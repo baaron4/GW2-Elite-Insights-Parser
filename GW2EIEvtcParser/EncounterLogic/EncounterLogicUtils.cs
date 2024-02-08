@@ -242,6 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// Compute the cast duration while the target has <see cref="Quickness"/>.
         /// </summary>
         /// <param name="log">The log.</param>
+        /// <param name="actor">Actor casting.</param>
         /// <param name="startCastTime">Starting time of the cast.</param>
         /// <param name="castDuration">Duration of the cast.</param>
         /// <returns>The duration of the cast.</returns>
@@ -271,6 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// Compute the cast duration while the target has <see cref="Quickness"/> and <see cref="MistlockInstabilitySugarRush"/>.
         /// </summary>
         /// <param name="log">The log.</param>
+        /// <param name="actor">Actor casting.</param>
         /// <param name="startCastTime">Starting time of the cast.</param>
         /// <param name="castDuration">Duration of the cast.</param>
         /// <returns>The duration of the cast.</returns>
@@ -287,15 +289,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             return 0;
         }
 
-        internal static long ComputeEndCastTimeByStun(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+        /// <summary>
+        /// Compute the end time of a cast.<br></br>
+        /// If <paramref name="buffId"/> is present before the end of the cast, return the <paramref name="buffId"/> application time.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="actor">Actor casting.</param>
+        /// <param name="buffId">Buff application that ends the cast earlier than the expected duration.</param>
+        /// <param name="startCastTime">Starting time of the cast.</param>
+        /// <param name="castDuration">Duration of the cast.</param>
+        /// <returns>The end time of the cast.</returns>
+        internal static long ComputeEndCastTimeByBuffApplication(ParsedEvtcLog log, AbstractSingleActor actor, long buffId, long startCastTime, long castDuration)
         {
-            long standardEndCastTime = startCastTime + castDuration;
-            Segment stunSegment = actor.GetBuffStatus(log, Stun, startCastTime, standardEndCastTime).FirstOrDefault(x => x.Value > 0);
-            if (stunSegment != null)
+            long end = startCastTime + castDuration;
+            Segment segment = actor.GetBuffStatus(log, buffId, startCastTime, end).FirstOrDefault(x => x.Value > 0);
+            if (segment != null)
             {
-                return stunSegment.Start;
+                return segment.Start;
             }
-            return standardEndCastTime;
+            return end;
         }
 
 

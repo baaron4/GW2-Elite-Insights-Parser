@@ -60,9 +60,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
                 TrashID.TemporalAnomalyArtsariiv,
                 TrashID.Spark,

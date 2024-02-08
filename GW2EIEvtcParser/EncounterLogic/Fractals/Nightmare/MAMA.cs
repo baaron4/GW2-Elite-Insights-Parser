@@ -140,9 +140,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
                 TrashID.TwistedHorror
             };
@@ -164,131 +164,153 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)TargetID.MAMA:
-                    // AoE Knockback
+                    // Blastwave - AoE Knockback
                     var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2).ToList();
                     foreach (AbstractCastEvent c in blastwave)
                     {
-                        int hitTime = (int)c.ExpectedEndTime;
-                        int endTime = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-                        replay.AddDecorationWithBorder(new CircleDecoration(550, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(hitTime), 0, Colors.Red, 0.2, false);
+                        int castDuration = 2750;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+
+                        if (c.SkillId == Blastwave1)
+                        {
+                            replay.AddDecorationWithBorder(new CircleDecoration(530, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
+                        }
+                        else if (c.SkillId == Blastwave2)
+                        {
+                            replay.AddDecorationWithBorder(new CircleDecoration(480, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
+                        }
                     }
 
                     // Leap with shockwaves
                     var leap = casts.Where(x => x.SkillId == Leap).ToList();
                     foreach (AbstractCastEvent c in leap)
                     {
-                        int attackStart = (int)c.Time;
-                        int hitTime = (int)c.ExpectedEndTime;
+                        int castDuration = 2400;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+
                         // Find position at the end of the leap time
-                        Point3D targetPosition = target.GetCurrentPosition(log, hitTime + 1000);
-                        if (targetPosition == null)
+                        Point3D targetPosition = target.GetCurrentPosition(log, expectedEndCast + 1000);
+                        if (targetPosition != null)
                         {
-                            continue;
-                        }
-                        int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-                        uint impactRadius = target.HitboxWidth / 2 + 100;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(impactRadius, (attackStart, attackEnd), Colors.Orange, 0.2, new PositionConnector(targetPosition)), hitTime);
-                        // 3 rounds of decorations for the 3 waves
-                        if (c.Status != AbstractCastEvent.AnimationStatus.Interrupted && attackEnd >= hitTime)
-                        {
-                            uint shockwaveRadius = 1300;
-                            int duration = 2680;
-                            for (int i = 0; i < 3; i++)
+                            replay.AddDecorationWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), expectedEndCast);
+                        
+                            // 3 rounds of decorations for the 3 waves
+                            if (lifespan.end == expectedEndCast)
                             {
-                                int shockWaveStart = hitTime + i * 120;
-                                replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), Colors.Yellow, 0.3, new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
+                                uint shockwaveRadius = 1300;
+                                int duration = 2680;
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    long shockWaveStart = expectedEndCast + i * 120;
+                                    replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), Colors.Yellow, 0.3, new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
+                                }
                             }
                         }
                     }
-
-                    // Nightmare Miasma AoE
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaIndicator, out IReadOnlyList<EffectEvent> miasmaEffects))
-                    {
-                        foreach (EffectEvent miasmaEffect in miasmaEffects)
-                        {
-                            int durationFirstAoe = 300;
-                            int durationSecondAoe = 2000;
-                            int growingFirstAoe = (int)miasmaEffect.Time + durationFirstAoe;
-                            int growingSecondAoe = (int)miasmaEffect.Time + durationSecondAoe;
-                            int startFirstAoe = (int)miasmaEffect.Time;
-                            int startSecondAoe = (int)miasmaEffect.Time + durationFirstAoe;
-                            int endFirstAndSecondAoe = startFirstAoe + durationFirstAoe + durationSecondAoe;
-                            int safeTime = endFirstAndSecondAoe + 1000;
-                            int dangerTime = 77000;
-
-                            replay.Decorations.Add(new CircleDecoration(540, (startFirstAoe, endFirstAndSecondAoe), Colors.LightOrange, 0.1, new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingFirstAoe));
-                            replay.Decorations.Add(new CircleDecoration(540, (startSecondAoe, endFirstAndSecondAoe), Colors.LightOrange, 0.1, new PositionConnector(miasmaEffect.Position)).UsingGrowingEnd(growingSecondAoe));
-                            replay.AddDecorationWithGrowing(new CircleDecoration(540, (endFirstAndSecondAoe, safeTime), "rgba(83, 30, 25, 0.1)", new PositionConnector(miasmaEffect.Position)), safeTime);
-                            replay.Decorations.Add(new CircleDecoration(540, (safeTime, endFirstAndSecondAoe + dangerTime), "rgba(83, 30, 25, 0.2)", new PositionConnector(miasmaEffect.Position)));
-                        }
-                    }
-
-                    // Arkk's Shield
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
-                    {
-                        foreach (EffectEvent shieldEffect in shieldEffects)
-                        {
-                            int duration = 6200;
-                            int start = (int)shieldEffect.Time;
-                            int effectEnd = start + duration;
-                            replay.Decorations.Add(new CircleDecoration(300, (start, effectEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
-                            replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 5000, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), effectEnd, true);
-                        }
-                    }
-
-                    // Grenade Barrage
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MAMAGrenadeBarrageIndicator, out IReadOnlyList<EffectEvent> effects)) {
-                        foreach (EffectEvent effect in effects) {
-                            int duration = (int)effect.Duration;
-                            int start = (int)effect.Time;
-                            int end = start + duration;
-                            uint radius = 140;
-                            var connector = new PositionConnector(effect.Position);
-                            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(radius, (start, end), Colors.Orange, 0.2, connector).UsingFilled(false), true, end);
-                        }
-                    }
-
-                    // Cascade Of Torment
-                    int cotDuration = 1000;
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing0, cotDuration, 0, 150);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing1, cotDuration, 150, 250);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing2, cotDuration, 250, 350);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing3, cotDuration, 350, 450);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing4, cotDuration, 450, 550);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing5, cotDuration, 550, 650);
                     break;
                 case (int)TrashID.BlueKnight:
                 case (int)TrashID.RedKnight:
                 case (int)TrashID.GreenKnight:
-                    // Knockback AoE
+                    // Explosive Launch - Knight Jump in air
+                    var explosiveLaunch = casts.Where(x => x.SkillId == ExplosiveLaunch).ToList();
+                    foreach (AbstractCastEvent c in explosiveLaunch)
+                    {
+                        int castDuration = 1714;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast, true);
+                    }
+
+                    // Explosive Impact - Knight fall and knockback AoE
                     var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact).ToList();
                     foreach (AbstractCastEvent c in explosiveImpact)
                     {
-                        int duration = 3000;
-                        int hitTime = (int)c.ExpectedEndTime;
-                        int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-                        int windUpDuration = (int)c.Time - (attackEnd - duration);
-                        int windUpStart = (int)c.Time - windUpDuration;
-
-                        // Wind Up - Knight in air
-                        replay.AddDecorationWithGrowing(new CircleDecoration( 600, (windUpStart, c.Time), Colors.Orange, 0.2, new AgentConnector(target)), c.Time, true);
-                        // Hit - Knight falling
-                        replay.AddDecorationWithGrowing(new CircleDecoration(600, (c.Time, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), hitTime);
+                        int castDuration = 533;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
                     }
 
                     // Pull AoE
                     var extraction = casts.Where(x => x.SkillId == Extraction).ToList();
                     foreach (AbstractCastEvent c in extraction)
                     {
-                        int hitTime = (int)c.ExpectedEndTime;
-                        int attackEnd = Math.Min((int)c.GetInterruptedByStunTime(log), hitTime);
-
-                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, ((int)c.Time, attackEnd), Colors.Orange, 0.2, new AgentConnector(target)), hitTime);
+                        int castDuration = 3835;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
                     }
                     break;
                 default:
                     break;
             }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Nightmare Miasma AoE Indicator
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaIndicator, out IReadOnlyList<EffectEvent> miasmaIndicators))
+            {
+                foreach (EffectEvent effect in miasmaIndicators)
+                {
+                    // Effect duration is slightly too long, reducing it from 3300 to 3000
+                    (long start, long end) lifespan = (effect.Time, effect.Time + 3000);
+                    var circle = new CircleDecoration(540, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
+                }
+            }
+
+            // Nightmare Miasma AoE Damage
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaDamage, out IReadOnlyList<EffectEvent> miasmaDamage))
+            {
+                foreach (EffectEvent effect in miasmaDamage)
+                {
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 76800);
+                    EnvironmentDecorations.Add(new CircleDecoration(540, lifespan, Colors.Chocolate, 0.2, new PositionConnector(effect.Position)));
+                }
+            }
+
+            // Arkk's Shield
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
+            {
+                foreach (EffectEvent effect in shieldEffects)
+                {
+                    int duration = 6400;
+                    (long start, long end) lifespan = (effect.Time, effect.Time + duration);
+                    var positionConnector = new PositionConnector(effect.Position);
+                    var arkkShield = new CircleDecoration(300, lifespan, Colors.Blue, 0.4, positionConnector);
+                    var doughnutHit = (DoughnutDecoration)new DoughnutDecoration(300, 5000, lifespan, Colors.Red, 0.2, positionConnector).UsingGrowingEnd(lifespan.end, true);
+                    EnvironmentDecorations.Add(arkkShield);
+                    EnvironmentDecorations.Add(doughnutHit);
+                }
+            }
+
+            // Grenade Barrage
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MAMAGrenadeBarrageIndicator, out IReadOnlyList<EffectEvent> effects))
+            {
+                foreach (EffectEvent effect in effects)
+                {
+                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    var positionConnector = new PositionConnector(effect.Position);
+                    var circleIndicator = (CircleDecoration)new CircleDecoration(140, lifespan, Colors.Orange, 0.2, positionConnector).UsingFilled(false);
+                    var circleFiller = (CircleDecoration)new CircleDecoration(140, lifespan, Colors.Orange, 0.2, positionConnector).UsingGrowingEnd(lifespan.end);
+                    EnvironmentDecorations.Add(circleIndicator);
+                    EnvironmentDecorations.Add(circleFiller);
+                }
+            }
+
+            // Cascade Of Torment
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing1, 150, 250);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing2, 250, 350);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing3, 350, 450);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
         }
     }
 }

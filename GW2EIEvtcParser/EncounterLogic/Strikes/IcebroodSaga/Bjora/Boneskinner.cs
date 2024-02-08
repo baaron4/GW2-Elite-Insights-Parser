@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -57,26 +58,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            return new List<TrashID>
             {
-                ArcDPSEnums.TrashID.VigilTactician,
-                ArcDPSEnums.TrashID.VigilRecruit,
-                ArcDPSEnums.TrashID.PrioryExplorer,
-                ArcDPSEnums.TrashID.PrioryScholar,
-                ArcDPSEnums.TrashID.AberrantWisp,
-                ArcDPSEnums.TrashID.Torch,
+                TrashID.VigilTactician,
+                TrashID.VigilRecruit,
+                TrashID.PrioryExplorer,
+                TrashID.PrioryScholar,
+                TrashID.AberrantWisp,
+                TrashID.Torch,
             };
         }
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var torches = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250).ToList();
+            var torches = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250).ToList();
             foreach (AgentItem torch in torches)
             {
                 torch.OverrideType(AgentItem.AgentType.NPC);
-                torch.OverrideID(ArcDPSEnums.TrashID.Torch);
+                torch.OverrideID(TrashID.Torch);
                 torch.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
             }
             agentData.Refresh();
@@ -99,7 +100,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Boneskinner:
+                case (int)TargetID.Boneskinner:
                     // Death Wind
                     var deathWind = casts.Where(x => x.SkillId == DeathWind).ToList();
                     foreach (AbstractCastEvent c in deathWind)
@@ -161,13 +162,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDecorationWithGrowing(landingCircle, finalTime);
                     }
                     // Cascade
-                    AddCascadeDecoration(log, target,replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
                     AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
                     AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator3, 600, 120);
                     AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
                     AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
                     break;
-                case (int)ArcDPSEnums.TrashID.AberrantWisp:
+                case (int)TrashID.AberrantWisp:
                     break;
                 default:
                     break;
@@ -176,6 +177,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             // Grasp AoE Orange Indicator
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspAoeIndicator, out IReadOnlyList<EffectEvent> indicators))
             {
@@ -197,7 +200,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 30000;
                     int start = (int)claw.Time;
                     int end = (int)claw.Time + duration;
-                    var circle = new CircleDecoration(100, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(claw.Position));
+                    var circle = new CircleDecoration(100, (start, end), Colors.RedBrownish, 0.2, new PositionConnector(claw.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }

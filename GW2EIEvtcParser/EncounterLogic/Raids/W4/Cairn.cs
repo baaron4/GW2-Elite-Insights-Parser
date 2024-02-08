@@ -99,6 +99,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDisplacement, out IReadOnlyList<EffectEvent> displacementEffects))
             {
                 foreach (EffectEvent displacement in displacementEffects)

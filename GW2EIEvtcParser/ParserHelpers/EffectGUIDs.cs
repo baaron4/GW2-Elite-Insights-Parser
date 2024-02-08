@@ -318,16 +318,21 @@ namespace GW2EIEvtcParser
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
         public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
-        public const string ToxicSicknessPuke1 = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
-        public const string ToxicSicknessPuke2 = "E09CD66E417B59409401192201CE4B6E";
+        public const string ToxicSicknessOldIndicator = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
+        public const string ToxicSicknessNewIndicator = "71469269D3A1F9469D74CC96153264C0";
+        public const string ToxicSicknessPuke = "E09CD66E417B59409401192201CE4B6E";
         public const string MAMAGrenadeBarrageIndicator = "8DDED161CE26964FA5952D821AD852F7";
         public const string NightmareMiasmaIndicator = "41883B3BD532124DACF93F7C2584E63C";
-        public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B";
-        public const string NightmareHallucinationsSpawn = "0C284B1C201D1846B4D9F249AD01A5C6";
-        public const string VileSpitSiax = "BC17A48E8DD2FF44864AA48A732BDC36";
+        public const string NightmareMiasmaDamage = "8A882A495793044D8C4A9AD9080283A7";
+        public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B"; // Duration 7400
+        public const string ArkkShieldIndicator2 = "1E267990C5098E49AFD5CFD5CA4E2B82"; // Duration 6400
+        public const string SiaxNightmareHallucinationsSpawnIndicator = "0C284B1C201D1846B4D9F249AD01A5C6"; // siax src
+        public const string SiaxVileSpitIndicator = "BC17A48E8DD2FF44864AA48A732BDC36";
+        public const string SiaxVileSpitPoison = "6589BB8F4EE227428CC3DDDE84A67015";
         public const string CausticBarrageIndicator = "C910F1B11A21014AA99F24DBDFBF13FB";
-        public const string CausticBarrageHitEffect = "CAF4E62C2C5CC04499657C2A6A78087B";
-        public const string VolatileExpulsionIndicator = "F22E201EAF24DD42A43D297B2E83CC66";
+        public const string CausticBarrageHitEffect = "CAF4E62C2C5CC04499657C2A6A78087B"; // 1000 duration - green explosion effect when orb lands - conflicts with player effects
+        public const string VolatileExpulsionIndicator = "DCA047DBD6E90A41B46CDDCE5405E4BC"; // 300 - 400 duration
+        public const string VolatileExpulsion2 = "F22E201EAF24DD42A43D297B2E83CC66"; // 0 duration
         public const string CascadeOfTormentRing0 = "EFF32973C7921F41AA3FD65745E06506";
         public const string CascadeOfTormentRing1 = "D919AC7D1B2ABD438F809B3B9DCE9226";
         public const string CascadeOfTormentRing2 = "A5D958EDAD66D7469CA40059915843CC";
@@ -338,8 +343,12 @@ namespace GW2EIEvtcParser
         public const string EnsolyssMiasmaDoughnut66_15 = "3AE042F82A10B84DB7487B0C0F4D2AB1";
         public const string EnsolyssMiasmaDoughnut15_0 = "AB294EC140644E48BC739B8E303D2762";
         public const string EnsolyssNightmareAltarShockwave = "AA31A20BDC52324B945FD660D60429EB";
+        public const string EnsolyssNightmareAltarLightOrangeAoE = "66C6DEE334653342BDC578817254F7C8";
+        public const string EnsolyssNightmareAltarOrangeAoE = "FA097ABEFB8CEF4B89EB12825EEE1FB9"; // same effect as Skorvald's Solar Bolt
+        public const string EnsolyssArrow = "3D85505CEBCF0E4D8993625957405977";
         // Shattered Observatory Fractal
-        public const string SolarBolt = "FA097ABEFB8CEF4B89EB12825EEE1FB9";
+        public const string SolarBoltIndicators = "FA097ABEFB8CEF4B89EB12825EEE1FB9";
+        public const string SkorvaldSolarBoltDamage = "49813989C508464B81FC45E6D24EA8C3";
         public const string KickGroundEffect = "47FE87414A88484AB05A84E1440F5FDD";
         public const string AoeIndicator130Radius = "8DDED161CE26964FA5952D821AD852F7";
         public const string MistBomb = "03FB41386DD2A54FA093795DF2870B7A";
