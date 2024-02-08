@@ -100,11 +100,12 @@
         public const long Determined895 = 895;
         public const long PortalInteractCooldown = 901;
         public const long RighteousIndignation = 903;
+        public const long Poisoned = 910;
         public const long NourishmentGuildBanquetTable = 937;
         public const long SkaleVenomConsumable = 972;
         public const long Resurrect = 1066;
         public const long LevelUp = 1080;
-        public const long Finisher = 1097;
+        public const long Finisher1 = 1097;
         public const long Stability = 1122;
         public const long Encumbered = 1159;
         public const long Bandage = 1175;
@@ -842,7 +843,10 @@
         public const long SlashBear = 12663;
         public const long BiteDrake = 12668;
         public const long TailSwipePet = 12671;
+        public const long TailLashDevourer = 12673;
         public const long PoisonousCloud = 12675;
+        public const long TwinDartsDevourer = 12676;
+        public const long RetreatDevourer = 12678;
         public const long SlashBird = 12682;
         public const long BiteBear = 12686;
         public const long BiteFeline = 12694;
@@ -958,6 +962,7 @@
         public const long TurnRightCatapult = 14600;
         public const long TurnLeftCatapult = 14601;
         public const long FireBoulderSkill = 14602;
+        public const long BoilingOil = 14605;
         public const long TurnLeftMortar = 14611;
         public const long TurnRightMortar = 14612;
         public const long FireTrebuchetSkill = 14613;
@@ -966,6 +971,7 @@
         public const long TurnRightTrebuchet = 14616;
         public const long VolleyArrowCart = 14618;
         public const long BallistaBolt = 14622;
+        public const long FireCannon = 14626;
         public const long PunchSiegeGolem = 14627;
         public const long DeployCatapult = 14628;
         public const long DeployTrebuchet = 14629;
@@ -979,6 +985,8 @@
         public const long CripplingVolley = 14650;
         public const long BarbedVolley = 14651;
         public const long ReinforcedShotDamage = 14655;
+        public const long Grapeshot = 14658;
+        public const long IceShot1 = 14658;
         public const long RottenCow1 = 14665;
         public const long PullSiegeGolem = 14672;
         public const long Ram = 14676;
@@ -1067,7 +1075,7 @@
         public const long FireCannonStrips2 = 18537;
         public const long IceShotDamage = 18539;
         public const long IceShotRadiusDamage = 18541;
-        public const long IceShot = 18543;
+        public const long IceShot2 = 18543;
         public const long ImprovedReinforcedShotDamage = 18564;
         public const long ImprovedShatteringBoltDamage = 18568;
         public const long SwiftBoltDamage = 18570;
@@ -1154,9 +1162,10 @@
         public const long MadKingFinisher = 20874;
         public const long ScarecrowFinisher = 20875;
         public const long GiftFinisher = 20876;
+        public const long SnowmanFinisher1 = 20877;
         public const long TwistedWatchworkFinisher = 20974;
         public const long FireHealingOasis = 21001;
-        public const long SnowmanFinisher = 22877;
+        public const long SnowmanFinisher2 = 22877;
         public const long WvWPickingUpSupplies = 20890;
         public const long SpeedOfTheBattlefield = 20893;
         public const long SummonSpawn = 20944;
@@ -1516,6 +1525,7 @@
         public const long TidalSurge = 30864;
         public const long ExitReaperShroud = 30961;
         public const long BirthdayFinisher = 31079;
+        public const long Finisher2 = 31101;
         public const long Bound = 31129;
         public const long Dash = 31187;
         public const long WatchfulEye = 31229;
@@ -1601,6 +1611,7 @@
         public const long GhastlyRampage = 31834;
         public const long GyroExplosion = 31847;
         public const long PylonAttunementGreen = 31852;
+        public const long SmokeAssaultSmokescaleSkill = 31854;
         public const long GreenGuardianUnstableMagicSpike = 31860;
         public const long ClarionBond = 31865;
         public const long EchoOfMemoryExtra = 31864;
@@ -1771,7 +1782,7 @@
         public const long CripplingStrikeCentaurBannerSkill = 34037;
         public const long BowlOfPricklyPearTapiocaPudding = 34069;
         public const long WeakeningStrikes = 34081;
-        public const long SmokeAssaultSmokescale = 34090;
+        public const long SmokeAssaultSmokescaleDamage = 34090;
         public const long AlwaysAngry = 34099;
         public const long ShellShocked = 34108;
         public const long SpawnProtection = 34113;
