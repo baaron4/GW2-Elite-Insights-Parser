@@ -241,6 +241,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="onDistanceFailDuration">Duration of the AoE effects farther away from the caster.</param>
         protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, List<GenericDecoration> environmentDecorations, string effectGUID, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
         {
+            AgentItem agent = log.AgentData.GetNPCsByID(target).FirstOrDefault();
+            if (agent == null)
+            {
+                return;
+            }
             if (log.CombatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
             {
                 foreach (EffectEvent effect in effects)
@@ -249,18 +254,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Correcting the duration of the effects for CTBS 45, based on the distance from the target casting the mechanic.
                     if (effect is EffectEventCBTS45)
                     {
-                        AgentItem agent = log.AgentData.GetNPCsByID(target).FirstOrDefault();
-                        if (agent != null)
+                        var distance = effect.Position.DistanceToPoint(agent.GetCurrentPosition(log, effect.Time));
+                        if (distance < distanceThreshold)
                         {
-                            var distance = effect.Position.DistanceToPoint(agent.GetCurrentPosition(log, effect.Time));
-                            if (distance < distanceThreshold)
-                            {
-                                lifespan.end = effect.Time + onDistanceSuccessDuration;
-                            }
-                            else
-                            {
-                                lifespan.end = effect.Time + onDistanceFailDuration;
-                            }
+                            lifespan.end = effect.Time + onDistanceSuccessDuration;
+                        }
+                        else
+                        {
+                            lifespan.end = effect.Time + onDistanceFailDuration;
                         }
                     }
                     environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
