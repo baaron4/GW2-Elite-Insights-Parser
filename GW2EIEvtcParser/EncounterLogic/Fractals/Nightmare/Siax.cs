@@ -252,33 +252,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Caustic Barrage
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CausticBarrageIndicator, out IReadOnlyList<EffectEvent> barrageEffects))
-            {
-                foreach (EffectEvent effect in barrageEffects)
-                {
-                    int duration;
-                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
-                    if (effect is EffectEventCBTS45)
-                    {
-                        AgentItem siax = log.AgentData.GetNPCsByID(TargetID.Siax).FirstOrDefault();
-                        if (siax != null)
-                        {
-                            var distance = effect.Position.DistanceToPoint(siax.GetCurrentPosition(log, effect.Time));
-                            if (distance < 210)
-                            {
-                                duration = 1000;
-                            }
-                            else
-                            {
-                                duration = 966;
-                            }
-                            lifespan.end = effect.Time + duration;
-                        }
-                    }
-                    var circle = new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position));
-                    EnvironmentDecorations.Add(circle);
-                }
-            }
+            AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Siax, 210, 1000, 966);
 
             // Cascade Of Torment
             AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);

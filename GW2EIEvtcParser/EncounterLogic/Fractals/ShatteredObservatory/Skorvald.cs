@@ -543,32 +543,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Solar Bolt - Indicator
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SolarBoltIndicators, out IReadOnlyList<EffectEvent> solarBoltIndicators))
-            {
-                foreach (EffectEvent effect in solarBoltIndicators)
-                {
-                    int duration;
-                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
-                    if (effect is EffectEventCBTS45)
-                    {
-                        AgentItem skorvald = log.AgentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault();
-                        if (skorvald != null)
-                        {
-                            var distance = effect.Position.DistanceToPoint(skorvald.GetCurrentPosition(log, effect.Time));
-                            if (distance < 310)
-                            {
-                                duration = 1800;
-                            }
-                            else
-                            {
-                                duration = 1300;
-                            }
-                            lifespan.end = effect.Time + duration;
-                        }
-                    }
-                    EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
-                }
-            }
+            AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
 
             // Solar Bolt - Damage
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SkorvaldSolarBoltDamage, out IReadOnlyList<EffectEvent> solarBolts))

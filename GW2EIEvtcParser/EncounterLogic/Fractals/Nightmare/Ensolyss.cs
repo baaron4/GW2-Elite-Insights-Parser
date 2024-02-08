@@ -442,34 +442,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
-            // Caustic Barrage
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CausticBarrageIndicator, out IReadOnlyList<EffectEvent> barrageEffects))
-            {
-                foreach (EffectEvent effect in barrageEffects)
-                {
-                    int duration;
-                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
-                    if (effect is EffectEventCBTS45)
-                    {
-                        AgentItem ensolyss = log.AgentData.GetNPCsByID(TargetID.Ensolyss).FirstOrDefault();
-                        if (ensolyss != null)
-                        {
-                            var distance = effect.Position.DistanceToPoint(ensolyss.GetCurrentPosition(log, effect.Time));
-                            if (distance < 210)
-                            {
-                                duration = 1000;
-                            }
-                            else
-                            {
-                                duration = 1300;
-                            }
-                            lifespan.end = effect.Time + duration;
-                        }
-                    }
-                    EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
-                }
-            }
-
             // Nightmare Altar Orb AoE 1
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarOrangeAoE, out IReadOnlyList<EffectEvent> indicators1))
             {
@@ -499,6 +471,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(1200, lifespan, Colors.Yellow, 0.4, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
                 }
             }
+
+            // Caustic Barrage
+            AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Ensolyss, 210, 1000, 1300);
         }
     }
 }

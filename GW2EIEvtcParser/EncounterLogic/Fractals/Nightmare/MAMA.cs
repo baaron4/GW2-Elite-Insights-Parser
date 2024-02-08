@@ -278,12 +278,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Arkk's Shield
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
             {
-                foreach (EffectEvent shieldEffect in shieldEffects)
+                foreach (EffectEvent effect in shieldEffects)
                 {
                     int duration = 6400;
-                    (long start, long end) lifespan = (shieldEffect.Time, shieldEffect.Time + duration);
-                    var arkkShield = new CircleDecoration(300, lifespan, Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position));
-                    var doughnutHit = (DoughnutDecoration)new DoughnutDecoration(300, 5000, lifespan, Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)).UsingGrowingEnd(lifespan.end, true);
+                    (long start, long end) lifespan = (effect.Time, effect.Time + duration);
+                    var positionConnector = new PositionConnector(effect.Position);
+                    var arkkShield = new CircleDecoration(300, lifespan, Colors.Blue, 0.4, positionConnector);
+                    var doughnutHit = (DoughnutDecoration)new DoughnutDecoration(300, 5000, lifespan, Colors.Red, 0.2, positionConnector).UsingGrowingEnd(lifespan.end, true);
                     EnvironmentDecorations.Add(arkkShield);
                     EnvironmentDecorations.Add(doughnutHit);
                 }
@@ -294,13 +295,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in effects)
                 {
-                    int duration = (int)effect.Duration;
-                    int start = (int)effect.Time;
-                    int end = start + duration;
-                    uint radius = 140;
-                    var connector = new PositionConnector(effect.Position);
-                    var circleIndicator = (CircleDecoration)new CircleDecoration(radius, (start, end), Colors.Orange, 0.2, connector).UsingFilled(false);
-                    var circleFiller = (CircleDecoration)new CircleDecoration(radius, (start, end), Colors.Orange, 0.2, connector).UsingGrowingEnd(end);
+                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    var positionConnector = new PositionConnector(effect.Position);
+                    var circleIndicator = (CircleDecoration)new CircleDecoration(140, lifespan, Colors.Orange, 0.2, positionConnector).UsingFilled(false);
+                    var circleFiller = (CircleDecoration)new CircleDecoration(140, lifespan, Colors.Orange, 0.2, positionConnector).UsingGrowingEnd(lifespan.end);
                     EnvironmentDecorations.Add(circleIndicator);
                     EnvironmentDecorations.Add(circleFiller);
                 }
