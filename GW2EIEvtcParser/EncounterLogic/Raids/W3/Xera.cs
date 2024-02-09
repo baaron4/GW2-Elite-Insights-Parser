@@ -160,17 +160,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem xera))
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                AgentItem fakeXera = agentData.GetNPCsByID(ArcDPSEnums.TrashID.FakeXera).FirstOrDefault();
-                if (fakeXera != null)
+                if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.FakeXera, out AgentItem fakeXera))
                 {
                     _hasPreEvent = true;
                     long encounterStart = fakeXera.LastAware;
@@ -192,8 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             bool needsRefresh = false;
             bool needsDummy = true;
             // find target
-            AgentItem firstXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (firstXera == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem firstXera))
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
@@ -256,8 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             // find split
-            AgentItem secondXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera2).FirstOrDefault();
-            if (secondXera != null)
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera2, out AgentItem secondXera))
             {
                 CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
                 if (move != null)

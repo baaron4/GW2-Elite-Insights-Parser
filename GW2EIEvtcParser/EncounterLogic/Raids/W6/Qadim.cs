@@ -215,8 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AgentItem qadim = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
-            if (qadim == null)
+            if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))
             {
                 throw new MissingKeyActorsException("Qadim not found");
             }
@@ -248,8 +247,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))
             {
                 throw new MissingKeyActorsException("Qadim not found");
             }

@@ -241,8 +241,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="onDistanceFailDuration">Duration of the AoE effects farther away from the caster.</param>
         protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, List<GenericDecoration> environmentDecorations, string effectGUID, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
         {
-            AgentItem agent = log.AgentData.GetNPCsByID(target).FirstOrDefault();
-            if (agent == null)
+            if (!log.AgentData.TryGetFirstAgentItem(target, out AgentItem agent))
             {
                 return;
             }
