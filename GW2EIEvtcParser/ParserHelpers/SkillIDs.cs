@@ -986,7 +986,7 @@
         public const long BarbedVolley = 14651;
         public const long ReinforcedShotDamage = 14655;
         public const long Grapeshot = 14658;
-        public const long IceShot1 = 14658;
+        public const long IceShot1 = 14659;
         public const long RottenCow1 = 14665;
         public const long PullSiegeGolem = 14672;
         public const long Ram = 14676;
