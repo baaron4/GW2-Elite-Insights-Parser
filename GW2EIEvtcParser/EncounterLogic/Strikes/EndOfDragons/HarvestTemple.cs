@@ -480,8 +480,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needRefreshAgentPool = true;
             }
             // Gravity Ball - Timecaster gadget
-            AgentItem timecaster = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidTimeCaster).FirstOrDefault();
-            if (timecaster != null)
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out AgentItem timecaster))
             {
                 var gravityBalls = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.Master == null && x.FirstAware > timecaster.FirstAware && x.FirstAware < timecaster.LastAware + 2000).ToList();
                 var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
@@ -496,8 +495,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             {
-                AgentItem jormagAgent = agentData.GetNPCsByID(ArcDPSEnums.TargetID.TheDragonVoidJormag).FirstOrDefault();
-                if (jormagAgent != null)
+                if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.TheDragonVoidJormag, out AgentItem jormagAgent))
                 {
                     var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                         .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))

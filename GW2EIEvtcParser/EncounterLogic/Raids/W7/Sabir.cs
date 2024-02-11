@@ -199,12 +199,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Sabir).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Sabir, out AgentItem sabir))
             {
                 throw new MissingKeyActorsException("Sabir not found");
             }
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(target));
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(sabir));
             if (enterCombat == null)
             {
                 CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
@@ -214,10 +213,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamagingDamage());
+                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(sabir) && x.IsDamagingDamage());
                     if (firstDamageEvent != null)
                     {
-                        return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, target);
+                        return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, sabir);
                     }
                     else
                     {

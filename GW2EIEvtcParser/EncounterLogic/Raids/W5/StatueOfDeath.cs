@@ -58,8 +58,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem eaterOfSouls = agentData.GetNPCsByID((int)ArcDPSEnums.TargetID.EaterOfSouls).FirstOrDefault();
-            if (eaterOfSouls == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.EaterOfSouls, out AgentItem eaterOfSouls))
             {
                 throw new MissingKeyActorsException("Eater of Souls not found");
             }

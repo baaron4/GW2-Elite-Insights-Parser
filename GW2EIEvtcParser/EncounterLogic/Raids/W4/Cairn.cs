@@ -175,13 +175,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Cairn).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Cairn, out AgentItem cairn))
             {
                 throw new MissingKeyActorsException("Cairn not found");
             }
             // spawn protection loss -- most reliable
-            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(target) && x.SkillID == SpawnProtection);
+            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(cairn) && x.SkillID == SpawnProtection);
             if (spawnProtectionLoss != null)
             {
                 return spawnProtectionLoss.Time;
@@ -189,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // get first end casting
-                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(target));
+                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(cairn));
                 // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
                 if (firstCastEnd != null && firstCastEnd.SkillID == CairnImpact)
                 {

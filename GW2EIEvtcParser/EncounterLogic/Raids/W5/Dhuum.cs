@@ -276,8 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem dhuum = agentData.GetNPCsByID(TargetID.Dhuum).FirstOrDefault();
-            if (dhuum == null)
+            if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out AgentItem dhuum))
             {
                 throw new MissingKeyActorsException("Dhuum not found");
             }
