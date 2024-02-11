@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
-        <div class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
+        <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
             style="max-width:450px">
             <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%">
                 <thead>
@@ -183,7 +183,20 @@
                 actorsList: actorsList,
                 mechanics: mechanics,
                 mechanicsList: mechanicsList,
+                scrollTop: 0,
+                div: null,
             };
+        },
+        activated() {
+            this.div = document.getElementById('combat-replay-mechanics-list');
+            this.div.scrollTop = this.scrollTop;
+            this.div.onscroll = (event) => {
+                this.scrollTop = this.div.scrollTop;
+            }
+        },
+        deactivated() {
+            this.div.onscroll = null;
+            this.div = null;
         },
         methods: {
             selectMechanic: function (mechanic) {
