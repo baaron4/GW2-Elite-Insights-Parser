@@ -128,7 +128,8 @@
                 this.mouseDownStart = Date.now();
             },
             select(player) {
-                if (Date.now() - this.mouseDownStart < 75) {
+                var mouseUp = Date.now();
+                if (mouseUp - this.mouseDownStart < 150) {
                     animator.selectActor(player.uniqueID);
                 }
             }
