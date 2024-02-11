@@ -241,5 +241,65 @@ namespace GW2EIEvtcParser.ParsedData
         {
             SwapMasters(new HashSet<AgentItem> { from }, to);
         }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="TargetID"/>.
+        /// </summary>
+        /// <param name="targetID">The ID of the target to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given  <see cref="TargetID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(TargetID targetID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)targetID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="TrashID"/>.
+        /// </summary>
+        /// <param name="trashID">The ID of the trash to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="TrashID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(TrashID trashID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)trashID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="MinionID"/>.
+        /// </summary>
+        /// <param name="minionID">The ID of the minion to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="MinionID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(MinionID minionID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)minionID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="ChestID"/>.
+        /// </summary>
+        /// <param name="chestID">The ID of the chest to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="ChestID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(ChestID chestID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)chestID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <paramref name="agentId"/>.<br></br>
+        /// </summary>
+        /// <param name="agentId">The ID of the agent to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <paramref name="agentId"/>; otherwise, <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(int agentId, out AgentItem agentItem)
+        {
+            agentItem = GetNPCsByID(agentId).FirstOrDefault();
+            if (agentItem != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

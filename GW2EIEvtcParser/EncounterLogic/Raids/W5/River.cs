@@ -94,8 +94,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AgentItem desmina = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).FirstOrDefault();
-            if (desmina == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Desmina, out AgentItem desmina))
             {
                 throw new MissingKeyActorsException("Desmina not found");
             }

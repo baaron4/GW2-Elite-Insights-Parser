@@ -151,8 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem aiAgent = agentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).FirstOrDefault();
-            if (aiAgent == null)
+            if (!agentData.TryGetFirstAgentItem(TargetID.AiKeeperOfThePeak, out AgentItem aiAgent))
             {
                 throw new MissingKeyActorsException("Ai not found");
             }

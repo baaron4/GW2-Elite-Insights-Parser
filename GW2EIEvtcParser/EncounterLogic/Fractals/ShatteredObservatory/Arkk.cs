@@ -167,8 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault();
-                if (arkk == null)
+                if(!agentData.TryGetFirstAgentItem(TargetID.Arkk, out AgentItem arkk))
                 {
                     throw new MissingKeyActorsException("Arkk not found");
                 }
