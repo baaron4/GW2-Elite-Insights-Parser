@@ -27,7 +27,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(row, rowIndex) in sortData(tableData.rows)" :class="{active: row.player.uniqueID === playerid}" v-show="isInRowPage(rowIndex)">
+                        <tr v-for="(row, rowIndex) in sortData(tableData.rows)" 
+                            :class="{active: row.player.uniqueID === playerid}" 
+                            v-show="isInRowPage(rowIndex)" @click="select(row.player)"
+                            @mousedown="startSelect"
+                            style="cursor: pointer;">
                             <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession">
                                 <img :src="row.player.icon" :alt="row.player.profession" class="icon">
                                 <span style="display:none">
@@ -81,6 +85,7 @@
                     index: -1,
                     key: "All"
                 },
+                mouseDownStart: 0,
             };
         },
         methods: {
@@ -119,6 +124,14 @@
                 }
                 return rows;
             },
+            startSelect() {
+                this.mouseDownStart = Date.now();
+            },
+            select(player) {
+                if (Date.now() - this.mouseDownStart < 75) {
+                    animator.selectActor(player.uniqueID);
+                }
+            }
         },
         created() {
             var i, cacheID;
