@@ -138,6 +138,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return FightData.EncounterStartStatus.Late;
             }
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Berg, out AgentItem berg))
+            {
+                var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration).ToList();
+                if (movements.Any())
+                {
+                    AbstractMovementEvent firstMove = movements.First();
+                    // two minutes
+                    if (firstMove.Time < 120000)
+                    {
+                        return FightData.EncounterStartStatus.Late;
+                    }
+                }
+            }
             return FightData.EncounterStartStatus.Normal;
         }
 
