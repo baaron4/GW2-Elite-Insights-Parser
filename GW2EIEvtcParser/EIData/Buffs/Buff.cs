@@ -171,6 +171,11 @@ namespace GW2EIEvtcParser.EIData
         internal static BuffSourceFinder GetBuffSourceFinder(CombatData combatData, HashSet<long> boonIds)
         {
             ulong gw2Build = combatData.GetBuildEvent().Build;
+
+            if (gw2Build >= GW2Builds.March2024Balance)
+            {
+                return new BuffSourceFinder20240319(boonIds);
+            }
             if (gw2Build >= GW2Builds.October2022BalanceHotFix)
             {
                 return new BuffSourceFinder20221018(boonIds);

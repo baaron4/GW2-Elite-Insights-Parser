@@ -50,6 +50,7 @@ namespace GW2EIEvtcParser.EIData
             new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.Executioner, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
             // Critical Strikes
             new DamageLogDamageModifier("Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, DamageModifierMode.All),
+            // TODO update Twin Fangs for March 2024 balance patch
             new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, DamageModifierMode.All),
             // Trickery
             new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), 
