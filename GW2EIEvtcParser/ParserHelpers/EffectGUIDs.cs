@@ -355,6 +355,26 @@ namespace GW2EIEvtcParser
         public const string CorporealReassignmentExplosion1 = "C93D2CA54BC7F84BBFA31B40DE056D21"; // owned by exploding player
         public const string CorporealReassignmentExplosion2 = "DAD653E8823274409610A732BE8FA188"; // owned by exploding player
         public const string HorizonStrikeArkk = "C5E4632E8131D342AA4F18222C68D8EB"; // owned by arkk
+        // Sunqua Peak Fractal
+        public const string AiArrowAttackIndicator = "88E9C3112BF6DA4486845A0433782E9C"; // GENERIC, no owner, rotated towards direction, used for lines & dash
+        public const string AiCircleAoEIndicator = "171A7BD24B5D0B4BA3770FF8A6A37EC0"; // GENERIC, no owner, no rotation, used for air & fire lines, not used by water
+        public const string AiConeIndicator = "CB877C57D1423240BACDF8D6B52A440F"; // GENERIC, owned by ai, rotation weird
+        public const string AiAoEAroundIndicator = "D11320204E28E643A48469AA8E4845BA"; // GENERIC, owned by ai
+        public const string AiSpreadCircle = "DD3870359E8FFA41BE69D612E05C972E"; // owned by ai, 5s duration
+        public const string AiAirLine1 = "EFB7EF07C1CCD4479A73B34C56B53D7C"; // owned by ai, oriented towards ai
+        public const string AiAirOrbFloat = "06E1712B62940C4CB8CEB23F06893370"; // owned by ai, 6s duration, higher up
+        public const string AiAirOrbGround = "88E9C3112BF6DA4486845A0433782E9C"; // no owner, 6s duration
+        public const string AiAirOrbZap = "014DCBC1E960094C84CE145C2F813169"; // played on spawn and on despawn?
+        public const string AiAirCircleDetonate = "A419E2904C80914C9F15991B3810B79A"; // no owner, no duration
+        public const string AiAirCirclePulsing = "AD2951EF56887941BC2001EC14C484E4"; // owned by ai, 8s duration
+        public const string AiMeteorIndicatorBeam = "EEAFAFB527630D44A232A335841CAE20"; // 5s duration
+        public const string AiMeteorIndicatorGround = "82F44EDA9D427D48B051FA9419ACB8F1"; // 6s duration, owned by ai, same for fixed position & on players
+        public const string AiMeteorDrop = "1B0ACDDD402CA0459F6B3ECD78E7F292";
+        public const string AiMeteorImpact = "ADE797298A7138408F4D27560EE26608";
+        public const string AiFireOrbFloat = "936AA38E65815647A9E005DD9D7E9238"; // owned by ai, 5s duration, higher up
+        public const string AiFireOrbGround = "3C8ECB429FAF8C43A22CC90DC8BACA8B"; // owned by ai, 5s duration
+        public const string AiFireCircleDetonate = "8CAF14D6FC78B9459652C6C5DF160539"; // no owner, 1.6s duration
+        public const string AiFireCirclePulsing = "70324046B99FA14D9D3B2F903CEEE6A7"; // owned by ai, 8s duration
         // Silent Surf Fractal
         public const string FrighteningSpeedRedAoE = "96E8C6EA0D2FAF4C8F62B5C6CA4B611C";
         public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";

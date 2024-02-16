@@ -1144,6 +1144,32 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
+        public bool TryGetEffectEventsByGUIDs(string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            var result = new List<EffectEvent>();
+            var found = false;
+            foreach (string effectGUID in effectGUIDs)
+            {
+                if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+                {
+                    result.AddRange(effects);
+                    found = true;
+                }
+            }
+            if (found)
+            {
+                effectEvents = result;
+            }
+            return found;
+        }
+
+        /// <summary>
         /// Returns effect events for the given agent and effect GUID.
         /// </summary>
         /// <param name="agent"></param>
