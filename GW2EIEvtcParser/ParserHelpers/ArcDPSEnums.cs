@@ -43,6 +43,7 @@ namespace GW2EIEvtcParser
             internal const ulong EODBeta2 = 119939;
             internal const ulong EODBeta3 = 121168;
             internal const ulong EODBeta4 = 122479;
+            internal const ulong EODRelease = 125589;
             internal const ulong March2022Balance = 126520;
             internal const ulong March2022Balance2 = 127285;
             internal const ulong May2022Balance = 128773;
