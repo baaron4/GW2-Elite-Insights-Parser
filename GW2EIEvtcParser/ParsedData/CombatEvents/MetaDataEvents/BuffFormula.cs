@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.ParsedData
         private bool IsExtraNumberNone => ExtraNumberState == 0;
         private bool IsExtraNumberSomething => ExtraNumberState == 1;
 
-        private bool IsFlippedFormula => Attr1 == PhysRec2 || Attr1 == CondRec2;
+        private bool IsFlippedFormula => Attr1 == PhysIncomingMultiplicative || Attr1 == CondIncomingMultiplicative;
 
         private string _solvedDescription = null;
 

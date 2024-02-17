@@ -330,15 +330,15 @@ namespace GW2EIEvtcParser
             Expertise = 9,
             Armor = 10,
             Agony = 11,
-            StatInc = 12,
-            FlatInc = 13,
-            PhysInc = 14,
-            CondInc = 15,
-            PhysRec = 16,
-            CondRec = 17,
+            StatOutgoing = 12,
+            FlatOutgoing = 13,
+            PhysOutgoing = 14,
+            CondOutgoing = 15,
+            PhysIncomingAdditive = 16,
+            CondIncomingAdditive = 17,
             AttackSpeed = 18,
-            UnusedSiphonInc_Arc = 19, // Unused due to being auto detected by the solver
-            SiphonRec = 20,
+            UnusedSiphonOutgoing_Arc = 19, // Unused due to being auto detected by the solver
+            SiphonIncomingAdditive = 20,
             //
             Unknown = short.MaxValue,
             //
@@ -365,7 +365,7 @@ namespace GW2EIEvtcParser
             ExperienceFromAll = 100,
             WXP = 112,*/
             // Custom Ids, matched using a very simple pattern detection, see BuffInfoSolver.cs
-            ConditionDurationInc = -1,
+            ConditionDurationOutgoing = -1,
             DamageFormulaSquaredLevel = -2,
             CriticalChance = -3,
             StrikeDamageToHP = -4,
@@ -375,9 +375,9 @@ namespace GW2EIEvtcParser
             DamageFormula = -8,
             MovementActivationDamageFormula = -9,
             EnduranceRegeneration = -10,
-            HealingEffectivenessRec = -11,
-            HealingEffectivenessFlatInc = -12,
-            HealingEffectivenessConvInc = -13,
+            HealingEffectivenessIncomingNonStacking = -11,
+            HealingEffectivenessOutgoingAdditive = -12,
+            HealingEffectivenessConvOutgoing = -13,
             HealingOutputFormula = -14,
             ExperienceFromKills = -15,
             GoldFind = -16,
@@ -387,11 +387,11 @@ namespace GW2EIEvtcParser
             MagicFind = -20,
             ExperienceFromAll = -21,
             WXP = -22,
-            SiphonInc = -23,
-            PhysRec2 = -24,
-            CondRec2 = -25,
-            BoonDurationInc = -26,
-            HealingEffectivenessRec2 = -27,
+            SiphonOutgoing = -23,
+            PhysIncomingMultiplicative = -24,
+            CondIncomingMultiplicative = -25,
+            BoonDurationOutgoing = -26,
+            HealingEffectivenessIncomingAdditive = -27,
             MovementSpeedStacking = -28,
             MovementSpeedStacking2 = -29,
             FishingPower = -30,
@@ -405,10 +405,10 @@ namespace GW2EIEvtcParser
             if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 // Enum has shifted by -1
-                if (bt <= (byte)BuffAttribute.SiphonRec - 1)
+                if (bt <= (byte)BuffAttribute.SiphonIncomingAdditive - 1)
                 {
                     // only apply +1 shift to enum higher or equal to the one removed
-                    res = bt < (byte)BuffAttribute.FlatInc ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
+                    res = bt < (byte)BuffAttribute.FlatOutgoing ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
                 } 
                 else
                 {
@@ -416,9 +416,9 @@ namespace GW2EIEvtcParser
                 }
             } else
             {
-                res = bt <= (byte)BuffAttribute.SiphonRec ? (BuffAttribute)bt : BuffAttribute.Unknown;
+                res = bt <= (byte)BuffAttribute.SiphonIncomingAdditive ? (BuffAttribute)bt : BuffAttribute.Unknown;
             }
-            if (res == BuffAttribute.UnusedSiphonInc_Arc)
+            if (res == BuffAttribute.UnusedSiphonOutgoing_Arc)
             {
                 res = BuffAttribute.Unknown;
             }
