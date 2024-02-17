@@ -128,6 +128,10 @@ namespace GW2EIEvtcParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), InvokingHarmony },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), CelestialAvatar },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.HealingEffectivenessOutgoingAdditive), NaturalMender },
+            // HealingEffectivenessIncomingMultiplicative
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.HealingEffectivenessIncomingMultiplicative), Infirmity },
+            // SiphonIncomingAdditive
+            { new BuffFormulaDescriptor(AnyNegative, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonIncomingAdditive2), Infirmity },
             // Damage to HP
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), BloodReckoning },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.StrikeDamageToHP), LitanyOfWrath },

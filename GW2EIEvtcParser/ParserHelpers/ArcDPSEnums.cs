@@ -338,7 +338,7 @@ namespace GW2EIEvtcParser
             CondIncomingAdditive = 17,
             AttackSpeed = 18,
             UnusedSiphonOutgoing_Arc = 19, // Unused due to being auto detected by the solver
-            SiphonIncomingAdditive = 20,
+            SiphonIncomingAdditive1 = 20,
             //
             Unknown = short.MaxValue,
             //
@@ -398,6 +398,8 @@ namespace GW2EIEvtcParser
             MaximumHP = -31,
             VitalityPercent = -32,
             DefensePercent = -33,
+            SiphonIncomingAdditive2 = -34,
+            HealingEffectivenessIncomingMultiplicative = -35,
         }
         internal static BuffAttribute GetBuffAttribute(short bt, int evtcVersion)
         {
@@ -405,7 +407,7 @@ namespace GW2EIEvtcParser
             if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 // Enum has shifted by -1
-                if (bt <= (byte)BuffAttribute.SiphonIncomingAdditive - 1)
+                if (bt <= (byte)BuffAttribute.SiphonIncomingAdditive1 - 1)
                 {
                     // only apply +1 shift to enum higher or equal to the one removed
                     res = bt < (byte)BuffAttribute.FlatOutgoing ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
@@ -416,7 +418,7 @@ namespace GW2EIEvtcParser
                 }
             } else
             {
-                res = bt <= (byte)BuffAttribute.SiphonIncomingAdditive ? (BuffAttribute)bt : BuffAttribute.Unknown;
+                res = bt <= (byte)BuffAttribute.SiphonIncomingAdditive1 ? (BuffAttribute)bt : BuffAttribute.Unknown;
             }
             if (res == BuffAttribute.UnusedSiphonOutgoing_Arc)
             {
