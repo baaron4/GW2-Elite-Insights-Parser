@@ -249,7 +249,7 @@ namespace GW2EIWingman
                 return multiPartContent;
             };
 
-            string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traceHandler, parserVersion, HttpMethod.Post, contentCreator);
+            string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traceHandler, null, HttpMethod.Post, contentCreator);
             return response != null && response != "False";
         }
 
