@@ -210,6 +210,14 @@ namespace GW2EIDPSReport
                         return item;
                     }
                 }
+                catch (AggregateException agg)
+                {
+                    traceHandler(requestName + " tentative failed - main message - " + agg.Message);
+                    foreach (Exception e in agg.InnerExceptions)
+                    {
+                        traceHandler(requestName + " tentative failed - sub message - " + e.Message);
+                    }
+                }
                 catch (Exception e)
                 {
                     traceHandler(requestName + " tentative failed - " + e.Message);
