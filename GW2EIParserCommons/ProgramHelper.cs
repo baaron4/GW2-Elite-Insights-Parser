@@ -16,6 +16,7 @@ using GW2EIGW2API;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIParserCommons.Exceptions;
 
+[assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons
 {
     public class ProgramHelper
