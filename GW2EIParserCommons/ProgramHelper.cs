@@ -13,6 +13,7 @@ using GW2EIDPSReport.DPSReportJsons;
 using GW2EIWingman;
 using GW2EIEvtcParser;
 using GW2EIGW2API;
+using GW2EIEvtcParser.ParserHelpers;
 using GW2EIParserCommons.Exceptions;
 
 namespace GW2EIParserCommons
@@ -28,6 +29,28 @@ namespace GW2EIParserCommons
         public void ApplySettings(ProgramSettings settings)
         {
             Settings = settings;
+        }
+
+        public static IReadOnlyList<string> SupportedFormats => SupportedFileFormats.SupportedFormats;
+
+        public static bool IsSupportedFormat(string path)
+        {
+            return SupportedFileFormats.IsSupportedFormat(path);
+        }
+
+        public static bool IsCompressedFormat(string path)
+        {
+            return SupportedFileFormats.IsCompressedFormat(path);
+        }
+
+        public static bool IsTemporaryCompressedFormat(string path)
+        {
+            return SupportedFileFormats.IsTemporaryCompressedFormat(path);
+        }
+
+        public static bool IsTemporaryFormat(string path)
+        {
+            return SupportedFileFormats.IsTemporaryFormat(path);
         }
 
         internal static HTMLAssets htmlAssets { get; } = new HTMLAssets();
