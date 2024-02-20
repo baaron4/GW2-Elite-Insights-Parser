@@ -123,5 +123,6 @@
     <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
     <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
     <ProjectReference Include="..\GW2EIWingman\GW2EIWingman.csproj" />
+    <ProjectReference Include="..\GW2EIParserCommons\GW2EIParserCommons.csproj" />
   </ItemGroup>
 </Project>
