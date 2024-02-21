@@ -357,9 +357,10 @@ namespace GW2EIEvtcParser
         public const string HorizonStrikeArkk = "C5E4632E8131D342AA4F18222C68D8EB"; // owned by arkk
         // Sunqua Peak Fractal
         public const string AiArrowAttackIndicator = "88E9C3112BF6DA4486845A0433782E9C"; // GENERIC, no owner, rotated towards direction, used for lines & dash
-        public const string AiCircleAoEIndicator = "171A7BD24B5D0B4BA3770FF8A6A37EC0"; // GENERIC, no owner, no rotation, used for air & fire lines, not used by water
+        public const string AiCircleAoEIndicator = "171A7BD24B5D0B4BA3770FF8A6A37EC0"; // GENERIC, no owner, no rotation, used for air & fire lines
         public const string AiConeIndicator = "CB877C57D1423240BACDF8D6B52A440F"; // GENERIC, owned by ai, rotation weird
         public const string AiAoEAroundIndicator = "D11320204E28E643A48469AA8E4845BA"; // GENERIC, owned by ai
+        public const string AiGreenCircleIndicator = "BFFF308926A8B647A729197D364C1095"; // GENERIC, owned by player, 6.250s duration
         public const string AiSpreadCircle = "DD3870359E8FFA41BE69D612E05C972E"; // owned by ai, 5s duration
         public const string AiAirLine1 = "EFB7EF07C1CCD4479A73B34C56B53D7C"; // owned by ai, oriented towards ai
         public const string AiAirOrbFloat = "06E1712B62940C4CB8CEB23F06893370"; // owned by ai, 6s duration, higher up
@@ -375,6 +376,11 @@ namespace GW2EIEvtcParser
         public const string AiFireOrbGround = "3C8ECB429FAF8C43A22CC90DC8BACA8B"; // owned by ai, 5s duration
         public const string AiFireCircleDetonate = "8CAF14D6FC78B9459652C6C5DF160539"; // no owner, 1.6s duration
         public const string AiFireCirclePulsing = "70324046B99FA14D9D3B2F903CEEE6A7"; // owned by ai, 8s duration
+        public const string AiWaterTornadoIndicator1 = "EFB7EF07C1CCD4479A73B34C56B53D7C"; // owned by ai, oriented towards ai
+        public const string AiWaterTornadoIndicator2 = "4467407024CFA749B71274BE38E587E9"; // no owner, oriented in tornado direction
+        public const string AiWaterOrbFloat = "2B63C3FF719EF044BFB6D8D95DF8E0E8"; // owned by ai, 5s duration
+        public const string AiWaterOrbGround = "FC86E1F5291AE84D9B35400941BDAC30"; // owned by ai, no duration
+        public const string AiWaterCircleDetonate = "97884C8935277A44AE284E65FC9A57C2"; // no owner, no duration, REUSED for spawning orbs
         // Silent Surf Fractal
         public const string FrighteningSpeedRedAoE = "96E8C6EA0D2FAF4C8F62B5C6CA4B611C";
         public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";
