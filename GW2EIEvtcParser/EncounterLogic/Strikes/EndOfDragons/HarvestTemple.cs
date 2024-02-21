@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class HarvestTemple : EndOfDragonsStrike
     {
 
+        private static readonly Point3D GrandStrikeChestPosition = new Point3D(605.31f, -20400.5f, -15420.1f);
         private IReadOnlyList<AbstractSingleActor> FirstAwareSortedTargets { get; set; }
         public HarvestTemple(int triggerID) : base(triggerID)
         {
@@ -95,6 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             );
             Icon = EncounterIconHarvestTemple;
+            ChestID = ArcDPSEnums.ChestID.GrandStrikeChest;
             Extension = "harvsttmpl";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000004;
@@ -349,15 +351,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (lastDamageTaken != null)
                     {
                         bool isSuccess = false;
-                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time - 150).ToList();
-                        IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
-                        foreach (AnimatedCastEvent liffOff in liftOffs)
+                        if (agentData.GetGadgetsByID(ChestID).Any())
                         {
                             isSuccess = true;
-                            if (determinedApplies.Count(x => x.To == liffOff.Caster && Math.Abs(x.Time - liffOff.Time) < ServerDelayConstant) != 1)
+                        } 
+                        else
+                        {
+                            var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant).ToList();
+                            IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
+                            foreach (AnimatedCastEvent liffOff in liftOffs)
                             {
-                                isSuccess = false;
-                                break;
+                                isSuccess = true;
+                                if (determinedApplies.Count(x => x.To == liffOff.Caster && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
+                                {
+                                    isSuccess = false;
+                                    break;
+                                }
                             }
                         }
                         if (isSuccess)
@@ -371,6 +380,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2);
             bool needRefreshAgentPool = false;
             //
             var dragonOrbMaxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent == 491550).ToList();

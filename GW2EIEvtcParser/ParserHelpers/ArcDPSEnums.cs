@@ -538,6 +538,7 @@ namespace GW2EIEvtcParser
         private const int QadimPlatform = -49;
         private const int GravityBall = -50;
         private const int JormagMovingFrostBeam = -51;
+        private const int GrandStrikeChest = -52;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -1174,6 +1175,7 @@ namespace GW2EIEvtcParser
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             SiegeChest = ArcDPSEnums.SiegeChest,
             CAChest = ArcDPSEnums.CAChest,
+            GrandStrikeChest = ArcDPSEnums.GrandStrikeChest,
             //
             None = int.MaxValue,
         };
