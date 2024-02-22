@@ -443,8 +443,8 @@ namespace GW2EIParser.Setting
 
         private void ChkRawTimelineArraysCheckedChanged(object sender, EventArgs e)
         {
-            Settings.SingleThreaded = ChkRawTimelineArrays.Checked;
-            Properties.Settings.Default.RawTimelineArrays = Settings.SingleThreaded;
+            Settings.RawTimelineArrays = ChkRawTimelineArrays.Checked;
+            Properties.Settings.Default.RawTimelineArrays = Settings.RawTimelineArrays;
         }
 
         private void TxtHtmlExternalScriptsPathTextChanged(object sender, EventArgs e)
