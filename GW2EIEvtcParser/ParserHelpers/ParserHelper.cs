@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser
 
         internal const long InchDistanceThreshold = 10;
 
-        internal const long MinimumInCombatDuration = 2200;
+        public const long MinimumInCombatDuration = 2200;
 
         internal const int PhaseTimeLimit = 2000;
 

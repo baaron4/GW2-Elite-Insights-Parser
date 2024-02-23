@@ -1,7 +1,7 @@
 ﻿using System;
 using GW2EIEvtcParser;
 
-namespace GW2EIParser.Exceptions
+namespace GW2EIParserCommons.Exceptions
 {
     public class ProgramException : Exception
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using GW2EIBuilders;
+using GW2EIParserCommons;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIParser
@@ -134,12 +134,13 @@ namespace GW2EIParser
                 }
 
             }
-            ProgramHelper.htmlAssets = new HTMLAssets();
+            var settings = CustomSettingsManager.GetProgramSettings();
+            var programHelper = new ProgramHelper(new Version(Application.ProductVersion), settings);
             if (uiMode)
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                var form = new MainForm(logFiles);
+                var form = new MainForm(logFiles, programHelper);
                 Application.Run(form);
                 form.Dispose();
             }
@@ -148,7 +149,7 @@ namespace GW2EIParser
                 if (logFiles.Count > 0)
                 {
                     // Use the application through console 
-                    _ = new ConsoleProgram(logFiles);
+                    _ = new ConsoleProgram(logFiles, programHelper);
                     return 0;
                 }
             }
