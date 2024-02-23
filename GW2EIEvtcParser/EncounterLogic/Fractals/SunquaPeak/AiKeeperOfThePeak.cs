@@ -401,12 +401,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        private AgentItem GetAiAgentAt(long time)
+        {
+            AgentItem elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak))?.AgentItem;
+            AgentItem darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2))?.AgentItem;
+            if (elementalAi != null && elementalAi.InAwareTimes(time))
+            {
+                return elementalAi;
+            }
+            else if (darkAi != null && darkAi.InAwareTimes(time))
+            {
+                return darkAi;
+            }
+            return null;
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
 
             // tether between sprite and player
-            List<AbstractBuffEvent> spriteFixations = GetFilteredList(log.CombatData, new long[] { EnragedWaterSpriteFixation}, p, true, true);
+            List<AbstractBuffEvent> spriteFixations = GetFilteredList(log.CombatData, new long[] { FixatedEnragedWaterSprite }, p, true, true);
             replay.AddTether(spriteFixations, Colors.Purple, 0.5);
 
             // Tethering Players to Fears
@@ -414,10 +429,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddTether(fearFixations, Colors.Magenta, 0.5);
         }
 
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+
+            // tether between guilt and player/boss, applied TO guilt
+            if (target.AgentItem.IsSpecies(TrashID.GuiltDemon))
+            {
+                List<AbstractBuffEvent> fixations = GetFilteredList(log.CombatData, new long[] { FixatedGuilt }, target, true, true);
+                replay.AddTether(fixations, Colors.DarkPurple, 0.5);
+            }
+        }
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            AgentItem ai = log.AgentData.GetNPCsByID(TargetID.AiKeeperOfThePeak).First();
-
             // arrow indicators
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiArrowAttackIndicator, out IReadOnlyList<EffectEvent> arrows))
             {
@@ -425,7 +450,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 const uint length = 360;
                 foreach (EffectEvent effect in arrows)
                 {
-                    (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    long duration = effect.Duration != 0 ? effect.Duration : 1800;
+                    (long, long) lifespan = (effect.Time, effect.Time + duration);
                     var rotation = new AngleConnector(effect.Rotation.Z);
                     GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 0.5f * length), true);
                     EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
@@ -433,28 +459,48 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // orbs
-            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirOrbFloat, EffectGUIDs.AiFireOrbFloat, EffectGUIDs.AiWaterOrbFloat }, out IReadOnlyList<EffectEvent> orbs))
+            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirOrbGround, EffectGUIDs.AiFireOrbGround, EffectGUIDs.AiWaterOrbGround }, out IReadOnlyList<EffectEvent> orbs))
             {
                 foreach (EffectEvent effect in orbs)
                 {
                     long start = effect.Time;
-                    long end = start + effect.Duration;
+                    long end = start + 5000;
                     var position = new PositionConnector(effect.Position);
                     EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.3, position).UsingFilled(false));
                 }
             }
-
-            // spreads
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiSpreadCircle, out IReadOnlyList<EffectEvent> spreads))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiDarkOrbFloat, out IReadOnlyList<EffectEvent> darkOrbs))
             {
-                foreach (EffectEvent effect in spreads)
+                foreach (EffectEvent effect in darkOrbs)
                 {
                     long start = effect.Time;
-                    long end = start + effect.Duration;
+                    long end = start + 5000;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Purple, 0.3, position).UsingFilled(false));
+                }
+            }
+
+            // spreads
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiSpreadCircle, out IReadOnlyList<EffectEvent> spreadIndicators))
+            {
+                var spreadDetonateGUIDs = new string[] { EffectGUIDs.AiDarkDetonate };
+                const float maxDist = 40f;
+
+                IReadOnlyList<EffectEvent> detonates = new List<EffectEvent>();
+                log.CombatData.TryGetEffectEventsByGUIDs(spreadDetonateGUIDs, out detonates);
+                foreach (EffectEvent effect in spreadIndicators)
+                {
+                    long start = effect.Time;
+                    long end = start + 5000;
                     var position = new AgentConnector(effect.Dst);
                     EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.3, position).UsingFilled(false));
                     EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.15, position).UsingGrowingEnd(end));
-                    EnvironmentDecorations.Add(new CircleDecoration(600, (end, end + 300), Colors.Red, 0.15, position));
+                    Point3D endPos = effect.Dst.GetCurrentPosition(log, end);
+                    EffectEvent detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && x.Position.Distance2DToPoint(endPos) < maxDist);
+                    if (detonate != null)
+                    {
+                        EnvironmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));
+                    }
                 }
             }
 
@@ -464,9 +510,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in frontal)
                 {
                     long start = effect.Time;
-                    long end = start + effect.Duration;
+                    long end = start + 2000;
                     var position = new PositionConnector(effect.Position);
-                    var rotation = new AgentFacingConnector(ai);
+                    var rotation = new AgentFacingConnector(effect.Src);
                     EnvironmentDecorations.Add(new PieDecoration(240, 170f, (start, end), Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
                     EnvironmentDecorations.Add(new PieDecoration(240, 170f, (end, end + 300), Colors.Red, 0.15, position).UsingRotationConnector(rotation));
                 }
@@ -476,7 +522,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in around)
                 {
                     long start = effect.Time;
-                    long end = start + effect.Duration;
+                    long end = start + 2100;
                     var position = new PositionConnector(effect.Position);
                     EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
                     EnvironmentDecorations.Add(new CircleDecoration(300, (end, end + 300), Colors.Red, 0.15, position));
@@ -486,18 +532,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             // scaled circles
             if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCircleDetonate, EffectGUIDs.AiFireCircleDetonate }, out IReadOnlyList<EffectEvent> circleDetonate))
             {
-                AddScalingCircleDecorations(log, ai, circleDetonate, 300);
+                AddScalingCircleDecorations(log, circleDetonate, 300);
             }
             if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing }, out IReadOnlyList<EffectEvent> circlePulsing))
             {
-                AddScalingCircleDecorations(log, ai, circlePulsing, 8000);
+                AddScalingCircleDecorations(log, circlePulsing, 8000);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiWaterCircleDetonate, out IReadOnlyList<EffectEvent> waterCircles))
+            // we need to filter water & dark detonates due to reuse
+            var detonateReusedGUIDs = new string[] { EffectGUIDs.AiWaterCircleDetonate, EffectGUIDs.AiDarkCircleDetonate };
+            if (log.CombatData.TryGetEffectEventsByGUIDs(detonateReusedGUIDs, out IReadOnlyList<EffectEvent> circleDetonateReused))
             {
-                // we need to filter due to reuse for spawning orbs
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiCircleAoEIndicator, out IReadOnlyList<EffectEvent> indicators))
                 {
-                    IEnumerable<EffectEvent> filteredCircles = waterCircles.Where(detonate =>
+                    IEnumerable<EffectEvent> filteredCircles = circleDetonateReused.Where(detonate =>
                     {
                         return indicators.Any(indicator =>
                         {
@@ -505,7 +552,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             return timeDifference > 0 && timeDifference < 4000 && detonate.Position.Distance2DToPoint(indicator.Position) < 1.0f;
                         });
                     });
-                    AddScalingCircleDecorations(log, ai, filteredCircles, 300);
+                    AddScalingCircleDecorations(log, filteredCircles, 300);
                 }
             }
 
@@ -518,7 +565,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in greens)
                 {
                     long start = effect.Time;
-                    long end = start + effect.Duration;
+                    long end = start + 6250;
                     var position = new AgentConnector(effect.Dst);
                     EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingFilled(false));
                     EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingGrowingEnd(end));
@@ -532,7 +579,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effect in tornados)
                 {
                     long start = effect.Time;
-                    long end = start + effect.Duration;
+                    long end = start + 1800;
                     var position = new PositionConnector(effect.Position);
                     GeographicalConnector offset = new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 0.5f * directionLength), true);
                     var rotation = new AngleConnector(effect.Rotation.Z);
@@ -542,39 +589,41 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private void AddScalingCircleDecorations(ParsedEvtcLog log, AgentItem ai, IEnumerable<EffectEvent> effects, long damageDuration)
+        private void AddScalingCircleDecorations(ParsedEvtcLog log, IEnumerable<EffectEvent> effects, long damageDuration)
         {
-                foreach (EffectEvent effect in effects)
+            foreach (EffectEvent effect in effects)
+            {
+                // TODO: determine duration from previous indicator at same location
+                const long indicatorDuration = 1800;
+
+                long start = effect.Time - indicatorDuration;
+                long end = effect.Time;
+
+                AgentItem ai = GetAiAgentAt(effect.Time);
+                Point3D aiPos = ai.GetCurrentPosition(log, start);
+                float dist = aiPos.Distance2DToPoint(effect.Position);
+
+                // actual distances are 400, 670, 1080, 1630
+                uint radius;
+                if (dist > 1500f)
                 {
-                    // TODO: determine duration from previous indicator at same location
-                    const long indicatorDuration = 1800;
-
-                    long start = effect.Time - indicatorDuration;
-                    long end = effect.Time;
-
-                    // actual distances are 400, 670, 1080, 1630
-    	            Point3D aiPos = ai.GetCurrentPosition(log, start);
-                    float dist = aiPos.Distance2DToPoint(effect.Position);
-                    uint radius;
-                    if (dist > 1500f)
-                    {
-                        radius = 320;
-                    }
-                    else if (dist > 900f)
-                    {
-                        radius = 240;
-                    }
-                    else if (dist > 500f)
-                    {
-                        radius = 160;
-                    }
-                    else {
-                        radius = 100;
-                    }
-                    var position = new PositionConnector(effect.Position);
-                    EnvironmentDecorations.Add(new CircleDecoration(radius, (start, end), Colors.Orange, 0.15, position));
-                    EnvironmentDecorations.Add(new CircleDecoration(radius, (end, end + damageDuration), Colors.Red, 0.15, position));
+                    radius = 320;
                 }
+                else if (dist > 900f)
+                {
+                    radius = 240;
+                }
+                else if (dist > 500f)
+                {
+                    radius = 160;
+                }
+                else {
+                    radius = 100;
+                }
+                var position = new PositionConnector(effect.Position);
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, end), Colors.Orange, 0.15, position));
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (end, end + damageDuration), Colors.Red, 0.15, position));
+            }
         }
 
         // TODO: find proper sizes
@@ -588,7 +637,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in groundIndicators)
                 {
-                    (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    (long, long) lifespan = (effect.Time, effect.Time + 6000);
                     GeographicalConnector position = effect.IsAroundDst ? new AgentConnector(effect.Dst) : (GeographicalConnector) new PositionConnector(effect.Position);
                     AddMeteorIndicatorDecoration(lifespan, position, Colors.Orange);
                     EnvironmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Orange, 0.15, position).UsingGrowingEnd(lifespan.Item2));

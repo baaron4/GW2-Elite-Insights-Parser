@@ -3316,7 +3316,8 @@
         public const long EmpathicManipulationGuilt = 61602;
         public const long EmpathicManipulation2 = 61604;
         public const long EmpathicManipulationSorrow = 61606;
-        public const long EnragedWaterSpriteFixation = 61615;
+        public const long FixatedEnragedWaterSprite = 61615;
+        public const long FixatedGuilt = 61225;
         #endregion
         #region End of Dragons
         public const long VoidObliteratorChargeWindup = 61713;
