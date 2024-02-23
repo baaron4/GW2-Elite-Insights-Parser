@@ -4009,11 +4009,11 @@
         #region Secret of the Obscure
         public const long EmpoweredEnvyEmbodiment = 69479;
         public const long InsatiableHunger1 = 69544;
-        public const long WailOfDespair1 = 69548;
+        public const long WailOfDespairEmpowered = 69548;
         public const long EmpoweredCerus = 69550;
         public const long ShootingStars = 69560;
         public const long EmpoweredRageCerus = 69576;
-        public const long EnviousGazeDoubleBeam1 = 69601;
+        public const long EnviousGazeDoubleBeamFrontal = 69601;
         public const long RelicOfTheHerald = 69606;
         public const long POV_SoulFeastTargetBuff = 69616;
         public const long MabonsStrength = 69620;
@@ -4025,11 +4025,11 @@
         public const long IntoTheFray = 69764;
         public const long RelicOfTheAristocracy = 69795;
         public const long BannerDropWarning = 61797;
-        public const long PoolOfDespair1 = 69809;
+        public const long PoolOfDespair = 69809;
         public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
         public const long EnviousGaze = 69814;
         public const long DagdaDemonicAuraTimer = 69827;
-        public const long EnviousGazeDoubleBeam2 = 69829;
+        public const long EnviousGazeDoubleBeamRear = 69829;
         public const long RelicOfTheNightmare = 69849;
         public const long RelicOfFireworks = 69855;
         public const long InsatiableHunger8 = 69861;
@@ -4084,8 +4084,8 @@
         public const long RelicOfTheSunless = 70617;
         public const long EmpoweredMaliceEmbodiment = 70621;
         public const long RelicOfTheMirage = 70622;
-        public const long WailOfDespair2 = 70633;
-        public const long PoolOfDespair2 = 70659;
+        public const long WailOfDespair = 70633;
+        public const long PoolOfDespairEmpowered = 70659;
         public const long CryOfRageLarge = 70668;
         public const long EmpoweredGluttonyEmbodiment = 70687;
         public const long SummonedPhantom = 70724;
