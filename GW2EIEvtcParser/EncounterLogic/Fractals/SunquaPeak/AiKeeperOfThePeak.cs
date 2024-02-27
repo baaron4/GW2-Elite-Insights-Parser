@@ -459,7 +459,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // orbs
-            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirOrbGround, EffectGUIDs.AiFireOrbGround, EffectGUIDs.AiWaterOrbGround }, out IReadOnlyList<EffectEvent> orbs))
+            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirOrbFloat, EffectGUIDs.AiFireOrbFloat, EffectGUIDs.AiWaterOrbFloat }, out IReadOnlyList<EffectEvent> orbs))
             {
                 foreach (EffectEvent effect in orbs)
                 {
