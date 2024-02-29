@@ -66,6 +66,8 @@ namespace GW2EIEvtcParser
             internal const ulong DagdaNMHPChangedAndCMRelease = 153978;
             internal const ulong November2023Balance = 154949;
             internal const ulong January2024Balance = 157732;
+            internal const ulong February2024NewWeapons = 158837;
+            internal const ulong February2024CerusCMHPFix = 158968;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
