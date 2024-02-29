@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -41,18 +42,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new EnemyDstBuffApplyMechanic(EmpoweredMaliceCerus, "Empowered Malice", new MechanicPlotlySetting(Symbols.Square, Colors.LightBlue), "EmpMal.A", "Gained Empowered Malice", "Empowered Malice Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredRageCerus, "Empowered Rage", new MechanicPlotlySetting(Symbols.Square, Colors.LightOrange), "EmpRage.A", "Gained Empowered Rage", "Empowered Rage Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredRegretCerus, "Empowered Regret", new MechanicPlotlySetting(Symbols.Square, Colors.LightGrey), "EmpReg.A", "Gained Empowered Regret", "Empowered Regret Application", 0),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightRed), "Despair.K", "Embodiment of Despair Killed", "Despair Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfDespair) && !bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "Envy.K", "Embodiment of Envy Killed", "Envy Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfEnvy) && !bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Gluttony.K", "Embodiment of Gluttony Killed", "Gluttony Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfGluttony) && ! bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightGrey), "Malice.K", "Embodiment of Malice Killed", "Malice Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfMalice) && !bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightPurple), "Rage.K", "Embodiment of Rage Killed", "Rage Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfRage) && !bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.White), "Regret.K", "Embodiment of Regret Killed", "Regret Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfRegret) && !bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Emp.Despair.K", "Empowered Embodiment of Despair Killed", "Empowered Despair Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfDespair) && bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Blue), "Emp.Envy.K", "Empowered Embodiment of Envy Killed", "Empowered Envy Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfEnvy) && bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Orange), "Emp.Gluttony.K", "Empowered Embodiment of Gluttony Killed", "Empowered Gluttony Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfGluttony) && bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Grey), "Emp.Malice.K", "Empowered Embodiment of Malice Killed", "Empowered Malice Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfMalice) && bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Purple), "Emp.Rage.K", "Empowered Embodiment of Rage Killed", "Empowered Rage Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfRage) && bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
-                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Black), "Emp.Regret.K", "Empowered Embodiment of Regret Killed", "Empowered Regret Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TrashID.EmbodimentOfRegret) && bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightRed), "Despair.K", "Embodiment of Despair Killed", "Despair Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfDespair) && !bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "Envy.K", "Embodiment of Envy Killed", "Envy Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfEnvy) && !bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightOrange), "Gluttony.K", "Embodiment of Gluttony Killed", "Gluttony Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfGluttony) && ! bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightGrey), "Malice.K", "Embodiment of Malice Killed", "Malice Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfMalice) && !bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightPurple), "Rage.K", "Embodiment of Rage Killed", "Rage Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRage) && !bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.White), "Regret.K", "Embodiment of Regret Killed", "Regret Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRegret) && !bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Emp.Despair.K", "Empowered Embodiment of Despair Killed", "Empowered Despair Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfDespair) && bae.To.HasBuff(log, EmpoweredDespairEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Blue), "Emp.Envy.K", "Empowered Embodiment of Envy Killed", "Empowered Envy Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfEnvy) && bae.To.HasBuff(log, EmpoweredEnvyEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Orange), "Emp.Gluttony.K", "Empowered Embodiment of Gluttony Killed", "Empowered Gluttony Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfGluttony) && bae.To.HasBuff(log, EmpoweredGluttonyEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Grey), "Emp.Malice.K", "Empowered Embodiment of Malice Killed", "Empowered Malice Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfMalice) && bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Purple), "Emp.Rage.K", "Empowered Embodiment of Rage Killed", "Empowered Rage Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRage) && bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
+                new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Black), "Emp.Regret.K", "Empowered Embodiment of Regret Killed", "Empowered Regret Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRegret) && bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
                 new EnemyCastStartMechanic(EnragedSmash, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "EnrSmash.C", "Casted Enraged Smash", "Enraged Smash Cast", 0),
                 new EnemyCastStartMechanic(new long [] { InsatiableHunger1, InsatiableHunger2, InsatiableHunger3, InsatiableHunger4, InsatiableHunger5, InsatiableHunger6, InsatiableHunger7, InsatiableHunger8, InsatiableHunger9, InsatiableHunger10 }, "Insatiable Hunger", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
                 new EnemyCastStartMechanic(EnviousGaze, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze (One Beam)", "Envious Gaze Cast (One Beam)", 0),
@@ -78,20 +79,20 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>()
             {
-                (int)ArcDPSEnums.TargetID.Cerus,
-                (int)ArcDPSEnums.TrashID.EmbodimentOfDespair,
-                (int)ArcDPSEnums.TrashID.EmbodimentOfEnvy,
-                (int)ArcDPSEnums.TrashID.EmbodimentOfGluttony,
-                (int)ArcDPSEnums.TrashID.EmbodimentOfMalice,
-                (int)ArcDPSEnums.TrashID.EmbodimentOfRage,
-                (int)ArcDPSEnums.TrashID.EmbodimentOfRegret,
+                (int)TargetID.Cerus,
+                (int)TrashID.EmbodimentOfDespair,
+                (int)TrashID.EmbodimentOfEnvy,
+                (int)TrashID.EmbodimentOfGluttony,
+                (int)TrashID.EmbodimentOfMalice,
+                (int)TrashID.EmbodimentOfRage,
+                (int)TrashID.EmbodimentOfRegret,
             };
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cerus));
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus));
             if (mainTarget == null)
             {
                 throw new MissingKeyActorsException("Cerus not found");
@@ -111,12 +112,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "Split " + (i) / 2;
                     var ids = new List<int>
                     {
-                        (int)ArcDPSEnums.TrashID.EmbodimentOfDespair,
-                        (int)ArcDPSEnums.TrashID.EmbodimentOfEnvy,
-                        (int)ArcDPSEnums.TrashID.EmbodimentOfGluttony,
-                        (int)ArcDPSEnums.TrashID.EmbodimentOfMalice,
-                        (int)ArcDPSEnums.TrashID.EmbodimentOfRage,
-                        (int)ArcDPSEnums.TrashID.EmbodimentOfRegret,
+                        (int)TrashID.EmbodimentOfDespair,
+                        (int)TrashID.EmbodimentOfEnvy,
+                        (int)TrashID.EmbodimentOfGluttony,
+                        (int)TrashID.EmbodimentOfMalice,
+                        (int)TrashID.EmbodimentOfRage,
+                        (int)TrashID.EmbodimentOfRegret,
                     };
                     AddTargetsToPhaseAndFit(phase, ids, log);
                 }
@@ -142,7 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 switch (target.ID)
                 {
-                    case (int)ArcDPSEnums.TrashID.EmbodimentOfDespair:
+                    case (int)TrashID.EmbodimentOfDespair:
                         CombatItem despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                         target.OverrideName(target.Character + " (P" + curDespair++ + ")");
                         if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
@@ -150,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
-                    case (int)ArcDPSEnums.TrashID.EmbodimentOfEnvy:
+                    case (int)TrashID.EmbodimentOfEnvy:
                         CombatItem envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                         target.OverrideName(target.Character + " (P" + curEnvy++ + ")");
                         if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
@@ -158,7 +159,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
-                    case (int)ArcDPSEnums.TrashID.EmbodimentOfGluttony:
+                    case (int)TrashID.EmbodimentOfGluttony:
                         CombatItem gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                         target.OverrideName(target.Character + " (P" + curGluttony++ + ")");
                         if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
@@ -166,7 +167,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
-                    case (int)ArcDPSEnums.TrashID.EmbodimentOfMalice:
+                    case (int)TrashID.EmbodimentOfMalice:
                         CombatItem malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                         target.OverrideName(target.Character + " (P" + curMalice++ + ")");
                         if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
@@ -174,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
-                    case (int)ArcDPSEnums.TrashID.EmbodimentOfRage:
+                    case (int)TrashID.EmbodimentOfRage:
                         CombatItem rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                         target.OverrideName(target.Character + " (P" + curRage++ + ")");
                         if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
@@ -182,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
-                    case (int)ArcDPSEnums.TrashID.EmbodimentOfRegret:
+                    case (int)TrashID.EmbodimentOfRegret:
                         CombatItem regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                         target.OverrideName(target.Character + " (P" + curRegret++ + ")");
                         if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
@@ -198,12 +199,21 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>() { ArcDPSEnums.TrashID.MaliciousShadow };
+            return new List<ArcDPSEnums.TrashID>() { TrashID.MaliciousShadow };
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Temple of Febe";
+        }
+        internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus));
+            if (cerus == null)
+            {
+                throw new MissingKeyActorsException("Cerus not found");
+            }
+            return (cerus.GetHealth(combatData) > 100e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }
 }
