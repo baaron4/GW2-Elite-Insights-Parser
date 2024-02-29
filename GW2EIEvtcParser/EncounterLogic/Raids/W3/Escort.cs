@@ -292,6 +292,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch(target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.McLeodTheSilent:
+
+                    var mcLeodInvuls = target.GetBuffStatus(log, Invulnerability757, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    foreach (Segment segment in mcLeodInvuls)
+                    {
+                        replay.Hidden.Add(new Segment(segment));
+                    }
+                    break;
+            }
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
