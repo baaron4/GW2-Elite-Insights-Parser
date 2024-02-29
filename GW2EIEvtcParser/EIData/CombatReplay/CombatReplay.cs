@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EIData
         internal List<ParametricPoint3D> Velocities { get; private set; } = new List<ParametricPoint3D>();
         internal List<ParametricPoint3D> Rotations { get; } = new List<ParametricPoint3D>();
         internal List<ParametricPoint3D> PolledRotations { get; private set; } = new List<ParametricPoint3D>();
+        internal List<Segment> Hidden { get; private set; } = new List<Segment>();
         private long _start = -1;
         private long _end = -1;
         internal (long start, long end) TimeOffsets => (_start, _end);

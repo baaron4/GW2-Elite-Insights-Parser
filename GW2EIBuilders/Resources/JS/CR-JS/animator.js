@@ -178,7 +178,7 @@ class Animator {
             if (!actor.isMechanicOrSkill) {
                 switch (actor.type) {
                     case "Player":
-                        this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.breakbarActive, this.inchToPixel * actor.hitboxWidth));
+                        this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, this.inchToPixel * actor.hitboxWidth));
                         if (this.times.length === 0) {
                             for (let j = 0; j < actor.positions.length / 2; j++) {
                                 this.times.push(j * this.pollingRate);
@@ -187,13 +187,13 @@ class Animator {
                         break;
                     case "Target":
                     case "TargetPlayer":
-                        this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.breakbarActive, -1, this.inchToPixel * actor.hitboxWidth));
+                        this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, -1, this.inchToPixel * actor.hitboxWidth));
                         break;
                     case "Mob":
-                        this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
+                        this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
                         break;
                     case "Friendly":
-                        this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
+                        this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
                         break;
                     case "ActorOrientation":
                         this.actorOrientationData.set(actor.connectedTo.masterId, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo));
