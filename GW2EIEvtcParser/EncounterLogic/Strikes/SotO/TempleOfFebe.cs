@@ -86,6 +86,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TrashID.EmbodimentOfMalice,
                 (int)TrashID.EmbodimentOfRage,
                 (int)TrashID.EmbodimentOfRegret,
+                (int)TrashID.PermanentEmbodimentOfDespair,
+                (int)TrashID.PermanentEmbodimentOfEnvy,
+                (int)TrashID.PermanentEmbodimentOfGluttony,
+                (int)TrashID.PermanentEmbodimentOfMalice,
+                (int)TrashID.PermanentEmbodimentOfRage,
+                (int)TrashID.PermanentEmbodimentOfRegret,
+            };
+        }
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)TargetID.Cerus, 0 },
+                {(int)TrashID.EmbodimentOfDespair, 1 },
+                {(int)TrashID.EmbodimentOfEnvy, 1 },
+                {(int)TrashID.EmbodimentOfGluttony, 1 },
+                {(int)TrashID.EmbodimentOfMalice, 1 },
+                {(int)TrashID.EmbodimentOfRage, 1 },
+                {(int)TrashID.EmbodimentOfRegret, 1 },
+                {(int)TrashID.PermanentEmbodimentOfDespair, 2 },
+                {(int)TrashID.PermanentEmbodimentOfEnvy, 2 },
+                {(int)TrashID.PermanentEmbodimentOfGluttony, 2 },
+                {(int)TrashID.PermanentEmbodimentOfMalice, 2 },
+                {(int)TrashID.PermanentEmbodimentOfRage, 2 },
+                {(int)TrashID.PermanentEmbodimentOfRegret, 2 },
             };
         }
 
@@ -132,6 +157,53 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            var embodimentIDs = new List<TrashID>()
+            {
+                TrashID.EmbodimentOfDespair,
+                TrashID.EmbodimentOfEnvy,
+                TrashID.EmbodimentOfGluttony,
+                TrashID.EmbodimentOfMalice,
+                TrashID.EmbodimentOfRage,
+                TrashID.EmbodimentOfRegret,
+            };
+            bool refresh = false;
+            foreach (TrashID embodimentID in embodimentIDs)
+            {
+                foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
+                {
+                    if (embodiment.FirstAware < 0)
+                    {
+                        refresh = true;
+                        switch (embodiment.ID)
+                        {
+                            case (int)TrashID.EmbodimentOfDespair:
+                                embodiment.OverrideID(TrashID.PermanentEmbodimentOfDespair);
+                                break;
+                            case (int)TrashID.EmbodimentOfEnvy:
+                                embodiment.OverrideID(TrashID.PermanentEmbodimentOfEnvy);
+                                break;
+                            case (int)TrashID.EmbodimentOfGluttony:
+                                embodiment.OverrideID(TrashID.PermanentEmbodimentOfGluttony);
+                                break;
+                            case (int)TrashID.EmbodimentOfMalice:
+                                embodiment.OverrideID(TrashID.PermanentEmbodimentOfMalice);
+                                break;
+                            case (int)TrashID.EmbodimentOfRage:
+                                embodiment.OverrideID(TrashID.PermanentEmbodimentOfRage);
+                                break;
+                            case (int)TrashID.EmbodimentOfRegret:
+                                embodiment.OverrideID(TrashID.PermanentEmbodimentOfRegret);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            if (refresh)
+            {
+                agentData.Refresh();
+            }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             int curDespair = 1;
             int curEnvy = 1;
@@ -191,10 +263,64 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
+                    case (int)TrashID.PermanentEmbodimentOfDespair:
+                    case (int)TrashID.PermanentEmbodimentOfEnvy:
+                    case (int)TrashID.PermanentEmbodimentOfGluttony:
+                    case (int)TrashID.PermanentEmbodimentOfMalice:
+                    case (int)TrashID.PermanentEmbodimentOfRage:
+                    case (int)TrashID.PermanentEmbodimentOfRegret:
+                        target.OverrideName(target.Character + " (Permanent)");
+                        break;
                     default:
                         break;
                 }
             }
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch (target.ID)
+            {
+                case (int)TrashID.PermanentEmbodimentOfDespair:
+                case (int)TrashID.PermanentEmbodimentOfEnvy:
+                case (int)TrashID.PermanentEmbodimentOfGluttony:
+                case (int)TrashID.PermanentEmbodimentOfMalice:
+                case (int)TrashID.PermanentEmbodimentOfRage:
+                case (int)TrashID.PermanentEmbodimentOfRegret:
+                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    break;
+            }
+        }
+
+        private static void AddHiddenWhileOutOfCombat(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            IReadOnlyList<EnterCombatEvent> enterCombats = log.CombatData.GetEnterCombatEvents(target.AgentItem);
+            IReadOnlyList<ExitCombatEvent> exitCombats = log.CombatData.GetExitCombatEvents(target.AgentItem);
+            long start = log.FightData.LogStart;
+            bool startTrimmed = false;
+            foreach (EnterCombatEvent e in enterCombats)
+            {
+                if (!startTrimmed)
+                {
+                    replay.Trim(e.Time, replay.TimeOffsets.end);
+                    startTrimmed = true;
+                } 
+                else
+                {
+                    replay.Hidden.Add(new Segment(start, e.Time));
+                }
+                ExitCombatEvent exit = exitCombats.FirstOrDefault(x => x.Time >= e.Time);
+                if (exit != null)
+                {
+                    start = exit.Time;
+                } 
+                else
+                {
+                    // log ended while visible
+                    return;
+                }
+            }
+            replay.Trim(replay.TimeOffsets.start, start);
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
