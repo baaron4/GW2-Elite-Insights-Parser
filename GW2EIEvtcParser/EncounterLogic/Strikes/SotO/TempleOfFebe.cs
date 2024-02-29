@@ -282,11 +282,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)TargetID.Cerus:
-                    var cerusInvuls = target.GetBuffStatus(log, InvulnerabilityCerus, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    foreach (Segment segment in cerusInvuls)
-                    {
-                        replay.Hidden.Add(new Segment(segment));
-                    }
+                    replay.AddHideByBuff(target, log, InvulnerabilityCerus);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfDespair:
                 case (int)TrashID.PermanentEmbodimentOfEnvy:

@@ -577,6 +577,20 @@ namespace GW2EIEvtcParser.EIData
             var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector(new List<ParametricPoint3D>() { startPoint, endPoint }));
             Decorations.Add(shootingCircle);
         }
+        /// <summary>
+        /// Add hide based on buff's presence
+        /// </summary>
+        /// <param name="actor">Actor to check</param>
+        /// <param name="log"></param>
+        /// <param name="buffID">Buff id</param>
+        internal void AddHideByBuff(AbstractSingleActor actor, ParsedEvtcLog log, long buffID)
+        {
+            var invuls = actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment segment in invuls)
+            {
+                Hidden.Add(new Segment(segment));
+            }
+        }
     }
 }
 

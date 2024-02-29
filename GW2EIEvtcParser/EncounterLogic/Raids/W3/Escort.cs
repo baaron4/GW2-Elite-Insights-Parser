@@ -297,12 +297,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch(target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.McLeodTheSilent:
-
-                    var mcLeodInvuls = target.GetBuffStatus(log, Invulnerability757, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    foreach (Segment segment in mcLeodInvuls)
-                    {
-                        replay.Hidden.Add(new Segment(segment));
-                    }
+                    replay.AddHideByBuff(target, log, Invulnerability757);
                     break;
             }
         }
