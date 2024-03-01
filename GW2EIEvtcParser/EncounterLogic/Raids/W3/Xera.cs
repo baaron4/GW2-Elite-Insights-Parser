@@ -332,6 +332,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
+                    if (_xeraFirstPhaseEndTime != 0)
+                    {
+                        replay.Hidden.Add(new Segment(_xeraFirstPhaseEndTime, _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
+                    }
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedBloodstone:
                     if (_xeraFirstPhaseEndTime != 0)

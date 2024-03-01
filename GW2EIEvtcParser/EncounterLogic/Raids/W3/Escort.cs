@@ -292,6 +292,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch(target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.McLeodTheSilent:
+                    replay.AddHideByBuff(target, log, Invulnerability757);
+                    break;
+            }
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);

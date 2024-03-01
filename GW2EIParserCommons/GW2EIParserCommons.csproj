@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0.0</Version>
     <Configurations>Debug;Release;NoRewards</Configurations>
   </PropertyGroup>
 
@@ -15,15 +16,25 @@
 
   <PropertyGroup>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Version>5.0.4</Version>
-    <Authors>EliphasNUIT</Authors>
     <Company>GW2 Elite Insights</Company>
     <Product>GW2 Elite Insights</Product>
+    <Authors>EliphasNUIT</Authors>
+    <Description></Description>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
-
+    
+    
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />
+    <ProjectReference Include="..\GW2EIDiscord\GW2EIDiscord.csproj" />
+    <ProjectReference Include="..\GW2EIDPSReport\GW2EIDPSReport.csproj" />
+    <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
+    <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
+    <ProjectReference Include="..\GW2EIWingman\GW2EIWingman.csproj" />
   </ItemGroup>
 
 </Project>

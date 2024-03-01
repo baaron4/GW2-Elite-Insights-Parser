@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EIData
         internal List<ParametricPoint3D> Velocities { get; private set; } = new List<ParametricPoint3D>();
         internal List<ParametricPoint3D> Rotations { get; } = new List<ParametricPoint3D>();
         internal List<ParametricPoint3D> PolledRotations { get; private set; } = new List<ParametricPoint3D>();
+        internal List<Segment> Hidden { get; private set; } = new List<Segment>();
         private long _start = -1;
         private long _end = -1;
         internal (long start, long end) TimeOffsets => (_start, _end);
@@ -575,6 +576,20 @@ namespace GW2EIEvtcParser.EIData
             var endPoint = new ParametricPoint3D(endingPoint, lifespan.end);
             var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector(new List<ParametricPoint3D>() { startPoint, endPoint }));
             Decorations.Add(shootingCircle);
+        }
+        /// <summary>
+        /// Add hide based on buff's presence
+        /// </summary>
+        /// <param name="actor">Actor to check</param>
+        /// <param name="log"></param>
+        /// <param name="buffID">Buff id</param>
+        internal void AddHideByBuff(AbstractSingleActor actor, ParsedEvtcLog log, long buffID)
+        {
+            var invuls = actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment segment in invuls)
+            {
+                Hidden.Add(new Segment(segment));
+            }
         }
     }
 }

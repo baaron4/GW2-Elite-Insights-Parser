@@ -5,10 +5,10 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EncounterLogic;
 
-namespace GW2EIParser
+namespace GW2EIParserCommons
 {
 
-    internal abstract class OperationController : ParserController
+    public abstract class OperationController : ParserController
     {
 
         public class OperationBasicMetaData
@@ -44,7 +44,7 @@ namespace GW2EIParser
         /// <summary>
         /// Location of the output
         /// </summary>
-        internal string OutLocation { get; set; }
+        public string OutLocation { get; internal set; }
 
         private readonly List<string> _GeneratedFiles;
         /// <summary>
@@ -60,7 +60,7 @@ namespace GW2EIParser
         /// <summary>
         /// Link to dps.report
         /// </summary>
-        internal string DPSReportLink { get; set; }
+        public string DPSReportLink { get; internal set; }
 
         public OperationBasicMetaData BasicMetaData { get; set; }
 
@@ -72,7 +72,7 @@ namespace GW2EIParser
 
         private readonly Stopwatch _stopWatch = new Stopwatch();
 
-        public OperationController(string location, string status)
+        protected OperationController(string location, string status)
         {
             Status = status;
             InputFile = location;
