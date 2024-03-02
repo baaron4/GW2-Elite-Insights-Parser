@@ -3441,6 +3441,7 @@
         public const long OverbearingSmashSkill = 63075;
         public const long VenomousOutburstPet = 63082;
         public const long RecallMech_PlayerSkill = 63089;
+        public const long Shrouded = 63093;
         public const long EnvelopingHaze = 63094;
         public const long OverclockSignetSkill = 63095;
         public const long ShiftSignetSkill = 63111;
