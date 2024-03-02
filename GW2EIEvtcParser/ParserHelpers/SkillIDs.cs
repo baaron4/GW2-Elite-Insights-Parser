@@ -130,6 +130,7 @@
         public const long ScorpionWireThiefMinion = 3665;
         public const long UnloadThiefMinion = 3666;
         public const long BlackPowderThiefMinion = 3669;
+        public const long DoNothingTransformationBuff = 3686; // What is this? The thing that stops Nature's strenght beeing applied white under Force of Nature?
         public const long LightningStrikeWvW = 3815;
         public const long ChainLightningWvW = 3816;
         public const long LongRangeShotWvW = 3818;
@@ -813,6 +814,7 @@
         public const long NaturesRenewalAura = 12567;
         public const long SpiritOfNature = 12569;
         public const long AttackOfOpportunity = 12574;
+        public const long ForceOfNature = 12579;
         public const long SunSpiritSummoned = 12586;
         public const long StormSpiritSummoned = 12587;
         public const long StoneSpiritSummoned = 12588;
@@ -4136,6 +4138,8 @@
         public const long IceBullet = 71862;
         public const long EarthBullet = 71881;
         public const long FireBullet = 71936;
+        public const long NaturesStrength = 71976;
+        public const long TappedOut = 71979;
         public const long ShatteringStoneBuff = 72046;
         public const long DazingDischargeBuff = 72069;
         public const long GuildHallWvWMode = 72110;
