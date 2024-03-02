@@ -4131,6 +4131,13 @@
         public const long NouryssHungerDamageBuff = 71431;
         public const long NouryssHungerStacksBuff = 71711;
         public const long NouryssHungerStartGainingStacksBuff = 71723;
+        public const long RagingRichochetBuff = 71811;
+        public const long AirBullet = 71848;
+        public const long IceBullet = 71862;
+        public const long EarthBullet = 71881;
+        public const long FireBullet = 71936;
+        public const long ShatteringStoneBuff = 72046;
+        public const long DazingDischargeBuff = 72069;
         public const long GuildHallWvWMode = 72110;
         public const long GuildHallPvEMode = 72113;
         public const long GuildHallsPvPMode = 72118;
