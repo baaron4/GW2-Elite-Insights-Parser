@@ -326,9 +326,9 @@ class Animator {
         }
     }
 
-    selectActor(actorId) {
+    selectActor(actorId, keepIfEqual = false) {
         let actor = this.getActorData(actorId);
-        if (!actor || this.selectedActor === actor) {
+        if (!actor || (!keepIfEqual && this.selectedActor === actor)) {
             this.selectedActor = null;
             this.reactiveDataStatus.selectedActorID = null;
         } else {
@@ -476,7 +476,7 @@ class Animator {
                 uint32ToUint8[2] = pickedColor[2];
                 uint32ToUint8[3] = 0;
                 var actorID = uint32[0];
-                _this.selectActor(actorID);
+                _this.selectActor(actorID, true);
             }
             _this.mouseDown = null;
         }, false);
