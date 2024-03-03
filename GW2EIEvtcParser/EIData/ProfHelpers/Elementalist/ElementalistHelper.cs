@@ -127,6 +127,8 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.November2023Balance),
             new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.November2023Balance),
+            new BuffOnActorDamageModifier(RagingRichochetBuff, "Raging Ricochet", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.RagingRicochet, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
@@ -217,6 +219,21 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new Buff("Rocky Loop", RockyLoopBuff, Source.Elementalist, BuffClassification.Other, BuffImages.RockyLoop)
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            // Pistol
+            new Buff("Fire Bullet", FireBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
+            new Buff("Ice Bullet", IceBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+                .WithBuilds( GW2Builds.February2024NewWeapons),
+            new Buff("Air Bullet", AirBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
+            new Buff("Earth Bullet", EarthBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
+            new Buff("Raging Ricochet", RagingRichochetBuff, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.RagingRicochet)
+                .WithBuilds( GW2Builds.February2024NewWeapons),
+            new Buff("Dazing Discharge", DazingDischargeBuff, Source.Elementalist, BuffClassification.Other, BuffImages.DazingDischarge)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
+            new Buff("Shattering Stone", ShatteringStoneBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ShatteringStone)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
         };
 
 
