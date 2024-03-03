@@ -465,6 +465,7 @@ class Animator {
 
         document.body.addEventListener('mouseup', function (evt) {
             if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
+                _this._drawPickCanvas();
                 var downPt = {
                     x: Math.round(_this.lastX * resolutionMultiplier),
                     y: Math.round(_this.lastY * resolutionMultiplier)
@@ -818,7 +819,7 @@ class Animator {
             return;
         }
         //
-        this._drawPickCanvas();
+        //this._drawPickCanvas();
         this._drawBGCanvas();
         this._drawMainCanvas();
         if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
