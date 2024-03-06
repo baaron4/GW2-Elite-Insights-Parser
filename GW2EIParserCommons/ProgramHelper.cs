@@ -175,7 +175,7 @@ namespace GW2EIParserCommons
                 {
                     string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
 
-                    if (WingmanController.CheckUploadPossible(fInfo, accName, str => originalController.UpdateProgress("Wingman: " + str)))
+                    if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.FightData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                     {
                         try
                         {
