@@ -92,6 +92,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TrashID.PermanentEmbodimentOfMalice,
                 (int)TrashID.PermanentEmbodimentOfRage,
                 (int)TrashID.PermanentEmbodimentOfRegret,
+                (int)TrashID.MaliciousShadowCM,
             };
         }
         protected override Dictionary<int, int> GetTargetsSortIDs()
@@ -105,12 +106,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {(int)TrashID.EmbodimentOfMalice, 1 },
                 {(int)TrashID.EmbodimentOfRage, 1 },
                 {(int)TrashID.EmbodimentOfRegret, 1 },
-                {(int)TrashID.PermanentEmbodimentOfDespair, 2 },
-                {(int)TrashID.PermanentEmbodimentOfEnvy, 2 },
-                {(int)TrashID.PermanentEmbodimentOfGluttony, 2 },
-                {(int)TrashID.PermanentEmbodimentOfMalice, 2 },
-                {(int)TrashID.PermanentEmbodimentOfRage, 2 },
-                {(int)TrashID.PermanentEmbodimentOfRegret, 2 },
+                {(int)TrashID.MaliciousShadowCM, 2 },
+                {(int)TrashID.PermanentEmbodimentOfDespair, 3 },
+                {(int)TrashID.PermanentEmbodimentOfEnvy, 3 },
+                {(int)TrashID.PermanentEmbodimentOfGluttony, 3 },
+                {(int)TrashID.PermanentEmbodimentOfMalice, 3 },
+                {(int)TrashID.PermanentEmbodimentOfRage, 3 },
+                {(int)TrashID.PermanentEmbodimentOfRegret, 3 },
             };
         }
 
@@ -211,6 +213,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int curMalice = 1;
             int curRage = 1;
             int curRegret = 1;
+            int curShadow = 1;
             foreach (AbstractSingleActor target in Targets)
             {
                 switch (target.ID)
@@ -263,6 +266,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
+                    case (int)TrashID.MaliciousShadowCM:
+                        target.OverrideName(target.Character + " " + (curShadow++));
+                        break;
                     case (int)TrashID.PermanentEmbodimentOfDespair:
                     case (int)TrashID.PermanentEmbodimentOfEnvy:
                     case (int)TrashID.PermanentEmbodimentOfGluttony:
@@ -270,6 +276,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                     case (int)TrashID.PermanentEmbodimentOfRage:
                     case (int)TrashID.PermanentEmbodimentOfRegret:
                         target.OverrideName(target.Character + " (Permanent)");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            foreach (AbstractSingleActor trashMob in TrashMobs)
+            {
+                switch (trashMob.ID)
+                {
+                    case (int)TrashID.MaliciousShadow:
+                        trashMob.OverrideName(trashMob.Character + " " + (curShadow++));
                         break;
                     default:
                         break;
@@ -290,18 +307,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TrashID.PermanentEmbodimentOfMalice:
                 case (int)TrashID.PermanentEmbodimentOfRage:
                 case (int)TrashID.PermanentEmbodimentOfRegret:
-                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay);
                     break;
             }
         }
 
-        private static void AddHiddenWhileOutOfCombat(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<EnterCombatEvent> enterCombats = log.CombatData.GetEnterCombatEvents(target.AgentItem);
-            IReadOnlyList<ExitCombatEvent> exitCombats = log.CombatData.GetExitCombatEvents(target.AgentItem);
-            long start = log.FightData.LogStart;
+            var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId != WeaponStow && x.SkillId != WeaponSwap && x.SkillId != WeaponDraw).ToList();
+            long invisibleStart = log.FightData.LogStart;
             bool startTrimmed = false;
-            foreach (EnterCombatEvent e in enterCombats)
+            foreach (AbstractCastEvent e in castEvents)
             {
                 if (!startTrimmed)
                 {
@@ -310,20 +326,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 } 
                 else
                 {
-                    replay.Hidden.Add(new Segment(start, e.Time));
+                    replay.Hidden.Add(new Segment(invisibleStart, e.Time));
                 }
-                ExitCombatEvent exit = exitCombats.FirstOrDefault(x => x.Time >= e.Time);
-                if (exit != null)
-                {
-                    start = exit.Time;
-                } 
-                else
-                {
-                    // log ended while visible
-                    return;
-                }
+                invisibleStart = e.EndTime;
             }
-            replay.Trim(replay.TimeOffsets.start, start);
+            replay.Trim(replay.TimeOffsets.start, invisibleStart);
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
