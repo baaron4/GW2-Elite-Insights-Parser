@@ -4042,6 +4042,7 @@
         public const long RelicOfVass = 69961;
         public const long SpinningNebulaCentral = 69989; // The attack when Dagda doesn't teleport off the center
         public const long RelicOfMabon = 69992;
+        public const long ResistanceUnrippable = 69995;
         public const long RelicOfTheDefenderHealing = 70001;
         public const long ShootingStarsTargetBuff = 70026;
         public const long InsatiableHunger4 = 70031;
@@ -4072,6 +4073,7 @@
         public const long SkyscaleFireballSkill = 70431;
         public const long RelicOfTheZephyrite = 70460;
         public const long LifeSuffused = 70473;
+        public const long KryptisPossessedCM = 70477;
         public const long RelicOfTheWizardsTower = 70491;
         public const long InsatiableHunger5 = 70503;
         public const long POV_PetrifyBuff = 70504;

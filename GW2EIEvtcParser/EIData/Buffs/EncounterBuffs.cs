@@ -72,6 +72,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Enraged (500%)", Enraged_500, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Call of the Mists", CallOfTheMists, Source.FightSpecific, BuffClassification.Other, BuffImages.CallOfTheMists),
             new Buff("Untargetable", Untargetable, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined ),
+            new Buff("Resistance (Unrippable)", ResistanceUnrippable, Source.Common, BuffStackType.Queue, 5, BuffClassification.Other, BuffImages.Resistance),
             // Strike Essences
             new Buff("Essence of Vigilance Tier 1", EssenceOfVigilanceTier1, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
             new Buff("Essence of Vigilance Tier 2", EssenceOfVigilanceTier2, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
@@ -604,6 +605,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Empowered Rage (Embodiment)", EmpoweredRageEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.ExcessMagic),
             new Buff("Empowered Regret (Embodiment)", EmpoweredRegretEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.ExcessMagic),
             new Buff("Kryptis-Possessed", KryptisPossessed, Source.FightSpecific, BuffClassification.Other, BuffImages.Madness),
+            new Buff("Kryptis-Possessed (CM)", KryptisPossessedCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Madness),
             new Buff("Invulnerability (Cerus)", InvulnerabilityCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             //Open World Soo-Won
