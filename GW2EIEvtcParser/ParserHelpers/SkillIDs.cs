@@ -4143,6 +4143,7 @@
         public const long FireBullet = 71936;
         public const long NaturesStrength = 71976;
         public const long TappedOut = 71979;
+        public const long Flourish = 71999;
         public const long ShatteringStoneBuff = 72046;
         public const long DazingDischargeBuff = 72069;
         public const long GuildHallWvWMode = 72110;

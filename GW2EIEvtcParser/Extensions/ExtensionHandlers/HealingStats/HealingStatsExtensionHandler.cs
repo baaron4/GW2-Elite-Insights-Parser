@@ -95,7 +95,8 @@ namespace GW2EIEvtcParser.Extensions
             GraspingShadows,
             DawnsRepose,
             EternalNight,
-            MindShock
+            MindShock,
+            Flourish
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
