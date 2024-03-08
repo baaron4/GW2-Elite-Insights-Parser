@@ -4146,6 +4146,7 @@
         public const long Gorge = 71871;
         public const long RampartSplitter = 71875;
         public const long EarthBullet = 71881;
+        public const long EssenceOfLivingShadows = 71882;
         public const long Journey = 71897;
         public const long LineBreakerHeal = 71901;
         public const long FireBullet = 71936;

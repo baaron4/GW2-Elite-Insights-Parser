@@ -110,7 +110,8 @@ namespace GW2EIEvtcParser.Extensions
             HungeringMaelstrom,
             EnervationBlade,
             EnervationEcho,
-            DeathlyEnervation
+            DeathlyEnervation,
+            EssenceOfLivingShadows
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
