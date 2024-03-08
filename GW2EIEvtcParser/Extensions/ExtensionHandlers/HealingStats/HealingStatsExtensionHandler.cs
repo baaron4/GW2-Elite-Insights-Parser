@@ -58,6 +58,8 @@ namespace GW2EIEvtcParser.Extensions
             WellOfRecall_Senility,
             GravityWell,
             VampiricAura,
+            VampiricStrikes,
+            VampiricStrikes2,
             YourSoulIsMine,
             WellOfCalamity,
             WellOfAction,
