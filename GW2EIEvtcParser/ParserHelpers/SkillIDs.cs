@@ -4148,11 +4148,12 @@
         public const long RampartSplitter = 71875;
         public const long EarthBullet = 71881;
         public const long EssenceOfLivingShadows = 71882;
+        public const long FriendlyFire = 71892;
         public const long Journey = 71897;
         public const long LineBreakerHeal = 71901;
         public const long FireBullet = 71936;
         public const long PathToVictory = 71950;
-        public const long FriendlyFireHeal = 71970;
+        public const long FriendlyFireIllu = 71970;
         public const long NaturesStrength = 71976;
         public const long TappedOut = 71979;
         public const long EnervationBlade = 71986;

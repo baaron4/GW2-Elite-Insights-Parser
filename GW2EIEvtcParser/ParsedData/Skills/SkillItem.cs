@@ -535,7 +535,7 @@ namespace GW2EIEvtcParser.ParsedData
             { EchoOfMemoryExtra, "https://wiki.guildwars2.com/images/9/95/Echo_of_Memory.png" },
             { SplitSurgeSecondaryBeams, "https://wiki.guildwars2.com/images/f/fd/Split_Surge.png" },
             { PersistenceOfMemory, "https://wiki.guildwars2.com/images/c/ce/Persistence_of_Memory.png" },
-            { FriendlyFireHeal, "https://wiki.guildwars2.com/images/c/c0/Friendly_Fire.png" },
+            { FriendlyFireIllu, "https://wiki.guildwars2.com/images/c/c0/Friendly_Fire.png" },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
