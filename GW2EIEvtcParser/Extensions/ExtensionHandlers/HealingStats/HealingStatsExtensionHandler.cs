@@ -101,9 +101,12 @@ namespace GW2EIEvtcParser.Extensions
             MindShock,
             Flourish,
             EchoingErosion,
+            FrigidFlurry,
             SoothingSplash,
             Journey,
             FriendlyFireHeal,
+            InspiringImagery,
+            Effervescence,
             RampartSplitter,
             PathToVictory,
             ValiantLeap,
@@ -113,7 +116,7 @@ namespace GW2EIEvtcParser.Extensions
             EnervationBlade,
             EnervationEcho,
             DeathlyEnervation,
-            EssenceOfLivingShadows
+            EssenceOfLivingShadows,
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();

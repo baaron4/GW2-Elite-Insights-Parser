@@ -4138,6 +4138,7 @@
         public const long NouryssHungerStacksBuff = 71711;
         public const long NouryssHungerStartGainingStacksBuff = 71723;
         public const long PathOfGluttony = 71799;
+        public const long Effervescence = 71800;
         public const long RagingRichochetBuff = 71811;
         public const long HungeringMaelstrom = 71813;
         public const long AirBullet = 71848;
@@ -4157,6 +4158,8 @@
         public const long EnervationBlade = 71986;
         public const long Flourish = 71999;
         public const long ValiantLeap = 72002;
+        public const long InspiringImagery = 72005;
+        public const long FrigidFlurry = 72028;
         public const long SoothingSplash = 72033;
         public const long ShatteringStoneBuff = 72046;
         public const long DeathlyEnervation = 72051;
