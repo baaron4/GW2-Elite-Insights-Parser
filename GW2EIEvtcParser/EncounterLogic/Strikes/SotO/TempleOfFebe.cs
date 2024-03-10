@@ -286,8 +286,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                         break;
                     case (int)TrashID.MaliciousShadow:
-                        target.OverrideName(target.Character + " " + (curShadow++));
-                        break;
                     case (int)TrashID.MaliciousShadowCM:
                         target.OverrideName(target.Character + " " + (curShadow++));
                         break;
@@ -298,17 +296,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     case (int)TrashID.PermanentEmbodimentOfRage:
                     case (int)TrashID.PermanentEmbodimentOfRegret:
                         target.OverrideName(target.Character + " (Permanent)");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            foreach (AbstractSingleActor trashMob in TrashMobs)
-            {
-                switch (trashMob.ID)
-                {
-                    case (int)TrashID.MaliciousShadow:
-                        trashMob.OverrideName(trashMob.Character + " " + (curShadow++));
                         break;
                     default:
                         break;
@@ -417,14 +404,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     uint radius = 175;
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                     long growing = lifespan.end;
-                    if (effect.Src.IsSpecies(TargetID.Cerus))
-                    {
-                        lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
-                    }
-                    else
-                    {
-                        lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
-                    }
+                    lifespan = ComputeMechanicLifespanWithCancellationTime(effect.Src, log, lifespan);
                     var circle = new CircleDecoration(radius, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p));
                     replay.AddDecorationWithGrowing(circle, growing, true);
                 }
@@ -437,14 +417,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                     long growing = lifespan.end;
-                    if (effect.Src.IsSpecies(TargetID.Cerus))
-                    {
-                        lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
-                    }
-                    else
-                    {
-                        lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
-                    }
+                    lifespan = ComputeMechanicLifespanWithCancellationTime(effect.Src, log, lifespan);
                     var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p));
                     replay.AddDecorationWithGrowing(circle, growing);
                 }
@@ -457,14 +430,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                     long growing = lifespan.end;
-                    if (effect.Src.IsSpecies(TargetID.Cerus))
-                    {
-                        lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
-                    }
-                    else
-                    {
-                        lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
-                    }
+                    lifespan = ComputeMechanicLifespanWithCancellationTime(effect.Src, log, lifespan);
                     var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p));
                     replay.AddDecorationWithGrowing(circle, growing);
                 }
@@ -540,14 +506,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (EffectEvent effect in maliciousIntentTethers.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 2000))
                     {
                         (long start, long end) lifespan = (effect.Time, effect.Time + 5000);
-                        if (target.IsSpecies(TargetID.Cerus))
-                        {
-                            lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
-                        }
-                        else
-                        {
-                            lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
-                        }
+                        lifespan = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespan);
                         var tether = new LineDecoration(lifespan, Colors.RedSkin, 0.4, new AgentConnector(effect.Dst), new AgentConnector(target));
                         replay.Decorations.Add(tether);
                     }
@@ -587,14 +546,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
 
                 // Check if the mechanic got cancelled
-                if (target.IsSpecies(TargetID.Cerus))
-                {
-                    lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
-                }
-                else
-                {
-                    lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
-                }
+                lifespan = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespan);
 
                 var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
                 replay.AddDecorationWithGrowing(circle, growing);
@@ -615,15 +567,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Point3D facing = target.GetCurrentRotation(log, lifespanIndicator.end);
                 if (facing != null)
                 {
-                    if (target.IsSpecies(TargetID.Cerus))
-                    {
-                        lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(log, lifespanIndicator);
-                    }
-                    else
-                    {
-                        lifespanIndicator = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespanIndicator);
-                    }
                     // Indicator
+                    lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanIndicator);
                     // Check if quickness is still applied from a previous steal
                     double computedDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, indicatorDuration);
                     if (computedDuration > 0)
@@ -637,14 +582,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Damage
                     (long start, long end) lifespanDamage = (lifespanIndicator.end + 950, lifespanIndicator.end + 10750);
                     (long start, long end) lifespanDamageCancelled = lifespanDamage;
-                    if (target.IsSpecies(TargetID.Cerus))
-                    {
-                        lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(log, lifespanDamage);
-                    }
-                    else
-                    {
-                        lifespanDamageCancelled = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespanDamage);
-                    }
+                    lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamage);
                     double millisecondsPerDegree = (double)(lifespanDamage.end - lifespanDamage.start) / 360;
                     double degreesRotated = (lifespanDamageCancelled.end - lifespanDamageCancelled.start) / millisecondsPerDegree;
                     var rotation2 = new AngleConnector(facing, (float)degreesRotated);
@@ -659,14 +597,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Opposite Damage
                         (long start, long end) lifespanDamageOpposite = (lifespanIndicator.end + 950, lifespanIndicator.end + 5850);
                         (long start, long end) lifespanDamageOppositeCancelled = lifespanDamage;
-                        if (target.IsSpecies(TargetID.Cerus))
-                        {
-                            lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(log, lifespanDamageOpposite);
-                        }
-                        else
-                        {
-                            lifespanDamageOppositeCancelled = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespanDamageOpposite);
-                        }
+                        lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamageOpposite);
                         double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
                         double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
                         var rotation3 = new AngleConnector(facing, (float)degreedRotatedOpposite);
@@ -677,31 +608,32 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static (long start, long end) ComputeMechanicLifespanWithCancellationTime(ParsedEvtcLog log, (long start, long end) lifespan)
+        private static (long start, long end) ComputeMechanicLifespanWithCancellationTime(AgentItem target, ParsedEvtcLog log, (long start, long end) lifespan)
         {
             AbstractSingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
             if (cerus != null)
             {
-                var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PetrifySkill).ToList();
-                foreach (AbstractCastEvent cast in casts)
+                if (target.IsSpecies(TargetID.Cerus))
                 {
-                    if (lifespan.start <= cast.Time && lifespan.end > cast.Time)
+                    var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PetrifySkill).ToList();
+                    foreach (AbstractCastEvent cast in casts)
                     {
-                        lifespan.end = Math.Min(lifespan.end, cast.Time);
+                        if (lifespan.start <= cast.Time && lifespan.end > cast.Time)
+                        {
+                            lifespan.end = Math.Min(lifespan.end, cast.Time);
+                        }
                     }
                 }
-            }
-            return lifespan;
-        }
-
-        private static (long start, long end) ComputeEmbodimentMechanicLifespanWithCancellationTime(ParsedEvtcLog log, (long start, long end) lifespan)
-        {
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase && x.CanBeSubPhase).ToList();
-            foreach (PhaseData phase in phases)
-            {
-                if (lifespan.start >= phase.Start && lifespan.start < phase.End && lifespan.end > phase.End)
+                else
                 {
-                    lifespan.end = Math.Min(lifespan.end, phase.End);
+                    var invulns = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffRemoveAllEvent>().ToList();
+                    foreach (BuffRemoveAllEvent invuln in invulns)
+                    {
+                        if (lifespan.start <= invuln.Time && lifespan.end > invuln.Time)
+                        {
+                            lifespan.end = Math.Min(lifespan.end, invuln.Time);
+                        }
+                    }
                 }
             }
             return lifespan;

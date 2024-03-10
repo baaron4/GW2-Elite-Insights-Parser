@@ -504,7 +504,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             buffCounter++;
                         }
                     }
-                    IReadOnlyList<DeathRecap> deaths = player.GetDeathRecaps(log);
+                    IReadOnlyList<DeadEvent> deaths = log.CombatData.GetDeadEvents(player.AgentItem);
                     if (deaths.Count == 0)
                     {
                         aliveCounter++;
