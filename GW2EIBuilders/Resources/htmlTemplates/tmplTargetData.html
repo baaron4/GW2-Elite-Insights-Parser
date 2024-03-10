@@ -4,12 +4,10 @@
             class="icon" :data-original-title="'Health: ' + target.health">
         <img v-if="target.tough > 0" src="https://wiki.guildwars2.com/images/1/12/Toughness.png" alt="Toughness"
             class="icon" hbHeight :data-original-title="'Toughness: ' + target.tough">
-        <span style="height:18px; font-size: 1.45rem; margin-bottom: 22px;" v-if="target.hbWidth > 0" :data-original-title="'Hitbox Width: ' + target.hbWidth">
-            &#8596;
-        </span>
-        <span style="height:18px; font-size: 1.3rem; margin-bottom: 18px;" v-if="target.hbHeight > 0" :data-original-title="'Hitbox Half-Height: ' + 0.5 * target.hbHeight">
-            &#8597;
-        </span>
+        <img v-if="target.hbWidth > 0" src="https://i.imgur.com/QSI79aT.png" alt="Hitbox Width"
+            class="icon" :data-original-title="'Hitbox Width: ' + target.hbWidth">
+        <img v-if="target.hbHeight > 0" src="https://i.imgur.com/41lsf0q.png" alt="Hitbox Half-Height"
+            class="icon" :data-original-title="'Hitbox Half-Height: ' + 0.5 * target.hbHeight">
     </div>
 </template>
 
