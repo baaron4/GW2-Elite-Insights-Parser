@@ -52,6 +52,7 @@
         public const long MarkOfBloodOrChillblains = -33;
         public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
         public const long NumberOfRangerPets = -35;
+        public const long AchievementEligibilityApathetic = -36;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;

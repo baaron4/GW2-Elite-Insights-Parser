@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Purple), "Emp.Rage.K", "Empowered Embodiment of Rage Killed", "Empowered Rage Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRage) && bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Black), "Emp.Regret.K", "Empowered Embodiment of Regret Killed", "Empowered Regret Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRegret) && bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
                 new EnemyCastStartMechanic(new long [] { CrushingRegretNM, CrushingRegretEmpoweredNM, CrushingRegretCM, CrushingRegretEmpoweredCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.LightMilitaryGreen), "CrushReg.C", "Casted Crushing Regret", "Crushing Regret Cast", 0),
-                new EnemyCastStartMechanic(new long [] { WailOfDespairNM, WailOfDespairEmpoweredNM, WailOfDespairCM, WailOfDespairEmpoweredCM}, "Wail of Despair", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "WailDesp.C", "Casted Wail of Despair", "Wail of Despair Cast", 0),
+                new EnemyCastStartMechanic(new long [] { WailOfDespairNM, WailOfDespairEmpoweredNM, WailOfDespairCM, WailOfDespairEmpoweredCM }, "Wail of Despair", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "WailDesp.C", "Casted Wail of Despair", "Wail of Despair Cast", 0),
                 new EnemyCastStartMechanic(new long [] { EnviousGazeNM, EnviousGazeCM, EnviousGazeEmpoweredNM, EnviousGazeEmpoweredCM }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze", "Envious Gaze Cast", 0),
                 new EnemyCastStartMechanic(new long [] { MaliciousIntentNM, MaliciousIntentEmpoweredNM, MaliciousIntentCM, MaliciousIntentEmpoweredCM }, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.RedSkin), "MalInt.C", "Casted Malicious Intent", "Malicious Intent Cast", 0),
                 new EnemyCastStartMechanic(new long [] { InsatiableHungerSkillNM, InsatiableHungerSkillEmpoweredNM, InsatiableHungerSkillCM, InsatiableHungerEmpoweredSkillCM }, "Insatiable Hunger", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
@@ -705,6 +705,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return lifespan;
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+
+            if (log.FightData.Success && log.FightData.IsCM)
+            {
+                AgentItem cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
+                if (cerus != null)
+                {
+                    bool despair = cerus.HasBuff(log, EmpoweredDespairCerus, log.FightData.LogStart, log.FightData.LogEnd);
+                    bool envy = cerus.HasBuff(log, EmpoweredEnvyCerus, log.FightData.LogStart, log.FightData.LogEnd);
+                    bool gluttony = cerus.HasBuff(log, EmpoweredGluttonyCerus, log.FightData.LogStart, log.FightData.LogEnd);
+                    bool malice = cerus.HasBuff(log, EmpoweredMaliceCerus, log.FightData.LogStart, log.FightData.LogEnd);
+                    bool rage = cerus.HasBuff(log, EmpoweredRageCerus, log.FightData.LogStart, log.FightData.LogEnd);
+                    bool regret = cerus.HasBuff(log, EmpoweredRegretCerus, log.FightData.LogStart, log.FightData.LogEnd);
+                    if (despair && envy && gluttony && malice && rage && regret)
+                    {
+                        // TODO: Check if this achievement Apathetic has an in game eligibility buff, and if it's available on a repeated clear this section can be simplified
+                        // Temporary set to ID -36
+                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityApathetic], 1));
+                    }
+                }
+            }
         }
     }
 }
