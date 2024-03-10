@@ -88,6 +88,7 @@ namespace GW2EIEvtcParser
             internal const int BuffExtensionBroken = 20230905;
             internal const int BuffExtensionOverstackValueChanged = 20231107;
             internal const int LingeringAgents = 20231110;
+            internal const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
             //
             internal const int EndOfLife = int.MaxValue;
         }

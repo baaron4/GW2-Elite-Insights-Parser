@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Virtuoso Blade", VirtuosoBlades, Source.Virtuoso, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.PowerAttribute),
         };
 
-        public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
+        public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData, int evtcVersion)
         {
             var res = new List<AbstractBuffEvent>();
             var bladeIDs = new HashSet<long>
@@ -75,21 +75,29 @@ namespace GW2EIEvtcParser.EIData
             };
             var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID)).ToList();
             SkillItem skill = skillData.Get(VirtuosoBlades);
-            var lastAddedBuffInstance = new Dictionary<long, uint>();
+            var lastAddedBuffInstance = new Dictionary<long, BuffApplyEvent>();
             foreach (AbstractBuffEvent blade in blades)
             {
                 if (blade is BuffApplyEvent bae)
                 {
                     res.Add(new BuffApplyEvent(bae.By, a, bae.Time, bae.AppliedDuration, skill, bae.IFF, bae.BuffInstance, true));
-                    lastAddedBuffInstance[blade.BuffID] = bae.BuffInstance;
+                    lastAddedBuffInstance[blade.BuffID] = bae;
                 }
                 else if (blade is BuffRemoveAllEvent brae)
                 {
-                    if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint removedInstance))
+                    uint removedInstance = 0;
+                    long elapsedTime = 0;
+                    if (lastAddedBuffInstance.TryGetValue(blade.BuffID, out BuffApplyEvent apply))
                     {
-                        removedInstance = 0;
+                        removedInstance = apply.BuffInstance;
+                        elapsedTime = brae.Time - apply.Time;
                     }
-                    res.Add(new BuffRemoveSingleEvent(brae.By, a, brae.Time, brae.RemovedDuration, skill, brae.IFF, removedInstance));
+                    int removedDuration = brae.RemovedDuration;
+                    if (evtcVersion >= ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged)
+                    {
+                        removedDuration -= (int)elapsedTime;
+                    }
+                    res.Add(new BuffRemoveSingleEvent(brae.By, a, brae.Time, removedDuration, skill, brae.IFF, removedInstance));
                 }
                 else if (blade is BuffRemoveSingleEvent brse)
                 {
