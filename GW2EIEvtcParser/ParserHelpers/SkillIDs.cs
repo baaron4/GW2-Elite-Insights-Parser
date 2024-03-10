@@ -4047,7 +4047,7 @@
         public const long RelicOfVass = 69961;
         public const long SpinningNebulaCentral = 69989; // The attack when Dagda doesn't teleport off the center
         public const long RelicOfMabon = 69992;
-        public const long ResistanceUnstrippableCerus = 69995;
+        public const long ResistanceUnremovable = 69995;
         public const long RelicOfTheDefenderHealing = 70001;
         public const long ShootingStarsTargetBuff = 70026;
         public const long InsatiableHunger4 = 70031;
@@ -4187,9 +4187,12 @@
         public const long GuildHallWvWMode = 72110;
         public const long GuildHallPvEMode = 72113;
         public const long GuildHallsPvPMode = 72118;
+        public const long AchievementEligibilityDancedWithTheStars = 72135;
         public const long EnviousGazeEmpoweredRearCM = 72200;
+        public const long AchievementEligibilityPrecisionAnxiety = 72246;
         public const long InsatiableHunger12 = 72261;
         public const long InsatiableHunger18 = 72321;
+        public const long AchievementEligibilityUnboundedOptimism = 72340;
         public const long InsatiableHunger7 = 72343;
         public const long InsatiableHunger6 = 72344;
         public const long InsatiableHunger13 = 72347;
