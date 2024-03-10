@@ -23,18 +23,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
                 new PlayerDstBuffApplyMechanic(Insatiable, "Insatiable", new MechanicPlotlySetting(Symbols.Hourglass, Colors.Pink), "Ins.A", "Insatiable Applied (Absorbed Gluttony Orb)", "Insatiable Application", 0),
-                new PlayerDstBuffApplyMechanic(MaliciousIntentTargetBuff, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targetted by Malicious Intent", 0),
-                new PlayerDstHitMechanic(new long [] { CrushingRegretEmbodiment, CrushingRegretCerus }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Green.H", "Hit by Crushing Regret (Green)", "Crushing Regret Hit", 0),
-                new PlayerDstHitMechanic(new long [] { WailOfDespair, WailOfDespairEmpowered }, "Wail of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "WailDesp.H", "Hit by Wail of Despair (Spread Player AoE)", "Wail of Despair Hit", 0),
-                new PlayerDstHitMechanic(new long [] { PoolOfDespair, PoolOfDespairEmpowered }, "Pool of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "PoolDesp.H", "Hit by Pool of Despair (Spread Ground AoE)", "Pool of Despair Hit", 0),
-                new PlayerDstHitMechanic(EnviousGaze, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "EnvGaz.H", "Hit by Envious Gaze (One Beam)", "Envious Gaze Hit (One Beam)", 0),
-                new PlayerDstHitMechanic(new long [] { EnviousGazeDoubleBeamFrontal, EnviousGazeDoubleBeamRear }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "EmpEnvGaz.H", "Hit by Envious Gaze (Double Beam)", "Envious Gaze Hit (Double Beam)", 0),
-                new PlayerDstHitMechanic(CryOfRageSmall, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "CryRage.H", "Hit by Cry of Rage (Small)", "Cry of Rage Hit (Small)", 0),
-                new PlayerDstHitMechanic(CryOfRageLarge, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleX, Colors.Orange), "LrgCryRage.H", "Hit by Cry of Rage (Large)", "Cry of Rage Hit (Large)", 0),
-                new PlayerDstHitMechanic(EnragedSmash, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0).UsingChecker((ahde, log) => ahde.HasDowned),
-                new PlayerDstHitMechanic(MaliciousIntent, "Malicious Intent", new MechanicPlotlySetting(Symbols.Y, Colors.White), "MalInt.H", "Hit by Malicious Intent", "Malicious Intent Hit", 0),
+                new PlayerDstHitMechanic(new long [] { CrushingRegretNM, CrushingRegretCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "CrushReg.H", "Hit by Crushing Regret (Green)", "Crushing Regret Hit", 0),
+                new PlayerDstHitMechanic(new long [] { CrushingRegretEmpoweredNM, CrushingRegretEmpoweredCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.GreenishYellow), "Emp.CrushReg.H", "Hit by Empowered Crushing Regret (Green)", "Empowered Crushing Regret Hit", 0),
+                new PlayerDstHitMechanic(new long [] { WailOfDespairNM, WailOfDespairCM }, "Wail of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "WailDesp.H", "Hit by Wail of Despair (Spread Player AoE)", "Wail of Despair Hit", 0),
+                new PlayerDstHitMechanic(new long [] { WailOfDespairEmpoweredNM, WailOfDespairEmpoweredCM }, "Wail of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Emp.WailDesp.H", "Hit by Empowered Wail of Despair (Spread Player AoE)", "Empowered Wail of Despair Hit", 0),
+                new PlayerDstHitMechanic(new long [] { PoolOfDespairNM, PoolOfDespairCM }, "Pool of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "PoolDesp.H", "Hit by Pool of Despair (Spread Ground AoE)", "Pool of Despair Hit", 0),
+                new PlayerDstHitMechanic(new long [] { PoolOfDespairEmpoweredNM, PoolOfDespairEmpoweredCM }, "Pool of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.RedSkin), "Emp.PoolDesp.H", "Hit by Empowered Pool of Despair (Spread Ground AoE)", "Empowered Pool of Despair Hit", 0),
+                new PlayerDstHitMechanic(new long [] { EnviousGazeNM, EnviousGazeCM }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "EnvGaz.H", "Hit by Envious Gaze (Wall/Beam)", "Envious Gaze Hit", 0),
+                new PlayerDstHitMechanic(new long [] { EnviousGazeEmpoweredNM, EnviousGazeEmpoweredRearNM, EnviousGazeEmpoweredCM, EnviousGazeEmpoweredRearCM }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Red), "Emp.EnvGaz.H", "Hit by Empowered Envious Gaze (Double Wall/Beam)", "Empowered Envious Gaze Hit", 0),
+                new PlayerDstHitMechanic(new long [] { MaliciousIntentSpawnDamageNM, MaliciousIntentSpawnDamageCM }, "Malicious Intent", new MechanicPlotlySetting(Symbols.Y, Colors.White), "MalInt.H", "Hit by Malicious Intent (Malicious Shadow Spawn)", "Malicious Intent Hit", 0),
+                new PlayerDstHitMechanic(new long [] { CryOfRageNM, CryOfRageCM }, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightOrange), "CryRage.H", "Hit by Cry of Rage", "Cry of Rage Hit", 0),
+                new PlayerDstHitMechanic(new long [] { CryOfRageEmpoweredNM, CryOfRageEmpoweredCM }, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleX, Colors.Orange), "Emp.CryRage.H", "Hit by Empowered Cry of Rage", "Empowered Cry of Rage Hit", 0),
+                new PlayerDstHitMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "EnrSmash.H", "Hit by Enraged Smash", "Hit by Enraged Smash", 0),
+                new PlayerDstHitMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.DarkRed), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0).UsingChecker((ahde, log) => ahde.HasDowned),
                 new PlayerDstHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
                 new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeCerusGreen, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.A", "Crushing Regret Applied (Green)", "Crushing Regret Application", 0),
+                new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targetted by Malicious Intent", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredCerus, "Empowered", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, "Empowered Despair", new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredEnvyCerus, "Empowered Envy", new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "EmpEnvy.A", "Gained Empowered Envy", "Empowered Envy Application", 0),
@@ -54,10 +58,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Grey), "Emp.Malice.K", "Empowered Embodiment of Malice Killed", "Empowered Malice Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfMalice) && bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Purple), "Emp.Rage.K", "Empowered Embodiment of Rage Killed", "Empowered Rage Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRage) && bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Black), "Emp.Regret.K", "Empowered Embodiment of Regret Killed", "Empowered Regret Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRegret) && bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
-                new EnemyCastStartMechanic(EnragedSmash, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "EnrSmash.C", "Casted Enraged Smash", "Enraged Smash Cast", 0),
-                new EnemyCastStartMechanic(new long [] { InsatiableHunger1, InsatiableHunger2, InsatiableHunger3, InsatiableHunger4, InsatiableHunger5, InsatiableHunger6, InsatiableHunger7, InsatiableHunger8, InsatiableHunger9, InsatiableHunger10 }, "Insatiable Hunger", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
-                new EnemyCastStartMechanic(EnviousGaze, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze (One Beam)", "Envious Gaze Cast (One Beam)", 0),
-                new EnemyCastStartMechanic(new long [] { EnviousGazeDoubleBeamFrontal, EnviousGazeDoubleBeamRear }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.Red), "EmpEnvGaz.C", "Casted Envious Gaze (Double Beam)", "Envious Gaze Cast (Double Beam)", 0),
+                new EnemyCastStartMechanic(new long [] { CrushingRegretNM, CrushingRegretEmpoweredNM, CrushingRegretCM, CrushingRegretEmpoweredCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.LightMilitaryGreen), "CrushReg.C", "Casted Crushing Regret", "Crushing Regret Cast", 0),
+                new EnemyCastStartMechanic(new long [] { WailOfDespairNM, WailOfDespairEmpoweredNM, WailOfDespairCM, WailOfDespairEmpoweredCM}, "Wail of Despair", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "WailDesp.C", "Casted Wail of Despair", "Wail of Despair Cast", 0),
+                new EnemyCastStartMechanic(new long [] { EnviousGazeNM, EnviousGazeCM, EnviousGazeEmpoweredNM, EnviousGazeEmpoweredCM }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze", "Envious Gaze Cast", 0),
+                new EnemyCastStartMechanic(new long [] { MaliciousIntentNM, MaliciousIntentEmpoweredNM, MaliciousIntentCM, MaliciousIntentEmpoweredCM }, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.RedSkin), "MalInt.C", "Casted Malicious Intent", "Malicious Intent Cast", 0),
+                new EnemyCastStartMechanic(new long [] { InsatiableHungerSkillNM, InsatiableHungerSkillEmpoweredNM, InsatiableHungerSkillCM, InsatiableHungerEmpoweredSkillCM }, "Insatiable Hunger", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
+                new EnemyCastStartMechanic(new long [] { CryOfRageNM, CryOfRageEmpoweredNM, CryOfRageCM, CryOfRageEmpoweredCM }, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "CryRage.C", "Casted Cry of Rage", "Cry of Rage Cast", 0),
+                new EnemyCastStartMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "EnrSmash.C", "Casted Enraged Smash", "Enraged Smash Cast", 0),
                 new EnemyCastStartMechanic(PetrifySkill, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Pet.C", "Casted Petrify", "Petrify breakbar start", 0),
                 new EnemySrcHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.DarkTeal), "Pet.F", "Petrify hit players and healed Cerus", "Petrify breakbar fail", 100),
             }
@@ -92,6 +99,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TrashID.PermanentEmbodimentOfMalice,
                 (int)TrashID.PermanentEmbodimentOfRage,
                 (int)TrashID.PermanentEmbodimentOfRegret,
+                (int)TrashID.MaliciousShadow,
+                (int)TrashID.MaliciousShadowCM,
             };
         }
         
@@ -99,25 +108,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new Dictionary<int, int>()
             {
-                {(int)TargetID.Cerus, 0 },
-                {(int)TrashID.EmbodimentOfDespair, 1 },
-                {(int)TrashID.EmbodimentOfEnvy, 1 },
-                {(int)TrashID.EmbodimentOfGluttony, 1 },
-                {(int)TrashID.EmbodimentOfMalice, 1 },
-                {(int)TrashID.EmbodimentOfRage, 1 },
-                {(int)TrashID.EmbodimentOfRegret, 1 },
-                {(int)TrashID.PermanentEmbodimentOfDespair, 2 },
-                {(int)TrashID.PermanentEmbodimentOfEnvy, 2 },
-                {(int)TrashID.PermanentEmbodimentOfGluttony, 2 },
-                {(int)TrashID.PermanentEmbodimentOfMalice, 2 },
-                {(int)TrashID.PermanentEmbodimentOfRage, 2 },
-                {(int)TrashID.PermanentEmbodimentOfRegret, 2 },
+                { (int)TargetID.Cerus, 0 },
+                { (int)TrashID.EmbodimentOfDespair, 1 },
+                { (int)TrashID.EmbodimentOfEnvy, 1 },
+                { (int)TrashID.EmbodimentOfGluttony, 1 },
+                { (int)TrashID.EmbodimentOfMalice, 1 },
+                { (int)TrashID.EmbodimentOfRage, 1 },
+                { (int)TrashID.EmbodimentOfRegret, 1 },
+                { (int)TrashID.MaliciousShadow, 2 },
+                { (int)TrashID.MaliciousShadowCM, 2 },
+                { (int)TrashID.PermanentEmbodimentOfDespair, 3 },
+                { (int)TrashID.PermanentEmbodimentOfEnvy, 3 },
+                { (int)TrashID.PermanentEmbodimentOfGluttony, 3 },
+                { (int)TrashID.PermanentEmbodimentOfMalice, 3 },
+                { (int)TrashID.PermanentEmbodimentOfRage, 3 },
+                { (int)TrashID.PermanentEmbodimentOfRegret, 3 },
             };
-        }
-        
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
-        {
-            return new List<ArcDPSEnums.TrashID>() { TrashID.MaliciousShadow };
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -157,6 +163,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     phase.Name = "Phase " + (i + 1) / 2;
                     phase.AddTarget(mainTarget);
                 }
+            }
+            // Enraged Smash phase - After 10% bar is broken
+            AbstractCastEvent enragedSmash = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).FirstOrDefault();
+            if (enragedSmash != null)
+            {
+                var phase = new PhaseData(enragedSmash.Time, log.FightData.FightEnd, "Enraged Smash");
+                phase.AddTarget(mainTarget);
+                phases.Add(phase);
             }
             return phases;
         }
@@ -217,6 +231,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int curMalice = 1;
             int curRage = 1;
             int curRegret = 1;
+            int curShadow = 1;
             foreach (AbstractSingleActor target in Targets)
             {
                 switch (target.ID)
@@ -269,6 +284,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             target.OverrideName("Empowered " + target.Character);
                         }
                         break;
+                    case (int)TrashID.MaliciousShadow:
+                        target.OverrideName(target.Character + " " + (curShadow++));
+                        break;
+                    case (int)TrashID.MaliciousShadowCM:
+                        target.OverrideName(target.Character + " " + (curShadow++));
+                        break;
                     case (int)TrashID.PermanentEmbodimentOfDespair:
                     case (int)TrashID.PermanentEmbodimentOfEnvy:
                     case (int)TrashID.PermanentEmbodimentOfGluttony:
@@ -307,44 +328,59 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TargetID.Cerus:
                     replay.AddHideByBuff(target, log, InvulnerabilityCerus);
-                    // Cry of Rage
                     AddCryOfRageDecoration(target, log, replay, casts);
-                    // Envious Gaze
                     AddEnviousGazeDecoration(target, log, replay, casts);
+                    AddMaliciousIntentDecoration(target, log, replay, casts);
+                    var enragedSmash = casts.Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).ToList();
+                    foreach (AbstractCastEvent cast in enragedSmash)
+                    {
+                        // Cast time is 750, we only show a quick pulse of damage
+                        (long start, long end) lifespan = (cast.Time + 750, cast.Time + 1000);
+                        var circle = new CircleDecoration(2500, lifespan, Colors.RedSkin, 0.1, new AgentConnector(target));
+                        replay.Decorations.Add(circle);
+                    }
                     break;
                 case (int)TrashID.EmbodimentOfDespair:
+                    AddDeterminedOverhead(target, log, replay);
+                    break;
+                case (int)TrashID.PermanentEmbodimentOfDespair:
                     AddHiddenWhileOutOfCombat(target, log, replay);
-                    // Invulnerability Overhead
-                    replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
                     break;
                 case (int)TrashID.EmbodimentOfEnvy:
+                    AddDeterminedOverhead(target, log, replay);
+                    AddEnviousGazeDecoration(target, log, replay, casts);
+                    break;
+                case (int)TrashID.PermanentEmbodimentOfEnvy:
                     AddHiddenWhileOutOfCombat(target, log, replay);
-                    // Invulnerability Overhead
-                    replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
-                    // Envious Gaze
                     AddEnviousGazeDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfGluttony:
+                    AddDeterminedOverhead(target, log, replay);
+                    break;
+                case (int)TrashID.PermanentEmbodimentOfGluttony:
                     AddHiddenWhileOutOfCombat(target, log, replay);
-                    // Invulnerability Overhead
-                    replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
                     break;
                 case (int)TrashID.EmbodimentOfMalice:
+                    AddDeterminedOverhead(target, log, replay);
+                    AddMaliciousIntentDecoration(target, log, replay, casts);
+                    break;
+                case (int)TrashID.PermanentEmbodimentOfMalice:
                     AddHiddenWhileOutOfCombat(target, log, replay);
-                    // Invulnerability Overhead
-                    replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
+                    AddMaliciousIntentDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfRage:
+                    AddDeterminedOverhead(target, log, replay);
+                    AddCryOfRageDecoration(target, log, replay, casts);
+                    break;
+                case (int)TrashID.PermanentEmbodimentOfRage:
                     AddHiddenWhileOutOfCombat(target, log, replay);
-                    // Invulnerability Overhead
-                    replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
-                    // Cry of Rage
                     AddCryOfRageDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfRegret:
+                    AddDeterminedOverhead(target, log, replay);
+                    break;
+                case (int)TrashID.PermanentEmbodimentOfRegret:
                     AddHiddenWhileOutOfCombat(target, log, replay);
-                    // Invulnerability Overhead
-                    replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
                     break;
                 default:
                     break;
@@ -360,10 +396,24 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in crushingRegrets)
                 {
+                    // The skill definition of Crushing Regret has different radiuses but the visual indicator looks about 175 for all of them.
+                    // Until we know more, we set it to the visual indicator in game.
+                    // Normal Mode - 360
+                    // Normal Mode Empowered - 240
+                    // Challenge Mode - 240
+                    // Challenge Mode Empowered - 156
+                    uint radius = 175;
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                     long growing = lifespan.end;
-                    lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
-                    var circle = new CircleDecoration(360, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p));
+                    if (effect.Src.IsSpecies(TargetID.Cerus))
+                    {
+                        lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                    }
+                    else
+                    {
+                        lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
+                    }
+                    var circle = new CircleDecoration(radius, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p));
                     replay.AddDecorationWithGrowing(circle, growing, true);
                 }
             }
@@ -375,7 +425,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                     long growing = lifespan.end;
-                    lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                    if (effect.Src.IsSpecies(TargetID.Cerus))
+                    {
+                        lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                    }
+                    else
+                    {
+                        lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
+                    }
                     var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p));
                     replay.AddDecorationWithGrowing(circle, growing);
                 }
@@ -388,16 +445,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
                     long growing = lifespan.end;
-                    lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                    if (effect.Src.IsSpecies(TargetID.Cerus))
+                    {
+                        lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                    }
+                    else
+                    {
+                        lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
+                    }
                     var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p));
                     replay.AddDecorationWithGrowing(circle, growing);
                 }
             }
-
-            // Malicious Intent Tether
-            var fixations = GetFilteredList(log.CombatData, MaliciousIntentTargetBuff, p, true, true).ToList();
-            replay.AddTether(fixations, Colors.RedSkin, 0.4);
-
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -409,10 +468,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in poolOfDespair)
                 {
-                    // Using ComputeDynamicLifespan because the pools get deleted at 10%
-                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 60000);
+                    int duration = log.FightData.IsCM ? 120000 : 60000;
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                     var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
 
@@ -421,32 +481,33 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in poolOfDespairEmpowered)
                 {
-                    // Using ComputeLifespan because the empowered pools don't get deleted at 10%
-                    (long start, long end) lifespan = effect.ComputeLifespan(log, 999000);
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 999000);
                     var circle = new CircleDecoration(240, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
         }
         
         private static void AddHiddenWhileOutOfCombat(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
+            IReadOnlyList<AnimatedCastEvent> castEvents = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId != WeaponDraw).ToList();
             IReadOnlyList<EnterCombatEvent> enterCombats = log.CombatData.GetEnterCombatEvents(target.AgentItem);
             IReadOnlyList<ExitCombatEvent> exitCombats = log.CombatData.GetExitCombatEvents(target.AgentItem);
             long start = log.FightData.LogStart;
             bool startTrimmed = false;
-            foreach (EnterCombatEvent e in enterCombats)
+            foreach (AnimatedCastEvent castEvent in castEvents)
             {
                 if (!startTrimmed)
                 {
-                    replay.Trim(e.Time, replay.TimeOffsets.end);
+                    replay.Trim(castEvent.Time, replay.TimeOffsets.end);
                     startTrimmed = true;
                 } 
                 else
                 {
-                    replay.Hidden.Add(new Segment(start, e.Time));
+                    replay.Hidden.Add(new Segment(start, castEvent.Time));
                 }
-                ExitCombatEvent exit = exitCombats.FirstOrDefault(x => x.Time >= e.Time);
+                ExitCombatEvent exit = exitCombats.FirstOrDefault(x => x.Time >= castEvent.Time);
                 if (exit != null)
                 {
                     start = exit.Time;
@@ -460,27 +521,80 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.Trim(replay.TimeOffsets.start, start);
         }
 
+        private static void AddDeterminedOverhead(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
+        }
+
+        private static void AddMaliciousIntentDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
+        {
+            // The Malicious Intent buff is only present in normal mode
+            // The effect has no Src but we can check the skill cast
+            var maliciousIntent = casts.Where(x => x.SkillId == MaliciousIntentNM || x.SkillId == MaliciousIntentEmpoweredNM || x.SkillId == MaliciousIntentCM || x.SkillId == MaliciousIntentEmpoweredCM).ToList();
+            foreach (AbstractCastEvent cast in maliciousIntent)
+            {
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebeMaliciousIntentTether, out IReadOnlyList<EffectEvent> maliciousIntentTethers))
+                {
+                    // This will only conflict if the embodiment and cerus cast the skill at the same time
+                    foreach (EffectEvent effect in maliciousIntentTethers.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 2000))
+                    {
+                        (long start, long end) lifespan = (effect.Time, effect.Time + 5000);
+                        if (target.IsSpecies(TargetID.Cerus))
+                        {
+                            lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                        }
+                        else
+                        {
+                            lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
+                        }
+                        var tether = new LineDecoration(lifespan, Colors.RedSkin, 0.4, new AgentConnector(effect.Dst), new AgentConnector(target));
+                        replay.Decorations.Add(tether);
+                    }
+                }
+            }
+        }
+
         private static void AddCryOfRageDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
         {
-            var cryOfRage = casts.Where(x => x.SkillId == CryOfRageSmall || x.SkillId == CryOfRageLarge).ToList();
+            var cryOfRage = casts.Where(x => x.SkillId == CryOfRageNM || x.SkillId == CryOfRageCM || x.SkillId == CryOfRageEmpoweredNM || x.SkillId == CryOfRageEmpoweredCM).ToList();
             foreach (AbstractCastEvent cast in cryOfRage)
             {
                 uint radius = 0;
+                long defaultCastDuration = 5000;
+                (long start, long end) lifespan = (cast.Time, cast.Time + defaultCastDuration);
+                long growing = lifespan.end;
+
                 switch (cast.SkillId)
                 {
-                    case CryOfRageSmall:
+                    case CryOfRageNM:
+                    case CryOfRageCM:
                         radius = 1000;
                         break;
-                    case CryOfRageLarge:
+                    case CryOfRageEmpoweredNM:
+                    case CryOfRageEmpoweredCM:
                         radius = 1250;
                         break;
                     default:
                         break;
                 }
 
-                (long start, long end) lifespan = (cast.Time, cast.Time + 5000);
-                long growing = lifespan.end;
-                lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                // Check if quickness was stolen
+                double computedDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, defaultCastDuration);
+                if (computedDuration > 0)
+                {
+                    lifespan.end = Math.Min(defaultCastDuration, (long)Math.Ceiling(computedDuration));
+                }
+
+                // Check if the mechanic got cancelled
+                if (target.IsSpecies(TargetID.Cerus))
+                {
+                    lifespan = ComputeMechanicLifespanWithCancellationTime(log, lifespan);
+                }
+                else
+                {
+                    lifespan = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespan);
+                }
+
                 var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
                 replay.AddDecorationWithGrowing(circle, growing);
             }
@@ -490,24 +604,46 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             uint width = 2200;
 
-            var enviousGaze = casts.Where(x => x.SkillId == EnviousGaze || x.SkillId == EnviousGazeDoubleBeamFrontal).ToList();
+            var enviousGaze = casts.Where(x => x.SkillId == EnviousGazeNM || x.SkillId == EnviousGazeEmpoweredNM || x.SkillId == EnviousGazeCM || x.SkillId == EnviousGazeEmpoweredCM).ToList();
             foreach (AbstractCastEvent cast in enviousGaze)
             {
-                bool isEmpowered = cast.SkillId == EnviousGazeDoubleBeamFrontal ? true : false;
-                (long start, long end) lifespanIndicator = (cast.Time, cast.Time + 1500);
+                bool isEmpowered = cast.SkillId == EnviousGazeEmpoweredNM || cast.SkillId == EnviousGazeEmpoweredCM ? true : false;
+                long indicatorDuration = 1500;
+                (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
                 long growing = lifespanIndicator.end;
                 Point3D facing = target.GetCurrentRotation(log, lifespanIndicator.end);
                 if (facing != null)
                 {
-                    lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(log, lifespanIndicator);
+                    if (target.IsSpecies(TargetID.Cerus))
+                    {
+                        lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(log, lifespanIndicator);
+                    }
+                    else
+                    {
+                        lifespanIndicator = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespanIndicator);
+                    }
                     // Indicator
+                    // Check if quickness is still applied from a previous steal
+                    double computedDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, indicatorDuration);
+                    if (computedDuration > 0)
+                    {
+                        lifespanIndicator.end = Math.Min(indicatorDuration, (long)Math.Ceiling(computedDuration));
+                    }
                     var rotation = new AngleConnector(facing);
                     var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                     var rectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(rotation);
                     replay.AddDecorationWithGrowing(rectangle, growing);
                     // Damage
                     (long start, long end) lifespanDamage = (lifespanIndicator.end + 950, lifespanIndicator.end + 10750);
-                    (long start, long end) lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(log, lifespanDamage);
+                    (long start, long end) lifespanDamageCancelled = lifespanDamage;
+                    if (target.IsSpecies(TargetID.Cerus))
+                    {
+                        lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(log, lifespanDamage);
+                    }
+                    else
+                    {
+                        lifespanDamageCancelled = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespanDamage);
+                    }
                     double millisecondsPerDegree = (double)(lifespanDamage.end - lifespanDamage.start) / 360;
                     double degreesRotated = (lifespanDamageCancelled.end - lifespanDamageCancelled.start) / millisecondsPerDegree;
                     var rotation2 = new AngleConnector(facing, (float)degreesRotated);
@@ -521,7 +657,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDecorationWithGrowing(oppositeRectangle, growing);
                         // Opposite Damage
                         (long start, long end) lifespanDamageOpposite = (lifespanIndicator.end + 950, lifespanIndicator.end + 5850);
-                        (long start, long end) lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(log, lifespanDamageOpposite);
+                        (long start, long end) lifespanDamageOppositeCancelled = lifespanDamage;
+                        if (target.IsSpecies(TargetID.Cerus))
+                        {
+                            lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(log, lifespanDamageOpposite);
+                        }
+                        else
+                        {
+                            lifespanDamageOppositeCancelled = ComputeEmbodimentMechanicLifespanWithCancellationTime(log, lifespanDamageOpposite);
+                        }
                         double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
                         double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
                         var rotation3 = new AngleConnector(facing, (float)degreedRotatedOpposite);
@@ -534,24 +678,31 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static (long start, long end) ComputeMechanicLifespanWithCancellationTime(ParsedEvtcLog log, (long start, long end) lifespan)
         {
-            var times = new List<long>();
             AbstractSingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
             if (cerus != null)
             {
                 var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PetrifySkill).ToList();
-                var invulns = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffRemoveAllEvent>().ToList();
-                foreach (BuffRemoveAllEvent invuln in invulns)
-                {
-                    times.Add(invuln.Time);
-                }
                 foreach (AbstractCastEvent cast in casts)
                 {
-                    times.Add(cast.Time);
+                    if (lifespan.start <= cast.Time && lifespan.end > cast.Time)
+                    {
+                        lifespan.end = Math.Min(lifespan.end, cast.Time);
+                    }
                 }
-                times.Sort();
             }
-            long time = times.FirstOrDefault(x => x >= lifespan.start && x <= lifespan.end);
-            lifespan.end = time > 0 ? Math.Min(lifespan.end, time) : lifespan.end;
+            return lifespan;
+        }
+
+        private static (long start, long end) ComputeEmbodimentMechanicLifespanWithCancellationTime(ParsedEvtcLog log, (long start, long end) lifespan)
+        {
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase && x.CanBeSubPhase).ToList();
+            foreach (PhaseData phase in phases)
+            {
+                if (lifespan.start >= phase.Start && lifespan.start < phase.End && lifespan.end > phase.End)
+                {
+                    lifespan.end = Math.Min(lifespan.end, phase.End);
+                }
+            }
             return lifespan;
         }
     }

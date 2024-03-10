@@ -584,6 +584,7 @@ namespace GW2EIEvtcParser
         public const string TempleOfFebeEnviousGaze2 = "DA42718917F2304FBA10AF6898217788"; // Duration 12500
         public const string TempleOfFebeEnviousGaze3 = "B77A06C842511949889877EDC1448D49"; // Duration 11000
         public const string TempleOfFebeEnviousGaze4 = "0D2192849D53B4469F56B1C74542DBE9"; // Duration 11000
+        public const string TempleOfFebeMaliciousIntentTether = "518369328A12B74EAC49702A785FBA19"; // Duration 0
         #endregion
     }
 }

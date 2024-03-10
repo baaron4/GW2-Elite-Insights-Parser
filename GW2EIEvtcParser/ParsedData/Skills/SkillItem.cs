@@ -246,9 +246,42 @@ namespace GW2EIEvtcParser.ParsedData
             { FrighteningSpeedReturn, "Frightening Speed (Return)" },
             { DreadVisageKanaxaiSkill, "Dread Visage (Kanaxai)" },
             { DreadVisageKanaxaiSkillIsland, "Dread Visage (Kanaxai Island)" },
-            { DreadVisageAspectSkill, "Dead Visage (Aspect)" },
+            { DreadVisageAspectSkill, "Dread Visage (Aspect)" },
             { RendingStormSkill, "Rending Storm (Axe)" },
             { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
+            // Cerus
+            // - Normal Mode
+            { CrushingRegretNM, "Crushing Regret (NM)" },
+            { WailOfDespairNM, "Wail of Despair (NM)" },
+            { EnviousGazeNM, "Envious Gaze (NM)" },
+            { MaliciousIntentNM, "Malicious Intent (NM)" },
+            { InsatiableHungerSkillNM, "Insatiable Hunger (NM)" },
+            { CryOfRageNM, "Cry of Rage (NM)" },
+            // - Empowered Normal Mode
+            { CrushingRegretEmpoweredNM, "Crushing Regret (Empowered NM)" },
+            { WailOfDespairEmpoweredNM, "Wail of Despair (Empowered NM)" },
+            { EnviousGazeEmpoweredNM, "Envious Gaze (Empowered NM)" },
+            { MaliciousIntentEmpoweredNM, "Malicious Intent (Empowered NM)" },
+            { InsatiableHungerSkillEmpoweredNM, "Insatiable Hunger (Empowered NM)" },
+            { CryOfRageEmpoweredNM, "Cry of Rage (Empowered NM)" },
+            // - Challenge Mode
+            { CrushingRegretCM, "Crushing Regret (CM)" },
+            { WailOfDespairCM, "Wail of Despair (CM)" },
+            { EnviousGazeCM, "Envious Gaze (CM)" },
+            { MaliciousIntentCM, "Malicious Intent (CM)" },
+            { InsatiableHungerSkillCM, "Insatiable Hunger (CM)" },
+            { CryOfRageCM, "Cry of Rage (CM)" },
+            // - Empowered Challenge Mode
+            { CrushingRegretEmpoweredCM, "Crushing Regret (Empowered CM)" },
+            { WailOfDespairEmpoweredCM, "Wail of Despair (Empowered CM)" },
+            { EnviousGazeEmpoweredCM, "Envious Gaze (Empowered CM)" },
+            { MaliciousIntentEmpoweredCM, "Malicious Intent (Empowered CM)" },
+            { InsatiableHungerEmpoweredSkillCM, "Insatiable Hunger (Empowered CM)" },
+            { CryOfRageEmpoweredCM, "Cry of Rage (Empowered CM)" },
+            // - Misc
+            { PetrifySkill, "Petrify" },
+            { EnragedSmashNM, "Enraged Smash (NM)" },
+            { EnragedSmashCM, "Enraged Smash (CM)" },
             // World vs World
             { WvWSpendingSupplies, "Spending Supply (Building / Repairing)" },
             { WvWPickingUpSupplies, "Picking Up Supplies" },

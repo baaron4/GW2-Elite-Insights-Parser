@@ -933,6 +933,7 @@ namespace GW2EIEvtcParser
             EmbodimentOfEnvy = 25967,
             EmbodimentOfMalice = 25700,
             MaliciousShadow = 25747,
+            MaliciousShadowCM = 25645,
             PermanentEmbodimentOfGluttony = ArcDPSEnums.PermanentEmbodimentOfGluttony,
             PermanentEmbodimentOfRage = ArcDPSEnums.PermanentEmbodimentOfRage,
             PermanentEmbodimentOfDespair = ArcDPSEnums.PermanentEmbodimentOfDespair,
