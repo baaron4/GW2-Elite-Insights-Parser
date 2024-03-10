@@ -302,6 +302,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                 }
             }
+            foreach (AbstractSingleActor trashMob in TrashMobs)
+            {
+                switch (trashMob.ID)
+                {
+                    case (int)TrashID.MaliciousShadow:
+                        trashMob.OverrideName(trashMob.Character + " " + (curShadow++));
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
@@ -344,28 +355,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddDeterminedOverhead(target, log, replay);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfDespair:
-                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay);
                     break;
                 case (int)TrashID.EmbodimentOfEnvy:
                     AddDeterminedOverhead(target, log, replay);
                     AddEnviousGazeDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfEnvy:
-                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay);
                     AddEnviousGazeDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfGluttony:
                     AddDeterminedOverhead(target, log, replay);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfGluttony:
-                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay);
                     break;
                 case (int)TrashID.EmbodimentOfMalice:
                     AddDeterminedOverhead(target, log, replay);
                     AddMaliciousIntentDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfMalice:
-                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay);
                     AddMaliciousIntentDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfRage:
@@ -373,14 +384,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddCryOfRageDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfRage:
-                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay);
                     AddCryOfRageDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfRegret:
                     AddDeterminedOverhead(target, log, replay);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfRegret:
-                    AddHiddenWhileOutOfCombat(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay);
                     break;
                 default:
                     break;
@@ -489,36 +500,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
         
-        private static void AddHiddenWhileOutOfCombat(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AnimatedCastEvent> castEvents = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId != WeaponDraw).ToList();
-            IReadOnlyList<EnterCombatEvent> enterCombats = log.CombatData.GetEnterCombatEvents(target.AgentItem);
-            IReadOnlyList<ExitCombatEvent> exitCombats = log.CombatData.GetExitCombatEvents(target.AgentItem);
-            long start = log.FightData.LogStart;
+            var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId != WeaponStow && x.SkillId != WeaponSwap && x.SkillId != WeaponDraw).ToList();
+            long invisibleStart = log.FightData.LogStart;
             bool startTrimmed = false;
-            foreach (AnimatedCastEvent castEvent in castEvents)
+            foreach (AbstractCastEvent e in castEvents)
             {
                 if (!startTrimmed)
                 {
-                    replay.Trim(castEvent.Time, replay.TimeOffsets.end);
+                    replay.Trim(e.Time, replay.TimeOffsets.end);
                     startTrimmed = true;
                 } 
                 else
                 {
-                    replay.Hidden.Add(new Segment(start, castEvent.Time));
+                    replay.Hidden.Add(new Segment(invisibleStart, e.Time));
                 }
-                ExitCombatEvent exit = exitCombats.FirstOrDefault(x => x.Time >= castEvent.Time);
-                if (exit != null)
-                {
-                    start = exit.Time;
-                } 
-                else
-                {
-                    // log ended while visible
-                    return;
-                }
+                invisibleStart = e.EndTime;
             }
-            replay.Trim(replay.TimeOffsets.start, start);
+            replay.Trim(replay.TimeOffsets.start, invisibleStart);
         }
 
         private static void AddDeterminedOverhead(NPC target, ParsedEvtcLog log, CombatReplay replay)

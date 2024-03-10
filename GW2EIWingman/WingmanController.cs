@@ -198,14 +198,15 @@ namespace GW2EIWingman
             return false;
         }
 
-        public static bool CheckUploadPossible(FileInfo fi, string account, TraceHandler traceHandler)
+        public static bool CheckUploadPossible(FileInfo fi, string account, long triggerID, TraceHandler traceHandler)
         {
             string creationTime = new DateTimeOffset(fi.CreationTime).ToUnixTimeSeconds().ToString();
             var data = new Dictionary<string, string> { 
                 { "account", account }, 
                 { "filesize", fi.Length.ToString() }, 
                 { "timestamp", creationTime }, 
-                { "file", fi.Name } 
+                { "file", fi.Name } ,
+                { "triggerID", triggerID.ToString() }
             };
             Func<HttpContent> contentCreator = () =>
             {

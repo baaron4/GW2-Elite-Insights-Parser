@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)ArcDPSEnums.TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
                 }
             }
             return startToUse;

@@ -285,6 +285,7 @@ namespace GW2EIEvtcParser.EIData
             // Fill in Boon Map
 #if DEBUG
             var test = log.CombatData.GetBuffDataByDst(Actor.AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+            var test2 = log.CombatData.GetBuffDataByDst(Actor.AgentItem).Where(x => log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
             var buffEventsDict = log.CombatData.GetBuffDataByDst(Actor.AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> buffEventPair in buffEventsDict)

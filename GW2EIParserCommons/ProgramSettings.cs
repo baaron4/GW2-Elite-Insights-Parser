@@ -72,7 +72,7 @@ namespace GW2EIParserCommons
         {
             if (ParseMultipleLogs)
             {
-                if (!HasFormat() && (UploadToDPSReports || UploadToWingman))
+                if (!HasFormat() && UploadToDPSReports)
                 {
                     return false;
                 }

@@ -15,6 +15,8 @@ using GW2EIEvtcParser;
 using GW2EIGW2API;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIParserCommons.Exceptions;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.EIData;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons
@@ -118,7 +120,9 @@ namespace GW2EIParserCommons
             //
             builder.WithTitle(log.FightData.FightName);
             //builder.WithTimestamp(DateTime.Now);
-            builder.WithFooter(log.LogData.LogStartStd + " / " + log.LogData.LogEndStd);
+            AgentItem pov = log.LogData.PoV;
+            AbstractSingleActor povActor = log.FindActor(pov);
+            builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon());
             builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
             if (dpsReportPermalink.Length > 0)
             {
@@ -171,7 +175,7 @@ namespace GW2EIParserCommons
                 {
                     string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
 
-                    if (WingmanController.CheckUploadPossible(fInfo, accName, str => originalController.UpdateProgress("Wingman: " + str)))
+                    if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.FightData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                     {
                         try
                         {

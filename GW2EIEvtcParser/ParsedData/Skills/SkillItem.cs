@@ -568,6 +568,7 @@ namespace GW2EIEvtcParser.ParsedData
             { EchoOfMemoryExtra, "https://wiki.guildwars2.com/images/9/95/Echo_of_Memory.png" },
             { SplitSurgeSecondaryBeams, "https://wiki.guildwars2.com/images/f/fd/Split_Surge.png" },
             { PersistenceOfMemory, "https://wiki.guildwars2.com/images/c/ce/Persistence_of_Memory.png" },
+            { FriendlyFireIllu, "https://wiki.guildwars2.com/images/c/c0/Friendly_Fire.png" },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
@@ -833,6 +834,7 @@ namespace GW2EIEvtcParser.ParsedData
             { BolaTossWvW, "https://wiki.guildwars2.com/images/7/7e/Bola_Shot.png" },
             { MagebaneTether, BuffImages.MagebaneTether },
             { EnchantmentCollapse, "https://wiki.guildwars2.com/images/7/7f/Enchantment_Collapse.png" },
+            { LineBreakerHeal, "https://wiki.guildwars2.com/images/0/0e/Line_Breaker.png" },
             #endregion WarriorIcons
             #region EncounterIcons
             // Silent Surf Fractal

@@ -256,6 +256,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, BuffImages.BountifulHunter, DamageModifierMode.All),
             new BuffOnActorDamageModifier(FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostSpirit, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
@@ -306,6 +308,13 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Quick Draw", QuickDraw, Source.Ranger, BuffClassification.Other, BuffImages.QuickDraw),
             new Buff("Light on your Feet", LightOnYourFeet, Source.Ranger, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.LightOnYourFeet),
             new Buff("Poison Master", PoisonMasterBuff, Source.Ranger, BuffClassification.Other, BuffImages.PoisonMaster),
+            // Mace
+            new Buff("Force of Nature", ForceOfNature, Source.Ranger, BuffClassification.Other, BuffImages.ForceOfNature)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
+            new Buff("Nature's Strength", NaturesStrength, Source.Ranger, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.NaturesStrength)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
+            new Buff("Tapped Out", TappedOut, Source.Ranger, BuffClassification.Other, BuffImages.TappedOut)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
