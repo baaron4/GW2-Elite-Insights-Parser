@@ -38,10 +38,24 @@ namespace GW2EIEvtcParser.ParsedData
         }
         public bool Success { get; private set; }
 
-        internal enum EncounterMode { NotSet, CM, Normal, CMNoName, Story }
+        internal enum EncounterMode { 
+            NotSet,
+            Story,
+            Normal,
+            LegendaryCM, 
+            CM, 
+            CMNoName
+        }
         private EncounterMode _encounterMode = EncounterMode.NotSet;
         public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
-        internal enum EncounterStartStatus { NotSet, Normal, Late, NoPreEvent }
+        public bool IsLegendaryCM =>  _encounterMode == EncounterMode.LegendaryCM;
+        
+        internal enum EncounterStartStatus { 
+            NotSet, 
+            Normal, 
+            Late, 
+            NoPreEvent 
+        }
         private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
         public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late || MissingPreEvent;
         public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
@@ -311,7 +325,8 @@ namespace GW2EIEvtcParser.ParsedData
         internal void CompleteFightName(CombatData combatData, AgentData agentData)
         {
             FightName = Logic.GetLogicName(combatData, agentData) 
-                + (_encounterMode == EncounterMode.CM ? " CM" : "") 
+                + (_encounterMode == EncounterMode.CM ? " CM" : "")
+                + (_encounterMode == EncounterMode.LegendaryCM ? " Legendary CM" : "")
                 + (_encounterMode == EncounterMode.Story ? " Story" : "")
                 + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "") 
                 + (MissingPreEvent ? " (No Pre-Event)" : "");

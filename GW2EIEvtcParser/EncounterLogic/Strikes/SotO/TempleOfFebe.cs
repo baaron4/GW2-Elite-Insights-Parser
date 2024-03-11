@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "EnrSmash.H", "Hit by Enraged Smash", "Hit by Enraged Smash", 0),
                 new PlayerDstHitMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.DarkRed), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0).UsingChecker((ahde, log) => ahde.HasDowned),
                 new PlayerDstHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
-                new PlayerDstHitMechanic(new long [] { WailOfDespairCM, WailOfDespairEmpoweredCM, PoolOfDespairCM, PoolOfDespairEmpoweredCM }, "Unbounded Optimism", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0).UsingEnable(x => x.FightData.IsCM).UsingAchievementEligibility(true),
+                new PlayerDstHitMechanic(new long [] { WailOfDespairCM, WailOfDespairEmpoweredCM, PoolOfDespairCM, PoolOfDespairEmpoweredCM }, "Unbounded Optimism", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0).UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM).UsingAchievementEligibility(true),
                 new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeCerusGreen, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.A", "Crushing Regret Applied (Green)", "Crushing Regret Application", 0),
                 new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targetted by Malicious Intent", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredCerus, "Empowered", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
@@ -310,7 +310,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Cerus not found");
             }
-            return (cerus.GetHealth(combatData) > 100e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+            var cerusHP = cerus.GetHealth(combatData);
+            if (combatData.GetBuildEvent().Build >= GW2Builds.March2024BalanceAndCerusLegendary && cerusHP > 130e6)
+            {
+                return FightData.EncounterMode.LegendaryCM;
+            }
+            return (cerusHP > 100e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
 
         }
 
@@ -446,7 +451,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in poolOfDespair)
                 {
-                    int duration = log.FightData.IsCM ? 120000 : 60000;
+                    int duration = log.FightData.IsCM || log.FightData.IsLegendaryCM ? 120000 : 60000;
                     (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
                     var circle = new CircleDecoration(120, lifespan, Colors.RedSkin, 0.2, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
@@ -643,7 +648,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
 
-            if (log.FightData.Success && log.FightData.IsCM)
+            if (log.FightData.Success && (log.FightData.IsCM || log.FightData.IsLegendaryCM))
             {
                 AgentItem cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
                 if (cerus != null)
