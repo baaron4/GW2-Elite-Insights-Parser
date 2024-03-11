@@ -71,8 +71,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Enraged (300%)", Enraged_300_strike_75_reduc, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Enraged (500%)", Enraged_500, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Call of the Mists", CallOfTheMists, Source.FightSpecific, BuffClassification.Other, BuffImages.CallOfTheMists),
-            new Buff("Untargetable", Untargetable, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined ),
-            new Buff("Resistance (Unrippable)", ResistanceUnrippable, Source.Common, BuffStackType.Queue, 5, BuffClassification.Other, BuffImages.Resistance),
+            new Buff("Untargetable", Untargetable, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Resistance (Unremovable)", ResistanceUnremovable, Source.FightSpecific, BuffClassification.Other, BuffImages.Resistance),
             // Strike Essences
             new Buff("Essence of Vigilance Tier 1", EssenceOfVigilanceTier1, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
             new Buff("Essence of Vigilance Tier 2", EssenceOfVigilanceTier2, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
@@ -588,6 +588,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Summoned Phantom", SummonedPhantom, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Immune to Damage", ImmuneToDamage, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Shared Destruction Target (Meteor Crash)", DagdaSharedDestruction_MeteorCrash, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Achievement Eligibility: Danced with the Stars", AchievementEligibilityDancedWithTheStars, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: Precision Anxiety", AchievementEligibilityPrecisionAnxiety, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Temple of Febe
             new Buff("Insatiable", Insatiable, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.VoidCorruption),
             new Buff("Malicious Intent Target", MaliciousIntentTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
@@ -608,6 +610,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Kryptis-Possessed (CM)", KryptisPossessedCM, Source.FightSpecific, BuffClassification.Other, BuffImages.Madness),
             new Buff("Invulnerability (Cerus)", InvulnerabilityCerus, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             new Buff("Invulnerability (Embodiment)", InvulnerabilityEmbodiment, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
+            new Buff("Achievement Eligibility: Unbounded Optimism", AchievementEligibilityUnboundedOptimism, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Achievement Eligibility: Apathetic", AchievementEligibilityApathetic, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             //Open World Soo-Won
             new Buff("Jade Tech Offensive Overcharge", JadeTechOffensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Offensive, BuffImages.JadeTechOffensive),
             new Buff("Jade Tech Defensive Overcharge", JadeTechDefensiveOvercharge, Source.FightSpecific, BuffStackType.Queue, 9, BuffClassification.Defensive, BuffImages.JadeTechDefensive),
