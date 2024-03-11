@@ -4171,6 +4171,7 @@
         public const long Journey = 71897;
         public const long LineBreakerHeal = 71901;
         public const long FireBullet = 71936;
+        public const long PathOfGluttonyFlipBuff = 71947;
         public const long PathToVictory = 71950;
         public const long FriendlyFireIllu = 71970;
         public const long NaturesStrength = 71976;

@@ -204,13 +204,16 @@ namespace GW2EIEvtcParser.ParsedData
                 switch(p.Spec)
                 {
                     case Spec.Willbender:
-                        toAdd.AddRange(WillbenderHelper.ComputeFlowingResolveCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ProfHelper.ComputeEndWithBuffApplyCastEvents(p, this, skillData, FlowingResolveSkill, 440, 500, FlowingResolveBuff));
                         break;
                     default:
                         break;
                 }
                 switch(p.BaseSpec)
                 {
+                    case Spec.Necromancer:
+                        toAdd.AddRange(ProfHelper.ComputeEndWithBuffApplyCastEvents(p, this, skillData, PathOfGluttony, 750, 750, PathOfGluttonyFlipBuff));
+                        break;
                     case Spec.Ranger:
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, AncestralGraceSkill, AncestralGraceBuff));
                         break;
