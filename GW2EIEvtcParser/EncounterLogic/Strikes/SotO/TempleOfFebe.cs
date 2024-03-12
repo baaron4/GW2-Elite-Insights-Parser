@@ -25,6 +25,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(Insatiable, "Insatiable", new MechanicPlotlySetting(Symbols.Hourglass, Colors.Pink), "Ins.A", "Insatiable Applied (Absorbed Gluttony Orb)", "Insatiable Application", 0),
                 new PlayerDstHitMechanic(new long [] { CrushingRegretNM, CrushingRegretCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "CrushReg.H", "Hit by Crushing Regret (Green)", "Crushing Regret Hit", 0),
                 new PlayerDstHitMechanic(new long [] { CrushingRegretEmpoweredNM, CrushingRegretEmpoweredCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.GreenishYellow), "Emp.CrushReg.H", "Hit by Empowered Crushing Regret (Green)", "Empowered Crushing Regret Hit", 0),
+                new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeCerusGreen, "Crushing Regret", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Green), "Green.A", "Crushing Regret Applied (Green)", "Crushing Regret Application", 0),
                 new PlayerDstHitMechanic(new long [] { WailOfDespairNM, WailOfDespairCM }, "Wail of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "WailDesp.H", "Hit by Wail of Despair (Spread Player AoE)", "Wail of Despair Hit", 0),
                 new PlayerDstHitMechanic(new long [] { WailOfDespairEmpoweredNM, WailOfDespairEmpoweredCM }, "Wail of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Emp.WailDesp.H", "Hit by Empowered Wail of Despair (Spread Player AoE)", "Empowered Wail of Despair Hit", 0),
                 new PlayerDstHitMechanic(new long [] { PoolOfDespairNM, PoolOfDespairCM }, "Pool of Despair", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "PoolDesp.H", "Hit by Pool of Despair (Spread Ground AoE)", "Pool of Despair Hit", 0),
@@ -38,7 +39,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.DarkRed), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0).UsingChecker((ahde, log) => ahde.HasDowned),
                 new PlayerDstHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
                 new PlayerDstHitMechanic(new long [] { WailOfDespairCM, WailOfDespairEmpoweredCM, PoolOfDespairCM, PoolOfDespairEmpoweredCM }, "Unbounded Optimism", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0).UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM).UsingAchievementEligibility(true),
-                new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeCerusGreen, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "Green.A", "Crushing Regret Applied (Green)", "Crushing Regret Application", 0),
                 new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targetted by Malicious Intent", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredCerus, "Empowered", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, "Empowered Despair", new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),
@@ -59,7 +59,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Grey), "Emp.Malice.K", "Empowered Embodiment of Malice Killed", "Empowered Malice Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfMalice) && bae.To.HasBuff(log, EmpoweredMaliceEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Purple), "Emp.Rage.K", "Empowered Embodiment of Rage Killed", "Empowered Rage Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRage) && bae.To.HasBuff(log, EmpoweredRageEmbodiment, bae.Time)),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Black), "Emp.Regret.K", "Empowered Embodiment of Regret Killed", "Empowered Regret Killed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.EmbodimentOfRegret) && bae.To.HasBuff(log, EmpoweredRegretEmbodiment, bae.Time)),
-                new EnemyCastStartMechanic(new long [] { CrushingRegretNM, CrushingRegretEmpoweredNM, CrushingRegretCM, CrushingRegretEmpoweredCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.Circle, Colors.LightMilitaryGreen), "CrushReg.C", "Casted Crushing Regret", "Crushing Regret Cast", 0),
+                new EnemyCastStartMechanic(new long [] { CrushingRegretNM, CrushingRegretEmpoweredNM, CrushingRegretCM, CrushingRegretEmpoweredCM }, "Crushing Regret", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightMilitaryGreen), "CrushReg.C", "Casted Crushing Regret", "Crushing Regret Cast", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.TempleOfFebeGreenSuccess, "Crushing Regret Success", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "CrushReg.C.S", "Crushing Regret Successful", "Success Crushing Regret", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.TempleOfFebeGreenFailure, "Crushing Regret Failed", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "CrushReg.C.F", "Crushing Regret Failed", "Failed Crushing Regret", 0),
                 new EnemyCastStartMechanic(new long [] { WailOfDespairNM, WailOfDespairEmpoweredNM, WailOfDespairCM, WailOfDespairEmpoweredCM }, "Wail of Despair", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "WailDesp.C", "Casted Wail of Despair", "Wail of Despair Cast", 0),
                 new EnemyCastStartMechanic(new long [] { EnviousGazeNM, EnviousGazeCM, EnviousGazeEmpoweredNM, EnviousGazeEmpoweredCM }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze", "Envious Gaze Cast", 0),
                 new EnemyCastStartMechanic(new long [] { MaliciousIntentNM, MaliciousIntentEmpoweredNM, MaliciousIntentCM, MaliciousIntentEmpoweredCM }, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.RedSkin), "MalInt.C", "Casted Malicious Intent", "Malicious Intent Cast", 0),
@@ -445,6 +447,33 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Crushing Regret (Green) End
+            var crushingRegretEnds = new List<(string GUID, Color Color)>()
+            {
+                (EffectGUIDs.TempleOfFebeGreenSuccess, Colors.Green),
+                (EffectGUIDs.TempleOfFebeGreenFailure, Colors.DarkRed)
+            };
+            foreach ((string GUID, Color Color) in crushingRegretEnds)
+            {
+                if (log.CombatData.TryGetEffectEventsByGUID(GUID, out IReadOnlyList<EffectEvent> crushingRegrets))
+                {
+                    foreach (EffectEvent effect in crushingRegrets)
+                    {
+                        // The skill definition of Crushing Regret has different radiuses but the visual indicator looks about 175 for all of them.
+                        // Until we know more, we set it to the visual indicator in game.
+                        // Normal Mode - 360
+                        // Normal Mode Empowered - 240
+                        // Challenge Mode - 240
+                        // Challenge Mode Empowered - 156
+                        uint radius = 175;
+                        // Show the state for 500 ms
+                        (long start, long end) lifespan = (effect.Time, effect.Time + 500);
+                        var circle = new CircleDecoration(radius, lifespan, Color, 0.2, new PositionConnector(effect.Position));
+                        EnvironmentDecorations.Add(circle);
+                    }
+                }
+            }
 
             // Pool of Despair - Spread AoE on ground
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebePoolOfDespair, out IReadOnlyList<EffectEvent> poolOfDespair))
