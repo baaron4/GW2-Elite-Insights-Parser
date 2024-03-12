@@ -571,8 +571,8 @@ namespace GW2EIEvtcParser
         public const string TempleOfFebeCerusGreen = "0651E35503F642419A21378FBD29F777"; // Owner Cerus Target Player
         public const string TempleOfFebeCerusGreen2 = "E7E95B11D4AAD2469DD2FD0AF9631ED5"; // Owner Cerus Target Player
         public const string TempleOfFebeRegretGreen = "015E5CF598A13D4F8D6CCFD66643525F"; // Owner Embodiment of Regret Target Player
-        public const string TempleOfFebeGreenSuccess = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
-        public const string TempleOfFebeGreenFailure = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeGreenFailure = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeGreenSuccess = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
         public const string TempleOfFebeWailOfDespair = "9EDCB6E2E3C11448B37F7D07B6B2D4F5"; // Owner Cerus/Embodiment Target Player Duration 5000
         public const string TempleOfFebeWailOfDespair2 = "00E0C7FC6A454B43B0FB93A6CA7BE83F"; // No Owner Target Player Duration 0
         public const string TempleOfFebeWailOfDespairEmpowered = "246326728CB3704C93FEA75C402D65CA"; // Owner Cerus/Embodiment Target Player Duration 5000
