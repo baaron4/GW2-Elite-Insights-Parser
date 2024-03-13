@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
                 if (hpUpdates.Count > 1 && hpUpdates.LastOrDefault().DstAgent == 10000)
                 {
-                    hpUpdates.LastOrDefault().OverrideSrcAgent(_unknownAgent.Agent);
+                    hpUpdates.Last().OverrideDstAgent(hpUpdates[hpUpdates.Count - 2].DstAgent);
                 }
             }
             int curPhantom = 1;

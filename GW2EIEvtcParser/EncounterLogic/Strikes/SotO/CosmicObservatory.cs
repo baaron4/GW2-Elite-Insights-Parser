@@ -442,6 +442,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                 }
             }
+            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
+            if (dagda == null)
+            {
+                throw new MissingKeyActorsException("Dagda not found");
+            }
+            // Security check to stop dagda from going back to 100%
+            var dagdaHPUpdates = combatData.Where(x => x.SrcMatchesAgent(dagda.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
+            if (dagdaHPUpdates.Count > 1 && dagdaHPUpdates.LastOrDefault().DstAgent == 10000)
+            {
+                dagdaHPUpdates.Last().OverrideDstAgent(dagdaHPUpdates[dagdaHPUpdates.Count - 2].DstAgent);
+            }
         }
 
         protected override List<int> GetTargetsIDs()
