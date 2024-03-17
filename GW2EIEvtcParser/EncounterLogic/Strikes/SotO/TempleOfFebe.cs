@@ -677,7 +677,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
 
-            if ((log.FightData.IsCM || log.FightData.IsLegendaryCM))
+            if (log.FightData.IsCM || log.FightData.IsLegendaryCM)
             {
                 AgentItem cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
                 if (cerus != null)
