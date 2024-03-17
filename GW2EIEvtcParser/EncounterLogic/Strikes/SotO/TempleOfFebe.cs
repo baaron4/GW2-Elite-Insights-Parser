@@ -677,21 +677,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.SetInstanceBuffs(log);
 
-            if (log.FightData.Success && (log.FightData.IsCM || log.FightData.IsLegendaryCM))
+            if ((log.FightData.IsCM || log.FightData.IsLegendaryCM))
             {
                 AgentItem cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
                 if (cerus != null)
                 {
-                    bool despair = cerus.HasBuff(log, EmpoweredDespairCerus, log.FightData.LogStart, log.FightData.LogEnd);
-                    bool envy = cerus.HasBuff(log, EmpoweredEnvyCerus, log.FightData.LogStart, log.FightData.LogEnd);
-                    bool gluttony = cerus.HasBuff(log, EmpoweredGluttonyCerus, log.FightData.LogStart, log.FightData.LogEnd);
-                    bool malice = cerus.HasBuff(log, EmpoweredMaliceCerus, log.FightData.LogStart, log.FightData.LogEnd);
-                    bool rage = cerus.HasBuff(log, EmpoweredRageCerus, log.FightData.LogStart, log.FightData.LogEnd);
-                    bool regret = cerus.HasBuff(log, EmpoweredRegretCerus, log.FightData.LogStart, log.FightData.LogEnd);
-                    if (despair && envy && gluttony && malice && rage && regret)
+                    var empoweredBuffs = new List<long>()
                     {
-                        // TODO: Check if this achievement Apathetic has an in game eligibility buff, and if it's available on a repeated clear this section can be simplified
-                        // Temporary set to ID -36
+                        EmpoweredDespairCerus,
+                        EmpoweredEnvyCerus,
+                        EmpoweredGluttonyCerus,
+                        EmpoweredMaliceCerus,
+                        EmpoweredRageCerus,
+                        EmpoweredRegretCerus
+                    };
+                    if (empoweredBuffs.Count(x => cerus.HasBuff(log, x, log.FightData.LogStart, log.FightData.LogEnd)) == 6)
+                    {
                         InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityApathetic], 1));
                     }
                 }
