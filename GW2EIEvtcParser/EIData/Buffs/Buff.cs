@@ -172,7 +172,7 @@ namespace GW2EIEvtcParser.EIData
         {
             ulong gw2Build = combatData.GetBuildEvent().Build;
 
-            if (gw2Build >= GW2Builds.March2024Balance)
+            if (gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary)
             {
                 return new BuffSourceFinder20240319(boonIds);
             }
