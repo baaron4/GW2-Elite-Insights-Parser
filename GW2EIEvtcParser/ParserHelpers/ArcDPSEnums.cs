@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser
             internal const ulong January2024Balance = 157732;
             internal const ulong February2024NewWeapons = 158837;
             internal const ulong February2024CerusCMHPFix = 158968;
-            internal const ulong March2024BalanceAndCerusLegendary = ulong.MaxValue;
+            internal const ulong March2024BalanceAndCerusLegendary = 159951;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
