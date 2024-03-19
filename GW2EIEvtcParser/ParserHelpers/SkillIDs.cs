@@ -4019,6 +4019,7 @@
         public const long InsatiableHunger1 = 69544;
         public const long WailOfDespairEmpoweredNM = 69548;
         public const long EmpoweredCerus = 69550;
+        public const long RelicOfMercyHealing = 69559;
         public const long ShootingStars = 69560;
         public const long EmpoweredRageCerus = 69576;
         public const long EnviousGazeEmpoweredNM = 69601;
@@ -4188,6 +4189,7 @@
         public const long DazingDischargeBuff = 72069;
         public const long GuildHallWvWMode = 72110;
         public const long GuildHallPvEMode = 72113;
+        public const long RelicOfTheFlockBarrier = 72115;
         public const long GuildHallsPvPMode = 72118;
         public const long AchievementEligibilityDancedWithTheStars = 72135;
         public const long EnviousGazeEmpoweredRearCM = 72200;

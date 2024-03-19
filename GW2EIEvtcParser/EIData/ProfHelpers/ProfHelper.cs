@@ -89,7 +89,9 @@ namespace GW2EIEvtcParser.EIData
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfTheDefenderHealing, RelicOfTheDefenderHealing)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EXTBarrierCastFinder(RelicOfTheFlock, RelicOfTheFlock)
+            new EXTHealingCastFinder(RelicOfTheFlock, RelicOfTheFlock)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTBarrierCastFinder(RelicOfTheFlockBarrier, RelicOfTheFlockBarrier)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             // Mounts
             new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),

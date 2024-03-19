@@ -71,6 +71,8 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfPeithaTargetBuff, "Relic of Peitha" },
             { RelicOfPeithaBlade, "Relic of Peitha (Blade)" },
             { RelicOfFireworksBuffLoss, "Relic of Fireworks (Buff Loss)" },
+            { RelicOfTheFlockBarrier, "Relic of the Flock (Barrier)" },
+            { RelicOfMercyHealing, "Relic of Mercy" },
             { MabonsStrength, "Relic of Mabon" },
             { NouryssHungerDamageBuff, "Relic of Nourys" },
             // Elementalist
@@ -401,7 +403,9 @@ namespace GW2EIEvtcParser.ParsedData
             // Relics
             { RelicOfTheAfflicted, "https://wiki.guildwars2.com/images/9/91/Relic_of_the_Afflicted.png" },
             { RelicOfTheCitadel, "https://wiki.guildwars2.com/images/3/36/Relic_of_the_Citadel.png" },
+            { RelicOfMercyHealing, "https://wiki.guildwars2.com/images/e/ed/Relic_of_Mercy.png" },
             { RelicOfTheFlock, "https://wiki.guildwars2.com/images/1/1b/Relic_of_the_Flock.png" },
+            { RelicOfTheFlockBarrier, "https://wiki.guildwars2.com/images/1/1b/Relic_of_the_Flock.png" },
             { RelicOfTheIce, "https://wiki.guildwars2.com/images/5/55/Relic_of_the_Ice.png" },
             { RelicOfTheKrait, "https://wiki.guildwars2.com/images/7/7e/Relic_of_the_Krait.png" },
             { RelicOfTheNightmare, "https://wiki.guildwars2.com/images/5/51/Relic_of_the_Nightmare.png" },
