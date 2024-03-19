@@ -258,7 +258,11 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
             // TODO Refined Toxins
             new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
-                .WithBuilds(GW2Builds.February2024NewWeapons),
+                .WithBuilds(GW2Builds.February2024NewWeapons, GW2Builds.March2024BalanceAndCerusLegendary),
+            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.sPvPWvW)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
