@@ -1359,6 +1359,7 @@
         internal const string BattlePresence = "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png";
         internal const string ForceOfWill = "https://wiki.guildwars2.com/images/d/d2/Force_of_Will.png";
         internal const string LethalTempo = "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png";
+        internal const string DeathlessCourage = "https://wiki.guildwars2.com/images/9/92/Deathless_Courage.png";
         internal const string TyrantsMomentum = "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png";
         internal const string RushingJustice = "https://wiki.guildwars2.com/images/7/74/Rushing_Justice.png";
         internal const string FlowingResolve = "https://wiki.guildwars2.com/images/b/be/Flowing_Resolve.png";
