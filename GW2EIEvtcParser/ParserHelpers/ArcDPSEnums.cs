@@ -66,7 +66,9 @@ namespace GW2EIEvtcParser
             internal const ulong DagdaNMHPChangedAndCMRelease = 153978;
             internal const ulong November2023Balance = 154949;
             internal const ulong January2024Balance = 157732;
-            internal const ulong March2024Balance = ulong.MaxValue;
+            internal const ulong February2024NewWeapons = 158837;
+            internal const ulong February2024CerusCMHPFix = 158968;
+            internal const ulong March2024BalanceAndCerusLegendary = ulong.MaxValue;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -87,6 +89,7 @@ namespace GW2EIEvtcParser
             internal const int BuffExtensionBroken = 20230905;
             internal const int BuffExtensionOverstackValueChanged = 20231107;
             internal const int LingeringAgents = 20231110;
+            internal const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -331,15 +334,15 @@ namespace GW2EIEvtcParser
             Expertise = 9,
             Armor = 10,
             Agony = 11,
-            StatInc = 12,
-            FlatInc = 13,
-            PhysInc = 14,
-            CondInc = 15,
-            PhysRec = 16,
-            CondRec = 17,
+            StatOutgoing = 12,
+            FlatOutgoing = 13,
+            PhysOutgoing = 14,
+            CondOutgoing = 15,
+            PhysIncomingAdditive = 16,
+            CondIncomingAdditive = 17,
             AttackSpeed = 18,
-            UnusedSiphonInc_Arc = 19, // Unused due to being auto detected by the solver
-            SiphonRec = 20,
+            UnusedSiphonOutgoing_Arc = 19, // Unused due to being auto detected by the solver
+            SiphonIncomingAdditive1 = 20,
             //
             Unknown = short.MaxValue,
             //
@@ -366,7 +369,7 @@ namespace GW2EIEvtcParser
             ExperienceFromAll = 100,
             WXP = 112,*/
             // Custom Ids, matched using a very simple pattern detection, see BuffInfoSolver.cs
-            ConditionDurationInc = -1,
+            ConditionDurationOutgoing = -1,
             DamageFormulaSquaredLevel = -2,
             CriticalChance = -3,
             StrikeDamageToHP = -4,
@@ -376,9 +379,9 @@ namespace GW2EIEvtcParser
             DamageFormula = -8,
             MovementActivationDamageFormula = -9,
             EnduranceRegeneration = -10,
-            HealingEffectivenessRec = -11,
-            HealingEffectivenessFlatInc = -12,
-            HealingEffectivenessConvInc = -13,
+            HealingEffectivenessIncomingNonStacking = -11,
+            HealingEffectivenessOutgoingAdditive = -12,
+            HealingEffectivenessConvOutgoing = -13,
             HealingOutputFormula = -14,
             ExperienceFromKills = -15,
             GoldFind = -16,
@@ -388,17 +391,19 @@ namespace GW2EIEvtcParser
             MagicFind = -20,
             ExperienceFromAll = -21,
             WXP = -22,
-            SiphonInc = -23,
-            PhysRec2 = -24,
-            CondRec2 = -25,
-            BoonDurationInc = -26,
-            HealingEffectivenessRec2 = -27,
+            SiphonOutgoing = -23,
+            PhysIncomingMultiplicative = -24,
+            CondIncomingMultiplicative = -25,
+            BoonDurationOutgoing = -26,
+            HealingEffectivenessIncomingAdditive = -27,
             MovementSpeedStacking = -28,
             MovementSpeedStacking2 = -29,
             FishingPower = -30,
             MaximumHP = -31,
             VitalityPercent = -32,
             DefensePercent = -33,
+            SiphonIncomingAdditive2 = -34,
+            HealingEffectivenessIncomingMultiplicative = -35,
         }
         internal static BuffAttribute GetBuffAttribute(short bt, int evtcVersion)
         {
@@ -406,10 +411,10 @@ namespace GW2EIEvtcParser
             if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 // Enum has shifted by -1
-                if (bt <= (byte)BuffAttribute.SiphonRec - 1)
+                if (bt <= (byte)BuffAttribute.SiphonIncomingAdditive1 - 1)
                 {
                     // only apply +1 shift to enum higher or equal to the one removed
-                    res = bt < (byte)BuffAttribute.FlatInc ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
+                    res = bt < (byte)BuffAttribute.FlatOutgoing ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
                 } 
                 else
                 {
@@ -417,9 +422,9 @@ namespace GW2EIEvtcParser
                 }
             } else
             {
-                res = bt <= (byte)BuffAttribute.SiphonRec ? (BuffAttribute)bt : BuffAttribute.Unknown;
+                res = bt <= (byte)BuffAttribute.SiphonIncomingAdditive1 ? (BuffAttribute)bt : BuffAttribute.Unknown;
             }
-            if (res == BuffAttribute.UnusedSiphonInc_Arc)
+            if (res == BuffAttribute.UnusedSiphonOutgoing_Arc)
             {
                 res = BuffAttribute.Unknown;
             }
@@ -537,6 +542,13 @@ namespace GW2EIEvtcParser
         private const int QadimPlatform = -49;
         private const int GravityBall = -50;
         private const int JormagMovingFrostBeam = -51;
+        private const int GrandStrikeChest = -52;
+        private const int PermanentEmbodimentOfGluttony = -53;
+        private const int PermanentEmbodimentOfRage = -54;
+        private const int PermanentEmbodimentOfDespair = -55;
+        private const int PermanentEmbodimentOfRegret = -56;
+        private const int PermanentEmbodimentOfEnvy = -57;
+        private const int PermanentEmbodimentOfMalice = -58;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -923,6 +935,13 @@ namespace GW2EIEvtcParser
             EmbodimentOfEnvy = 25967,
             EmbodimentOfMalice = 25700,
             MaliciousShadow = 25747,
+            MaliciousShadowCM = 25645,
+            PermanentEmbodimentOfGluttony = ArcDPSEnums.PermanentEmbodimentOfGluttony,
+            PermanentEmbodimentOfRage = ArcDPSEnums.PermanentEmbodimentOfRage,
+            PermanentEmbodimentOfDespair = ArcDPSEnums.PermanentEmbodimentOfDespair,
+            PermanentEmbodimentOfRegret = ArcDPSEnums.PermanentEmbodimentOfRegret,
+            PermanentEmbodimentOfEnvy = ArcDPSEnums.PermanentEmbodimentOfEnvy,
+            PermanentEmbodimentOfMalice = ArcDPSEnums.PermanentEmbodimentOfMalice,
             // Freezie
             FreeziesFrozenHeart = 21328,
             IceStormer = 21325,
@@ -1173,6 +1192,7 @@ namespace GW2EIEvtcParser
             ChestOfSouls = ArcDPSEnums.ChestOfSouls,
             SiegeChest = ArcDPSEnums.SiegeChest,
             CAChest = ArcDPSEnums.CAChest,
+            GrandStrikeChest = ArcDPSEnums.GrandStrikeChest,
             //
             None = int.MaxValue,
         };

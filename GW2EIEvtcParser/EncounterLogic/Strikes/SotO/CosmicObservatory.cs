@@ -6,13 +6,13 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(SoulFeast, "Soul Feast", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Sl.Fst.H", "Soul Feat (Pulsing Orb AoEs)", "Soul Feast Hit", 0),
                 new PlayerDstHitMechanic(PlanetCrashProjectileSkill, "Planet Crash", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.White), "PlnCrhProj.H", "Planet Crash (Projectiles Hits)", "Planet Crash Projectiles Hit", 0),
                 new PlayerDstHitMechanic(ChargingConstellationDamage, "Charging Constellation", new MechanicPlotlySetting(Symbols.Star, Colors.White), "ChargCons.H", "Charging Constellation Hit", "Charging Constellation Hit", 0),
+                new PlayerDstHitMechanic(new long [] { SpinningNebulaCentral, SpinningNebulaWithTeleport }, "Danced with the Stars", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.DarkBlue), "DancStars.Achiv", "Achievement Eligibility: Danced with the Stars", "Danced with the Stars", 0).UsingEnable(x => x.FightData.IsCM).UsingAchievementEligibility(true),
                 new PlayerDstBuffApplyMechanic(ShootingStarsTargetBuff, "Shooting Stars", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "StarsTarg.A", "Shooting Stars Target (Green Arrow)", "Targetted by Shooting Stars", 0),
                 new PlayerDstBuffApplyMechanic(ResidualAnxiety, "Residual Anxiety", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Red), "Rsdl.Anxty", "Residual Anxiety", "Residual Anxiety", 0),
                 new PlayerDstBuffApplyMechanic(CosmicObservatoryLostControlBuff, "Lost Control", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Lst.Ctrl", "Lost Control (10 stacks of Residual Anxiety)", "Lost Control", 0),
@@ -441,6 +442,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                 }
             }
+            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
+            if (dagda == null)
+            {
+                throw new MissingKeyActorsException("Dagda not found");
+            }
+            // Security check to stop dagda from going back to 100%
+            var dagdaHPUpdates = combatData.Where(x => x.SrcMatchesAgent(dagda.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
+            if (dagdaHPUpdates.Count > 1 && dagdaHPUpdates.LastOrDefault().DstAgent == 10000)
+            {
+                dagdaHPUpdates.Last().OverrideDstAgent(dagdaHPUpdates[dagdaHPUpdates.Count - 2].DstAgent);
+            }
         }
 
         protected override List<int> GetTargetsIDs()
@@ -481,6 +493,40 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             return "Cosmic Observatory";
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+
+            if (log.FightData.Success && log.FightData.IsCM)
+            {
+                var check = log.CombatData.GetBuffData(AchievementEligibilityPrecisionAnxiety).Count;
+                int buffCounter = 0;
+                int aliveCounter = 0;
+
+                foreach (Player player in log.PlayerList)
+                {
+                    IReadOnlyDictionary<long, BuffsGraphModel> bgms = player.GetBuffGraphs(log);
+                    if (bgms != null && bgms.TryGetValue(AchievementEligibilityPrecisionAnxiety, out BuffsGraphModel bgm))
+                    {
+                        if (bgm.BuffChart.Any(x => x.Value == 1))
+                        {
+                            buffCounter++;
+                        }
+                    }
+                    IReadOnlyList<DeadEvent> deaths = log.CombatData.GetDeadEvents(player.AgentItem);
+                    if (deaths.Count == 0)
+                    {
+                        aliveCounter++;
+                    }
+                }
+
+                if (buffCounter == log.PlayerList.Count && aliveCounter == log.PlayerList.Count)
+                {
+                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityPrecisionAnxiety));
+                }
+            }
         }
     }
 }

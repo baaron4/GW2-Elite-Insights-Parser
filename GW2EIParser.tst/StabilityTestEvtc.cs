@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIParser.Exceptions;
+using GW2EIParserCommons.Exceptions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;

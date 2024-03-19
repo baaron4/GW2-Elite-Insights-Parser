@@ -12,6 +12,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -29,17 +30,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { NoxiousVaporBlade, NoxiousVaporBladeCM }, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Green), "BladeOut.H", "Hit by Noxious Vapor Blade (to player)", "Noxious Vapor Blade Hit", 150),
                 new PlayerDstHitMechanic(new long [] { NoxiousReturn, NoxiousReturnCM }, "Noxious Return", new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "BladeBack.H", "Hit by Noxious Return (to Arsenite)", "Noxious Return Hit", 150),
                 new PlayerDstHitMechanic(new long [] { BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM }, "Boiling Aether", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150).UsingAchievementEligibility(true),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeVermilion, ArcDPSEnums.TargetID.PrototypeVermilionCM })),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeArsenite, ArcDPSEnums.TargetID.PrototypeArseniteCM })),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeIndigo, ArcDPSEnums.TargetID.PrototypeIndigoCM })),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
                 new PlayerDstBuffApplyMechanic(Spaghettification, "Spaghettification", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Spgt.H", "Hit by Spaghettification", "Spaghettification Hit", 0),
                 new PlayerDstBuffApplyMechanic(Dysapoptosis, "Dysapoptosis", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkRed), "Dysp.H", "Hit by Dysapoptosis", "Dysapoptosis Hit", 0),
                 new PlayerDstBuffApplyMechanic(ThunderingUltimatum, "Thundering Ultimatum", new MechanicPlotlySetting(Symbols.Asterisk, Colors.DarkRed), "ThunUlti.H", "Hit by Thundering Ultimatum", "Thunderin gUltimatum Hit", 0),
                 new PlayerDstBuffApplyMechanic(new long [] { TidalTorment, TidalTormentCM }, "Tidal Torment", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "TidTorm.A", "Tidal Torment Applied", "Tidal Torment Applied", 0),
                 new PlayerDstBuffApplyMechanic(new long [] { ErgoShear, ErgoShearCM }, "Ergo Shear", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "ErgShr.A", "Ergo Shear Applied", "Ergo Shear Applied", 0),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeVermilion, ArcDPSEnums.TargetID.PrototypeVermilionCM })),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeArsenite, ArcDPSEnums.TargetID.PrototypeArseniteCM })),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeIndigo, ArcDPSEnums.TargetID.PrototypeIndigoCM })),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, "Empowered", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
                 new EnemyDstBuffApplyMechanic(PowerTransfer, "Power Transfer", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
                 new EnemyDstBuffApplyMechanic(LeyWovenShielding, "Ley-Woven Shielding", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),
@@ -67,12 +68,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.PrototypeVermilion,
-                (int)ArcDPSEnums.TargetID.PrototypeIndigo,
-                (int)ArcDPSEnums.TargetID.PrototypeArsenite,
-                (int)ArcDPSEnums.TargetID.PrototypeVermilionCM,
-                (int)ArcDPSEnums.TargetID.PrototypeIndigoCM,
-                (int)ArcDPSEnums.TargetID.PrototypeArseniteCM,
+                (int)TargetID.PrototypeVermilion,
+                (int)TargetID.PrototypeIndigo,
+                (int)TargetID.PrototypeArsenite,
+                (int)TargetID.PrototypeVermilionCM,
+                (int)TargetID.PrototypeIndigoCM,
+                (int)TargetID.PrototypeArseniteCM,
             };
         }
 
@@ -88,9 +89,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Can be improved
             if (fightData.IsCM)
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilionCM, fightData.FightStart, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigoCM, fightData.FightStart, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArseniteCM, fightData.FightStart, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilionCM, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(TargetID.PrototypeIndigoCM, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(TargetID.PrototypeArseniteCM, fightData.FightStart, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
@@ -98,9 +99,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             } 
             else
             {
-                if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeVermilion, fightData.FightStart, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeIndigo, fightData.FightStart, combatData, Targets) ||
-                    TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.PrototypeArsenite, fightData.FightStart, combatData, Targets))
+                if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilion, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(TargetID.PrototypeIndigo, fightData.FightStart, combatData, Targets) ||
+                    TargetHPPercentUnderThreshold(TargetID.PrototypeArsenite, fightData.FightStart, combatData, Targets))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
@@ -118,18 +119,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     idsToCheck = new List<int>
                     {
-                        (int)ArcDPSEnums.TargetID.PrototypeVermilionCM,
-                        (int)ArcDPSEnums.TargetID.PrototypeIndigoCM,
-                        (int)ArcDPSEnums.TargetID.PrototypeArseniteCM,
+                        (int)TargetID.PrototypeVermilionCM,
+                        (int)TargetID.PrototypeIndigoCM,
+                        (int)TargetID.PrototypeArseniteCM,
                     };
                 } 
                 else
                 {
                     idsToCheck = new List<int>
                     {
-                        (int)ArcDPSEnums.TargetID.PrototypeVermilion,
-                        (int)ArcDPSEnums.TargetID.PrototypeIndigo,
-                        (int)ArcDPSEnums.TargetID.PrototypeArsenite,
+                        (int)TargetID.PrototypeVermilion,
+                        (int)TargetID.PrototypeIndigo,
+                        (int)TargetID.PrototypeArsenite,
                     };
                 }
                 SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)).ToList(), combatData, fightData, playerAgents, true);
@@ -145,26 +146,26 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>
             {
-                (int)ArcDPSEnums.TargetID.PrototypeVermilion,
-                (int)ArcDPSEnums.TargetID.PrototypeIndigo,
-                (int)ArcDPSEnums.TargetID.PrototypeArsenite,
-                (int)ArcDPSEnums.TargetID.PrototypeVermilionCM,
-                (int)ArcDPSEnums.TargetID.PrototypeIndigoCM,
-                (int)ArcDPSEnums.TargetID.PrototypeArseniteCM,
+                (int)TargetID.PrototypeVermilion,
+                (int)TargetID.PrototypeIndigo,
+                (int)TargetID.PrototypeArsenite,
+                (int)TargetID.PrototypeVermilionCM,
+                (int)TargetID.PrototypeIndigoCM,
+                (int)TargetID.PrototypeArseniteCM,
             };
         }
 
         private AbstractSingleActor Vermilion()
         {
-            return Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilionCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeVermilion));
+            return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilionCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilion));
         }
         private AbstractSingleActor Indigo()
         {
-            return Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigoCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeIndigo));
+            return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeIndigoCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeIndigo));
         }
         private AbstractSingleActor Arsenite()
         {
-            return Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PrototypeArsenite));
+            return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArsenite));
         }
 
         private static List<PhaseData> GetSubPhases(AbstractSingleActor target, ParsedEvtcLog log, string phaseName)
@@ -216,10 +217,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-            AgentItem vermilion = agentData.GetNPCsByID(ArcDPSEnums.TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(ArcDPSEnums.TargetID.PrototypeVermilion).FirstOrDefault();
+            AgentItem vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
             if (vermilion != null)
             {
-                CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState && x.Value == 0);
+                CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && x.Value == 0);
                 if (breakbarStateActive != null)
                 {
                     startToUse = breakbarStateActive.Time;
@@ -237,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // Missing Buff Initial
                 if (pair.Value.FirstOrDefault() is AbstractBuffRemoveEvent)
                 {
-                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), ArcDPSEnums.IFF.Friend, 1, true));
+                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), IFF.Friend, 1, true));
                 }
             }
             return toAdd;
@@ -302,13 +303,38 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixation
             IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffData(FixatedOldLionsCourt).Where(buff => buff.To == p.AgentItem);
-            IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeVermilion, ArcDPSEnums.TargetID.PrototypeVermilionCM }));
-            IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeArsenite, ArcDPSEnums.TargetID.PrototypeArseniteCM }));
-            IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { ArcDPSEnums.TargetID.PrototypeIndigo, ArcDPSEnums.TargetID.PrototypeIndigoCM }));
+            IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM }));
+            IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM }));
+            IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM }));
 
             AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
             AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);
             AddFixatedDecorations(p, log, replay, fixatedIndigo, ParserIcons.FixationBlueOverhead);
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch(target.ID)
+            {
+                case (int)TargetID.PrototypeVermilion:
+                    replay.AddHideByBuff(target, log, Determined762);
+                    break;
+                case (int)TargetID.PrototypeVermilionCM:
+                    replay.AddHideByBuff(target, log, Determined762);
+                    break;
+                case (int)TargetID.PrototypeArsenite:
+                    replay.AddHideByBuff(target, log, Determined762);
+                    break;
+                case (int)TargetID.PrototypeArseniteCM:
+                    replay.AddHideByBuff(target, log, Determined762);
+                    break;
+                case (int)TargetID.PrototypeIndigo:
+                    replay.AddHideByBuff(target, log, Determined762);
+                    break;
+                case (int)TargetID.PrototypeIndigoCM:
+                    replay.AddHideByBuff(target, log, Determined762);
+                    break;
+            }
         }
 
         /// <summary>

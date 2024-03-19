@@ -246,9 +246,42 @@ namespace GW2EIEvtcParser.ParsedData
             { FrighteningSpeedReturn, "Frightening Speed (Return)" },
             { DreadVisageKanaxaiSkill, "Dread Visage (Kanaxai)" },
             { DreadVisageKanaxaiSkillIsland, "Dread Visage (Kanaxai Island)" },
-            { DreadVisageAspectSkill, "Dead Visage (Aspect)" },
+            { DreadVisageAspectSkill, "Dread Visage (Aspect)" },
             { RendingStormSkill, "Rending Storm (Axe)" },
             { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
+            // Cerus
+            // - Normal Mode
+            { CrushingRegretNM, "Crushing Regret (NM)" },
+            { WailOfDespairNM, "Wail of Despair (NM)" },
+            { EnviousGazeNM, "Envious Gaze (NM)" },
+            { MaliciousIntentNM, "Malicious Intent (NM)" },
+            { InsatiableHungerSkillNM, "Insatiable Hunger (NM)" },
+            { CryOfRageNM, "Cry of Rage (NM)" },
+            // - Empowered Normal Mode
+            { CrushingRegretEmpoweredNM, "Crushing Regret (Empowered NM)" },
+            { WailOfDespairEmpoweredNM, "Wail of Despair (Empowered NM)" },
+            { EnviousGazeEmpoweredNM, "Envious Gaze (Empowered NM)" },
+            { MaliciousIntentEmpoweredNM, "Malicious Intent (Empowered NM)" },
+            { InsatiableHungerSkillEmpoweredNM, "Insatiable Hunger (Empowered NM)" },
+            { CryOfRageEmpoweredNM, "Cry of Rage (Empowered NM)" },
+            // - Challenge Mode
+            { CrushingRegretCM, "Crushing Regret (CM)" },
+            { WailOfDespairCM, "Wail of Despair (CM)" },
+            { EnviousGazeCM, "Envious Gaze (CM)" },
+            { MaliciousIntentCM, "Malicious Intent (CM)" },
+            { InsatiableHungerSkillCM, "Insatiable Hunger (CM)" },
+            { CryOfRageCM, "Cry of Rage (CM)" },
+            // - Empowered Challenge Mode
+            { CrushingRegretEmpoweredCM, "Crushing Regret (Empowered CM)" },
+            { WailOfDespairEmpoweredCM, "Wail of Despair (Empowered CM)" },
+            { EnviousGazeEmpoweredCM, "Envious Gaze (Empowered CM)" },
+            { MaliciousIntentEmpoweredCM, "Malicious Intent (Empowered CM)" },
+            { InsatiableHungerEmpoweredSkillCM, "Insatiable Hunger (Empowered CM)" },
+            { CryOfRageEmpoweredCM, "Cry of Rage (Empowered CM)" },
+            // - Misc
+            { PetrifySkill, "Petrify" },
+            { EnragedSmashNM, "Enraged Smash (NM)" },
+            { EnragedSmashCM, "Enraged Smash (CM)" },
             // World vs World
             { WvWSpendingSupplies, "Spending Supply (Building / Repairing)" },
             { WvWPickingUpSupplies, "Picking Up Supplies" },
@@ -535,6 +568,7 @@ namespace GW2EIEvtcParser.ParsedData
             { EchoOfMemoryExtra, "https://wiki.guildwars2.com/images/9/95/Echo_of_Memory.png" },
             { SplitSurgeSecondaryBeams, "https://wiki.guildwars2.com/images/f/fd/Split_Surge.png" },
             { PersistenceOfMemory, "https://wiki.guildwars2.com/images/c/ce/Persistence_of_Memory.png" },
+            { FriendlyFireIllu, "https://wiki.guildwars2.com/images/c/c0/Friendly_Fire.png" },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
@@ -800,6 +834,7 @@ namespace GW2EIEvtcParser.ParsedData
             { BolaTossWvW, "https://wiki.guildwars2.com/images/7/7e/Bola_Shot.png" },
             { MagebaneTether, BuffImages.MagebaneTether },
             { EnchantmentCollapse, "https://wiki.guildwars2.com/images/7/7f/Enchantment_Collapse.png" },
+            { LineBreakerHeal, "https://wiki.guildwars2.com/images/0/0e/Line_Breaker.png" },
             #endregion WarriorIcons
             #region EncounterIcons
             // Silent Surf Fractal
@@ -1231,7 +1266,7 @@ namespace GW2EIEvtcParser.ParsedData
             return true;
         }
 
-        internal int FindFirstWeaponSet(List<int> swaps)
+        internal int FindFirstWeaponSet(IReadOnlyList<int> swaps)
         {
             int swapped = WeaponSetIDs.NoSet;
             // we started on a proper weapon set

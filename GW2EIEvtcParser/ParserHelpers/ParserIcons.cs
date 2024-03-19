@@ -378,6 +378,12 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashCage = "https://i.imgur.com/W9Z0roU.png";
         private const string TrashBombs = "https://i.imgur.com/fV8psEZ.png";
         private const string TrashGravityBall = "https://i.imgur.com/7zm0q8A.png";
+        private const string TrashCerusDespair = "https://i.imgur.com/A5ORL5I.png";
+        private const string TrashCerusEnvy = "https://i.imgur.com/pncZoZZ.png";
+        private const string TrashCerusGluttony = "https://i.imgur.com/Hsturw6.png";
+        private const string TrashCerusMalice = "https://i.imgur.com/13Z3dNF.png";
+        private const string TrashCerusRage = "https://i.imgur.com/L0v8Goe.png";
+        private const string TrashCerusRegret = "https://i.imgur.com/jZdx74j.png";
 
         // Minion NPC Icons
         private const string MinionHoundOfBalthazar = "https://i.imgur.com/FFSYrzL.png";
@@ -1158,12 +1164,18 @@ namespace GW2EIEvtcParser.ParserHelpers
             { ArcDPSEnums.TrashID.InspectorEllenKiel, TrashInspectorEllenKiel },
             { ArcDPSEnums.TrashID.JadeMawTentacle, TrashJadeMawTentacle },
             { ArcDPSEnums.TrashID.AwakenedAbomination, TrashAwakenedAbomination },
-            { ArcDPSEnums.TrashID.EmbodimentOfDespair, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.EmbodimentOfEnvy, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.EmbodimentOfGluttony, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.EmbodimentOfMalice, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.EmbodimentOfRage, TrashGenericRedEnemySkull },
-            { ArcDPSEnums.TrashID.EmbodimentOfRegret, TrashGenericRedEnemySkull },
+            { ArcDPSEnums.TrashID.EmbodimentOfDespair, TrashCerusDespair },
+            { ArcDPSEnums.TrashID.EmbodimentOfEnvy, TrashCerusEnvy },
+            { ArcDPSEnums.TrashID.EmbodimentOfGluttony, TrashCerusGluttony },
+            { ArcDPSEnums.TrashID.EmbodimentOfMalice, TrashCerusMalice },
+            { ArcDPSEnums.TrashID.EmbodimentOfRage, TrashCerusRage },
+            { ArcDPSEnums.TrashID.EmbodimentOfRegret, TrashCerusRegret },
+            { ArcDPSEnums.TrashID.PermanentEmbodimentOfDespair, TrashCerusDespair },
+            { ArcDPSEnums.TrashID.PermanentEmbodimentOfEnvy, TrashCerusEnvy },
+            { ArcDPSEnums.TrashID.PermanentEmbodimentOfGluttony, TrashCerusGluttony },
+            { ArcDPSEnums.TrashID.PermanentEmbodimentOfMalice, TrashCerusMalice },
+            { ArcDPSEnums.TrashID.PermanentEmbodimentOfRage, TrashCerusRage },
+            { ArcDPSEnums.TrashID.PermanentEmbodimentOfRegret, TrashCerusRegret },
             { ArcDPSEnums.TrashID.TheTormented, TrashTheTormented },
             { ArcDPSEnums.TrashID.VeteranTheTormented, TrashTheTormented },
             { ArcDPSEnums.TrashID.EliteTheTormented, TrashTheTormented },

@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<long> Dead { get; private set; }
         public IReadOnlyList<long> Down { get; private set; }
         public IReadOnlyList<long> Dc { get; private set; }
+        public IReadOnlyList<long> Hide { get; }
         public IReadOnlyList<long> BreakbarActive { get; private set; }
 
         public long HitboxWidth { get; }
@@ -55,6 +56,16 @@ namespace GW2EIEvtcParser.EIData
             foreach (Point3D facing in replay.PolledRotations)
             {
                 angles.Add(-Point3D.GetZRotationFromFacing(facing));
+            }
+            if (replay.Hidden.Any())
+            {
+                var hide = new List<long>();
+                foreach (Segment seg in replay.Hidden)
+                {
+                    hide.Add(seg.Start);
+                    hide.Add(seg.End);
+                }
+                Hide = hide;
             }
         }
         protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)

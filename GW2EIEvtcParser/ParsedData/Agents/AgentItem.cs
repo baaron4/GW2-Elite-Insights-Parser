@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void SetMaster(AgentItem master)
         {
-            if (IsPlayer)
+            if (IsPlayer || master == this)
             {
                 return;
             }

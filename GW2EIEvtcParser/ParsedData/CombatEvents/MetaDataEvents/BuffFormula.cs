@@ -69,7 +69,9 @@ namespace GW2EIEvtcParser.ParsedData
         private bool IsExtraNumberNone => ExtraNumberState == 0;
         private bool IsExtraNumberSomething => ExtraNumberState == 1;
 
-        private bool IsFlippedFormula => Attr1 == PhysRec2 || Attr1 == CondRec2;
+        private bool IsFlippedFormula => Attr1 == PhysIncomingMultiplicative || Attr1 == CondIncomingMultiplicative || Attr1 == HealingEffectivenessIncomingMultiplicative;
+
+        private bool MultiplyBy100 => Attr2 != None || Attr1 == HealingEffectivenessIncomingMultiplicative;
 
         private string _solvedDescription = null;
 
@@ -199,6 +201,9 @@ namespace GW2EIEvtcParser.ParsedData
             if (Attr2 != None)
             {
                 _solvedDescription += " from " + stat2;
+            }
+            if (MultiplyBy100)
+            {
                 totalOffset *= 100.0;
                 variable *= 100.0;
             }

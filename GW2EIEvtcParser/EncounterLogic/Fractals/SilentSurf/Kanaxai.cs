@@ -344,9 +344,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int castDuration = 26320;
                         var hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time).ToList();
                         (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                        (long start, long end) lifespanHit = (c.Time, hits.FirstOrDefault(x => x.Time > c.Time).Time);
                         if (hits.Count != 0)
                         {
+                            (long start, long end) lifespanHit = (c.Time, hits.FirstOrDefault(x => x.Time > c.Time).Time);
                             AddWorldCleaverDecoration(target, replay, lifespanHit, lifespan.end);
                         }
                         else

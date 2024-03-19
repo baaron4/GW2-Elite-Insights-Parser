@@ -571,8 +571,20 @@ namespace GW2EIEvtcParser
         public const string TempleOfFebeCerusGreen = "0651E35503F642419A21378FBD29F777"; // Owner Cerus Target Player
         public const string TempleOfFebeCerusGreen2 = "E7E95B11D4AAD2469DD2FD0AF9631ED5"; // Owner Cerus Target Player
         public const string TempleOfFebeRegretGreen = "015E5CF598A13D4F8D6CCFD66643525F"; // Owner Embodiment of Regret Target Player
-        public const string TempleOfFebeGreenSuccess = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
-        public const string TempleOfFebeGreenFailure = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeGreenFailure = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeGreenSuccess = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeWailOfDespair = "9EDCB6E2E3C11448B37F7D07B6B2D4F5"; // Owner Cerus/Embodiment Target Player Duration 5000
+        public const string TempleOfFebeWailOfDespair2 = "00E0C7FC6A454B43B0FB93A6CA7BE83F"; // No Owner Target Player Duration 0
+        public const string TempleOfFebeWailOfDespairEmpowered = "246326728CB3704C93FEA75C402D65CA"; // Owner Cerus/Embodiment Target Player Duration 5000
+        public const string TempleOfFebePoolOfDespair = "3CF93AB93143B64A879D1D63FBA9282A"; // Owner Cerus/Embodiment Duration 60000
+        public const string TempleOfFebePoolOfDespair2 = "4F982CD060507C44A25844BF0ADFCB54"; // No Owner Target Player Duration 0
+        public const string TempleOfFebePoolOfDespairEmpowered = "24E40E1F15BE2142B61F3568D23AE799"; // Owner Cerus/Embodiment Duration 999000
+        public const string TempleOfFebeEnviousGazeIndicator = "62B3766CDF54BD4EA964DAA462954A4A"; // Duration 1500
+        public const string TempleOfFebeEnviousGaze1 = "246ECEBC28173B498B9A6886D7937D59"; // Duration 12500
+        public const string TempleOfFebeEnviousGaze2 = "DA42718917F2304FBA10AF6898217788"; // Duration 12500
+        public const string TempleOfFebeEnviousGaze3 = "B77A06C842511949889877EDC1448D49"; // Duration 11000
+        public const string TempleOfFebeEnviousGaze4 = "0D2192849D53B4469F56B1C74542DBE9"; // Duration 11000
+        public const string TempleOfFebeMaliciousIntentTether = "518369328A12B74EAC49702A785FBA19"; // Duration 0
         #endregion
     }
 }

@@ -452,6 +452,7 @@
         internal const string GiftOfTrueSight = "https://wiki.guildwars2.com/images/7/75/Gift_of_True_Sight.png";
         internal const string Hallucinations = "https://wiki.guildwars2.com/images/c/ce/Hallucinations.png";
         internal const string Disoriented = "https://wiki.guildwars2.com/images/7/7c/Disoriented.png";
+        internal const string SporeInducedRage = "https://wiki.guildwars2.com/images/1/1e/Spore-Induced_Rage.png";
         // Ai
         internal const string TwistedEarth = "https://wiki.guildwars2.com/images/7/77/Twisted_Earth_%28active_effect%29.png";
         // Open World
@@ -1604,6 +1605,12 @@
         internal const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
         internal const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
         internal const string ReflectiveShielding = "https://wiki.guildwars2.com/images/c/c6/Reflective_Shielding.png";
+        internal const string RagingRicochet = "https://wiki.guildwars2.com/images/1/1a/Raging_Ricochet.png";
+        internal const string DazingDischarge = "https://wiki.guildwars2.com/images/1/14/Dazing_Discharge.png";
+        internal const string ShatteringStone = "https://wiki.guildwars2.com/images/a/aa/Shattering_Stone.png";
+        internal const string ForceOfNature = "https://wiki.guildwars2.com/images/2/29/Force_of_Nature.png";
+        internal const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
+        internal const string NaturesStrength = "https://wiki.guildwars2.com/images/8/84/Nature%27s_Strength.png";
         #endregion Cast
 
         #region Traits

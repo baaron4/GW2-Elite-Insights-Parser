@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool HasBreakbarDamageData { get; } = false;
         public bool HasEffectData { get; } = false;
 
-        private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData)
+        private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, int evtcVersion)
         {
             var toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.ParsedData
                 }
                 if (p.Spec == Spec.Virtuoso)
                 {
-                    toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffDataByDst(p.AgentItem), p.AgentItem, skillData));
+                    toAdd.AddRange(VirtuosoHelper.TransformVirtuosoBladeStorage(GetBuffDataByDst(p.AgentItem), p.AgentItem, skillData, evtcVersion));
                 }
                 if (p.BaseSpec == Spec.Elementalist && p.Spec != Spec.Weaver)
                 {
@@ -204,13 +204,16 @@ namespace GW2EIEvtcParser.ParsedData
                 switch(p.Spec)
                 {
                     case Spec.Willbender:
-                        toAdd.AddRange(WillbenderHelper.ComputeFlowingResolveCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ProfHelper.ComputeEndWithBuffApplyCastEvents(p, this, skillData, FlowingResolveSkill, 440, 500, FlowingResolveBuff));
                         break;
                     default:
                         break;
                 }
                 switch(p.BaseSpec)
                 {
+                    case Spec.Necromancer:
+                        toAdd.AddRange(ProfHelper.ComputeEndWithBuffApplyCastEvents(p, this, skillData, PathOfGluttony, 750, 750, PathOfGluttonyFlipBuff));
+                        break;
                     case Spec.Ranger:
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, AncestralGraceSkill, AncestralGraceBuff));
                         break;
@@ -401,7 +404,7 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.ProcessRacialGadgets(players, this);
             // Custom events
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Buff Events");
-            EIBuffParse(players, skillData, fightData);
+            EIBuffParse(players, skillData, fightData, arcdpsVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Damage Events");
             EIDamageParse(skillData, fightData);
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Cast Events");

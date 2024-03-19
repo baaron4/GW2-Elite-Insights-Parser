@@ -46,6 +46,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new Buff("Shadow Shroud", ShadowShroud, Source.Specter, BuffClassification.Other, BuffImages.EnterShadowShroud),
             new Buff("Endless Night", EndlessNight, Source.Specter, BuffClassification.Other, BuffImages.EndlessNight),
+            new Buff("Shrouded", Shrouded, Source.Specter, BuffClassification.Support, BuffImages.EnterShadowShroud),
             new Buff("Shrouded Ally", ShroudedAlly, Source.Specter, BuffClassification.Other, BuffImages.Siphon),
             new Buff("Rot Wallow Venom", RotWallowVenom, Source.Specter, BuffStackType.StackingConditionalLoss, 100, BuffClassification.Offensive, BuffImages.DarkSentry),
             new Buff("Consume Shadows", ConsumeShadows, Source.Specter, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.ConsumeShadows),

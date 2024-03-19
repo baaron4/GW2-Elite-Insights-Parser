@@ -17,6 +17,10 @@ namespace GW2EIEvtcParser.EIData
             Value = value;
         }
 
+        public Segment(long start, long end) : this(start, end, 0)
+        {
+        }
+
         public Segment(Segment other) : this(other.Start, other.End, other.Value)
         {
 

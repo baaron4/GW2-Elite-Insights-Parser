@@ -4,8 +4,19 @@
 /*global animator, animateCanvas, noUpdateTime, deadIcon, dcIcon, downIcon*/
 "use strict";
 //// ACTORS
+
+function IsPresentInArray(array) {
+    var time = animator.reactiveDataStatus.time;
+    for (let i = 0; i < array.length; i += 2) {
+        if (array[i] <= time && array[i + 1] >= time) {
+            return true;
+        }
+    }
+    return false;
+}
+
 class IconDrawable {
-    constructor(pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth) {
+    constructor(id, pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, hide, breakbarActive, hitboxWidth) {
         this.pos = pos;
         this.angles = angles;
         this.start = start;
@@ -20,8 +31,12 @@ class IconDrawable {
         this.dead = typeof dead !== "undefined" ? dead : null;
         this.down = typeof down !== "undefined" ? down : null;
         this.dc = typeof dc !== "undefined" ? dc : null;
+        this.hide = typeof hide !== "undefined" ? hide : null;
         this.breakbarActive = typeof breakbarActive !== "undefined" ? breakbarActive : null;
         this.hitboxWidth = hitboxWidth;
+        //
+        uint32[0] = id;
+        this.pickingColor = `rgba(${uint32ToUint8[0]}, ${uint32ToUint8[1]}, ${uint32ToUint8[2]}, 1)`;
     }
 
     isSelected() {
@@ -36,52 +51,28 @@ class IconDrawable {
         if (this.dead === null || this.dead.length === 0) {
             return false;
         }
-        var time = animator.reactiveDataStatus.time;
-        for (let i = 0; i < this.dead.length; i += 2) {
-            if (this.dead[i] <= time && this.dead[i + 1] >= time) {
-                return true;
-            }
-        }
-        return false;
+        return IsPresentInArray(this.dead);
     }
 
     downed() {
         if (this.down === null || this.down.length === 0) {
             return false;
         }
-        var time = animator.reactiveDataStatus.time;
-        for (let i = 0; i < this.down.length; i += 2) {
-            if (this.down[i] <= time && this.down[i + 1] >= time) {
-                return true;
-            }
-        }
-        return false;
+        return IsPresentInArray(this.down);
     }
 
     disconnected() {
         if (this.dc === null || this.dc.length === 0) {
             return false;
         }
-        var time = animator.reactiveDataStatus.time;
-        for (let i = 0; i < this.dc.length; i += 2) {
-            if (this.dc[i] <= time && this.dc[i + 1] >= time) {
-                return true;
-            }
-        }
-        return false;
+        return IsPresentInArray(this.dc);
     }
 
     isBreakbarActive() {
         if (this.breakbarActive === null || this.breakbarActive.length === 0) {
             return false;
         }
-        var time = animator.reactiveDataStatus.time;
-        for (let i = 0; i < this.breakbarActive.length; i += 2) {
-            if (this.breakbarActive[i] <= time && this.breakbarActive[i + 1] >= time) {
-                return true;
-            }
-        }
-        return false;
+        return IsPresentInArray(this.breakbarActive);
     }
 
     getIcon() {
@@ -145,6 +136,9 @@ class IconDrawable {
     }
 
     canDraw() {
+        if (this.hide && this.hide.length > 0 && IsPresentInArray(this.hide)) {        
+            return false;
+        }
         return true;
     }
 
@@ -233,11 +227,31 @@ class IconDrawable {
             pos.x - halfSize, pos.y - halfSize, fullSize, fullSize);
     }
 
+    drawPicking() {
+        if (!this.canDraw()) {
+            return;
+        }
+        const pos = this.getPosition();
+        if (pos === null) {
+            return;
+        }
+        var ctx = animator.pickContext;
+        
+        ctx.save();
+        ctx.translate(pos.x, pos.y);
+        const fullSize = this.getSize();
+        const halfSize = fullSize / 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, halfSize, 0, 2 * Math.PI);
+        ctx.fillStyle = this.pickingColor;
+        ctx.fill();
+        ctx.restore();
+    }
 }
 
 class SquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, group, pos, angles, dead, down, dc, breakbarActive, hitboxWidth) {
-        super(pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
+    constructor(id, start, end, imgSrc, pixelSize, group, pos, angles, dead, down, dc, hide, breakbarActive, hitboxWidth) {
+        super(id, pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, hide, breakbarActive, hitboxWidth);
         this.group = group;
     }
 
@@ -248,18 +262,21 @@ class SquadIconDrawable extends IconDrawable {
 }
 
 class NonSquadIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, pos, angles, dead, down, dc, breakbarActive, masterID, hitboxWidth) {
-        super(pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth);
+    constructor(id, start, end, imgSrc, pixelSize, pos, angles, dead, down, dc, hide, breakbarActive, masterID, hitboxWidth) {
+        super(id, pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, hide, breakbarActive, hitboxWidth);
         this.masterID = typeof masterID === "undefined" ? -1 : masterID;
         this.master = null;
     }
 
     canDraw() {
+        if (!super.canDraw()) {
+            return false;
+        }
         if (this.master === null) {
             this.master = animator.getActorData(this.masterID);
         }
         if (this.master && !animator.displaySettings.displayAllMinions) {
-            return this.master.isSelected() && animator.displaySettings.displaySelectedMinions;
+            return (this.master.isSelected() || this.isSelected()) && animator.displaySettings.displaySelectedMinions;
         }
         return true;
     }

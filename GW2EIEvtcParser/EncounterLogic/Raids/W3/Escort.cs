@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)ArcDPSEnums.TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
                 }
             }
             return startToUse;
@@ -289,6 +289,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
                 if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
+            }
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch(target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.McLeodTheSilent:
+                    replay.AddHideByBuff(target, log, Invulnerability757);
+                    break;
             }
         }
 

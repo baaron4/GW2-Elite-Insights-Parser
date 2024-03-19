@@ -19,19 +19,6 @@ namespace GW2EIEvtcParser.EIData
         {
         };
 
-        public static IReadOnlyList<AnimatedCastEvent> ComputeFlowingResolveCastEvents(Player willbender, CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<AnimatedCastEvent>();
-            SkillItem skill = skillData.Get(FlowingResolveSkill);
-            var applies = combatData.GetBuffData(FlowingResolveBuff).OfType<BuffApplyEvent>().Where(x => x.To == willbender.AgentItem).ToList();
-            foreach (BuffApplyEvent bae in applies)
-            {
-                res.Add(new AnimatedCastEvent(willbender.AgentItem, skill, bae.Time - 440, 500));
-            }
-            return res;
-        }
-
-
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.All)
