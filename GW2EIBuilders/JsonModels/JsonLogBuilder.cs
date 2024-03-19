@@ -115,8 +115,8 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.Language = log.LogData.Language;
             jsonLog.LanguageID = (byte)log.LogData.LanguageID;
             jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
-            jsonLog.IsCM = log.FightData.IsCM;
-            //jsonLog.IsLegendaryCM = log.FightData.IsLegendaryCM;
+            jsonLog.IsCM = log.FightData.IsCM || log.FightData.IsLegendaryCM;
+            jsonLog.IsLegendaryCM = log.FightData.IsLegendaryCM;
             jsonLog.IsLateStart = log.FightData.IsLateStart;
             jsonLog.MissingPreEvent = log.FightData.MissingPreEvent;
             jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
