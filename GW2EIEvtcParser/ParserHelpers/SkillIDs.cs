@@ -3141,6 +3141,7 @@
         public const long HammerLunge = 58497;
         public const long IceFlail1 = 58501;
         public const long CrushingCruelty = 58503;
+        public const long WeightOfTheWorld = 58512;
         public const long ShatterArmFraenir = 58515;
         public const long SeismicCrush = 58518;
         public const long FrozenMissile = 58520;
@@ -4156,6 +4157,7 @@
         public const long NouryssHungerDamageBuff = 71431;
         public const long NouryssHungerStacksBuff = 71711;
         public const long NouryssHungerStartGainingStacksBuff = 71723;
+        public const long DimensionalApertureSkill = 71792;
         public const long PathOfGluttony = 71799;
         public const long Effervescence = 71800;
         public const long RagingRichochetBuff = 71811;
@@ -4167,6 +4169,7 @@
         public const long RampartSplitter = 71875;
         public const long EarthBullet = 71881;
         public const long EssenceOfLivingShadows = 71882;
+        public const long DimensionalAperturePortalBuff = 71890;
         public const long FriendlyFire = 71892;
         public const long Journey = 71897;
         public const long LineBreakerHeal = 71901;
@@ -4180,6 +4183,7 @@
         public const long Flourish = 71999;
         public const long ValiantLeap = 72002;
         public const long InspiringImagery = 72005;
+        public const long POV_DimensionalAperturaFlipSkillBuff = 72025;
         public const long FrigidFlurry = 72028;
         public const long SoothingSplash = 72033;
         public const long ShatteringStoneBuff = 72046;

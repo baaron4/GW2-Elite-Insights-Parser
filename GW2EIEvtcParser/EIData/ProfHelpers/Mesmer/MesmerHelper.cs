@@ -73,6 +73,8 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
             new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
             new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            // Rifle
+            new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
         };
 
 
@@ -156,6 +158,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
             new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            new Buff("Dimensional Aperture", DimensionalAperturePortalBuff, Source.Mesmer, BuffClassification.Other, BuffImages.DimensionalAperture),
             // Traits
             new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FencersFinesse),
             new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.IllusionaryDefense),
@@ -179,6 +182,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.CloneSpear,
             (int)MinionID.CloneDagger,
             (int)MinionID.CloneDownstate,
+            (int)MinionID.CloneRifle,
             (int)MinionID.CloneUnknown,
             (int)MinionID.CloneSwordTorch,
             (int)MinionID.CloneSwordFocus,
@@ -226,6 +230,9 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 case (int)MinionID.CloneDownstate:
                     minion.OverrideName("Downstate " + minion.Name);
+                    break;
+                case (int)MinionID.CloneRifle:
+                    minion.OverrideName("Rifle " + minion.Name);
                     break;
                 case (int)MinionID.CloneSword:
                 case (int)MinionID.CloneSwordPistol:
@@ -298,6 +305,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryMariner,
             (int)MinionID.IllusionaryWhaler,
             (int)MinionID.IllusionaryAvenger,
+            (int)MinionID.IllusionarySharpShooter,
         };
 
         internal static bool IsKnownMinionID(int id)
@@ -382,6 +390,28 @@ namespace GW2EIEvtcParser.EIData
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Dimensional Aperture
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out IReadOnlyList<EffectEvent> dimensionalApertures))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, DimensionalApertureSkill, SkillModeCategory.Portal);
+                foreach (EffectEvent effect in dimensionalApertures)
+                {
+                    AbstractBuffEvent buffApply = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem && Math.Abs(x.Time - effect.Time) <= ServerDelayConstant).FirstOrDefault();
+                    AgentItem portal = buffApply.To;
+                    DespawnEvent despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
+                    uint radius = portal.HitboxWidth / 2;
+                    (long start, long end) lifespan = (buffApply.Time, despawn.Time);
+                    var connector = new PositionConnector(effect.Position);
+
+                    // Portal location
+                    replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+
+                    // Tether between the portal and the player
+                    replay.Decorations.Add(new LineDecoration(lifespan, color, 0.3, new AgentConnector(player.AgentItem), connector));
                 }
             }
         }
