@@ -1242,6 +1242,7 @@ namespace GW2EIEvtcParser
             IllusionaryMariner = 9052,
             IllusionaryWhaler = 9057,
             IllusionaryAvenger = 15188,
+            IllusionarySharpShooter = 26152,
             // Mesmer Clones
             // - Single Weapon
             CloneSword = 8108,
@@ -1253,6 +1254,7 @@ namespace GW2EIEvtcParser
             CloneSpear = 6479,
             CloneDownstate = 10542,
             CloneDagger = 25569,
+            CloneRifle = 26153,
             CloneUnknown = 8107, // Possibly -> https://wiki.guildwars2.com/wiki/Clone_(Snowball_Mayhem)
             // - Sword + Offhand
             CloneSwordTorch = 15090,
