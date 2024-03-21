@@ -1142,6 +1142,7 @@
         public const long FireHollowedGravel = 20284;
         public const long FireHollowedBoulder = 20285;
         public const long FireHeavyBoulder2 = 20290;
+        public const long ArcanePowerFerocityBuff = 20449;
         public const long WaveOfHealing = 20462;
         public const long RuneOfTormenting = 20479;
         public const long PortalExitWhiteMantleWatchwork = 20851;
