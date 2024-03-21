@@ -311,6 +311,11 @@ namespace GW2EIJSON
         /// </summary>
         public bool IsCM { get; set; }
         /// <summary>
+        /// If the fight is in legendary challenge mode. \n
+        /// If this is true, <see cref="IsCM"/> will also be true
+        /// </summary>
+        public bool IsLegendaryCM { get; set; }
+        /// <summary>
         /// True if EI detected that the encounter started later than expected. \n
         /// This value being false does not mean the encounter could not have started later than expected.
         /// </summary>

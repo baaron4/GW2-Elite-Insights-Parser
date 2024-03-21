@@ -1610,8 +1610,10 @@
         internal const string DazingDischarge = "https://wiki.guildwars2.com/images/1/14/Dazing_Discharge.png";
         internal const string ShatteringStone = "https://wiki.guildwars2.com/images/a/aa/Shattering_Stone.png";
         internal const string ForceOfNature = "https://wiki.guildwars2.com/images/2/29/Force_of_Nature.png";
+        internal const string SurvivalInstincts = "https://wiki.guildwars2.com/images/d/de/Refined_Toxins.png";
         internal const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
         internal const string NaturesStrength = "https://wiki.guildwars2.com/images/8/84/Nature%27s_Strength.png";
+        internal const string DimensionalAperture = "https://wiki.guildwars2.com/images/8/80/Dimensional_Aperture.png";
         #endregion Cast
 
         #region Traits

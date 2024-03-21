@@ -71,7 +71,11 @@ namespace GW2EIEvtcParser.EIData
             
             //new DamageCastFinder(9097,9097), // Symbol of Blades
             new DamageCastFinder(GlacialHeart, GlacialHeart)
-                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
+            new EXTHealingCastFinder(GlacialHeartHeal, GlacialHeartHeal)
+                .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
             new DamageCastFinder(ShatteredAegis, ShatteredAegis)
                 .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EXTHealingCastFinder(SelflessDaring, SelflessDaring)

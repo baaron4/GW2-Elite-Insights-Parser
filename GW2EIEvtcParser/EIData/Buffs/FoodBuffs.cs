@@ -378,6 +378,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bloodstone Pot Pie", BloodstonePotPie, Source.Item, BuffClassification.Nourishment, BuffImages.BloodstonePotPie),
             new Buff("Poor Nourishment", PoorNourishment, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentFood),
             new Buff("Nourishment (Guild Banquet Table)", NourishmentGuildBanquetTable, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentBirthdayBlaster),
+            new Buff("Weight of the World", WeightOfTheWorld, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentFood),
         };
 
         internal static readonly List<Buff> AscendedFood = new List<Buff>

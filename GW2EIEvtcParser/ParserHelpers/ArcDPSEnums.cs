@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser
             internal const ulong January2024Balance = 157732;
             internal const ulong February2024NewWeapons = 158837;
             internal const ulong February2024CerusCMHPFix = 158968;
-            internal const ulong March2024BalanceAndCerusLegendary = ulong.MaxValue;
+            internal const ulong March2024BalanceAndCerusLegendary = 159951;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -1242,6 +1242,7 @@ namespace GW2EIEvtcParser
             IllusionaryMariner = 9052,
             IllusionaryWhaler = 9057,
             IllusionaryAvenger = 15188,
+            IllusionarySharpShooter = 26152,
             // Mesmer Clones
             // - Single Weapon
             CloneSword = 8108,
@@ -1253,6 +1254,7 @@ namespace GW2EIEvtcParser
             CloneSpear = 6479,
             CloneDownstate = 10542,
             CloneDagger = 25569,
+            CloneRifle = 26153,
             CloneUnknown = 8107, // Possibly -> https://wiki.guildwars2.com/wiki/Clone_(Snowball_Mayhem)
             // - Sword + Offhand
             CloneSwordTorch = 15090,

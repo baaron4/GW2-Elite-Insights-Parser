@@ -193,6 +193,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Earth Elemental Summoned", EarthElementalSummoned, Source.Elementalist, BuffClassification.Other, BuffImages.GlyphOfElementalsEarth),
             // Skills
             new Buff("Arcane Power", ArcanePowerBuff, Source.Elementalist, BuffStackType.Stacking, 6, BuffClassification.Other, BuffImages.ArcanePower),
+            new Buff("Arcane Power (Ferocity)", ArcanePowerFerocityBuff, Source.Elementalist, BuffClassification.Other, BuffImages.ArcanePower),
             new Buff("Arcane Shield", ArcaneShieldBuff, Source.Elementalist, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ArcaneShield),
             new Buff("Renewal of Fire", RenewalOfFire, Source.Elementalist, BuffClassification.Other, BuffImages.RenewalOfFire),
             new Buff("Rock Barrier", RockBarrier, Source.Elementalist, BuffClassification.Other, BuffImages.RockBarrier),//750?

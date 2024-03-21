@@ -123,6 +123,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(QuickDraw, QuickDraw).UsingAfterWeaponSwap(true).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EXTHealingCastFinder(WindborneNotes, WindborneNotes).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EXTHealingCastFinder(InvigoratingBond, InvigoratingBond).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            // TODO evasive purity
             new EXTBarrierCastFinder(ProtectMe, ProtectMe),
             new BuffGiveCastFinder(GuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 6000) < ServerDelayConstant)),
             new BuffGiveCastFinder(LesserGuardSkill, GuardBuff).UsingChecker(((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - 4000) < ServerDelayConstant)).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -256,13 +257,22 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, BuffImages.BountifulHunter, DamageModifierMode.All),
             new BuffOnActorDamageModifier(FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostSpirit, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
+            new DamageLogDamageModifier("Survival Instincts (Outgoing)","10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
+                .UsingApproximate(true),
             new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
-                .WithBuilds(GW2Builds.February2024NewWeapons),
+                .WithBuilds(GW2Builds.February2024NewWeapons, GW2Builds.March2024BalanceAndCerusLegendary),
+            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.sPvPWvW)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new BuffOnActorDamageModifier(Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.NoPets, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.OakheartSalve, DamageModifierMode.All),
+            new DamageLogDamageModifier("Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

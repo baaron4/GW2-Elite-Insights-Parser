@@ -524,6 +524,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string PortalSandswell = "https://i.imgur.com/15kzkcj.png";
         internal const string PortalWhiteMantleItem = "https://i.imgur.com/FcO9n7c.png";
         internal const string PortalWhiteMantleSkill = "https://i.imgur.com/qf99SF9.png";
+        internal const string PortalDimensionalAperture = "https://i.imgur.com/kzbkWov.png";
 
         // Skill effect decoration icons
         internal const string EffectCorrosivePoisonCloud = "https://i.imgur.com/tzUFm6G.png";

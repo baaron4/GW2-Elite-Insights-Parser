@@ -37,8 +37,14 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.August2022Balance, GW2Builds.SOTOReleaseAndBalance),
             new BuffOnActorDamageModifier(TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.SOTOReleaseAndBalance),
-            new BuffOnActorDamageModifier(TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+            new BuffOnActorDamageModifier(TempestuousAria, "Tempestuous Aria", "7% after giving aura", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.sPvPWvW)
                 .WithBuilds(GW2Builds.June2023Balance),
+            new BuffOnActorDamageModifier(TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.June2023Balance, GW2Builds.March2024BalanceAndCerusLegendary),
+            new BuffOnActorDamageModifier(TempestuousAria, "Tempestuous Aria (Strike)", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+            new BuffOnActorDamageModifier(TempestuousAria, "Tempestuous Aria (Condition)", "5% after giving aura", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
