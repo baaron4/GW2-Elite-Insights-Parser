@@ -494,6 +494,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
             { SwordOfJusticeDamage, "https://wiki.guildwars2.com/images/8/81/Sword_of_Justice.png" },
             { GlacialHeart, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },
+            { GlacialHeartHeal, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },
             { ShatteredAegis, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
             { SelflessDaring, "https://wiki.guildwars2.com/images/9/9c/Selfless_Daring.png" },
             { Chapter1SearingSpell, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png" },

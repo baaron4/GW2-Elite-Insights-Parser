@@ -916,6 +916,7 @@
         public const long ArcaneLightning = 13423;
         public const long MedicalDispersionFieldHeal = 13515;
         public const long SelflessDaring = 13594;
+        public const long GlacialHeartHeal = 13629;
         public const long LesserSymbolOfProtection = 13684;
         public const long RestorativeMantras = 13721;
         public const long PowerBlock = 13752;
