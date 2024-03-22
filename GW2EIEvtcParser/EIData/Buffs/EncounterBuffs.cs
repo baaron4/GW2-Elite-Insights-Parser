@@ -72,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Enraged (500%)", Enraged_500, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
             new Buff("Call of the Mists", CallOfTheMists, Source.FightSpecific, BuffClassification.Other, BuffImages.CallOfTheMists),
             new Buff("Untargetable", Untargetable, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
-            new Buff("Resistance (Unremovable)", ResistanceUnremovable, Source.FightSpecific, BuffClassification.Other, BuffImages.Resistance),
+            new Buff("Resistance (Unremovable)", ResistanceUnremovable, Source.FightSpecific,BuffStackType.Queue, 5, BuffClassification.Other, BuffImages.Resistance),
             // Strike Essences
             new Buff("Essence of Vigilance Tier 1", EssenceOfVigilanceTier1, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
             new Buff("Essence of Vigilance Tier 2", EssenceOfVigilanceTier2, Source.FightSpecific,BuffStackType.StackingConditionalLoss, 30, BuffClassification.Other, BuffImages.EssenceOfVigilance),
