@@ -200,6 +200,7 @@ namespace GW2EIEvtcParser.ParsedData
         private void EICastParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
         {
             List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
+            ulong gw2Build = GetBuildEvent().Build;
             foreach (Player p in players) {
                 switch(p.Spec)
                 {
@@ -212,7 +213,10 @@ namespace GW2EIEvtcParser.ParsedData
                 switch(p.BaseSpec)
                 {
                     case Spec.Necromancer:
-                        toAdd.AddRange(ProfHelper.ComputeEndWithBuffApplyCastEvents(p, this, skillData, PathOfGluttony, 750, 750, PathOfGluttonyFlipBuff));
+                        if (gw2Build < GW2Builds.March2024BalanceAndCerusLegendary)
+                        {
+                            toAdd.AddRange(ProfHelper.ComputeEndWithBuffApplyCastEvents(p, this, skillData, PathOfGluttony, 750, 750, PathOfGluttonyFlipBuff));
+                        }
                         break;
                     case Spec.Ranger:
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, AncestralGraceSkill, AncestralGraceBuff));
