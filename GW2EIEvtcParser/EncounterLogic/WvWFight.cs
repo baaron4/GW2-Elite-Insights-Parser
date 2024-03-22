@@ -32,14 +32,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= EncounterIDs.EncounterMasks.WvWMask;
             MechanicList.AddRange(new List<Mechanic>
             {
-                new PlayerDamageMechanic("Killing Blows to enemy Players", new MechanicPlotlySetting(Symbols.Asterisk, Colors.Blue), "Kllng.Blw.Player", "Killing Blows inflicted by Squad Players to enemy Players", "Killing Blows to enemy Players", 0, (log, a) => {
+                new PlayerDamageMechanic("Killing Blows to enemy Players", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "Kllng.Blw.Player", "Killing Blows inflicted by Squad Players to enemy Players", "Killing Blows to enemy Players", 0, (log, a) => {
                     if (a.Type != AgentItem.AgentType.Player)
                     {
                         return new List<AbstractHealthDamageEvent>();
                     }
                     return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
                 }).UsingChecker((x, log) => x.HasKilled && (x.To.Type == AgentItem.AgentType.NonSquadPlayer || x.To.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))),
-                new EnemyDamageMechanic("Killing Blows received by enemies", new MechanicPlotlySetting(Symbols.Asterisk, Colors.Red), "Kllng.Blw.Enemy", "Killing Blows inflicted enemy Players by Squad Players", "Killing Blows received by enemies", 0, (log, a) => {
+                new EnemyDamageMechanic("Killing Blows received by enemies", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Kllng.Blw.Enemy", "Killing Blows inflicted enemy Players by Squad Players", "Killing Blows received by enemies", 0, (log, a) => {
                     return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
                 }).UsingChecker((x, log) => x.HasKilled && x.CreditedFrom.Type == AgentItem.AgentType.Player),
             });
