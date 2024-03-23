@@ -26,7 +26,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
-    
+
+    <ItemGroup>
+        <Content Include="Content\SkillList.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\SpecList.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Content\LI.ico" />
+    </ItemGroup>
     
   <ItemGroup>
     <ProjectReference Include="..\GW2EIBuilders\GW2EIBuilders.csproj" />

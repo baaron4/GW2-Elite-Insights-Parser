@@ -33,7 +33,7 @@
     <Win32Resource />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Content\LI.ico</ApplicationIcon>
+    <ApplicationIcon>LI.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -103,13 +103,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\SkillList.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\SpecList.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\LI.ico" />
+      <Content Include="LI.ico" />
     <None Include="Settings\sample.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
