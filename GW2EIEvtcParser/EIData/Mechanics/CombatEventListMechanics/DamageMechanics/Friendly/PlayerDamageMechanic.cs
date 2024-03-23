@@ -4,9 +4,9 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIEvtcParser.EIData
 {
 
-    internal class PlayerStatusMechanic<T> : StatusMechanic<T> where T : AbstractStatusEvent
+    internal class PlayerDamageMechanic : DamageMechanic
     {
-        public PlayerStatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, StatusGetter getter) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, getter)
+        public PlayerDamageMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, getter)
         {
         }
 
@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (Player p in log.PlayerList)
             {
-                foreach (T c in GetEvents(log, p.AgentItem))
+                foreach (AbstractHealthDamageEvent c in GetEvents(log, p.AgentItem))
                 {
                     if (Keep(c, log))
                     {
