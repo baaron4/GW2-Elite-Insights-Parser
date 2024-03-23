@@ -62,6 +62,7 @@ namespace GW2EIEvtcParser
         public const string MesmerDiversion = "916D8385083F144EBAA5BEEDE21FD47A";
         public const string MesmerDistortionOrMindWrack = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
         public const string MesmerMantraOfResolveAndPowerCleanse = "593E668A006AB24D84999AED68F2E4C4";
+        public const string MesmerMantraOfResolveAndPowerCleanse2 = "ABF2332D28C7D6449A5B822E5714ADA4";
         public const string MesmerMantraOfConcentrationAndPowerBreak = "5B488D552E316045AD99C4A98EEDDB1E";
         public const string MesmerPowerReturn = "F53E2CE3B06B934085D46FA59468477B";
         public const string MesmerDimensionalAperturePortal = "9246D82C91B5274396DBAB561DC8EFAF";
