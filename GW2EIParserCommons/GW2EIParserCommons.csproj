@@ -34,7 +34,6 @@
         <Content Include="Content\SpecList.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <Content Include="Content\LI.ico" />
     </ItemGroup>
     
   <ItemGroup>
