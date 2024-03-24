@@ -407,6 +407,11 @@ namespace GW2EIEvtcParser.EIData
                     AgentItem portal = buffApply.To;
                     DespawnEvent despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
                     uint radius = portal.HitboxWidth / 2;
+                    if (radius == 0)
+                    {
+                        // 120 / 2
+                        radius = 60;
+                    }
                     (long start, long end) lifespan = (buffApply.Time, despawn.Time);
                     var connector = new PositionConnector(effect.Position);
 
