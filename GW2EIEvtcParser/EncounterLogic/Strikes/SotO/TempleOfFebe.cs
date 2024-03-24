@@ -313,7 +313,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Cerus not found");
             }
             var cerusHP = cerus.GetHealth(combatData);
-            if (combatData.GetBuildEvent().Build >= GW2Builds.March2024BalanceAndCerusLegendary && cerusHP > 130e6)
+            if (cerusHP > 130e6)
             {
                 return FightData.EncounterMode.LegendaryCM;
             }
