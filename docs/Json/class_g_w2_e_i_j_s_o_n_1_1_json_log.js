@@ -20,6 +20,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "GW2Build", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a750467c7376ac8703622acf59e2c517b", null ],
     [ "IsCM", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acaa0d773f609bb6ef25a59b0ff5ef8a8", null ],
     [ "IsLateStart", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a3dae87c28216f2ecb937c1eaa5618346", null ],
+    [ "IsLegendaryCM", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a5de911362d014d7118f6507e360a95c2", null ],
     [ "Language", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1644dfa11424c9f28b64347bf56dd00c", null ],
     [ "LanguageID", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ae12642cdb8b209e31ca150b4b198ad86", null ],
     [ "LogErrors", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a82b2a1783260afb40910a0abd28c9f3a", null ],
