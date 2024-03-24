@@ -17,6 +17,8 @@ For general ArcDPS-related discussions and troubleshooting, including ArcDPS, Ar
 
 [![](https://discordapp.com/api/guilds/456611641526845473/widget.png?style=banner2)](https://discord.gg/T4kSbKJ5Sf)
 
+The key for verifying the release's signature can be found on [openpgp](https://keys.openpgp.org/search?q=CC2A0529D3469F39A6155C73FA6E8DECE596BCE9).
+
 ## Logging
 
 We suggest following [this guide](https://snowcrows.com/guides/getting-started/arc-dps) written by Snow Crows on how to setup your ArcDPS installation and generate encounter logs.
