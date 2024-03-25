@@ -401,26 +401,37 @@ namespace GW2EIEvtcParser.EIData
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out IReadOnlyList<EffectEvent> dimensionalApertures))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, DimensionalApertureSkill, SkillModeCategory.Portal);
+                var applies = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem).ToList();
                 foreach (EffectEvent effect in dimensionalApertures)
                 {
-                    AbstractBuffEvent buffApply = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem && Math.Abs(x.Time - effect.Time) <= ServerDelayConstant).FirstOrDefault();
-                    AgentItem portal = buffApply.To;
-                    DespawnEvent despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
-                    uint radius = portal.HitboxWidth / 2;
-                    if (radius == 0)
+                    // The buff can be quite delayed
+                    AbstractBuffEvent buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
+                    // Security
+                    if (buffApply != null)
                     {
-                        // 120 / 2
-                        radius = 60;
+                        AgentItem portal = buffApply.To;
+                        DespawnEvent despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
+                        // Security
+                        if (despawn != null)
+                        {
+                            uint radius = portal.HitboxWidth / 2;
+                            // Security
+                            if (radius == 0)
+                            {
+                                // 120 / 2
+                                radius = 60;
+                            }
+                            (long start, long end) lifespan = (buffApply.Time, despawn.Time);
+                            var connector = new PositionConnector(effect.Position);
+
+                            // Portal location
+                            replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingSkillMode(skill));
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+
+                            // Tether between the portal and the player
+                            replay.Decorations.Add(new LineDecoration(lifespan, color, 0.3, new AgentConnector(player.AgentItem), connector));
+                        }              
                     }
-                    (long start, long end) lifespan = (buffApply.Time, despawn.Time);
-                    var connector = new PositionConnector(effect.Position);
-
-                    // Portal location
-                    replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
-
-                    // Tether between the portal and the player
-                    replay.Decorations.Add(new LineDecoration(lifespan, color, 0.3, new AgentConnector(player.AgentItem), connector));
                 }
             }
         }
