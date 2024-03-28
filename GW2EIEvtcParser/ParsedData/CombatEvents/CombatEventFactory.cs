@@ -165,6 +165,11 @@ namespace GW2EIEvtcParser.ParsedData
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
                 case StateChange.Marker:
+                    if (stateChangeEvent.SkillID == 0)
+                    {
+                        new MarkerEndEvent(stateChangeEvent, agentData, statusEvents.MarkerEvents);
+                        break;
+                    }
                     var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
                     Add(statusEvents.MarkerEvents, markerEvent.Src, markerEvent);
                     Add(statusEvents.MarkerEventsByID, markerEvent.MarkerID, markerEvent);
