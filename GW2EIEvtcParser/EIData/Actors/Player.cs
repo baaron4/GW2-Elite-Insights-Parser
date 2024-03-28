@@ -77,41 +77,41 @@ namespace GW2EIEvtcParser.EIData
             return IsCommander(log, out _);
         }
 
-        public bool IsCommander(ParsedEvtcLog log, out string tagGUID)
+        public bool IsCommander(ParsedEvtcLog log, out string markerGUID)
         {
-            IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
+            IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(AgentItem);
 
-            if (tagEvents.Count > 0)
+            if (markerEvents.Count > 0)
             {
-                foreach (TagEvent tagEvent in tagEvents)
+                foreach (MarkerEvent markerEvent in markerEvents)
                 {
-                    MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
+                    MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(markerEvent.MarkerID);
                     if (marker != null)
                     {
                         if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))
                         {
-                            tagGUID = marker.HexContentGUID;
+                            markerGUID = marker.HexContentGUID;
                             return true;
                         }
                     }
-                    else if (tagEvent.TagID != 0)
+                    else if (markerEvent.MarkerID != 0)
                     {
-                        tagGUID = MarkerGUIDs.BlueCommanderTag;
+                        markerGUID = MarkerGUIDs.BlueCommanderTag;
                         return true;
                     }
                 }
             }
 
-            tagGUID = null;
+            markerGUID = null;
             return false;
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
             base.InitAdditionalCombatReplayData(log);
-            if (IsCommander(log, out string tagGUID))
+            if (IsCommander(log, out string markerGUID))
             {
-                CombatReplay.AddRotatedOverheadIcon(new Segment(FirstAware, LastAware, 1), this, MarkerGUIDs.CommanderTagToIcon[tagGUID], 180f, 15);
+                CombatReplay.AddRotatedOverheadIcon(new Segment(FirstAware, LastAware, 1), this, MarkerGUIDs.CommanderTagToIcon[markerGUID], 180f, 15);
             }
         }
 

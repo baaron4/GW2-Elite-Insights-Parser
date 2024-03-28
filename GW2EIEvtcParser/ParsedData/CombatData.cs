@@ -762,13 +762,33 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<TargetableEvent>();
         }
 
-        public IReadOnlyList<TagEvent> GetTagEvents(AgentItem key)
+        public IReadOnlyList<MarkerEvent> GetMarkerEvents(AgentItem key)
         {
-            if (_statusEvents.TagEvents.TryGetValue(key, out List<TagEvent> list))
+            if (_statusEvents.MarkerEvents.TryGetValue(key, out List<MarkerEvent> list))
             {
                 return list;
             }
-            return new List<TagEvent>();
+            return new List<MarkerEvent>();
+        }
+
+        public IReadOnlyList<MarkerEvent> GetMarkerEvents(long id)
+        {
+            if (_statusEvents.MarkerEventsByID.TryGetValue(id, out List<MarkerEvent> list))
+            {
+                return list;
+            }
+            return new List<MarkerEvent>();
+        }
+        public bool TryGetMarkerEventsByGUID(string markerGUID, out IReadOnlyList<MarkerEvent> markerEvents)
+        {
+            MarkerGUIDEvent markerGUIDEvent = GetMarkerGUIDEvent(markerGUID);
+            markerEvents = null;
+            if (markerGUIDEvent != null)
+            {
+                markerEvents = GetMarkerEvents(markerGUIDEvent.ContentID);
+                return true;
+            }
+            return false;
         }
 
         public IReadOnlyList<TeamChangeEvent> GetTeamChangeEvents(AgentItem src)

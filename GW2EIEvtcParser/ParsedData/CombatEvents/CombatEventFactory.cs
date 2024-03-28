@@ -164,9 +164,10 @@ namespace GW2EIEvtcParser.ParsedData
                 case StateChange.Error:
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
-                case StateChange.Tag:
-                    var tagEvent = new TagEvent(stateChangeEvent, agentData);
-                    Add(statusEvents.TagEvents, tagEvent.Src, tagEvent);
+                case StateChange.Marker:
+                    var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.MarkerEvents, markerEvent.Src, markerEvent);
+                    Add(statusEvents.MarkerEventsByID, markerEvent.MarkerID, markerEvent);
                     break;
                 case StateChange.Velocity:
                     var velEvt = new VelocityEvent(stateChangeEvent, agentData);

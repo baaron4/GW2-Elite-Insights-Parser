@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser
             BreakbarState = 34,
             BreakbarPercent = 35,
             Error = 36,
-            Tag = 37,
+            Marker = 37,
             BarrierUpdate = 38,
             StatReset = 39, 
             Extension = 40,
