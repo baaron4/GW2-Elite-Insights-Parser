@@ -1,9 +1,9 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public class MarkerEvent : AbstractMarkerEvent
+    public class MarkerEndEvent : AbstractMarkerEvent
     {
 
-        internal MarkerEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        internal MarkerEndEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
         }
 
