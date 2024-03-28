@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.ParsedData
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
                 case StateChange.Marker:
-                    if (stateChangeEvent.SkillID == 0)
+                    if (stateChangeEvent.Value == 0)
                     {
                         new MarkerEndEvent(stateChangeEvent, agentData, statusEvents.MarkerEvents);
                         break;
