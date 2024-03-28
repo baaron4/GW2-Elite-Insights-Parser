@@ -4,17 +4,11 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class Segment
+    public class Segment : GenericSegment<double>
     {
-        public long Start { get; internal set; }
-        public long End { get; internal set; }
-        public double Value { get; internal set; }
 
-        public Segment(long start, long end, double value)
+        public Segment(long start, long end, double value) : base(start, end, value)
         {
-            Start = start;
-            End = end;
-            Value = value;
         }
 
         public Segment(long start, long end) : this(start, end, 0)
@@ -26,29 +20,9 @@ namespace GW2EIEvtcParser.EIData
 
         }
 
-        public bool IntersectSegment(Segment seg)
-        {
-            return IntersectSegment(seg.Start, seg.End);
-        }
-
         public double IntersectingArea(Segment seg)
         {
             return IntersectingArea(seg.Start, seg.End);
-        }
-
-        public bool IntersectSegment(long start, long end)
-        {
-            if (Start > End)
-            {
-                return false;
-            }
-            else if (Start == End)
-            {
-                return ContainsPoint(start);
-            }
-            long maxStart = Math.Max(start, Start);
-            long minEnd = Math.Min(end, End);
-            return minEnd - maxStart >= 0;
         }
 
         public double IntersectingArea(long start, long end)
@@ -56,11 +30,6 @@ namespace GW2EIEvtcParser.EIData
             long maxStart = Math.Max(start, Start);
             long minEnd = Math.Min(end, End);
             return Math.Max(minEnd - maxStart, 0) * Value;
-        }
-
-        public bool ContainsPoint(long time)
-        {
-            return Start <= time && End >= time;
         }
 
         public static List<Segment> FromStates(List<(long start, double state)> states, long min, long max)
