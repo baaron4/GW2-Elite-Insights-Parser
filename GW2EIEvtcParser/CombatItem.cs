@@ -127,7 +127,8 @@ namespace GW2EIEvtcParser
             return SrcIsAgent()
                 || DstIsAgent()
                 || IsStateChange == ArcDPSEnums.StateChange.Reward
-                || IsStateChange == ArcDPSEnums.StateChange.TickRate;
+                || IsStateChange == ArcDPSEnums.StateChange.TickRate
+                || IsStateChange == ArcDPSEnums.StateChange.SquadMarker;
         }
 
         internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

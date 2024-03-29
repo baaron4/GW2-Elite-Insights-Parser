@@ -280,6 +280,7 @@ namespace GW2EIEvtcParser
             FractalScale = 50,
             Effect_51 = 51,
             RuleSet = 52,
+            SquadMarker = 53,
             Unknown
         };
 
