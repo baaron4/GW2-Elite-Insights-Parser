@@ -140,7 +140,7 @@ namespace GW2EIEvtcParser.EIData
                 Player lastPlayer = null;
                 foreach ((Player p, GenericSegment<string> seg) in states)
                 {
-                    if (lastPlayer == p)
+                    if (lastPlayer == p && lastAdded.Value == seg.Value)
                     {
                         lastAdded.End = seg.End;
                     }
