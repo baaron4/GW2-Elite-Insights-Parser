@@ -277,6 +277,10 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     metaDataEvents.FractalScaleEvent = new FractalScaleEvent(stateChangeEvent);
                     break;
+                case StateChange.SquadMarker:
+                    var squadMarkerEvent = new SquadMarkerEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.MarkerEventsByID, squadMarkerEvent.MarkerID, squadMarkerEvent);
+                    break;
                 default:
                     break;
             }

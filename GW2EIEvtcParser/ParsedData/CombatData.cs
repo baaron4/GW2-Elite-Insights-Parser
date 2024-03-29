@@ -762,23 +762,38 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<TargetableEvent>();
         }
 
-        public IReadOnlyList<MarkerEvent> GetMarkerEvents(AgentItem key)
+        /// <summary>
+        /// Returns marker events owned by agent
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <returns></returns>
+        public IReadOnlyList<MarkerEvent> GetMarkerEvents(AgentItem agent)
         {
-            if (_statusEvents.MarkerEvents.TryGetValue(key, out List<MarkerEvent> list))
+            if (_statusEvents.MarkerEvents.TryGetValue(agent, out List<MarkerEvent> list))
             {
                 return list;
             }
             return new List<MarkerEvent>();
         }
-
-        public IReadOnlyList<MarkerEvent> GetMarkerEvents(long id)
+        /// <summary>
+        /// Returns marker events of given marker ID
+        /// </summary>
+        /// <param name="markerID">marker ID</param>
+        /// <returns></returns>
+        public IReadOnlyList<MarkerEvent> GetMarkerEvents(long markerID)
         {
-            if (_statusEvents.MarkerEventsByID.TryGetValue(id, out List<MarkerEvent> list))
+            if (_statusEvents.MarkerEventsByID.TryGetValue(markerID, out List<MarkerEvent> list))
             {
                 return list;
             }
             return new List<MarkerEvent>();
         }
+        /// <summary>
+        /// True if marker events of given marker GUID has been found
+        /// </summary>
+        /// <param name="markerGUID">marker GUID</param>
+        /// <param name="markerEvents">Found marker events</param>
+        /// <returns></returns>
         public bool TryGetMarkerEventsByGUID(string markerGUID, out IReadOnlyList<MarkerEvent> markerEvents)
         {
             MarkerGUIDEvent markerGUIDEvent = GetMarkerGUIDEvent(markerGUID);
@@ -786,6 +801,23 @@ namespace GW2EIEvtcParser.ParsedData
             if (markerGUIDEvent != null)
             {
                 markerEvents = GetMarkerEvents(markerGUIDEvent.ContentID);
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// True if marker events of given marker GUID has been found on given agent
+        /// </summary>
+        /// <param name="agent">marker owner</param>
+        /// <param name="markerGUID">marker GUID</param>
+        /// <param name="markerEvents">Found marker events</param>
+        /// <returns></returns>
+        public bool TryGetMarkerEventsBySrcWithGUID(AgentItem agent, string markerGUID, out IReadOnlyList<MarkerEvent> markerEvents)
+        {
+            markerEvents = null;
+            if (TryGetMarkerEventsByGUID(markerGUID, out IReadOnlyList<MarkerEvent> markers))
+            {
+                markerEvents = markers.Where(effect => effect.Src == agent).ToList();
                 return true;
             }
             return false;
