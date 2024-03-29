@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.EIData
             base.InitAdditionalCombatReplayData(log);
             foreach (GenericSegment<string> seg in GetCommanderStates(log))
             {
-                CombatReplay.AddRotatedOverheadIcon(new Segment(seg.Start, seg.End, 1), this, MarkerGUIDs.CommanderTagToIcon[seg.Value], 180f, 15);
+                CombatReplay.AddRotatedOverheadIcon(new Segment(seg.Start, seg.End, 1), this, ParserIcons.CommanderTagToIcon[seg.Value], 180f, 15);
             }
         }
 

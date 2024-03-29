@@ -463,8 +463,27 @@ namespace GW2EIEvtcParser
             return Enum.IsDefined(typeof(SkillAction), bt) ? (SkillAction)bt : SkillAction.Unknown;
         }
 
-        // Content local
+        // Squad Marker index
 
+        public enum SquadMarkerIndex : byte
+        {
+            // To be verified
+            Arrow = 0,
+            Circle = 1,
+            Heart = 2,
+            Square = 3,
+            Star = 4,
+            Swirl = 5,
+            Triangle = 6,
+            X = 7,
+            Unknown
+        }
+        internal static SquadMarkerIndex GetSquadMarkerIndex(byte bt)
+        {
+            return bt < (byte)SquadMarkerIndex.Unknown ? (SquadMarkerIndex)bt : SquadMarkerIndex.Unknown;
+        }
+
+        // Content local
         public enum ContentLocal : byte
         {
             Effect = 0,

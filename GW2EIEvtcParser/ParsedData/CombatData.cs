@@ -761,7 +761,19 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return new List<TargetableEvent>();
         }
-
+        /// <summary>
+        /// Returns squad marker events of given marker index
+        /// </summary>
+        /// <param name="markerIndex">marker index</param>
+        /// <returns></returns>
+        public IReadOnlyList<SquadMarkerEvent> GetSquadMarkerEvents(SquadMarkerIndex markerIndex)
+        {
+            if (_statusEvents.SquadMarkerEventsByIndex.TryGetValue(markerIndex, out List<SquadMarkerEvent> list))
+            {
+                return list;
+            }
+            return new List<SquadMarkerEvent>();
+        }
         /// <summary>
         /// Returns marker events owned by agent
         /// </summary>

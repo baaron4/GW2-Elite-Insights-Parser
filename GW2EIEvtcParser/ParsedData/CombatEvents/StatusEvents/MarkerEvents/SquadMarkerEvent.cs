@@ -1,10 +1,18 @@
 ﻿using GW2EIEvtcParser.EIData;
 using System;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class SquadMarkerEvent : MarkerEvent
+    public class SquadMarkerEvent : AbstractStatusEvent
     {
+        public Point3D Position { get; protected set; } = new Point3D(0, 0, 0);
+        public long EndTime { get; protected set; } = long.MaxValue;
+
+        public SquadMarkerIndex MarkerIndex { get; }
+
+        private readonly uint _markerIndex;
+        public bool EndNotSet => EndTime == long.MaxValue;
         internal static Point3D ReadPosition(CombatItem evtcItem)
         {
             var positionBytes = new byte[4 * sizeof(float)];
@@ -27,7 +35,9 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal SquadMarkerEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
-            Src = null;
+            Src = ParserHelper._unknownAgent;
+            _markerIndex = evtcItem.SkillID;
+            MarkerIndex = GetSquadMarkerIndex((byte)evtcItem.SkillID);
             Position = ReadPosition(evtcItem);
         }
 

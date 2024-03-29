@@ -279,7 +279,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case StateChange.SquadMarker:
                     var squadMarkerEvent = new SquadMarkerEvent(stateChangeEvent, agentData);
-                    Add(statusEvents.MarkerEventsByID, squadMarkerEvent.MarkerID, squadMarkerEvent);
+                    Add(statusEvents.SquadMarkerEventsByIndex, squadMarkerEvent.MarkerIndex, squadMarkerEvent);
                     break;
                 default:
                     break;

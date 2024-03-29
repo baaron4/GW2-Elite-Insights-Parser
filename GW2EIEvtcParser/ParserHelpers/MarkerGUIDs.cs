@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.ParsedData;
-using GW2EIEvtcParser.ParserHelpers;
+﻿using System.Collections.Generic;
 
 namespace GW2EIEvtcParser
 {
@@ -41,7 +37,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// HashSet containing the types of Commander Tag GUIDs.
         /// </summary>
-        public static IReadOnlyCollection<string> CommanderTagMarkersHexGUIDs { get; set; } = new HashSet<string>()
+        public static IReadOnlyCollection<string> CommanderTagMarkersHexGUIDs { get; } = new HashSet<string>()
         {
             RedCommanderTag,
             OrangeCommanderTag,
@@ -66,7 +62,7 @@ namespace GW2EIEvtcParser
         /// <summary>
         /// HashSet containing the types of Squad Marker GUIDs.
         /// </summary>
-        public static IReadOnlyCollection<string> SquadOverheadMarkersHexGUIDs { get; set; } = new HashSet<string>()
+        public static IReadOnlyCollection<string> SquadOverheadMarkersHexGUIDs { get; } = new HashSet<string>()
         {
             ArrowOverhead,
             CircleOverhead,
@@ -76,46 +72,6 @@ namespace GW2EIEvtcParser
             SwirlOverhead,
             TriangleOverhead,
             XOverhead
-        };
-
-        /// <summary>
-        /// Matches the Squad Marker GUIDs to the relative icons.
-        /// </summary>
-        public static IReadOnlyDictionary<string, string> SquadMarkerToIcon { get; set; } = new Dictionary<string, string>()
-        {
-            { ArrowOverhead, ParserIcons.ArrowSquadMarkerOverhead },
-            { CircleOverhead, ParserIcons.CircleSquadMarkerOverhead },
-            { HeartOverhead, ParserIcons.HeartSquadMarkerOverhead },
-            { SquareOverhead, ParserIcons.SquareSquadMarkerOverhead },
-            { StarOverhead, ParserIcons.StarSquadMarkerOverhead },
-            { SwirlOverhead, ParserIcons.SwirlSquadMarkerOverhead },
-            { TriangleOverhead, ParserIcons.TriangleSquadMarkerOverhead },
-            { XOverhead, ParserIcons.XSquadMarkerOverhead },
-        };
-
-        /// <summary>
-        /// Matches the Commander/Catmander Tag GUIDs to the relative icons.
-        /// </summary>
-        public static IReadOnlyDictionary<string, string> CommanderTagToIcon { get; set; } = new Dictionary<string, string>()
-        {
-            { RedCommanderTag, ParserIcons.RedCommanderTagOverhead },
-            { OrangeCommanderTag, ParserIcons.OrangeCommanderTagOverhead },
-            { YellowCommanderTag, ParserIcons.YellowCommanderTagOverhead },
-            { GreenCommanderTag, ParserIcons.GreenCommanderTagOverhead },
-            { CyanCommanderTag, ParserIcons.CyanCommanderTagOverhead },
-            { BlueCommanderTag, ParserIcons.BlueCommanderTagOverhead },
-            { PurpleCommanderTag, ParserIcons.PurpleCommanderTagOverhead },
-            { PinkCommanderTag, ParserIcons.PinkCommanderTagOverhead },
-            { WhiteCommanderTag, ParserIcons.WhiteCommanderTagOverhead },
-            { RedCatmanderTag, ParserIcons.RedCatmanderTagOverhead },
-            { OrangeCatmanderTag, ParserIcons.OrangeCatmanderTagOverhead },
-            { YellowCatmanderTag, ParserIcons.YellowCatmanderTagOverhead },
-            { GreenCatmanderTag, ParserIcons.GreenCatmanderTagOverhead },
-            { CyanCatmanderTag, ParserIcons.CyanCatmanderTagOverhead },
-            { BlueCatmanderTag, ParserIcons.BlueCatmanderTagOverhead },
-            { PurpleCatmanderTag, ParserIcons.PurpleCatmanderTagOverhead },
-            { PinkCatmanderTag, ParserIcons.PinkCatmanderTagOverhead },
-            { WhiteCatmanderTag, ParserIcons.WhiteCatmanderTagOverhead },
         };
     }
 
