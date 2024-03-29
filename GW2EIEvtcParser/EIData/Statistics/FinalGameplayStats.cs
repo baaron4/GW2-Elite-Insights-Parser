@@ -37,13 +37,11 @@ namespace GW2EIEvtcParser.EIData
                 var distances = new List<float>();
                 for (int time = 0; time < positions.Count; time++)
                 {
-
-                    float deltaX = positions[time].X - reference[time + offset].X;
-                    float deltaY = positions[time].Y - reference[time + offset].Y;
-                    //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
-
-
-                    distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+                    if (reference[time + offset] == null)
+                    {
+                        continue;
+                    }
+                    distances.Add(positions[time].Distance2DToPoint(reference[time + offset]));
                 }
                 return distances.Sum() / distances.Count;
             }
