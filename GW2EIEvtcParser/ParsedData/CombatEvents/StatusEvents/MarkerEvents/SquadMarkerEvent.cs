@@ -7,12 +7,14 @@ namespace GW2EIEvtcParser.ParsedData
     public class SquadMarkerEvent : AbstractStatusEvent
     {
         public Point3D Position { get; protected set; } = new Point3D(0, 0, 0);
-        public long EndTime { get; protected set; } = long.MaxValue;
+
+        internal bool IsEnd => Position.Length() == float.PositiveInfinity;
+        public long EndTime { get; protected set; } = int.MaxValue;
 
         public SquadMarkerIndex MarkerIndex { get; }
 
         private readonly uint _markerIndex;
-        public bool EndNotSet => EndTime == long.MaxValue;
+        public bool EndNotSet => EndTime == int.MaxValue;
         internal static Point3D ReadPosition(CombatItem evtcItem)
         {
             var positionBytes = new byte[4 * sizeof(float)];
@@ -39,6 +41,15 @@ namespace GW2EIEvtcParser.ParsedData
             _markerIndex = evtcItem.SkillID;
             MarkerIndex = GetSquadMarkerIndex((byte)evtcItem.SkillID);
             Position = ReadPosition(evtcItem);
+        }
+        internal void SetEndTime(long endTime)
+        {
+            // Sanity check
+            if (!EndNotSet)
+            {
+                return;
+            }
+            EndTime = endTime;
         }
 
     }

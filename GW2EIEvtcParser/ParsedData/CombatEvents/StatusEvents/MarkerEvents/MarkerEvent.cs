@@ -1,11 +1,13 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public class MarkerEvent : AbstractMarkerEvent
+    public class MarkerEvent : AbstractStatusEvent
     {
         public int MarkerID { get; }
-        public long EndTime { get; protected set; } = long.MaxValue;
+        public long EndTime { get; protected set; } = int.MaxValue;
 
-        public bool EndNotSet => EndTime == long.MaxValue;
+        internal bool IsEnd => MarkerID == 0;
+
+        public bool EndNotSet => EndTime == int.MaxValue;
 
         internal MarkerEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {

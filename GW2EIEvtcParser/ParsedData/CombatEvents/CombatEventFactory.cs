@@ -165,12 +165,31 @@ namespace GW2EIEvtcParser.ParsedData
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
                 case StateChange.Marker:
-                    if (stateChangeEvent.Value == 0)
-                    {
-                        new MarkerEndEvent(stateChangeEvent, agentData, statusEvents.MarkerEvents);
-                        break;
-                    }
                     var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
+                    // End event
+                    if (markerEvent.IsEnd)
+                    {
+                        // Find last marker on agent and set an end time on it
+                        if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        {
+                            markers.LastOrDefault()?.SetEndTime(markerEvent.Time);
+                        }
+                        break;
+                    } 
+                    else if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                    {
+                        MarkerEvent lastMarker = markers.LastOrDefault();
+                        if (lastMarker != null)
+                        {
+                            // Ignore current if last marker on agent is the same and end not set
+                            if (lastMarker.MarkerID == markerEvent.MarkerID && lastMarker.EndNotSet)
+                            {
+                                break;
+                            }
+                            // Otherwise update end time and put current in the event pool
+                            lastMarker.SetEndTime(markerEvent.Time);
+                        }
+                    }
                     Add(statusEvents.MarkerEvents, markerEvent.Src, markerEvent);
                     Add(statusEvents.MarkerEventsByID, markerEvent.MarkerID, markerEvent);
                     break;
@@ -279,6 +298,33 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case StateChange.SquadMarker:
                     var squadMarkerEvent = new SquadMarkerEvent(stateChangeEvent, agentData);
+                    if (squadMarkerEvent.IsEnd)
+                    {
+                        // Find last marker of given index and set an end event on it
+                        if (statusEvents.SquadMarkerEventsByIndex.TryGetValue(squadMarkerEvent.MarkerIndex, out List<SquadMarkerEvent> squadMarkers))
+                        {
+                            squadMarkers.LastOrDefault()?.SetEndTime(squadMarkerEvent.Time);
+                        }
+                        break;
+                    }
+                    else if (statusEvents.SquadMarkerEventsByIndex.TryGetValue(squadMarkerEvent.MarkerIndex, out List<SquadMarkerEvent> squadMarkers))
+                    {
+                        SquadMarkerEvent lastSquadMarker = squadMarkers.LastOrDefault();
+                        if (lastSquadMarker != null)
+                        {
+                            // End previous if position has changed
+                            if (lastSquadMarker.Position.DistanceToPoint(squadMarkerEvent.Position) > 1e-6)
+                            {
+                                lastSquadMarker.SetEndTime(squadMarkerEvent.Time);
+                            } 
+                            else
+                            // Ignore current if last marker does not have an end set
+                            if (lastSquadMarker.EndNotSet)
+                            {
+                                break;
+                            }
+                        }
+                    }
                     Add(statusEvents.SquadMarkerEventsByIndex, squadMarkerEvent.MarkerIndex, squadMarkerEvent);
                     break;
                 default:
