@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.Buff;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -523,7 +522,19 @@ namespace GW2EIEvtcParser.EIData
             }
             return CombatReplay.Decorations;
         }
-        protected abstract void InitAdditionalCombatReplayData(ParsedEvtcLog log);
+        protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log)
+        {
+            foreach (string squadMarkerGUID in MarkerGUIDs.SquadOverheadMarkersHexGUIDs)
+            {
+                if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(AgentItem, squadMarkerGUID, out IReadOnlyList<MarkerEvent> markerEvents))
+                {
+                    foreach (MarkerEvent markerEvent in markerEvents)
+                    {
+                        CombatReplay.AddRotatedOverheadIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, ParserIcons.SquadMarkerGUIDsToIcon[squadMarkerGUID], 240f, 16, 1);
+                    }
+                }
+            }
+        }
 
         public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 

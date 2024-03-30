@@ -31,6 +31,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
+            base.InitAdditionalCombatReplayData(log);
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
             if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {

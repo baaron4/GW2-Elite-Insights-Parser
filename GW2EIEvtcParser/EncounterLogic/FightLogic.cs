@@ -382,7 +382,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 IReadOnlyList<SquadMarkerEvent> squadMarkerEvents = log.CombatData.GetSquadMarkerEvents(squadMarker);
                 foreach (SquadMarkerEvent squadMarkerEvent in squadMarkerEvents)
                 {
-                    EnvironmentDecorations.Add(new IconDecoration(ParserIcons.SquadMarkerIndexToIcon[squadMarker], 16, 90, 0.5f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)));
+                    EnvironmentDecorations.Add(new IconDecoration(ParserIcons.SquadMarkerIndexToIcon[squadMarker], 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)));
                 }
             }
         }

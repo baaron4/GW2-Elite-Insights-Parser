@@ -1427,7 +1427,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         /// <summary>
         /// Matches the Squad Marker GUIDs to the relative icons.
         /// </summary>
-        public static IReadOnlyDictionary<string, string> SquadMarkerToIcon { get; set; } = new Dictionary<string, string>()
+        public static IReadOnlyDictionary<string, string> SquadMarkerGUIDsToIcon { get; set; } = new Dictionary<string, string>()
         {
             { MarkerGUIDs.ArrowOverhead, ArrowSquadMarkerOverhead },
             { MarkerGUIDs.CircleOverhead, CircleSquadMarkerOverhead },
