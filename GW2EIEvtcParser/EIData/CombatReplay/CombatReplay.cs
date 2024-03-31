@@ -310,12 +310,26 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="segment">Lifespan interval</param>
         /// <param name="actor">actor to which the decoration will be attached to</param>
         /// <param name="icon">URL of the icon</param>
-        /// <param name="rotation">URL of the icon</param>
+        /// <param name="rotation">rotation of the icon</param>
         /// <param name="pixelSize">Size in pixel of the icon</param>
         /// <param name="opacity">Opacity of the icon</param>
         internal void AddRotatedOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
         {
             Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
+        }
+
+        /// <summary>
+        /// Add an overhead squad marker
+        /// </summary>
+        /// <param name="segment">Lifespan interval</param>
+        /// <param name="actor">actor to which the decoration will be attached to</param>
+        /// <param name="icon">URL of the icon</param>
+        /// <param name="rotation">rotation of the icon</param>
+        /// <param name="pixelSize">Size in pixel of the icon</param>
+        /// <param name="opacity">Opacity of the icon</param>
+        internal void AddRotatedOverheadMarkerIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        {
+            Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingSquadMarker(true).UsingRotationConnector(new AngleConnector(rotation)));
         }
 
         /// <summary>

@@ -9,6 +9,10 @@ namespace GW2EIEvtcParser.EIData
         internal IconDecorationCombatReplayDescription(ParsedEvtcLog log, IconDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "IconDecoration";
+            if (decoration.IsSquadMarker)
+            {
+                Type = "SquadMarkerDecoration";
+            }
             Opacity = decoration.Opacity;
             if (WorldSize == 0 && PixelSize == 0)
             {

@@ -726,8 +726,9 @@ class MovingPlatformDrawable extends BackgroundDrawable {
 class IconMechanicDrawable extends MechanicDrawable {
     constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
         super(start, end, connectedTo, rotationConnectedTo);
+        this.imageUrl = image;
         this.image = new Image();
-        this.image.src = image;
+        this.image.src = this.imageUrl;
         this.image.onload = () => animateCanvas(noUpdateTime);
         this.pixelSize = pixelSize;
         this.worldSize = worldSize;

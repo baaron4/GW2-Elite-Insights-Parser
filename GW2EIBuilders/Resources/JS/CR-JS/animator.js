@@ -78,6 +78,7 @@ class Animator {
             displayAllMinions: false,
             displaySelectedMinions: true,
             displayMechanics: true,
+            displaySquadMarkers: true,
             displaySkillMechanics: true,
             skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
@@ -187,6 +188,8 @@ class Animator {
         this.actorOrientationData.clear();
         this.overheadActorData = [];
         this.mechanicActorData = [];
+        this.squadMarkerData = [];
+        this.overheadSquadMarkerData = [];
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
             if (!actor.isMechanicOrSkill) {
@@ -218,9 +221,6 @@ class Animator {
                     case "BackgroundIconDecoration":
                         this.backgroundActorData.push( new BackgroundIconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacities, actor.heights));
                         break;
-                    case "IconOverheadDecoration":
-                        this.overheadActorData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
-                        break;
                     default:
                         throw "Unknown decoration type";
                 }
@@ -244,6 +244,15 @@ class Animator {
                         break;
                     case "IconDecoration":
                         decoration = new IconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
+                        break;
+                    case "IconOverheadDecoration":
+                        this.overheadActorData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
+                        break;
+                    case "SquadMarkerDecoration":
+                        this.squadMarkerData.push(new IconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
+                        break;
+                    case "OverheadSquadMarkerDecoration":
+                        this.overheadSquadMarkerData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
                         break;
                     default:
                         throw "Unknown decoration type";
@@ -375,6 +384,11 @@ class Animator {
 
     toggleMechanics() {
         this.displaySettings.displayMechanics = !this.displaySettings.displayMechanics;
+        animateCanvas(noUpdateTime);
+    }
+    
+    toggleSquadMarkers() {
+        this.displaySettings.displaySquadMarkers = !this.displaySettings.displaySquadMarkers;
         animateCanvas(noUpdateTime);
     }
 
@@ -810,6 +824,14 @@ class Animator {
         if (this.displaySettings.displayMechanics) {
             for (let i = 0; i < this.overheadActorData.length; i++) {
                 this.overheadActorData[i].draw();
+            }
+        }
+        if (this.displaySettings.displaySquadMarkers) {
+            for (let i = 0; i < this.squadMarkerData.length; i++) {
+                this.squadMarkerData[i].draw();
+            }
+            for (let i = 0; i < this.overheadSquadMarkerData.length; i++) {
+                this.overheadSquadMarkerData[i].draw();
             }
         }
     }

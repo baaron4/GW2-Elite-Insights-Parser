@@ -6,7 +6,10 @@
         internal IconOverheadDecorationCombatReplayDescription(ParsedEvtcLog log, IconOverheadDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
         {
             Type = "IconOverheadDecoration";
-            IsMechanicOrSkill = false;
+            if (decoration.IsSquadMarker)
+            {
+                Type = "OverheadSquadMarkerDecoration";
+            }
         }
     }
 

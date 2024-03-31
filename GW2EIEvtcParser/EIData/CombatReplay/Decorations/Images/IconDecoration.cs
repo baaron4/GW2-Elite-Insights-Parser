@@ -6,6 +6,8 @@ namespace GW2EIEvtcParser.EIData
     {
         public float Opacity { get; }
 
+        public bool IsSquadMarker { get; private set; }
+
         public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base(icon, pixelSize, lifespan, connector)
         {
             Opacity = opacity;
@@ -22,6 +24,12 @@ namespace GW2EIEvtcParser.EIData
 
         public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacity, (lifespan.Start, lifespan.End), connector)
         {
+        }
+
+        public IconDecoration UsingSquadMarker(bool isSquadMarker)
+        {
+            IsSquadMarker = isSquadMarker;
+            return this;
         }
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
