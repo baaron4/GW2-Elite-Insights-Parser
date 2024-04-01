@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser.ParsedData
             { WailOfDespairEmpoweredNM, "Wail of Despair (Empowered NM)" },
             { EnviousGazeEmpoweredNM, "Envious Gaze (Empowered NM)" },
             { MaliciousIntentEmpoweredNM, "Malicious Intent (Empowered NM)" },
-            { InsatiableHungerSkillEmpoweredNM, "Insatiable Hunger (Empowered NM)" },
+            { InsatiableHungerEmpoweredSkillNM, "Insatiable Hunger (Empowered NM)" },
             { CryOfRageEmpoweredNM, "Cry of Rage (Empowered NM)" },
             // - Challenge Mode
             { CrushingRegretCM, "Crushing Regret (CM)" },

@@ -4032,7 +4032,7 @@
         public const long KryptisPossessed = 69647;
         public const long PlanetCrashProjectileSkill = 69683;
         public const long InvulnerabilityCerus = 69722;
-        public const long InsatiableHungerSkillEmpoweredNM = 69728;
+        public const long InsatiableHungerEmpoweredSkillNM = 69728;
         public const long ShootingStarsTargetToDagdaBuff = 69735; // Buff applied from player to Dagda when the player is hit
         public const long IntoTheFray = 69764;
         public const long MaliciousIntentEmpoweredNM = 69779;
@@ -4200,8 +4200,8 @@
         public const long AchievementEligibilityDancedWithTheStars = 72135;
         public const long EnviousGazeEmpoweredRearCM = 72200;
         public const long AchievementEligibilityPrecisionAnxiety = 72246;
-        public const long InsatiableHunger12 = 72261;
-        public const long InsatiableHunger18 = 72321;
+        public const long InsatiableHungerPermanentEmbodimentSkillCM = 72261;
+        public const long InsatiableHungerPermanentEmbodimentEmpoweredSkillCM = 72321;
         public const long AchievementEligibilityUnboundedOptimism = 72340;
         public const long InsatiableHunger7 = 72343;
         public const long InsatiableHunger6 = 72344;

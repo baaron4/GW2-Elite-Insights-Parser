@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new EnemyCastStartMechanic(new long [] { WailOfDespairNM, WailOfDespairEmpoweredNM, WailOfDespairCM, WailOfDespairEmpoweredCM }, "Wail of Despair", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "WailDesp.C", "Casted Wail of Despair", "Wail of Despair Cast", 0),
                 new EnemyCastStartMechanic(new long [] { EnviousGazeNM, EnviousGazeCM, EnviousGazeEmpoweredNM, EnviousGazeEmpoweredCM }, "Envious Gaze", new MechanicPlotlySetting(Symbols.TriangleDownOpen, Colors.Red), "EnvGaz.C", "Casted Envious Gaze", "Envious Gaze Cast", 0),
                 new EnemyCastStartMechanic(new long [] { MaliciousIntentNM, MaliciousIntentEmpoweredNM, MaliciousIntentCM, MaliciousIntentEmpoweredCM }, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.RedSkin), "MalInt.C", "Casted Malicious Intent", "Malicious Intent Cast", 0),
-                new EnemyCastStartMechanic(new long [] { InsatiableHungerSkillNM, InsatiableHungerSkillEmpoweredNM, InsatiableHungerSkillCM, InsatiableHungerEmpoweredSkillCM }, "Insatiable Hunger", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
+                new EnemyCastStartMechanic(new long [] { InsatiableHungerSkillNM, InsatiableHungerEmpoweredSkillNM, InsatiableHungerSkillCM, InsatiableHungerEmpoweredSkillCM }, "Insatiable Hunger", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.Pink), "InsHun.C", "Casted Insatiable Hunger", "Insatiable Hunger Cast", 0),
                 new EnemyCastStartMechanic(new long [] { CryOfRageNM, CryOfRageEmpoweredNM, CryOfRageCM, CryOfRageEmpoweredCM }, "Cry of Rage", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "CryRage.C", "Casted Cry of Rage", "Cry of Rage Cast", 0),
                 new EnemyCastStartMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "EnrSmash.C", "Casted Enraged Smash", "Enraged Smash Cast", 0),
                 new EnemyCastStartMechanic(PetrifySkill, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Pet.C", "Casted Petrify", "Petrify breakbar start", 0),
@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TrashID.MaliciousShadowCM,
             };
         }
-        
+
         protected override Dictionary<int, int> GetTargetsSortIDs()
         {
             return new Dictionary<int, int>()
@@ -304,7 +304,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        
+
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Cerus));
@@ -500,33 +500,119 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Hide the Permanent Embodiments in Challenge Mode.<br></br>
+        /// The Embodiments are shown during their cast events.
+        /// </summary>
+        /// <param name="target">The casting Embodiment.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
         private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId != WeaponStow && x.SkillId != WeaponSwap && x.SkillId != WeaponDraw).ToList();
             long invisibleStart = log.FightData.LogStart;
             bool startTrimmed = false;
-            foreach (AbstractCastEvent e in castEvents)
+
+            // Cast durations of each mechanic with +- 20ms leeway
+            foreach (AbstractCastEvent cast in castEvents)
             {
+                int castDuration = 0;
+                switch (cast.SkillId)
+                {
+                    case CrushingRegretNM:
+                    case CrushingRegretCM:
+                    case CrushingRegretEmpoweredNM:
+                    case CrushingRegretEmpoweredCM:
+                        castDuration = 8350;
+                        break;
+                    case WailOfDespairNM:
+                    case WailOfDespairCM:
+                    case WailOfDespairEmpoweredNM:
+                    case WailOfDespairEmpoweredCM:
+                        castDuration = 6350;
+                        break;
+                    case EnviousGazeNM:
+                    case EnviousGazeCM:
+                    case EnviousGazeEmpoweredNM:
+                    case EnviousGazeEmpoweredCM:
+                        castDuration = 13750;
+                        break;
+                    case MaliciousIntentNM:
+                    case MaliciousIntentCM:
+                    case MaliciousIntentEmpoweredNM:
+                    case MaliciousIntentEmpoweredCM:
+                        castDuration = 3670;
+                        break;
+                    case InsatiableHungerSkillNM:
+                    case InsatiableHungerSkillCM:
+                    case InsatiableHungerPermanentEmbodimentSkillCM:
+                    case InsatiableHungerEmpoweredSkillNM:
+                    case InsatiableHungerEmpoweredSkillCM:
+                    case InsatiableHungerPermanentEmbodimentEmpoweredSkillCM:
+                        castDuration = 13720;
+                        break;
+                    case CryOfRageNM:
+                    case CryOfRageCM:
+                    case CryOfRageEmpoweredNM:
+                    case CryOfRageEmpoweredCM:
+                        castDuration = 7660;
+                        break;
+                    default:
+                        break;
+                }
+
+                // Spawn and despawn the Embodiment 3500 ms before the cast start and end.
+                (long start, long end) = (cast.Time - 3500, cast.Time + castDuration + 3500);
+
+                // End the cast early if Cerus gains Invulnerability for the 80% and 50% splits.
+                AbstractSingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+                if (cerus != null)
+                {
+                    var invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>().ToList();
+                    foreach (BuffApplyEvent invulnApply in invulnsApply)
+                    {
+                        if (start <= invulnApply.Time && end > invulnApply.Time)
+                        {
+                            end = invulnApply.Time;
+                        }
+                    }
+                }
+
+                // If the Embodiment hasn't been trimmed yet, trim the lifespan to start on first cast and end at the fight end.
                 if (!startTrimmed)
                 {
-                    replay.Trim(e.Time, replay.TimeOffsets.end);
+                    replay.Trim(start, replay.TimeOffsets.end);
                     startTrimmed = true;
-                } 
+                }
                 else
                 {
-                    replay.Hidden.Add(new Segment(invisibleStart, e.Time));
+                    // Once already trimmed, hide them at the end of cast and show at the start of the next.
+                    replay.Hidden.Add(new Segment(invisibleStart, start));
                 }
-                invisibleStart = e.EndTime;
+                invisibleStart = end;
             }
             replay.Trim(replay.TimeOffsets.start, invisibleStart);
         }
 
+        /// <summary>
+        /// Adds the <see cref="BuffImages.Determined"/> icon for the invulnerable Embodiments during the split phases.
+        /// </summary>
+        /// <param name="target">The Embodiment.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
         private static void AddDeterminedOverhead(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             replay.AddOverheadIcons(target.GetBuffStatus(log, InvulnerabilityEmbodiment, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), target, BuffImages.Determined);
         }
 
+        /// <summary>
+        /// Adds the Malicious Intent mechanic decoration.
+        /// </summary>
+        /// <param name="target">The target casting.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="casts">The cast events.</param>
         private static void AddMaliciousIntentDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
         {
             // The Malicious Intent buff is only present in normal mode
@@ -548,6 +634,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        /// <summary>
+        /// Adds the Cry of Rage mechanic decoration.
+        /// </summary>
+        /// <param name="target">The target casting.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="casts">The cast events.</param>
         private static void AddCryOfRageDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
         {
             var cryOfRage = casts.Where(x => x.SkillId == CryOfRageNM || x.SkillId == CryOfRageCM || x.SkillId == CryOfRageEmpoweredNM || x.SkillId == CryOfRageEmpoweredCM).ToList();
@@ -587,6 +680,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        /// <summary>
+        /// Adds the Envious Gaze mechanic decoration.
+        /// </summary>
+        /// <param name="target">The target casting.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="casts">The cast events.</param>
         private static void AddEnviousGazeDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
         {
             uint width = 2200;
@@ -594,7 +694,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var enviousGaze = casts.Where(x => x.SkillId == EnviousGazeNM || x.SkillId == EnviousGazeEmpoweredNM || x.SkillId == EnviousGazeCM || x.SkillId == EnviousGazeEmpoweredCM).ToList();
             foreach (AbstractCastEvent cast in enviousGaze)
             {
-                bool isEmpowered = cast.SkillId == EnviousGazeEmpoweredNM || cast.SkillId == EnviousGazeEmpoweredCM ? true : false;
+                bool isEmpowered = cast.SkillId == EnviousGazeEmpoweredNM || cast.SkillId == EnviousGazeEmpoweredCM;
                 long indicatorDuration = 1500;
                 (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
                 long growing = lifespanIndicator.end;
@@ -602,18 +702,36 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (facing != null)
                 {
                     // Indicator
-                    lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanIndicator);
                     // Check if quickness is still applied from a previous steal
                     double computedDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, indicatorDuration);
                     if (computedDuration > 0)
                     {
                         lifespanIndicator.end = Math.Min(indicatorDuration, (long)Math.Ceiling(computedDuration));
                     }
+                    // Check if the indicator is cancelled
+                    lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanIndicator);
+
+                    // Frontal indicator
                     var rotation = new AngleConnector(facing);
                     var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                     var rectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(rotation);
                     replay.AddDecorationWithGrowing(rectangle, growing);
-                    // Damage
+                    if (isEmpowered)
+                    {
+                        // Opposite Indicator
+                        var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(-(width / 2), 0), true);
+                        var oppositeRectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation);
+                        replay.AddDecorationWithGrowing(oppositeRectangle, growing);
+                    }
+
+                    // Check if Petrify is casted between the end of the indicator and the start of the damage beam
+                    (long start, long end) = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, (lifespanIndicator.end, lifespanIndicator.end + 950));
+                    if (end < lifespanIndicator.end + 950)
+                    {
+                        break;
+                    }
+
+                    // Frontal Damage Beam
                     (long start, long end) lifespanDamage = (lifespanIndicator.end + 950, lifespanIndicator.end + 10750);
                     (long start, long end) lifespanDamageCancelled = lifespanDamage;
                     lifespanDamageCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamage);
@@ -624,17 +742,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(rectangle2);
                     if (isEmpowered)
                     {
-                        // Opposite Indicator
-                        var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(-(width / 2), 0), true);
-                        var oppositeRectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation);
-                        replay.AddDecorationWithGrowing(oppositeRectangle, growing);
-                        // Opposite Damage
+                        // Opposite Damage Beam
                         (long start, long end) lifespanDamageOpposite = (lifespanIndicator.end + 950, lifespanIndicator.end + 5850);
                         (long start, long end) lifespanDamageOppositeCancelled = lifespanDamage;
                         lifespanDamageOppositeCancelled = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanDamageOpposite);
                         double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
                         double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
                         var rotation3 = new AngleConnector(facing, (float)degreedRotatedOpposite);
+                        var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(-(width / 2), 0), true);
                         var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
                         replay.Decorations.Add(rectangle3);
                     }
@@ -642,11 +757,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        /// <summary>
+        /// Computes the lifespan of a mechanic.<br></br>
+        /// If Cerus is casting a mechanic and gains a breakbar at 80, 50 or 10%, it gets cancelled.<br></br>
+        /// If a Permanent Embodiment is casting a mechanic, it gets cancelled at the start of the split phase, when Cerus gains <see cref="InvulnerabilityCerus"/>.<br></br>
+        /// If a Killable Embodiment is casting a mechanic, it gets cancelled at the end of the split phase, when Cerus loses <see cref="InvulnerabilityCerus"/>.
+        /// </summary>
+        /// <param name="target">The target casting.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="lifespan">The supposed lifespan.</param>
+        /// <returns>The computed lifespan.</returns>
         private static (long start, long end) ComputeMechanicLifespanWithCancellationTime(AgentItem target, ParsedEvtcLog log, (long start, long end) lifespan)
         {
             AbstractSingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
             if (cerus != null)
             {
+                // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
                 if (target.IsSpecies(TargetID.Cerus))
                 {
                     var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PetrifySkill).ToList();
@@ -660,12 +786,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    var invulns = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffRemoveAllEvent>().ToList();
-                    foreach (BuffRemoveAllEvent invuln in invulns)
+                    // If a permanent Embodiment is casting a mechanic, cancel it when Cerus gains invulnerability (start 80% and 50% split phases)
+                    var invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>().ToList();
+                    foreach (BuffApplyEvent invulnApply in invulnsApply)
                     {
-                        if (lifespan.start <= invuln.Time && lifespan.end > invuln.Time)
+                        if (lifespan.start <= invulnApply.Time && lifespan.end > invulnApply.Time)
                         {
-                            lifespan.end = Math.Min(lifespan.end, invuln.Time);
+                            lifespan.end = Math.Min(lifespan.end, invulnApply.Time);
+                        }
+                        else
+                        {
+                            // If a killable Embodiment is casting a mechanic, cancel it when Cerus loses invulnerability (end 80% and 50% split phases)
+                            var invulnsRemove = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffRemoveAllEvent>().ToList();
+                            foreach (BuffRemoveAllEvent invulnRemove in invulnsRemove)
+                            {
+                                if (lifespan.start <= invulnRemove.Time && lifespan.end > invulnRemove.Time)
+                                {
+                                    lifespan.end = Math.Min(lifespan.end, invulnRemove.Time);
+                                }
+                            }
                         }
                     }
                 }
