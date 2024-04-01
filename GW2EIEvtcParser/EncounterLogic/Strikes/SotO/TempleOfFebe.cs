@@ -350,28 +350,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddDeterminedOverhead(target, log, replay);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfDespair:
-                    AddHiddenWhileNotCasting(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay, 6350);
                     break;
                 case (int)TrashID.EmbodimentOfEnvy:
                     AddDeterminedOverhead(target, log, replay);
                     AddEnviousGazeDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfEnvy:
-                    AddHiddenWhileNotCasting(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay, 13750);
                     AddEnviousGazeDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfGluttony:
                     AddDeterminedOverhead(target, log, replay);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfGluttony:
-                    AddHiddenWhileNotCasting(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay, 13720);
                     break;
                 case (int)TrashID.EmbodimentOfMalice:
                     AddDeterminedOverhead(target, log, replay);
                     AddMaliciousIntentDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfMalice:
-                    AddHiddenWhileNotCasting(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay, 3670);
                     AddMaliciousIntentDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfRage:
@@ -379,14 +379,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddCryOfRageDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfRage:
-                    AddHiddenWhileNotCasting(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay, 7660);
                     AddCryOfRageDecoration(target, log, replay, casts);
                     break;
                 case (int)TrashID.EmbodimentOfRegret:
                     AddDeterminedOverhead(target, log, replay);
                     break;
                 case (int)TrashID.PermanentEmbodimentOfRegret:
-                    AddHiddenWhileNotCasting(target, log, replay);
+                    AddHiddenWhileNotCasting(target, log, replay, 8350);
                     break;
                 default:
                     break;
@@ -508,74 +508,31 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="target">The casting Embodiment.</param>
         /// <param name="log">The log.</param>
         /// <param name="replay">The Combat Replay.</param>
-        private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        /// <param name="castDuration">The cast duration of the mechanic, roughly +- 20ms leeway.</param>
+        private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay, long castDuration)
         {
             var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId != WeaponStow && x.SkillId != WeaponSwap && x.SkillId != WeaponDraw).ToList();
             long invisibleStart = log.FightData.LogStart;
             bool startTrimmed = false;
 
-            // Cast durations of each mechanic with +- 20ms leeway
+            AbstractSingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+            var invulnsApply = new List<BuffApplyEvent>();
+            if (cerus != null)
+            {
+                invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>().ToList();
+            }
+
             foreach (AbstractCastEvent cast in castEvents)
             {
-                int castDuration = 0;
-                switch (cast.SkillId)
-                {
-                    case CrushingRegretNM:
-                    case CrushingRegretCM:
-                    case CrushingRegretEmpoweredNM:
-                    case CrushingRegretEmpoweredCM:
-                        castDuration = 8350;
-                        break;
-                    case WailOfDespairNM:
-                    case WailOfDespairCM:
-                    case WailOfDespairEmpoweredNM:
-                    case WailOfDespairEmpoweredCM:
-                        castDuration = 6350;
-                        break;
-                    case EnviousGazeNM:
-                    case EnviousGazeCM:
-                    case EnviousGazeEmpoweredNM:
-                    case EnviousGazeEmpoweredCM:
-                        castDuration = 13750;
-                        break;
-                    case MaliciousIntentNM:
-                    case MaliciousIntentCM:
-                    case MaliciousIntentEmpoweredNM:
-                    case MaliciousIntentEmpoweredCM:
-                        castDuration = 3670;
-                        break;
-                    case InsatiableHungerSkillNM:
-                    case InsatiableHungerSkillCM:
-                    case InsatiableHungerPermanentEmbodimentSkillCM:
-                    case InsatiableHungerEmpoweredSkillNM:
-                    case InsatiableHungerEmpoweredSkillCM:
-                    case InsatiableHungerPermanentEmbodimentEmpoweredSkillCM:
-                        castDuration = 13720;
-                        break;
-                    case CryOfRageNM:
-                    case CryOfRageCM:
-                    case CryOfRageEmpoweredNM:
-                    case CryOfRageEmpoweredCM:
-                        castDuration = 7660;
-                        break;
-                    default:
-                        break;
-                }
-
                 // Spawn and despawn the Embodiment 3500 ms before the cast start and end.
                 (long start, long end) = (cast.Time - 3500, cast.Time + castDuration + 3500);
 
                 // End the cast early if Cerus gains Invulnerability for the 80% and 50% splits.
-                AbstractSingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
-                if (cerus != null)
+                foreach (BuffApplyEvent invulnApply in invulnsApply)
                 {
-                    var invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>().ToList();
-                    foreach (BuffApplyEvent invulnApply in invulnsApply)
+                    if (start <= invulnApply.Time && end > invulnApply.Time)
                     {
-                        if (start <= invulnApply.Time && end > invulnApply.Time)
-                        {
-                            end = invulnApply.Time;
-                        }
+                        end = invulnApply.Time;
                     }
                 }
 
