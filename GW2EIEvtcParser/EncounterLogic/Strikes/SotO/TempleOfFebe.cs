@@ -467,8 +467,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Challenge Mode - 240
                         // Challenge Mode Empowered - 156
                         uint radius = 175;
-                        // Show the state for 500 ms
-                        (long start, long end) lifespan = (effect.Time, effect.Time + 500);
+                        // Show the state for 500 ms, 250 ms before so that failures are actually visible
+                        (long start, long end) lifespan = (effect.Time - 250, effect.Time + 250);
                         var circle = new CircleDecoration(radius, lifespan, Color, 0.2, new PositionConnector(effect.Position));
                         EnvironmentDecorations.Add(circle);
                     }
