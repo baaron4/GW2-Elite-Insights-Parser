@@ -303,7 +303,7 @@ class Animator {
 
     startAnimate(updateReactiveStatus) {
         if (this.animation === null && this.times.length > 0) {
-            if (this.reactiveDataStatus.time >= this.times[this.times.length - 1]) {
+            if (this.reactiveDataStatus.time >= this.times[this.times.length - 1] && !this.backwards) {
                 this.reactiveDataStatus.time = 0;
             }
             this.prevTime = new Date().getTime();
