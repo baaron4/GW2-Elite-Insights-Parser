@@ -34,13 +34,13 @@ namespace GW2EIEvtcParser.EIData
                     PlateOfPeppercornSpicedBeefCarpaccio, PlateOfPeppercornSpicedPoultryAspic, PeppercornSpicedEggsBenedict, SpicedPepperCremeBrulee,
                     SpicedPeppercornCheesecake, PepperedCuredMeatFlatbread, PeppercornAndVeggieFlatbread, BowlOfSpicedFruitSalad, 
                     SpherifiedPeppercornSpicedOysterSoup, MistsInfusedSpherifiedPeppercornSpicedOysterSoup,
-                }, "Ascended Food: -10%", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
+                }, "Ascended Food: -10%", "-10% Multiplicative", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
             new BuffOnActorDamageModifier(
                 new long[]
                 {
                     FriedOysters, FriedOysterSandwich, OystersWithCocktailSauce, BowlOfLemongrassMusselPasta, BowlOfMusselSoup, PlateOfMusselsGnashblade,
-                    OystersWithSpicySauce, OystersGnashblade, OystersWithZestySauce, OystersWithPestoSauce, BowlOfCurryMusselSoup,
-                }, "Food: -10%", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
+                    OystersWithSpicySauce, OystersGnashblade, OystersWithZestySauce, OystersWithPestoSauce, BowlOfCurryMusselSoup, WeightOfTheWorld,
+                }, "Food: -10%", "-10% Additive", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
         };
 
     }

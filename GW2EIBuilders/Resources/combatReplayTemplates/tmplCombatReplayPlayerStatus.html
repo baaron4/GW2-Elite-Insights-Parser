@@ -1,6 +1,6 @@
 <template>
     <div class="player-status" :style="{'background': getHPGradient(time, status)}" @click="select">
-        <h6 class="actor-shorten text-center" :title="player.name">
+        <h6 class="actor-shorten text-center" :title="player.name + ' - ' + player.acc">
             <img v-if="player.isCommander"
                             src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
                             height="18" width="18" data-original-title="Commander">
