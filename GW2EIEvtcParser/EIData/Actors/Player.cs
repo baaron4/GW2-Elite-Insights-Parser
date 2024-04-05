@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EIData
                         {
                             if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))
                             {
-                                commanderMarkerStates.Add(new GenericSegment<string>(commanderMarkerStates.Count != 0 ? markerEvent.Time : player.FirstAware, Math.Min(markerEvent.EndTime, player.LastAware), marker.HexContentGUID));
+                                commanderMarkerStates.Add(new GenericSegment<string>(commanderMarkerStates.Count != 0 ? markerEvent.Time : player.FirstAware, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
                                 if (markerEvent.EndNotSet)
                                 {
                                     break;
@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EIData
                         else if (markerEvent.MarkerID != 0)
                         {
                             commanderMarkerStates.Clear();
-                            commanderMarkerStates.Add(new GenericSegment<string>(player.FirstAware, player.LastAware, MarkerGUIDs.BlueCommanderTag));
+                            commanderMarkerStates.Add(new GenericSegment<string>(player.FirstAware, log.FightData.LogEnd, MarkerGUIDs.BlueCommanderTag));
                             CommanderStates = commanderMarkerStates;
                             return CommanderStates;
                         }
@@ -158,11 +158,11 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
-            base.InitAdditionalCombatReplayData(log);
             foreach (GenericSegment<string> seg in GetCommanderStates(log))
             {
                 CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, ParserIcons.CommanderTagToIcon[seg.Value], 180f, 15);
             }
+            base.InitAdditionalCombatReplayData(log);
         }
 
         public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
