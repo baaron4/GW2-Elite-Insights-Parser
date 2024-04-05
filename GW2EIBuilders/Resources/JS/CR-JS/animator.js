@@ -357,6 +357,17 @@ class Animator {
         return  this.getSelectableActorData(actorId) || animator.trashMobData.get(actorId);
     }
 
+    getActiveActorMarkers(actorID) {
+        let res = [];
+        for (let i = 0; i < this.overheadSquadMarkerData.length; i++) {
+            var marker = this.overheadSquadMarkerData[i];
+            if (marker.canDraw() && marker.getPosition() && marker.master === this.getActorData(actorID)) {
+                res.push(marker);
+            }
+        }
+        return res;
+    }
+
     toggleHighlightSelectedGroup() {
         this.displaySettings.highlightSelectedGroup = !this.displaySettings.highlightSelectedGroup;
         animateCanvas(noUpdateTime);
