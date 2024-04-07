@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EIData
             // Reaper's Mark (Staff 5)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMark, out IReadOnlyList<EffectEvent> reapersMarks))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark, SkillModeCategory.CC);
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
                 foreach (EffectEvent effect in reapersMarks)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);

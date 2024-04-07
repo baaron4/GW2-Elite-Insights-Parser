@@ -193,12 +193,7 @@ for (let key in SkillDecorationCategory) {
     AllSkillDecorations |= SkillDecorationCategory[key];
 }
 
-let DefaultSkillDecorations = 0;
-for (let key in SkillDecorationCategory) {
-    if (key !== "CC") {
-        DefaultSkillDecorations |= SkillDecorationCategory[key];
-    }
-}
+let DefaultSkillDecorations = AllSkillDecorations & ~SkillDecorationCategory.CC;
 
 const RotationStatus = {
     UNKNOWN: 0,
