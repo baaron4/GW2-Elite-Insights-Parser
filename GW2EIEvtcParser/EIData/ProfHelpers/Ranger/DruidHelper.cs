@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
             // Glyph of the Stars
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidGlyphOfTheStars, out IReadOnlyList<EffectEvent> glyphOfTheStars))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Druid, GlyphOfTheStars, SkillModeCategory.Heal);
+                var skill = new SkillModeDescriptor(player, Spec.Druid, GlyphOfTheStars, SkillModeCategory.Heal | SkillModeCategory.ImportantBuffs | SkillModeCategory.Cleanse);
                 foreach (EffectEvent effect in glyphOfTheStars)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
@@ -80,7 +80,7 @@ namespace GW2EIEvtcParser.EIData
             // Glyph of the Stars (Celestial Avatar)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidGlyphOfTheStarsCA, out IReadOnlyList<EffectEvent> glyphOfTheStarsCA))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Druid, GlyphOfTheStarsCA, SkillModeCategory.Heal);
+                var skill = new SkillModeDescriptor(player, Spec.Druid, GlyphOfTheStarsCA, SkillModeCategory.Heal | SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in glyphOfTheStarsCA)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
