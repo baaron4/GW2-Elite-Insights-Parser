@@ -156,6 +156,32 @@ namespace GW2EIEvtcParser.EIData
             return CommanderStates;
         }
 
+        /// <summary>
+        /// Return commander status list, with no consideration of tag type.
+        /// Player had a commander tag between every segment.Start and segment.End.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public IReadOnlyList<Segment> GetCommanderStatesNoTagValues(ParsedEvtcLog log)
+        {
+            IReadOnlyList<GenericSegment<string>> commanderStates = GetCommanderStates(log);
+            var result = new List<Segment>();
+            Segment prev = null;
+            foreach (GenericSegment<string> state in commanderStates) 
+            {
+                if (prev == null || state.Start != prev.End)
+                {
+                    prev = new Segment(state.Start, state.End);
+                    result.Add(prev);
+                } 
+                else
+                {
+                    prev.End = state.End;
+                }
+            }
+            return result;
+        }
+
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
             foreach (GenericSegment<string> seg in GetCommanderStates(log))

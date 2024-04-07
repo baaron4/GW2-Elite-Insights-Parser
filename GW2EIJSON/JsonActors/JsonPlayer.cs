@@ -23,7 +23,14 @@ namespace GW2EIJSON
         /// Indicates if a player has a commander tag
         /// </summary>
         public bool HasCommanderTag { get; set; }
-        
+        /// <summary>
+        /// If <see cref="HasCommanderTag"/> is true, will contain the states of the tag. \n
+        /// Array of int[2] that represents the commander tag status \n
+        /// Array[i][0] will be the time at which player got tag. \n
+        /// Array[i][1] will be the time at which player lost tag.
+        /// </summary>
+        public IReadOnlyList<IReadOnlyList<int>> CommanderTagStates { get; set; }
+
         /// <summary>
         /// Profession of the player
         /// </summary>

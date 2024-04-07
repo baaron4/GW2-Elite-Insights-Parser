@@ -27,13 +27,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             get
             {
-                var duration = TimeSpan.FromMilliseconds(FightDuration);
-                string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s " + duration.Milliseconds + "ms";
-                if (duration.Hours > 0)
-                {
-                    durationString = duration.ToString("hh") + "h " + durationString;
-                }
-                return durationString;
+                return ParserHelper.ToDurationString(FightDuration);
             }
         }
         public bool Success { get; private set; }

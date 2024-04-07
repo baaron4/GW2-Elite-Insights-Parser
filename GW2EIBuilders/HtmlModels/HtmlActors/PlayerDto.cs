@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -15,6 +16,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
         public bool IsPoV { get; set; }
 
         public bool IsCommander { get; set; }
+        public List<string[]> CommanderStates { get; set; }
         public List<string> L1Set { get; } = new List<string>();
         public List<string> L2Set { get; } = new List<string>();
         public List<string> A1Set { get; } = new List<string>();
@@ -60,7 +62,11 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             Acc = actor.Account;
             Profession = actor.Spec.ToString();
             IsPoV = log.LogData.PoV == actor.AgentItem;
-            IsCommander = actor is Player p && p.IsCommander(log);
+            if (actor is Player p)
+            {
+                IsCommander = p.IsCommander(log);
+                CommanderStates = IsCommander ? p.GetCommanderStatesNoTagValues(log).Select(x => new string[2] { ParserHelper.ToDurationString(x.Start), ParserHelper.ToDurationString(x.End) }).ToList() : null;
+            }
             (ColTarget, ColCleave, ColTotal) = GetSpecGraphColor(actor.BaseSpec);
             IsFake = actor.IsFakeActor;
             NotInSquad = !(actor is Player);

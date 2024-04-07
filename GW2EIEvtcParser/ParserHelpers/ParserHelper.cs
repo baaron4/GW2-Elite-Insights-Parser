@@ -265,6 +265,21 @@ namespace GW2EIEvtcParser
         }
 
 
+        public static string ToDurationString(long duration)
+        {
+            var durationTimeSpan = TimeSpan.FromMilliseconds(Math.Abs(duration));
+            string durationString = durationTimeSpan.ToString("mm") + "m " + durationTimeSpan.ToString("ss") + "s " + durationTimeSpan.Milliseconds + "ms";
+            if (durationTimeSpan.Hours > 0)
+            {
+                durationString = durationTimeSpan.ToString("hh") + "h " + durationString;
+            }
+            if (duration < 0)
+            {
+                durationString = "-" + durationString;
+            }
+            return durationString;
+        }
+
 
         internal delegate bool ExtraRedirection(CombatItem evt, AgentItem from, AgentItem to);
         /// <summary>
