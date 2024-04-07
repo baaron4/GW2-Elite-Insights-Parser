@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -58,5 +59,36 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Lingering Light", LingeringLight, Source.Druid, BuffClassification.Other, BuffImages.LingeringLight).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023Balance),
             new Buff("Natural Balance", NaturalBalance, Source.Druid, BuffClassification.Other, BuffImages.NaturalBalance).WithBuilds(GW2Builds.June2023Balance),
         };
+
+        internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            Color color = Colors.Ranger;
+
+            // Glyph of the Stars
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidGlyphOfTheStars, out IReadOnlyList<EffectEvent> glyphOfTheStars))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Druid, GlyphOfTheStars, SkillModeCategory.Heal | SkillModeCategory.ImportantBuffs | SkillModeCategory.Cleanse);
+                foreach (EffectEvent effect in glyphOfTheStars)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGlyphOfTheStars, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Glyph of the Stars (Celestial Avatar)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidGlyphOfTheStarsCA, out IReadOnlyList<EffectEvent> glyphOfTheStarsCA))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Druid, GlyphOfTheStarsCA, SkillModeCategory.Heal | SkillModeCategory.ImportantBuffs);
+                foreach (EffectEvent effect in glyphOfTheStarsCA)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGlyphOfTheStarsCA, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+        }
     }
 }

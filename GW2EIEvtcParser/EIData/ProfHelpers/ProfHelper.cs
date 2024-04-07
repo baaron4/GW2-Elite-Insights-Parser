@@ -450,8 +450,15 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 // Ranger
                 case Spec.Ranger:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Druid:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    DruidHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Soulbeast:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Untamed:
                     RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;

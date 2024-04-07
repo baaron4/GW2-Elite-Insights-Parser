@@ -185,13 +185,15 @@ const SkillDecorationCategory = {
     "Cleanse": 1 << 4,
     "Strip": 1 << 5,
     "Portal": 1 << 6,
+    "CC": 1 << 7,
 };
 
 let AllSkillDecorations = 0;
 for (let key in SkillDecorationCategory) {
     AllSkillDecorations |= SkillDecorationCategory[key];
 }
-let DefaultSkillDecorations = AllSkillDecorations;
+
+let DefaultSkillDecorations = AllSkillDecorations & ~SkillDecorationCategory.CC;
 
 const RotationStatus = {
     UNKNOWN: 0,

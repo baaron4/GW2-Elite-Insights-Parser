@@ -427,7 +427,7 @@ namespace GW2EIEvtcParser.EIData
             // Spike Trap
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerSpikeTrap, out IReadOnlyList<EffectEvent> spikeTraps))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.ShowOnSelect);
+                var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC);
                 foreach (EffectEvent effect in spikeTraps)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 2000); // roughly time displayed ingame

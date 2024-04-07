@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -32,6 +32,9 @@ namespace GW2EIEvtcParser.EIData
 
             /// <summary>Active portal</summary>
             Portal = 1 << 6,
+
+            /// <summary>Crowd Control</summary>
+            CC = 1 << 7,
         }
 
         public SkillConnector Owner;

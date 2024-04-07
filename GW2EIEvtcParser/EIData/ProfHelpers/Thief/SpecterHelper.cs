@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.EIData
             // Well of Bounty
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfBounty2, out IReadOnlyList<EffectEvent> wellsOfBounty))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfBounty);
+                var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfBounty, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in wellsOfBounty)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
             // Well of Silence
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfSilence2, out IReadOnlyList<EffectEvent> wellsOfSilence))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfSilence);
+                var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfSilence, SkillModeCategory.CC);
                 foreach (EffectEvent effect in wellsOfSilence)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
