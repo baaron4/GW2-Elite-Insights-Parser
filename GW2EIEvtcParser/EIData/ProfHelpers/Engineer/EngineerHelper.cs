@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EIData
             // Thunderclap
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperThunderclap, out IReadOnlyList<EffectEvent> thunderclaps))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Engineer, Thunderclap, SkillModeCategory.ShowOnSelect);
+                var skill = new SkillModeDescriptor(player, Spec.Engineer, Thunderclap, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC);
                 foreach (EffectEvent effect in thunderclaps)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);

@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -331,7 +332,7 @@ namespace GW2EIEvtcParser.EIData
             // Static Field (Staff)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldStaff, out IReadOnlyList<EffectEvent> staticFieldsStaff))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldStaff);
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldStaff, SkillModeCategory.CC);
                 foreach (EffectEvent effect in staticFieldsStaff)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
@@ -344,7 +345,7 @@ namespace GW2EIEvtcParser.EIData
             // Static Field (Lightning Hammer)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldLightningHammer, out IReadOnlyList<EffectEvent> staticFieldsHammer))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldLightingHammer);
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldLightingHammer, SkillModeCategory.CC);
                 foreach (EffectEvent effect in staticFieldsHammer)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
@@ -357,7 +358,7 @@ namespace GW2EIEvtcParser.EIData
             // Updraft
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Updraft);
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Updraft, SkillModeCategory.CC);
                 foreach (EffectEvent effect in updrafts)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 750);
@@ -399,7 +400,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyserSplash, out IReadOnlyList<EffectEvent> geyserSplash))
                 {
-                    var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist);
+                    var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist, SkillModeCategory.Heal);
                     foreach (EffectEvent effect in geysers)
                     {
                         if (!geyserSplash.Any(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant))

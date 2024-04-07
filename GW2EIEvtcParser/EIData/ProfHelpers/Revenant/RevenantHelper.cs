@@ -267,6 +267,8 @@ namespace GW2EIEvtcParser.EIData
                         .UsingSkillMode(inspiringReinforcementSkill));
                 }
             }
+
+            // Protective Solace
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, ProtectiveSolaceSkill, SkillModeCategory.ProjectileManagement);

@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EIData
             // Seal Area
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE, out IReadOnlyList<EffectEvent> sealAreaAoEs))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Thief, SealArea, SkillModeCategory.ProjectileManagement);
+                var skill = new SkillModeDescriptor(player, Spec.Thief, SealArea, SkillModeCategory.ProjectileManagement | SkillModeCategory.CC);
                 foreach (EffectEvent effect in sealAreaAoEs)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000);

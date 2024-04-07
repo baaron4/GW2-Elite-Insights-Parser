@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EIData
             // Gravity Well
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerGravityWell, out IReadOnlyList<EffectEvent> gravityWells))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell);
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell, SkillModeCategory.CC);
                 foreach (EffectEvent effect in gravityWells)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EIData
             // Gravity Well - Pulses
             if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerGravityWellPulse, EffectGUIDs.ChronomancerGravityWellExplosion }, out IReadOnlyList<EffectEvent> gravityWellPulses))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell);
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell, SkillModeCategory.CC);
                 foreach (EffectEvent effect in gravityWellPulses)
                 {
                     int effectTimeStart = (int)effect.Time;

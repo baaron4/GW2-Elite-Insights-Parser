@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.EIData
             // Corrosive Poison Cloud
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud, out IReadOnlyList<EffectEvent> poisonClouds))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Necromancer, CorrosivePoisonCloud);
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, CorrosivePoisonCloud, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in poisonClouds)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000);
@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EIData
             // Reaper's Mark (Staff 5)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMark, out IReadOnlyList<EffectEvent> reapersMarks))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark, SkillModeCategory.CC);
                 foreach (EffectEvent effect in reapersMarks)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);
@@ -326,7 +326,7 @@ namespace GW2EIEvtcParser.EIData
             // Reaper's Mark (Staff 5) Activated
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMarkActivated, out IReadOnlyList<EffectEvent> reapersMarksActivated))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark, SkillModeCategory.CC);
                 foreach (EffectEvent effect in reapersMarksActivated)
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);

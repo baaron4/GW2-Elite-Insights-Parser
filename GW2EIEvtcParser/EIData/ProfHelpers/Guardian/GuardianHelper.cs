@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EIData
             // Ring of Warding (Hammer 5)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianRingOfWarding, out IReadOnlyList<EffectEvent> ringOfWardings))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Guardian, RingOfWarding);
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, RingOfWarding, SkillModeCategory.CC);
                 foreach (EffectEvent effect in ringOfWardings)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
@@ -211,7 +211,7 @@ namespace GW2EIEvtcParser.EIData
             // Line of Warding (Staff 5)
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding, out IReadOnlyList<EffectEvent> lineOfWardings))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Guardian, LineOfWarding);
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, LineOfWarding, SkillModeCategory.CC);
                 foreach (EffectEvent effect in lineOfWardings)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EIData
             // Sanctuary
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary, out IReadOnlyList<EffectEvent> sanctuaries))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Guardian, SanctuaryGuardian);
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SanctuaryGuardian, SkillModeCategory.CC | SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in sanctuaries)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000); // 7s with trait
@@ -249,7 +249,7 @@ namespace GW2EIEvtcParser.EIData
             // Shield of the Avenger
             if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger, out IReadOnlyList<EffectEvent> shieldOfTheAvengers))
             {
-                    var skill = new SkillModeDescriptor(player, Spec.Guardian, ShieldOfTheAvenger);
+                    var skill = new SkillModeDescriptor(player, Spec.Guardian, ShieldOfTheAvenger, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in shieldOfTheAvengers)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
