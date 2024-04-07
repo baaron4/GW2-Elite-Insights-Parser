@@ -271,6 +271,8 @@ namespace GW2EIEvtcParser
         public const string DruidSeedOfLifeBlossom = "666BCBD61F72E042B08EFE1C62555245"; // has owner, ~720ms delayed
         public const string DruidSublimeConversion1 = "5707A4A2BFFAD048BBDEC9CA0F2A61E1";
         public const string DruidSublimeConversion2 = "2F74AC468871444BB66AF5D8B25EC870";
+        public const string DruidGlyphOfTheStars = "84BD2B25ADE2E34C8E8B508283BE8077";
+        public const string DruidGlyphOfTheStarsCA = "6AFF7DBF27F63D45940FEC1CB837475D";
         public const string SoulbeastEternalBond = "BF0A5B11A4076A4F98C6E1D655D507B1"; // has owner & target
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";

@@ -601,7 +601,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectDeployJadeSphereWater = "https://i.imgur.com/xy0SAxK.png";
         internal const string EffectDeployJadeSphereAir = "https://i.imgur.com/SvUQmyj.png";
         internal const string EffectDeployJadeSphereEarth = "https://i.imgur.com/KG8ysd9.png";
+        internal const string EffectGlyphOfTheStars = "https://i.imgur.com/hDrlcEU.png";
+        internal const string EffectGlyphOfTheStarsCA = "https://i.imgur.com/hHOcANm.png";
         #endregion
+
         #region Marker
         // Overhead icons
         // - Fixations
