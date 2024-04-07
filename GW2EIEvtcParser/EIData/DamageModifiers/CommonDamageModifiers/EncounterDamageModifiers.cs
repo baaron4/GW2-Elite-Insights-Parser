@@ -145,6 +145,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     return VulnerabilityAdditiveChecker(ahde, log, ConjuredProtection, 10);
                 }),
+            new BuffOnActorDamageModifier(ExposedPlayer, "Exposed (Player)", "25% per stack", DamageSource.All, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Exposed, DamageModifierMode.PvE),
             new CounterOnActorDamageModifier(ConjuredProtection, "Conjured Protection (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.Strike, DamageType.All, Source.FightSpecific, BuffImages.Fractured, DamageModifierMode.PvE)
                 .UsingChecker((ahde, log) =>
                 {
