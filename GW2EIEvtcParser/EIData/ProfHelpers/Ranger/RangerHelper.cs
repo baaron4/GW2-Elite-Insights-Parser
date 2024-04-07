@@ -308,7 +308,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Sic 'Em! (PvP)", SicEmPvPBuff, Source.Ranger, BuffClassification.Other, BuffImages.SicEm),
             new Buff("Sharpening Stones", SharpeningStonesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpeningStone),
             new Buff("Sharpen Spines", SharpenSpinesBuff, Source.Ranger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SharpenSpines),
-            new Buff("Guard!", GuardBuff, Source.Ranger, BuffClassification.Other, BuffImages.Guard),
+            new Buff("Guard!", GuardBuff, Source.Ranger, BuffClassification.Defensive, BuffImages.Guard),
             new Buff("Clarion Bond", ClarionBond, Source.Ranger, BuffClassification.Other, BuffImages.ClarionBond),
             new Buff("Search and Rescue!", SearchAndRescueBuff, Source.Ranger, BuffClassification.Support, BuffImages.SearchAndRescue),
             new Buff("Ancestral Grace", AncestralGraceBuff, Source.Ranger, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
