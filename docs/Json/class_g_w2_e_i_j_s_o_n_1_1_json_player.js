@@ -6,6 +6,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_player =
     [ "ActiveTimes", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af2828bf40a85961b2947f89ea7a7b676", null ],
     [ "BuffUptimes", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a5327a117260ac39307cbeb3ef49bec77", null ],
     [ "BuffUptimesActive", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ad541adf295387d0334e758c62790f853", null ],
+    [ "CommanderTagStates", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a6757f3dca68926684d733750ae74e864", null ],
     [ "Consumables", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a6c567ff2839c88b2f7a0ad05abfa5cf8", null ],
     [ "DamageModifiers", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a6b4a40b6e5daf68193f4c8d1ef0b1bd4", null ],
     [ "DamageModifiersTarget", "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a66dfa3821ed381c868664705249bd7af", null ],

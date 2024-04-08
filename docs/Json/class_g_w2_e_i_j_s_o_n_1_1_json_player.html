@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.66.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.67.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -124,6 +124,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>Group</b><code> [get, 
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>HasCommanderTag</b><code> [get, set]</code></td></tr>
 <tr class="memdesc:a66c207adcd20b26b2179ec82e1ba9e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates if a player has a commander tag. <br /></td></tr>
 <tr class="separator:a66c207adcd20b26b2179ec82e1ba9e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6757f3dca68926684d733750ae74e864" id="r_a6757f3dca68926684d733750ae74e864"><td class="memItemLeft" align="right" valign="top"><a id="a6757f3dca68926684d733750ae74e864" name="a6757f3dca68926684d733750ae74e864"></a>
+IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CommanderTagStates</b><code> [get, set]</code></td></tr>
+<tr class="memdesc:a6757f3dca68926684d733750ae74e864"><td class="mdescLeft">&#160;</td><td class="mdescRight">If HasCommanderTag is true, will contain the states of the tag. <br  />
+Array of int[2] that represents the commander tag status <br  />
+Array[i][0] will be the time at which player got tag. <br  />
+Array[i][1] will be the time at which player lost tag. <br /></td></tr>
+<tr class="separator:a6757f3dca68926684d733750ae74e864"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0d033faacc4a1370f73d354e5689fd3" id="r_af0d033faacc4a1370f73d354e5689fd3"><td class="memItemLeft" align="right" valign="top"><a id="af0d033faacc4a1370f73d354e5689fd3" name="af0d033faacc4a1370f73d354e5689fd3"></a>
 string&#160;</td><td class="memItemRight" valign="bottom"><b>Profession</b><code> [get, set]</code></td></tr>
 <tr class="memdesc:af0d033faacc4a1370f73d354e5689fd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Profession of the player. <br /></td></tr>
