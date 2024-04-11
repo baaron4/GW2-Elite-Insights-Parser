@@ -292,7 +292,8 @@
         public const long StandYourGround = 9153;
         public const long SignetOfJudgmentBuff = 9156;
         public const long SymbolOfProtection = 9161;
-        public const long SignetOfMercy = 9162;
+        public const long SignetOfMercyBuff = 9162;
+        public const long SignetOfMercySkill = 9163;
         public const long SwordOfJusticeSomething = 9170;
         public const long POV_AegisTimer = 9177; // guardian passive aegis
         public const long ShieldOfTheAvenger = 9182;
@@ -698,6 +699,7 @@
         public const long MantraOfConcentration = 10237;
         public const long PowerBreak = 10238;
         public const long DistortionBuff = 10243;
+        public const long IllusionOfLifeSkill = 10244;
         public const long SignetOfIllusions = 10246;
         public const long DisenchantingBolt = 10266;
         public const long HideInShadows = 10269;
@@ -723,7 +725,7 @@
         public const long Blur = 10335;
         public const long Swap = 10337;
         public const long ShadowAssault = 10338;
-        public const long IllusionOfLife = 10346;
+        public const long IllusionOfLifeBuff = 10346;
         public const long IllusionaryLeapBuff = 10353;
         public const long Mirror = 10357;
         public const long MindBlast = 10367;
@@ -753,7 +755,9 @@
         public const long Chillblains = 10605;
         public const long Epidemic = 10606;
         public const long WellOfDarkness = 10607;
-        public const long SignetOfUndeath = 10610;
+        public const long SpectralRing = 10608;
+        public const long SignetOfUndeathBuff = 10610;
+        public const long SignetOfUndeathSkill = 10611;
         public const long SignetOfTheLocust = 10614;
         public const long DeadlyFeast = 10619;
         public const long SignetOfSpite = 10621;
@@ -1394,10 +1398,12 @@
         public const long EmbraceTheDarkness = 28001;
         public const long FacetOfDarknessUW = 28036;
         public const long LegendaryDragonStanceSkill = 28085;
+        public const long DropTheHammer = 28110;
         public const long LegendaryAssassinStanceSkill = 28134;
         public const long LegendaryCentaurStanceSkill = 28195;
         public const long UnrelentingAssaultMultihit = 28232;
         public const long FacetOfElementsBuff = 28243;
+        public const long CoalescenceOfRuin = 28253;
         public const long EnchantedDaggers2 = 28313;
         public const long RelinquishPower = 28382;
         public const long LesserBanishEnchantment = 28388;
@@ -2357,6 +2363,7 @@
         public const long POV_StealPrecisionBuff = 42194;
         public const long Afterburner = 42210;
         public const long ManifestSandShadeSkill = 42297;
+        public const long PhotonBarrierBuff = 42249;
         public const long TomeOfCourageSkill = 42259;
         public const long DualAirAttunement = 42264;
         public const long TrailOfAnguishBuff = 42311; // longer duration (12s vs 6s) but not pov only
@@ -2374,6 +2381,7 @@
         public const long HiddenKiller = 42720;
         public const long DismissLieutenantSoulcleaveSkill = 42752;
         public const long POV_StealDefensesBuff = 42762;
+        public const long CitadelBombardment = 42836;
         public const long POV_StealMobilityBuff = 42839;
         public const long FireMinorAttunement = 42811;
         public const long OpeningPassage = 42864;
@@ -3341,6 +3349,7 @@
         #endregion
         #region End of Dragons
         public const long VoidObliteratorChargeWindup = 61713;
+        public const long BannerDropWarning = 61797;
         public const long VoidObliteratorFirebomb = 61838;
         public const long VoidObliteratorCharge = 61895;
         public const long VirtuosoBlade4 = 62505;
@@ -3358,6 +3367,7 @@
         public const long Bladeturn = 62592;
         public const long BladeturnRequiem = 62597;
         public const long FlowingResolveSkill = 62603;
+        public const long UnstableBladestorm = 62607;
         public const long VirtuosoBlade5 = 62613;
         public const long CrashingCourage = 62615;
         public const long RushingJusticeStrike = 62624;
@@ -3423,6 +3433,7 @@
         public const long ExplosiveThrust = 62918;
         public const long LegendaryAllianceStanceBuff = 62919;
         public const long FlickerStep = 62926;
+        public const long EternitysRequiem = 62929;
         public const long BloomingFire = 62930;
         public const long FlameWheelBuff = 62931;
         public const long ImperialImpactDodge = 62932;
@@ -3979,6 +3990,7 @@
         public const long NaturalBalance = 69314;
         public const long AchievementEligibilityJadeSeaLegs = 69325;
         public const long AspectMainPlatformBuff = 69327; // while on main platform, removed when tethering successfully?
+        public const long NaturesRenewalHealing = 69336;
         public const long DualOrbitFireAndAir = 69341;
         public const long POV_DreadVisageBuff = 69343;
         public const long DissectingDance2 = 69345;
@@ -4036,8 +4048,7 @@
         public const long ShootingStarsTargetToDagdaBuff = 69735; // Buff applied from player to Dagda when the player is hit
         public const long IntoTheFray = 69764;
         public const long MaliciousIntentEmpoweredNM = 69779;
-        public const long RelicOfTheAristocracy = 69795;
-        public const long BannerDropWarning = 61797;
+        public const long RelicOfTheAristocracy = 69795;        
         public const long PoolOfDespairNM = 69809;
         public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
         public const long EnviousGazeNM = 69814;
@@ -4211,6 +4222,12 @@
         public const long InsatiableHunger16 = 72350;
         public const long InsatiableHunger17 = 72351;
         public const long InsatiableHunger19 = 72352;
+        public const long IcerazorsIreSkillMinionReworked = 72353;
+        public const long DarkrazorsDaringSkillMinionReworked = 72360;
+        public const long BreakrazorsBastionSkillMinionReworked = 72365;
+        public const long RazorclawsRageSkillMinionReworked = 72370;
+        public const long SoulcleavesSummitHitReworked = 72376;
+        public const long RazorclawsRageHitReworked = 72388;
         #endregion
     }
 

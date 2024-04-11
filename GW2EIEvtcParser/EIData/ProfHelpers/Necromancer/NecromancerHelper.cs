@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Signet of Spite (Shroud)", SignetOfSpiteShroud, Source.Necromancer, BuffClassification.Other,BuffImages.SignetOfSpite),
             new Buff("Signet of the Locust", SignetOfTheLocust, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfTheLocust),
             new Buff("Signet of the Locust (Shroud)", SignetOfTheLocustShroud, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfTheLocust),
-            new Buff("Signet of Undeath", SignetOfUndeath, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfUndeath),
+            new Buff("Signet of Undeath", SignetOfUndeathBuff, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfUndeath),
             new Buff("Signet of Undeath (Shroud)", SignetOfUndeathShroud, Source.Necromancer, BuffClassification.Other, BuffImages.SignetOfUndeath),
             // Skills
             new Buff("Spectral Walk", SpectralWalkOldBuff, Source.Necromancer, BuffClassification.Other, BuffImages.NecroticTraversal).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
@@ -333,6 +333,33 @@ namespace GW2EIEvtcParser.EIData
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Signet of Undeath
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerSignetOfUndeathGroundMark, out IReadOnlyList<EffectEvent> signetOfUndeath))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, SignetOfUndeathSkill, SkillModeCategory.Heal);
+                foreach (EffectEvent effect in signetOfUndeath)
+                {
+                    (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSignetOfUndeath, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Spectral Ring
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerSpectralRing, out IReadOnlyList<EffectEvent> spectralRings))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Necromancer, SpectralRing, SkillModeCategory.CC);
+                foreach (EffectEvent effect in spectralRings)
+                {
+                    long duration = log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.WvW ? 5000 : 8000;
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, duration);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new DoughnutDecoration(180, 200, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSpectralRing, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
         }

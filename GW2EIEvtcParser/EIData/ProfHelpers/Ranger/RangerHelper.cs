@@ -89,7 +89,8 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileWhiteTiger,
             (int)MinionID.JuvenileWolf,
             (int)MinionID.JuvenileHyena,
-            (int)MinionID.JuvenileAetherHunter
+            (int)MinionID.JuvenileAetherHunter,
+            (int)MinionID.JuvenileSkyChakStriker,
         };
 
         private static bool IsJuvenilePetID(int id)

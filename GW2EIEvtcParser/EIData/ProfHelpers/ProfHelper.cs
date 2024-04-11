@@ -465,7 +465,12 @@ namespace GW2EIEvtcParser.EIData
                 // Revenant
                 case Spec.Revenant:
                 case Spec.Herald:
+                    RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Renegade:
+                    RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    RenegadeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Vindicator:
                     RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;

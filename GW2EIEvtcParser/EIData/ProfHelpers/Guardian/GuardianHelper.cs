@@ -147,7 +147,7 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Judgment (PI)", SignetOfJudgmentPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfJudgment)
                 .WithBuilds(GW2Builds.June2022Balance),
-            new Buff("Signet of Mercy", SignetOfMercy, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy),
+            new Buff("Signet of Mercy", SignetOfMercyBuff, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy),
             new Buff("Signet of Mercy (PI)", SignetOfMercyPI, Source.Guardian, BuffStackType.Stacking, 25, BuffClassification.Defensive, BuffImages.SignetOfMercy)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Signet of Mercy (PI)", SignetOfMercyPI, Source.Guardian, BuffClassification.Other, BuffImages.SignetOfMercy)
@@ -249,13 +249,26 @@ namespace GW2EIEvtcParser.EIData
             // Shield of the Avenger
             if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger, out IReadOnlyList<EffectEvent> shieldOfTheAvengers))
             {
-                    var skill = new SkillModeDescriptor(player, Spec.Guardian, ShieldOfTheAvenger, SkillModeCategory.ProjectileManagement);
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, ShieldOfTheAvenger, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in shieldOfTheAvengers)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShieldOfTheAvenger, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Signet of Mercy
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSignetOfMercyEnd, out IReadOnlyList<EffectEvent> signetOfMercy))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SignetOfMercySkill, SkillModeCategory.Heal);
+                foreach (EffectEvent effect in signetOfMercy)
+                {
+                    (long, long) lifespan = (effect.Time, effect.Time + 500);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSignetOfMercy, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
         }

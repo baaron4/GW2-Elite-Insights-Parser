@@ -490,6 +490,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionJuvenileWolf = "https://i.imgur.com/GQLiFky.png";
         private const string MinionJuvenileHyena = "https://i.imgur.com/XtYVyhH.png";
         private const string MinionJuvenileAetherHunter = "https://i.imgur.com/qMVHHki.png";
+        private const string MinionSkyChakStriker = "https://i.imgur.com/bfmZsdK.png";
         private const string MinionBloodFiend = "https://i.imgur.com/PrOpULe.png";
         private const string MinionBoneFiend = "https://i.imgur.com/BEntBIt.png";
         private const string MinionFleshGolem = "https://i.imgur.com/JkYUNug.png";
@@ -603,6 +604,16 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectDeployJadeSphereEarth = "https://i.imgur.com/KG8ysd9.png";
         internal const string EffectGlyphOfTheStars = "https://i.imgur.com/hDrlcEU.png";
         internal const string EffectGlyphOfTheStarsCA = "https://i.imgur.com/hHOcANm.png";
+        internal const string EffectSignetOfUndeath = "https://i.imgur.com/hIdzJ0J.png";
+        internal const string EffectIllusionOfLife = "https://i.imgur.com/5FCB6T4.png";
+        internal const string EffectSignetOfMercy = "https://i.imgur.com/UV4R1mo.png";
+        internal const string EffectSpectralRing = "https://i.imgur.com/bMpFia8.png";
+        internal const string EffectUnstableBladestorm = "https://i.imgur.com/J8LVXGm.png";
+        internal const string EffectCoalescenceOfRuin = "https://i.imgur.com/EFLZ9s9.png";
+        internal const string EffectDropTheHammer = "https://i.imgur.com/Dvg5jKT.png";
+        internal const string EffectEternitysRequiem = "https://i.imgur.com/weWJdsh.png";
+        internal const string EffectCitadelBombardment = "https://i.imgur.com/IUZceLh.png";
+        internal const string EffectCitadelBombardmentPortal = "https://i.imgur.com/sYUZpkj.png";
         #endregion
 
         #region Marker
@@ -1345,6 +1356,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { MinionID.JuvenileWolf, MinionJuvenileWolf },
             { MinionID.JuvenileHyena, MinionJuvenileHyena },
             { MinionID.JuvenileAetherHunter, MinionJuvenileAetherHunter },
+            { MinionID.JuvenileSkyChakStriker, MinionSkyChakStriker },
             { MinionID.BloodFiend, MinionBloodFiend },
             { MinionID.BoneFiend, MinionBoneFiend },
             { MinionID.FleshGolem, MinionFleshGolem },
