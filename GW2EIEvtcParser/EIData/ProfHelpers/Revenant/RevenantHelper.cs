@@ -303,7 +303,8 @@ namespace GW2EIEvtcParser.EIData
                         var centralPosition = Point3D.FindCentralPoint(positions);
                         var centralConnector = new PositionConnector(centralPosition);
                         replay.Decorations.Add(new IconDecoration(ParserIcons.EffectEternitysRequiem, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector).UsingSkillMode(skill));
-                        replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));
+                        // TODO: Find a way to tell the user that the circle is approximative.
+                        //replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));
                     }
                 }
             }

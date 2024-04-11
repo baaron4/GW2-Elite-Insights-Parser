@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
                         Point3D playerPosition = player.AgentItem.GetCurrentPosition(log, effect.Time);
                         if (playerPosition != null)
                         {
-                            var playerConnector = new PositionConnector(playerPosition);
+                            var playerPositionConnector = new PositionConnector(playerPosition);
                             var positions = new List<Point3D>();
                             foreach (EffectEvent hitEffect in citadelBombardmentHits.Where(x => x.Time >= effect.Time && x.Time <= effect.Time + 3000))
                             {
@@ -107,11 +107,12 @@ namespace GW2EIEvtcParser.EIData
                             (long, long) lifespan = (effect.Time, effect.Time + 3000);
                             var centralPoint = Point3D.FindCentralPoint(positions);
                             var centralConnector = new PositionConnector(centralPoint);
-                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardmentPortal, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, playerConnector)
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardmentPortal, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, playerPositionConnector)
                                 .UsingSkillMode(skill));
                             replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector)
                                 .UsingSkillMode(skill));
-                            replay.Decorations.Add(new CircleDecoration(230, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));
+                            // TODO: Find a way to tell the user that the circle is approximative.
+                            //replay.Decorations.Add(new CircleDecoration(230, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));
                         }
                     }
                 }
