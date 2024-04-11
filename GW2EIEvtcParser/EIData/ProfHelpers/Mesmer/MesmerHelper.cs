@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Illusionary Leap", IllusionaryLeapBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
             new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
-            new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
+            new Buff("Illusion of Life", IllusionOfLifeBuff, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
             new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new Buff("Dimensional Aperture", DimensionalAperturePortalBuff, Source.Mesmer, BuffClassification.Other, BuffImages.DimensionalAperture),
             // Traits
@@ -397,6 +397,19 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
+            // Illusion of Life
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerIllusionOfLife1, out IReadOnlyList<EffectEvent> illusionOfLife))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, IllusionOfLifeSkill, SkillModeCategory.Heal);
+                foreach (EffectEvent effect in illusionOfLife)
+                {
+                    (long, long) lifespan = (effect.Time, effect.Time + 500);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectIllusionOfLife, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
             // Dimensional Aperture
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out IReadOnlyList<EffectEvent> dimensionalApertures))
             {
@@ -432,6 +445,19 @@ namespace GW2EIEvtcParser.EIData
                             replay.Decorations.Add(new LineDecoration(lifespan, color, 0.3, new AgentConnector(player.AgentItem), connector));
                         }              
                     }
+                }
+            }
+
+            // Unstable Bladestorm
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoUnstableBladestorm, out IReadOnlyList<EffectEvent> unstableBladestorm))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, UnstableBladestorm);
+                foreach (EffectEvent effect in unstableBladestorm)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUnstableBladestorm, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
         }

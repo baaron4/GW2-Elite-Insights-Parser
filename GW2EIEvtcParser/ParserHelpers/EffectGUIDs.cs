@@ -66,6 +66,8 @@ namespace GW2EIEvtcParser
         public const string MesmerMantraOfConcentrationAndPowerBreak = "5B488D552E316045AD99C4A98EEDDB1E";
         public const string MesmerPowerReturn = "F53E2CE3B06B934085D46FA59468477B";
         public const string MesmerDimensionalAperturePortal = "9246D82C91B5274396DBAB561DC8EFAF";
+        public const string MesmerIllusionOfLife1 = "F7D8B60F91335741AB6CDCC9B7CEF2C5";
+        public const string MesmerIllusionOfLife2 = "40818C8E9CC6EF4388C2821FCC26A9EC"; // Collides with other fields
         public const string ChronomancerSeizeTheMomentShatter = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // This seems to happen everytime split second, rewinder, time sink or continuum split are cast under SeizeTheMoment
         public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA"; // this is also triggered by the clones while being sourced to the chrono
@@ -92,7 +94,8 @@ namespace GW2EIEvtcParser
         public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
-        public const string VirtuosoUnstableBladestorm = "DEF12997FAEA6847A8786CD2920ACA91";
+        public const string VirtuosoUnstableBladestorm = "DEF12997FAEA6847A8786CD2920ACA91"; // has effect end
+        public const string VirtuosoUnstableBladestorm2 = "242B1513FCF07842B658A56CDE4851C8";
         public const string VirtuosoBladeturnRequiem = "87B761200637AC48B71469F553BA6F60";
         public const string VirtuosoRainOfSwords = "83834EDBA8E79946A6D5665E3519B72C";
         public const string VirtuosoThousandCuts = "E4002B7AD7DF024394D0184B47A316E7";
@@ -124,6 +127,9 @@ namespace GW2EIEvtcParser
         public const string NecromancerPutridMarkActivated2 = "EFB9CDA30AEBC744B9D377A99BEBC0B2";
         public const string NecromancerPutridMarkActivated3 = "CAF4E62C2C5CC04499657C2A6A78087B"; // No src or dst
         public const string NecromancerReapersMarkActivated = "255FBE1C15D0C6488BD018748184624F";
+        public const string NecromancerSignetOfUndeathOverhead = "1FEB5ECC28F92245A04646869B4A8169";
+        public const string NecromancerSignetOfUndeathGroundMark = "28FE26F58FB0534BAF091C2D9D2261EA";
+        public const string NecromancerSpectralRing = "99D0D6FC6817E24396180B07711013EE"; // infinite duration, has effect end
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
@@ -186,7 +192,15 @@ namespace GW2EIEvtcParser
         public const string RevenantEnergyExpulsion = "BE191381B1BC984A989D94D215DDEA1F";
         public const string RevenantInspiringReinforcement = "09171204F3936841813E518123E2F867";
         public const string RevenantInspiringReinforcementPart = "E6D6CD56B9A61E40A86F982C60421625";
+        public const string RevenantEternitysRequiemOnPlayer = "40240467597E2746A5CCFA31FAC22FAB";
+        public const string RevenantEternitysRequiemHit = "9BFCBED9DE8A6E4E8AB5F480629AE244";
+        public const string RevenantCoalescenceOfRuin = "D37B86D576586B489A951153B598CDE6";
+        public const string RevenantCoalescenceOfRuinLast = "D66761A11B8FF344B3CEBE31F458896C";
+        public const string RevenantDropTheHammer = "A4311C8684668348B427FA0162992E6C";
         public const string RenegadeOrdersFromAbove = "F53F05F041957A47AD62B522FE030408";
+        public const string RenegadeCitadelBombardmentPortal = "145B288ECA42CF43A40DFD759419C904";
+        public const string RenegadeCitadelBombardment1 = "5BBF59761E6B9D49A91E79D5474CC61C";
+        public const string RenegadeCitadelBombardment2 = "6C8201B551CF274C9C1AF51C33AA062A"; // duration 0
         #endregion
         #region Guardian
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
@@ -205,6 +219,8 @@ namespace GW2EIEvtcParser
         public const string GuardianSignetOfJudgement1 = "0AFA3936BD4D70458925660B54D47A90"; // happens twice?
         public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
         public const string GuardianShieldOfTheAvenger = "0885D553A0A0A341B4C31B7964243407";
+        public const string GuardianSignetOfMercyLightTray = "E9D10435E997D846B736B62EDCC6B4BD"; // Duration 2000 - light ray at the start of the cast
+        public const string GuardianSignetOfMercyEnd = "61ED02C4AA44C0429790A79E8EFCA7CC"; // Duration 0 - end cast
         public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
