@@ -18,6 +18,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 {
     internal class TempleOfFebe : SecretOfTheObscureStrike
     {
+        private static HashSet<long> UnboundOptimismSkillIDs = new HashSet<long>()
+        {
+            WailOfDespairCM, WailOfDespairEmpoweredCM, PoolOfDespairCM, PoolOfDespairEmpoweredCM
+        };
+
         public TempleOfFebe(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
@@ -38,8 +43,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "EnrSmash.H", "Hit by Enraged Smash", "Hit by Enraged Smash", 0),
                 new PlayerDstHitMechanic(new long [] { EnragedSmashNM, EnragedSmashCM }, "Enraged Smash", new MechanicPlotlySetting(Symbols.Star, Colors.DarkRed), "EnrSmash.D", "Downed to Enraged Smash", "Downed to Enraged Smash", 0).UsingChecker((ahde, log) => ahde.HasDowned),
                 new PlayerDstHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
-                new PlayerDstHitMechanic(new long [] { WailOfDespairCM, WailOfDespairEmpoweredCM, PoolOfDespairCM, PoolOfDespairEmpoweredCM }, "Unbounded Optimism", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0)
-                    .UsingChecker((ahde, log) => !ahde.To.IsDead(log, log.FightData.FightEnd) && !ahde.To.IsDC(log, log.FightData.FightEnd))
+                new GenericCombatEventListMechanic<AbstractTimeCombatEvent>("Unbounded Optimism", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0, false, (log, agentItem) =>
+                    {
+                        AbstractSingleActor actor = log.FindActor(agentItem);
+                        var eligibilityRemovedEvents = new List<AbstractTimeCombatEvent>();
+                        eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillId) && x.HasHit));
+                        IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(agentItem);
+                        // In case player is dead but death event did not happen during encounter
+                        if (agentItem.IsDead(log, log.FightData.FightEnd) && !deads.Any(x => x.Time >= log.FightData.FightStart && x.Time <= log.FightData.FightEnd))
+                        {
+                            eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.FightData.FightEnd - 1));
+                        }
+                        else
+                        {
+                            eligibilityRemovedEvents.AddRange(deads);
+                        }
+                        IReadOnlyList<DespawnEvent> despawns = log.CombatData.GetDespawnEvents(agentItem);
+                        // In case player is DC but DC event did not happen during encounter
+                        if (agentItem.IsDC(log, log.FightData.FightEnd) && !despawns.Any(x => x.Time >= log.FightData.FightStart && x.Time <= log.FightData.FightEnd))
+                        {
+                            eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.FightData.FightEnd - 1));
+                        } 
+                        else
+                        {
+                            eligibilityRemovedEvents.AddRange(despawns);
+                        }
+                        eligibilityRemovedEvents = eligibilityRemovedEvents.OrderBy(x => x.Time).ToList();
+                        return eligibilityRemovedEvents;
+                    })
                     .UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM)
                     .UsingAchievementEligibility(true),
                 new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targetted by Malicious Intent", 0),
