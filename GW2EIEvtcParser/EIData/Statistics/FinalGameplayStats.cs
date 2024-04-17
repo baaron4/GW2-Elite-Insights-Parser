@@ -37,13 +37,13 @@ namespace GW2EIEvtcParser.EIData
                 var distances = new List<float>();
                 for (int time = 0; time < positions.Count; time++)
                 {
-                    if (reference[time + offset] == null)
+                    if (time+offset >= reference.Count || reference[time + offset] == null)
                     {
                         continue;
                     }
                     distances.Add(positions[time].Distance2DToPoint(reference[time + offset]));
                 }
-                return distances.Sum() / distances.Count;
+                return distances.Count == 0 ? -1 : distances.Sum() / distances.Count;
             }
             else
             {
