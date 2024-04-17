@@ -164,16 +164,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return null;
             }
-            if (_breakbarDamageList1S == null)
+            if (_breakbarDamageTakenList1S == null)
             {
-                _breakbarDamageList1S = new CachingCollectionWithTarget<double[]>(log);
+                _breakbarDamageTakenList1S = new CachingCollectionWithTarget<double[]>(log);
             }
-            if (_breakbarDamageList1S.TryGetValue(start, end, target, out double[] res))
+            if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out double[] res))
             {
                 return res;
             }
             var brkDmgList = ComputeBreakbarDamageGraph(Actor.GetBreakbarDamageTakenEvents(target, log, start, end), start, end);
-            _breakbarDamageList1S.Set(start, end, target, brkDmgList);
+            _breakbarDamageTakenList1S.Set(start, end, target, brkDmgList);
             return brkDmgList;
         }
 
