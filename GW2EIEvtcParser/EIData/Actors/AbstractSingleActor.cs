@@ -263,9 +263,18 @@ namespace GW2EIEvtcParser.EIData
             return _graphHelper.Get1SDamageList(log, start, end, target, damageType);
         }
 
+        public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType)
+        {
+            return _graphHelper.Get1SDamageTakenList(log, start, end, target, damageType);
+        }
+
         public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             return _graphHelper.Get1SBreakbarDamageList(log, start, end, target);
+        }
+        public IReadOnlyList<double> Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        {
+            return _graphHelper.Get1SBreakbarDamageTakenList(log, start, end, target);
         }
 
         // Damage Modifiers
