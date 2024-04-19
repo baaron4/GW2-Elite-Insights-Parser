@@ -8,7 +8,6 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIJSON.JsonBuffsUptime;
 using static GW2EIJSON.JsonPlayerBuffsGeneration;
@@ -53,6 +52,26 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             var dpsTargets = new JsonStatistics.JsonDPS[log.FightData.Logic.Targets.Count][];
             var statsTargets = new JsonStatistics.JsonGameplayStats[log.FightData.Logic.Targets.Count][];
             var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
+
+            if (settings.RawFormatTimelineArrays)
+            {
+                var damageTaken1S = new IReadOnlyList<int>[phases.Count];
+                var powerDamageTaken1S = new IReadOnlyList<int>[phases.Count];
+                var conditionDamageTaken1S = new IReadOnlyList<int>[phases.Count];
+                var breakbarDamageTaken1S = new IReadOnlyList<double>[phases.Count];
+                for (int i = 0; i < phases.Count; i++)
+                {
+                    PhaseData phase = phases[i];
+                    damageTaken1S[i] = player.Get1SDamageTakenList(log, phase.Start, phase.End, null, DamageType.All);
+                    powerDamageTaken1S[i] = player.Get1SDamageTakenList(log, phase.Start, phase.End, null, DamageType.Power);
+                    conditionDamageTaken1S[i] = player.Get1SDamageTakenList(log, phase.Start, phase.End, null, DamageType.Condition);
+                    breakbarDamageTaken1S[i] = player.Get1SBreakbarDamageTakenList(log, phase.Start, phase.End, null);
+                }
+                jsonPlayer.DamageTaken1S = damageTaken1S;
+                jsonPlayer.PowerDamageTaken1S = powerDamageTaken1S;
+                jsonPlayer.ConditionDamageTaken1S = conditionDamageTaken1S;
+                jsonPlayer.BreakbarDamageTaken1S = breakbarDamageTaken1S;
+            }
             for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
             {
                 AbstractSingleActor target = log.FightData.Logic.Targets[j];
