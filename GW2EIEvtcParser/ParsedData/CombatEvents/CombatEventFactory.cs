@@ -166,28 +166,68 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case StateChange.Marker:
                     var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
-                    // End event
-                    if (markerEvent.IsEnd)
+                    if (evtcVersion >= ArcDPSBuilds.NewMarkerEventBehavior)
                     {
-                        // Find last marker on agent and set an end time on it
-                        if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        // End event
+                        if (markerEvent.IsEnd)
                         {
-                            markers.LastOrDefault()?.SetEndTime(markerEvent.Time);
-                        }
-                        break;
-                    } 
-                    else if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
-                    {
-                        MarkerEvent lastMarker = markers.LastOrDefault();
-                        if (lastMarker != null)
-                        {
-                            // Ignore current if last marker on agent is the same and end not set
-                            if (lastMarker.MarkerID == markerEvent.MarkerID && lastMarker.EndNotSet)
+                            // An end event ends all previous markers
+                            if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
                             {
-                                break;
+                                for (int i = markers.Count - 1; i >= 0; i--)
+                                {
+                                    MarkerEvent preMarker = markers[i];
+                                    if (!preMarker.EndNotSet)
+                                    {
+                                        break;
+                                    }
+                                    preMarker.SetEndTime(markerEvent.Time);
+                                }
                             }
-                            // Otherwise update end time and put current in the event pool
-                            lastMarker.SetEndTime(markerEvent.Time);
+                            break;
+                        }
+                        else if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        {
+                            for (int i = markers.Count - 1; i >= 0; i--)
+                            {
+                                MarkerEvent preMarker = markers[i];
+                                // We can't have the same markers active at the same time on one Src
+                                if (preMarker.MarkerID == markerEvent.MarkerID)
+                                {
+                                    if (preMarker.Time <=  markerEvent.Time && preMarker.EndTime > markerEvent.Time)
+                                    {
+                                        preMarker.SetEndTime(markerEvent.Time);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    } 
+                    else
+                    {
+                        // End event
+                        if (markerEvent.IsEnd)
+                        {
+                            // Find last marker on agent and set an end time on it
+                            if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                            {
+                                markers.LastOrDefault()?.SetEndTime(markerEvent.Time);
+                            }
+                            break;
+                        }
+                        else if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        {
+                            MarkerEvent lastMarker = markers.LastOrDefault();
+                            if (lastMarker != null)
+                            {
+                                // Ignore current if last marker on agent is the same and end not set
+                                if (lastMarker.MarkerID == markerEvent.MarkerID && lastMarker.EndNotSet)
+                                {
+                                    break;
+                                }
+                                // Otherwise update end time and put current in the event pool
+                                lastMarker.SetEndTime(markerEvent.Time);
+                            }
                         }
                     }
                     Add(statusEvents.MarkerEvents, markerEvent.Src, markerEvent);

@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EIData
                         {
                             if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))
                             {
-                                commanderMarkerStates.Add(new GenericSegment<string>(commanderMarkerStates.Count != 0 ? markerEvent.Time : player.FirstAware, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
+                                commanderMarkerStates.Add(new GenericSegment<string>(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
                                 if (markerEvent.EndNotSet)
                                 {
                                     break;
