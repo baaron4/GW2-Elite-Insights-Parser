@@ -4183,6 +4183,7 @@
         public const long RampartSplitter = 71875;
         public const long EarthBullet = 71881;
         public const long EssenceOfLivingShadows = 71882;
+        public const long BlossomingAuraBuff = 71887;
         public const long DimensionalAperturePortalBuff = 71890;
         public const long FriendlyFire = 71892;
         public const long Journey = 71897;

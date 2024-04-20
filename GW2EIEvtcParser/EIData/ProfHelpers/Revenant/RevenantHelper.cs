@@ -179,6 +179,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Selfless Amplification", SelflessAmplification, Source.Revenant, BuffClassification.Other, BuffImages.SelflessAmplification),
             new Buff("Battle Scars", BattleScars, Source.Revenant, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ThrillOfCombat).WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
             new Buff("Steadfast Rejuvenation", SteadfastRejuvenation, Source.Revenant, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.SteadfastRejuvenation),
+            // Scepter
+            new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffClassification.Other, BuffImages.BlossomingAura),
         };
 
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>
