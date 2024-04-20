@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Exposed (48209)", Exposed48209, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other, BuffImages.Exposed),
-            new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Unblockable)
+            new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, BuffImages.Unblockable)
                 .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
             new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
             new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
