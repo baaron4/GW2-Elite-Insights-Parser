@@ -1614,6 +1614,7 @@
         public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
         public const string NaturesStrength = "https://wiki.guildwars2.com/images/8/84/Nature%27s_Strength.png";
         public const string DimensionalAperture = "https://wiki.guildwars2.com/images/8/80/Dimensional_Aperture.png";
+        public const string BlossomingAura = "https://wiki.guildwars2.com/images/6/62/Blossoming_Aura.png";
         #endregion Cast
 
         #region Traits

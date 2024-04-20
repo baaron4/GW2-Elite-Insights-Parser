@@ -25,10 +25,12 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             //
             jsonNPC.Id = npc.ID;
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
+            IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(npc.AgentItem);
             jsonNPC.FirstAware = (int)npc.FirstAware;
             jsonNPC.LastAware = (int)npc.LastAware;
             jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
             double hpLeft = 100.0;
+            double barrierLeft = 0.0;
             if (log.FightData.Success)
             {
                 hpLeft = 0;
@@ -39,9 +41,15 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 {
                     hpLeft = hpUpdates.Last().HPPercent;
                 }
+                if (barrierUpdates.Count > 0)
+                {
+                    barrierLeft = barrierUpdates.Last().BarrierPercent;
+                }
             }
             jsonNPC.HealthPercentBurned = 100.0 - hpLeft;
+            jsonNPC.BarrierPercent = barrierLeft;
             jsonNPC.FinalHealth = npc.GetCurrentHealth(log, hpLeft);
+            jsonNPC.FinalBarrier = (int)Math.Round(jsonNPC.TotalHealth * barrierLeft / 100.0);
             //
             jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffDesc);
             // Breakbar

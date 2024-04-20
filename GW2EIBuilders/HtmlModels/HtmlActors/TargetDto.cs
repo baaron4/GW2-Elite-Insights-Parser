@@ -13,6 +13,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
         public long HbHeight { get; set; }
         public double HpLeftPercent { get; set; }
         public int HpLeft { get; set; }
+        public double BarrierLeft { get; set; }
 
         public TargetDto(AbstractSingleActor target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
         {
@@ -22,6 +23,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             if (log.FightData.Success)
             {
                 HpLeftPercent = 0;
+                BarrierLeft = 0;
             }
             else
             {
@@ -29,6 +31,11 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 if (hpUpdates.Count > 0)
                 {
                     HpLeftPercent = hpUpdates.Last().HPPercent;
+                }
+                IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(target.AgentItem);
+                if (barrierUpdates.Count > 0)
+                {
+                    BarrierLeft = barrierUpdates.Last().BarrierPercent;
                 }
             }
             HpLeft = target.GetCurrentHealth(log, HpLeftPercent);
