@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases.Add(new PhaseData(last, end));
             }
-            return phases; // skip filtering too short phases here, it may mess with phase names
+            return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
         }
 
         internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
