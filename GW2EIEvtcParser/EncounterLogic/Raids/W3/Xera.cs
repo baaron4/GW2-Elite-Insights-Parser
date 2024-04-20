@@ -268,20 +268,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
             }
             ComputeFightTargets(agentData, combatData, extensions);
-
-            if (_xeraSecondPhaseStartTime > 0)
+            // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
+            AbstractSingleActor mainTarget = GetMainTarget();
+            if (mainTarget == null)
             {
-                AbstractSingleActor mainTarget = GetMainTarget();
-                if (mainTarget == null)
-                {
-                    throw new MissingKeyActorsException("Xera not found");
-                }
-                mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
-                {
-                    (22611300, 100),
-                    (25560600, 50)
-                });
+                throw new MissingKeyActorsException("Xera not found");
             }
+            mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
+            {
+                (22611300, 100),
+                (25560600, 50)
+            });
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
