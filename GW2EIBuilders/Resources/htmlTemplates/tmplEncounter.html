@@ -27,8 +27,8 @@
                             <div v-if="target.hpLeftPercent > 0" class="small" style="text-align:center;">
                                 {{ target.hpLeftPercent }}% health remaining
                             </div>
-                            <div v-if="target.barrierLeft > 0" class="small" style="text-align:center;">
-                                {{ target.barrierLeft }}% barrier remaining
+                            <div v-if="target.barrierLeftPercent > 0" class="small" style="text-align:center;">
+                                {{ target.barrierLeftPercent }}% barrier remaining
                             </div>
                         </div>
                     </div>
@@ -54,22 +54,22 @@
         },
         methods: {
             getGradient: function (target) {
-                var healthAndBarrier = target.hpLeftPercent + target.barrierLeft;
+                var hpLeftPercent = target.hpLeftPercent;
+                var healthAndBarrier = hpLeftPercent + target.barrierLeftPercent;
                 if (healthAndBarrier > 100) {
+                    // So that barrier remains fully visible like in game
+                    hpLeftPercent -= healthAndBarrier - 100;
                     healthAndBarrier = 100;
                 }
-                var template = 'linear-gradient(to right, $red$, $yellow$, $green$)';
-                var red = "red " + target.hpLeftPercent + "%";
-                var yellow = "yellow " + target.hpLeftPercent + "% " + healthAndBarrier + "%";
-                var green = "green " + healthAndBarrier + "%";
-                template = template.replace('$red$', red);
-                template = template.replace('$yellow$', yellow);
-                template = template.replace('$green$', green);
+                var red = "red " + hpLeftPercent + "%";
+                var yellow = "yellow " + hpLeftPercent + "% " + healthAndBarrier + "%";
+                var green = "green " + healthAndBarrier + "%";        
+                var template = `linear-gradient(to right, ${red}, ${yellow}, ${green})`;
                 return template;
             },
             healthRemaining: function (target) {
-                var hpLeft = Math.round(target.health * target.hpLeftPercent / 100.0);
-                var barrierLeft = Math.round(target.health * target.barrierLeft / 100.0);
+                var hpLeft = target.hpLeft;
+                var barrierLeft = target.barrierLeft;
                 if (hpLeft > 0 && barrierLeft > 0) {
                     return 'Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;
                 }

@@ -37,6 +37,11 @@ namespace GW2EIEvtcParser.EIData
             return -1;
         }
 
+        public override int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time)
+        {
+            return -1;
+        }
+
         public override string GetIcon()
         {
             return !IsFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);

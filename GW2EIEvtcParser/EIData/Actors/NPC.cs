@@ -40,9 +40,9 @@ namespace GW2EIEvtcParser.EIData
         public override int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent)
         {
             int health = GetHealth(log.CombatData);
-            if (health < 0)
+            if (health < 0 || currentHealthPercent < 0)
             {
-                return health;
+                return -1;
             }
             if (HpDistribution == null)
             {
@@ -66,6 +66,15 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             return currentHealth;
+        }
+        public override int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time)
+        {
+            MaxHealthUpdateEvent currentMaxHealth = log.CombatData.GetMaxHealthUpdateEvents(AgentItem).LastOrDefault(x => x.Time <= time);
+            if (currentMaxHealth == null || currentBarrierPercent < 0)
+            {
+                return -1;
+            }
+            return (int)Math.Round(currentMaxHealth.MaxHealth * currentBarrierPercent / 100.0, 0);
         }
 
         public override string GetIcon()
