@@ -719,7 +719,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long start, long end) = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, (lifespanIndicator.end, lifespanIndicator.end + 950));
                     if (end < lifespanIndicator.end + 950)
                     {
-                        break;
+                        continue;
                     }
 
                     // Frontal Damage Beam
