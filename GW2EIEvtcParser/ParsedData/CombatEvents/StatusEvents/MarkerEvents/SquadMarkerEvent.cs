@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.ParsedData
         public SquadMarkerIndex MarkerIndex { get; }
 
         private readonly uint _markerIndex;
-        public bool EndNotSet => EndTime == int.MaxValue;
+        internal bool EndNotSet => EndTime == int.MaxValue;
         internal static Point3D ReadPosition(CombatItem evtcItem)
         {
             var positionBytes = new byte[4 * sizeof(float)];

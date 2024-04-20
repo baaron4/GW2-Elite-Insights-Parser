@@ -7,7 +7,7 @@
 
         internal bool IsEnd => MarkerID == 0;
 
-        public bool EndNotSet => EndTime == int.MaxValue;
+        internal bool EndNotSet => EndTime == int.MaxValue;
 
         internal MarkerEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {

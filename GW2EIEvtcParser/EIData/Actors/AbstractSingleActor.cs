@@ -72,7 +72,12 @@ namespace GW2EIEvtcParser.EIData
             return Health;
         }
 
-        internal abstract void SetManualHealth(int health);
+        internal abstract void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null);
+
+        public virtual IReadOnlyList<(long hpValue, double percent)> GetHealthDistribution()
+        {
+            return null;
+        }
 
         internal abstract void OverrideName(string name);
 
@@ -179,6 +184,8 @@ namespace GW2EIEvtcParser.EIData
         {
             return _graphHelper.GetCurrentHealthPercent(log, time);
         }
+
+        public abstract int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent);
 
         public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {

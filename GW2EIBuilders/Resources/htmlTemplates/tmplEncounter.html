@@ -24,8 +24,8 @@
                         <div :data-original-title="healthRemaining(target)">
                             <div :style="{'background': getGradient(target), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
                             </div>
-                            <div v-if="target.hpLeft > 0" class="small" style="text-align:center;">
-                                {{ target.hpLeft ? target.hpLeft : 0 }}% health remaining
+                            <div v-if="target.hpLeftPercent > 0" class="small" style="text-align:center;">
+                                {{ target.hpLeftPercent ? target.hpLeftPercent : 0 }}% health remaining
                             </div>
                             <div v-if="target.barrierLeft > 0" class="small" style="text-align:center;">
                                 {{ target.barrierLeft }}% barrier remaining
@@ -54,13 +54,13 @@
         },
         methods: {
             getGradient: function (target) {
-                var healthAndBarrier = target.hpLeft + target.barrierLeft;
+                var healthAndBarrier = target.hpLeftPercent + target.barrierLeft;
                 if (healthAndBarrier > 100) {
                     healthAndBarrier = 100;
                 }
                 var template = 'linear-gradient(to right, $red$, $yellow$, $green$)';
-                var red = "red " + target.hpLeft + "%";
-                var yellow = "yellow " + target.hpLeft + "% " + healthAndBarrier + "%";
+                var red = "red " + target.hpLeftPercent + "%";
+                var yellow = "yellow " + target.hpLeftPercent + "% " + healthAndBarrier + "%";
                 var green = "green " + healthAndBarrier + "%";
                 template = template.replace('$red$', red);
                 template = template.replace('$yellow$', yellow);
@@ -68,7 +68,7 @@
                 return template;
             },
             healthRemaining: function (target) {
-                var hpLeft = Math.round(target.health * target.hpLeft / 100.0);
+                var hpLeft = Math.round(target.health * target.hpLeftPercent / 100.0);
                 var barrierLeft = Math.round(target.health * target.barrierLeft / 100.0);
                 if (hpLeft > 0 && barrierLeft > 0) {
                     return 'Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;

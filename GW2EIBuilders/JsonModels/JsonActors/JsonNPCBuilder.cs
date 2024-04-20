@@ -48,7 +48,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             }
             jsonNPC.HealthPercentBurned = 100.0 - hpLeft;
             jsonNPC.BarrierPercent = barrierLeft;
-            jsonNPC.FinalHealth = (int)Math.Round(jsonNPC.TotalHealth * hpLeft / 100.0);
+            jsonNPC.FinalHealth = npc.GetCurrentHealth(log, hpLeft);
             jsonNPC.FinalBarrier = (int)Math.Round(jsonNPC.TotalHealth * barrierLeft / 100.0);
             //
             jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffDesc);

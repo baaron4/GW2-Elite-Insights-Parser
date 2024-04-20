@@ -11,18 +11,18 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
     {
         public long HbWidth { get; set; }
         public long HbHeight { get; set; }
-        public double Percent { get; set; }
-        public double HpLeft { get; set; }
+        public double HpLeftPercent { get; set; }
+        public int HpLeft { get; set; }
         public double BarrierLeft { get; set; }
 
         public TargetDto(AbstractSingleActor target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
         {
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;
-            HpLeft = 100.0;
+            HpLeftPercent = 100.0;
             if (log.FightData.Success)
             {
-                HpLeft = 0;
+                HpLeftPercent = 0;
                 BarrierLeft = 0;
             }
             else
@@ -30,7 +30,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
                 if (hpUpdates.Count > 0)
                 {
-                    HpLeft = hpUpdates.Last().HPPercent;
+                    HpLeftPercent = hpUpdates.Last().HPPercent;
                 }
                 IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(target.AgentItem);
                 if (barrierUpdates.Count > 0)
@@ -38,7 +38,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                     BarrierLeft = barrierUpdates.Last().BarrierPercent;
                 }
             }
-            Percent = Math.Round(100.0 - HpLeft, 2);
+            HpLeft = target.GetCurrentHealth(log, HpLeftPercent);
         }
     }
 }

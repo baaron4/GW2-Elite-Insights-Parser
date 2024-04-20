@@ -90,6 +90,7 @@ namespace GW2EIEvtcParser
             internal const int BuffExtensionOverstackValueChanged = 20231107;
             internal const int LingeringAgents = 20231110;
             internal const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
+            internal const int NewMarkerEventBehavior = 20240418;
             //
             internal const int EndOfLife = int.MaxValue;
         }
