@@ -25,7 +25,7 @@
                             <div :style="{'background': getGradient(target), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
                             </div>
                             <div v-if="target.hpLeftPercent > 0" class="small" style="text-align:center;">
-                                {{ target.hpLeftPercent ? target.hpLeftPercent : 0 }}% health remaining
+                                {{ target.hpLeftPercent }}% health remaining
                             </div>
                             <div v-if="target.barrierLeft > 0" class="small" style="text-align:center;">
                                 {{ target.barrierLeft }}% barrier remaining
