@@ -21,10 +21,15 @@
                         <div v-if="target.health > 0" class="super-small" style="text-align:center;">
                             {{ target.health }} Health
                         </div>
-                        <div :style="{'background': getGradient(target.hpLeft ? target.hpLeft : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
-                        </div>
-                        <div class="small" style="text-align:center;">
-                            {{ target.hpLeft ? target.hpLeft : 0 }}% remaining
+                        <div :data-original-title="healthRemaining(target)">
+                            <div :style="{'background': getGradient(target), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
+                            </div>
+                            <div v-if="target.hpLeft > 0" class="small" style="text-align:center;">
+                                {{ target.hpLeft ? target.hpLeft : 0 }}% health remaining
+                            </div>
+                            <div v-if="target.barrierLeft > 0" class="small" style="text-align:center;">
+                                {{ target.barrierLeft }}% barrier remaining
+                            </div>
                         </div>
                     </div>
                     <div v-if="!wvw" class="mb-2 text" :class="resultStatus.class">
@@ -48,16 +53,34 @@
             };
         },
         methods: {
-            getGradient: function (percent) {
-                var template = 'linear-gradient(to right, $left$, $middle$, $right$)';
-                var greenPercent = "green " + (100 - percent) + "%";
-                var redPercent = "red " + (percent) + "%";
-                var middle = percent + "%";
-                template = template.replace('$right$', greenPercent);
-                template = template.replace('$left$', redPercent);
-                template = template.replace('$middle$', middle);
+            getGradient: function (target) {
+                var healthAndBarrier = target.hpLeft + target.barrierLeft;
+                if (healthAndBarrier > 100) {
+                    healthAndBarrier = 100;
+                }
+                var template = 'linear-gradient(to right, $red$, $yellow$, $green$)';
+                var red = "red " + target.hpLeft + "%";
+                var yellow = "yellow " + target.hpLeft + "% " + healthAndBarrier + "%";
+                var green = "green " + healthAndBarrier + "%";
+                template = template.replace('$red$', red);
+                template = template.replace('$yellow$', yellow);
+                template = template.replace('$green$', green);
                 return template;
-            }
+            },
+            healthRemaining: function (target) {
+                var hpLeft = Math.round(target.health * target.hpLeft / 100.0);
+                var barrierLeft = Math.round(target.health * target.barrierLeft / 100.0);
+                if (hpLeft > 0 && barrierLeft > 0) {
+                    return 'Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;
+                }
+                else if (hpLeft > 0 && barrierLeft == 0) {
+                    return 'Health: ' + hpLeft;
+                }
+                else if (barrierLeft > 0) {
+                    return 'Barrier: ' + barrierLeft;
+                }
+                return false;
+            },
         },
         computed: {
             encounter: function () {

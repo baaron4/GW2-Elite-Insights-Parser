@@ -20,6 +20,16 @@ namespace GW2EIJSON
         /// Final health of the target
         /// </summary>
         public int FinalHealth { get; set; }
+
+        /// <summary>
+        /// Final barrier on the target
+        /// </summary>
+        public int FinalBarrier { get; set; }
+
+        /// <summary>
+        /// % of barrier remaining on the target
+        /// </summary>
+        public double BarrierPercent { get; set; }
         
         /// <summary>
         /// % of health burned
