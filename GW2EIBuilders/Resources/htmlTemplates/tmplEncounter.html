@@ -21,10 +21,10 @@
                         <div v-if="target.health > 0" class="super-small" style="text-align:center;">
                             {{ target.health }} Health
                         </div>
-                        <div :style="{'background': getGradient(target.hpLeft ? target.hpLeft : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
+                        <div :style="{'background': getGradient(target.hpLeftPercent ? target.hpLeftPercent : 0), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
                         </div>
                         <div class="small" style="text-align:center;">
-                            {{ target.hpLeft ? target.hpLeft : 0 }}% remaining
+                            {{ target.hpLeftPercent ? target.hpLeftPercent : 0 }}% remaining
                         </div>
                     </div>
                     <div v-if="!wvw" class="mb-2 text" :class="resultStatus.class">

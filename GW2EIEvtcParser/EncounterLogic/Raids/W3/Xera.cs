@@ -276,7 +276,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Xera not found");
                 }
-                mainTarget.SetManualHealth(24085950);
+                mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
+                {
+                    (22611300, 100),
+                    (25560600, 50)
+                });
             }
         }
 
