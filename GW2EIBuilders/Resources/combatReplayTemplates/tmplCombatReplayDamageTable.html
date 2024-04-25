@@ -32,7 +32,7 @@
                             v-show="isInRowPage(rowIndex)" @click="select(row.player)"
                             @mousedown="startSelect"
                             style="cursor: pointer;">
-                            <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession">
+                            <td :class="getBodyClass('Prof')" :title="row.player.profession">
                                 <img :src="row.player.icon" :alt="row.player.profession" class="icon">
                                 <span style="display:none">
                                     {{row.player.profession}}
