@@ -68,10 +68,10 @@
                 <tbody>
                     <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row"
                         :class="{active: event.actor.id === selectedplayerid}" @click="selectMechanic(event)">
-                        <td>{{(event.time / 1000).toFixed(2)}}s</td>
-                        <td class="text-left" :title="event.mechanic.name">{{event.mechanic.shortName}}</td>
+                        <td :data-original-title="'Timestamp'">{{(event.time / 1000).toFixed(2)}}s</td>
+                        <td class="text-left" :data-original-title="event.mechanic.name">{{event.mechanic.shortName}}</td>
                         <td class="text-left">
-                            <span class="ellipsis" :title="event.actor.name">
+                            <span class="ellipsis" :data-original-title="event.actor.name">
                                 {{event.actor.name}}
                             </span>
                         </td>
