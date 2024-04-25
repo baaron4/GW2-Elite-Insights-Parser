@@ -20,7 +20,7 @@
                             </th>
                             <th v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)"
                                 class="damage-cr-cell" :class="getHeaderClass('Target', colIndex)" @click="sortBy('Target', colIndex)">
-                                <span class="ellipsis" :title="col.name">
+                                <span class="ellipsis" :data-original-title="col.name">
                                     {{col.name}}
                                 </span>
                             </th>

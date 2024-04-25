@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-column justify-content-center align-items-center">
-        <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select">
-            <h6 class="actor-shorten-cr text-center" :title="target.name + ' - ' + target.health + ' health'">
+        <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select" :title="target.name + ' - ' + target.health + ' health'">
+            <h6 class="actor-shorten-cr text-center">
                 <img v-for="(marker, index) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
                 <img :src="target.icon" height="18" width="18"/>
                 {{target.name}}
