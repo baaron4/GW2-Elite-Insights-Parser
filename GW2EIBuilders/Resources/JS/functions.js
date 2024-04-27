@@ -558,11 +558,19 @@ function getActorGraphLayout(images, color, hasBuffs) {
             nticks: 10,
         },
         yaxis3: {
-            title: 'DPS',
+            title: 'Outgoing',
+            domain: hasBuffs ? [0.68, 1.0] : [0.23, 1.0],
             color: color,
-            tickformat: ",d",
             gridcolor: color,
-            domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0]
+            tickformat: ",d",
+        },
+        yaxis5: {
+            title: 'Incoming',
+            domain: hasBuffs ? [0.55, 0.67] : [0.1, 0.22],
+            color: color,
+            gridcolor: color,
+            tickformat: ",d",
+            nticks: 2,
         },
         images: images,
         font: {

@@ -31,6 +31,10 @@
                     this.layout.yaxis2.color = textColor;
                     this.layout.yaxis3.gridcolor = textColor;
                     this.layout.yaxis3.color = textColor;
+                    this.layout.yaxis4.gridcolor = textColor;
+                    this.layout.yaxis4.color = textColor;
+                    this.layout.yaxis5.gridcolor = textColor;
+                    this.layout.yaxis5.color = textColor;
                     this.layout.xaxis.gridcolor = textColor;
                     this.layout.xaxis.color = textColor;
                     this.layout.font.color = textColor;
@@ -62,9 +66,9 @@
                     shape: 'spline',
                     color: this.player.colTotal,
                 },
-                yaxis: 'y3',
+                yaxis: 'y5',
                 hoverinfo: 'name+y+x',
-                name: 'Taken'
+                name: 'Taken',
             });
             if (!logData.targetless) {
                 this.data.push({
@@ -167,7 +171,7 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
+                //this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
                 this.data[this.playerOffset].y = data[3];
