@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -23,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             Positions.Add((x, y, z, (float)angle, (float)opacity, time));
         }
 
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             return new MovingPlatformDecorationCombatReplayDescription(this, map);
         }

@@ -258,8 +258,8 @@ class Animator {
                         throw "Unknown decoration type";
                 }
                 if (decoration) {
-                    if (actor.owner) {
-                        decoration.usingSkillMode(actor.owner, actor.category);
+                    if (actor.skillMode) {
+                        decoration.usingSkillMode(actor.skillMode.owner, actor.skillMode.category);
                         this.skillMechanicActorData.push(decoration);
                     } else {
                         this.mechanicActorData.push(decoration);

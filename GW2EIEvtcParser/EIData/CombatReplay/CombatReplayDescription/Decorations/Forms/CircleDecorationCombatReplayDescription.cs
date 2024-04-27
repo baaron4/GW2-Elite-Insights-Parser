@@ -1,11 +1,14 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using GW2EIEvtcParser.ParsedData;
+using System.Collections.Generic;
+
+namespace GW2EIEvtcParser.EIData
 {
     public class CircleDecorationCombatReplayDescription : FormDecorationCombatReplayDescription
     {
         public uint Radius { get; }
         public uint MinRadius { get; }
 
-        internal CircleDecorationCombatReplayDescription(ParsedEvtcLog log, CircleDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal CircleDecorationCombatReplayDescription(ParsedEvtcLog log, CircleDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
         {
             Type = "Circle";
             Radius = decoration.Radius;

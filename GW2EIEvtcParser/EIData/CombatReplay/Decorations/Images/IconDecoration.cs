@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -32,9 +33,9 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            return new IconDecorationCombatReplayDescription(log, this, map);
+            return new IconDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
         }
     }
 }

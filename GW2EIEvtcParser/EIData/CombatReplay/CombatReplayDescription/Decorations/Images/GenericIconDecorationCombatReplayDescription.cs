@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -8,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
         public uint PixelSize { get; }
         public uint WorldSize { get; }
 
-        internal GenericIconDecorationCombatReplayDescription(ParsedEvtcLog log, GenericIconDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal GenericIconDecorationCombatReplayDescription(ParsedEvtcLog log, GenericIconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
         {
             Image = decoration.Image;
             PixelSize = decoration.PixelSize;
