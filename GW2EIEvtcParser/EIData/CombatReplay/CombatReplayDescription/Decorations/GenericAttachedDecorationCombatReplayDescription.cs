@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
             public long SkillID { get; internal set; }
             public bool IsBuff { get; internal set; }
         }
-        SkillModeDescription SkillMode { get; } = null;
+        public object SkillMode { get; } = null;
 
         internal GenericAttachedDecorationCombatReplayDescription(ParsedEvtcLog log, GenericAttachedDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(decoration)
         {
@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
             IsMechanicOrSkill = true;
             if (decoration.SkillMode != null)
             {
-                SkillMode = new SkillModeDescription
+                var skillModeDescription = new SkillModeDescription
                 {
                     Category = (uint)decoration.SkillMode.Category
                 };
@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
                     if (!usedBuffs.ContainsKey(buff.ID)) {
                         usedBuffs.Add(buff.ID, buff);
                     }
-                    SkillMode.IsBuff = true;
+                    skillModeDescription.IsBuff = true;
                 } 
                 else
                 {
@@ -45,12 +45,13 @@ namespace GW2EIEvtcParser.EIData
                     {
                         usedSkills.Add(skill.ID, skill);
                     }
-                    SkillMode.IsBuff = false;
+                    skillModeDescription.IsBuff = false;
                 }
                 if (decoration.SkillMode.Owner != null)
                 {
-                    SkillMode.Owner = decoration.SkillMode.Owner.GetConnectedTo(map, log);
+                    skillModeDescription.Owner = decoration.SkillMode.Owner.GetConnectedTo(map, log);
                 }
+                SkillMode = skillModeDescription;
             }
         }
     }
