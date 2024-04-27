@@ -60,9 +60,21 @@
                 },
                 yaxis: 'y3',
                 hoverinfo: 'name+y+x',
-                name: 'Total'
+                name: 'Received'
             });
-                this.data.push({
+            this.data.push({
+                x: this.phase.times,
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline',
+                    color: this.player.colCleave,
+                },
+                yaxis: 'y3',
+                hoverinfo: 'name+y+x',
+                name: 'Cleave'
+            });
+            this.data.push({
                 x: this.phase.times,
                 y: [],
                 mode: 'lines',
@@ -84,7 +96,7 @@
                 },
                 yaxis: 'y3',
                 hoverinfo: 'name+y+x',
-                name: 'Cleave'
+                name: 'Total'
             });
             this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
@@ -138,10 +150,11 @@
                 this.layout.yaxis3.title = healingGraphTypeEnumToString(this.graphhealingdata.graphmode, this.graphhealingdata.healingmode);
                 var res = this.data;
                 var data = this.computeHPSRelatedData();
-                this.data[this.playerOffset].y = data[0];
-                this.data[this.playerOffset + 1].y = data[1];
-                this.data[this.playerOffset + 2].y = data[2];
-                var offset = 3;
+                this.data[this.playerOffset].y = data[3];
+                this.data[this.playerOffset + 1].y = data[2];
+                this.data[this.playerOffset + 2].y = data[1];
+                this.data[this.playerOffset + 3].y = data[0];
+                var offset = 4;
                 for (var i = this.graphOffset; i < this.playerOffset; i++) {
                     this.data[i].y = data[offset++];
                 }
@@ -195,6 +208,7 @@
                 res.push(hpsData.playerHPS.total);
                 res.push(hpsData.playerHPS.target);
                 res.push(hpsData.playerHPS.cleave);
+                res.push(hpsData.playerHPS.taken);
                 for (var i = 0; i < this.graph.players.length; i++) {
                     if (logData.players[i].isFake) {
                         continue;
