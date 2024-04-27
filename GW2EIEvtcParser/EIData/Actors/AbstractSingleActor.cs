@@ -72,7 +72,12 @@ namespace GW2EIEvtcParser.EIData
             return Health;
         }
 
-        internal abstract void SetManualHealth(int health);
+        internal abstract void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null);
+
+        public virtual IReadOnlyList<(long hpValue, double percent)> GetHealthDistribution()
+        {
+            return null;
+        }
 
         internal abstract void OverrideName(string name);
 
@@ -180,6 +185,26 @@ namespace GW2EIEvtcParser.EIData
             return _graphHelper.GetCurrentHealthPercent(log, time);
         }
 
+        /// <summary>
+        /// Return the health value at requested %
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="currentHealthPercent"></param>
+        /// <returns></returns>
+        public abstract int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent);
+
+        /// <summary>
+        /// Return the health value at requested time
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public int GetCurrentHealth(ParsedEvtcLog log, long time)
+        {
+            var currentHPPercent = GetCurrentHealthPercent(log, time);
+            return GetCurrentHealth(log, currentHPPercent);
+        }
+
         public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {
             return _graphHelper.GetBreakbarPercentUpdates(log);
@@ -193,6 +218,27 @@ namespace GW2EIEvtcParser.EIData
         public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
         {
             return _graphHelper.GetCurrentBarrierPercent(log, time);
+        }
+
+        /// <summary>
+        /// Return the barrier value at requested %
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="currentBarrierPercent"></param>
+        /// <param name="time">Time at which to check for barrier. Barrier scales of the current maximum health of the actor and maximum health can change dynamically</param>
+        /// <returns></returns>
+        public abstract int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time);
+
+        /// <summary>
+        /// Return the barrier value at requested time
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time">Time at which to check for barrier. Barrier scales of the current maximum health of the actor and maximum health can change dynamically</param>
+        /// <returns></returns>
+        public int GetCurrentBarrier(ParsedEvtcLog log, long time)
+        {
+            var currentBarrierPercent = GetCurrentBarrierPercent(log, time);
+            return GetCurrentBarrier(log, currentBarrierPercent, time);
         }
 
         // Minions

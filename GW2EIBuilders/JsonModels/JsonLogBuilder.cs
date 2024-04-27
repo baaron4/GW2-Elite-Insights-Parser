@@ -18,7 +18,7 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonLogBuilder
     {
-        internal static SkillDesc BuildSkillDesc(SkillItem skill, ParsedEvtcLog log)
+        private static SkillDesc BuildSkillDesc(SkillItem skill, ParsedEvtcLog log)
         {
             var skillDesc = new SkillDesc
             {
@@ -37,7 +37,7 @@ namespace GW2EIBuilders.JsonModels
             return skillDesc;
         }
 
-        internal static BuffDesc BuildBuffDesc(Buff buff, ParsedEvtcLog log)
+        private static BuffDesc BuildBuffDesc(Buff buff, ParsedEvtcLog log)
         {
             var buffDesc = new BuffDesc
             {
@@ -74,7 +74,7 @@ namespace GW2EIBuilders.JsonModels
             return buffDesc;
         }
 
-        internal static DamageModDesc BuildDamageModDesc(DamageModifier damageModifier)
+        private static DamageModDesc BuildDamageModDesc(DamageModifier damageModifier)
         {
             var damageModDesc = new DamageModDesc
             {
@@ -123,9 +123,12 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
             var personalDamageMods = new Dictionary<string, HashSet<long>>();
-            var skillMap = new Dictionary<string, SkillDesc>();
-            var buffMap = new Dictionary<string, BuffDesc>();
-            var damageModMap = new Dictionary<string, DamageModDesc>();
+            var skillMap = new Dictionary<long, SkillItem>();
+            var skillDescs = new Dictionary<string, SkillDesc>();
+            var buffMap = new Dictionary<long, Buff>();
+            var buffDescs = new Dictionary<string, BuffDesc>();
+            var damageModMap = new Dictionary<long, DamageModifier>();
+            var damageModDesc = new Dictionary<string, DamageModDesc>();
 
             if (log.FightData.Logic.GetInstanceBuffs(log).Any())
             {
@@ -133,9 +136,9 @@ namespace GW2EIBuilders.JsonModels
                 var presentInstanceBuffs = new List<long[]>();
                 foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
                 {
-                    if (!buffMap.ContainsKey("b" + instanceBuff.ID))
+                    if (!buffMap.ContainsKey(instanceBuff.ID))
                     {
-                        buffMap["b" + instanceBuff.ID] = BuildBuffDesc(instanceBuff, log);
+                        buffMap[instanceBuff.ID] = instanceBuff;
                     }
                     if (instanceBuff.Source == ParserHelper.Source.FractalInstability)
                     {
@@ -196,9 +199,21 @@ namespace GW2EIBuilders.JsonModels
             //
             jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
             jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
-            jsonLog.SkillMap = skillMap;
-            jsonLog.BuffMap = buffMap;
-            jsonLog.DamageModMap = damageModMap;
+            foreach (KeyValuePair<long, SkillItem> pair in skillMap)
+            {
+                skillDescs["s" + pair.Key] = BuildSkillDesc(pair.Value, log);
+            }
+            jsonLog.SkillMap = skillDescs;
+            foreach (KeyValuePair<long, Buff> pair in buffMap)
+            {
+                buffDescs["b" + pair.Key] = BuildBuffDesc(pair.Value, log);
+            }
+            jsonLog.BuffMap = buffDescs;
+            foreach (KeyValuePair<long, DamageModifier> pair in damageModMap)
+            {
+                damageModDesc["d" + pair.Key] = BuildDamageModDesc(pair.Value);
+            }
+            jsonLog.DamageModMap = damageModDesc;
             //
             if (log.CanCombatReplay)
             {

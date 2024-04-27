@@ -17,18 +17,20 @@ namespace GW2EIBuilders.JsonModels.JsonActors
     internal static class JsonNPCBuilder
     {
       
-        public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonNPC = new JsonNPC();
-            JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillDesc, buffDesc);
+            JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap);
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             //
             jsonNPC.Id = npc.ID;
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(npc.AgentItem);
+            IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(npc.AgentItem);
             jsonNPC.FirstAware = (int)npc.FirstAware;
             jsonNPC.LastAware = (int)npc.LastAware;
             jsonNPC.EnemyPlayer = npc is PlayerNonSquad;
             double hpLeft = 100.0;
+            double barrierLeft = 0.0;
             if (log.FightData.Success)
             {
                 hpLeft = 0;
@@ -39,11 +41,17 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 {
                     hpLeft = hpUpdates.Last().HPPercent;
                 }
+                if (barrierUpdates.Count > 0)
+                {
+                    barrierLeft = barrierUpdates.Last().BarrierPercent;
+                }
             }
             jsonNPC.HealthPercentBurned = 100.0 - hpLeft;
-            jsonNPC.FinalHealth = (int)Math.Round(jsonNPC.TotalHealth * hpLeft / 100.0);
+            jsonNPC.BarrierPercent = barrierLeft;
+            jsonNPC.FinalHealth = npc.GetCurrentHealth(log, hpLeft);
+            jsonNPC.FinalBarrier = npc.GetCurrentBarrier(log, barrierLeft, log.FightData.FightEnd);
             //
-            jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffDesc);
+            jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffMap);
             // Breakbar
             if (settings.RawFormatTimelineArrays)
             {
@@ -52,7 +60,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             return jsonNPC;
         }
 
-        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap)
         {
             var res = new List<JsonBuffsUptime>();
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
@@ -79,7 +87,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                         data.Add(value);
                     }
                 }
-                res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, buffDesc));
+                res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, buffMap));
             }
             return res;
         }

@@ -112,8 +112,7 @@ namespace GW2EIEvtcParser.EIData
                         {
                             commanderMarkerStates.Clear();
                             commanderMarkerStates.Add(new GenericSegment<string>(player.FirstAware, log.FightData.LogEnd, MarkerGUIDs.BlueCommanderTag));
-                            CommanderStates = commanderMarkerStates;
-                            return CommanderStates;
+                            break;
                         }
                     }
                     if (commanderMarkerStates.Count > 0)

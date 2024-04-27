@@ -13,9 +13,9 @@ namespace GW2EIEvtcParser.EIData
 
         //
 
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            return new ActorOrientationDecorationCombatReplayDescription(log, this, map);
+            return new ActorOrientationDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
         }
 
         public override GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)

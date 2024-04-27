@@ -1,13 +1,13 @@
 <template>
     <div class="d-flex align-items-center actor-rotation">
         <div v-if="rotation.current">
-            <img class="icon-ll" :class="getIconClass(rotation.current)" :src="rotation.current.skill.icon" :data-original-title="getTooltip(rotation.current)"/>
+            <img class="icon-ll" :class="getIconClass(rotation.current)" :src="rotation.current.skill.icon" :title="getTooltip(rotation.current)"/>
         </div>
         <div v-else class="empty-icon-ll">
 
         </div>
         <div v-for="next in rotation.nexts">
-            <img class="icon-l" :class="getIconClass(next)" :src="next.skill.icon" :data-original-title="getTooltip(next)"/>
+            <img class="icon-l" :class="getIconClass(next)" :src="next.skill.icon" :title="getTooltip(next)"/>
         </div>
     </div>
 </template>

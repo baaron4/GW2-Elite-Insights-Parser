@@ -1,6 +1,6 @@
 <template>
-    <div class="player-status" :style="{'background': getHPGradient(time, status)}" @click="select">
-        <h6 class="actor-shorten-cr text-center" :title="player.name + ' - ' + player.acc">     
+    <div class="player-status" :style="{'background': getHPGradient(time, status)}" @click="select" :data-original-title="player.name + ' - ' + player.acc">
+        <h6 class="actor-shorten-cr text-center">     
             <img v-for="(marker, index) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
             <img :src="player.icon" :alt="player.profession" height="16" width="16">
             {{player.name}}

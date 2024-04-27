@@ -674,19 +674,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             FightData.EncounterMode cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
-            
-            if (_deimos10PercentTime > 0)
+
+            // Deimos gains additional health during the last 10% so the max-health needs to be corrected
+            // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
+            if (cmStatus == FightData.EncounterMode.CM)
             {
-                // Deimos gains additional health during the last 10% so the max-health needs to be corrected
-                // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
-                if (cmStatus == FightData.EncounterMode.CM)
-                {
-                    target.SetManualHealth(42804900);
-                }
-                else
-                {
-                    target.SetManualHealth(37388210);
-                }
+                target.SetManualHealth(42804900, new List<(long hpValue, double percent)>()
+                    {
+                        (42000000 , 100),
+                        (50049000, 10)
+                    });
+            }
+            else
+            {
+                target.SetManualHealth(37388210, new List<(long hpValue, double percent)>()
+                    {
+                        (35981456 , 100),
+                        (50049000, 10)
+                    });
             }
 
             return cmStatus;
