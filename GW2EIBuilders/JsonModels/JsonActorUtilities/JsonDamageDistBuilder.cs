@@ -14,32 +14,32 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
     /// </summary>
     internal static class JsonDamageDistBuilder
     {
-        private static JsonDamageDist BuildJsonDamageDist(long id, List<AbstractHealthDamageEvent> dmList, List<AbstractBreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static JsonDamageDist BuildJsonDamageDist(long id, List<AbstractHealthDamageEvent> dmList, List<AbstractBreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonDamageDist = new JsonDamageDist();
             jsonDamageDist.IndirectDamage = dmList.Exists(x => x is NonDirectHealthDamageEvent) || brList.Exists(x => x is NonDirectBreakbarDamageEvent);
             if (jsonDamageDist.IndirectDamage)
             {
-                if (!buffDesc.ContainsKey("b" + id))
+                if (!buffMap.ContainsKey(id))
                 {
                     if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
                     {
-                        buffDesc["b" + id] = JsonLogBuilder.BuildBuffDesc(buff, log);
+                        buffMap[id] = buff;
                     }
                     else
                     {
                         SkillItem skill = log.SkillData.Get(id);
-                        var auxBoon = new Buff(skill.Name, id, skill.Icon);
-                        buffDesc["b" + id] = JsonLogBuilder.BuildBuffDesc(auxBoon, log);
+                        var auxBuff = new Buff(skill.Name, id, skill.Icon);
+                        buffMap[id] = auxBuff;
                     }
                 }
             }
             else
             {
-                if (!skillDesc.ContainsKey("s" + id))
+                if (!skillMap.ContainsKey(id))
                 {
                     SkillItem skill = log.SkillData.Get(id);
-                    skillDesc["s" + id] = JsonLogBuilder.BuildSkillDesc(skill, log);
+                    skillMap[id] = skill;
                 }
             }
             jsonDamageDist.Id = id;
@@ -79,7 +79,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             return jsonDamageDist;
         }
 
-        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, Dictionary<long, List<AbstractBreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, Dictionary<long, List<AbstractBreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var res = new List<JsonDamageDist>();
             foreach (KeyValuePair<long, List<AbstractHealthDamageEvent>> pair in dlsByID)
@@ -88,7 +88,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 {
                     brls = new List<AbstractBreakbarDamageEvent>();
                 }
-                res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, log, skillDesc, buffDesc));
+                res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, log, skillMap, buffMap));
             }
             foreach (KeyValuePair<long, List<AbstractBreakbarDamageEvent>> pair in brlsByID)
             {
@@ -96,7 +96,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 {
                     continue;
                 }
-                res.Add(BuildJsonDamageDist(pair.Key, new List<AbstractHealthDamageEvent>(), pair.Value, log, skillDesc, buffDesc));
+                res.Add(BuildJsonDamageDist(pair.Key, new List<AbstractHealthDamageEvent>(), pair.Value, log, skillMap, buffMap));
             }
             return res;
         }

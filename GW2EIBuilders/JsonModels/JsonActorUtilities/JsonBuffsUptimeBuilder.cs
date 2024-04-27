@@ -2,6 +2,7 @@
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonBuffsUptime;
@@ -40,16 +41,16 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
         }
 
 
-        public static JsonBuffsUptime BuildJsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public static JsonBuffsUptime BuildJsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<long, Buff> buffMap)
         {
             var jsonBuffsUptime = new JsonBuffsUptime
             {
                 Id = buffID,
                 BuffData = buffData
             };
-            if (!buffDesc.ContainsKey("b" + buffID))
+            if (!buffMap.ContainsKey(buffID))
             {
-                buffDesc["b" + buffID] = JsonLogBuilder.BuildBuffDesc(log.Buffs.BuffsByIds[buffID], log);
+                buffMap[buffID] = log.Buffs.BuffsByIds[buffID];
             }
             if (settings.RawFormatTimelineArrays)
             {

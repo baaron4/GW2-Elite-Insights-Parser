@@ -17,10 +17,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
     internal static class JsonNPCBuilder
     {
       
-        public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonNPC = new JsonNPC();
-            JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillDesc, buffDesc);
+            JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap);
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             //
             jsonNPC.Id = npc.ID;
@@ -51,7 +51,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             jsonNPC.FinalHealth = npc.GetCurrentHealth(log, hpLeft);
             jsonNPC.FinalBarrier = npc.GetCurrentBarrier(log, barrierLeft, log.FightData.FightEnd);
             //
-            jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffDesc);
+            jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffMap);
             // Breakbar
             if (settings.RawFormatTimelineArrays)
             {
@@ -60,7 +60,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             return jsonNPC;
         }
 
-        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap)
         {
             var res = new List<JsonBuffsUptime>();
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
@@ -87,7 +87,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                         data.Add(value);
                     }
                 }
-                res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, buffDesc));
+                res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, buffMap));
             }
             return res;
         }
