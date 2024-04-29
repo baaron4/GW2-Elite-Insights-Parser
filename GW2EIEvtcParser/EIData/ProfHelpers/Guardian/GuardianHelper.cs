@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -202,10 +203,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, RingOfWarding, SkillModeCategory.CC);
                 foreach (EffectEvent effect in ringOfWardings)
                 {
-                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRingOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddGenericCircleDecoration(log, replay, effect, color, skill, 5000, 180, ParserIcons.EffectRingOfWarding);
                 }
             }
             // Line of Warding (Staff 5)
@@ -252,10 +250,7 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, ShieldOfTheAvenger, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in shieldOfTheAvengers)
                 {
-                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShieldOfTheAvenger, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddGenericCircleDecoration(log, replay, effect, color, skill, 5000, 180, ParserIcons.EffectShieldOfTheAvenger);
                 }
             }
 
@@ -271,6 +266,90 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSignetOfMercy, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
+
+            // Hunter's Ward
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DragonhunterHuntersWardCage, out IReadOnlyList<EffectEvent> huntersWards))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, HuntersWard, SkillModeCategory.CC);
+                foreach (EffectEvent effect in huntersWards)
+                {
+                    long duration = log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW ? 3000 : 5000;
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
+                    var connector = new PositionConnector(effect.Position);
+                    replay.Decorations.Add(new CircleDecoration(140, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill)); // radius approximation
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHuntersWard, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+
+            // Symbol of Energy
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DragonhunterSymbolOfEnergy, out IReadOnlyList<EffectEvent> symbolsOfEnergy))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfEnergy, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in symbolsOfEnergy)
+                {
+                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfEnergy);
+                }
+            }
+
+            // Symbol of Vengeance
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandSymbolOfVengeance1, out IReadOnlyList<EffectEvent> symbolsOfVengeance))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfVengeance, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC); // CC when traited
+                foreach(EffectEvent effect in symbolsOfVengeance)
+                {
+                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfVengeance);
+                }
+            }
+
+            // Symbol of Punishment
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfPunishment1, out IReadOnlyList<EffectEvent> symbolsOfPunishment))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfPunishment, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in symbolsOfPunishment)
+                {
+                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfPunishment);
+                }
+            }
+
+            // Symbol of Blades
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBlades, out IReadOnlyList<EffectEvent> symbolsOfBlades))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBlades, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in symbolsOfBlades)
+                {
+                    AddGenericCircleDecoration(log, replay, effect, color, skill, 5000, 180, ParserIcons.EffectSymbolOfBlades);
+                }
+            }
+
+            // Symbol of Resolution
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfResolution, out IReadOnlyList<EffectEvent> symbolsOfResolution))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in symbolsOfResolution)
+                {
+                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfResolution);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds generic circle decorations.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="effect">The mine effect.</param>
+        /// <param name="color">The specialization color.</param>
+        /// <param name="skill">The source skill.</param>
+        /// <param name="icon">The skill icon.</param>
+        /// <param name="effectDuration">Effect duration.</param>
+        /// <param name="radius">Circle radius.</param>
+        /// <param name="icon">The skill icon.</param>
+        private static void AddGenericCircleDecoration(ParsedEvtcLog log, CombatReplay replay, EffectEvent effect, Color color, SkillModeDescriptor skill, long effectDuration, uint radius, string icon)
+        {
+            (long start, long end) lifespan = effect.ComputeLifespan(log, effectDuration);
+            var connector = new PositionConnector(effect.Position);
+            replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+            replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
         }
     }
 }

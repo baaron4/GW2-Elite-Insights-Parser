@@ -292,7 +292,7 @@
         public const long HolyStrike = 9140;
         public const long SymbolOfSwiftness = 9143;
         public const long LineOfWarding = 9144;
-        public const long SymbolOfWrath = 9146;
+        public const long SymbolOfWrath_SymbolOfResolution = 9146;
         public const long BindingBlade = 9148;
         public const long SignetOfJudgmentSkill = 9120;
         public const long HoldTheLine = 9152;
@@ -1522,6 +1522,7 @@
         public const long SoothingDetonation = 30564;
         public const long RapidRegeneration = 30581;
         public const long Vault = 30597;
+        public const long HuntersWard = 30628;
         public const long FeelTheBurn = 30662;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;

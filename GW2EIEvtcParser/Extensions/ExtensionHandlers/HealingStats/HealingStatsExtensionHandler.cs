@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.Extensions
             SymbolOfFaith,
             FaithfulStrike,
             SymbolOfSwiftness,
-            SymbolOfWrath,
+            SymbolOfWrath_SymbolOfResolution,
             SymbolOfProtection,
             SymbolOfSpears,
             SymbolOfLight,

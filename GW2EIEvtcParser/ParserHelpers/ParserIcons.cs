@@ -617,6 +617,12 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectThrowMine = "https://i.imgur.com/q9Z4xdI.png";
         internal const string EffectMineField = "https://i.imgur.com/Miy0H2G.png";
         internal const string EffectDetonateThrowMineOrMineField = "https://i.imgur.com/0Jbtf2q.png";
+        internal const string EffectHuntersWard = "https://i.imgur.com/Di7OvVr.png";
+        internal const string EffectSymbolOfEnergy = "https://i.imgur.com/tPaAF8S.png";
+        internal const string EffectSymbolOfVengeance = "https://i.imgur.com/1niDRW8.png";
+        internal const string EffectSymbolOfResolution = "https://i.imgur.com/Vy3948S.png";
+        internal const string EffectSymbolOfPunishment = "https://i.imgur.com/cSoxJvd.png";
+        internal const string EffectSymbolOfBlades = "https://i.imgur.com/4vyfoTs.png";
         #endregion
 
         #region Marker

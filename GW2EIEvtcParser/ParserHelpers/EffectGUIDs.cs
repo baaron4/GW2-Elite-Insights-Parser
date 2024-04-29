@@ -221,6 +221,11 @@ namespace GW2EIEvtcParser
         public const string GuardianShieldOfTheAvenger = "0885D553A0A0A341B4C31B7964243407";
         public const string GuardianSignetOfMercyLightTray = "E9D10435E997D846B736B62EDCC6B4BD"; // Duration 2000 - light ray at the start of the cast
         public const string GuardianSignetOfMercyEnd = "61ED02C4AA44C0429790A79E8EFCA7CC"; // Duration 0 - end cast
+        public const string GuardianSymbolOfPunishment1 = "D20225BED809BE4D86FFE87D6C5AD2B0"; // duration 5000
+        public const string GuardianSymbolOfPunishment2 = "5F56361FEE7463448CA988CE773F4F63"; // duration 6000 - has effect end after 5000
+        public const string GuardianSymbolOfPunishmentOrb = "A8C650860481DD48B1B41F76B3054576"; // duration 500
+        public const string GuardianSymbolOfResolution = "98C9834C6381204A85DC67C375D135E4"; // duration 4000
+        public const string GuardianSymbolOfBlades = "FA37E0B77272314AA1ADCFF824F24C27"; // duration 5000
         public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
@@ -237,9 +242,14 @@ namespace GW2EIEvtcParser
         public const string FirebrandTomeOfJusticeOpen = "D573910FDB59434ABF6E7433061995BD";
         public const string FirebrandTomeOfResolveOpen = "39C1BD24ADA04C4788A99C7B0FD9B53F";
         public const string FirebrandTomeOfCourageOpen = "9EE3EAFEF333BE44AD8A7D234A1C3899";
+        public const string FirebrandSymbolOfVengeance1 = "9E41C2BEFD43D64299C41FD6EFB9ECBE";
+        public const string FirebrandSymbolOfVengeance2 = "0B22F631EBB04341A17FDC57431385EB";
+        public const string FirebrandSymbolOfVengeance3 = "60C2DD0478450F4B81BAA6486227872A";
         public const string DragonhunterTrapEffect = "CCF55B3EAA4D514BBB8340E01B6A1DEC";
         public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
+        public const string DragonhunterHuntersWardCage = "F70A6157503537478331C8F82C0AB76E";
+        public const string DragonhunterSymbolOfEnergy = "8493CB203B40E04BAE5DC6F141B40743";
         #endregion
         #region Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
