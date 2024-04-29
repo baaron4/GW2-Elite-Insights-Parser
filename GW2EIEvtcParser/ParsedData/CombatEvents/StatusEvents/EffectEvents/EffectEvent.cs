@@ -175,12 +175,5 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return (start, end);
         }
-
-        //public bool CanDynamicEndTime()
-        //{
-        //    return HasDynamicEndTime;
-        //}
-
-        //public long 
     }
 }
