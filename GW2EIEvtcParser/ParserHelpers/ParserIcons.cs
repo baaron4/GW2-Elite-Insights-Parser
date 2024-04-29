@@ -614,6 +614,9 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectEternitysRequiem = "https://i.imgur.com/weWJdsh.png";
         internal const string EffectCitadelBombardment = "https://i.imgur.com/IUZceLh.png";
         internal const string EffectCitadelBombardmentPortal = "https://i.imgur.com/sYUZpkj.png";
+        internal const string EffectThrowMine = "https://i.imgur.com/q9Z4xdI.png";
+        internal const string EffectMineField = "https://i.imgur.com/Miy0H2G.png";
+        internal const string EffectDetonateThrowMineOrMineField = "https://i.imgur.com/0Jbtf2q.png";
         #endregion
 
         #region Marker

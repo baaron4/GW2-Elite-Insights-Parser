@@ -244,9 +244,11 @@ namespace GW2EIEvtcParser
         #region Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
-        public const string EngineerMineInactive = "2EE26B8656BD424B9BF9A7EA4CB0AA06";
-        public const string EngineerMineExplode1 = "885B7AAA68F09E48A926BFFE488DB5AD";
-        public const string EngineerMineExplode2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD";
+        public const string EngineerThrowMineInactive1 = "2EE26B8656BD424B9BF9A7EA4CB0AA06"; // infinite duration
+        public const string EngineerThrowMineInactive2 = "67649A4CB18C5C4A8D48ACFCF50B21CE"; // 0 duration
+        public const string EngineerMineField = "997750CA2636154E9FFBFEE4AA51A970"; // 0 duration and infinite duration, both logged at the same time
+        public const string EngineerMineExplosion1 = "885B7AAA68F09E48A926BFFE488DB5AD"; // 0 duration - Throw Mine and Mine Field use this effect
+        public const string EngineerMineExplosion2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD"; // 0 duration - Throw Mine and Mine Field use this effect
         public const string ScrapperThunderclap = "8C8E0AB8328CC1418F9A815E022E20B6"; // has owner, 5s duration
         public const string ScrapperThunderclapSpawn = "039F8B46E5595C4E9C2D52AA58FDD8B0"; // has owner, 1s duration
         public const string ScrapperFunctionGyro = "B4CA602E8A849F47BFC105C740005162"; // has owner, 5s duration

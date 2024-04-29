@@ -53,6 +53,7 @@
         public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
         public const long NumberOfRangerPets = -35;
         public const long AchievementEligibilityApathetic = -36;
+        public const long DetonateThrowMineOrMineField = -37;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
@@ -254,6 +255,12 @@
         public const long RocketTurretDamage = 6108;
         public const long MagneticInversion = 6126;
         public const long OverchargedShot = 6154;
+        public const long POV_ThrowMineBuff = 6160;
+        public const long ThrowMine = 6161;
+        public const long DetonateThrowMine = 6162;
+        public const long MineField = 6164;
+        public const long POV_MineFieldBuff = 6165;
+        public const long DetonateMineField = 6166;
         public const long SupplyCrateUW = 6183;
         public const long HaresSpeedSkill = 6221;
         public const long WvWSpendingSupplies = 6852;
