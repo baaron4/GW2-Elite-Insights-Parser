@@ -319,11 +319,11 @@ namespace GW2EIEvtcParser.EIData
                 {
                     foreach (EffectEvent effect in meteorShowersMeteors)
                     {
-                        (long start, long end) lifespan = effect.ComputeLifespan(log, 1330);
+                        (long start, long end) = effect.ComputeLifespan(log, 1330);
                         var connector = new PositionConnector(effect.Position);
                         // -750 to make the decoration faster than in game
-                        replay.Decorations.Add(new CircleDecoration(180, (lifespan.start - 750, lifespan.end), color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                        replay.Decorations.Add(new CircleDecoration(180, (lifespan.start - 750, lifespan.end), color, 0.2, connector).UsingFilled(false).UsingGrowingEnd(lifespan.end, true).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(180, (end - 750, end), color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(180, (end - 750, end), color, 0.2, connector).UsingFilled(false).UsingGrowingEnd(end, true).UsingSkillMode(skill));
                     }
                 }
             }
