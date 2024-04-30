@@ -846,7 +846,8 @@ namespace GW2EIEvtcParser.ParsedData
             { VolleyWvW, "https://wiki.guildwars2.com/images/5/5d/Volley.png" },
             { BleedingShotWvW, "https://wiki.guildwars2.com/images/9/97/Fierce_Shot.png" },
             { BolaTossWvW, "https://wiki.guildwars2.com/images/7/7e/Bola_Shot.png" },
-            { MagebaneTether, BuffImages.MagebaneTether },
+            { MagebaneTetherBuff, BuffImages.MagebaneTether },
+            { MagebaneTetherSkill, BuffImages.MagebaneTether },
             { EnchantmentCollapse, "https://wiki.guildwars2.com/images/7/7f/Enchantment_Collapse.png" },
             { LineBreakerHeal, "https://wiki.guildwars2.com/images/0/0e/Line_Breaker.png" },
             #endregion WarriorIcons

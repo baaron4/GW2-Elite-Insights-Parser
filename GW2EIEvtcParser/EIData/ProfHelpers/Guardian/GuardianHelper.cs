@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using GW2EIEvtcParser.ParserHelpers;
@@ -203,7 +204,8 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, RingOfWarding, SkillModeCategory.CC);
                 foreach (EffectEvent effect in ringOfWardings)
                 {
-                    AddGenericCircleDecoration(log, replay, effect, color, skill, 5000, 180, ParserIcons.EffectRingOfWarding);
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectRingOfWarding);
                 }
             }
             // Line of Warding (Staff 5)
@@ -239,9 +241,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in sanctuaries)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000); // 7s with trait
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSanctuary, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectSanctuary);
                 }
             }
             // Shield of the Avenger
@@ -250,7 +250,8 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, ShieldOfTheAvenger, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in shieldOfTheAvengers)
                 {
-                    AddGenericCircleDecoration(log, replay, effect, color, skill, 5000, 180, ParserIcons.EffectShieldOfTheAvenger);
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectShieldOfTheAvenger);
                 }
             }
 
@@ -261,9 +262,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in signetOfMercy)
                 {
                     (long, long) lifespan = (effect.Time, effect.Time + 500);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSignetOfMercy, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSignetOfMercy);
                 }
             }
 
@@ -275,9 +274,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     long duration = log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW ? 3000 : 5000;
                     (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(140, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill)); // radius approximation
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHuntersWard, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 140, ParserIcons.EffectHuntersWard); // radius approximation
                 }
             }
 
@@ -287,7 +284,8 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfEnergy, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfEnergy)
                 {
-                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfEnergy);
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfEnergy);
                 }
             }
 
@@ -297,7 +295,8 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfVengeance, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC); // CC when traited
                 foreach(EffectEvent effect in symbolsOfVengeance)
                 {
-                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfVengeance);
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfVengeance);
                 }
             }
 
@@ -307,7 +306,8 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfPunishment, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfPunishment)
                 {
-                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfPunishment);
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfPunishment);
                 }
             }
 
@@ -317,7 +317,8 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBlades, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfBlades)
                 {
-                    AddGenericCircleDecoration(log, replay, effect, color, skill, 5000, 180, ParserIcons.EffectSymbolOfBlades);
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfBlades);
                 }
             }
 
@@ -327,29 +328,10 @@ namespace GW2EIEvtcParser.EIData
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfResolution)
                 {
-                    AddGenericCircleDecoration(log, replay, effect, color, skill, 4000, 180, ParserIcons.EffectSymbolOfResolution);
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfResolution);
                 }
             }
-        }
-
-        /// <summary>
-        /// Adds generic circle decorations.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="replay">The Combat Replay.</param>
-        /// <param name="effect">The mine effect.</param>
-        /// <param name="color">The specialization color.</param>
-        /// <param name="skill">The source skill.</param>
-        /// <param name="icon">The skill icon.</param>
-        /// <param name="effectDuration">Effect duration.</param>
-        /// <param name="radius">Circle radius.</param>
-        /// <param name="icon">The skill icon.</param>
-        private static void AddGenericCircleDecoration(ParsedEvtcLog log, CombatReplay replay, EffectEvent effect, Color color, SkillModeDescriptor skill, long effectDuration, uint radius, string icon)
-        {
-            (long start, long end) lifespan = effect.ComputeLifespan(log, effectDuration);
-            var connector = new PositionConnector(effect.Position);
-            replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-            replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
         }
     }
 }

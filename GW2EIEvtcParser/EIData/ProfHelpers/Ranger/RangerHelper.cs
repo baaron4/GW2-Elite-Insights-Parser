@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -332,20 +333,20 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
             // entangle works fine already
-            HashSet<AgentItem> jacarandaEmbraces = ProfHelper.GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
-            HashSet<AgentItem> blackHoles = ProfHelper.GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
+            HashSet<AgentItem> jacarandaEmbraces = GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
+            HashSet<AgentItem> blackHoles = GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
             var rangers = players.Where(x => x.BaseSpec == Spec.Ranger).ToList();
             // if only one ranger, could only be that one
             if (rangers.Count == 1)
             {
                 Player ranger = rangers[0];
-                ProfHelper.SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
-                ProfHelper.SetGadgetMaster(blackHoles, ranger.AgentItem);
+                SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
+                SetGadgetMaster(blackHoles, ranger.AgentItem);
             }
             else if (rangers.Count > 1)
             {
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { JacarandasEmbraceSkill }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { BlackHoleSkill }, 1000);
+                AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { JacarandasEmbraceSkill }, 1000);
+                AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { BlackHoleSkill }, 1000);
             }
         }
 
@@ -360,9 +361,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in hunkerDowns)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHunkerDown, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectHunkerDown);
                 }
             }
             // Barrage
@@ -372,9 +371,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in barrages)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 600); // ~600ms interval
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBarrage, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectBarrage);
                 }
             }
             // Bonfire
@@ -384,9 +381,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in bonfires)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectBonfire, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectBonfire);
                 }
             }
             // Frost Trap
@@ -396,9 +391,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in frostTraps)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFrostTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFrostTrap);
                 }
             }
             // Flame Trap
@@ -408,9 +401,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in flameTraps)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFlameTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFlameTrap);
                 }
             }
             // Viper's Nest
@@ -420,9 +411,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in vipersNests)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVipersNest, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectVipersNest);
                 }
             }
             // Spike Trap
@@ -432,9 +421,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in spikeTraps)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 2000); // roughly time displayed ingame
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSpikeTrap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectSpikeTrap);
                 }
             }
             // Sublime Conversion

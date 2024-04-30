@@ -2379,9 +2379,10 @@
         public const long EchoOfTrue = 42360;
         public const long TomeOfCourageOpen = 42404;
         public const long ElementsOfRage = 42416;
-        public const long MagebaneTether = 42428;
+        public const long MagebaneTetherBuff = 42428;
         public const long Chapter3HeatedRebuke = 42449;
         public const long LesserSignetOfStone = 42470;
+        public const long MagebaneTetherSkill = 43532;
         public const long BerserkersPower = 42539;
         public const long SoulcleavesSummitSkillMinion = 42614; // cast by created minion, does not hit
         public const long GrimSpecterBuff = 42651;

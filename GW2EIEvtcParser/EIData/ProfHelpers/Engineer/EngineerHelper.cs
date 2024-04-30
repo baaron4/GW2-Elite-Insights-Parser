@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
@@ -233,23 +234,23 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
 
-            HashSet<AgentItem> flameTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, FireTurretDamage, playerAgents);
+            HashSet<AgentItem> flameTurrets = GetOffensiveGadgetAgents(combatData, FireTurretDamage, playerAgents);
 
-            HashSet<AgentItem> rifleTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, RifleTurretDamage, playerAgents);
-            rifleTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, RifleTurretDamageUW, playerAgents));
+            HashSet<AgentItem> rifleTurrets = GetOffensiveGadgetAgents(combatData, RifleTurretDamage, playerAgents);
+            rifleTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, RifleTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> netTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, NetTurretDamage, playerAgents);
-            netTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, NetTurretDamageUW, playerAgents));
+            HashSet<AgentItem> netTurrets = GetOffensiveGadgetAgents(combatData, NetTurretDamage, playerAgents);
+            netTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, NetTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> rocketTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, RocketTurretDamage, playerAgents);
-            rocketTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, RocketTurretDamageUW, playerAgents));
+            HashSet<AgentItem> rocketTurrets = GetOffensiveGadgetAgents(combatData, RocketTurretDamage, playerAgents);
+            rocketTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, RocketTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> thumperTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, ThumperTurret, playerAgents);
-            thumperTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, ThumperTurretUW, playerAgents));
+            HashSet<AgentItem> thumperTurrets = GetOffensiveGadgetAgents(combatData, ThumperTurret, playerAgents);
+            thumperTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, ThumperTurretUW, playerAgents));
             // TODO: need ID here
-            HashSet<AgentItem> harpoonTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, Unknown, playerAgents);
+            HashSet<AgentItem> harpoonTurrets = GetOffensiveGadgetAgents(combatData, Unknown, playerAgents);
 
-            HashSet<AgentItem> healingTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
+            HashSet<AgentItem> healingTurrets = GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
             healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
             var engineers = players.Where(x => x.BaseSpec == Spec.Engineer).ToList();
@@ -257,21 +258,21 @@ namespace GW2EIEvtcParser.EIData
             if (engineers.Count == 1)
             {
                 Player engineer = engineers[0];
-                ProfHelper.SetGadgetMaster(flameTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(netTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(rocketTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(rifleTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(thumperTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(healingTurrets, engineer.AgentItem);
+                SetGadgetMaster(flameTurrets, engineer.AgentItem);
+                SetGadgetMaster(netTurrets, engineer.AgentItem);
+                SetGadgetMaster(rocketTurrets, engineer.AgentItem);
+                SetGadgetMaster(rifleTurrets, engineer.AgentItem);
+                SetGadgetMaster(thumperTurrets, engineer.AgentItem);
+                SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
+                SetGadgetMaster(healingTurrets, engineer.AgentItem);
             }
             else if (engineers.Count > 1)
             {
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { FlameTurretCast, SupplyCrate }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { RifleTurretCast }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, netTurrets, new List<long> { NetTurretCast, SupplyCrate, SupplyCrateUW }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, rocketTurrets, new List<long> { RocketTurretCast, RocketTurretCast2, SupplyCrateUW }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, thumperTurrets, new List<long> { ThumperTurretCast }, 1000);
+                AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { FlameTurretCast, SupplyCrate }, 1000);
+                AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { RifleTurretCast }, 1000);
+                AttachMasterToGadgetByCastData(combatData, netTurrets, new List<long> { NetTurretCast, SupplyCrate, SupplyCrateUW }, 1000);
+                AttachMasterToGadgetByCastData(combatData, rocketTurrets, new List<long> { RocketTurretCast, RocketTurretCast2, SupplyCrateUW }, 1000);
+                AttachMasterToGadgetByCastData(combatData, thumperTurrets, new List<long> { ThumperTurretCast }, 1000);
                 //AttachMasterToGadgetByCastData(castData, harpoonTurrets, new List<long> { 6093, 6183 }, 1000);
                 //AttachMasterToGadgetByCastData(castData, healingTurrets, new List<long> { 5857, 5868 }, 1000);
             }
@@ -365,9 +366,7 @@ namespace GW2EIEvtcParser.EIData
         private static void AddMineDecoration(ParsedEvtcLog log, CombatReplay replay, EffectEvent effect, Color color, SkillModeDescriptor skill, string icon)
         {
             (long, long) lifespan = effect.ComputeDynamicLifespan(log, 60000);
-            var connector = new PositionConnector(effect.Position);
-            replay.Decorations.Add(new CircleDecoration(120, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-            replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+            AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 120, icon);
         }
 
         /// <summary>
