@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override int GetStacks(AbstractSingleActor actor)
         {
-            if (GetActiveSources(actor).Any())
+            if (GetActiveSources().Any(x => x == actor.AgentItem))
             {
                 return 1;
             }
@@ -67,20 +67,6 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         public override IReadOnlyList<AgentItem> GetActiveSources()
         {
             return GetSources();
-        }
-
-        public override IReadOnlyList<AgentItem> GetSources(AbstractSingleActor actor)
-        {
-            if (actor.AgentItem != _src)
-            {
-                return new List<AgentItem>();
-            }
-            return new List<AgentItem>() { _src };
-        }
-
-        public override IReadOnlyList<AgentItem> GetActiveSources(AbstractSingleActor actor)
-        {
-            return GetSources(actor);
         }
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
