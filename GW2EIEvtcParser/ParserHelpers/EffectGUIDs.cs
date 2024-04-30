@@ -227,6 +227,12 @@ namespace GW2EIEvtcParser
         public const string GuardianSymbolOfResolution = "98C9834C6381204A85DC67C375D135E4"; // duration 4000
         public const string GuardianSymbolOfBlades = "FA37E0B77272314AA1ADCFF824F24C27"; // duration 5000
         public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
+        public const string FirebrandStalwartStand1 = "E20B6672FDCE57409B229DB152BF2286"; // duration 4000
+        public const string FirebrandStalwartStand2 = "CA4F198982BFD44180D63EB043F9F710"; // duration 4000
+        public const string FirebrandShiningRiver1 = "D2803F97338434488CD789E22E797CE2"; // duration 4000
+        public const string FirebrandShiningRiver2 = "AEBF45AEDFF2CC48A64ED01441241288"; // duration 4000
+        public const string FirebrandScorchedAftermath1 = "3B0AF49A77811F4EA3CFD1BF671BDDE5"; // duration 4000
+        public const string FirebrandScorchedAftermath2 = "4CC8C2BAB89D1C488CD69D4F711D49B3"; // duration 0
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
         public const string FirebrandMantraOfLoreCone = "C2B55AE44B295849A2983745203D19A1";

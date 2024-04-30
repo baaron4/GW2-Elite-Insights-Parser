@@ -623,6 +623,9 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectSymbolOfResolution = "https://i.imgur.com/Vy3948S.png";
         internal const string EffectSymbolOfPunishment = "https://i.imgur.com/cSoxJvd.png";
         internal const string EffectSymbolOfBlades = "https://i.imgur.com/4vyfoTs.png";
+        internal const string EffectStalwartStand = "https://i.imgur.com/uBAyxRu.png";
+        internal const string EffectShiningRiver = "https://i.imgur.com/5ahjMoe.png";
+        internal const string EffectScorchedAftermath = "https://i.imgur.com/XvxyVC7.png";
         #endregion
 
         #region Marker

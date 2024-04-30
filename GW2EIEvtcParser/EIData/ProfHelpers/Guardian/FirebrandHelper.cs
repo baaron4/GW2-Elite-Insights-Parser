@@ -145,6 +145,39 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectValiantBulwark);
                 }
             }
+
+            // Stalwart Stand
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandStalwartStand1, out IReadOnlyList<EffectEvent> stalwartStands))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4StalwartStand, SkillModeCategory.ImportantBuffs);
+                foreach (EffectEvent effect in stalwartStands)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectStalwartStand);
+                }
+            }
+
+            // Shining River
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandShiningRiver1, out IReadOnlyList<EffectEvent> shiningRiver))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4ShiningRiver, SkillModeCategory.Heal);
+                foreach (EffectEvent effect in shiningRiver)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectShiningRiver);
+                }
+            }
+
+            // Scorched Aftermath
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandScorchedAftermath1, out IReadOnlyList<EffectEvent> scorchedAftermath))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4ScorchedAftermath, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in scorchedAftermath)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectScorchedAftermath);
+                }
+            }
         }
     }
 }
