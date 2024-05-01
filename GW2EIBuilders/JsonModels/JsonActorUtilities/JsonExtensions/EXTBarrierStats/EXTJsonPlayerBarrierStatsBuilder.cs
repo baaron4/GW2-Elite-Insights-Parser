@@ -20,6 +20,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
             var incomingBarrier = new List<EXTJsonBarrierStatistics.EXTJsonIncomingBarrierStatistics>();
             var alliedBarrier1S = new List<List<IReadOnlyList<int>>>();
             var barrier1S = new List<IReadOnlyList<int>>();
+            var barrierReceived1S = new List<IReadOnlyList<int>>();
             var alliedBarrierDist = new List<List<List<EXTJsonBarrierDist>>>();
             var totalBarrierDist = new List<List<EXTJsonBarrierDist>>();
             var totalIncomingBarrierDist = new List<List<EXTJsonBarrierDist>>();
@@ -30,6 +31,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
                 IncomingBarrier = incomingBarrier,
                 AlliedBarrier1S = alliedBarrier1S,
                 Barrier1S = barrier1S,
+                BarrierReceived1S = barrierReceived1S,
                 AlliedBarrierDist = alliedBarrierDist,
                 TotalBarrierDist = totalBarrierDist,
                 TotalIncomingBarrierDist = totalIncomingBarrierDist,
@@ -63,6 +65,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
                 if (settings.RawFormatTimelineArrays)
                 {
                     barrier1S.Add(a.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, null));
+                    barrierReceived1S.Add(a.EXTBarrier.Get1SBarrierReceivedList(log, phase.Start, phase.End, null));
                 }
                 totalBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetOutgoingBarrierEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillMap, buffMap));
                 totalIncomingBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetIncomingBarrierEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillMap, buffMap));

@@ -413,19 +413,22 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 }
 
 
-function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, times, graphMode, damageMode) {
+function computePlayerDPS(player, damageGraphs, lim, phasebreaks, activetargets, cacheID, times, graphMode, damageMode) {
     if (player.dpsGraphCache.has(cacheID)) {
         return player.dpsGraphCache.get(cacheID);
     }
     var totalDamage = 0;
+    var totalDamageTaken = 0;
     var targetDamage = 0;
     var totalDPS = [0];
     var cleaveDPS = [0];
     var targetDPS = [0];
+    var takenDPS = [0];
     var maxDPS = {
         total: 0,
         cleave: 0,
-        target: 0
+        target: 0,
+        taken: 0
     };
     if (graphMode === GraphType.CenteredDPS) {
         lim /= 2;
@@ -456,18 +459,21 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
             }
         }          
         var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
-        totalDamage = damageData.total[right] - damageData.total[left];
+        totalDamage = damageGraphs.total[right] - damageGraphs.total[left];
+        totalDamageTaken = damageGraphs.taken[right] - damageGraphs.taken[left];
         targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {
             targetid = activetargets[k];
-            targetDamage += damageData.targets[targetid][right] - damageData.targets[targetid][left];
+            targetDamage += damageGraphs.targets[targetid][right] - damageGraphs.targets[targetid][left];
         }
         totalDPS[j] = roundingToUse(totalDamage / div);
         targetDPS[j] = roundingToUse(targetDamage / div);
         cleaveDPS[j] = roundingToUse((totalDamage - targetDamage) / div);
+        takenDPS[j] = roundingToUse(totalDamageTaken / div);
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
+        maxDPS.taken = Math.max(maxDPS.taken, takenDPS[j]);
     }
     if (maxDPS.total < 1e-6) {
         maxDPS.total = 10;
@@ -478,11 +484,15 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     if (maxDPS.cleave < 1e-6) {
         maxDPS.cleave = 10;
     }
+    if (maxDPS.taken < 1e-6) {
+        maxDPS.taken = 10;
+    }
     var res = {
         dps: {
             total: totalDPS,
             target: targetDPS,
-            cleave: cleaveDPS
+            cleave: cleaveDPS,
+            taken: takenDPS
         },
         maxDPS: maxDPS
     };
@@ -548,11 +558,19 @@ function getActorGraphLayout(images, color, hasBuffs) {
             nticks: 10,
         },
         yaxis3: {
-            title: 'DPS',
+            title: 'Outgoing',
+            domain: hasBuffs ? [0.68, 1.0] : [0.23, 1.0],
             color: color,
-            tickformat: ",d",
             gridcolor: color,
-            domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0]
+            tickformat: ",d",
+        },
+        yaxis5: {
+            title: 'Incoming',
+            domain: hasBuffs ? [0.55, 0.67] : [0.1, 0.22],
+            color: color,
+            gridcolor: color,
+            tickformat: ",d",
+            nticks: 2,
         },
         images: images,
         font: {
@@ -695,7 +713,7 @@ function computeBuffData(buffData, data) {
     return 0;
 }
 
-function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times, graphMode) {
+function computeTargetDPS(target, damageGraphs, lim, phasebreaks, cacheID, times, graphMode) {
     if (target.dpsGraphCache.has(cacheID)) {
         return target.dpsGraphCache.get(cacheID);
     }
@@ -730,7 +748,7 @@ function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times, 
             }
         }
         var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
-        totalDamage = damageData[right] - damageData[left];
+        totalDamage = damageGraphs[right] - damageGraphs[left];
         totalDPS[j] = Math.round(totalDamage / (div));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }
