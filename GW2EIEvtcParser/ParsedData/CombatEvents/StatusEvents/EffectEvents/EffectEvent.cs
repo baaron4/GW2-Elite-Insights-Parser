@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// End of the effect, provided by an <see cref="EffectEndEvent"/>
         /// </summary>
-        internal long DynamicEndTime { get; set; } = long.MinValue;
+        internal long DynamicEndTime { get; private set; } = long.MinValue;
 
         internal bool HasDynamicEndTime => DynamicEndTime != long.MinValue;
 

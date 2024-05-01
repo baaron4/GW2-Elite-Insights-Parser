@@ -53,6 +53,22 @@ namespace GW2EIEvtcParser.EIData
             return _engineerKit.Contains(id);
         }
 
+        private static bool MineDetonationInstantCastChecker(EffectEvent effect, CombatData combatData, bool ifFound, string[] effectGUIDs)
+        {
+            // Find the DynamicEffectEnd of mine at the time of the explosion effects.
+            if (combatData.TryGetEffectEventsBySrcWithGUIDs(effect.Src, effectGUIDs, out IReadOnlyList<EffectEvent> mineFields))
+            {
+                foreach (EffectEvent e in mineFields)
+                {
+                    if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
+                    {
+                        return ifFound;
+                    }
+                }
+            }
+            return !ifFound;
+        }
+
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
             new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceBuff)
@@ -81,52 +97,21 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((effect, combatData, agentData, skillData) =>
                 {
                     // If Throw Mine and Mine Field are precasted out of combat, there won't be an DynamicEffectEnd event so we use the custom ID
-                    if(combatData.TryGetEffectEventsBySrcWithGUIDs(effect.Src, 
-                        new string [] { EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 }, out IReadOnlyList<EffectEvent> mines))
-                    {
-                        foreach(EffectEvent e in mines)
-                        {
-                            if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    return true;
+                    return MineDetonationInstantCastChecker(effect, combatData, false, new string [] { EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 });
                 }),
             new EffectCastFinder(DetonateMineField, EffectGUIDs.EngineerMineExplosion1)
                 .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
                 .UsingChecker((effect, combatData, agentData, skillData) =>
                 {
                     // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
-                    if(combatData.TryGetEffectEventsBySrcWithGUID(effect.Src, EffectGUIDs.EngineerMineField, out IReadOnlyList<EffectEvent> mineFields))
-                    {
-                        foreach(EffectEvent e in mineFields)
-                        {
-                            if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
+                    return MineDetonationInstantCastChecker(effect, combatData, true, new string [] { EffectGUIDs.EngineerMineField });
                 }),
              new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
                 .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
                 .UsingChecker((effect, combatData, agentData, skillData) =>
                 {
                     // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
-                    if(combatData.TryGetEffectEventsBySrcWithGUID(effect.Src, EffectGUIDs.EngineerThrowMineInactive1, out IReadOnlyList<EffectEvent> throwMines))
-                    {
-                        foreach(EffectEvent e in throwMines)
-                        {
-                            if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
+                    return MineDetonationInstantCastChecker(effect, combatData, true, new string [] { EffectGUIDs.EngineerThrowMineInactive1 });
                 }),
         };
 
