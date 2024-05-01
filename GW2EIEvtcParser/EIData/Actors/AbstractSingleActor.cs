@@ -893,7 +893,7 @@ namespace GW2EIEvtcParser.EIData
                 int midIndex = (minIndex + maxIndex) / 2;
                 if (time == position[midIndex].Time)
                 {
-                    return midIndex;
+                    return midIndex + 1;
                 }
                 else if (time < position[midIndex].Time)
                 {
