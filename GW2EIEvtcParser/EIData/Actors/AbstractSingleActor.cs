@@ -872,6 +872,40 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
+
+        // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
+        private static int BinarySearchRecursive(IReadOnlyList<ParametricPoint3D> position, long time, int minIndex, int maxIndex)
+        {
+            if (position[minIndex].Time > time)
+            {
+                return minIndex;
+            }
+            if (position[maxIndex].Time < time)
+            {
+                return maxIndex + 1;
+            }
+            if (minIndex > maxIndex)
+            {
+                return minIndex;
+            }
+            else
+            {
+                int midIndex = (minIndex + maxIndex) / 2;
+                if (time == position[midIndex].Time)
+                {
+                    return midIndex;
+                }
+                else if (time < position[midIndex].Time)
+                {
+                    return BinarySearchRecursive(position, time, minIndex, midIndex - 1);
+                }
+                else
+                {
+                    return BinarySearchRecursive(position, time, midIndex + 1, maxIndex);
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -890,7 +924,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
             }
-            return positions.LastOrDefault(x => x.Time <= time);
+            int foundIndex = BinarySearchRecursive(positions, time, 0, positions.Count - 1) - 1;
+            if (foundIndex < 0)
+            {
+                return null;
+            }
+            return positions[foundIndex];
         }
 
         public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
@@ -939,9 +978,14 @@ namespace GW2EIEvtcParser.EIData
             }
             if (forwardWindow != 0)
             {
-                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time); 
+                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time);
             }
-            return rotations.LastOrDefault(x => x.Time <= time);
+            int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1) - 1;
+            if (foundIndex < 0)
+            {
+                return null;
+            }
+            return rotations[foundIndex];
         }
     }
 }

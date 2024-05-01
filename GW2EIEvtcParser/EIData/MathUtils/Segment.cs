@@ -106,5 +106,37 @@ namespace GW2EIEvtcParser.EIData
             res.Add(new object[] { segEnd, lastSeg.Value });
             return res;
         }
+        // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
+        public static int BinarySearchRecursive(IReadOnlyList<Segment> segments, long time, int minIndex, int maxIndex)
+        {
+            if (segments[minIndex].Start > time)
+            {
+                return minIndex;
+            }
+            if (segments[maxIndex].Start < time)
+            {
+                return maxIndex + 1;
+            }
+            if (minIndex > maxIndex)
+            {
+                return minIndex;
+            }
+            else
+            {
+                int midIndex = (minIndex + maxIndex) / 2;
+                if (segments[midIndex].ContainsPoint(time))
+                {
+                    return midIndex;
+                }
+                else if (time < segments[midIndex].Start)
+                {
+                    return BinarySearchRecursive(segments, time, minIndex, midIndex - 1);
+                }
+                else
+                {
+                    return BinarySearchRecursive(segments, time, midIndex + 1, maxIndex);
+                }
+            }
+        }
     }
 }
