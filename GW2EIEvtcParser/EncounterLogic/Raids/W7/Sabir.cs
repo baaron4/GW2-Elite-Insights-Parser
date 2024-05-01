@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
@@ -20,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstSkillMechanic(DireDrafts, "Dire Drafts", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500).UsingChecker((de, log) => de.HasDowned || de.HasKilled),
                 new PlayerDstSkillMechanic(UnbridledTempest, "Unbridled Tempest", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Pink), "Shockwave", "Hit by Shockwave", "Shockwave Hit", 0).UsingChecker((de, log) => de.HasDowned || de.HasKilled),
                 new PlayerDstSkillMechanic(FuryOfTheStorm, "Fury of the Storm", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Arena AoE", "Hit by Arena wide AoE", "Arena AoE hit", 0).UsingChecker( (de, log) => de.HasDowned || de.HasKilled ),
-                new PlayerDstHitMechanic(new long [] { DynamicDeterrentNM, DynamicDeterrentCM }, "Dynamic Deterrent", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Pushed", "Pushed by rotating breakbar", "Pushed", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(new long [] { DynamicDeterrentNM, DynamicDeterrentCM }, "Dynamic Deterrent", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Pushed", "Pushed by rotating breakbar", "Pushed", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(new long [] { StormsEdgeLeftHand, StormsEdgeRightHand }, "Storm's Edge", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Blue), "Storm's Edge", "Hit by Storm's Edge", "Storm's Edge", 0),
                 new PlayerDstHitMechanic(ChainLightning, "Chain Lightning", new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.White), "Chain Lightning", "Hit by Chain Lightning", "Chain Lightning Hit", 0),
                 new PlayerDstHitMechanic(Electrospark, "Electrospark", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Orange), "Electrospark", "Hit by Electrospark", "Electrospark", 0),
@@ -69,7 +71,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(BoltBreakSabir, BoltBreakSabir),
-                new EffectCastFinder(FlashDischargeSAK, EffectGUIDs.SabirFlashDischarge),
+                new EffectCastFinder(FlashDischargeSAK, EffectGUIDs.SabirFlashDischarge)
+                    .UsingChecker((effect, combatData, agentData, skillData) =>
+                    {
+                        BuffRemoveAllEvent buffRemove = combatData.GetBuffRemoveAllData(ViolentCurrents)
+                            .Where(x => Math.Abs(effect.Time - x.Time) < ServerDelayConstant && x.To == effect.Src)
+                            .FirstOrDefault();
+                        return buffRemove != null;
+                    }),
             };
         }
 

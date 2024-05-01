@@ -102,6 +102,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SoothingDetonation, "Soothing Detonation" },
             { HealingTurretHeal, "Healing Turret (Heal)" },
             { BladeBurstOrParticleAccelerator, "Blade Burst or Particle Accelerator" },
+            { DetonateThrowMineOrMineField, "Detonate (Throw Mine / Mine Field)" },
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
@@ -493,6 +494,7 @@ namespace GW2EIEvtcParser.ParsedData
             { JadeEnergyShot2JadeMech, "https://wiki.guildwars2.com/images/c/c0/Anchor.png" },
             { RifleBurstGrenadeDamage, "https://wiki.guildwars2.com/images/e/ed/Grenade_Barrage.png" },
             { GyroExplosion, "https://wiki.guildwars2.com/images/4/4e/Function_Gyro_%28tool_belt_skill%29.png" },
+            { DetonateThrowMineOrMineField, "https://wiki.guildwars2.com/images/d/d1/Detonate_Mine_Field.png" },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
@@ -844,7 +846,8 @@ namespace GW2EIEvtcParser.ParsedData
             { VolleyWvW, "https://wiki.guildwars2.com/images/5/5d/Volley.png" },
             { BleedingShotWvW, "https://wiki.guildwars2.com/images/9/97/Fierce_Shot.png" },
             { BolaTossWvW, "https://wiki.guildwars2.com/images/7/7e/Bola_Shot.png" },
-            { MagebaneTether, BuffImages.MagebaneTether },
+            { MagebaneTetherBuff, BuffImages.MagebaneTether },
+            { MagebaneTetherSkill, BuffImages.MagebaneTether },
             { EnchantmentCollapse, "https://wiki.guildwars2.com/images/7/7f/Enchantment_Collapse.png" },
             { LineBreakerHeal, "https://wiki.guildwars2.com/images/0/0e/Line_Breaker.png" },
             #endregion WarriorIcons

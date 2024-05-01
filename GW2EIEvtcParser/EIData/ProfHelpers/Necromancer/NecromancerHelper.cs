@@ -7,6 +7,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
@@ -150,9 +151,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in wellOfBloods)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfBlood, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfBlood);
                 }
             }
             // Well of Suffering
@@ -162,9 +161,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in wellOfSufferings)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 6000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSuffering, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfSuffering);
                 }
             }
             // Well of Darkness
@@ -174,9 +171,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in wellOfDarknesses)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfDarkness, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfDarkness);
                 }
             }
             // Well of Corruption
@@ -186,9 +181,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in wellOfCorruptions)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCorruption, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfCorruption);
                 }
             }
             // Corrosive Poison Cloud
@@ -198,9 +191,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in poisonClouds)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCorrosivePoisonCloud, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectCorrosivePoisonCloud);
                 }
             }
             // Plaguelands
@@ -256,9 +247,7 @@ namespace GW2EIEvtcParser.EIData
                         icon = ParserIcons.EffectMarkOfBloodOrChillblains;
                     }
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, fromDodge ? 6000 : 30000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, icon);
                 }
             }
             // Mark of Blood Activated (Staff 2)
@@ -268,9 +257,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in marksOfBloodActivated)
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMarkOfBlood, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectMarkOfBlood);
                 }
             }
             // Chillblains Activated (Staff 3)
@@ -280,9 +267,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in chillblainsActivated)
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration( 300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectChillblains, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectChillblains);
                 }
             }
 
@@ -293,9 +278,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in putridMarks)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectPutridMark);
                 }
             }
             // Putrid Mark (Staff 4) Activated
@@ -305,9 +288,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in putridMarksActivated)
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPutridMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectPutridMark);
                 }
             }
 
@@ -318,9 +299,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in reapersMarks)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.2f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectReapersMark);
                 }
             }
             // Reaper's Mark (Staff 5) Activated
@@ -330,9 +309,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in reapersMarksActivated)
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(300, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectReapersMark, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectReapersMark);
                 }
             }
 
@@ -343,9 +320,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in signetOfUndeath)
                 {
                     (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSignetOfUndeath, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSignetOfUndeath);
                 }
             }
 

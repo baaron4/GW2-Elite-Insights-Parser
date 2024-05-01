@@ -630,5 +630,23 @@ namespace GW2EIEvtcParser.EIData
             }
             return res;
         }
+
+        /// <summary>
+        /// Adds generic circle decorations, to be used for player skills.
+        /// </summary>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="effect">The mine effect.</param>
+        /// <param name="color">The specialization color.</param>
+        /// <param name="skill">The source skill.</param>
+        /// <param name="icon">The skill icon.</param>
+        /// <param name="lifespan">Decoration lifespan.</param>
+        /// <param name="radius">Circle radius.</param>
+        /// <param name="icon">The skill icon.</param>
+        internal static void AddCircleSkillDecoration(CombatReplay replay, EffectEvent effect, Color color, SkillModeDescriptor skill, (long start, long end) lifespan, uint radius, string icon)
+        {
+            var connector = new PositionConnector(effect.Position);
+            replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+            replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+        }
     }
 }

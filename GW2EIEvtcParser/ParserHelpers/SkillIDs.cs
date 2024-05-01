@@ -53,6 +53,7 @@
         public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
         public const long NumberOfRangerPets = -35;
         public const long AchievementEligibilityApathetic = -36;
+        public const long DetonateThrowMineOrMineField = -37;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
@@ -254,6 +255,12 @@
         public const long RocketTurretDamage = 6108;
         public const long MagneticInversion = 6126;
         public const long OverchargedShot = 6154;
+        public const long POV_ThrowMineBuff = 6160;
+        public const long ThrowMine = 6161;
+        public const long DetonateThrowMine = 6162;
+        public const long MineField = 6164;
+        public const long POV_MineFieldBuff = 6165;
+        public const long DetonateMineField = 6166;
         public const long SupplyCrateUW = 6183;
         public const long HaresSpeedSkill = 6221;
         public const long WvWSpendingSupplies = 6852;
@@ -285,7 +292,7 @@
         public const long HolyStrike = 9140;
         public const long SymbolOfSwiftness = 9143;
         public const long LineOfWarding = 9144;
-        public const long SymbolOfWrath = 9146;
+        public const long SymbolOfWrath_SymbolOfResolution = 9146;
         public const long BindingBlade = 9148;
         public const long SignetOfJudgmentSkill = 9120;
         public const long HoldTheLine = 9152;
@@ -1069,6 +1076,13 @@
         public const long VirtueOfResolveBattlePresence = 17046;
         public const long VirtueOfResolveBattlePresenceAbsoluteResolve = 17047;
         public const long DeployGuildArrowCart = 17676;
+        public const long GuildSwiftnessBannerBoost = 17681;
+        public const long GuildGatheringBannerBoost = 17682;
+        public const long GuildKarmaBannerBoost = 17683;
+        public const long GuildMagicFindBannerBoost = 17684;
+        public const long GuildExperienceBannerBoost = 17685;
+        public const long GuildGoldBannerBoost15 = 17686;
+        public const long GuildGoldBannerBoost5 = 17690;
         public const long PlateOfSpicyHerbedChicken = 17823;
         public const long MushroomLoaf = 17822;
         public const long SpicyMarinatedMushroom = 17824;
@@ -1205,6 +1219,7 @@
         public const long IntenseFlameBlast = 21475;
         public const long ImpactSlam = 21479;
         public const long IronHideRam = 21484;
+        public const long MetabolicPrimer = 21487;
         public const long ElectricDischarge = 21636;
         public const long ArcaneBrilliance = 21656;
         public const long AED = 21660;
@@ -1306,6 +1321,7 @@
         public const long BowlOfSweetAndSpicyBeans = 24804;
         public const long BowlOfCactusSoup = 24807;
         public const long LeyLineFinisher = 25173;
+        public const long UtilityPrimer = 25179;
         public const long FeastOfDelectableBirthdayCake = 25318;
         public const long GuildFlagFinisher = 25435;
         public const long AvatarOfDeathFinisher = 25436;
@@ -1515,6 +1531,7 @@
         public const long SoothingDetonation = 30564;
         public const long RapidRegeneration = 30581;
         public const long Vault = 30597;
+        public const long HuntersWard = 30628;
         public const long FeelTheBurn = 30662;
         public const long Suffer = 30670;
         public const long LightOnYourFeet = 30673;
@@ -2371,9 +2388,10 @@
         public const long EchoOfTrue = 42360;
         public const long TomeOfCourageOpen = 42404;
         public const long ElementsOfRage = 42416;
-        public const long MagebaneTether = 42428;
+        public const long MagebaneTetherBuff = 42428;
         public const long Chapter3HeatedRebuke = 42449;
         public const long LesserSignetOfStone = 42470;
+        public const long MagebaneTetherSkill = 43532;
         public const long BerserkersPower = 42539;
         public const long SoulcleavesSummitSkillMinion = 42614; // cast by created minion, does not hit
         public const long GrimSpecterBuff = 42651;

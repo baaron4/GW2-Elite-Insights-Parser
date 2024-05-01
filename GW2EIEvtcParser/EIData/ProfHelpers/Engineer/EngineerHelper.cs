@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
@@ -6,6 +7,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
@@ -74,6 +76,58 @@ namespace GW2EIEvtcParser.EIData
             new EngineerKitFinder(EliteMortarKit),
             new EffectCastFinderByDst(HealingMistOrSoothingDetonation, EffectGUIDs.EngineerHealingMist)
                 .UsingDstBaseSpecChecker(Spec.Engineer),
+            new EffectCastFinder(DetonateThrowMineOrMineField, EffectGUIDs.EngineerMineExplosion1)
+                .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
+                .UsingChecker((effect, combatData, agentData, skillData) =>
+                {
+                    // If Throw Mine and Mine Field are precasted out of combat, there won't be an DynamicEffectEnd event so we use the custom ID
+                    if(combatData.TryGetEffectEventsBySrcWithGUIDs(effect.Src, 
+                        new string [] { EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 }, out IReadOnlyList<EffectEvent> mines))
+                    {
+                        foreach(EffectEvent e in mines)
+                        {
+                            if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                }),
+            new EffectCastFinder(DetonateMineField, EffectGUIDs.EngineerMineExplosion1)
+                .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
+                .UsingChecker((effect, combatData, agentData, skillData) =>
+                {
+                    // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
+                    if(combatData.TryGetEffectEventsBySrcWithGUID(effect.Src, EffectGUIDs.EngineerMineField, out IReadOnlyList<EffectEvent> mineFields))
+                    {
+                        foreach(EffectEvent e in mineFields)
+                        {
+                            if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }),
+             new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
+                .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
+                .UsingChecker((effect, combatData, agentData, skillData) =>
+                {
+                    // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
+                    if(combatData.TryGetEffectEventsBySrcWithGUID(effect.Src, EffectGUIDs.EngineerThrowMineInactive1, out IReadOnlyList<EffectEvent> throwMines))
+                    {
+                        foreach(EffectEvent e in throwMines)
+                        {
+                            if (e.HasDynamicEndTime && Math.Abs(e.DynamicEndTime - effect.Time) < ServerDelayConstant)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
@@ -180,23 +234,23 @@ namespace GW2EIEvtcParser.EIData
         {
             var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
 
-            HashSet<AgentItem> flameTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, FireTurretDamage, playerAgents);
+            HashSet<AgentItem> flameTurrets = GetOffensiveGadgetAgents(combatData, FireTurretDamage, playerAgents);
 
-            HashSet<AgentItem> rifleTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, RifleTurretDamage, playerAgents);
-            rifleTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, RifleTurretDamageUW, playerAgents));
+            HashSet<AgentItem> rifleTurrets = GetOffensiveGadgetAgents(combatData, RifleTurretDamage, playerAgents);
+            rifleTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, RifleTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> netTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, NetTurretDamage, playerAgents);
-            netTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, NetTurretDamageUW, playerAgents));
+            HashSet<AgentItem> netTurrets = GetOffensiveGadgetAgents(combatData, NetTurretDamage, playerAgents);
+            netTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, NetTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> rocketTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, RocketTurretDamage, playerAgents);
-            rocketTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, RocketTurretDamageUW, playerAgents));
+            HashSet<AgentItem> rocketTurrets = GetOffensiveGadgetAgents(combatData, RocketTurretDamage, playerAgents);
+            rocketTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, RocketTurretDamageUW, playerAgents));
 
-            HashSet<AgentItem> thumperTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, ThumperTurret, playerAgents);
-            thumperTurrets.UnionWith(ProfHelper.GetOffensiveGadgetAgents(combatData, ThumperTurretUW, playerAgents));
+            HashSet<AgentItem> thumperTurrets = GetOffensiveGadgetAgents(combatData, ThumperTurret, playerAgents);
+            thumperTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, ThumperTurretUW, playerAgents));
             // TODO: need ID here
-            HashSet<AgentItem> harpoonTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, Unknown, playerAgents);
+            HashSet<AgentItem> harpoonTurrets = GetOffensiveGadgetAgents(combatData, Unknown, playerAgents);
 
-            HashSet<AgentItem> healingTurrets = ProfHelper.GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
+            HashSet<AgentItem> healingTurrets = GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
             healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
             var engineers = players.Where(x => x.BaseSpec == Spec.Engineer).ToList();
@@ -204,21 +258,21 @@ namespace GW2EIEvtcParser.EIData
             if (engineers.Count == 1)
             {
                 Player engineer = engineers[0];
-                ProfHelper.SetGadgetMaster(flameTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(netTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(rocketTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(rifleTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(thumperTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
-                ProfHelper.SetGadgetMaster(healingTurrets, engineer.AgentItem);
+                SetGadgetMaster(flameTurrets, engineer.AgentItem);
+                SetGadgetMaster(netTurrets, engineer.AgentItem);
+                SetGadgetMaster(rocketTurrets, engineer.AgentItem);
+                SetGadgetMaster(rifleTurrets, engineer.AgentItem);
+                SetGadgetMaster(thumperTurrets, engineer.AgentItem);
+                SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
+                SetGadgetMaster(healingTurrets, engineer.AgentItem);
             }
             else if (engineers.Count > 1)
             {
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { FlameTurretCast, SupplyCrate }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { RifleTurretCast }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, netTurrets, new List<long> { NetTurretCast, SupplyCrate, SupplyCrateUW }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, rocketTurrets, new List<long> { RocketTurretCast, RocketTurretCast2, SupplyCrateUW }, 1000);
-                ProfHelper.AttachMasterToGadgetByCastData(combatData, thumperTurrets, new List<long> { ThumperTurretCast }, 1000);
+                AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { FlameTurretCast, SupplyCrate }, 1000);
+                AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { RifleTurretCast }, 1000);
+                AttachMasterToGadgetByCastData(combatData, netTurrets, new List<long> { NetTurretCast, SupplyCrate, SupplyCrateUW }, 1000);
+                AttachMasterToGadgetByCastData(combatData, rocketTurrets, new List<long> { RocketTurretCast, RocketTurretCast2, SupplyCrateUW }, 1000);
+                AttachMasterToGadgetByCastData(combatData, thumperTurrets, new List<long> { ThumperTurretCast }, 1000);
                 //AttachMasterToGadgetByCastData(castData, harpoonTurrets, new List<long> { 6093, 6183 }, 1000);
                 //AttachMasterToGadgetByCastData(castData, healingTurrets, new List<long> { 5857, 5868 }, 1000);
             }
@@ -245,6 +299,97 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThunderclap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
+            }
+
+            // Throw Mine / Mine Field
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerMineExplosion1, out IReadOnlyList<EffectEvent> mineDetonations))
+            {
+                var throwMine = new SkillModeDescriptor(player, Spec.Engineer, ThrowMine, SkillModeCategory.Strip | SkillModeCategory.CC);
+                var mineField = new SkillModeDescriptor(player, Spec.Engineer, MineField);
+                var detonate = new SkillModeDescriptor(player, Spec.Engineer, DetonateThrowMineOrMineField);
+                var detonateThrowMine = new SkillModeDescriptor(player, Spec.Engineer, DetonateThrowMine, SkillModeCategory.Strip | SkillModeCategory.CC);
+                var detonateMineField = new SkillModeDescriptor(player, Spec.Engineer, DetonateMineField);
+
+                foreach (EffectEvent detonation in mineDetonations)
+                {
+                    bool isThrowMine = false;
+                    bool isMineField = false;
+
+                    // Check if the detonation is sourced by Throw Mine
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerThrowMineInactive1, out IReadOnlyList<EffectEvent> throwMines))
+                    {
+                        foreach (EffectEvent mine in throwMines)
+                        {
+                            if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
+                            {
+                                isThrowMine = true;
+                                AddMineDecoration(log, replay, mine, color, throwMine, ParserIcons.EffectThrowMine);
+                                AddMineDetonationDecoration(log, replay, detonation, color, detonateThrowMine, 240);
+                            }
+                        }
+                    }
+
+                    // Check if the detonation is sourced by Mine Field
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerMineField, out IReadOnlyList<EffectEvent> mineFields))
+                    {
+                        // The mine field has 10 events, all using the same GUID, 5 with 0 duration and 5 with infinite duration, filter out half of them.
+                        foreach (EffectEvent mine in mineFields.Where(x => x.Duration > 0))
+                        {
+                            if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
+                            {
+                                isMineField = true;
+                                AddMineDecoration(log, replay, mine, color, mineField, ParserIcons.EffectMineField);
+                                AddMineDetonationDecoration(log, replay, detonation, color, detonateMineField, 180);
+                            }
+                        }
+                    }
+
+                    // Throw Mine or Mine Field were placed before entering combat, log isn't aware of the source
+                    if (!isThrowMine && !isMineField)
+                    {
+                        AddMineDetonationDecoration(log, replay, detonation, color, detonate, 180, true);
+                    }
+                    
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the decorations for <see cref="ThrowMine"/> or <see cref="MineField"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="effect">The mine effect.</param>
+        /// <param name="color">The specialization color.</param>
+        /// <param name="skill">The source skill.</param>
+        /// <param name="icon">The skill icon.</param>
+        private static void AddMineDecoration(ParsedEvtcLog log, CombatReplay replay, EffectEvent effect, Color color, SkillModeDescriptor skill, string icon)
+        {
+            (long, long) lifespan = effect.ComputeDynamicLifespan(log, 60000);
+            AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 120, icon);
+        }
+
+        /// <summary>
+        /// Adds the decorations for <see cref="DetonateThrowMine"/> or <see cref="DetonateMineField"/>.<br></br>
+        /// If the source of the detonation isn't known, use <see cref="DetonateThrowMineOrMineField"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="effect">The detonation effect.</param>
+        /// <param name="color">The specialization color.</param>
+        /// <param name="skill">The source skill.</param>
+        /// <param name="radius">The detonation radius.</param>
+        /// <param name="unknownSource">Wether the source skill is known or not.</param>
+        private static void AddMineDetonationDecoration(ParsedEvtcLog log, CombatReplay replay, EffectEvent effect, Color color, SkillModeDescriptor skill, uint radius, bool unknownSource = false)
+        {
+            (long, long) lifespan = effect.ComputeLifespan(log, 500);
+            var connector = new PositionConnector(effect.Position);
+            replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectDetonateThrowMineOrMineField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+            // If we do not know the source of the detonation, show both radiuses
+            if (unknownSource)
+            {
+                replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
             }
         }
     }

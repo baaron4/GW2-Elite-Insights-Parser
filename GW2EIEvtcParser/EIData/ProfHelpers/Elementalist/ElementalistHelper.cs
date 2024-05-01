@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -311,20 +312,18 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in meteorShowerCircles)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 9000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectMeteorShower, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectMeteorShower);
                 }
                 // The meteors
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerMeteor, out IReadOnlyList<EffectEvent> meteorShowersMeteors))
                 {
                     foreach (EffectEvent effect in meteorShowersMeteors)
                     {
-                        (long, long) lifespan = effect.ComputeLifespan(log, 1330);
+                        (long start, long end) = effect.ComputeLifespan(log, 1330);
                         var connector = new PositionConnector(effect.Position);
                         // -750 to make the decoration faster than in game
-                        replay.Decorations.Add(new CircleDecoration(180, (lifespan.Item2 - 750, lifespan.Item2), color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                        replay.Decorations.Add(new CircleDecoration(180, (lifespan.Item2 - 750, lifespan.Item2), color, 0.2, connector).UsingFilled(false).UsingGrowingEnd(lifespan.Item2, true).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(180, (end - 750, end), color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                        replay.Decorations.Add(new CircleDecoration(180, (end - 750, end), color, 0.2, connector).UsingFilled(false).UsingGrowingEnd(end, true).UsingSkillMode(skill));
                     }
                 }
             }
@@ -336,9 +335,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in staticFieldsStaff)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectStaticField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectStaticField);
                 }
             }
 
@@ -349,9 +346,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in staticFieldsHammer)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectStaticField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectStaticField);
                 }
             }
 
@@ -389,9 +384,7 @@ namespace GW2EIEvtcParser.EIData
                         icon = ParserIcons.EffectFirestormGlyphOrFieryGreatsword;
                     }
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 10000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, icon);
                 }
             }
 
@@ -408,9 +401,7 @@ namespace GW2EIEvtcParser.EIData
                             continue;
                         }
                         (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                        var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGeyser, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                        AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGeyser);
                     }
                 }
                 
