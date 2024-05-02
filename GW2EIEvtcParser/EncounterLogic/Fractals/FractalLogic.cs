@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D agentPos = agent.GetCurrentPosition(log, effect.Time);
                         if (agentPos == null)
                         {
-                            return;
+                            continue;
                         }
                         var distance = effect.Position.DistanceToPoint(agentPos);
                         if (distance < distanceThreshold)
