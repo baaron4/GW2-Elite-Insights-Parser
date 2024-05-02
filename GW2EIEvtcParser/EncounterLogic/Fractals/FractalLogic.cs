@@ -253,7 +253,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Correcting the duration of the effects for CTBS 45, based on the distance from the target casting the mechanic.
                     if (effect is EffectEventCBTS45)
                     {
-                        var distance = effect.Position.DistanceToPoint(agent.GetCurrentPosition(log, effect.Time));
+                        Point3D agentPos = agent.GetCurrentPosition(log, effect.Time);
+                        if (agentPos == null)
+                        {
+                            return;
+                        }
+                        var distance = effect.Position.DistanceToPoint(agentPos);
                         if (distance < distanceThreshold)
                         {
                             lifespan.end = effect.Time + onDistanceSuccessDuration;

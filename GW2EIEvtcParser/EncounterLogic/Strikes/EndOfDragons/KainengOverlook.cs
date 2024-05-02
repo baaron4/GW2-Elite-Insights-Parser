@@ -595,7 +595,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static void AddFallOfTheAxeDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration, int angle)
         {
             Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-            if (facingDirection == null) { return; }
+            if (facingDirection == null) 
+            { 
+                return; 
+            }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
             var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
@@ -606,7 +609,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddDragonSlashWaveDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration)
         {
             Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-            if (facingDirection == null) { return; }
+            if (facingDirection == null) 
+            { 
+                return; 
+            }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
             var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);

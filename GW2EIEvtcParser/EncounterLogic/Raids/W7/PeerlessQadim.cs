@@ -213,6 +213,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         Point3D pylonPosition = target.GetCurrentPosition(log, end);
+                        if (pylonPosition == null)
+                        {
+                            continue;
+                        }
                         replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
                         replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                     }
