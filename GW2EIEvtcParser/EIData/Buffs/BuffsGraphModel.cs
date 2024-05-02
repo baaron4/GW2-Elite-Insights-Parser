@@ -27,14 +27,26 @@ namespace GW2EIEvtcParser.EIData
 
         public Segment GetBuffStatus(long time)
         {
-            foreach (Segment seg in BuffChart)
+            int foundIndex = Segment.BinarySearchRecursive(BuffChart, time, 0, BuffChart.Count - 1);
+            if (foundIndex == BuffChart.Count)
             {
-                if (seg.ContainsPoint(time))
+                Segment last = BuffChart[foundIndex - 1];
+                if (last.ContainsPoint(time))
                 {
-                    return seg;
+                    return last;
                 }
+                return new Segment(long.MinValue, long.MaxValue, 0);
             }
-            return new Segment(long.MinValue, long.MaxValue, 0);
+            else if (foundIndex == 0)
+            {
+                Segment first = BuffChart[0];
+                if (first.ContainsPoint(time))
+                {
+                    return first;
+                }
+                return new Segment(long.MinValue, long.MaxValue, 0);
+            }
+            return BuffChart[foundIndex];
         }
 
         public IReadOnlyList<Segment> GetBuffStatus(long start, long end)
