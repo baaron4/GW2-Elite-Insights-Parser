@@ -1613,7 +1613,7 @@
         public const string DazingDischarge = "https://wiki.guildwars2.com/images/1/14/Dazing_Discharge.png";
         public const string ShatteringStone = "https://wiki.guildwars2.com/images/a/aa/Shattering_Stone.png";
         public const string ForceOfNature = "https://wiki.guildwars2.com/images/2/29/Force_of_Nature.png";
-        public const string SurvivalInstincts = "https://wiki.guildwars2.com/images/d/de/Refined_Toxins.png";
+        public const string SurvivalInstincts = "https://wiki.guildwars2.com/images/b/b6/Survival_Instincts.png";
         public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
         public const string NaturesStrength = "https://wiki.guildwars2.com/images/8/84/Nature%27s_Strength.png";
         public const string DimensionalAperture = "https://wiki.guildwars2.com/images/8/80/Dimensional_Aperture.png";
