@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -124,9 +125,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in rainOfSwords)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 6000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(280, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRainOfSwords, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 280, ParserIcons.EffectRainOfSwords);
                 }
             }
             // Thousand Cuts

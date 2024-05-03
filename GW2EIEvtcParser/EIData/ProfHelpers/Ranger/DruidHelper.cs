@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -71,9 +72,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in glyphOfTheStars)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGlyphOfTheStars, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectGlyphOfTheStars);
                 }
             }
 
@@ -84,9 +83,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in glyphOfTheStarsCA)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGlyphOfTheStarsCA, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectGlyphOfTheStarsCA);
                 }
             }
         }

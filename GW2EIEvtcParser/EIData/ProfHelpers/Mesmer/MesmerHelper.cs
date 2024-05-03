@@ -8,6 +8,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
@@ -366,9 +367,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in feedbacks)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 6000 : 7000); // 7s with trait pre March 2024
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFeedback);
                 }
             }
             // Veil
@@ -391,9 +390,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in nullFields)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 5000 : 6000); // 6s with trait pre March 2024
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectNullField);
                 }
             }
 
@@ -404,9 +401,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in illusionOfLife)
                 {
                     (long, long) lifespan = (effect.Time, effect.Time + 500);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectIllusionOfLife, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectIllusionOfLife);
                 }
             }
 
@@ -455,9 +450,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in unstableBladestorm)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUnstableBladestorm, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectUnstableBladestorm);
                 }
             }
         }

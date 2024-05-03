@@ -63,11 +63,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11204, 4414, 13252, 6462)*/);
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
-                TrashID.TemporalAnomalyArkk,
                 TrashID.FanaticDagger2,
                 TrashID.FanaticDagger1,
                 TrashID.FanaticBow,
@@ -93,8 +92,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)TargetID.Arkk,
                 (int)TrashID.Archdiviner,
-                (int)TrashID.EliteBrazenGladiator
+                (int)TrashID.EliteBrazenGladiator,
+                (int)TrashID.TemporalAnomalyArkk,
             };
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+
+            // Add number to the spawned anomalies
+            var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk)).ToList();
+            for (int i = 0; i < anomalies.Count; i++)
+            {
+                anomalies[i].OverrideName(anomalies[i].Character + " " + (i + 1));
+            }
         }
 
         private void GetMiniBossPhase(int targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
@@ -158,6 +170,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Time ?? log.FightData.FightEnd));
             }
             phases.AddRange(bloomPhases);
+
+            // Add anomalies as secondary target to the phases
+            foreach (PhaseData phase in phases)
+            {
+                var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && Math.Min(phase.End, x.LastAware) - Math.Max(phase.Start, x.FirstAware) > 0 && phase.CanBeSubPhase).ToList();
+                phase.AddSecondaryTargets(anomalies);
+            }
 
             return phases;
         }

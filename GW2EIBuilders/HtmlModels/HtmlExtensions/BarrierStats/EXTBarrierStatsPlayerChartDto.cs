@@ -15,6 +15,7 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
             Barrier = new PlayerDamageChartDto<int>()
             {
                 Total = p.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, null),
+                Taken = p.EXTBarrier.Get1SBarrierReceivedList(log, phase.Start, phase.End, null),
                 Targets = new List<IReadOnlyList<int>>()
             };
             foreach (AbstractSingleActor target in log.Friendlies)

@@ -108,9 +108,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Power Suit", PowerSuit, Source.Common, BuffClassification.Other, BuffImages.PowerSuit),
             new Buff("Reaper of Grenth", ReaperOfGrenth, Source.Common, BuffClassification.Other, BuffImages.ReaperOfGrenth),
             new Buff("Charrzooka", Charrzooka, Source.Common, BuffClassification.Other, BuffImages.Charrzooka),
-            //
-            new Buff("Guild Item Research", GuildItemResearch, Source.Common, BuffClassification.Other, BuffImages.GuildMagicFind),
-            //
+            // W4
             new Buff("Crystalline Heart", CrystallineHeart, Source.Common, BuffClassification.Other, BuffImages.CrystallineHeart),
             // Mounts
             new Buff("No Mount Use", NoMountUse, Source.Common, BuffClassification.Other, BuffImages.MountsDisabled),
@@ -130,6 +128,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fire Elemental Powder", FireElementalPowderBuff, Source.Common, BuffClassification.Other, BuffImages.FireElementalPowder),
             new Buff("Sunspear Paragon Support", SunspearParagonSupportBuff, Source.Common, BuffClassification.Other, BuffImages.SunspearParagonSupport),
             new Buff("Raven Spirit Shadow", RavenSpiritShadowBuff, Source.Common, BuffClassification.Other, BuffImages.RavenSpiritShadow),
+            // Primers
+            new Buff("Metabolic Primer", MetabolicPrimer, Source.Common, BuffClassification.Other, BuffImages.MetabolicPrimer),
+            new Buff("Utility Primer", UtilityPrimer, Source.Common, BuffClassification.Other, BuffImages.UtilityPrimer),
         };
 
         internal static readonly List<Buff> Gear = new List<Buff>

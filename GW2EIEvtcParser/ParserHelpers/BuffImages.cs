@@ -84,7 +84,10 @@
         public const string ReaperOfGrenth = "https://wiki.guildwars2.com/images/0/07/Reaper_of_Grenth.png";
         public const string Charrzooka = "https://wiki.guildwars2.com/images/1/17/Charrzooka.png";
         // Guild
-        public const string GuildMagicFind = "https://wiki.guildwars2.com/images/c/c6/Guild_Magic_Find_Banner_Boost.png";
+        public const string GuildSwiftnessBanner = "https://wiki.guildwars2.com/images/4/45/Guild_Swiftness_Banner_Boost.png";
+        // Primers
+        public const string UtilityPrimer = "https://wiki.guildwars2.com/images/a/a8/Utility_Primer_%28effect%29.png";
+        public const string MetabolicPrimer = "https://wiki.guildwars2.com/images/a/af/Metabolic_Primer_%28effect%29.png";
         // Wing 4
         public const string CrystallineHeart = "https://wiki.guildwars2.com/images/5/56/Crystalline_Heart.png";
         // WvW
@@ -1610,7 +1613,7 @@
         public const string DazingDischarge = "https://wiki.guildwars2.com/images/1/14/Dazing_Discharge.png";
         public const string ShatteringStone = "https://wiki.guildwars2.com/images/a/aa/Shattering_Stone.png";
         public const string ForceOfNature = "https://wiki.guildwars2.com/images/2/29/Force_of_Nature.png";
-        public const string SurvivalInstincts = "https://wiki.guildwars2.com/images/d/de/Refined_Toxins.png";
+        public const string SurvivalInstincts = "https://wiki.guildwars2.com/images/b/b6/Survival_Instincts.png";
         public const string TappedOut = "https://wiki.guildwars2.com/images/9/94/Tapped_Out.png";
         public const string NaturesStrength = "https://wiki.guildwars2.com/images/8/84/Nature%27s_Strength.png";
         public const string DimensionalAperture = "https://wiki.guildwars2.com/images/8/80/Dimensional_Aperture.png";

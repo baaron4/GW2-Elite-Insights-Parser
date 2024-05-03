@@ -221,7 +221,18 @@ namespace GW2EIEvtcParser
         public const string GuardianShieldOfTheAvenger = "0885D553A0A0A341B4C31B7964243407";
         public const string GuardianSignetOfMercyLightTray = "E9D10435E997D846B736B62EDCC6B4BD"; // Duration 2000 - light ray at the start of the cast
         public const string GuardianSignetOfMercyEnd = "61ED02C4AA44C0429790A79E8EFCA7CC"; // Duration 0 - end cast
+        public const string GuardianSymbolOfPunishment1 = "D20225BED809BE4D86FFE87D6C5AD2B0"; // duration 5000
+        public const string GuardianSymbolOfPunishment2 = "5F56361FEE7463448CA988CE773F4F63"; // duration 6000 - has effect end after 5000
+        public const string GuardianSymbolOfPunishmentOrb = "A8C650860481DD48B1B41F76B3054576"; // duration 500
+        public const string GuardianSymbolOfResolution = "98C9834C6381204A85DC67C375D135E4"; // duration 4000
+        public const string GuardianSymbolOfBlades = "FA37E0B77272314AA1ADCFF824F24C27"; // duration 5000
         public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
+        public const string FirebrandStalwartStand1 = "E20B6672FDCE57409B229DB152BF2286"; // duration 4000
+        public const string FirebrandStalwartStand2 = "CA4F198982BFD44180D63EB043F9F710"; // duration 4000
+        public const string FirebrandShiningRiver1 = "D2803F97338434488CD789E22E797CE2"; // duration 4000
+        public const string FirebrandShiningRiver2 = "AEBF45AEDFF2CC48A64ED01441241288"; // duration 4000
+        public const string FirebrandScorchedAftermath1 = "3B0AF49A77811F4EA3CFD1BF671BDDE5"; // duration 4000
+        public const string FirebrandScorchedAftermath2 = "4CC8C2BAB89D1C488CD69D4F711D49B3"; // duration 0
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
         public const string FirebrandMantraOfLoreCone = "C2B55AE44B295849A2983745203D19A1";
@@ -237,16 +248,23 @@ namespace GW2EIEvtcParser
         public const string FirebrandTomeOfJusticeOpen = "D573910FDB59434ABF6E7433061995BD";
         public const string FirebrandTomeOfResolveOpen = "39C1BD24ADA04C4788A99C7B0FD9B53F";
         public const string FirebrandTomeOfCourageOpen = "9EE3EAFEF333BE44AD8A7D234A1C3899";
+        public const string FirebrandSymbolOfVengeance1 = "9E41C2BEFD43D64299C41FD6EFB9ECBE";
+        public const string FirebrandSymbolOfVengeance2 = "0B22F631EBB04341A17FDC57431385EB";
+        public const string FirebrandSymbolOfVengeance3 = "60C2DD0478450F4B81BAA6486227872A";
         public const string DragonhunterTrapEffect = "CCF55B3EAA4D514BBB8340E01B6A1DEC";
         public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
+        public const string DragonhunterHuntersWardCage = "F70A6157503537478331C8F82C0AB76E";
+        public const string DragonhunterSymbolOfEnergy = "8493CB203B40E04BAE5DC6F141B40743";
         #endregion
         #region Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
-        public const string EngineerMineInactive = "2EE26B8656BD424B9BF9A7EA4CB0AA06";
-        public const string EngineerMineExplode1 = "885B7AAA68F09E48A926BFFE488DB5AD";
-        public const string EngineerMineExplode2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD";
+        public const string EngineerThrowMineInactive1 = "2EE26B8656BD424B9BF9A7EA4CB0AA06"; // infinite duration
+        public const string EngineerThrowMineInactive2 = "67649A4CB18C5C4A8D48ACFCF50B21CE"; // 0 duration
+        public const string EngineerMineField = "997750CA2636154E9FFBFEE4AA51A970"; // 0 duration and infinite duration, both logged at the same time
+        public const string EngineerMineExplosion1 = "885B7AAA68F09E48A926BFFE488DB5AD"; // 0 duration - Throw Mine and Mine Field use this effect
+        public const string EngineerMineExplosion2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD"; // 0 duration - Throw Mine and Mine Field use this effect
         public const string ScrapperThunderclap = "8C8E0AB8328CC1418F9A815E022E20B6"; // has owner, 5s duration
         public const string ScrapperThunderclapSpawn = "039F8B46E5595C4E9C2D52AA58FDD8B0"; // has owner, 1s duration
         public const string ScrapperFunctionGyro = "B4CA602E8A849F47BFC105C740005162"; // has owner, 5s duration
