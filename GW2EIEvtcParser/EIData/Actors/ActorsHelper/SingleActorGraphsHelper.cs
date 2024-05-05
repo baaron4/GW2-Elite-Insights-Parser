@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -177,6 +178,30 @@ namespace GW2EIEvtcParser.EIData
             return brkDmgList;
         }
 
+        private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
+        {
+            int foundIndex = Segment.BinarySearchRecursive(segments, time, 0, segments.Count - 1);
+            if (foundIndex == segments.Count)
+            {
+                Segment last = segments[foundIndex - 1];
+                if (last.ContainsPoint(time))
+                {
+                    return last.Value;
+                }
+                return -1.0;
+            }
+            else if (foundIndex == 0)
+            {
+                Segment first = segments[0];
+                if (first.ContainsPoint(time))
+                {
+                    return first.Value;
+                }
+                return -1.0;
+            }
+            return segments[foundIndex].Value;
+        }
+
         public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
         {
             IReadOnlyList<Segment> hps = GetHealthUpdates(log);
@@ -184,31 +209,17 @@ namespace GW2EIEvtcParser.EIData
             {
                 return -1.0;
             }
-            foreach (Segment seg in hps)
-            {
-                if (seg.ContainsPoint(time))
-                {
-                    return seg.Value;
-                }
-            }
-            return -1.0;
+            return GetPercentValue(hps, time);
         }
 
         public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
         {
-            IReadOnlyList<Segment> hps = GetBarrierUpdates(log);
-            if (!hps.Any())
+            IReadOnlyList<Segment> barriers = GetBarrierUpdates(log);
+            if (!barriers.Any())
             {
                 return -1.0;
             }
-            foreach (Segment seg in hps)
-            {
-                if (seg.ContainsPoint(time))
-                {
-                    return seg.Value;
-                }
-            }
-            return -1.0;
+            return GetPercentValue(barriers, time);
         }
 
     }

@@ -586,6 +586,10 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="radius">Radius of the circle.</param>
         internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
         {
+            if (startingPoint == null || endingPoint == null)
+            {
+                return;
+            }
             var startPoint = new ParametricPoint3D(startingPoint, lifespan.start);
             var endPoint = new ParametricPoint3D(endingPoint, lifespan.end);
             var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector(new List<ParametricPoint3D>() { startPoint, endPoint }));

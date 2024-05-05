@@ -260,7 +260,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endTime = (int)deathEmbrace.Time + deathsEmbraceCastDuration;
 
                         Point3D ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
-                        if (ankkaPosition == null) { continue; }
+                        if (ankkaPosition == null) 
+                        { 
+                            continue; 
+                        }
 
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out IReadOnlyList<EffectEvent> deathsEmbraceEffects))
                         {

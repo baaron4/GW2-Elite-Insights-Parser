@@ -609,40 +609,44 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                     if (shackledPrisoner != null)
                     {
-                        float diffX = 0;
-                        float diffY = 0;
-                        if (replay.PolledPositions[0].X - demonicCenter.X > 0)
+                        Point3D shackledPos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant);
+                        if (shackledPos != null)
                         {
-                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                            float diffX = 0;
+                            float diffY = 0;
+                            if (replay.PolledPositions[0].X - demonicCenter.X > 0)
                             {
-                                // top
-                                diffX = 55;
-                                diffY = 1080;
-                            } 
-                            else
-                            {
-                                // right
-                                diffX = 1115;
-                                diffY = -35;
-                            }
-                        } 
-                        else
-                        {
-                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
-                            {
-                                // left 
-                                diffX = -1100;
-                                diffY = 40;
+                                if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                                {
+                                    // top
+                                    diffX = 55;
+                                    diffY = 1080;
+                                }
+                                else
+                                {
+                                    // right
+                                    diffX = 1115;
+                                    diffY = -35;
+                                }
                             }
                             else
                             {
-                                // bottom
-                                diffX = -38;
-                                diffY = -1130;
+                                if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                                {
+                                    // left 
+                                    diffX = -1100;
+                                    diffY = 40;
+                                }
+                                else
+                                {
+                                    // bottom
+                                    diffX = -38;
+                                    diffY = -1130;
+                                }
                             }
+                            Point3D pos = shackledPos + new Point3D(diffX, diffY);
+                            replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                         }
-                        Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant) + new Point3D(diffX, diffY);
-                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                     }
                     break;
                 default:

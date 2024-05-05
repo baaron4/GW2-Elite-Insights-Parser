@@ -49,8 +49,6 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public abstract IReadOnlyList<AgentItem> GetSources();
         public abstract IReadOnlyList<AgentItem> GetActiveSources();
-        public abstract IReadOnlyList<AgentItem> GetSources(AbstractSingleActor actor);
-        public abstract IReadOnlyList<AgentItem> GetActiveSources(AbstractSingleActor actor);
 
         public abstract int GetActiveStacks();
         public abstract int GetStacks();
