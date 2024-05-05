@@ -2,6 +2,11 @@
     <div class="d-flex flex-column justify-content-center align-items-center" style="max-width: 500px;">           
         <h4>General Settings</h4>
         <div class="d-flex flex-row justify-content-center flex-wrap">
+            <div class="form-check mb-2 mr-2" :data-original-title="'Viewpoint will follow selected actor, as long as selected actor is drawn'">
+                <input type="checkbox" class="form-check-input" id="followCheck" 
+                    :checked="getAnimator().displaySettings.followSelected" v-on:change="getAnimator().toggleFollowSelected()">
+                <label class="form-check-label" for="followCheck">Follow Selected</label>
+            </div>
             <div class="form-check mb-2 mr-2" :data-original-title="'Selected player in green, group in blue'">
                 <input type="checkbox" class="form-check-input" id="subgroupCheck" 
                     :checked="getAnimator().displaySettings.highlightSelectedGroup" v-on:change="getAnimator().toggleHighlightSelectedGroup()">
