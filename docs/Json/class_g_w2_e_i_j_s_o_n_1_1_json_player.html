@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.67.1.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.68.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -173,6 +173,22 @@ Only relevant for rangers. <br /></td></tr>
 <tr class="memdesc:a1353f113c4abc3b85f8e99296ecd9ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Total DPS stats <br  />
 Length == # of targets and the length of each sub array is equal to # of phases.  <br /></td></tr>
 <tr class="separator:a1353f113c4abc3b85f8e99296ecd9ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ab291691eb8de590edc79fa5bc0d9ac" id="r_a2ab291691eb8de590edc79fa5bc0d9ac"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a2ab291691eb8de590edc79fa5bc0d9ac">DamageTaken1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a2ab291691eb8de590edc79fa5bc0d9ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage taken points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:a2ab291691eb8de590edc79fa5bc0d9ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a1d147a1b382b2bafb20c9280abaa05" id="r_a7a1d147a1b382b2bafb20c9280abaa05"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a7a1d147a1b382b2bafb20c9280abaa05">PowerDamageTaken1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a7a1d147a1b382b2bafb20c9280abaa05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S power damage taken points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:a7a1d147a1b382b2bafb20c9280abaa05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebab224f60acf625a29e0a4eeabe7458" id="r_aebab224f60acf625a29e0a4eeabe7458"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aebab224f60acf625a29e0a4eeabe7458">ConditionDamageTaken1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:aebab224f60acf625a29e0a4eeabe7458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S condition damage taken points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:aebab224f60acf625a29e0a4eeabe7458"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b1946e489ecc398cee46b6c228d345a" id="r_a7b1946e489ecc398cee46b6c228d345a"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a7b1946e489ecc398cee46b6c228d345a">BreakbarDamageTaken1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a7b1946e489ecc398cee46b6c228d345a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of double representing 1S breakbar damage taken points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:a7b1946e489ecc398cee46b6c228d345a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1c3c39224bc30dd54f6c8d686ecea6e" id="r_af1c3c39224bc30dd54f6c8d686ecea6e"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af1c3c39224bc30dd54f6c8d686ecea6e">TargetDamage1S</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:af1c3c39224bc30dd54f6c8d686ecea6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S damage points <br  />
 Length == # of targets and the length of each sub array is equal to # of phases.  <br /></td></tr>
@@ -398,6 +414,33 @@ If i corresponds to the last element that means the health did not change for th
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class representing a player. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a7b1946e489ecc398cee46b6c228d345a" name="a7b1946e489ecc398cee46b6c228d345a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b1946e489ecc398cee46b6c228d345a">&#9670;&#160;</a></span>BreakbarDamageTaken1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;double&gt; &gt; GW2EIJSON.JsonPlayer.BreakbarDamageTaken1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of double representing 1S breakbar damage taken points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
 <a id="a5327a117260ac39307cbeb3ef49bec77" name="a5327a117260ac39307cbeb3ef49bec77"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5327a117260ac39307cbeb3ef49bec77">&#9670;&#160;</a></span>BuffUptimes</h2>
 
@@ -445,6 +488,33 @@ If i corresponds to the last element that means the health did not change for th
 
 <p>List of buff status on active time. </p>
 <dl class="section see"><dt>See also</dt><dd>JsonBuffsUptime</dd></dl>
+
+</div>
+</div>
+<a id="aebab224f60acf625a29e0a4eeabe7458" name="aebab224f60acf625a29e0a4eeabe7458"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebab224f60acf625a29e0a4eeabe7458">&#9670;&#160;</a></span>ConditionDamageTaken1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.JsonPlayer.ConditionDamageTaken1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S condition damage taken points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
 
 </div>
 </div>
@@ -521,6 +591,33 @@ If i corresponds to the last element that means the health did not change for th
 <p>Damage modifiers against targets <br  />
 Length == # of targets. </p>
 <dl class="section see"><dt>See also</dt><dd>JsonDamageModifierData</dd></dl>
+
+</div>
+</div>
+<a id="a2ab291691eb8de590edc79fa5bc0d9ac" name="a2ab291691eb8de590edc79fa5bc0d9ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ab291691eb8de590edc79fa5bc0d9ac">&#9670;&#160;</a></span>DamageTaken1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.JsonPlayer.DamageTaken1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S damage taken points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
 
 </div>
 </div>
@@ -674,6 +771,33 @@ Length == # of targets. </p>
 
 <p>List of buff status on off group generation. </p>
 <dl class="section see"><dt>See also</dt><dd>JsonPlayerBuffsGeneration</dd></dl>
+
+</div>
+</div>
+<a id="a7a1d147a1b382b2bafb20c9280abaa05" name="a7a1d147a1b382b2bafb20c9280abaa05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a1d147a1b382b2bafb20c9280abaa05">&#9670;&#160;</a></span>PowerDamageTaken1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.JsonPlayer.PowerDamageTaken1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S power damage taken points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
 
 </div>
 </div>

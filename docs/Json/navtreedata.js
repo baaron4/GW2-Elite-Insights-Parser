@@ -43,9 +43,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"class_g_w2_e_i_j_s_o_n_1_1_json_buffs_uptime.html#a19d04082968f54060b04e041c98b2e3c",
-"class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_extension_desc.html#a42d2e13eba89ed61367b1959b55d9307",
-"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a81a93232249a7fd69ad9885ebabb430c"
+"class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#ab026d9c2b92af14428df20012570fe01",
+"class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html#ad65136405552afedb13cd36bf35246d3",
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_d_p_s.html#a0581d378bc6fef3a84db91c6cad29d14"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
