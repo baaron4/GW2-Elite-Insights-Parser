@@ -210,14 +210,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
                 // Sub Phase for 50-10%
-                for (int i = 1; i <= invulnPhases.Count; i++)
+                PhaseData phase3 = invulnPhases.LastOrDefault(x => x.InInterval(enragedSmash.Time));
+                if (phase3 != null)
                 {
-                    if (i == 5)
-                    {
-                        var phase50_10 = new PhaseData(invulnPhases[i - 1].Start, enragedSmash.Time, "50-10%");
-                        phase50_10.AddTarget(mainTarget);
-                        phases.Add(phase50_10);
-                    }
+                    var phase50_10 = new PhaseData(phase3.Start, enragedSmash.Time, "50-10%");
+                    phase50_10.AddTarget(mainTarget);
+                    phases.Add(phase50_10);
                 }
             }
             return phases;
