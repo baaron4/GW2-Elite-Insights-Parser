@@ -177,7 +177,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Invul check
-            phases.AddRange(GetPhasesByInvul(log, InvulnerabilityCerus, mainTarget, true, true));
+            List<PhaseData> invulnPhases = GetPhasesByInvul(log, InvulnerabilityCerus, mainTarget, true, true);
+            phases.AddRange(invulnPhases);
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -208,6 +209,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var phase = new PhaseData(enragedSmash.Time, log.FightData.FightEnd, "Enraged Smash");
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
+                // Sub Phase for 50%-10%
+                PhaseData phase3 = invulnPhases.LastOrDefault(x => x.InInterval(enragedSmash.Time));
+                if (phase3 != null)
+                {
+                    var phase50_10 = new PhaseData(phase3.Start, enragedSmash.Time, "50%-10%");
+                    phase50_10.AddTarget(mainTarget);
+                    phases.Add(phase50_10);
+                }
             }
             return phases;
         }
