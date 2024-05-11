@@ -55,15 +55,11 @@
 
 <script>
     function getDefaultHealingSubComponent() {
+        if (!validateStartPath("HealingStatistics")) {
+            return 0;
+        }
         const setting = EIUrlParams.get("startPage");
-        if (!setting) {
-            return 0;
-        }
-        const mainCompo = setting.split('/')[0];
-        if (!mainCompo || mainCompo !== "HealingStatistics") {
-            return 0;
-        }
-        var compo = EIUrlParams.get("startPage").split('/')[1];
+        var compo = setting.split('/')[1];
         if (!compo) {
             return 0;
         }

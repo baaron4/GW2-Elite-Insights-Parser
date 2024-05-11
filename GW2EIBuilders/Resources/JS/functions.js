@@ -925,3 +925,11 @@ function hasMechanics() {
 function hasTargets() {
     return !logData.targetless ;
 }
+
+function validateStartPath(path) {  
+    const setting = EIUrlParams.get("startPage");
+    if (!setting) {
+        return false;
+    }
+    return setting.startsWith(path);
+}

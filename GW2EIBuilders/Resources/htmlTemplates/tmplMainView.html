@@ -70,14 +70,10 @@
 <script>
 
     function getDefaultMainSubComponent() {
+        if (!validateStartPath("Statistics")) {
+            return 0;
+        }
         const setting = EIUrlParams.get("startPage");
-        if (!setting) {
-            return 0;
-        }
-        const mainCompo = setting.split('/')[0];
-        if (!mainCompo || mainCompo !== "Statistics") {
-            return 0;
-        }
         const compo = setting.split('/')[1];
         if (!compo) {
             return 0;

@@ -132,9 +132,6 @@ function getDefaultMainComponent() {
         return 0;
     }
     const mainCompo = setting.split('/')[0];
-    if (!mainCompo) {
-        return 0;
-    }
     switch (mainCompo) {
         case "Statistics":
             return 0;
