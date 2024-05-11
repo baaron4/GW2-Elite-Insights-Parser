@@ -202,3 +202,5 @@ const RotationStatus = {
     FULL: 3,
     INSTANT: 4
 };
+
+const EIUrlParams = new URLSearchParams(window.location.search);

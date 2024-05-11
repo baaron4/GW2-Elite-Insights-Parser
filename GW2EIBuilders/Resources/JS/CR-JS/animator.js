@@ -44,10 +44,18 @@ let overheadAnimationIncrement = 1;
 const uint32 = new Uint32Array(1);
 const uint32ToUint8 = new Uint8Array(uint32.buffer);
 
+function getDefaultCombatReplayTime() {  
+    var time = EIUrlParams.get("crTime");
+    if (!time) {
+        return 0;
+    }
+    return Math.max(parseFloat(time), 0.0) * 1000;
+}
+
 var animator = null;
 // reactive structures
-var reactiveAnimationData = {
-    time: 0,
+const reactiveAnimationData = {
+    time: getDefaultCombatReplayTime(),
     selectedActorID: null,
     animated: false
 };
@@ -200,6 +208,7 @@ class Animator {
                             for (let j = 0; j < actor.positions.length / 2; j++) {
                                 this.times.push(j * this.pollingRate);
                             }
+                            reactiveAnimationData.time = Math.min(reactiveAnimationData.time, this.times[this.times.length - 1]);
                         }
                         break;
                     case "Target":

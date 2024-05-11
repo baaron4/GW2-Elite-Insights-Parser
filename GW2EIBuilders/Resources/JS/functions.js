@@ -909,3 +909,19 @@ function computeBuffData(buffData, data) {
         stacking: false
     };
 }*/
+
+function hasRotations() {
+    return logData.players.length > 1;
+}
+
+function hasDamageMods() {
+    return Object.keys(logData.damageModMap).length !== 0 || Object.keys(logData.damageIncModMap).length !== 0 ;
+}
+
+function hasMechanics() {
+    return logData.mechanicMap.length > 0 && !logData.noMechanics ;
+}
+
+function hasTargets() {
+    return !logData.targetless ;
+}
