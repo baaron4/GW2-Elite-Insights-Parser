@@ -24,12 +24,31 @@
 </template>
 
 <script>
+    function getDefaultHealingStatsSubComponent() {
+        if (!validateStartPath("HealingStatistics/HealingStats")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        if (!compo) {
+            return 0;
+        }
+        switch (compo) {
+            case "OutgoingHealingStats":
+                return 0;
+            case "IncomingHealingStats":
+                return 1;
+            case "SupportStats":
+                return 2;
+        }
+        return 0;
+    }
     Vue.component("healing-stat-tables-component", {
         props: ["phaseindex", "playerindex", "activetargets"],
         template: `${template}`,
         data: function () {
             return {
-                tab: 0,
+                tab: getDefaultHealingStatsSubComponent(),
             };
         },
     });

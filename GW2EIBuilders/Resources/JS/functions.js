@@ -926,6 +926,46 @@ function hasTargets() {
     return !logData.targetless ;
 }
 
+function hasOffBuffs() {
+    return logData.offBuffs.length > 0;
+};
+function hasDefBuffs() {
+    return logData.defBuffs.length > 0;
+};
+function hasSupBuffs() {
+    return logData.supBuffs.length > 0;
+};
+function hasGearBuffs() {
+    return logData.gearBuffs.length > 0;
+};
+function hasDebuffs() {
+    return logData.debuffs.length > 0;
+};
+function hasConditions() {
+    return logData.conditions.length > 0;
+};
+function hasNourishments() {
+    return logData.nourishments.length > 0;
+};
+function hasEnhancements() {
+    return logData.enhancements.length > 0;
+};
+function hasOtherConsumables() {
+    return logData.otherConsumables.length > 0;
+};
+function hasPersBuffs() {
+    var hasPersBuffs = false;
+    if (logData.persBuffs) {
+        for (var prop in logData.persBuffs) {
+            if (logData.persBuffs.hasOwnProperty(prop) && logData.persBuffs[prop].length > 0) {
+                hasPersBuffs = true;
+                break;
+            }
+        }
+    }
+    return hasPersBuffs;
+};
+
 function validateStartPath(path) {  
     const setting = EIUrlParams.get("startPage");
     if (!setting) {

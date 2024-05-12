@@ -22,13 +22,32 @@
 </template>
 
 <script>
+    function getDefaultGraphSubComponent() {
+        if (!validateStartPath("Statistics/Graph")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        if (!compo) {
+            return logData.targetless ? 0 : 1;
+        }
+        switch (compo) {
+            case "Total":
+                return 0;
+            case "Target":
+                return logData.targetless ? 0 : 1;
+            case "Cleave":
+                return logData.targetless ? 0 : 2;
+        }
+        return logData.targetless ? 0 : 1;
+    }
     Vue.component("graph-stats-component", {
         props: ["activetargets", "phaseindex", 'playerindex', 'light'],
         template: `${template}`,
         data: function () {
             return {
                 targetless: logData.targetless,
-                mode: logData.targetless ? 0 : 1,
+                mode: getDefaultGraphSubComponent(),
             };
         },
         computed: {
