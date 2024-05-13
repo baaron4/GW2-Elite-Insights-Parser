@@ -24,13 +24,10 @@
 <script>
     function getDefaultGraphSubComponent() {
         if (!validateStartPath("Statistics/Graph")) {
-            return 0;
+            return logData.targetless ? 0 : 1;
         }
         const setting = EIUrlParams.get("startPage");
         const compo = setting.split('/')[2];
-        if (!compo) {
-            return logData.targetless ? 0 : 1;
-        }
         switch (compo) {
             case "Total":
                 return 0;

@@ -75,9 +75,6 @@
         }
         const setting = EIUrlParams.get("startPage");
         const compo = setting.split('/')[1];
-        if (!compo) {
-            return 0;
-        }
         switch (compo) {
             case "GeneralStats":
                 return 0;

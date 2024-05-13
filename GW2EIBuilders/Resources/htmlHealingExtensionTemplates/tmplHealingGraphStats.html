@@ -24,13 +24,10 @@
 <script>
     function getDefaultHealingGraphSubComponent() {
         if (!validateStartPath("HealingStatistics/HealingGraph")) {
-            return 0;
+            return 1;
         }
         const setting = EIUrlParams.get("startPage");
         const compo = setting.split('/')[2];
-        if (!compo) {
-            return 1;
-        }
         switch (compo) {
             case "Total":
                 return 0;

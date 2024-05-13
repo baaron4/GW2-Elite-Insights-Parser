@@ -914,8 +914,16 @@ function hasRotations() {
     return logData.players.length > 1;
 }
 
+function hasOutgoingDamageMods() {
+    return Object.keys(logData.damageModMap).length !== 0;
+}
+
+function hasIncomingDamageMods() {
+    return Object.keys(logData.damageIncModMap).length !== 0 ;
+}
+
 function hasDamageMods() {
-    return Object.keys(logData.damageModMap).length !== 0 || Object.keys(logData.damageIncModMap).length !== 0 ;
+    return hasOutgoingDamageMods() || hasIncomingDamageMods();
 }
 
 function hasMechanics() {
