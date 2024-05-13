@@ -54,6 +54,7 @@
         public const long NumberOfRangerPets = -35;
         public const long AchievementEligibilityApathetic = -36;
         public const long DetonateThrowMineOrMineField = -37;
+        public const long SuperiorSigilOfLeeching = -38;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
@@ -323,11 +324,14 @@
         public const long WallOfReflection = 9251;
         public const long RenewedFocus = 9255;
         public const long ReinforcedArmor = 9283;
-        public const long FlameBlastSigil = 9284;
+        public const long FlameBlast_SigilOfFire = 9284; // Minor, Major and Superior use the same skill, different sigil cooldown
         public const long MinorSigilOfBloodlust = 9281;
         public const long MajorSigilOfBloodlust = 9285;
         public const long SuperiorSigilOfBloodlust = 9286;
-        public const long LightningStrikeSigil = 9292;
+        public const long MinorSigilOfBlood = 9288;
+        public const long LightningStrike_SigilOfAir = 9292; // Minor, Major and Superior use the same skill, different sigil cooldown
+        public const long WaveOfHealing_MinorSigilOfRenewal = 9293;
+        public const long MajorSigilOfRestoration = 9298;
         public const long SuperiorSigilOfCorruption = 9374;
         public const long MajorSigilOfCorruption = 9375;
         public const long MinorSigilOfCorruption = 9376;
@@ -338,15 +342,23 @@
         public const long SuperiorSigilOfBenevolence = 9398;
         public const long MajorSigilOfBenevolence = 9399;
         public const long MinorSigilOfBenevolence = 9400;
+        public const long SuperiorSigilOfRestoration = 9413;
         public const long LeechBuff = 9416;
         public const long MajorSigilOfLeeching = 9417;
         public const long SuperiorSigilOfVision = 9422;
-        public const long SigilOfHydromancy = 9428;
-        public const long SigilOfEarth = 9433;
-        public const long SigilOfDoom = 9441;
-        public const long SigilOfBlood = 9458;
+        public const long FrostBurst_MinorSigilOfHydromancy = 9425;
+        public const long FrostBurst_MajorSigilOfHydromancy = 9427;
+        public const long FrostBurst_SuperiorSigilOfHydromancy = 9428;
+        public const long RingOfEarth_MajorSigilOfGeomancy = 9431;
+        public const long RingOfEarth_MinorSigilOfGeomancy = 9432;
+        public const long RingOfEarth_SuperiorSigilOfGeomancy = 9433;
+        public const long MajorSigilOfDoom = 9440;
+        public const long SuperiorSigilOfDoom = 9441;
+        public const long MajorSigilOfBlood = 9457;
+        public const long SuperiorSigilOfBlood = 9458;
         public const long SuperiorRuneOfTheDolyak = 9586;
         public const long FrozenBurstRuneOfIce = 9604;
+        public const long MinorSigilOfDoom = 9703;
         public const long BowlOfSimpleStirfry = 9733;
         public const long BowlOfGarlicSpinachSautee = 9734;
         public const long BowlOfAvocadoStirfry = 9736;
@@ -1161,7 +1173,8 @@
         public const long FireHollowedBoulder = 20285;
         public const long FireHeavyBoulder2 = 20290;
         public const long ArcanePowerFerocityBuff = 20449;
-        public const long WaveOfHealing = 20462;
+        public const long WaveOfHealing_MajorSigilOfRenewal = 20461;
+        public const long WaveOfHealing_SuperiorSigilOfRenewal = 20462;
         public const long RuneOfTormenting = 20479;
         public const long PortalExitWhiteMantleWatchwork = 20851;
         public const long PortalUsesWhiteMantleWatchwork = 20852;
@@ -1303,8 +1316,9 @@
         public const long Reflection2 = 24014;
         public const long HealingRipple = 24061;
         public const long POV_DhuumfireCooldown = 24286;
-        public const long SigilOfWater = 24241;
-        public const long WaveOfHealing2 = 24244;
+        public const long WaveOfHealing_SuperiorSigilOfWater = 24241;
+        public const long WaveOfHealing_MinorSigilOfWater = 24242;
+        public const long WaveOfHealing_MajorSigilOfWater = 24244;
         public const long Critical = 24278;
         public const long MysticalDragonFinisher = 24290;
         public const long LlamaFinisher = 24291;
@@ -1363,6 +1377,7 @@
         public const long NorthAmericanWorldTournamentFinisher = 26080;
         public const long EuropeanWorldTournamentFinisher = 26081;
         public const long PoorNourishment = 26248;
+        public const long Snowball_SigilOfMischief = 26261; // Minor, Major and Superior use the same skill
         public const long BloodstonePotPie = 26445;
         public const long DeliciousRiceBall = 26529;
         public const long FriedGoldenDumpling = 26530;
@@ -1722,6 +1737,7 @@
         public const long WritOfStudiedSpeed = 33005;
         public const long TemporalOrigin = 33009;
         public const long GuildObjectiveAuraVII = 33010;
+        public const long SuperiorSigilOfDraining = 33022;
         public const long FractalMobility = 33024;
         public const long WritOfMasterfulSpeed = 33040;
         public const long MordremSharkFinisher = 33053;
