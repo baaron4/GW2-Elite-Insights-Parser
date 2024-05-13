@@ -20,13 +20,22 @@
 </template>
 
 <script>
+    function getDefaultDamageModifiersClassSubComponent(incoming) {
+        let path = "Statistics/DamageModifiers/" + (incoming ? "IncomingDamageModifiers" : "OutgoingDamageModifiers") + "/ClassBasedDamageModifiers";
+        if (!validateStartPath(path)) {
+            return "None";
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[4];
+        return compo ? compo : "None";
+    }
     Vue.component("dmgmodifier-persstats-component", {
         props: ['phaseindex', 'playerindex', 'activetargets', 'mode', 'incoming'],
         template: `${template}`,
         data: function () {
             return {
                 bases: [],
-                specmode: "Warrior",
+                specmode: getDefaultDamageModifiersClassSubComponent(this.incoming),
                 specToBase: SpecToBase
             };
         },
@@ -71,7 +80,9 @@
                 aux.forEach(function (value, value2, set) {
                     _this.bases.push(value);
                 });
-                this.specmode = this.bases[0];
+                if (this.specmode === "None" || !this.bases.includes(this.specmode)) {
+                    this.specmode = this.bases[0];
+                }
                 return res;
             },
             personalModifiers: function () {
