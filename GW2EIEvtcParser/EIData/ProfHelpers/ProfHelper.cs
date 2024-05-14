@@ -16,27 +16,89 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
-            new BreakbarDamageCastFinder(Technobabble, Technobabble),
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth)
+            // Sigils
+            new DamageCastFinder(RingOfEarth_MinorSigilOfGeomancy, RingOfEarth_MinorSigilOfGeomancy)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil)
+            new DamageCastFinder(RingOfEarth_MajorSigilOfGeomancy, RingOfEarth_MajorSigilOfGeomancy)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil)
+            new DamageCastFinder(RingOfEarth_SuperiorSigilOfGeomancy, RingOfEarth_SuperiorSigilOfGeomancy)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy)
+            new DamageCastFinder(LightningStrike_SigilOfAir, LightningStrike_SigilOfAir)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FlameBlast_SigilOfFire, FlameBlast_SigilOfFire)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(Snowball_SigilOfMischief, Snowball_SigilOfMischief)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FrostBurst_MinorSigilOfHydromancy, FrostBurst_MinorSigilOfHydromancy)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FrostBurst_MajorSigilOfHydromancy, FrostBurst_MajorSigilOfHydromancy)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FrostBurst_SuperiorSigilOfHydromancy, FrostBurst_SuperiorSigilOfHydromancy)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(SuperiorSigilOfDraining, SuperiorSigilOfDraining)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfSeverance, SuperiorSigilOfSeverance)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(MinorSigilOfDoom, MinorSigilOfDoom)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(MajorSigilOfDoom, MajorSigilOfDoom)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfDoom, SuperiorSigilOfDoom)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(MajorSigilOfLeeching, MajorSigilOfLeeching)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfLeeching, LeechBuff)
+                .WithBuilds(ArcDPSEnums.GW2Builds.November2018Rune)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfVision, SuperiorSigilOfVision)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfConcentration, SuperiorSigilOfConcentration)
+                .WithBuilds(ArcDPSEnums.GW2Builds.StartOfLife, ArcDPSEnums.GW2Builds.November2018Rune)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MinorSigilOfWater, WaveOfHealing_MinorSigilOfWater)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MajorSigilOfWater, WaveOfHealing_MajorSigilOfWater)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_SuperiorSigilOfWater, WaveOfHealing_SuperiorSigilOfWater)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MinorSigilOfRenewal, WaveOfHealing_MinorSigilOfRenewal)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MajorSigilOfRenewal, WaveOfHealing_MajorSigilOfRenewal)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_SuperiorSigilOfRenewal, WaveOfHealing_SuperiorSigilOfRenewal)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(MajorSigilOfRestoration, MajorSigilOfRestoration)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(SuperiorSigilOfRestoration, SuperiorSigilOfRestoration)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(MinorSigilOfBlood, MinorSigilOfBlood)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(MajorSigilOfBlood, MajorSigilOfBlood)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(SuperiorSigilOfBlood, SuperiorSigilOfBlood)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            // Runes
+            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            // Combos
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
             new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
             new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
-            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
-                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BreakbarDamageCastFinder(LightningLeapCombo, LightningLeapCombo),
+            // Misc
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
             new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
                 .UsingBeforeWeaponSwap(true),
+            new BreakbarDamageCastFinder(Technobabble, Technobabble),
             // Relics
             new BuffGainCastFinder(RelicOfVass, RelicOfVass)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
