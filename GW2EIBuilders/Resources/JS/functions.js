@@ -974,6 +974,19 @@ function hasPersBuffs() {
     return hasPersBuffs;
 };
 
+function showDeathRecap() {
+    for (var i = 0; i < logData.players.length; i++) {
+        if (!!logData.players[i].details.deathRecap) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function hasBarrierExtension() {
+    return !!barrierStatsExtension;
+}
+
 function validateStartPath(path) {  
     const setting = EIUrlParams.get("startPage");
     if (!setting) {
