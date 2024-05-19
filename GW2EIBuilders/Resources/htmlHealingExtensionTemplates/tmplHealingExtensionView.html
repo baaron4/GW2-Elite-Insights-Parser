@@ -24,7 +24,7 @@
                 <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Mechanics</a>
             </li>
             <li>
-                <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Healing Graph</a>
+                <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Graph</a>
             </li>    
             <li v-if="hasRotations">
                 <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Rotations</a>
@@ -67,7 +67,7 @@
                 return 1;
             case "Mechanics":
                 return hasMechanics() ? 2 : 0;
-            case "HealingGraph":
+            case "Graph":
                 return 3;
             case "Rotations":
                 return hasRotations() ? 4 : 0;
