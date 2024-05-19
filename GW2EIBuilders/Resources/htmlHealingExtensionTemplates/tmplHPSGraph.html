@@ -145,7 +145,7 @@
                         name = this.graphhealingdata.hpsmode + "s " + name;
                         break;
                 }
-                name = (this.mode === 0 ? "Total " : (this.mode === 1 ? "Target " : "Cleave ")) + name;
+                name = (this.mode === 0 ? "Total " : (this.mode === 1 ? "Target " : (this.mode === 1 ? "Cleave " : "Incoming "))) + name;
                 return name;
             },
             computeData: function () {
@@ -182,12 +182,14 @@
                 var maxHPS = {
                     total: 0,
                     cleave: 0,
-                    target: 0
+                    target: 0,
+                    taken: 0
                 };
                 var allHPS = {
                     total: [],
                     cleave: [],
-                    target: []
+                    target: [],
+                    taken: []
                 };
                 var playerHPS = [];
                 for (var i = 0; i < logData.players.length; i++) {
@@ -197,10 +199,12 @@
                     maxHPS.total = Math.max(maxHPS.total, data.maxDPS.total);
                     maxHPS.cleave = Math.max(maxHPS.cleave, data.maxDPS.cleave);
                     maxHPS.target = Math.max(maxHPS.target, data.maxDPS.target);
+                    maxHPS.taken = Math.max(maxHPS.taken, data.maxDPS.taken);
                     for (var j = 0; j < data.dps.total.length; j++) {
                         allHPS.total[j] = (allHPS.total[j] || 0) + data.dps.total[j];
                         allHPS.cleave[j] = (allHPS.cleave[j] || 0) + data.dps.cleave[j];
                         allHPS.target[j] = (allHPS.target[j] || 0) + data.dps.target[j];
+                        allHPS.taken[j] = (allHPS.taken[j] || 0) + data.dps.taken[j];
                     }
                 }
 
@@ -232,12 +236,27 @@
                 var res = [];
                 var hpsData = this.computeHPSData();
                 var offset = 0;
+                var attributeToUse = null;
+                switch (this.mode) {
+                    case 0:
+                        attributeToUse = "total";
+                        break;
+                    case 1:
+                        attributeToUse = "target";
+                        break;
+                    case 2:
+                        attributeToUse = "cleave";
+                        break;
+                    case 3:
+                        attributeToUse = "taken";
+                        break;
+                }
                 for (var i = 0; i < logData.players.length; i++) {
                     var pHPS = hpsData.playerHPS[i];
-                    res.push((this.mode === 0 ? pHPS.total : (this.mode === 1 ? pHPS.target : pHPS.cleave)));
+                    res.push(pHPS[attributeToUse]);
                 }
-                res.push((this.mode === 0 ? hpsData.allHPS.total : (this.mode === 1 ? hpsData.allHPS.target : hpsData.allHPS.cleave)));
-                var maxHPS = (this.mode === 0 ? hpsData.maxHPS.total : (this.mode === 1 ? hpsData.maxHPS.target : hpsData.maxHPS.cleave));
+                res.push(hpsData.allHPS[attributeToUse]);
+                var maxHPS = hpsData.maxHPS[attributeToUse];
                 var hps = [];
                 for (var i = 0; i < this.graph.players.length; i++) {
                     if (logData.players[i].isFake) {

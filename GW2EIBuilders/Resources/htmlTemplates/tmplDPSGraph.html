@@ -157,7 +157,7 @@
                         name = this.graphdata.dpsmode + "s " + name;
                         break;
                 }
-                name = (this.mode === 0 ? "Total " : (this.mode === 1 ? "Target " : "Cleave ")) + name;
+                name = (this.mode === 0 ? "Total " : (this.mode === 1 ? "Target " : (this.mode === 2 ? "Cleave " : "Taken "))) + name;
                 return name;
             },
             computeData: function () {
@@ -176,12 +176,14 @@
                 var maxDPS = {
                     total: 0,
                     cleave: 0,
-                    target: 0
+                    target: 0,
+                    taken: 0,
                 };
                 var allDPS = {
                     total: [],
                     cleave: [],
-                    target: []
+                    target: [],
+                    taken: [],
                 };
                 var playerDPS = [];
                 var damageArrayToUse = this.damageGraphName;
@@ -192,10 +194,12 @@
                     maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
                     maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);
                     maxDPS.target = Math.max(maxDPS.target, data.maxDPS.target);
+                    maxDPS.taken = Math.max(maxDPS.taken, data.maxDPS.taken);
                     for (var j = 0; j < data.dps.total.length; j++) {
                         allDPS.total[j] = (allDPS.total[j] || 0) + data.dps.total[j];
                         allDPS.cleave[j] = (allDPS.cleave[j] || 0) + data.dps.cleave[j];
                         allDPS.target[j] = (allDPS.target[j] || 0) + data.dps.target[j];
+                        allDPS.taken[j] = (allDPS.taken[j] || 0) + data.dps.taken[j];
                     }
                 }
 
@@ -227,12 +231,27 @@
                 var res = [];
                 var dpsData = this.computeDPSData();
                 var offset = 0;
+                var attributeToUse = null;
+                switch (this.mode) {
+                    case 0:
+                        attributeToUse = "total";
+                        break;
+                    case 1:
+                        attributeToUse = "target";
+                        break;
+                    case 2:
+                        attributeToUse = "cleave";
+                        break;
+                    case 3:
+                        attributeToUse = "taken";
+                        break;
+                }
                 for (i = 0; i < logData.players.length; i++) {
                     var pDPS = dpsData.playerDPS[i];
-                    res.push((this.mode === 0 ? pDPS.total : (this.mode === 1 ? pDPS.target : pDPS.cleave)));
+                    res.push(pDPS[attributeToUse]);
                 }
-                res.push((this.mode === 0 ? dpsData.allDPS.total : (this.mode === 1 ? dpsData.allDPS.target : dpsData.allDPS.cleave)));
-                var maxDPS = (this.mode === 0 ? dpsData.maxDPS.total : (this.mode === 1 ? dpsData.maxDPS.target : dpsData.maxDPS.cleave));
+                res.push(dpsData.allDPS[attributeToUse]);
+                var maxDPS = dpsData.maxDPS[attributeToUse];
                 var hps = [];
                 for (var i = 0; i < this.graph.targets.length; i++) {
                     var health = this.graph.targets[i].healthStates;
