@@ -65,9 +65,9 @@ namespace GW2EIEvtcParser.ParsedData
             }
             if (associatedBuff != null)
             {
-                BuffRemoveAllEvent remove = log.CombatData.GetBuffData(associatedBuff.Value)
+                BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent)
                     .OfType<BuffRemoveAllEvent>()
-                    .FirstOrDefault(x => x.To == agent && x.Time >= Time);
+                    .FirstOrDefault(x => x.Time >= Time);
                 if (remove != null)
                 {
                     return remove.Time;

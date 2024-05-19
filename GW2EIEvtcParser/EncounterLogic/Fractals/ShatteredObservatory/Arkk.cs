@@ -216,7 +216,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // removes should be present
             if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, Determined762, 10))
             {
-                var invulsRemoveTarget = combatData.GetBuffData(Determined762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
+                var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>().ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
                     SetSuccessByCombatExit(new List<AbstractSingleActor> { target }, combatData, fightData, adjustedPlayers);

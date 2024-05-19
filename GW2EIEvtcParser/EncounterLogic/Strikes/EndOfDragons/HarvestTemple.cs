@@ -714,7 +714,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Purification Zones
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationZones, out IReadOnlyList<EffectEvent> purificationZoneEffects))
                     {
-                        var voidShells = log.CombatData.GetBuffData(VoidShell).Where(x => x.To == target.AgentItem).ToList();
+                        var voidShells = log.CombatData.GetBuffDataByIDByDst(VoidShell, target.AgentItem).ToList();
                         var voidShellRemovals = voidShells.Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList();
                         int voidShellAppliesCount = voidShells.Where(x => x is BuffApplyEvent).Count();
                         int voidShellRemovalOffset = 0;

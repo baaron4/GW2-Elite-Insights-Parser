@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
         private Dictionary<long, Dictionary<uint, List<AbstractBuffEvent>>> _buffDataByInstanceID;
         private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
+        private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffEvent>>> _buffDataByIDByDst;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
         private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageData;
         private readonly Dictionary<long, List<AbstractBreakbarDamageEvent>> _breakbarDamageDataById;
@@ -105,7 +106,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             if (toAdd.Any())
             {
-                BuildDependentContainers();
+                BuildBuffDependentContainers();
             }
         }
 
@@ -569,7 +570,7 @@ namespace GW2EIEvtcParser.ParsedData
             _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageDataById = brkDamageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            BuildDependentContainers();
+            BuildBuffDependentContainers();
             //
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
@@ -578,9 +579,10 @@ namespace GW2EIEvtcParser.ParsedData
             EIExtraEventProcess(players, skillData, agentData, fightData, operation, evtcVersion);
         }
 
-        private void BuildDependentContainers()
+        private void BuildBuffDependentContainers()
         {
             _buffRemoveAllData = _buffData.ToDictionary(x => x.Key, x => x.Value.OfType<BuffRemoveAllEvent>().ToList());
+            _buffDataByIDByDst = _buffData.ToDictionary(x => x.Key, x => x.Value.GroupBy(y => y.To).ToDictionary(y => y.Key, y => y.ToList()));
             _buffDataByInstanceID = new Dictionary<long, Dictionary<uint, List<AbstractBuffEvent>>>();
             foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in _buffData)
             {
@@ -963,6 +965,24 @@ namespace GW2EIEvtcParser.ParsedData
             if (_buffData.TryGetValue(buffID, out List<AbstractBuffEvent> res))
             {
                 return res;
+            }
+            return new List<AbstractBuffEvent>();
+        }
+
+        /// <summary>
+        /// Returns list of buff events applied on agent for given id
+        /// </summary>
+        /// <param name="buffID"></param> buff id
+        /// <param name="dst"></param> Agent
+        /// <returns></returns>
+        public IReadOnlyList<AbstractBuffEvent> GetBuffDataByIDByDst(long buffID, AgentItem dst)
+        {
+            if (_buffDataByIDByDst.TryGetValue(buffID, out Dictionary<AgentItem, List<AbstractBuffEvent>> agentDict))
+            {
+                if (agentDict.TryGetValue(dst, out List<AbstractBuffEvent> res))
+                {
+                    return res;
+                }
             }
             return new List<AbstractBuffEvent>();
         }
@@ -1476,38 +1496,38 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool HasGainedBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any();
         }
 
         public bool HasGainedBuff(long buffID, AgentItem agent, long time, AgentItem source, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent && apply.CreditedBy == source);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any(apply => apply.CreditedBy == source);
         }
 
         public bool HasGainedBuff(long buffID, AgentItem agent, long time, long appliedDuration, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any(apply => Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
         }
 
         public bool HasGainedBuff(long buffID, AgentItem agent, long time, long appliedDuration, AgentItem source, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffApplyEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent && apply.CreditedBy == source && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffApplyEvent>(), time, epsilon)
+                .Any(apply => apply.CreditedBy == source && Math.Abs(apply.AppliedDuration - appliedDuration) < epsilon);
         }
 
         public bool HasLostBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffRemoveAllEvent>(), time, epsilon)
-                .Any(remove => remove.To == agent);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffRemoveAllEvent>(), time, epsilon)
+                .Any();
         }
 
         public bool HasLostBuffStack(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<AbstractBuffRemoveEvent>(), time, epsilon)
-                .Any(remove => remove.To == agent);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<AbstractBuffRemoveEvent>(), time, epsilon)
+                .Any();
         }
 
         public bool HasRelatedEffect(string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
@@ -1530,26 +1550,26 @@ namespace GW2EIEvtcParser.ParsedData
 
         public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any();
         }
 
         public bool HasExtendedBuff(long buffID, AgentItem agent, long time, AgentItem source, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent && apply.CreditedBy == source);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.CreditedBy == source);
         }
 
         public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long extendedDuration, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
         }
 
         public bool HasExtendedBuff(long buffID, AgentItem agent, long time, long extendedDuration, AgentItem source, long epsilon = ServerDelayConstant)
         {
-            return FindRelatedEvents(GetBuffData(buffID).OfType<BuffExtensionEvent>(), time, epsilon)
-                .Any(apply => apply.To == agent && apply.CreditedBy == source && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
+            return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<BuffExtensionEvent>(), time, epsilon)
+                .Any(apply => apply.CreditedBy == source && Math.Abs(apply.ExtendedDuration - extendedDuration) < epsilon);
         }
 
     }

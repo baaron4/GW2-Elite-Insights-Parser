@@ -1388,7 +1388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Player p in log.PlayerList)
             {
                 IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
-                var exitBuffs = log.CombatData.GetBuffData(PowerOfTheLamp).OfType<BuffApplyEvent>().Where(x => x.To == p.AgentItem).ToList();
+                var exitBuffs = log.CombatData.GetBuffDataByIDByDst(PowerOfTheLamp, p.AgentItem).OfType<BuffApplyEvent>().ToList();
 
                 // Count the times the player has entered and exited the lamp.
                 // A player that has entered the lamp but never exites and remains alive is elible for the achievement.

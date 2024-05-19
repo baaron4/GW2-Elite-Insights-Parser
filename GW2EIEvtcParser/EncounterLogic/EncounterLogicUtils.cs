@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
         {
             bool needStart = beginWithStart;
-            var main = combatData.GetBuffData(buffID).Where(x => x.To == target && (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x =>(x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
             var filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {

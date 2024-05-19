@@ -148,7 +148,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         throw new MissingKeyActorsException("Mai Trin not found");
                     }
-                    BuffApplyEvent buffApply = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == maiTrin.AgentItem).LastOrDefault();
+                    BuffApplyEvent buffApply = combatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
                     if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                     {
                         fightData.SetSuccess(true, buffApply.Time);
@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
                 long maiTrinEnd = lastHPUpdate.Time;
                 long maiTrinStart = 0;
-                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffData(Determined895).OfType<BuffRemoveAllEvent>().Where(x => x.To == maiTrin.AgentItem && x.Time > maiTrinStart).FirstOrDefault();
+                BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffRemoveAllEvent>().Where(x => x.Time > maiTrinStart).FirstOrDefault();
                 if (buffRemove != null)
                 {
                     maiTrinStart = buffRemove.Time;

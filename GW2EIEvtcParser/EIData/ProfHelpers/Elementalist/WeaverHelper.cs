@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData
             var list = new List<AbstractBuffEvent>();
             foreach (long attunement in _weaverAtunements)
             {
-                list.AddRange(combatData.GetBuffData(attunement).Where(x => x is BuffApplyEvent && x.To == agent && x.Time <= time + ServerDelayConstant));
+                list.AddRange(combatData.GetBuffDataByIDByDst(attunement, agent).Where(x => x is BuffApplyEvent && x.Time <= time + ServerDelayConstant));
             }
             if (list.Any())
             {

@@ -619,7 +619,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
         {
-            var tethers = log.CombatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem && !(x is BuffRemoveManualEvent)).ToList();
+            var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x =>!(x is BuffRemoveManualEvent)).ToList();
             var tethersApplies = tethers.OfType<BuffApplyEvent>().ToList();
             var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
             foreach (BuffApplyEvent bae in tethersApplies)

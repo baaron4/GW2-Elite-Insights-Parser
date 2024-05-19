@@ -247,7 +247,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Main phases
             var mainPhases = new List<PhaseData>();
-            var pillarApplies = log.CombatData.GetBuffData(PillarPandemonium).OfType<BuffApplyEvent>().Where(x => x.To == mainTarget.AgentItem).ToList();
+            var pillarApplies = log.CombatData.GetBuffDataByIDByDst(PillarPandemonium, mainTarget.AgentItem).OfType<BuffApplyEvent>().ToList();
             Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = GroupByTime(pillarApplies);
             var mainPhaseEnds = new List<long>();
             foreach (KeyValuePair<long, List<BuffApplyEvent>> pair in pillarAppliesGroupByTime)

@@ -36,9 +36,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 5s extreme vulnerability from dread visage
                         const int duration = 5000;
                         // find last apply
-                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
                             .OfType<BuffApplyEvent>()
-                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .Where(e => e.Time <= remove.Time)
                             .MaxBy(e => e.Time);
                         // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
@@ -55,9 +55,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 60s extreme vulnerability from frightening speed
                         const int duration = 60000;
                         // find last apply
-                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
                             .OfType<BuffApplyEvent>()
-                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .Where(e => e.Time <= remove.Time)
                             .MaxBy(e => e.Time);
                         // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
@@ -165,8 +165,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Phases
             List<PhaseData> encounterPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
 
-            var worldCleaverPhaseStarts = log.CombatData.GetBuffData(DeterminedToDestroy).OfType<BuffApplyEvent
-                >().Where(x => x.To == kanaxai.AgentItem).Select(x => x.Time).ToList();
+            var worldCleaverPhaseStarts = log.CombatData.GetBuffDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent
+                >().Select(x => x.Time).ToList();
             int worldCleaverCount = 0;
             int repeatedCount = 0;
             var isRepeatedWorldCleaverPhase = new List<bool>();
@@ -276,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Kanaxai not found");
             }
-            BuffApplyEvent invul762Gain = combatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().Where(x => x.To == kanaxai.AgentItem).FirstOrDefault(x => x.Time > 0);
+            BuffApplyEvent invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
             if (invul762Gain != null)
             {
                 fightData.SetSuccess(true, invul762Gain.Time);
@@ -289,7 +289,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long maxEnd = log.FightData.FightEnd;
 
             // Orange Tether from Aspect to player
-            IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffData(AspectTetherBuff).Where(x => x.To == player.AgentItem);
+            IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
             IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
             IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
             AgentItem tetherAspect = _unknownAgent;

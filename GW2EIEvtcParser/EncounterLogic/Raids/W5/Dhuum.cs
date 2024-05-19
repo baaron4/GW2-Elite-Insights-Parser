@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, "Messenger Fixation", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", 10).UsingChecker((bae, log) =>
             {
                 // Additional buff applications can happen, filting them out
-                AbstractBuffEvent firstAggroEvent = log.CombatData.GetBuffDataByDst(bae.To).Where(x => x.BuffID == DhuumsMessengerFixationBuff).FirstOrDefault();
+                AbstractBuffEvent firstAggroEvent = log.CombatData.GetBuffDataByIDByDst(DhuumsMessengerFixationBuff, bae.To).FirstOrDefault();
                 if (firstAggroEvent != null && bae.Time > firstAggroEvent.Time + ServerDelayConstant && bae.Initial)
                 {
                     return false;
@@ -107,7 +107,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         state = false;
                     }
                     // Buff loss at the time of the 10% starting
-                    if (combatData.GetBuffData(SourcePureOblivionBuff).Any(x => Math.Abs(x.Time - brae.Time) < 100 && x.To == brae.To))
+                    if (combatData.GetBuffDataByIDByDst(SourcePureOblivionBuff, brae.To).Any(x => Math.Abs(x.Time - brae.Time) < 100))
                     {
                         state = false;
                     }
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // full fight contains the pre event
-                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffRemoveAllEvent && x.To == dhuum.AgentItem && x.Time > 115000);
+                AbstractBuffEvent invulDhuum = log.CombatData.GetBuffDataByIDByDst(Determined762, dhuum.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > 115000);
                 // pre event done
                 if (invulDhuum != null)
                 {
@@ -605,7 +605,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // spirit transform
-            var spiritTransform = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var spiritTransform = log.CombatData.GetBuffDataByIDByDst(FracturedSpirit, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in spiritTransform)
             {
                 int duration = 15000;

@@ -399,7 +399,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    AbstractBuffEvent phasingBuffLoss = log.CombatData.GetBuffData(DagdaDuringPhase75_50_25).FirstOrDefault(x => x.To == mainTarget.AgentItem && x.Time >= start && x.Time <= end && x is BuffRemoveAllEvent);
+                    AbstractBuffEvent phasingBuffLoss = log.CombatData.GetBuffDataByIDByDst(DagdaDuringPhase75_50_25, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= start && x.Time <= end && x is BuffRemoveAllEvent);
                     if (phasingBuffLoss != null)
                     {
                         start = phasingBuffLoss.Time;

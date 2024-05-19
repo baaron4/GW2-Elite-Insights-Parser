@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.PvE).UsingChecker((x, log) => {
                 AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmBuff).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EIData
             }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
                 AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmBuff).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.EIData
             }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.All).UsingChecker( (x, log) => {
                 AgentItem src = x.From;
-                AbstractBuffEvent effectApply = log.CombatData.GetBuffData(SicEmBuff).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+                AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                     return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);

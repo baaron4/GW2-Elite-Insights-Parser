@@ -672,13 +672,13 @@ namespace GW2EIEvtcParser.EIData
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
         {
             SkillItem skill = skillData.Get(skillId);
-            return ComputeUnderBuffCastEvents(combatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem).ToList(), skill);
+            return ComputeUnderBuffCastEvents(combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem), skill);
         }
 
         internal static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
         {
             SkillItem skill = skillData.Get(skillId);
-            return ComputeEndWithBuffApplyCastEvents(combatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem).OfType<BuffApplyEvent>().ToList(), skill, startOffset, skillDuration);
+            return ComputeEndWithBuffApplyCastEvents(combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>().ToList(), skill, startOffset, skillDuration);
         }
 
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillId, long buffId)

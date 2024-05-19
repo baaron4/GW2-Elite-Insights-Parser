@@ -525,7 +525,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
         internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, AbstractPlayer player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
         {
-            var buffEvents = log.CombatData.GetBuffData(buffId).Where(x => x.To == player.AgentItem && x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
+            var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffId, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
             var buffApplies = buffEvents.OfType<BuffApplyEvent>().ToList();
             var buffRemoves = buffEvents.OfType<BuffRemoveAllEvent>().ToList();
             var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentId).ToList();
