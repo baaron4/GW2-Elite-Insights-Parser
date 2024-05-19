@@ -378,6 +378,28 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        internal virtual Dictionary<long, FinalActorBuffVolumes>[] ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        {
+            Dictionary<long, FinalActorBuffVolumes>[] empty =
+            {
+                        new Dictionary<long, FinalActorBuffVolumes>(),
+                        new Dictionary<long, FinalActorBuffVolumes>()
+             };
+            switch (type)
+            {
+                case BuffEnum.Group:
+                    return empty;
+                case BuffEnum.OffGroup:
+                    return empty;
+                case BuffEnum.Squad:
+                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
+                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayers, log, AgentItem, start, end);
+                case BuffEnum.Self:
+                default:
+                    return FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end);
+            }
+        }
+
 
         public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {

@@ -20,6 +20,7 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollection<BuffDistribution> _buffDistribution;
         private CachingCollection<Dictionary<long, long>> _buffPresence;
         private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffs>[]> _buffStats;
+        private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffVolumes>[]> _buffVolumes;
         private CachingCollection<Dictionary<long, FinalBuffsDictionary>[]> _buffsDictionary;
         private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
 
@@ -260,6 +261,34 @@ namespace GW2EIEvtcParser.EIData
             {
                 value = Actor.ComputeBuffs(log, start, end, type);
                 _buffStats.Set(start, end, type, value);
+            }
+            return value[1];
+        }
+
+        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
+        {
+            if (_buffStats == null)
+            {
+                _buffVolumes = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffVolumes>[]>(log, BuffEnum.Self);
+            }
+            if (!_buffVolumes.TryGetValue(start, end, type, out Dictionary<long, FinalActorBuffVolumes>[] value))
+            {
+                value = Actor.ComputeBuffVolumes(log, start, end, type);
+                _buffVolumes.Set(start, end, type, value);
+            }
+            return value[0];
+        }
+
+        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetActiveBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
+        {
+            if (_buffVolumes == null)
+            {
+                _buffVolumes = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffVolumes>[]>(log, BuffEnum.Self);
+            }
+            if (!_buffVolumes.TryGetValue(start, end, type, out Dictionary<long, FinalActorBuffVolumes>[] value))
+            {
+                value = Actor.ComputeBuffVolumes(log, start, end, type);
+                _buffVolumes.Set(start, end, type, value);
             }
             return value[1];
         }
