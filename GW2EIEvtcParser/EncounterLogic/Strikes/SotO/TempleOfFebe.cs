@@ -706,7 +706,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     double computedDuration = ComputeCastTimeWithQuickness(log, target, cast.Time, indicatorDuration);
                     if (computedDuration > 0)
                     {
-                        lifespanIndicator.end = Math.Min(indicatorDuration, (long)Math.Ceiling(computedDuration));
+                        lifespanIndicator.end = cast.Time + Math.Min(indicatorDuration, (long)Math.Ceiling(computedDuration));
                     }
                     // Check if the indicator is cancelled
                     lifespanIndicator = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespanIndicator);
