@@ -878,22 +878,22 @@ namespace GW2EIEvtcParser.EIData
         {
             if (position[minIndex].Time > time)
             {
-                return minIndex;
+                return minIndex - 1;
             }
             if (position[maxIndex].Time < time)
             {
-                return maxIndex + 1;
+                return maxIndex;
             }
             if (minIndex > maxIndex)
             {
-                return minIndex;
+                return minIndex - 1;
             }
             else
             {
                 int midIndex = (minIndex + maxIndex) / 2;
                 if (time == position[midIndex].Time)
                 {
-                    return midIndex + 1;
+                    return midIndex;
                 }
                 else if (time < position[midIndex].Time)
                 {
@@ -924,7 +924,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
             }
-            int foundIndex = BinarySearchRecursive(positions, time, 0, positions.Count - 1) - 1;
+            int foundIndex = BinarySearchRecursive(positions, time, 0, positions.Count - 1);
             if (foundIndex < 0)
             {
                 return null;
@@ -980,7 +980,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time);
             }
-            int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1) - 1;
+            int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1);
             if (foundIndex < 0)
             {
                 return null;

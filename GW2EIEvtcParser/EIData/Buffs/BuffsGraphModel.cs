@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EIData
                 return new Segment(long.MinValue, long.MaxValue, 0);
             }
             int foundIndex = Segment.BinarySearchRecursive(BuffChart, time, 0, BuffChart.Count - 1);
-            if (foundIndex == BuffChart.Count)
+            if (foundIndex == BuffChart.Count - 1)
             {
                 Segment last = BuffChart[foundIndex - 1];
                 if (last.ContainsPoint(time))

@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EIData
         private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
         {
             int foundIndex = Segment.BinarySearchRecursive(segments, time, 0, segments.Count - 1);
-            if (foundIndex == segments.Count)
+            if (foundIndex == segments.Count - 1)
             {
                 Segment last = segments[foundIndex - 1];
                 if (last.ContainsPoint(time))
