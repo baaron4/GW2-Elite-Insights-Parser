@@ -111,6 +111,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         internal static class RewardTypes
         {
+            internal const int Daily = 13;
             internal const int OldRaidReward1 = 55821; // On each kill
             internal const int OldRaidReward2 = 60685; // On each kill
             internal const int CurrentRaidReward = 22797; // Once per week
