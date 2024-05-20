@@ -115,7 +115,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (segments[maxIndex].Start < time)
             {
-                return maxIndex + 1;
+                return maxIndex;
             }
             if (minIndex > maxIndex)
             {
