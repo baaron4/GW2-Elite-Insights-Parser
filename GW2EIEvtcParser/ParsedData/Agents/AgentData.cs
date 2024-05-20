@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using GW2EIGW2API.GW2API;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -23,10 +25,23 @@ namespace GW2EIEvtcParser.ParsedData
         public IReadOnlyCollection<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
         public IReadOnlyCollection<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
 
-        internal AgentData(List<AgentItem> allAgentsList)
+
+        private readonly GW2EIGW2API.GW2APIController _apiController;
+
+        internal AgentData(GW2EIGW2API.GW2APIController apiController, List<AgentItem> allAgentsList)
         {
+            _apiController = apiController;
             _allAgentsList = allAgentsList;
             Refresh();
+        }
+        internal string GetSpec(int specValue)
+        {
+            GW2APISpec spec = _apiController.GetAPISpec(specValue);
+            if (spec == null) 
+            { 
+                return "Unknown";
+            }
+            return spec.Elite ? spec.Name : spec.Profession;
         }
 
         internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, int ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
