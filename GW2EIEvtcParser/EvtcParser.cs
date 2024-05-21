@@ -380,6 +380,9 @@ namespace GW2EIEvtcParser
                         }
                         type = AgentItem.AgentType.Gadget;
                         break;
+                    // Filter unknowns out
+                    case Spec.Unknown:
+                        continue;
                     default:
                         // Player
                         type = AgentItem.AgentType.Player;
