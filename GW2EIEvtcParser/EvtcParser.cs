@@ -380,6 +380,9 @@ namespace GW2EIEvtcParser
                         }
                         type = AgentItem.AgentType.Gadget;
                         break;
+                    // Filter unknowns out
+                    case Spec.Unknown:
+                        continue;
                     default:
                         // Player
                         type = AgentItem.AgentType.Player;
@@ -937,7 +940,7 @@ namespace GW2EIEvtcParser
             }
             _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
             operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
-            _agentData = new AgentData(_allAgentsList);
+            _agentData = new AgentData(_apiController, _allAgentsList);
 
             if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
             {
