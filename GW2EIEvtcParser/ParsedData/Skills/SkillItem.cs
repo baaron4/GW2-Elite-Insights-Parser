@@ -101,6 +101,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfMercyHealing, "Relic of Mercy" },
             { MabonsStrength, "Relic of Mabon" },
             { NouryssHungerDamageBuff, "Relic of Nourys" },
+            { RelicOfTheFoundingBarrier, "Relic of the Founding (Barrier)" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -476,6 +477,8 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfKarakosaHealing, "https://wiki.guildwars2.com/images/6/6e/Relic_of_Karakosa.png" },
             { RelicOfNayosHealing, "https://wiki.guildwars2.com/images/e/e4/Relic_of_Nayos.png" },
             { RelicOfTheDefenderHealing, BuffImages.RelicOfTheDefender },
+            { RelicOfTheFoundingBarrier, "https://wiki.guildwars2.com/images/8/81/Relic_of_the_Founding.png" },
+            { RelicOfTheTwinGenerals, "https://wiki.guildwars2.com/images/0/0e/Relic_of_the_Twin_Generals.png" },
 #endregion RelicIcons
             #region ElementalistIcons
             { DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
@@ -760,6 +763,11 @@ namespace GW2EIEvtcParser.ParsedData
             { TakedownSmokescale, "https://wiki.guildwars2.com/images/e/e6/Takedown.png" },
             { PhasePounceWhiteTiger, "https://wiki.guildwars2.com/images/2/20/Phase_Pounce.png" },
             { PhotosynthesizeJacaranda, "https://wiki.guildwars2.com/images/2/2f/Photosynthesize.png" },
+            { EvilEye, "https://wiki.guildwars2.com/images/2/27/Evil_Eye.png" },
+            { TormentingVisionSpinegazer, "https://wiki.guildwars2.com/images/0/0b/Tormenting_Visions.png" },
+            { Panopticon, "https://wiki.guildwars2.com/images/d/dd/Panopticon.png" },
+            { TormentingVisionsMergedSoulbeast, "https://wiki.guildwars2.com/images/0/0b/Tormenting_Visions.png" },
+            { StaringVoid, "https://wiki.guildwars2.com/images/9/9e/Staring_Void.png" },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },

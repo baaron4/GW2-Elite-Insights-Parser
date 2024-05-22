@@ -4263,6 +4263,13 @@
         public const long RazorclawsRageSkillMinionReworked = 72370;
         public const long SoulcleavesSummitHitReworked = 72376;
         public const long RazorclawsRageHitReworked = 72388;
+        public const long TormentingVisionSpinegazer = 72527;
+        public const long RelicOfTheFoundingBarrier = 72548;
+        public const long EvilEye = 72603;
+        public const long TormentingVisionsMergedSoulbeast = 72636;
+        public const long RelicOfTheTwinGenerals = 72707;
+        public const long Panopticon = 72843;
+        public const long StaringVoid = 72851;
         #endregion
     }
 
