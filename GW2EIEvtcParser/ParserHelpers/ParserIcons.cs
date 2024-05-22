@@ -491,6 +491,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string MinionJuvenileHyena = "https://i.imgur.com/XtYVyhH.png";
         private const string MinionJuvenileAetherHunter = "https://i.imgur.com/qMVHHki.png";
         private const string MinionSkyChakStriker = "https://i.imgur.com/bfmZsdK.png";
+        private const string MinionSpinegazer = "https://i.imgur.com/xCcnGrr.png"; // TODO update this image
         private const string MinionBloodFiend = "https://i.imgur.com/PrOpULe.png";
         private const string MinionBoneFiend = "https://i.imgur.com/BEntBIt.png";
         private const string MinionFleshGolem = "https://i.imgur.com/JkYUNug.png";
@@ -1369,6 +1370,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { MinionID.JuvenileHyena, MinionJuvenileHyena },
             { MinionID.JuvenileAetherHunter, MinionJuvenileAetherHunter },
             { MinionID.JuvenileSkyChakStriker, MinionSkyChakStriker },
+            { MinionID.JuvenileSpinegazer, MinionSpinegazer },
             { MinionID.BloodFiend, MinionBloodFiend },
             { MinionID.BoneFiend, MinionBoneFiend },
             { MinionID.FleshGolem, MinionFleshGolem },
