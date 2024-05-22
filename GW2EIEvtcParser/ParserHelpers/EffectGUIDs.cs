@@ -47,6 +47,7 @@ namespace GW2EIEvtcParser
         public const string RelicOfTheWizardsTower = "2A1D0C23F448C348A83E9A4F2669B73F";
         public const string RelicOfPeitha = "0CBFB70434661647B68003ECD77207E6"; // Projectile
         public const string RelicOfAkeem = "8181E21A43EAFB42BC8FFB001F02CF44"; // Target Src
+        public const string RelicOfTheTwinGenerals = "40ECD58F39B30041B3E6C7CEDB7C4D8C";
         #endregion
         #region Mesmer
         public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
