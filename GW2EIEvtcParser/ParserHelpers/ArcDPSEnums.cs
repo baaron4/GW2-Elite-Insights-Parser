@@ -1388,6 +1388,7 @@ namespace GW2EIEvtcParser
             JuvenilePhoenix = 25131,
             JuvenileAetherHunter = 25652,
             JuvenileSkyChakStriker = 26147,
+            JuvenileSpinegazer = 26220,
             // Guardian Weapon Summons
             BowOfTruth = 6383,
             HammerOfWisdom = 5791,
