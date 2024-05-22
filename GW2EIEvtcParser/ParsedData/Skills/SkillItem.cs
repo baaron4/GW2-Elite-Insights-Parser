@@ -765,9 +765,6 @@ namespace GW2EIEvtcParser.ParsedData
             { PhotosynthesizeJacaranda, "https://wiki.guildwars2.com/images/2/2f/Photosynthesize.png" },
             { EvilEye, "https://wiki.guildwars2.com/images/2/27/Evil_Eye.png" },
             { TormentingVisionSpinegazer, "https://wiki.guildwars2.com/images/0/0b/Tormenting_Visions.png" },
-            { Panopticon, "https://wiki.guildwars2.com/images/d/dd/Panopticon.png" },
-            { TormentingVisionsMergedSoulbeast, "https://wiki.guildwars2.com/images/0/0b/Tormenting_Visions.png" },
-            { StaringVoid, "https://wiki.guildwars2.com/images/9/9e/Staring_Void.png" },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
