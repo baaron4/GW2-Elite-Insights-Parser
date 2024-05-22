@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Main target of the fight not found");
             }
-            RewardEvent reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == 13);
+            RewardEvent reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > fightData.FightStart);
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken != null)
             {

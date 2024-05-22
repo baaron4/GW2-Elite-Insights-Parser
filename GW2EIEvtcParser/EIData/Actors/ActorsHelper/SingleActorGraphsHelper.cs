@@ -181,25 +181,12 @@ namespace GW2EIEvtcParser.EIData
         private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
         {
             int foundIndex = Segment.BinarySearchRecursive(segments, time, 0, segments.Count - 1);
-            if (foundIndex == segments.Count)
+            Segment found = segments[foundIndex];
+            if (found.ContainsPoint(time))
             {
-                Segment last = segments[foundIndex - 1];
-                if (last.ContainsPoint(time))
-                {
-                    return last.Value;
-                }
-                return -1.0;
+                return found.Value;
             }
-            else if (foundIndex == 0)
-            {
-                Segment first = segments[0];
-                if (first.ContainsPoint(time))
-                {
-                    return first.Value;
-                }
-                return -1.0;
-            }
-            return segments[foundIndex].Value;
+            return -1.0;
         }
 
         public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)

@@ -32,6 +32,7 @@
             ShatteredObservatory,
             SunquaPeak,
             SilentSurf,
+            TheLonelyTower,
             // 
             Grothmar,
             Bjora,
@@ -119,6 +120,8 @@
                     return "Sunqua Peak";
                 case SubFightCategory.SilentSurf:
                     return "Silent Surf";
+                case SubFightCategory.TheLonelyTower:
+                    return "The Lonely Tower";
                 // 
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";

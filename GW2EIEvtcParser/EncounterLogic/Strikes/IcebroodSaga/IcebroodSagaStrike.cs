@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 RewardIDs.BoneskinnerRepeatableChest,
             };
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => strikeRewardIDs.Contains(x.RewardID));
+            RewardEvent reward = rewards.FirstOrDefault(x => strikeRewardIDs.Contains(x.RewardID) && x.Time > fightData.FightStart);
             if (reward != null)
             {
                 fightData.SetSuccess(true, reward.Time);

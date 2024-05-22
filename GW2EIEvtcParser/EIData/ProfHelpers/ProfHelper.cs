@@ -145,6 +145,8 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
                 .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfTheTwinGenerals, EffectGUIDs.RelicOfTheTwinGenerals)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
@@ -154,6 +156,8 @@ namespace GW2EIEvtcParser.EIData
             new EXTHealingCastFinder(RelicOfTheFlock, RelicOfTheFlock)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTBarrierCastFinder(RelicOfTheFlockBarrier, RelicOfTheFlockBarrier)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTBarrierCastFinder(RelicOfTheFoundingBarrier, RelicOfTheFoundingBarrier)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             // Mounts
             new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),

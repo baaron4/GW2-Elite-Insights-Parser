@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             // Special check since CM release, normal mode broke too, but we always trust reward events
-            if (combatData.GetBuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward) == null)
+            if (combatData.GetBuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
             {
                 AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
                 if (dagda == null)

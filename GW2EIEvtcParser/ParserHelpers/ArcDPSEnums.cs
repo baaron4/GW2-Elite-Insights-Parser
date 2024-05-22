@@ -69,6 +69,7 @@ namespace GW2EIEvtcParser
             internal const ulong February2024NewWeapons = 158837;
             internal const ulong February2024CerusCMHPFix = 158968;
             internal const ulong March2024BalanceAndCerusLegendary = 159951;
+            internal const ulong May2024LonelyTowerFractalRelease = 163141;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -111,6 +112,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         internal static class RewardTypes
         {
+            internal const int Daily = 13;
             internal const int OldRaidReward1 = 55821; // On each kill
             internal const int OldRaidReward2 = 60685; // On each kill
             internal const int CurrentRaidReward = 22797; // Once per week
@@ -1386,6 +1388,7 @@ namespace GW2EIEvtcParser
             JuvenilePhoenix = 25131,
             JuvenileAetherHunter = 25652,
             JuvenileSkyChakStriker = 26147,
+            JuvenileSpinegazer = 26220,
             // Guardian Weapon Summons
             BowOfTruth = 6383,
             HammerOfWisdom = 5791,

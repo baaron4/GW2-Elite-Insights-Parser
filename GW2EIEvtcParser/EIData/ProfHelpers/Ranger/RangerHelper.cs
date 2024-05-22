@@ -92,6 +92,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.JuvenileHyena,
             (int)MinionID.JuvenileAetherHunter,
             (int)MinionID.JuvenileSkyChakStriker,
+            (int)MinionID.JuvenileSpinegazer,
         };
 
         private static bool IsJuvenilePetID(int id)
@@ -264,10 +265,12 @@ namespace GW2EIEvtcParser.EIData
                 .UsingApproximate(true),
             new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
                 .WithBuilds(GW2Builds.February2024NewWeapons, GW2Builds.March2024BalanceAndCerusLegendary),
-            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.sPvPWvW)
-                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.sPvPWvW)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.May2024LonelyTowerFractalRelease),
             new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.PvE)
-                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.May2024LonelyTowerFractalRelease),
+            new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>

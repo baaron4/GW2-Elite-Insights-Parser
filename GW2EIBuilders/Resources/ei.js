@@ -143,9 +143,18 @@ function getDefaultMainComponent() {
     return 0;
 }
 
+function getDefaultPhase() {
+    const setting = EIUrlParams.get("phase");
+    if (!setting) {
+        return 0;
+    }
+    return parseInt(setting);
+}
+
 function mainLoad() {
     // make some additional variables reactive
-    var firstActive = logData.phases[0];
+    var activePhaseIndex = getDefaultPhase();
+    var firstActive = logData.phases[activePhaseIndex] ? logData.phases[activePhaseIndex] : logData.phases[0];
     for (var i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
