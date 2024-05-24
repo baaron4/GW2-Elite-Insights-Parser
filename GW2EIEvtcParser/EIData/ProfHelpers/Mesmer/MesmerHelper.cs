@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
             new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack)
-                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer, Spec.Chronomancer})
                 .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
                 .WithBuilds(GW2Builds.October2022Balance),
             // Mantras        
