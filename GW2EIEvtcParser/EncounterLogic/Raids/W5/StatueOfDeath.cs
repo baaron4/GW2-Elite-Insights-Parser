@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 } 
                 else
                 {
-                    startToUse = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, eaterOfSouls);
+                    startToUse = GetFirstDamageEventTime(fightData, agentData, combatData, eaterOfSouls);
                 }
             }
             return startToUse;

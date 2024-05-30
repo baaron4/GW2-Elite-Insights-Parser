@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(sabir) && x.IsDamagingDamage());
                     if (firstDamageEvent != null)
                     {
-                        return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, sabir);
+                        return firstDamageEvent.Time;
                     }
                     else
                     {
