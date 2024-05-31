@@ -85,13 +85,13 @@
                 var order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Sub":
-                        rows.sort((x,y) => order * (x.player.group - y.player.group));
+                        rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
                         break;
                     case "Prof":
-                        rows.sort((x,y) => order * x.player.profession.localeCompare(y.player.profession));
+                        rows.sort((x,y) => order * this.sortByPlayerProfession(x, y) || this.sortByPlayerName(x, y));
                         break;
                     case "Name":
-                        rows.sort((x,y) => order * x.player.name.localeCompare(y.player.name));
+                        rows.sort((x,y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "Data":
                         var index = this.sortdata.index;
@@ -102,7 +102,7 @@
                             }
                             return value ?? 0;
                         }
-                        rows.sort((x,y) => order * (getValue(x) - getValue(y)));
+                        rows.sort((x,y) => order * (getValue(x) - getValue(y)) || this.sortByPlayerName(x, y));
                         break;
                     default:
                         return null;

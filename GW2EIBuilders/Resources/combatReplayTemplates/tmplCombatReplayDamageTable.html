@@ -115,20 +115,20 @@
                 const order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Prof":
-                        rows.sort((x, y) => order * x.player.profession.localeCompare(y.player.profession));
+                        rows.sort((x, y) => order * this.sortByPlayerProfession(x, y) || this.sortByPlayerName(x, y));
                         break;
                     case "Name":
-                        rows.sort((x, y) => order * x.player.name.localeCompare(y.player.name));
+                        rows.sort((x, y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "All":
-                        rows.sort((x, y) => order * (x.dps[x.dps.length - 1] - y.dps[y.dps.length - 1]));
+                        rows.sort((x, y) => order * (x.dps[x.dps.length - 1] - y.dps[y.dps.length - 1]) || this.sortByPlayerName(x, y));
                         break;
                     case "Taken":
-                        rows.sort((x, y) => order * (x.dps[x.dps.length - 2] - y.dps[y.dps.length - 2]));
+                        rows.sort((x, y) => order * (x.dps[x.dps.length - 2] - y.dps[y.dps.length - 2])) || this.sortByPlayerName(x, y);
                         break;
                     case "Target":
                         const index = this.sortdata.index;
-                        rows.sort((x, y) => order * (x.dps[index] - y.dps[index]));
+                        rows.sort((x, y) => order * (x.dps[index] - y.dps[index]) || this.sortByPlayerName(x, y));
                         break;
                     default:
                         return null;

@@ -139,6 +139,15 @@ var sortedTableComponent = {
             sortdata.key = key;
             sortdata.index = index;
         },
+        sortByPlayerName: function(x, y) {
+            return x.player.name.localeCompare(y.player.name);
+        },
+        sortByPlayerProfession: function(x, y) {
+            return x.player.profession.localeCompare(y.player.profession);
+        },
+        sortByPlayerAccount: function(x, y) {
+            return x.player.acc.localeCompare(y.player.acc);
+        },
         getHeaderClassBase: function(sortdata, key, index) {
             index = index >= 0 ? index : -1;
             if (sortdata.key === key && sortdata.index === index) {
@@ -200,10 +209,9 @@ var sortedDistributionComponent = {
                         }
                         return value;
                     };
-                    rows.sort((x,y) => order * (sortFunc(x) - sortFunc(y)));
+                    rows.sort((x,y) => order * (sortFunc(x) - sortFunc(y)) || (this.getSkill(x).name.localeCompare(this.getSkill(y).name)));
                     break;
                 default:
-                    return null;
                     break;
             }
             return rows;
