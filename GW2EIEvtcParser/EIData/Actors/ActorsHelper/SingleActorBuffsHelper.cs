@@ -22,6 +22,7 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffs>[]> _buffStats;
         private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffVolumes>[]> _buffVolumes;
         private CachingCollection<Dictionary<long, FinalBuffsDictionary>[]> _buffsDictionary;
+        private CachingCollection<Dictionary<long, FinalBuffVolumesDictionary>[]> _buffVolumesDictionary;
         private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new Dictionary<long, AbstractBuffSimulator>();
 
         public SingleActorBuffsHelper(AbstractSingleActor actor) : base(actor)
@@ -530,6 +531,20 @@ namespace GW2EIEvtcParser.EIData
             return value[0];
         }
 
+        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            if (_buffVolumesDictionary == null)
+            {
+                _buffVolumesDictionary = new CachingCollection<Dictionary<long, FinalBuffVolumesDictionary>[]>(log);
+            }
+            if (!_buffVolumesDictionary.TryGetValue(start, end, out Dictionary<long, FinalBuffVolumesDictionary>[] value))
+            {
+                value = ComputeBuffVolumesDictionary(log, start, end);
+                _buffVolumesDictionary.Set(start, end, value);
+            }
+            return value[0];
+        }
+
         public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             if (_buffsDictionary == null)
@@ -560,6 +575,22 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             return new Dictionary<long, FinalBuffsDictionary>[] { rates, ratesActive };
+        }
+
+        private Dictionary<long, FinalBuffVolumesDictionary>[] ComputeBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
+            var rates = new Dictionary<long, FinalBuffVolumesDictionary>();
+            var ratesActive = new Dictionary<long, FinalBuffVolumesDictionary>();
+
+            foreach (Buff buff in GetTrackedBuffs(log))
+            {
+                if (buffDistribution.HasBuffID(buff.ID))
+                {
+                    (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffVolumesDictionary.GetFinalBuffVolumesDictionary(log, buff, Actor, start, end);
+                }
+            }
+            return new Dictionary<long, FinalBuffVolumesDictionary>[] { rates, ratesActive };
         }
 
 

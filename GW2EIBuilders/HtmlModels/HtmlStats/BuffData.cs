@@ -35,16 +35,16 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         {
             foreach (Buff buff in listToUse)
             {
-                if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.Generated.ContainsKey(actor))
+                if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.GeneratedBy.ContainsKey(actor))
                 {
                     Data.Add(new List<object>()
                         {
-                            toUse.Generated[actor],
-                            toUse.Overstacked[actor],
-                            toUse.Wasted[actor],
-                            toUse.UnknownExtension[actor],
-                            toUse.Extension[actor],
-                            toUse.Extended[actor]
+                            toUse.GeneratedBy[actor],
+                            toUse.OverstackedBy[actor],
+                            toUse.WastedFrom[actor],
+                            toUse.UnknownExtensionFrom[actor],
+                            toUse.ExtensionBy[actor],
+                            toUse.ExtendedFrom[actor]
                         });
                 }
                 else

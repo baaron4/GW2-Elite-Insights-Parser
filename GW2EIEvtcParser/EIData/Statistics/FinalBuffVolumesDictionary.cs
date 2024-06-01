@@ -9,10 +9,10 @@ namespace GW2EIEvtcParser.EIData
 {
     public class FinalBuffVolumesDictionary
     {
-        private Dictionary<AbstractSingleActor, double> _generated { get; } = new Dictionary<AbstractSingleActor, double>();
-        public IReadOnlyDictionary<AbstractSingleActor, double> Generated => _generated;
-        private Dictionary<AbstractSingleActor, double> _extension { get; } = new Dictionary<AbstractSingleActor, double>();
-        public IReadOnlyDictionary<AbstractSingleActor, double> Extension => _extension;
+        private Dictionary<AbstractSingleActor, double> _incomingBy { get; } = new Dictionary<AbstractSingleActor, double>();
+        public IReadOnlyDictionary<AbstractSingleActor, double> IncomingBy => _incomingBy;
+        private Dictionary<AbstractSingleActor, double> _incomingExtensionBy { get; } = new Dictionary<AbstractSingleActor, double>();
+        public IReadOnlyDictionary<AbstractSingleActor, double> IncomingExtensionBy => _incomingExtensionBy;
 
 
         internal static (FinalBuffVolumesDictionary, FinalBuffVolumesDictionary) GetFinalBuffVolumesDictionary(ParsedEvtcLog log, Buff buff, AbstractSingleActor dstActor, long start, long end)
@@ -30,42 +30,42 @@ namespace GW2EIEvtcParser.EIData
             foreach (KeyValuePair<AgentItem, List<AbstractBuffApplyEvent>> pair in appliesBySrc)
             {
                 AbstractSingleActor actor = log.FindActor(pair.Key);
-                double generated = 0;
-                double extension = 0;
+                double incoming = 0;
+                double incomingByExtension = 0;
                 foreach (AbstractBuffApplyEvent abae in pair.Value)
                 {
                     if (abae is BuffApplyEvent bae)
                     {
-                        generated += bae.AppliedDuration;
+                        incoming += bae.AppliedDuration;
                     }
                     if (abae is BuffExtensionEvent bee)
                     {
-                        extension += bee.ExtendedDuration;
+                        incomingByExtension += bee.ExtendedDuration;
                         if (activePhaseDuration > 0)
                         {
-                            extension += bee.ExtendedDuration;
+                            incomingByExtension += bee.ExtendedDuration;
                         }
                     }
 
                 }
-                generated += extension;
+                incoming += incomingByExtension;
 
                 if (buff.Type == BuffType.Duration)
                 {
-                    generated *= 100.0;
-                    extension *= 100.0;
+                    incoming *= 100.0;
+                    incomingByExtension *= 100.0;
                 }
-                buffs._generated[actor] = Math.Round(generated / phaseDuration, ParserHelper.BuffDigit);
-                buffs._extension[actor] = Math.Round(extension / phaseDuration, ParserHelper.BuffDigit);
+                buffs._incomingBy[actor] = Math.Round(incoming / phaseDuration, ParserHelper.BuffDigit);
+                buffs._incomingExtensionBy[actor] = Math.Round(incomingByExtension / phaseDuration, ParserHelper.BuffDigit);
                 if (activePhaseDuration > 0)
                 {
-                    buffsActive._generated[actor] = Math.Round(generated / activePhaseDuration, ParserHelper.BuffDigit);
-                    buffsActive._extension[actor] = Math.Round(extension / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive._incomingBy[actor] = Math.Round(incoming / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive._incomingExtensionBy[actor] = Math.Round(incomingByExtension / activePhaseDuration, ParserHelper.BuffDigit);
                 }
                 else
                 {
-                    buffsActive._generated[actor] = 0.0;
-                    buffsActive._extension[actor] = 0.0;
+                    buffsActive._incomingBy[actor] = 0.0;
+                    buffsActive._incomingExtensionBy[actor] = 0.0;
                 }
             }
             return (buffs, buffsActive);
