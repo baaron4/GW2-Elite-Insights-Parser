@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
         public double ByExtension { get; internal set; }
         public double Extended { get; internal set; }
 
-        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem agentItem, long start, long end)
+        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
         {
 
             long phaseDuration = end - start;
@@ -59,13 +59,13 @@ namespace GW2EIEvtcParser.EIData
                     long playerActiveDuration = buffDistributionByPlayer.Key.GetActiveDuration(log, start, end);
                     if (buffDistribution.HasBuffID(boon.ID))
                     {
-                        hasGeneration = hasGeneration || buffDistribution.HasSrc(boon.ID, agentItem);
-                        double generation = buffDistribution.GetGeneration(boon.ID, agentItem);
-                        double overstack = buffDistribution.GetOverstack(boon.ID, agentItem);
-                        double wasted = buffDistribution.GetWaste(boon.ID, agentItem);
-                        double unknownExtension = buffDistribution.GetUnknownExtension(boon.ID, agentItem);
-                        double extension = buffDistribution.GetExtension(boon.ID, agentItem);
-                        double extended = buffDistribution.GetExtended(boon.ID, agentItem);
+                        hasGeneration = hasGeneration || buffDistribution.HasSrc(boon.ID, srcAgentItem);
+                        double generation = buffDistribution.GetGeneration(boon.ID, srcAgentItem);
+                        double overstack = buffDistribution.GetOverstack(boon.ID, srcAgentItem);
+                        double wasted = buffDistribution.GetWaste(boon.ID, srcAgentItem);
+                        double unknownExtension = buffDistribution.GetUnknownExtension(boon.ID, srcAgentItem);
+                        double extension = buffDistribution.GetExtension(boon.ID, srcAgentItem);
+                        double extended = buffDistribution.GetExtended(boon.ID, srcAgentItem);
 
                         totalGeneration += generation;
                         totalOverstack += overstack;
@@ -143,17 +143,17 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
+        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor dstActor, long start, long end)
         {
             var buffs = new Dictionary<long, FinalActorBuffs>();
             var activeBuffs = new Dictionary<long, FinalActorBuffs>();
 
-            BuffDistribution buffDistribution = actor.GetBuffDistribution(log, start, end);
-            IReadOnlyDictionary<long, long> buffPresence = actor.GetBuffPresence(log, start, end);
+            BuffDistribution buffDistribution = dstActor.GetBuffDistribution(log, start, end);
+            IReadOnlyDictionary<long, long> buffPresence = dstActor.GetBuffPresence(log, start, end);
 
             long phaseDuration = end - start;
-            long playerActiveDuration = actor.GetActiveDuration(log, start, end);
-            foreach (Buff buff in actor.GetTrackedBuffs(log))
+            long playerActiveDuration = dstActor.GetActiveDuration(log, start, end);
+            foreach (Buff buff in dstActor.GetTrackedBuffs(log))
             {
                 if (buffDistribution.HasBuffID(buff.ID))
                 {
@@ -179,13 +179,13 @@ namespace GW2EIEvtcParser.EIData
                     };
                     buffs[buff.ID] = uptime;
                     activeBuffs[buff.ID] = uptimeActive;
-                    double generationValue = buffDistribution.GetGeneration(buff.ID, actor.AgentItem);
+                    double generationValue = buffDistribution.GetGeneration(buff.ID, dstActor.AgentItem);
                     double uptimeValue = buffDistribution.GetUptime(buff.ID);
-                    double overstackValue = buffDistribution.GetOverstack(buff.ID, actor.AgentItem);
-                    double wasteValue = buffDistribution.GetWaste(buff.ID, actor.AgentItem);
-                    double unknownExtensionValue = buffDistribution.GetUnknownExtension(buff.ID, actor.AgentItem);
-                    double extensionValue = buffDistribution.GetExtension(buff.ID, actor.AgentItem);
-                    double extendedValue = buffDistribution.GetExtended(buff.ID, actor.AgentItem);
+                    double overstackValue = buffDistribution.GetOverstack(buff.ID, dstActor.AgentItem);
+                    double wasteValue = buffDistribution.GetWaste(buff.ID, dstActor.AgentItem);
+                    double unknownExtensionValue = buffDistribution.GetUnknownExtension(buff.ID, dstActor.AgentItem);
+                    double extensionValue = buffDistribution.GetExtension(buff.ID, dstActor.AgentItem);
+                    double extendedValue = buffDistribution.GetExtended(buff.ID, dstActor.AgentItem);
                     if (buff.Type == BuffType.Duration)
                     {
                         uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, ParserHelper.BuffDigit);
