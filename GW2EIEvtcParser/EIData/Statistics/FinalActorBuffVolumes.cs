@@ -11,21 +11,20 @@ namespace GW2EIEvtcParser.EIData
     {
         public double Incoming { get; internal set; }
         public double IncomingByExtension { get; internal set; }
+        public double IncomingByUnknownExtension { get; internal set; }
         public double Outgoing { get; internal set; }
         public double OutgoingByExtension { get; internal set; }
 
-        internal static Dictionary<long, FinalActorBuffVolumes>[] GetBuffVolumesForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem agentItem, long start, long end)
+        internal static Dictionary<long, FinalActorBuffVolumes>[] GetBuffVolumesForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
         {
 
             long phaseDuration = end - start;
 
-            var buffDistribution = new Dictionary<Player, BuffDistribution>();
+            var buffsToTrack = new HashSet<Buff>();
             foreach (Player p in playerList)
             {
-                buffDistribution[p] = p.GetBuffDistribution(log, start, end);
+                buffsToTrack.UnionWith(p.GetTrackedBuffs(log));
             }
-
-            var buffsToTrack = new HashSet<Buff>(buffDistribution.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
 
             var buffs =
                 new Dictionary<long, FinalActorBuffVolumes>();
@@ -43,30 +42,30 @@ namespace GW2EIEvtcParser.EIData
                 foreach (Player p in playerList)
                 {
                     long playerActiveDuration = p.GetActiveDuration(log, start, end);
+                    if (playerActiveDuration > 0)
+                    {
+                        activePlayerCount++;
+                    }
                     foreach (AbstractBuffEvent abe in log.CombatData.GetBuffDataByIDByDst(buff.ID, p.AgentItem))
                     {
                         if (abe.Time >= start && abe.Time <= end && abe is AbstractBuffApplyEvent abae)
                         {
                             abae.TryFindSrc(log);
-                            if (abae.CreditedBy == agentItem)
+                            if (abae.CreditedBy == srcAgentItem)
                             {
                                 if (abae is BuffApplyEvent bae)
                                 {
                                     totalOutgoing += bae.AppliedDuration;
                                     if (playerActiveDuration > 0)
                                     {
-                                        activePlayerCount++;
                                         totalActiveOutgoing += bae.AppliedDuration / playerActiveDuration;
                                     }
                                 }
                                 if (abae is BuffExtensionEvent bee)
                                 {
-                                    totalActiveOutgoing += bee.ExtendedDuration;
-                                    totalActiveOutgoingByExtension += bee.ExtendedDuration;
+                                    totalOutgoingByExtension += bee.ExtendedDuration;
                                     if (playerActiveDuration > 0)
                                     {
-                                        activePlayerCount++;
-                                        totalActiveOutgoing += bee.ExtendedDuration / playerActiveDuration;
                                         totalActiveOutgoingByExtension += bee.ExtendedDuration / playerActiveDuration;
                                     }
                                 }
@@ -74,6 +73,9 @@ namespace GW2EIEvtcParser.EIData
                         }
                     }
                 }
+
+                totalOutgoing += totalOutgoingByExtension;
+                totalActiveOutgoing = totalActiveOutgoingByExtension;
 
                 totalOutgoing /= phaseDuration;
                 totalOutgoingByExtension /= phaseDuration;
@@ -122,11 +124,13 @@ namespace GW2EIEvtcParser.EIData
 
                 double totalIncoming = 0;
                 double totalIncomingByExtension = 0;
+                double totalIncomingByUnknownExtension = 0;
                 double totalOutgoing = 0;
                 double totalOutgoingByExtension = 0;
                 //
                 double totalActiveIncoming = 0;
                 double totalActiveIncomingByExtension = 0;
+                double totalActiveIncomingByUnknownExtension = 0;
                 double totalActiveOutgoing = 0;
                 double totalActiveOutgoingByExtension = 0;
                 foreach (AbstractBuffEvent abe in log.CombatData.GetBuffData(buff.ID))
@@ -139,20 +143,10 @@ namespace GW2EIEvtcParser.EIData
                             if (abae is BuffApplyEvent bae)
                             {
                                 totalOutgoing += bae.AppliedDuration;
-                                if (playerActiveDuration > 0)
-                                {
-                                    totalActiveOutgoing += bae.AppliedDuration;
-                                }
                             }
                             if (abae is BuffExtensionEvent bee)
                             {
-                                totalActiveOutgoing += bee.ExtendedDuration;
-                                totalActiveOutgoingByExtension += bee.ExtendedDuration;
-                                if (playerActiveDuration > 0)
-                                {
-                                    totalActiveOutgoing += bee.ExtendedDuration;
-                                    totalActiveOutgoingByExtension += bee.ExtendedDuration;
-                                }
+                                totalOutgoingByExtension += bee.ExtendedDuration;
                             }
                         }
                         if (abe.To == actor.AgentItem)
@@ -160,27 +154,33 @@ namespace GW2EIEvtcParser.EIData
                             if (abae is BuffApplyEvent bae)
                             {
                                 totalIncoming += bae.AppliedDuration;
-                                if (playerActiveDuration > 0)
-                                {
-                                    totalActiveIncoming += bae.AppliedDuration;
-                                }
                             }
                             if (abae is BuffExtensionEvent bee)
                             {
-                                totalIncoming += bee.ExtendedDuration;
                                 totalIncomingByExtension += bee.ExtendedDuration;
-                                if (playerActiveDuration > 0)
+                                if (abe.CreditedBy == ParserHelper._unknownAgent)
                                 {
-                                    totalActiveIncoming += bee.ExtendedDuration;
-                                    totalActiveIncomingByExtension += bee.ExtendedDuration;
+                                    totalIncomingByUnknownExtension += bee.ExtendedDuration;
                                 }
                             }
                         }
                     }
                 }
+                totalIncoming += totalIncomingByExtension;
+                totalOutgoing += totalOutgoingByExtension;
+
+                if (playerActiveDuration > 0)
+                {
+                    totalActiveIncoming = totalIncoming / playerActiveDuration;
+                    totalActiveOutgoing = totalOutgoing / playerActiveDuration;
+                    totalActiveIncomingByExtension = totalIncomingByExtension / playerActiveDuration; 
+                    totalActiveIncomingByUnknownExtension = totalIncomingByUnknownExtension / playerActiveDuration;
+                    totalActiveOutgoingByExtension = totalOutgoingByExtension / playerActiveDuration;
+                }
 
                 totalIncoming /= phaseDuration;
                 totalIncomingByExtension /= phaseDuration;
+                totalIncomingByUnknownExtension /= phaseDuration;
                 totalOutgoing /= phaseDuration;
                 totalOutgoingByExtension /= phaseDuration;
 
@@ -192,30 +192,34 @@ namespace GW2EIEvtcParser.EIData
                 {
                     uptime.Incoming = Math.Round(100.0 * totalIncoming, ParserHelper.BuffDigit);
                     uptime.IncomingByExtension = Math.Round(100.0 * totalIncomingByExtension, ParserHelper.BuffDigit);
+                    uptime.IncomingByUnknownExtension = Math.Round(100.0 * totalIncomingByUnknownExtension, ParserHelper.BuffDigit);
                     uptime.Outgoing = Math.Round(100.0 * totalOutgoing, ParserHelper.BuffDigit);
                     uptime.OutgoingByExtension = Math.Round(100.0 * (totalOutgoingByExtension), ParserHelper.BuffDigit);
                     //
                     if (playerActiveDuration > 0)
                     {
-                        uptimeActive.Incoming = Math.Round(100.0 * totalActiveIncoming / playerActiveDuration, ParserHelper.BuffDigit);
-                        uptimeActive.IncomingByExtension = Math.Round(100.0 * totalActiveIncomingByExtension / playerActiveDuration, ParserHelper.BuffDigit);
-                        uptimeActive.Outgoing = Math.Round(100.0 * totalActiveOutgoing / playerActiveDuration, ParserHelper.BuffDigit);
-                        uptimeActive.OutgoingByExtension = Math.Round(100.0 * (totalActiveOutgoingByExtension) / playerActiveDuration, ParserHelper.BuffDigit);
+                        uptimeActive.Incoming = Math.Round(100.0 * totalActiveIncoming, ParserHelper.BuffDigit);
+                        uptimeActive.IncomingByExtension = Math.Round(100.0 * totalActiveIncomingByExtension, ParserHelper.BuffDigit);
+                        uptimeActive.IncomingByUnknownExtension = Math.Round(100.0 * totalActiveIncomingByUnknownExtension, ParserHelper.BuffDigit);
+                        uptimeActive.Outgoing = Math.Round(100.0 * totalActiveOutgoing, ParserHelper.BuffDigit);
+                        uptimeActive.OutgoingByExtension = Math.Round(100.0 * (totalActiveOutgoingByExtension), ParserHelper.BuffDigit);
                     }
                 }
                 else if (buff.Type == BuffType.Intensity)
                 {
                     uptime.Incoming = Math.Round(totalIncoming, ParserHelper.BuffDigit);
                     uptime.IncomingByExtension = Math.Round(totalIncomingByExtension, ParserHelper.BuffDigit);
+                    uptime.IncomingByUnknownExtension = Math.Round(totalIncomingByUnknownExtension, ParserHelper.BuffDigit);
                     uptime.Outgoing = Math.Round(totalOutgoing, ParserHelper.BuffDigit);
                     uptime.OutgoingByExtension = Math.Round((totalOutgoingByExtension) , ParserHelper.BuffDigit);
                     //
                     if (playerActiveDuration > 0)
                     {
-                        uptimeActive.Incoming = Math.Round(totalActiveIncoming / playerActiveDuration, ParserHelper.BuffDigit);
-                        uptimeActive.IncomingByExtension = Math.Round(totalActiveIncomingByExtension / playerActiveDuration, ParserHelper.BuffDigit);
-                        uptimeActive.Outgoing = Math.Round(totalActiveOutgoing / playerActiveDuration, ParserHelper.BuffDigit);
-                        uptimeActive.OutgoingByExtension = Math.Round((totalActiveOutgoingByExtension) / playerActiveDuration, ParserHelper.BuffDigit);
+                        uptimeActive.Incoming = Math.Round(totalActiveIncoming, ParserHelper.BuffDigit);
+                        uptimeActive.IncomingByExtension = Math.Round(totalActiveIncomingByExtension, ParserHelper.BuffDigit);
+                        uptimeActive.IncomingByUnknownExtension = Math.Round(totalActiveIncomingByUnknownExtension , ParserHelper.BuffDigit);
+                        uptimeActive.Outgoing = Math.Round(totalActiveOutgoing , ParserHelper.BuffDigit);
+                        uptimeActive.OutgoingByExtension = Math.Round((totalActiveOutgoingByExtension) , ParserHelper.BuffDigit);
                     }
                 }
             }
