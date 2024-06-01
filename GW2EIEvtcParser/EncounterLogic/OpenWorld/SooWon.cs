@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW).FirstOrDefault());
+                return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW).FirstOrDefault());
             }
             return startToUse;
         }

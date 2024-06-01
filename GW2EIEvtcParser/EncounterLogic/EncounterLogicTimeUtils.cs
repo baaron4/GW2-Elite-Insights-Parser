@@ -31,6 +31,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             return upperLimit;
         }
 
+        internal static long GetFirstDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, AgentItem mainTarget)
+        {
+            if (mainTarget == null)
+            {
+                throw new MissingKeyActorsException("Main target not found");
+            }
+            CombatItem firstDamageEvent = combatData.FirstOrDefault(x => (x.SrcMatchesAgent(mainTarget) || x.DstMatchesAgent(mainTarget)) && x.IsDamagingDamage());
+            if (firstDamageEvent != null)
+            {
+                return firstDamageEvent.Time;
+            }
+            return mainTarget.FirstAware;
+        }
+
         internal static long GetEnterCombatTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, int id, ulong agent)
         {
             AgentItem mainTarget = agentData.GetNPCsByIDAndAgent(id, agent).FirstOrDefault() ?? agentData.GetNPCsByID(id).FirstOrDefault();

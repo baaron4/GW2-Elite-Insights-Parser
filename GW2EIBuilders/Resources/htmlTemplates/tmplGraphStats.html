@@ -1,15 +1,18 @@
 <template>
     <div>
-        <div v-if="!targetless">
+        <div>
             <ul class="nav nav-tabs">
                 <li>
                     <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Total</a>
                 </li>
-                <li>
+                <li v-if="!targetless">
                     <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Target</a>
                 </li>
-                <li>
+                <li v-if="!targetless">
                     <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Cleave</a>
+                </li>
+                <li>
+                    <a class="nav-link" :class="{active: mode === 3}" @click="mode = 3">Taken</a>
                 </li>
             </ul>
         </div>
@@ -35,6 +38,8 @@
                 return logData.targetless ? 0 : 1;
             case "Cleave":
                 return logData.targetless ? 0 : 2;
+            case "Taken":
+                return 3;
         }
         return logData.targetless ? 0 : 1;
     }

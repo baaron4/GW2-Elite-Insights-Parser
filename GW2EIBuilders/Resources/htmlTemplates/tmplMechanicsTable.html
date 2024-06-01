@@ -96,17 +96,17 @@
                 var order = this.sortPdata.order === "asc" ? 1 : -1;
                 switch (this.sortPdata.key) {
                     case "Sub":
-                        rows.sort((x,y) => order * (x.player.group - y.player.group));
+                        rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
                         break;
                     case "Prof":
-                        rows.sort((x,y) => order * x.player.profession.localeCompare(y.player.profession));
+                        rows.sort((x,y) => order * this.sortByPlayerProfession(x, y) || this.sortByPlayerName(x, y));
                         break;
                     case "Name":
-                        rows.sort((x,y) => order * x.player.name.localeCompare(y.player.name));
+                        rows.sort((x,y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "Data":
                         var index = this.sortPdata.index;
-                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]));
+                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]) || this.sortByPlayerName(x, y));
                         break;
                     default:
                         return null;
@@ -132,7 +132,7 @@
                         break;
                     case "Data":
                         var index = this.sortEdata.index;
-                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]));
+                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]) || x.enemy.localeCompare(y.enemy));
                         break;
                     default:
                         return null;

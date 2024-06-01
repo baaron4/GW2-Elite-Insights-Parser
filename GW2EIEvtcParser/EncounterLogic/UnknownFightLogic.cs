@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (logStartNPCUpdate != null)
             {
                 AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? agentData.GetGadgetsByID(GenericTriggerID).FirstOrDefault();
-                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, target);
+                return GetFirstDamageEventTime(fightData, agentData, combatData, target);
             }
             return GetGenericFightOffset(fightData);
         }

@@ -34,7 +34,7 @@
         <Win32Resource />
     </PropertyGroup>
     <PropertyGroup>
-        <ApplicationIcon>LI.ico</ApplicationIcon>
+        <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
     </PropertyGroup>
     <PropertyGroup>
         <ApplicationManifest>App.manifest</ApplicationManifest>
@@ -104,7 +104,7 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="LI.ico" />
+        <Content Include="Content\ArenaNet\LI.ico" />
         <None Include="Settings\sample.conf">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

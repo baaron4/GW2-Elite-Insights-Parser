@@ -148,20 +148,20 @@
                 var order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Sub":
-                        rows.sort((x, y) => order * (x.player.group - y.player.group));
+                        rows.sort((x, y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
                         break;
                     case "Prof":
-                        rows.sort((x, y) => order * x.player.profession.localeCompare(y.player.profession));
+                        rows.sort((x, y) => order * this.sortByPlayerProfession(x, y) || this.sortByPlayerName(x, y));
                         break;
                     case "Name":
-                        rows.sort((x, y) => order * x.player.name.localeCompare(y.player.name));
+                        rows.sort((x, y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "Account":
-                        rows.sort((x, y) => order * x.player.acc.localeCompare(y.player.acc));
+                        rows.sort((x, y) => order * this.sortByPlayerAccount(x, y));
                         break;
                     case "Data":
                         var index = this.sortdata.index;
-                        rows.sort((x, y) => order * (x.commons[index] - y.commons[index]));
+                        rows.sort((x, y) => order * (x.commons[index] - y.commons[index]) || this.sortByPlayerName(x, y));
                         break;
                     default:
                         return null;

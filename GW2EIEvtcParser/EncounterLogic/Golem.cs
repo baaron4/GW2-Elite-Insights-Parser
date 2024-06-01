@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (logStartNPCUpdate != null)
             {
                 AgentItem golem = agentData.GetNPCsByIDAndAgent(GenericTriggerID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
-                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, golem);
+                return GetFirstDamageEventTime(fightData, agentData, combatData, golem);
             }
             return GetGenericFightOffset(fightData);
         }
