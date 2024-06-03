@@ -198,7 +198,8 @@ namespace GW2EIEvtcParser
         public const string RevenantCoalescenceOfRuin = "D37B86D576586B489A951153B598CDE6";
         public const string RevenantCoalescenceOfRuinLast = "D66761A11B8FF344B3CEBE31F458896C";
         public const string RevenantDropTheHammer = "A4311C8684668348B427FA0162992E6C";
-        public const string RenegadeOrdersFromAbove = "F53F05F041957A47AD62B522FE030408";
+        public const string RenegadeOrdersFromAboveRighteousRebel = "F53F05F041957A47AD62B522FE030408";
+        public const string RenegadeOrdersFromAbove = "B63D192DED78B1489DDB6E742D603CE5";
         public const string RenegadeCitadelBombardmentPortal = "145B288ECA42CF43A40DFD759419C904";
         public const string RenegadeCitadelBombardment1 = "5BBF59761E6B9D49A91E79D5474CC61C";
         public const string RenegadeCitadelBombardment2 = "6C8201B551CF274C9C1AF51C33AA062A"; // duration 0
