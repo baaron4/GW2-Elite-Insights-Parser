@@ -1046,6 +1046,7 @@ namespace GW2EIEvtcParser
             // Eparch
             IncarnationOfCruelty = 26270,
             IncarnationOfJudgement = 26260,
+            AvatarOfSpite = 26268,
             TheTormentedLonelyTower = 26193,
             TheCravenLonelyTower = 26193,
             // Open world Soo-Won

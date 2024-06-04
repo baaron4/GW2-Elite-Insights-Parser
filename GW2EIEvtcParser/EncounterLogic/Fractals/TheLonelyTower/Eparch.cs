@@ -38,6 +38,29 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Eparch";
         }
 
+        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+            
+            int crueltyCount = 1;
+            int judgementCount = 1;
+            int avatarCount = 1;
+            foreach (NPC target in _targets)
+            {
+                switch (target.ID) {
+                    case (int)TrashID.IncarnationOfCruelty:
+                        target.OverrideName(target.Character + " " + crueltyCount++);
+                        break;
+                    case (int)TrashID.IncarnationOfJudgement:
+                        target.OverrideName(target.Character + " " + judgementCount++);
+                        break;
+                    case (int)TrashID.AvatarOfSpite:
+                        target.OverrideName(target.Character + " " + avatarCount++);
+                        break;
+                }
+            }
+        }
+
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower));
@@ -94,6 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TargetID.EparchLonelyTower,
                 (int)TrashID.IncarnationOfCruelty,
                 (int)TrashID.IncarnationOfJudgement,
+                (int)TrashID.AvatarOfSpite,
             };
         }
 
@@ -104,6 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {(int)TargetID.EparchLonelyTower, 0},
                 {(int)TrashID.IncarnationOfCruelty, 1},
                 {(int)TrashID.IncarnationOfJudgement, 1},
+                {(int)TrashID.AvatarOfSpite, 2},
             };
         }
 

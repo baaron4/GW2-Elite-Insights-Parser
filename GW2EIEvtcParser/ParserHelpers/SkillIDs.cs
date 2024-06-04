@@ -4163,6 +4163,7 @@
         public const long InsatiableHunger9 = 70792;
         public const long RelicOfIsgarrenTargetBuff = 70806;
         public const long EmpoweredDespairCerus = 70821;
+        public const long FearOfTheKing = 70822;
         public const long RainOfComets = 70837; // Health % damage, can't be tracked
         public const long RelicOfTheDaredevil = 70839;
         public const long PlanetCrashSkill = 70840;

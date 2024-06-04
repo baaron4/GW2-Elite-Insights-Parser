@@ -468,6 +468,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Regret Empowerment", RegretEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RegretAttunement),
             new Buff("Consume", Consume, Source.FightSpecific, BuffClassification.Other, BuffImages.Consumed),
             new Buff("Consumed", Consumed, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Debuff, BuffImages.Consumed),
+            new Buff("Fear of the King", FearOfTheKing, Source.FightSpecific, BuffClassification.Other, BuffImages.Crazed),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood

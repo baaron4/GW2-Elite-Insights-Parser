@@ -65,6 +65,7 @@
         public const string PowerAttribute = "https://wiki.guildwars2.com/images/thumb/d/d6/Power_attribute.png/20px-Power_attribute.png";
         public const string HealingPowerAttribute = "https://wiki.guildwars2.com/images/0/0c/Healing_Power_attribute.png";
         public const string CooldownNegative = "https://wiki.guildwars2.com/images/c/c3/Aquatic_Ruins_Chest_Disabled.png";
+        public const string Crazed = "https://wiki.guildwars2.com/images/4/41/Crazed.png";
         // Auras
         public const string ChaosAura = "https://wiki.guildwars2.com/images/e/ec/Chaos_Aura.png";
         public const string FireAura = "https://wiki.guildwars2.com/images/c/ce/Fire_Aura.png";
