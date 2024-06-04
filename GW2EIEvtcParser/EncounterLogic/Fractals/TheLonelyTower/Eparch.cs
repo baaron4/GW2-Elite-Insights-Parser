@@ -45,10 +45,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Eparch not found");
             }
-            BuffApplyEvent determinedApply = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
-            if (determinedApply != null)
+            var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
+            if (determinedApplies.Count >= 3)
             {
-                fightData.SetSuccess(true, determinedApply.Time);
+                fightData.SetSuccess(true, determinedApplies[2].Time);
             }
         }
 
