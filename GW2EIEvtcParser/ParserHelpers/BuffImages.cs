@@ -418,6 +418,13 @@
         public const string PrimedBottle = "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png";
         public const string CrowdFavor = "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png";
         public const string VoidAffliction = "https://wiki.guildwars2.com/images/f/f8/Void_Affliction.png";
+        public const string DespairAttunement = "https://wiki.guildwars2.com/images/8/8f/Despair_Attunement.png";
+        public const string EnvyAttunement = "https://wiki.guildwars2.com/images/7/7d/Envy_Attunement.png";
+        public const string GluttonyAttunement = "https://wiki.guildwars2.com/images/6/6e/Gluttony_Attunement.png";
+        public const string MaliceAttunement = "https://wiki.guildwars2.com/images/0/06/Malice_Attunement.png";
+        public const string RageAttunement = "https://wiki.guildwars2.com/images/1/1c/Rage_Attunement.png";
+        public const string RegretAttunement = "https://wiki.guildwars2.com/images/5/5f/Regret_Attunement.png";
+        public const string Consumed = "https://wiki.guildwars2.com/images/7/71/Scion%27s_Absorption.png";
         // Strikes
         public const string Hypothermia = "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png";
         public const string Frostbite = "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png";

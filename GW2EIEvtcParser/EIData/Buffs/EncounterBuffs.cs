@@ -453,6 +453,21 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: The Fearless Few", AchievementEligibilityTheFearlessFew, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Peace and Quiet", AchievementEligibilityPeaceAndQuiet, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Jade Sea Legs", AchievementEligibilityJadeSeaLegs, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // Eparch
+            new Buff("Despair Attunement", DespairAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Defensive, BuffImages.DespairAttunement),
+            new Buff("Envy Attunement", EnvyAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Offensive, BuffImages.EnvyAttunement),
+            new Buff("Gluttony Attunement", GluttonyAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Offensive, BuffImages.GluttonyAttunement),
+            new Buff("Malice Attunement", MaliceAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Support, BuffImages.MaliceAttunement),
+            new Buff("Rage Attunement", RageAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Offensive, BuffImages.RageAttunement),
+            new Buff("Regret Attunement", RegretAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Support, BuffImages.RegretAttunement),
+            new Buff("Despair Empowerment", DespairEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.DespairAttunement),
+            new Buff("Envy Empowerment", EnvyEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.EnvyAttunement),
+            new Buff("Gluttony Empowerment", GluttonyEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.GluttonyAttunement),
+            new Buff("Malice Empowerment", MaliceEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.MaliceAttunement),
+            new Buff("Rage Empowerment", RageEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RageAttunement),
+            new Buff("Regret Empowerment", RegretEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RegretAttunement),
+            new Buff("Consume", Consume, Source.FightSpecific, BuffClassification.Other, BuffImages.Consumed),
+            new Buff("Consumed", Consumed, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Debuff, BuffImages.Consumed),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood

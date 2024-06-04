@@ -4270,6 +4270,21 @@
         public const long RelicOfTheTwinGenerals = 72707;
         public const long Panopticon = 72843;
         public const long StaringVoid = 72851;
+        public const long RageEmpowerment = 72399;
+        public const long EnvyAttunement = 72403;
+        public const long GluttonyEmpowerment = 72499;
+        public const long RegretAttunement = 72515;
+        public const long Consume = 72519;
+        public const long EnvyEmpowerment = 72555;
+        public const long GluttonyAttunement = 72591;
+        public const long DespairAttunement = 72658;
+        public const long RegretEmpowerment = 72699;
+        public const long DespairEmpowerment = 72726;
+        public const long MaliceAttunement = 72762;
+        public const long RageAttunement = 72781;
+        public const long MaliceEmpowerment = 72795;
+        public const long DeterminationEparch = 72883;
+        public const long Consumed = 72888;
         #endregion
     }
 

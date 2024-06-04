@@ -1043,6 +1043,11 @@ namespace GW2EIEvtcParser
             LuxonMonkSpirit = 25571,
             CaptainThess1 = 25554,
             CaptainThess2 = 25557,
+            // Eparch
+            IncarnationOfCruelty = 26270,
+            IncarnationOfJudgement = 26260,
+            TheTormentedLonelyTower = 26193,
+            TheCravenLonelyTower = 26193,
             // Open world Soo-Won
             SooWonTail = 51756,
             VoidGiant2 = 24310,
