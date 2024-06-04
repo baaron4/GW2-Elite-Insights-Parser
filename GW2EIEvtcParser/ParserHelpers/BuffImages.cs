@@ -419,6 +419,7 @@
         public const string PrimedBottle = "https://wiki.guildwars2.com/images/b/b1/Primed_Bottle.png";
         public const string CrowdFavor = "https://wiki.guildwars2.com/images/1/13/Crowd_Favor.png";
         public const string VoidAffliction = "https://wiki.guildwars2.com/images/f/f8/Void_Affliction.png";
+        public const string BrothersUnited = "https://wiki.guildwars2.com/images/9/9b/Icy_Echoes.png";
         public const string DespairAttunement = "https://wiki.guildwars2.com/images/8/8f/Despair_Attunement.png";
         public const string EnvyAttunement = "https://wiki.guildwars2.com/images/7/7d/Envy_Attunement.png";
         public const string GluttonyAttunement = "https://wiki.guildwars2.com/images/6/6e/Gluttony_Attunement.png";

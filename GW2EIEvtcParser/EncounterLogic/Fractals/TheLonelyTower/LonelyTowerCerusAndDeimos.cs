@@ -23,14 +23,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             });
             Extension = "cerdei";
-            //Icon = EncounterIconMAMA;
+            Icon = EncounterIconGeneric;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.EncounterMode.CMNoName;
+            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
+            if (cerus == null)
+            {
+                throw new MissingKeyActorsException("Cerus not found");
+            }
+            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
+            if (deimos == null)
+            {
+                throw new MissingKeyActorsException("Deimos not found");
+            }
+            if (cerus.GetHealth(combatData) < 5e6 || deimos.GetHealth(combatData) < 5e6)
+            {
+                return FightData.EncounterMode.Normal;
+            }
+            return FightData.EncounterMode.CM;
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -45,25 +59,30 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (evtcVersion >= ArcDPSBuilds.NewLogStart)
             {
                 AgentItem cerus = agentData.GetNPCsByID(TargetID.CerusLonelyTower).FirstOrDefault();
-                AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault();
-                if (cerus != null && deimos != null)
+                if (cerus == null)
                 {
-                    CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
-                    if (logStartNPCUpdate != null)
-                    {
-                        startToUse = Math.Min(GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.CerusLonelyTower, logStartNPCUpdate.DstAgent),
-                                GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.DeimosLonelyTower, logStartNPCUpdate.DstAgent));
-                        return startToUse;
-                    }
-                    CombatItem initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
-                          agentData.GetAgent(x.SrcAgent, x.Time) == cerus || agentData.GetAgent(x.SrcAgent, x.Time) == deimos)).FirstOrDefault();
-                    long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(fightData, agentData, combatData, cerus),GetFirstDamageEventTime(fightData, agentData, combatData, deimos));
-                    if (initialDamageToPlayers != null)
-                    {
-                        return Math.Min(initialDamageToPlayers.Time, initialDamageTimeToTargets);
-                    }
-                    return initialDamageTimeToTargets;
+                    throw new MissingKeyActorsException("Cerus not found");
                 }
+                AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault();
+                if (deimos == null)
+                {
+                    throw new MissingKeyActorsException("Deimos not found");
+                }
+                CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
+                if (logStartNPCUpdate != null)
+                {
+                    startToUse = Math.Min(GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.CerusLonelyTower, logStartNPCUpdate.DstAgent),
+                            GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.DeimosLonelyTower, logStartNPCUpdate.DstAgent));
+                    return startToUse;
+                }
+                CombatItem initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
+                      agentData.GetAgent(x.SrcAgent, x.Time) == cerus || agentData.GetAgent(x.SrcAgent, x.Time) == deimos)).FirstOrDefault();
+                long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(fightData, agentData, combatData, cerus), GetFirstDamageEventTime(fightData, agentData, combatData, deimos));
+                if (initialDamageToPlayers != null)
+                {
+                    return Math.Min(initialDamageToPlayers.Time, initialDamageTimeToTargets);
+                }
+                return initialDamageTimeToTargets;
                 throw new MissingKeyActorsException("Cerus or Deimos not found");
             }
             return startToUse;

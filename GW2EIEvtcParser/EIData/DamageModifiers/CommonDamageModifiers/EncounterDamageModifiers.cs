@@ -146,6 +146,7 @@ namespace GW2EIEvtcParser.EIData
                     return VulnerabilityAdditiveChecker(ahde, log, ConjuredProtection, 10);
                 }),
             new BuffOnActorDamageModifier(ExposedPlayer, "Exposed (Player)", "25% per stack", DamageSource.All, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Exposed, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(NotStickingTogetherBuff, "Not Sticking Together", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.ActivateRed, DamageModifierMode.PvE),
             new CounterOnActorDamageModifier(ConjuredProtection, "Conjured Protection (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.Strike, DamageType.All, Source.FightSpecific, BuffImages.Fractured, DamageModifierMode.PvE)
                 .UsingChecker((ahde, log) =>
                 {
@@ -167,6 +168,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnFoeDamageModifier(PowerOfTheVoid, "Power of theVoid", "25% per stack", DamageSource.All, 25, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(EmpoweredWatchknightTriumverate, "Empowered (Watchknight Triumverate)", "5% per stack", DamageSource.All, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Empowered, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(EmpoweredCerus, "Empowered (Cerus)", "5% per stack", DamageSource.All, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.EmpoweredMursaarOverseer, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(DevourLonelyTower, "Devour (Lonely Tower)", "2% per stack", DamageSource.All, 2, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Devour, DamageModifierMode.PvE),
+            new BuffOnFoeDamageModifier(BrothersUnited, "Brothers United", "50%", DamageSource.All, 50, DamageType.Strike, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.BrothersUnited, DamageModifierMode.PvE),
             // Enrages
             new BuffOnFoeDamageModifier(new long[]{Enraged_100_strike, Enraged_100_strike_25_reduc }, "Enraged (100% strike)", "100%", DamageSource.All, 100.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),
             new BuffOnFoeDamageModifier(Enraged_200, "Enraged (200%)", "200%", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),

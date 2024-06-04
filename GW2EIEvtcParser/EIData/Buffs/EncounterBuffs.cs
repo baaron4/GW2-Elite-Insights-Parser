@@ -453,7 +453,14 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: The Fearless Few", AchievementEligibilityTheFearlessFew, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Peace and Quiet", AchievementEligibilityPeaceAndQuiet, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Jade Sea Legs", AchievementEligibilityJadeSeaLegs, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-            // Eparch
+            // Lonely Tower - Cerus and Deimos
+            new Buff("Deimos's Focus", DeimossFocus, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Cerus's Focus", CerussFocus, Source.FightSpecific, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Brothers United", BrothersUnited, Source.FightSpecific, BuffClassification.Other, BuffImages.BrothersUnited),
+            new Buff("Enraged (Lonely Tower)", EnragedLonelyTower, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
+            new Buff("Devour (Lonely Tower)", DevourLonelyTower, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Devour),
+            new Buff("Achievement Eligibility: Brothers, Together", AchievementEligibilityBrothersTogether, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            // Lonely Tower - Eparch
             new Buff("Despair Attunement", DespairAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Defensive, BuffImages.DespairAttunement),
             new Buff("Envy Attunement", EnvyAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Offensive, BuffImages.EnvyAttunement),
             new Buff("Gluttony Attunement", GluttonyAttunement, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Offensive, BuffImages.GluttonyAttunement),
@@ -470,6 +477,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Regret Empowerment", RegretEmpowerment, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RegretAttunement),
             new Buff("Determination", DeterminationEparch, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IonShield),
             new Buff("Fear of the King", FearOfTheKing, Source.FightSpecific, BuffClassification.Other, BuffImages.Crazed),
+            new Buff("Achievement Eligibility: Fissure Walker", AchievementEligibilityFissureWalker, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood

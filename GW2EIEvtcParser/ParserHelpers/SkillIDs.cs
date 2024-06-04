@@ -4275,17 +4275,24 @@
         public const long GluttonyAttunement = 72591;
         public const long EvilEye = 72603;
         public const long TormentingVisionsMergedSoulbeast = 72636;
+        public const long CerussFocus = 72647;
         public const long DespairAttunement = 72658;
         public const long RegretEmpowerment = 72699;
         public const long RelicOfTheTwinGenerals = 72707;
         public const long DespairEmpowerment = 72726;
+        public const long AchievementEligibilityFissureWalker = 72742;
         public const long MaliceAttunement = 72762;
         public const long RageAttunement = 72781;
         public const long MaliceEmpowerment = 72795;
+        public const long DevourLonelyTower = 72754;
+        public const long AchievementEligibilityBrothersTogether = 72812;
         public const long Panopticon = 72843;
+        public const long DeimossFocus = 72846;
         public const long StaringVoid = 72851;
         public const long DeterminationEparch = 72883;
         public const long Consumed = 72888;
+        public const long EnragedLonelyTower = 72878;
+        public const long BrothersUnited = 72892;
         #endregion
     }
 
