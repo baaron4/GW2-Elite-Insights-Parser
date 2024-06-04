@@ -40,6 +40,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
+            // TODO: verify this
             long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
             if (evtcVersion >= ArcDPSBuilds.NewLogStart)
             {
@@ -47,6 +48,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault();
                 if (cerus != null && deimos != null)
                 {
+                    CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
+                    if (logStartNPCUpdate != null)
+                    {
+                        startToUse = Math.Min(GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.CerusLonelyTower, logStartNPCUpdate.DstAgent),
+                                GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.DeimosLonelyTower, logStartNPCUpdate.DstAgent));
+                        return startToUse;
+                    }
                     CombatItem initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
                           agentData.GetAgent(x.SrcAgent, x.Time) == cerus || agentData.GetAgent(x.SrcAgent, x.Time) == deimos)).FirstOrDefault();
                     long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(fightData, agentData, combatData, cerus),GetFirstDamageEventTime(fightData, agentData, combatData, deimos));
