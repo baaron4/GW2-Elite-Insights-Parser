@@ -117,6 +117,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases[0].AddTarget(cerus);
             phases[0].AddTarget(deimos);
+            if (!requirePhases)
+            {
+                return phases;
+            }
+            //
+            BuffApplyEvent determinedApplyCerus = log.CombatData.GetBuffDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+            long cerusEnd = determinedApplyCerus != null ? determinedApplyCerus.Time : cerus.LastAware;
+            var cerusPhase = new PhaseData(log.FightData.FightStart, cerusEnd, "Cerus")
+            {
+                CanBeSubPhase = false
+            };
+            cerusPhase.AddTarget(cerus);
+            phases.Add(cerusPhase);
+            //
+            BuffApplyEvent determinedApplyDeimos = log.CombatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+            long deimosEnd = determinedApplyDeimos != null ? determinedApplyDeimos.Time : deimos.LastAware;
+            var deimosPhase = new PhaseData(log.FightData.FightStart, deimosEnd, "Deimos")
+            {
+                CanBeSubPhase = false
+            };
+            deimosPhase.AddTarget(deimos);
+            phases.Add(deimosPhase);
             return phases;
         }
 
