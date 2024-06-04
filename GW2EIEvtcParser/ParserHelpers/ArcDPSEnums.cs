@@ -1187,6 +1187,9 @@ namespace GW2EIEvtcParser
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
             KanaxaiScytheOfHouseAurkusNM = 25572,
             KanaxaiScytheOfHouseAurkusCM = 25577,
+            CerusLonelyTower = 26257,
+            DeimosLonelyTower = 26226,
+            EparchLonelyTower = 26231,
             // Golems
             MassiveGolem10M = 16169,
             MassiveGolem4M = 16202,

@@ -890,6 +890,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TargetID.KanaxaiScytheOfHouseAurkusCM, TargetKanaxai },
             { TargetID.Dagda, TargetDagda },
             { TargetID.Cerus, TargetCerus },
+            { TargetID.CerusLonelyTower, TargetCerus },
+            { TargetID.DeimosLonelyTower, TargetDeimos },
         };
 
         /// <summary>

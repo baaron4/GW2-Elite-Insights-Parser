@@ -253,6 +253,10 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
                     Logic = new Kanaxai(id);
                     break;
+                case ArcDPSEnums.TargetID.CerusLonelyTower:
+                case ArcDPSEnums.TargetID.DeimosLonelyTower:
+                    Logic = new LonelyTowerCerusAndDeimos(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())

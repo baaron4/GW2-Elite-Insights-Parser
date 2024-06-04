@@ -6,12 +6,12 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal abstract class TheLonelyTower : FractalLogic
+    internal abstract class LonelyTower : FractalLogic
     {
-        public TheLonelyTower(int triggerID) : base(triggerID)
+        public LonelyTower(int triggerID) : base(triggerID)
         {
-            EncounterCategoryInformation.SubCategory = SubFightCategory.TheLonelyTower;
-            EncounterID |= EncounterIDs.FractalMasks.TheLonelyTowerMask;
+            EncounterCategoryInformation.SubCategory = SubFightCategory.LonelyTower;
+            EncounterID |= EncounterIDs.FractalMasks.LonelyTowerMask;
         }
     }
 }
