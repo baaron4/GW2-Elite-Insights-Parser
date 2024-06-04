@@ -47,7 +47,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault();
                 if (cerus != null && deimos != null)
                 {
-                    return Math.Min(GetFirstDamageEventTime(fightData, agentData, combatData, cerus),GetFirstDamageEventTime(fightData, agentData, combatData, deimos));
+                    CombatItem initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
+                          agentData.GetAgent(x.SrcAgent, x.Time) == cerus || agentData.GetAgent(x.SrcAgent, x.Time) == deimos)).FirstOrDefault();
+                    long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(fightData, agentData, combatData, cerus),GetFirstDamageEventTime(fightData, agentData, combatData, deimos));
+                    if (initialDamageToPlayers != null)
+                    {
+                        return Math.Min(initialDamageToPlayers.Time, initialDamageTimeToTargets);
+                    }
+                    return initialDamageTimeToTargets;
                 }
                 throw new MissingKeyActorsException("Cerus or Deimos not found");
             }
