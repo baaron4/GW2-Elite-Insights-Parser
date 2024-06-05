@@ -7,9 +7,8 @@ using GW2EIParserCommons.Exceptions;
 
 namespace GW2EIParser
 {
-    internal class ConsoleProgram
+    public class ConsoleProgram
     {
-
         public ConsoleProgram(IEnumerable<string> logFiles, ProgramHelper programHelper)
         {
             if (programHelper.ParseMultipleLogs())
