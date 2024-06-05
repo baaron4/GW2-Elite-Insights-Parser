@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             });
             Extension = "cerdei";
-            Icon = EncounterIconGeneric;
+            Icon = EncounterCerusAndDeimos;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
         }
