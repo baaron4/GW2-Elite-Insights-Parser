@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var brothersDeimos = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                         foreach (Segment seg in brothersDeimos)
                         {
-                            replay.Decorations.Add(new LineDecoration(seg, Colors.Blue, 0.1, new AgentConnector(target), new AgentConnector(cerus)));
+                            replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(cerus)));
                         }
                     }
                     break;
@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var brothersCerus = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                         foreach (Segment seg in brothersCerus)
                         {
-                            replay.Decorations.Add(new LineDecoration(seg, Colors.Blue, 0.1, new AgentConnector(target), new AgentConnector(deimos)));
+                            replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(deimos)));
                         }
                     }
                     break;
