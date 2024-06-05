@@ -12,6 +12,8 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using System.Security.Cryptography;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -159,6 +161,63 @@ namespace GW2EIEvtcParser.EncounterLogic
             deimosPhase.AddTarget(deimos);
             phases.Add(deimosPhase);
             return phases;
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+            switch (target.ID)
+            {
+                case (int)TargetID.DeimosLonelyTower:
+                    AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
+                    if (cerus != null)
+                    {
+                        var brothersDeimos = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                        foreach (Segment seg in brothersDeimos)
+                        {
+                            replay.Decorations.Add(new LineDecoration(seg, Colors.Blue, 0.1, new AgentConnector(target), new AgentConnector(cerus)));
+                        }
+                    }
+                    break;
+                case (int)TargetID.CerusLonelyTower:
+                    AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
+                    if (deimos != null)
+                    {
+                        var brothersCerus = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                        foreach (Segment seg in brothersCerus)
+                        {
+                            replay.Decorations.Add(new LineDecoration(seg, Colors.Blue, 0.1, new AgentConnector(target), new AgentConnector(deimos)));
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
+            if (cerus != null)
+            {
+                var fixadedCerus = p.GetBuffStatus(log, CerussFocus, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                foreach (Segment seg in fixadedCerus)
+                {
+                    replay.Decorations.Add(new LineDecoration(seg, Colors.Orange, 0.3, new AgentConnector(p), new AgentConnector(cerus)));
+                    replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+                }
+            }
+            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
+            if (deimos != null)
+            {
+                var fixatedDeimos = p.GetBuffStatus(log, DeimossFocus, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                foreach (Segment seg in fixatedDeimos)
+                {
+                    replay.Decorations.Add(new LineDecoration(seg, Colors.Red, 0.3, new AgentConnector(p), new AgentConnector(deimos)));
+                    replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+                }
+            }
         }
 
         protected override List<int> GetTargetsIDs()
