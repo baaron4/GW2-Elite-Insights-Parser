@@ -406,11 +406,12 @@ namespace GW2EIEvtcParser
         public const string HorizonStrikeArkk = "C5E4632E8131D342AA4F18222C68D8EB"; // owned by arkk
         // Sunqua Peak Fractal
         public const string AiArrowAttackIndicator = "88E9C3112BF6DA4486845A0433782E9C"; // GENERIC, no owner, rotated towards direction, used for lines & dash
-        public const string AiCircleAoEIndicator = "171A7BD24B5D0B4BA3770FF8A6A37EC0"; // GENERIC, no owner, no rotation, used for air & fire lines
+        public const string AiCircleAoEIndicator = "171A7BD24B5D0B4BA3770FF8A6A37EC0"; // GENERIC, no owner, no rotation, used for air & fire lines, pulsing circles
         public const string AiConeIndicator = "CB877C57D1423240BACDF8D6B52A440F"; // GENERIC, owned by ai, rotation weird
         public const string AiAoEAroundIndicator = "D11320204E28E643A48469AA8E4845BA"; // GENERIC, owned by ai
         public const string AiGreenCircleIndicator = "BFFF308926A8B647A729197D364C1095"; // GENERIC, owned by player, 6.250s duration
         public const string AiSpreadCircle = "DD3870359E8FFA41BE69D612E05C972E"; // owned by ai, 5s duration
+        public const string AiRedCircleIndicator = "46DCBA8A1BF48A46BDD5B533FFF20659"; // owned by ai, 4s duration
         public const string AiAirLine1 = "EFB7EF07C1CCD4479A73B34C56B53D7C"; // owned by ai, oriented towards ai
         public const string AiAirOrbFloat = "06E1712B62940C4CB8CEB23F06893370"; // owned by ai, 5s duration, higher up
         public const string AiAirOrbGround = "014DCBC1E960094C84CE145C2F813169"; // owned by ai, 5s duration
@@ -418,6 +419,10 @@ namespace GW2EIEvtcParser
         public const string AiAirCircleDetonate = "A419E2904C80914C9F15991B3810B79A"; // no owner, no duration
         public const string AiAirCirclePulsing = "AD2951EF56887941BC2001EC14C484E4"; // owned by ai, 8s duration
         public const string AiAirDetonate = "84EB1D03AD685647BB815B4601C81B46"; // no owner, no duration
+        public const string AiAirIntermissionRedCircleIndicator = "A1B63679B1042C4ABB88491CD126249A"; // owner by ai, 1.5s duration
+        public const string AiAirLightningStrike = "06A1D3F77B651C4F87AE2EBA7EDE852F"; // no owner, no duration, lightning strikes in intermission
+        public const string AiAirIntermissionUnknown1 = "46DCBA8A1BF48A46BDD5B533FFF20659"; // owned by ai, 1.5s duration
+        public const string AiAirIntermissionUnknown2 = "1370664D1C79DF48AE3BC58B8EFCC81B"; // no owner, no duration, maybe growing indicator?
         public const string AiMeteorIndicatorBeam = "EEAFAFB527630D44A232A335841CAE20"; // 5s duration
         public const string AiMeteorIndicatorGround = "82F44EDA9D427D48B051FA9419ACB8F1"; // 6s duration, owned by ai, same for fixed position & on players
         public const string AiMeteorDrop = "1B0ACDDD402CA0459F6B3ECD78E7F292";

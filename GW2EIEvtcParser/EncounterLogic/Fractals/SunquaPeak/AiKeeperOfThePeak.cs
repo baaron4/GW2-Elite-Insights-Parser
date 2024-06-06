@@ -530,6 +530,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(300, (end, end + 300), Colors.Red, 0.15, position));
                 }
             }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiRedCircleIndicator, out IReadOnlyList<EffectEvent> aroundRed))
+            {
+                foreach (EffectEvent effect in aroundRed)
+                {
+                    long start = effect.Time;
+                    long end = start + 4000;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
+                }
+            }
 
             // scaled circles
             if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCircleDetonate, EffectGUIDs.AiFireCircleDetonate }, out IReadOnlyList<EffectEvent> circleDetonate))
@@ -558,10 +568,32 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            // fire meteors
+            // air intermission lightning strikes
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirIntermissionRedCircleIndicator, out IReadOnlyList<EffectEvent> intermissionReds))
+            {
+                foreach (EffectEvent effect in intermissionReds)
+                {
+                    long start = effect.Time;
+                    long end = start + 1500;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirLightningStrike, out IReadOnlyList<EffectEvent> lightningStrikes))
+            {
+                foreach (EffectEvent effect in lightningStrikes)
+                {
+                    long start = effect.Time;
+                    long end = start + 300;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
+                }
+            }
+
+            // fire intermission meteors
             AddMeteorDecorations(log);
 
-            // water greens
+            // water intermission greens
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiGreenCircleIndicator, out IReadOnlyList<EffectEvent> greens))
             {
                 foreach (EffectEvent effect in greens)
