@@ -228,6 +228,9 @@ namespace GW2EIEvtcParser
         public const string GuardianSymbolOfPunishmentOrb = "A8C650860481DD48B1B41F76B3054576"; // duration 500
         public const string GuardianSymbolOfResolution = "98C9834C6381204A85DC67C375D135E4"; // duration 4000
         public const string GuardianSymbolOfBlades = "FA37E0B77272314AA1ADCFF824F24C27"; // duration 5000
+        public const string GuardianDetonateJurisdictionLevel1 = "6646D48A2446884998EFADB3EFEF0483";
+        public const string GuardianDetonateJurisdictionLevel2 = "3E33C9645D62CF4DBC208511BB3D12F1";
+        public const string GuardianDetonateJurisdictionLevel3 = "29F6AADDF5E75348854123B956E4BF0E";
         public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
         public const string FirebrandStalwartStand1 = "E20B6672FDCE57409B229DB152BF2286"; // duration 4000
         public const string FirebrandStalwartStand2 = "CA4F198982BFD44180D63EB043F9F710"; // duration 4000

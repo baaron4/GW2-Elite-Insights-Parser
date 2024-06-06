@@ -4231,6 +4231,7 @@
         public const long NaturesStrength = 71976;
         public const long TappedOut = 71979;
         public const long EnervationBlade = 71986;
+        public const long DetonateJurisdiction = 71989;
         public const long Flourish = 71999;
         public const long ValiantLeap = 72002;
         public const long InspiringImagery = 72005;

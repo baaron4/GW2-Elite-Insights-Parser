@@ -82,6 +82,13 @@ namespace GW2EIEvtcParser.EIData
                 .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
             new EXTHealingCastFinder(SelflessDaring, SelflessDaring)
                 .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
+            // Pistol    
+            new EffectCastFinder(DetonateJurisdiction, EffectGUIDs.GuardianDetonateJurisdictionLevel1)
+                .UsingSrcBaseSpecChecker(Spec.Guardian),
+            new EffectCastFinder(DetonateJurisdiction, EffectGUIDs.GuardianDetonateJurisdictionLevel2)
+                .UsingSrcBaseSpecChecker(Spec.Guardian),
+            new EffectCastFinder(DetonateJurisdiction, EffectGUIDs.GuardianDetonateJurisdictionLevel3)
+                .UsingSrcBaseSpecChecker(Spec.Guardian),
         };
 
 
