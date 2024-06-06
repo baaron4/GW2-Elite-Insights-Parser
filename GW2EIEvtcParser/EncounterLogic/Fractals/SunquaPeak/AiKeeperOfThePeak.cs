@@ -439,7 +439,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TrashID.CCSorrowDemon:
                     {
                         const long fullCastDuration = 11840;
-                        const long hitDelay = 420;
+                        const long hitDelay = 400;
                         const uint indicatorSize = 2000;
                         var detonates = casts.Where(x => x.SkillId == OverwhelmingSorrowDetonate).ToList();
                         foreach (AnimatedCastEvent cast in casts)

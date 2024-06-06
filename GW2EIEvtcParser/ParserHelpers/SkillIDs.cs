@@ -3315,12 +3315,13 @@
         public const long EmpathicManipulation5 = 61217;
         public const long ResilientForm = 61220;
         public const long WhirlwindShield = 61224;
+        public const long FixatedGuilt = 61225;
+        public const long OverwhelmingSorrowHit = 61241;
         public const long FlameBurst = 61248;
         public const long AquaticBurst = 61251;
         public const long ElementalManipulationFire2 = 61256;
         public const long EmpathicManipulation7 = 61260;
         public const long ElementalManipulationFire3 = 61271;
-        public const long OverwhelmingSorrowHit = 61241;
         public const long RoilingFlames1 = 61273;
         public const long AiDarkModeStart = 61277;
         public const long AiDarkModeStartCN = 61279;
@@ -3383,7 +3384,6 @@
         public const long EmpathicManipulation2 = 61604;
         public const long EmpathicManipulationSorrow = 61606;
         public const long FixatedEnragedWaterSprite = 61615;
-        public const long FixatedGuilt = 61225;
         #endregion
         #region End of Dragons
         public const long VoidObliteratorChargeWindup = 61713;
