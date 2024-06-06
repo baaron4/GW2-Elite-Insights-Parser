@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.SkillIDs;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
@@ -35,9 +36,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 5s extreme vulnerability from dread visage
                         const int duration = 5000;
                         // find last apply
-                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
                             .OfType<BuffApplyEvent>()
-                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .Where(e => e.Time <= remove.Time)
                             .MaxBy(e => e.Time);
                         // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
@@ -54,9 +55,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 60s extreme vulnerability from frightening speed
                         const int duration = 60000;
                         // find last apply
-                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
                             .OfType<BuffApplyEvent>()
-                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .Where(e => e.Time <= remove.Time)
                             .MaxBy(e => e.Time);
                         // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
@@ -85,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>
             {
-                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM,
+                (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
             };
         }
 
@@ -93,12 +94,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM,
-                (int)ArcDPSEnums.TrashID.AspectOfTorment,
-                (int)ArcDPSEnums.TrashID.AspectOfLethargy,
-                (int)ArcDPSEnums.TrashID.AspectOfExposure,
-                (int)ArcDPSEnums.TrashID.AspectOfDeath,
-                (int)ArcDPSEnums.TrashID.AspectOfFear,
+                (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
+                (int)TrashID.AspectOfTorment,
+                (int)TrashID.AspectOfLethargy,
+                (int)TrashID.AspectOfExposure,
+                (int)TrashID.AspectOfDeath,
+                (int)TrashID.AspectOfFear,
             };
         }
 
@@ -106,12 +107,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new Dictionary<int, int>()
             {
-                {(int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
-                {(int)ArcDPSEnums.TrashID.AspectOfTorment, 1 },
-                {(int)ArcDPSEnums.TrashID.AspectOfLethargy, 1 },
-                {(int)ArcDPSEnums.TrashID.AspectOfExposure, 1 },
-                {(int)ArcDPSEnums.TrashID.AspectOfDeath, 1 },
-                {(int)ArcDPSEnums.TrashID.AspectOfFear, 1 },
+                {(int)TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
+                {(int)TrashID.AspectOfTorment, 1 },
+                {(int)TrashID.AspectOfLethargy, 1 },
+                {(int)TrashID.AspectOfExposure, 1 },
+                {(int)TrashID.AspectOfDeath, 1 },
+                {(int)TrashID.AspectOfFear, 1 },
             };
         }
 
@@ -128,11 +129,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 switch (actor.ID)
                 {
-                    case (int)ArcDPSEnums.TrashID.AspectOfTorment:
-                    case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
-                    case (int)ArcDPSEnums.TrashID.AspectOfExposure:
-                    case (int)ArcDPSEnums.TrashID.AspectOfDeath:
-                    case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                    case (int)TrashID.AspectOfTorment:
+                    case (int)TrashID.AspectOfLethargy:
+                    case (int)TrashID.AspectOfExposure:
+                    case (int)TrashID.AspectOfDeath:
+                    case (int)TrashID.AspectOfFear:
                         if (aspectCounts.TryGetValue(actor.ID, out int count))
                         {
                             actor.OverrideName(actor.Character + " " + count);
@@ -151,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
+            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
             if (kanaxai == null)
             {
                 throw new MissingKeyActorsException("Kanaxai not found");
@@ -164,8 +165,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Phases
             List<PhaseData> encounterPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
 
-            var worldCleaverPhaseStarts = log.CombatData.GetBuffData(DeterminedToDestroy).OfType<BuffApplyEvent
-                >().Where(x => x.To == kanaxai.AgentItem).Select(x => x.Time).ToList();
+            var worldCleaverPhaseStarts = log.CombatData.GetBuffDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent
+                >().Select(x => x.Time).ToList();
             int worldCleaverCount = 0;
             int repeatedCount = 0;
             var isRepeatedWorldCleaverPhase = new List<bool>();
@@ -217,11 +218,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         switch (aspect.ID)
                         {
-                            case (int)ArcDPSEnums.TrashID.AspectOfTorment:
-                            case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
-                            case (int)ArcDPSEnums.TrashID.AspectOfExposure:
-                            case (int)ArcDPSEnums.TrashID.AspectOfDeath:
-                            case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                            case (int)TrashID.AspectOfTorment:
+                            case (int)TrashID.AspectOfLethargy:
+                            case (int)TrashID.AspectOfExposure:
+                            case (int)TrashID.AspectOfDeath:
+                            case (int)TrashID.AspectOfFear:
                                 if (log.CombatData.GetBuffRemoveAllData(Determined762).Any(x => x.To == aspect.AgentItem && x.Time >= curPhase.Start && x.Time <= curPhase.End))
                                 {
                                     curPhase.AddTarget(aspect);
@@ -270,12 +271,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
+            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
             if (kanaxai == null)
             {
                 throw new MissingKeyActorsException("Kanaxai not found");
             }
-            BuffApplyEvent invul762Gain = combatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().Where(x => x.To == kanaxai.AgentItem).FirstOrDefault(x => x.Time > 0);
+            BuffApplyEvent invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
             if (invul762Gain != null)
             {
                 fightData.SetSuccess(true, invul762Gain.Time);
@@ -288,7 +289,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long maxEnd = log.FightData.FightEnd;
 
             // Orange Tether from Aspect to player
-            IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffData(AspectTetherBuff).Where(x => x.To == player.AgentItem);
+            IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
             IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
             IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
             AgentItem tetherAspect = _unknownAgent;
@@ -335,21 +336,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
                     // World Cleaver
                     var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver).ToList();
                     foreach (AbstractCastEvent c in worldCleaver)
                     {
-                        int duration = 26320;
-                        int start = (int)c.Time;
-                        IEnumerable<AbstractHealthDamageEvent> hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time);
-                        if (hits.Any())
+                        int castDuration = 26320;
+                        var hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time).ToList();
+                        (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                        if (hits.Count != 0)
                         {
-                            AddWorldCleaverDecoration(target, replay, start, (int)hits.FirstOrDefault(x => x.Time > c.Time).Time, start + duration);
+                            (long start, long end) lifespanHit = (c.Time, hits.FirstOrDefault(x => x.Time > c.Time).Time);
+                            AddWorldCleaverDecoration(target, replay, lifespanHit, lifespan.end);
                         }
                         else
                         {
-                            AddWorldCleaverDecoration(target, replay, start, start + duration, start + duration);
+                            AddWorldCleaverDecoration(target, replay, lifespan, lifespan.end);
                         }
                     }
                     // Dread Visage
@@ -361,19 +363,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                         double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
                         if (actualDuration > 0)
                         {
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                            replay.AddOverheadIcon(new Segment(c.Time, c.Time + (long)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
                         }
                         else
                         {
-                            replay.AddOverheadIcon(new Segment((int)c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                            replay.AddOverheadIcon(new Segment(c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.AspectOfTorment:
-                case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
-                case (int)ArcDPSEnums.TrashID.AspectOfExposure:
-                case (int)ArcDPSEnums.TrashID.AspectOfDeath:
-                case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                case (int)TrashID.AspectOfTorment:
+                case (int)TrashID.AspectOfLethargy:
+                case (int)TrashID.AspectOfExposure:
+                case (int)TrashID.AspectOfDeath:
+                case (int)TrashID.AspectOfFear:
                     // Tether casts performed by Aspects
                     IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
                     foreach (AnimatedCastEvent cast in tetherCasts)
@@ -439,10 +441,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent aoe in frighteningSpeedRedAoEs)
                 {
-                    int duration = 1500;
-                    int start = (int)aoe.Time;
-                    int effectEnd = start + duration;
-                    var circle = new CircleDecoration( 380, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
+                    (long start, long end) lifespan = (aoe.Time, aoe.Time + 1500);
+                    var circle = new CircleDecoration(380, lifespan, Colors.Red, 0.2, new PositionConnector(aoe.Position));
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
                 }
@@ -452,7 +452,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out IReadOnlyList<EffectEvent> axeAoEs))
             {
                 // Get World Cleaver casts
-                AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
+                AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
                 IReadOnlyList<AbstractCastEvent> casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 
                 // Get Axe AoE Buffs
@@ -487,12 +487,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent harrowshot in harrowshots)
                 {
-                    int duration = 3000;
-                    int start = (int)harrowshot.Time;
-                    int end = (int)harrowshot.Time + duration;
-                    var circle = new CircleDecoration(280, (start, end), Colors.Orange, 0.2, new PositionConnector(harrowshot.Position));
+                    (long start, long end) lifespan = harrowshot.ComputeLifespan(log, 3000);
+                    var circle = new CircleDecoration(280, lifespan, Colors.Orange, 0.2, new PositionConnector(harrowshot.Position));
                     EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
                 }
             }
         }
@@ -528,12 +526,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// </summary>
         /// <param name="target">Kanaxai.</param>
         /// <param name="replay">Combat Replay.</param>
-        /// <param name="start">Start of the cast.</param>
-        /// <param name="end">End of the cast.</param>
+        /// <param name="lifespan">Start and End of the cast.</param>
         /// <param name="growing">Duration of the channel.</param>
-        private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
+        private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, (long start, long end) lifespan, long growing)
         {
-            replay.AddDecorationWithGrowing(new CircleDecoration(1100, (start, end), Colors.Red, 0.2, new AgentConnector(target)), growing);
+            replay.AddDecorationWithGrowing(new CircleDecoration(1100, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing);
         }
     }
 }

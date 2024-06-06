@@ -127,7 +127,8 @@ namespace GW2EIEvtcParser
             return SrcIsAgent()
                 || DstIsAgent()
                 || IsStateChange == ArcDPSEnums.StateChange.Reward
-                || IsStateChange == ArcDPSEnums.StateChange.TickRate;
+                || IsStateChange == ArcDPSEnums.StateChange.TickRate
+                || IsStateChange == ArcDPSEnums.StateChange.SquadMarker;
         }
 
         internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -215,7 +216,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.Guild
                 || IsStateChange == ArcDPSEnums.StateChange.BreakbarState
                 || IsStateChange == ArcDPSEnums.StateChange.BreakbarPercent
-                || IsStateChange == ArcDPSEnums.StateChange.Tag
+                || IsStateChange == ArcDPSEnums.StateChange.Marker
                 || IsStateChange == ArcDPSEnums.StateChange.BarrierUpdate
                 || IsStateChange == ArcDPSEnums.StateChange.Last90BeforeDown
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_45

@@ -50,12 +50,47 @@
 </template>
 
 <script>
+    function getDefaultTargetTabSubComponent() {
+        if (!validateStartPath("Statistics/TargetsSummary")) {
+            return [-1, 0];
+        }
+        const setting = EIUrlParams.get("startPage");
+        const selectedTarget = setting.split('/')[2];
+        if (!selectedTarget) {
+            return [-1, 0];
+        }
+        const compo = setting.split('/')[3];
+        let component = 0;
+        switch (compo) {
+            case "OutgoingDamage":
+                component = 0;
+                break;
+            case "IncomingDamage":
+                component = 1;
+                break;
+            case "Graph":
+                component = 2;
+                break;
+            case "GraphPerPlayer":
+                component = 5;
+                break;
+            case "BuffStatus":
+                component = 4;
+                break;
+            case "SimpleRotation":
+                component = 3;
+                break;
+        }
+        return [parseInt(selectedTarget), component];
+    }
     Vue.component("target-stats-component", {
         props: ["playerindex", "phaseindex", 'light', "simplephase"],
         template: `${template}`,
         data: function () {
+            const modes = getDefaultTargetTabSubComponent();
             return {
-                mode: 0
+                mode: modes[1],
+                initTarget: modes[0]
             };
         },
         computed: {
@@ -70,6 +105,12 @@
                 for (var i = 0; i < this.phase.targets.length; i++) {
                     var tar = logData.targets[this.phase.targets[i]];
                     res.push(tar);
+                }
+                if (this.initTarget >= 0) {
+                    if (res[this.initTarget]) {
+                        this.simplephase.focus = res[this.initTarget].id;
+                    }
+                    this.initTarget = -1;
                 }
                 if (this.simplephase.focus === -1) {
                     this.simplephase.focus = res[0] ? res[0].id : -1;

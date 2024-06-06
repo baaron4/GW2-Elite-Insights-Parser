@@ -57,12 +57,38 @@
 </template>
 
 <script>
+    function getDefaultPlayerTabSubComponent() {
+        if (!validateStartPath("Statistics/PlayerSummary")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "OutgoingDamage":
+                return 0;
+            case "IncomingDamage":
+                return 1;
+            case "Graph":
+                return 2;
+            case "BoonStatus":
+                return 7;
+            case "SimpleRotation":
+                return 3;
+            case "AdvancedRotation":
+                return 4;
+            case "Consumables":
+                return 5;
+            case "DeathRecap":
+                return showDeathRecap() ? 6 : 0;
+        }
+        return 0;
+    }
     Vue.component("player-stats-component", {
         props: ["phaseindex", 'activetargets', 'activeplayer', 'light'],
         template: `${template}`,
         data: function () {
             return {
-                tabmode: 0
+                tabmode: getDefaultPlayerTabSubComponent()
             };
         },
         computed: {
@@ -70,12 +96,7 @@
                 return logData.players;
             },
             hasDeaths: function () {
-                for (var i = 0; i < this.players.length; i++) {
-                    if (!!this.players[i].details.deathRecap) {
-                        return true;
-                    }
-                }
-                return false;
+                return showDeathRecap();
             }
         }
     });

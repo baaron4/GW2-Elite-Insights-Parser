@@ -25,12 +25,12 @@ namespace GW2EIEvtcParser.EIData
                 if (actor.BaseSpec == ParserHelper.Spec.Elementalist)
                 {
                     var vaporFormRemoves = log.CombatData.GetBuffRemoveAllData(SkillIDs.VaporForm).Where(brae => brae.To == actor.AgentItem && brae.Time >= start && brae.Time <= end).ToList();
-                    var downEvents = log.CombatData.GetBuffData(SkillIDs.Downed).Where(be => be.To == actor.AgentItem && be.Time >= start && be.Time <= end && be is BuffApplyEvent).ToList();
+                    var downEvents = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Downed, actor.AgentItem).Where(be => be.Time >= start && be.Time <= end && be is BuffApplyEvent).ToList();
                     DownCount = downEvents.Count(downEvent => !vaporFormRemoves.Any(vaporRemove => Math.Abs(vaporRemove.Time - downEvent.Time) < ParserHelper.ServerDelayConstant));
                 }
                 else
                 {
-                    DownCount = log.CombatData.GetBuffData(SkillIDs.Downed).Where(be => be.To == actor.AgentItem && be.Time >= start && be.Time <= end && be is BuffApplyEvent).Count();
+                    DownCount = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Downed, actor.AgentItem).Where(be => be.Time >= start && be.Time <= end && be is BuffApplyEvent).Count();
                 }
             } 
             else

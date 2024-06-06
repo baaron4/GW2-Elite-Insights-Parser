@@ -1,12 +1,12 @@
 <template>
     <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
-        <div class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
+        <div id="combat-replay-mechanics-list" class="combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y"
             style="max-width:450px">
             <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th style="min-width:80px">Time</th>
-                        <th style="min-width:120px"
+                        <th style="width:100px">Time</th>
+                        <th style="width:200px"
                             class="text-left combat-replay-mechanics-list-header position-relative">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Mechanics">
                                 Mechanic <span class="caret"></span>
@@ -35,7 +35,7 @@
                                 </li>
                             </ul>
                         </th>
-                        <th style="min-width:120px"
+                        <th style="width:150px"
                             class="text-left combat-replay-mechanics-list-header position-relative">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Filter Actors">
                                 Actor <span class="caret"></span>
@@ -68,9 +68,13 @@
                 <tbody>
                     <tr v-for="event in filteredMechanicEvents" class="combat-replay-mechanics-list-row"
                         :class="{active: event.actor.id === selectedplayerid}" @click="selectMechanic(event)">
-                        <td>{{(event.time / 1000).toFixed(2)}}s</td>
-                        <td class="text-left" :title="event.mechanic.name">{{event.mechanic.shortName}}</td>
-                        <td class="text-left">{{event.actor.name}}</td>
+                        <td :data-original-title="'Timestamp'">{{(event.time / 1000).toFixed(2)}}s</td>
+                        <td class="text-left" :data-original-title="event.mechanic.name">{{event.mechanic.shortName}}</td>
+                        <td class="text-left">
+                            <span class="cr-ellipsis" :data-original-title="event.actor.name">
+                                {{event.actor.name}}
+                            </span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -179,7 +183,20 @@
                 actorsList: actorsList,
                 mechanics: mechanics,
                 mechanicsList: mechanicsList,
+                scrollTop: 0,
+                div: null,
             };
+        },
+        activated() {
+            this.div = document.getElementById('combat-replay-mechanics-list');
+            this.div.scrollTop = this.scrollTop;
+            this.div.onscroll = (event) => {
+                this.scrollTop = this.div.scrollTop;
+            }
+        },
+        deactivated() {
+            this.div.onscroll = null;
+            this.div = null;
         },
         methods: {
             selectMechanic: function (mechanic) {

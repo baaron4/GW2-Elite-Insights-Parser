@@ -150,27 +150,25 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {
-            AbstractBuffEvent determined = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+            AbstractBuffEvent determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
             if (determined == null)
             {
-                determined = log.CombatData.GetBuffData(SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
+                determined = log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
             }
             return determined;
         }
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem xera))
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                AgentItem fakeXera = agentData.GetNPCsByID(ArcDPSEnums.TrashID.FakeXera).FirstOrDefault();
-                if (fakeXera != null)
+                if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.FakeXera, out AgentItem fakeXera))
                 {
                     _hasPreEvent = true;
                     long encounterStart = fakeXera.LastAware;
@@ -192,8 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             bool needsRefresh = false;
             bool needsDummy = true;
             // find target
-            AgentItem firstXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (firstXera == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem firstXera))
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
@@ -256,8 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             // find split
-            AgentItem secondXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera2).FirstOrDefault();
-            if (secondXera != null)
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera2, out AgentItem secondXera))
             {
                 CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
                 if (move != null)
@@ -272,16 +268,17 @@ namespace GW2EIEvtcParser.EncounterLogic
                 RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
             }
             ComputeFightTargets(agentData, combatData, extensions);
-
-            if (_xeraSecondPhaseStartTime > 0)
+            // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
+            AbstractSingleActor mainTarget = GetMainTarget();
+            if (mainTarget == null)
             {
-                AbstractSingleActor mainTarget = GetMainTarget();
-                if (mainTarget == null)
-                {
-                    throw new MissingKeyActorsException("Xera not found");
-                }
-                mainTarget.SetManualHealth(24085950);
+                throw new MissingKeyActorsException("Xera not found");
             }
+            mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
+            {
+                (22611300, 100),
+                (25560600, 50)
+            });
         }
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -335,6 +332,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in summon)
                     {
                         replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    }
+                    if (_xeraFirstPhaseEndTime != 0)
+                    {
+                        replay.Hidden.Add(new Segment(_xeraFirstPhaseEndTime, _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedBloodstone:

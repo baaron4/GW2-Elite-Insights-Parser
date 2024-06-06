@@ -1,4 +1,6 @@
-﻿namespace GW2EIParser
+﻿using GW2EIParserCommons;
+
+namespace GW2EIParser
 {
     internal class ConsoleOperationController : OperationController
     {

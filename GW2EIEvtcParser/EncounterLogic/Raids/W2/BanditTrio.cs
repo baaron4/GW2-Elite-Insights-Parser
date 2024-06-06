@@ -88,20 +88,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (logStartNPCUpdate != null)
             {
                 startToUse = long.MaxValue;
-                AgentItem berg = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Berg).FirstOrDefault();
-                if (berg == null)
+                if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Berg, out AgentItem berg))
                 {
                     throw new MissingKeyActorsException("Berg not found");
                 }
                 startToUse = Math.Min(berg.FirstAware, startToUse);
-                AgentItem zane = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Zane).FirstOrDefault();
-                if (zane == null)
+                if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Zane, out AgentItem zane))
                 {
                     throw new MissingKeyActorsException("Zane not found");
                 }
                 startToUse = Math.Min(zane.FirstAware, startToUse);
-                AgentItem narella = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Narella).FirstOrDefault();
-                if (narella == null)
+                if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Narella, out AgentItem narella))
                 {
                     throw new MissingKeyActorsException("Narella not found");
                 }
@@ -140,6 +137,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.Berg, fightData.FightStart, combatData, Targets))
             {
                 return FightData.EncounterStartStatus.Late;
+            }
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Berg, out AgentItem berg))
+            {
+                var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration).ToList();
+                if (movements.Any())
+                {
+                    AbstractMovementEvent firstMove = movements.First();
+                    // two minutes
+                    if (firstMove.Time < 120000)
+                    {
+                        return FightData.EncounterStartStatus.Late;
+                    }
+                }
             }
             return FightData.EncounterStartStatus.Normal;
         }

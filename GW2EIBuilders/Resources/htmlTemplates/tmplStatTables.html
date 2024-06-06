@@ -36,12 +36,32 @@
 </template>
 
 <script>
+    function getDefaultStatsSubComponent() {
+        if (!validateStartPath("Statistics/GeneralStats")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "DamageStats":
+                return 0;
+            case "GameplayStats":
+                return 1;
+            case "OffensiveStats":
+                return 4;
+            case "DefensiveStats":
+                return 2;
+            case "SupportStats":
+                return 3;
+        }
+        return 0;
+    }
     Vue.component("stat-tables-component", {
         props: ["phaseindex", "playerindex", "activetargets"],
         template: `${template}`,
         data: function () {
             return {
-                tab: 0,
+                tab: getDefaultStatsSubComponent(),
             };
         },
     });

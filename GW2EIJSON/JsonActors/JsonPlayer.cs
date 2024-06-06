@@ -23,7 +23,14 @@ namespace GW2EIJSON
         /// Indicates if a player has a commander tag
         /// </summary>
         public bool HasCommanderTag { get; set; }
-        
+        /// <summary>
+        /// If <see cref="HasCommanderTag"/> is true, will contain the states of the tag. \n
+        /// Array of int[2] that represents the commander tag status \n
+        /// Array[i][0] will be the time at which player got tag. \n
+        /// Array[i][1] will be the time at which player lost tag.
+        /// </summary>
+        public IReadOnlyList<IReadOnlyList<int>> CommanderTagStates { get; set; }
+
         /// <summary>
         /// Profession of the player
         /// </summary>
@@ -75,7 +82,46 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonDPS"/>
         public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonDPS>> DpsTargets { get; set; }
-        
+
+
+        /// <summary>
+        /// Array of int representing 1S damage taken points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public IReadOnlyList<IReadOnlyList<int>> DamageTaken1S { get; set; }
+        /// <summary>
+        /// Array of int representing 1S power damage taken points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public IReadOnlyList<IReadOnlyList<int>> PowerDamageTaken1S { get; set; }
+        /// <summary>
+        /// Array of int representing 1S condition damage taken points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public IReadOnlyList<IReadOnlyList<int>> ConditionDamageTaken1S { get; set; }
+
+        /// <summary>
+        /// Array of double representing 1S breakbar damage taken points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public IReadOnlyList<IReadOnlyList<double>> BreakbarDamageTaken1S { get; set; }
+
         /// <summary>
         /// Array of int representing 1S damage points \n
         /// Length == # of targets and the length of each sub array is equal to # of phases

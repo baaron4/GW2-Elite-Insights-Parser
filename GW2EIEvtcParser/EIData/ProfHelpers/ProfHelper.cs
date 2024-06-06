@@ -16,27 +16,89 @@ namespace GW2EIEvtcParser.EIData
 
         private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
         {
-            new BreakbarDamageCastFinder(Technobabble, Technobabble),
-            new DamageCastFinder(SigilOfEarth, SigilOfEarth)
+            // Sigils
+            new DamageCastFinder(RingOfEarth_MinorSigilOfGeomancy, RingOfEarth_MinorSigilOfGeomancy)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(LightningStrikeSigil, LightningStrikeSigil)
+            new DamageCastFinder(RingOfEarth_MajorSigilOfGeomancy, RingOfEarth_MajorSigilOfGeomancy)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(FlameBlastSigil, FlameBlastSigil)
+            new DamageCastFinder(RingOfEarth_SuperiorSigilOfGeomancy, RingOfEarth_SuperiorSigilOfGeomancy)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new DamageCastFinder(SigilOfHydromancy, SigilOfHydromancy)
+            new DamageCastFinder(LightningStrike_SigilOfAir, LightningStrike_SigilOfAir)
                 .UsingICD(500)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FlameBlast_SigilOfFire, FlameBlast_SigilOfFire)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(Snowball_SigilOfMischief, Snowball_SigilOfMischief)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FrostBurst_MinorSigilOfHydromancy, FrostBurst_MinorSigilOfHydromancy)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FrostBurst_MajorSigilOfHydromancy, FrostBurst_MajorSigilOfHydromancy)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new DamageCastFinder(FrostBurst_SuperiorSigilOfHydromancy, FrostBurst_SuperiorSigilOfHydromancy)
+                .UsingICD(500)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(SuperiorSigilOfDraining, SuperiorSigilOfDraining)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfSeverance, SuperiorSigilOfSeverance)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(MinorSigilOfDoom, MinorSigilOfDoom)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(MajorSigilOfDoom, MajorSigilOfDoom)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfDoom, SuperiorSigilOfDoom)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(MajorSigilOfLeeching, MajorSigilOfLeeching)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfLeeching, LeechBuff)
+                .WithBuilds(ArcDPSEnums.GW2Builds.November2018Rune)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfVision, SuperiorSigilOfVision)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(SuperiorSigilOfConcentration, SuperiorSigilOfConcentration)
+                .WithBuilds(ArcDPSEnums.GW2Builds.StartOfLife, ArcDPSEnums.GW2Builds.November2018Rune)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MinorSigilOfWater, WaveOfHealing_MinorSigilOfWater)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MajorSigilOfWater, WaveOfHealing_MajorSigilOfWater)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_SuperiorSigilOfWater, WaveOfHealing_SuperiorSigilOfWater)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MinorSigilOfRenewal, WaveOfHealing_MinorSigilOfRenewal)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_MajorSigilOfRenewal, WaveOfHealing_MajorSigilOfRenewal)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(WaveOfHealing_SuperiorSigilOfRenewal, WaveOfHealing_SuperiorSigilOfRenewal)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(MajorSigilOfRestoration, MajorSigilOfRestoration)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(SuperiorSigilOfRestoration, SuperiorSigilOfRestoration)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(MinorSigilOfBlood, MinorSigilOfBlood)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(MajorSigilOfBlood, MajorSigilOfBlood)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTHealingCastFinder(SuperiorSigilOfBlood, SuperiorSigilOfBlood)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            // Runes
+            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            // Combos
             new EXTHealingCastFinder(WaterBlastCombo1, WaterBlastCombo1),
             new EXTHealingCastFinder(WaterBlastCombo2, WaterBlastCombo2),
             new EXTHealingCastFinder(WaterLeapCombo, WaterLeapCombo),
-            new EffectCastFinderByDst(RuneOfNightmare, EffectGUIDs.RuneOfNightmare)
-                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BreakbarDamageCastFinder(LightningLeapCombo, LightningLeapCombo),
+            // Misc
             new BuffGainCastFinder(PortalEntranceWhiteMantleWatchwork, PortalWeavingWhiteMantleWatchwork),
             new BuffGainCastFinder(PortalExitWhiteMantleWatchwork, PortalUsesWhiteMantleWatchwork)
                 .UsingBeforeWeaponSwap(true),
+            new BreakbarDamageCastFinder(Technobabble, Technobabble),
             // Relics
             new BuffGainCastFinder(RelicOfVass, RelicOfVass)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
@@ -83,13 +145,19 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
                 .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheWizardsTower)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EffectCastFinder(RelicOfTheTwinGenerals, EffectGUIDs.RelicOfTheTwinGenerals)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfTheDefenderHealing, RelicOfTheDefenderHealing)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EXTBarrierCastFinder(RelicOfTheFlock, RelicOfTheFlock)
+            new EXTHealingCastFinder(RelicOfTheFlock, RelicOfTheFlock)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTBarrierCastFinder(RelicOfTheFlockBarrier, RelicOfTheFlockBarrier)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new EXTBarrierCastFinder(RelicOfTheFoundingBarrier, RelicOfTheFoundingBarrier)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             // Mounts
             new BuffGainCastFinder(BondOfLifeSkill, BondOfLifeBuff),
@@ -448,15 +516,27 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 // Ranger
                 case Spec.Ranger:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Druid:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    DruidHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Soulbeast:
+                    RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Untamed:
                     RangerHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
                 // Revenant
                 case Spec.Revenant:
                 case Spec.Herald:
+                    RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Renegade:
+                    RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    RenegadeHelper.ComputeProfessionCombatReplayActors(player, log, replay);
+                    break;
                 case Spec.Vindicator:
                     RevenantHelper.ComputeProfessionCombatReplayActors(player, log, replay);
                     break;
@@ -583,10 +663,26 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
+        private static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(IReadOnlyList<BuffApplyEvent> buffs, SkillItem skill, long startOffset, long skillDuration)
+        {
+            var res = new List<AnimatedCastEvent>();
+            foreach (BuffApplyEvent bae in buffs) 
+            {
+                res.Add(new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
+            }
+            return res;
+        }
+
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
         {
             SkillItem skill = skillData.Get(skillId);
-            return ComputeUnderBuffCastEvents(combatData.GetBuffData(buffId).Where(x => x.To == actor.AgentItem).ToList(), skill);
+            return ComputeUnderBuffCastEvents(combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem), skill);
+        }
+
+        internal static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
+        {
+            SkillItem skill = skillData.Get(skillId);
+            return ComputeEndWithBuffApplyCastEvents(combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>().ToList(), skill, startOffset, skillDuration);
         }
 
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillId, long buffId)
@@ -599,6 +695,24 @@ namespace GW2EIEvtcParser.EIData
                 res.AddRange(ComputeUnderBuffCastEvents(pair.Value, skill));
             }
             return res;
+        }
+
+        /// <summary>
+        /// Adds generic circle decorations, to be used for player skills.
+        /// </summary>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="effect">The mine effect.</param>
+        /// <param name="color">The specialization color.</param>
+        /// <param name="skill">The source skill.</param>
+        /// <param name="icon">The skill icon.</param>
+        /// <param name="lifespan">Decoration lifespan.</param>
+        /// <param name="radius">Circle radius.</param>
+        /// <param name="icon">The skill icon.</param>
+        internal static void AddCircleSkillDecoration(CombatReplay replay, EffectEvent effect, Color color, SkillModeDescriptor skill, (long start, long end) lifespan, uint radius, string icon)
+        {
+            var connector = new PositionConnector(effect.Position);
+            replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+            replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
         }
     }
 }

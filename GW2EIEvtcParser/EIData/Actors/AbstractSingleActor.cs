@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.Buff;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -73,7 +72,12 @@ namespace GW2EIEvtcParser.EIData
             return Health;
         }
 
-        internal abstract void SetManualHealth(int health);
+        internal abstract void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null);
+
+        public virtual IReadOnlyList<(long hpValue, double percent)> GetHealthDistribution()
+        {
+            return null;
+        }
 
         internal abstract void OverrideName(string name);
 
@@ -181,6 +185,26 @@ namespace GW2EIEvtcParser.EIData
             return _graphHelper.GetCurrentHealthPercent(log, time);
         }
 
+        /// <summary>
+        /// Return the health value at requested %
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="currentHealthPercent"></param>
+        /// <returns></returns>
+        public abstract int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent);
+
+        /// <summary>
+        /// Return the health value at requested time
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public int GetCurrentHealth(ParsedEvtcLog log, long time)
+        {
+            var currentHPPercent = GetCurrentHealthPercent(log, time);
+            return GetCurrentHealth(log, currentHPPercent);
+        }
+
         public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
         {
             return _graphHelper.GetBreakbarPercentUpdates(log);
@@ -194,6 +218,27 @@ namespace GW2EIEvtcParser.EIData
         public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
         {
             return _graphHelper.GetCurrentBarrierPercent(log, time);
+        }
+
+        /// <summary>
+        /// Return the barrier value at requested %
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="currentBarrierPercent"></param>
+        /// <param name="time">Time at which to check for barrier. Barrier scales of the current maximum health of the actor and maximum health can change dynamically</param>
+        /// <returns></returns>
+        public abstract int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time);
+
+        /// <summary>
+        /// Return the barrier value at requested time
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time">Time at which to check for barrier. Barrier scales of the current maximum health of the actor and maximum health can change dynamically</param>
+        /// <returns></returns>
+        public int GetCurrentBarrier(ParsedEvtcLog log, long time)
+        {
+            var currentBarrierPercent = GetCurrentBarrierPercent(log, time);
+            return GetCurrentBarrier(log, currentBarrierPercent, time);
         }
 
         // Minions
@@ -264,9 +309,18 @@ namespace GW2EIEvtcParser.EIData
             return _graphHelper.Get1SDamageList(log, start, end, target, damageType);
         }
 
+        public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType)
+        {
+            return _graphHelper.Get1SDamageTakenList(log, start, end, target, damageType);
+        }
+
         public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             return _graphHelper.Get1SBreakbarDamageList(log, start, end, target);
+        }
+        public IReadOnlyList<double> Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        {
+            return _graphHelper.Get1SBreakbarDamageTakenList(log, start, end, target);
         }
 
         // Damage Modifiers
@@ -523,7 +577,19 @@ namespace GW2EIEvtcParser.EIData
             }
             return CombatReplay.Decorations;
         }
-        protected abstract void InitAdditionalCombatReplayData(ParsedEvtcLog log);
+        protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log)
+        {
+            foreach (string squadMarkerGUID in MarkerGUIDs.SquadOverheadMarkersHexGUIDs)
+            {
+                if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(AgentItem, squadMarkerGUID, out IReadOnlyList<MarkerEvent> markerEvents))
+                {
+                    foreach (MarkerEvent markerEvent in markerEvents)
+                    {
+                        CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, ParserIcons.SquadMarkerGUIDsToIcon[squadMarkerGUID], 240f, 16, 1);
+                    }
+                }
+            }
+        }
 
         public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
@@ -806,6 +872,40 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
+
+        // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
+        private static int BinarySearchRecursive(IReadOnlyList<ParametricPoint3D> position, long time, int minIndex, int maxIndex)
+        {
+            if (position[minIndex].Time > time)
+            {
+                return minIndex - 1;
+            }
+            if (position[maxIndex].Time < time)
+            {
+                return maxIndex;
+            }
+            if (minIndex > maxIndex)
+            {
+                return minIndex - 1;
+            }
+            else
+            {
+                int midIndex = (minIndex + maxIndex) / 2;
+                if (time == position[midIndex].Time)
+                {
+                    return midIndex;
+                }
+                else if (time < position[midIndex].Time)
+                {
+                    return BinarySearchRecursive(position, time, minIndex, midIndex - 1);
+                }
+                else
+                {
+                    return BinarySearchRecursive(position, time, midIndex + 1, maxIndex);
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -824,7 +924,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
             }
-            return positions.LastOrDefault(x => x.Time <= time);
+            int foundIndex = BinarySearchRecursive(positions, time, 0, positions.Count - 1);
+            if (foundIndex < 0)
+            {
+                return null;
+            }
+            return positions[foundIndex];
         }
 
         public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
@@ -873,9 +978,14 @@ namespace GW2EIEvtcParser.EIData
             }
             if (forwardWindow != 0)
             {
-                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time); 
+                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time);
             }
-            return rotations.LastOrDefault(x => x.Time <= time);
+            int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1);
+            if (foundIndex < 0)
+            {
+                return null;
+            }
+            return rotations[foundIndex];
         }
     }
 }

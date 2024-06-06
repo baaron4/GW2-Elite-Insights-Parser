@@ -1,10 +1,13 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal class IconDecoration : GenericIconDecoration
     {
         public float Opacity { get; }
+
+        public bool IsSquadMarker { get; private set; }
 
         public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base(icon, pixelSize, lifespan, connector)
         {
@@ -24,9 +27,15 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public IconDecoration UsingSquadMarker(bool isSquadMarker)
         {
-            return new IconDecorationCombatReplayDescription(log, this, map);
+            IsSquadMarker = isSquadMarker;
+            return this;
+        }
+
+        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        {
+            return new IconDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
         }
     }
 }

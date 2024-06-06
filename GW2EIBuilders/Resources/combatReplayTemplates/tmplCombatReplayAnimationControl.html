@@ -17,6 +17,8 @@
                     class="replay"></canvas>
                 <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.bgCanvasID"
                     class="replay"></canvas>
+                <canvas :width="canvasSize.x + 'px'" :height="canvasSize.y + 'px'" :id="htmlElementIDs.pickCanvasID"
+                    class="replay"></canvas>
             </div>
             <div class="animation-control">
                 <div class="d-flex justify-content-center mb-1">
@@ -29,6 +31,8 @@
                     </div>
                     <div @click="toggleBackwards();" class="btn btn-small"
                         :class="{'active': backwards, 'btn-dark': !light, 'btn-light': light}">Backwards</div>
+                    <div @click="resetViewpoint();" class="btn btn-small"
+                        :class="{'btn-dark': !light, 'btn-light': light}">Reset Viewpoint</div>
                 </div>
                 <div class="d-flex justify-content-center slidercontainer mt-1">
                     <input style="min-width: 400px;" @input="updateTime($event.target.value)" type="range" min="0"
@@ -46,7 +50,7 @@
                         {{speed}}x
                     </label>
                 </div>
-                <p class="text-justify text-center">Double click on canvas to restore viewpoint</p>
+                <p class="text-justify text-center">You can click on the canvas to select agents</p>
             </div>
         </div>
     </div>
@@ -65,7 +69,7 @@
             };
         },
         mounted() {
-            animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
+            animator.attachDOM(this.htmlElementIDs.mainCanvasID, this.htmlElementIDs.bgCanvasID, this.htmlElementIDs.pickCanvasID, this.htmlElementIDs.timeRangeID, this.htmlElementIDs.timeRangeDisplayID);
         },
         computed: {
             showNormalPhases: function () {
@@ -93,6 +97,7 @@
                 return {
                     mainCanvasID: "main-canvas",
                     bgCanvasID: "bg-canvas",
+                    pickCanvasID: "picking-canvas",
                     timeRangeID: "timeRange",
                     timeRangeDisplayID: "timeRangeDisplay",
                 };
@@ -116,6 +121,9 @@
             },
             toggleBackwards: function () {
                 this.backwards = animator.toggleBackwards();
+            },
+            resetViewpoint: function () {
+                animator.resetViewpoint();
             },
             toggleAnimate: function () {
                 animator.toggleAnimate();

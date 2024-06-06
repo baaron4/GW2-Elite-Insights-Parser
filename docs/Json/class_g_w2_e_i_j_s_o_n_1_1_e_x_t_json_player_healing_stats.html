@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.62.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.68.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -147,6 +147,22 @@ Length == # of phases.  <br /></td></tr>
 <tr class="memdesc:a5c7e71e7bede9321bbf104738457e3c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S outgoing hybrid healing points <br  />
 Length == # of phases.  <br /></td></tr>
 <tr class="separator:a5c7e71e7bede9321bbf104738457e3c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad75e281b6e57b4e3b9e0b2d855808295" id="r_ad75e281b6e57b4e3b9e0b2d855808295"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#ad75e281b6e57b4e3b9e0b2d855808295">HealingReceived1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ad75e281b6e57b4e3b9e0b2d855808295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S incoming healing points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:ad75e281b6e57b4e3b9e0b2d855808295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7093d46308231ea21dc2fc5ebf950093" id="r_a7093d46308231ea21dc2fc5ebf950093"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#a7093d46308231ea21dc2fc5ebf950093">HealingPowerHealingReceived1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:a7093d46308231ea21dc2fc5ebf950093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S incoming healing power based healing points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:a7093d46308231ea21dc2fc5ebf950093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4f4fc529c0439afbe101ff80ce5f376" id="r_af4f4fc529c0439afbe101ff80ce5f376"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#af4f4fc529c0439afbe101ff80ce5f376">ConversionHealingHealingReceived1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:af4f4fc529c0439afbe101ff80ce5f376"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S incoming conversion based healing points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:af4f4fc529c0439afbe101ff80ce5f376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5b4a417439edd91a07dfa42b5c60649" id="r_ac5b4a417439edd91a07dfa42b5c60649"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#ac5b4a417439edd91a07dfa42b5c60649">HybridHealingReceived1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ac5b4a417439edd91a07dfa42b5c60649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S incoming hybrid healing points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:ac5b4a417439edd91a07dfa42b5c60649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a289ff281d579e91768c86616e2b782b5" id="r_a289ff281d579e91768c86616e2b782b5"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_healing_dist.html">EXTJsonHealingDist</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#a289ff281d579e91768c86616e2b782b5">AlliedHealingDist</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a289ff281d579e91768c86616e2b782b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total Outgoing Allied Healing distribution array <br  />
 Length == # of players and the length of each sub array is equal to # of phases.  <br /></td></tr>
@@ -324,6 +340,33 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
 
 </div>
 </div>
+<a id="af4f4fc529c0439afbe101ff80ce5f376" name="af4f4fc529c0439afbe101ff80ce5f376"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4f4fc529c0439afbe101ff80ce5f376">&#9670;&#160;</a></span>ConversionHealingHealingReceived1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.EXTJsonPlayerHealingStats.ConversionHealingHealingReceived1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S incoming conversion based healing points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
 <a id="a5ddc96ad6994811ac06b0e9a6384e16a" name="a5ddc96ad6994811ac06b0e9a6384e16a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ddc96ad6994811ac06b0e9a6384e16a">&#9670;&#160;</a></span>Healing1S</h2>
 
@@ -378,6 +421,60 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
 
 </div>
 </div>
+<a id="a7093d46308231ea21dc2fc5ebf950093" name="a7093d46308231ea21dc2fc5ebf950093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7093d46308231ea21dc2fc5ebf950093">&#9670;&#160;</a></span>HealingPowerHealingReceived1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.EXTJsonPlayerHealingStats.HealingPowerHealingReceived1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S incoming healing power based healing points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
+<a id="ad75e281b6e57b4e3b9e0b2d855808295" name="ad75e281b6e57b4e3b9e0b2d855808295"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad75e281b6e57b4e3b9e0b2d855808295">&#9670;&#160;</a></span>HealingReceived1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.EXTJsonPlayerHealingStats.HealingReceived1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S incoming healing points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
 <a id="a5c7e71e7bede9321bbf104738457e3c3" name="a5c7e71e7bede9321bbf104738457e3c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5c7e71e7bede9321bbf104738457e3c3">&#9670;&#160;</a></span>HybridHealing1S</h2>
 
@@ -399,6 +496,33 @@ ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,152
 </div><div class="memdoc">
 
 <p>Array of int representing 1S outgoing hybrid healing points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
+<a id="ac5b4a417439edd91a07dfa42b5c60649" name="ac5b4a417439edd91a07dfa42b5c60649"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5b4a417439edd91a07dfa42b5c60649">&#9670;&#160;</a></span>HybridHealingReceived1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.EXTJsonPlayerHealingStats.HybridHealingReceived1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S incoming hybrid healing points <br  />
 Length == # of phases. </p>
 <p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
 ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>

@@ -173,8 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Deimos not found");
                 }
-                AgentItem saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
-                if (saul == null)
+                if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.Saul, out AgentItem saul))
                 {
                     throw new MissingKeyActorsException("Saul not found");
                 }
@@ -430,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {
             // Determined + additional data on inst change
-            AbstractBuffEvent invulDei = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x is BuffApplyEvent && x.To == mainTarget.AgentItem);
+            AbstractBuffEvent invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, mainTarget.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
 
             if (invulDei != null || _deimos10PercentTime > 0)
             {
@@ -610,40 +609,44 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                     if (shackledPrisoner != null)
                     {
-                        float diffX = 0;
-                        float diffY = 0;
-                        if (replay.PolledPositions[0].X - demonicCenter.X > 0)
+                        Point3D shackledPos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant);
+                        if (shackledPos != null)
                         {
-                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                            float diffX = 0;
+                            float diffY = 0;
+                            if (replay.PolledPositions[0].X - demonicCenter.X > 0)
                             {
-                                // top
-                                diffX = 55;
-                                diffY = 1080;
-                            } 
-                            else
-                            {
-                                // right
-                                diffX = 1115;
-                                diffY = -35;
-                            }
-                        } 
-                        else
-                        {
-                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
-                            {
-                                // left 
-                                diffX = -1100;
-                                diffY = 40;
+                                if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                                {
+                                    // top
+                                    diffX = 55;
+                                    diffY = 1080;
+                                }
+                                else
+                                {
+                                    // right
+                                    diffX = 1115;
+                                    diffY = -35;
+                                }
                             }
                             else
                             {
-                                // bottom
-                                diffX = -38;
-                                diffY = -1130;
+                                if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                                {
+                                    // left 
+                                    diffX = -1100;
+                                    diffY = 40;
+                                }
+                                else
+                                {
+                                    // bottom
+                                    diffX = -38;
+                                    diffY = -1130;
+                                }
                             }
+                            Point3D pos = shackledPos + new Point3D(diffX, diffY);
+                            replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                         }
-                        Point3D pos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant) + new Point3D(diffX, diffY);
-                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                     }
                     break;
                 default:
@@ -675,19 +678,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("Deimos not found");
             }
             FightData.EncounterMode cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
-            
-            if (_deimos10PercentTime > 0)
+
+            // Deimos gains additional health during the last 10% so the max-health needs to be corrected
+            // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
+            if (cmStatus == FightData.EncounterMode.CM)
             {
-                // Deimos gains additional health during the last 10% so the max-health needs to be corrected
-                // done here because this method will get called during the creation of the ParsedEvtcLog and the ParsedEvtcLog should contain complete and correct values after creation
-                if (cmStatus == FightData.EncounterMode.CM)
-                {
-                    target.SetManualHealth(42804900);
-                }
-                else
-                {
-                    target.SetManualHealth(37388210);
-                }
+                target.SetManualHealth(42804900, new List<(long hpValue, double percent)>()
+                    {
+                        (42000000 , 100),
+                        (50049000, 10)
+                    });
+            }
+            else
+            {
+                target.SetManualHealth(37388210, new List<(long hpValue, double percent)>()
+                    {
+                        (35981456 , 100),
+                        (50049000, 10)
+                    });
             }
 
             return cmStatus;

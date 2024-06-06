@@ -70,13 +70,51 @@
 </template>
 
 <script>
+    function getDefaultBuffTableSubComponent(key) {
+        let header = 'N/A';
+        if (key === "healingbuff-tables") {
+            header = "HealingStatistics";
+        } else if (key === "buff-tables") {
+            header = "Statistics";
+        }
+        if (!validateStartPath(header+"/Buffs")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "Boons":
+                return 0;
+            case "OffensiveBuffs":
+                return hasOffBuffs() ? 1 : 0;
+            case "SupportBuffs":
+                return hasSupBuffs() ? 2 : 0;
+            case "DefensiveBuffs":
+                return hasDefBuffs() ? 3 : 0;
+            case "Conditions":
+                return hasConditions() ? 5 : 0;
+            case "GearBuffs":
+                return hasGearBuffs() ? 4 : 0;
+            case "Debuffs":
+                return hasDebuffs() ? 7 : 0;
+            case "Nourishments":
+                return hasNourishments() ? 8 : 0;
+            case "Enhancements":
+                return hasEnhancements() ? 9 : 0;
+            case "Other Consumables":
+                return hasOtherConsumables() ? 10 : 0;
+            case "Personal Buffs":
+                return hasPersBuffs() ? 6 : 0;
+        }
+        return 0;
+    }
     Vue.component("buff-tables-component", {
         props: ["phaseindex", "playerindex"],
         template: `${template}`,
         data: function () {
             return {
                 activeduration: 0,
-                tab: 0,
+                tab: getDefaultBuffTableSubComponent(this.$vnode.key),
             };
         },
         computed: {
@@ -84,43 +122,34 @@
                 return this.tab < 8 || this.tab > 10;
             },
             hasOffBuffs: function () {
-                return logData.offBuffs.length > 0;
+                return hasOffBuffs();
             },
             hasDefBuffs: function () {
-                return logData.defBuffs.length > 0;
+                return hasDefBuffs();
             },
             hasSupBuffs: function () {
-                return logData.supBuffs.length > 0;
+                return hasSupBuffs();
             },
             hasGearBuffs: function () {
-                return logData.gearBuffs.length > 0;
+                return hasGearBuffs();
             },
             hasDebuffs: function () {
-                return logData.debuffs.length > 0;
+                return hasDebuffs();
             },
             hasConditions: function () {
-                return logData.conditions.length > 0;
+                return hasConditions();
             },
             hasNourishments: function () {
-                return logData.nourishments.length > 0;
+                return hasNourishments();
             },
             hasEnhancements: function () {
-                return logData.enhancements.length > 0;
+                return hasEnhancements();
             },
             hasOtherConsumables: function () {
-                return logData.otherConsumables.length > 0;
+                return hasOtherConsumables();
             },
             hasPersBuffs: function () {
-                var hasPersBuffs = false;
-                if (logData.persBuffs) {
-                    for (var prop in logData.persBuffs) {
-                        if (logData.persBuffs.hasOwnProperty(prop) && logData.persBuffs[prop].length > 0) {
-                            hasPersBuffs = true;
-                            break;
-                        }
-                    }
-                }
-                return hasPersBuffs;
+                return hasPersBuffs()
             },
         }
     });

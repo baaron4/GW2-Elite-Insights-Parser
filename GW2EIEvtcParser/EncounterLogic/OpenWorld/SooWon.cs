@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW).FirstOrDefault());
+                return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW).FirstOrDefault());
             }
             return startToUse;
         }
@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData,
             IReadOnlyCollection<AgentItem> playerAgents)
         {
-            RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == 13);
+            RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.Daily && x.Time > fightData.FightStart);
             if (reward != null)
             {
                 fightData.SetSuccess(true, reward.Time);

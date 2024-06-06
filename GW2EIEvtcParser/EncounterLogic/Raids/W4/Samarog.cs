@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.SpearAggressionRevulsion:
                     var spearLifespan = new Segment(target.FirstAware, target.LastAware, 1);
                     replay.Decorations.Add(new CircleDecoration(240, spearLifespan, Colors.Orange, 0.1, new AgentConnector(target)));
-                    if (log.CombatData.GetBuffData(SpearOfAggressionBuff).Any(x => x.To == target.AgentItem))
+                    if (log.CombatData.GetBuffDataByIDByDst(SpearOfAggressionBuff, target.AgentItem).Any())
                     {
                         replay.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15);
                     } 
@@ -223,7 +223,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // big bomb
-            var bigbomb = log.CombatData.GetBuffData(InevitableBetrayalBig).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var bigbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalBig, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in bigbomb)
             {
                 int bigStart = (int)c.Time;
@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.AddDecorationWithGrowing(circle, bigEnd);
             }
             // small bomb
-            var smallbomb = log.CombatData.GetBuffData(InevitableBetrayalSmall).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var smallbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalSmall, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in smallbomb)
             {
                 int smallStart = (int)c.Time;

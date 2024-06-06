@@ -16,6 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
     internal class HarvestTemple : EndOfDragonsStrike
     {
 
+        private static readonly Point3D GrandStrikeChestPosition = new Point3D(605.31f, -20400.5f, -15420.1f);
         private IReadOnlyList<AbstractSingleActor> FirstAwareSortedTargets { get; set; }
         public HarvestTemple(int triggerID) : base(triggerID)
         {
@@ -95,6 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             );
             Icon = EncounterIconHarvestTemple;
+            ChestID = ArcDPSEnums.ChestID.GrandStrikeChest;
             Extension = "harvsttmpl";
             EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000004;
@@ -349,15 +351,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (lastDamageTaken != null)
                     {
                         bool isSuccess = false;
-                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && x.Time >= targetOffs[1].Time - 150).ToList();
-                        IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
-                        foreach (AnimatedCastEvent liffOff in liftOffs)
+                        if (agentData.GetGadgetsByID(ChestID).Any())
                         {
                             isSuccess = true;
-                            if (determinedApplies.Count(x => x.To == liffOff.Caster && Math.Abs(x.Time - liffOff.Time) < ServerDelayConstant) != 1)
+                        } 
+                        else
+                        {
+                            var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant).ToList();
+                            IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
+                            foreach (AnimatedCastEvent liffOff in liftOffs)
                             {
-                                isSuccess = false;
-                                break;
+                                isSuccess = true;
+                                if (determinedApplies.Count(x => x.To == liffOff.Caster && liffOff.Time - x.Time + ServerDelayConstant > 0) != 1)
+                                {
+                                    isSuccess = false;
+                                    break;
+                                }
                             }
                         }
                         if (isSuccess)
@@ -371,6 +380,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2);
             bool needRefreshAgentPool = false;
             //
             var dragonOrbMaxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent == 491550).ToList();
@@ -480,8 +490,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needRefreshAgentPool = true;
             }
             // Gravity Ball - Timecaster gadget
-            AgentItem timecaster = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidTimeCaster).FirstOrDefault();
-            if (timecaster != null)
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out AgentItem timecaster))
             {
                 var gravityBalls = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.Master == null && x.FirstAware > timecaster.FirstAware && x.FirstAware < timecaster.LastAware + 2000).ToList();
                 var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
@@ -496,8 +505,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             {
-                AgentItem jormagAgent = agentData.GetNPCsByID(ArcDPSEnums.TargetID.TheDragonVoidJormag).FirstOrDefault();
-                if (jormagAgent != null)
+                if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.TheDragonVoidJormag, out AgentItem jormagAgent))
                 {
                     var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                         .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
@@ -664,6 +672,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out IReadOnlyList<EffectEvent> greenEffects))
             {
                 AddShareTheVoidDecoration(greenEffects, true);
@@ -704,7 +714,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Purification Zones
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationZones, out IReadOnlyList<EffectEvent> purificationZoneEffects))
                     {
-                        var voidShells = log.CombatData.GetBuffData(VoidShell).Where(x => x.To == target.AgentItem).ToList();
+                        var voidShells = log.CombatData.GetBuffDataByIDByDst(VoidShell, target.AgentItem).ToList();
                         var voidShellRemovals = voidShells.Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList();
                         int voidShellAppliesCount = voidShells.Where(x => x is BuffApplyEvent).Count();
                         int voidShellRemovalOffset = 0;
@@ -1343,7 +1353,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         uint radius = 500;
                         long castDuration = 1680;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         (long start, long end) lifespan = (c.Time, actualEndCast);
                         var agentConnector = new AgentConnector(c.Caster);
                         var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, agentConnector);
@@ -1523,7 +1533,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         uint width = target.HitboxWidth;
                         long castDuration = 1000;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
                         if (facing != null)
                         {
@@ -1543,7 +1553,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int openingAngle = 60;
                         long castDuration = 3400;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
                         if (facing != null)
                         {
@@ -1623,7 +1633,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         uint radius = 600;
                         long castDuration = 1880;
                         long supposedEndCast = c.Time + castDuration;
-                        long actualEndCast = ComputeEndCastTimeByStun(log, target, c.Time, castDuration);
+                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
                         (long start, long end) lifespan = (c.Time, actualEndCast);
                         var agentConnector = new AgentConnector(c.Caster);
                         var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, agentConnector);

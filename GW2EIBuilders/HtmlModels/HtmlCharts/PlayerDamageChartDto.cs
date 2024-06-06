@@ -6,5 +6,6 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
     {
         public List<IReadOnlyList<T>> Targets { get; set; }
         public IReadOnlyList<T> Total { get; set; }
+        public IReadOnlyList<T> Taken { get; set; }
     }
 }

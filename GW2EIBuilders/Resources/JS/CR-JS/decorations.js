@@ -201,7 +201,7 @@ class MechanicDrawable {
 
     getOffset() {
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start > time || this.end < time)) {
+        if (this.start > time || this.end < time) {
             return null;
         }
         return this.offsetFetcher(this.connectedTo);
@@ -209,7 +209,7 @@ class MechanicDrawable {
 
     getRotation() {
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start > time || this.end < time)) {
+        if (this.start > time || this.end < time) {
             return null;
         }
         return this.rotationFetcher(this.rotationConnectedTo, this.rotationMaster, this.dstRotationMaster, this.start, this.end);
@@ -217,7 +217,7 @@ class MechanicDrawable {
 
     getPosition() {
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start > time || this.end < time)) {
+        if (this.start > time || this.end < time) {
             return null;
         }
         return this.positionFetcher(this.connectedTo, this.master);
@@ -525,7 +525,7 @@ class LineMechanicDrawable extends FormMechanicDrawable {
 
     getTargetPosition() {
         var time = animator.reactiveDataStatus.time;
-        if (this.start !== -1 && (this.start > time || this.end < time)) {
+        if (this.start > time || this.end < time) {
             return null;
         }
         var pos = this.targetPositionFetcher(this.connectedFrom, this.endMaster);
@@ -726,8 +726,9 @@ class MovingPlatformDrawable extends BackgroundDrawable {
 class IconMechanicDrawable extends MechanicDrawable {
     constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
         super(start, end, connectedTo, rotationConnectedTo);
+        this.imageUrl = image;
         this.image = new Image();
-        this.image.src = image;
+        this.image.src = this.imageUrl;
         this.image.onload = () => animateCanvas(noUpdateTime);
         this.pixelSize = pixelSize;
         this.worldSize = worldSize;

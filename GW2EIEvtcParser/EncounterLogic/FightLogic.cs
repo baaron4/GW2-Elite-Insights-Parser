@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using System.IO;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -366,7 +367,24 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-
+            var squadMarkers = new List<ArcDPSEnums.SquadMarkerIndex>() {
+                SquadMarkerIndex.Arrow,
+                SquadMarkerIndex.Circle,
+                SquadMarkerIndex.Heart,
+                SquadMarkerIndex.Square,
+                SquadMarkerIndex.Star,
+                SquadMarkerIndex.Swirl,
+                SquadMarkerIndex.Triangle,
+                SquadMarkerIndex.X,
+            };
+            foreach (SquadMarkerIndex squadMarker in squadMarkers)
+            {
+                IReadOnlyList<SquadMarkerEvent> squadMarkerEvents = log.CombatData.GetSquadMarkerEvents(squadMarker);
+                foreach (SquadMarkerEvent squadMarkerEvent in squadMarkerEvents)
+                {
+                    EnvironmentDecorations.Add(new IconDecoration(ParserIcons.SquadMarkerIndexToIcon[squadMarker], 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
+                }
+            }
         }
 
         internal IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

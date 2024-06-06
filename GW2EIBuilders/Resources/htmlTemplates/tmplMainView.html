@@ -29,7 +29,7 @@
             <li>
                 <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Graph</a>
             </li>
-            <li v-if="players.length > 1">
+            <li v-if="hasRotations">
                 <a class="nav-link" :class="{active: tab === 7}" @click="tab = 7">Rotations</a>
             </li>
             <li v-if="hasTargets">
@@ -68,12 +68,39 @@
 </template>
 
 <script>
+
+    function getDefaultMainSubComponent() {
+        if (!validateStartPath("Statistics")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[1];
+        switch (compo) {
+            case "GeneralStats":
+                return 0;
+            case "Buffs":
+                return 1;
+            case "DamageModifiers":
+                return hasDamageMods() ? 2 : 0;
+            case "Mechanics":
+                return hasMechanics() ? 3 : 0;
+            case "Graph":
+                return 4;
+            case "Rotations":
+                return hasRotations() ? 7 : 0;
+            case "TargetsSummary":
+                return hasTargets() ? 5 : 0;
+            case "PlayerSummary":
+                return 6;
+        }
+        return 0;
+    }
     Vue.component("main-view-component", {
         props: ['light'],
         template: `${template}`,
         data: function () {
             return {
-                tab: 0,
+                tab: getDefaultMainSubComponent(),
                 reactiveLogdata: simpleLogData
             };
         },
@@ -114,13 +141,16 @@
                 return res;
             },
             hasDamageMods: function() {
-                return Object.keys(logData.damageModMap).length !== 0 || Object.keys(logData.damageIncModMap).length !== 0 ;
+                return hasDamageMods() ;
             },
             hasMechanics: function() {
-                return logData.mechanicMap.length > 0 && !logData.noMechanics;
+                return hasMechanics();
             },
             hasTargets: function() {
-                return !logData.targetless;
+                return hasTargets();
+            },
+            hasRotations: function() {
+                return hasRotations();
             },
             players: function () {
                 return logData.players;

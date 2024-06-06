@@ -42,10 +42,15 @@ namespace GW2EIEvtcParser.EIData
             return gain != 0;
         }
 
+        protected static bool Skip(BuffsTracker tracker, IReadOnlyDictionary<long, BuffsGraphModel> bgms, GainComputer gainComputer)
+        {
+            return (!tracker.Has(bgms) && gainComputer != ByAbsence) || (tracker.Has(bgms) && gainComputer == ByAbsence);
+        }
+
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
-            if (!Tracker.Has(bgms) && GainComputer != ByAbsence)
+            if (Skip(Tracker, bgms, GainComputer))
             {
                 return new List<DamageModifierEvent>();
             }

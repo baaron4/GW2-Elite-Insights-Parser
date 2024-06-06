@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // add burn phases
             int offset = phases.Count;
-            var orbItems = log.CombatData.GetBuffData(Compromised).Where(x => x.To == mainTarget.AgentItem).ToList();
+            IReadOnlyList<AbstractBuffEvent> orbItems = log.CombatData.GetBuffDataByIDByDst(Compromised, mainTarget.AgentItem);
             // Get number of orbs and filter the list
             start = 0;
             int orbCount = 0;

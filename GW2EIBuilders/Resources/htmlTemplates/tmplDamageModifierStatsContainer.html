@@ -22,20 +22,34 @@
 </template>
 
 <script>
+    function getDefaultDamageModifiersSubComponent() {
+        if (!validateStartPath("Statistics/DamageModifiers")) {
+            return  hasOutgoingDamageMods() ? 0 : 1;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "OutgoingDamageModifiers":
+                return hasOutgoingDamageMods() ? 0 : 1;
+            case "IncomingDamageModifiers":
+                return hasIncomingDamageMods() ? 1 : 0;
+        }
+        return hasOutgoingDamageMods() ? 0 : 1;
+    }
     Vue.component("dmgmodifier-stats-container-component", {
         props: ['phaseindex', 'playerindex', 'activetargets'],
         template: `${template}`,
         data: function () {
             return {
-                mode: Object.keys(logData.damageModMap).length !== 0 ? 0 : 1,
+                mode: getDefaultDamageModifiersSubComponent(),
             };
         },
         computed: {
             hasOutDamageMods: function() {
-                return Object.keys(logData.damageModMap).length !== 0 ;
+                return hasOutgoingDamageMods();
             },
             hasIncDamageMods: function() {
-                return Object.keys(logData.damageIncModMap).length !== 0 ;
+                return hasIncomingDamageMods() ;
             },
         }
     });

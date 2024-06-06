@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyCastEndMechanic(QadimCC, "Qadim CC", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed","Qadim Breakbar broken", "Qadim CCed",0).UsingChecker((ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(QadimRiposte, "Riposte", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkRed), "Q.CC Fail","Qadim Breakbar failed", "Qadim CC Fail",0),
             new PlayerDstHitMechanic(QadimRiposte, "Riposte", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
-            new PlayerDstHitMechanic(new long[] { FieryDance1, FieryDance2, FieryDance3, FieryDance4, }, "Fiery Dance", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
+            new PlayerDstHitMechanic(new long[] { FieryDance1, FieryDance2, FieryDance3, FieryDance4, }, "Fiery Dance", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
             new PlayerDstHitMechanic(ShatteringImpact, "Shattering Impact", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
             new PlayerDstHitMechanic(FlameWave, "Flame Wave", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "KB","Flame Wave (Knockback Frontal Beam)", "KB Push",0),
             new PlayerDstHitMechanic(FireWaveQadim, "Fire Wave", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Q.Wave","Fire Wave (Shockwave after Qadim's Mace attack)", "Mace Shockwave",0),
@@ -215,8 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AgentItem qadim = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
-            if (qadim == null)
+            if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))
             {
                 throw new MissingKeyActorsException("Qadim not found");
             }
@@ -248,8 +247,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID(TargetID.Qadim).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))
             {
                 throw new MissingKeyActorsException("Qadim not found");
             }
@@ -423,6 +421,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             if (_manualPlatforms)
             {
                 AddManuallyAnimatedPlatformsToCombatReplay(Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)), log, EnvironmentDecorations);
@@ -1388,7 +1388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Player p in log.PlayerList)
             {
                 IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
-                var exitBuffs = log.CombatData.GetBuffData(PowerOfTheLamp).OfType<BuffApplyEvent>().Where(x => x.To == p.AgentItem).ToList();
+                var exitBuffs = log.CombatData.GetBuffDataByIDByDst(PowerOfTheLamp, p.AgentItem).OfType<BuffApplyEvent>().ToList();
 
                 // Count the times the player has entered and exited the lamp.
                 // A player that has entered the lamp but never exites and remains alive is elible for the achievement.

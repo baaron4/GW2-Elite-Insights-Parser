@@ -227,10 +227,36 @@ namespace GW2EIEvtcParser.EIData
         private void SetStackCommanderPositions(ParsedEvtcLog log)
         {
             _stackCommanderPositions = new List<ParametricPoint3D>();
-            Player commander = log.PlayerList.FirstOrDefault(x => x.IsCommander(log));
-            if (log.CombatData.HasMovementData && commander != null)
+            if (log.CombatData.HasMovementData)
             {
-                _stackCommanderPositions = new List<ParametricPoint3D>(commander.GetCombatReplayPolledPositions(log));
+                var states = new List<(Player p, GenericSegment<string> seg)>();
+                foreach (Player p in log.PlayerList)
+                {
+                    foreach (GenericSegment<string> seg in p.GetCommanderStates(log))
+                    {
+                        states.Add((p, seg));
+                    }
+                }
+                states = states.OrderBy(x => x.seg.Start).ToList();
+                GenericSegment<string> last = null;
+                foreach ((Player p, GenericSegment<string> seg) in states)
+                {
+                    IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
+                    long start = last == null ? long.MinValue : last.End;
+                    var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList();
+                    for (int i = 0; i < toAdd.Count; i++)
+                    {
+                        if (toAdd[i].Time < seg.Start)
+                        {
+                            toAdd[i] = null;
+                        } 
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    _stackCommanderPositions.AddRange(toAdd);
+                }
             }
         }
 

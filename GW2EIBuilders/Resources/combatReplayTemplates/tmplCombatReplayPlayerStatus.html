@@ -1,19 +1,17 @@
 <template>
-    <div class="player-status" :style="{'background': getHPGradient(time, status)}" @click="select">
-        <h6 class="actor-shorten text-center" :title="player.name">
-            <img v-if="player.isCommander"
-                            src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
-                            height="18" width="18" data-original-title="Commander">
-            <img :src="player.icon" :alt="player.profession" height="18" width="18">
+    <div class="player-status" :style="{'background': getHPGradient(time, status)}" @click="select" :data-original-title="player.name + ' - ' + player.acc">
+        <h6 class="actor-shorten-cr text-center">     
+            <img v-for="(marker, index) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
+            <img :src="player.icon" :alt="player.profession" height="16" width="16">
             {{player.name}}
-        </h6>
+        </h6>     
         <p v-if="hasHealth" class="text-right cr-hp-display cr-hp-display-player">
             {{(Math.round(100*getHPPercent(time))/100).toFixed(2)}} %
         </p>
         <p v-if="hasBarrier" class="text-right cr-barrier-display cr-barrier-display-player">
             {{(Math.round(100*getBarrierPercent(time))/100).toFixed(2)}} %
         </p>      
-        <div v-if="hasBarrier" class="cr-barrier" :style="{'background': getBarrierGradient(time)}">
+        <div v-if="hasBarrier" class="cr-barrier cr-barrier-player" :style="{'background': getBarrierGradient(time)}">
 
         </div>
     </div>
@@ -42,6 +40,9 @@
             },
             getBarrierGradient: function (time) {
                 return computeGradient('rgba(0,0,0,0)', 100 - this.getBarrierPercent(time), 'rgba(228,148,97, 0.5)' );
+            },
+            activeMarkers: function() {
+                return animator.getActiveActorMarkers(this.player.uniqueID);
             },
             select() {
                 animator.selectActor(this.player.uniqueID);

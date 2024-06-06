@@ -37,8 +37,8 @@
                             class="icon" :data-original-title="computeExtensionTooltip(runningExtensions[player.id])">
                         <img v-if="player.isCommander"
                             src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
-                            class="icon" data-original-title="Commander">
-                        <span class="player-cell-shorten" :data-original-title="player.acc">
+                            class="icon" :data-original-title="getCommanderTooltip(player)">
+                        <span class="player-cell-shorten" :data-original-title="player.name + ' - ' + player.acc">
                             {{ player.name }}
                         </span>
                     </div>
@@ -63,6 +63,19 @@
                     this.players[i].active = false;
                 }
                 this.players[id].active = true;
+            },
+            getCommanderTooltip: function(player) {
+                if (!player.isCommander) {
+                    return false;
+                }
+                let res = 'Commander';
+                for (let i = 0; i < player.commanderStates.length; i++) {
+                    res = `
+                        ${res}<br>
+                        From ${player.commanderStates[i][0]} to ${player.commanderStates[i][1]}
+                    `;
+                }
+                return res;
             },
             computeExtensionTooltip: function(data) {
                 var str = "Player is running: <br>";

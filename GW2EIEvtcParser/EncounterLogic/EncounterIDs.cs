@@ -34,6 +34,7 @@
             public const long ShatteredObservatoryMask = 0x000200;
             public const long SunquaPeakMask = 0x000300;
             public const long SilentSurfMask = 0x000400;
+            public const long LonelyTowerMask = 0x000500;
         }
 
         public static class StrikeMasks

@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (cbtEnter != null)
                 {
-                    AbstractBuffEvent nextPhaseStartEvt = log.CombatData.GetBuffDataByDst(ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.BuffID == Determined762 && x.Time > cbtEnter.Time);
+                    AbstractBuffEvent nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
                     long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
                     var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                     addPhase.AddTargets(targets);
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Minister Li not found");
             }
-            var buffApplies = combatData.GetBuffData(Resurrection).OfType<BuffApplyEvent>().Where(x => x.To == ministerLi.AgentItem).ToList();
+            var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
             if (buffApplies.Any())
             {
                 fightData.SetSuccess(true, buffApplies[0].Time);
@@ -595,7 +595,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static void AddFallOfTheAxeDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration, int angle)
         {
             Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-            if (facingDirection == null) { return; }
+            if (facingDirection == null) 
+            { 
+                return; 
+            }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
             var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
@@ -606,7 +609,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddDragonSlashWaveDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration)
         {
             Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-            if (facingDirection == null) { return; }
+            if (facingDirection == null) 
+            { 
+                return; 
+            }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
             var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);

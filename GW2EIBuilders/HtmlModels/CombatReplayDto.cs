@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels
 {
@@ -15,10 +16,10 @@ namespace GW2EIBuilders.HtmlModels
         public int PollingRate { get; set; }
         public IReadOnlyList<CombatReplayMap.MapItem> Maps { get; set; }
 
-        public CombatReplayDto(ParsedEvtcLog log)
+        public CombatReplayDto(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
-            Actors = GetCombatReplayActors(log, map);
+            Actors = GetCombatReplayActors(log, map, usedSkills, usedBuffs);
             Maps = map.Maps;
             (int width, int height) = map.GetPixelMapSize();
             Sizes = new int[2] { width, height };
@@ -28,7 +29,7 @@ namespace GW2EIBuilders.HtmlModels
         }
 
 
-        private static List<object> GetCombatReplayActors(ParsedEvtcLog log, CombatReplayMap map)
+        private static List<object> GetCombatReplayActors(ParsedEvtcLog log, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var actors = new List<object>();
             var fromNonFriendliesSet = new HashSet<AbstractSingleActor>(log.FightData.Logic.Hostiles);
@@ -41,7 +42,7 @@ namespace GW2EIBuilders.HtmlModels
                 actors.Add(actor.GetCombatReplayDescription(map, log));
                 foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
                 {
-                    actors.Add(a.GetCombatReplayDescription(map, log));
+                    actors.Add(a.GetCombatReplayDescription(map, log, usedSkills, usedBuffs));
                 }
                 foreach (Minions minions in actor.GetMinions(log).Values)
                 {
@@ -64,12 +65,12 @@ namespace GW2EIBuilders.HtmlModels
                 actors.Add(actor.GetCombatReplayDescription(map, log));
                 foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
                 {
-                    actors.Add(a.GetCombatReplayDescription(map, log));
+                    actors.Add(a.GetCombatReplayDescription(map, log, usedSkills, usedBuffs));
                 }
             }
             foreach (GenericDecoration a in log.FightData.GetEnvironmentCombatReplayDecorations(log))
             {
-                actors.Add(a.GetCombatReplayDescription(map, log));
+                actors.Add(a.GetCombatReplayDescription(map, log, usedSkills, usedBuffs));
             }
             return actors;
         }

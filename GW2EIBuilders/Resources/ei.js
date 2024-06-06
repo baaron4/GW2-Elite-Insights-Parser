@@ -126,9 +126,35 @@ function compileTemplates() {
     TEMPLATE_COMPILE
 };
 
+function getDefaultMainComponent() {
+    const setting = EIUrlParams.get("startPage");
+    if (!setting) {
+        return 0;
+    }
+    const mainCompo = setting.split('/')[0];
+    switch (mainCompo) {
+        case "Statistics":
+            return 0;
+        case "CombatReplay":
+            return !!crData ? 1 : 0;
+        case "HealingStatistics":
+            return !!healingStatsExtension ? 2 : 0;
+    }
+    return 0;
+}
+
+function getDefaultPhase() {
+    const setting = EIUrlParams.get("phase");
+    if (!setting) {
+        return 0;
+    }
+    return parseInt(setting);
+}
+
 function mainLoad() {
     // make some additional variables reactive
-    var firstActive = logData.phases[0];
+    var activePhaseIndex = getDefaultPhase();
+    var firstActive = logData.phases[activePhaseIndex] ? logData.phases[activePhaseIndex] : logData.phases[0];
     for (var i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
@@ -182,7 +208,7 @@ function mainLoad() {
         el: "#content",
         data: {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
-            mode: 0,
+            mode: getDefaultMainComponent(),
             cr: !!crData,
             healingExtShow: !!healingStatsExtension || logData.evtcVersion >= 20210701,
             healingExt: !!healingStatsExtension

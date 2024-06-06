@@ -413,19 +413,22 @@ function computePhaseMarkups(shapes, annotations, phase, linecolor) {
 }
 
 
-function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, cacheID, times, graphMode, damageMode) {
+function computePlayerDPS(player, damageGraphs, lim, phasebreaks, activetargets, cacheID, times, graphMode, damageMode) {
     if (player.dpsGraphCache.has(cacheID)) {
         return player.dpsGraphCache.get(cacheID);
     }
     var totalDamage = 0;
+    var totalDamageTaken = 0;
     var targetDamage = 0;
     var totalDPS = [0];
     var cleaveDPS = [0];
     var targetDPS = [0];
+    var takenDPS = [0];
     var maxDPS = {
         total: 0,
         cleave: 0,
-        target: 0
+        target: 0,
+        taken: 0
     };
     if (graphMode === GraphType.CenteredDPS) {
         lim /= 2;
@@ -456,18 +459,21 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
             }
         }          
         var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
-        totalDamage = damageData.total[right] - damageData.total[left];
+        totalDamage = damageGraphs.total[right] - damageGraphs.total[left];
+        totalDamageTaken = damageGraphs.taken[right] - damageGraphs.taken[left];
         targetDamage = 0;
         for (k = 0; k < activetargets.length; k++) {
             targetid = activetargets[k];
-            targetDamage += damageData.targets[targetid][right] - damageData.targets[targetid][left];
+            targetDamage += damageGraphs.targets[targetid][right] - damageGraphs.targets[targetid][left];
         }
         totalDPS[j] = roundingToUse(totalDamage / div);
         targetDPS[j] = roundingToUse(targetDamage / div);
         cleaveDPS[j] = roundingToUse((totalDamage - targetDamage) / div);
+        takenDPS[j] = roundingToUse(totalDamageTaken / div);
         maxDPS.total = Math.max(maxDPS.total, totalDPS[j]);
         maxDPS.target = Math.max(maxDPS.target, targetDPS[j]);
         maxDPS.cleave = Math.max(maxDPS.cleave, cleaveDPS[j]);
+        maxDPS.taken = Math.max(maxDPS.taken, takenDPS[j]);
     }
     if (maxDPS.total < 1e-6) {
         maxDPS.total = 10;
@@ -478,11 +484,15 @@ function computePlayerDPS(player, damageData, lim, phasebreaks, activetargets, c
     if (maxDPS.cleave < 1e-6) {
         maxDPS.cleave = 10;
     }
+    if (maxDPS.taken < 1e-6) {
+        maxDPS.taken = 10;
+    }
     var res = {
         dps: {
             total: totalDPS,
             target: targetDPS,
-            cleave: cleaveDPS
+            cleave: cleaveDPS,
+            taken: takenDPS
         },
         maxDPS: maxDPS
     };
@@ -509,8 +519,8 @@ function findState(states, timeS, start, end) {
     }
 }
 
-function getActorGraphLayout(images, color, hasBuffs) {
-    return {
+function getActorGraphLayout(images, color, hasBuffs, noIncoming) {
+    let layout =  {
         barmode: 'stack',
         yaxis2: {
             title: 'Rotation',
@@ -547,13 +557,6 @@ function getActorGraphLayout(images, color, hasBuffs) {
             overlaying: 'y',
             nticks: 10,
         },
-        yaxis3: {
-            title: 'DPS',
-            color: color,
-            tickformat: ",d",
-            gridcolor: color,
-            domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0]
-        },
         images: images,
         font: {
             color: color
@@ -577,6 +580,36 @@ function getActorGraphLayout(images, color, hasBuffs) {
         height: 850,
         datarevision: new Date().getTime(),
     };
+    if (noIncoming) {
+        Object.assign(layout, {
+            yaxis3: {
+                title: 'Outgoing',
+                domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0],
+                color: color,
+                gridcolor: color,
+                tickformat: ",d",
+            },
+        });
+    } else {
+        Object.assign(layout, {
+            yaxis3: {
+                title: 'Outgoing',
+                domain: hasBuffs ? [0.68, 1.0] : [0.23, 1.0],
+                color: color,
+                gridcolor: color,
+                tickformat: ",d",
+            },
+            yaxis5: {
+                title: 'Incoming',
+                domain: hasBuffs ? [0.55, 0.67] : [0.1, 0.22],
+                color: color,
+                gridcolor: color,
+                tickformat: ",d",
+                nticks: 2,
+            },
+        });
+    }
+    return layout;
 }
 
 function _computeTargetGraphData(graph, targets, phase, data, yaxis, jsonGraphName, percentName, graphName, visible) {
@@ -695,7 +728,7 @@ function computeBuffData(buffData, data) {
     return 0;
 }
 
-function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times, graphMode) {
+function computeTargetDPS(target, damageGraphs, lim, phasebreaks, cacheID, times, graphMode) {
     if (target.dpsGraphCache.has(cacheID)) {
         return target.dpsGraphCache.get(cacheID);
     }
@@ -730,7 +763,7 @@ function computeTargetDPS(target, damageData, lim, phasebreaks, cacheID, times, 
             }
         }
         var div = graphMode !== GraphType.Damage ? Math.max(times[right] - times[left], 1) : 1;
-        totalDamage = damageData[right] - damageData[left];
+        totalDamage = damageGraphs[right] - damageGraphs[left];
         totalDPS[j] = Math.round(totalDamage / (div));
         maxDPS = Math.max(maxDPS, totalDPS[j]);
     }
@@ -891,3 +924,88 @@ function computeBuffData(buffData, data) {
         stacking: false
     };
 }*/
+
+function hasRotations() {
+    return logData.players.length > 1;
+}
+
+function hasOutgoingDamageMods() {
+    return Object.keys(logData.damageModMap).length !== 0;
+}
+
+function hasIncomingDamageMods() {
+    return Object.keys(logData.damageIncModMap).length !== 0 ;
+}
+
+function hasDamageMods() {
+    return hasOutgoingDamageMods() || hasIncomingDamageMods();
+}
+
+function hasMechanics() {
+    return logData.mechanicMap.length > 0 && !logData.noMechanics ;
+}
+
+function hasTargets() {
+    return !logData.targetless ;
+}
+
+function hasOffBuffs() {
+    return logData.offBuffs.length > 0;
+};
+function hasDefBuffs() {
+    return logData.defBuffs.length > 0;
+};
+function hasSupBuffs() {
+    return logData.supBuffs.length > 0;
+};
+function hasGearBuffs() {
+    return logData.gearBuffs.length > 0;
+};
+function hasDebuffs() {
+    return logData.debuffs.length > 0;
+};
+function hasConditions() {
+    return logData.conditions.length > 0;
+};
+function hasNourishments() {
+    return logData.nourishments.length > 0;
+};
+function hasEnhancements() {
+    return logData.enhancements.length > 0;
+};
+function hasOtherConsumables() {
+    return logData.otherConsumables.length > 0;
+};
+function hasPersBuffs() {
+    var hasPersBuffs = false;
+    if (logData.persBuffs) {
+        for (var prop in logData.persBuffs) {
+            if (logData.persBuffs.hasOwnProperty(prop) && logData.persBuffs[prop].length > 0) {
+                hasPersBuffs = true;
+                break;
+            }
+        }
+    }
+    return hasPersBuffs;
+};
+
+function showDeathRecap() {
+    for (var i = 0; i < logData.players.length; i++) {
+        if (!!logData.players[i].details.deathRecap) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function hasBarrierExtension() {
+    return !!barrierStatsExtension;
+}
+
+function validateStartPath(path) {  
+    const setting = EIUrlParams.get("startPage");
+    if (!setting) {
+        return false;
+    }
+    return setting.startsWith(path);
+}

@@ -101,6 +101,34 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
+        private static void FilterDamageEvents(ParsedEvtcLog log, List<AbstractHealthDamageEvent> dls, ParserHelper.DamageType damageType)
+        {
+            switch (damageType)
+            {
+                case ParserHelper.DamageType.Power:
+                    dls.RemoveAll(x => x.ConditionDamageBased(log));
+                    break;
+                case ParserHelper.DamageType.Strike:
+                    dls.RemoveAll(x => x is NonDirectHealthDamageEvent);
+                    break;
+                case ParserHelper.DamageType.LifeLeech:
+                    dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !ndhd.IsLifeLeech);
+                    break;
+                case ParserHelper.DamageType.Condition:
+                    dls.RemoveAll(x => !x.ConditionDamageBased(log));
+                    break;
+                case ParserHelper.DamageType.StrikeAndCondition:
+                    dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
+                    break;
+                case ParserHelper.DamageType.StrikeAndConditionAndLifeLeech:
+                    dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !x.ConditionDamageBased(log) && !ndhd.IsLifeLeech);
+                    break;
+                case ParserHelper.DamageType.All:
+                    break;
+                default:
+                    throw new NotImplementedException("Not implemented damage type " + damageType);
+            }
+        }
         public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
             if (!_typedHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
@@ -111,31 +139,7 @@ namespace GW2EIEvtcParser.EIData
             if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
                 dls = GetDamageEvents(target, log, start, end).Where(x => x.HasHit).ToList();
-                switch (damageType)
-                {
-                    case ParserHelper.DamageType.Power:
-                        dls.RemoveAll(x => x.ConditionDamageBased(log));
-                        break;
-                    case ParserHelper.DamageType.Strike:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent);
-                        break;
-                    case ParserHelper.DamageType.LifeLeech:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !ndhd.IsLifeLeech);
-                        break;
-                    case ParserHelper.DamageType.Condition:
-                        dls.RemoveAll(x => !x.ConditionDamageBased(log));
-                        break;
-                    case ParserHelper.DamageType.StrikeAndCondition:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
-                        break;
-                    case ParserHelper.DamageType.StrikeAndConditionAndLifeLeech:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !x.ConditionDamageBased(log) && !ndhd.IsLifeLeech);
-                        break;
-                    case ParserHelper.DamageType.All:
-                        break;
-                    default:
-                        throw new NotImplementedException("Not implemented damage type " + damageType);
-                }
+                FilterDamageEvents(log, dls, damageType);
                 hitDamageEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;
@@ -151,31 +155,7 @@ namespace GW2EIEvtcParser.EIData
             if (!hitDamageTakenEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<AbstractHealthDamageEvent> dls))
             {
                 dls = GetDamageTakenEvents(target, log, start, end).Where(x => x.HasHit).ToList();
-                switch (damageType)
-                {
-                    case ParserHelper.DamageType.Power:
-                        dls.RemoveAll(x => x.ConditionDamageBased(log));
-                        break;
-                    case ParserHelper.DamageType.Strike:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent);
-                        break;
-                    case ParserHelper.DamageType.LifeLeech:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !ndhd.IsLifeLeech);
-                        break;
-                    case ParserHelper.DamageType.Condition:
-                        dls.RemoveAll(x => !x.ConditionDamageBased(log));
-                        break;
-                    case ParserHelper.DamageType.StrikeAndCondition:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent && !x.ConditionDamageBased(log));
-                        break;
-                    case ParserHelper.DamageType.StrikeAndConditionAndLifeLeech:
-                        dls.RemoveAll(x => x is NonDirectHealthDamageEvent ndhd && !x.ConditionDamageBased(log) && !ndhd.IsLifeLeech);
-                        break;
-                    case ParserHelper.DamageType.All:
-                        break;
-                    default:
-                        throw new NotImplementedException("Not implemented damage type " + damageType);
-                }
+                FilterDamageEvents(log, dls, damageType);
                 hitDamageTakenEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
             return dls;

@@ -27,21 +27,29 @@ namespace GW2EIEvtcParser.ParsedData
         {
             get
             {
-                var duration = TimeSpan.FromMilliseconds(FightDuration);
-                string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s " + duration.Milliseconds + "ms";
-                if (duration.Hours > 0)
-                {
-                    durationString = duration.ToString("hh") + "h " + durationString;
-                }
-                return durationString;
+                return ParserHelper.ToDurationString(FightDuration);
             }
         }
         public bool Success { get; private set; }
 
-        internal enum EncounterMode { NotSet, CM, Normal, CMNoName, Story }
+        internal enum EncounterMode { 
+            NotSet,
+            Story,
+            Normal,
+            LegendaryCM, 
+            CM, 
+            CMNoName
+        }
         private EncounterMode _encounterMode = EncounterMode.NotSet;
         public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
-        internal enum EncounterStartStatus { NotSet, Normal, Late, NoPreEvent }
+        public bool IsLegendaryCM =>  _encounterMode == EncounterMode.LegendaryCM;
+        
+        internal enum EncounterStartStatus { 
+            NotSet, 
+            Normal, 
+            Late, 
+            NoPreEvent 
+        }
         private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
         public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late || MissingPreEvent;
         public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
@@ -245,6 +253,10 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
                     Logic = new Kanaxai(id);
                     break;
+                case ArcDPSEnums.TargetID.CerusLonelyTower:
+                case ArcDPSEnums.TargetID.DeimosLonelyTower:
+                    Logic = new LonelyTowerCerusAndDeimos(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())
@@ -311,7 +323,8 @@ namespace GW2EIEvtcParser.ParsedData
         internal void CompleteFightName(CombatData combatData, AgentData agentData)
         {
             FightName = Logic.GetLogicName(combatData, agentData) 
-                + (_encounterMode == EncounterMode.CM ? " CM" : "") 
+                + (_encounterMode == EncounterMode.CM ? " CM" : "")
+                + (_encounterMode == EncounterMode.LegendaryCM ? " LCM" : "")
                 + (_encounterMode == EncounterMode.Story ? " Story" : "")
                 + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "") 
                 + (MissingPreEvent ? " (No Pre-Event)" : "");

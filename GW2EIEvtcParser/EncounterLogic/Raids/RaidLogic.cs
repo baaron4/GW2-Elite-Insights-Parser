@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 raidRewardsTypes = new HashSet<int> { RewardTypes.CurrentRaidReward };
             }
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
+            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > fightData.FightStart);
             if (reward != null)
             {
                 fightData.SetSuccess(true, reward.Time);

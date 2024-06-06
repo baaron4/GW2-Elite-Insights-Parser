@@ -70,11 +70,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     nextToAddIsSkipPhase = false;
                 }
             }
-            if (end - last > ParserHelper.PhaseTimeLimit && (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases)))
+            if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
             {
                 phases.Add(new PhaseData(last, end));
             }
-            return phases.Where(x => x.DurationInMS > ParserHelper.PhaseTimeLimit).ToList();
+            return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
         }
 
         internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)

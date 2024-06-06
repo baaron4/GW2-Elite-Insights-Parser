@@ -142,24 +142,27 @@
 .cr-hp-display {
     font-size: 0.65rem;
     position: relative;
-    top: -12px;
     width: 45px;
+    top: -12px;
+    left: 0%;
+    height: 16px;
     pointer-events: none;
 }
 
 .cr-barrier-display {
     font-size: 0.65rem;
-    top: -43px;
     position: relative;
     width: 45px;
+    top: -44px;
+    height: 16px;
     pointer-events: none;
 }
 
 .cr-barrier { 
     position: relative;
     width: 100%;
+    top: -99px;
     height: 100%;
-    top: -97px;
     pointer-events: none;
 }
 
@@ -171,6 +174,7 @@
 .cr-breakbar-bar {
     color: #DDDDDD;
     width: 130px;
+    height: 16px;
 }
 
 .cr-breakbar-phase-display {
@@ -178,24 +182,17 @@
     width: 180px;
 }
 
-.cr-hp-display-player {
-    left: 0%;
-}
-
 .cr-barrier-display-player {
     left: 53%;
-}
-
-.cr-hp-display-target {
-    left: 0%;
 }
 
 .cr-barrier-display-target {
     left: 70%;
 }
 
-h6.actor-shorten {
+h6.actor-shorten-cr {
     width: 100%;
+    height: 21px;
     margin-top: 7px;
     margin-bottom: 7px;
     overflow: hidden;
@@ -451,8 +448,8 @@ th:hover img.icon-hover,
     width: 5px;
 }
 
-span.ellipsis {
-    width: 150px;
+.cr-ellipsis {
+    width: 130px;
     display: block;
     overflow: hidden;
     white-space: nowrap;
@@ -472,11 +469,15 @@ span.ellipsis {
 }
 
 .name-cr-cell {
-    width: 150px;
+    width: 130px;
+}
+
+.damage-cr-cell-small {
+    width: 80px;
 }
 
 .damage-cr-cell {
-    width: 170px;
+    width: 130px;
 }
 
 .sub-tabs {
@@ -645,6 +646,11 @@ canvas {
 
 #bg-canvas {
     z-index: 1
+}
+
+#picking-canvas {
+    z-index: 0;
+    opacity: 0;
 }
 
 .animation-control {

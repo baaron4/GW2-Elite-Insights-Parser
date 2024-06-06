@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
@@ -29,9 +27,19 @@ namespace GW2EIEvtcParser.EIData
         {
             throw new InvalidOperationException("Players' name can't be overriden");
         }
-        internal override void SetManualHealth(int health)
+        internal override void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null)
         {
             throw new InvalidOperationException("Players' health can't be overriden");
+        }
+
+        public override int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent)
+        {
+            return -1;
+        }
+
+        public override int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time)
+        {
+            return -1;
         }
 
         public override string GetIcon()
@@ -41,6 +49,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
+            base.InitAdditionalCombatReplayData(log);
             // Fight related stuff
             log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             ProfHelper.ComputeProfessionCombatReplayActors(this, log, CombatReplay);

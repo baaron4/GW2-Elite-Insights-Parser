@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Ankka not found");
                 }
-                var buffApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == ankka.AgentItem && !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000).ToList();
+                var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000).ToList();
                 if (buffApplies.Count == 3)
                 {
                     fightData.SetSuccess(true, buffApplies.LastOrDefault().Time);
@@ -260,7 +260,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endTime = (int)deathEmbrace.Time + deathsEmbraceCastDuration;
 
                         Point3D ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
-                        if (ankkaPosition == null) { continue; }
+                        if (ankkaPosition == null) 
+                        { 
+                            continue; 
+                        }
 
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out IReadOnlyList<EffectEvent> deathsEmbraceEffects))
                         {

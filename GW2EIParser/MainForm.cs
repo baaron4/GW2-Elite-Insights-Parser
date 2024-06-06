@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Discord;
 using GW2EIDiscord;
-using GW2EIEvtcParser;
-using GW2EIEvtcParser.ParserHelpers;
-using GW2EIParser.Exceptions;
+using GW2EIParserCommons.Exceptions;
 using GW2EIParser.Setting;
+using GW2EIParserCommons;
 
 namespace GW2EIParser
 {
@@ -26,8 +25,11 @@ namespace GW2EIParser
         private readonly string _traceFileName;
 
         private int _fileNameSorting = 0;
-        private MainForm()
+
+        private readonly ProgramHelper _programHelper;
+        private MainForm(ProgramHelper programHelper)
         {
+            _programHelper = programHelper;
             DateTime now = DateTime.Now;
             _traceFileName = ProgramHelper.EILogPath + "EILogs-" + now.Year + "-" + now.Month + "-" + now.Day + "-" + now.Hour + "-" + now.Minute + "-" + now.Second + ".txt";
             InitializeComponent();
@@ -42,7 +44,7 @@ namespace GW2EIParser
             BtnCancelAll.Enabled = false;
             BtnParse.Enabled = false;
             UpdateWatchDirectory();
-            _settingsForm = new SettingsForm();
+            _settingsForm = new SettingsForm(_programHelper);
             _settingsForm.SettingsClosedEvent += EnableSettingsWatcher;
             _settingsForm.SettingsLoadedEvent += LoadSettingsWatcher;
             _settingsForm.WatchDirectoryUpdatedEvent += UpdateWatchDirectoryWatcher;
@@ -57,7 +59,7 @@ namespace GW2EIParser
             NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
         }
 
-        public MainForm(IEnumerable<string> filesArray) : this()
+        public MainForm(IEnumerable<string> filesArray, ProgramHelper programHelper) : this(programHelper)
         {
             AddLogFiles(filesArray);
         }
@@ -105,7 +107,7 @@ namespace GW2EIParser
             {
                 operation.ToRunState();
                 AddTraceMessage("Operation: Parsing " + operation.InputFile);
-                ProgramHelper.DoWork(operation);
+                _programHelper.DoWork(operation);
             }, cancelTokenSource.Token).ContinueWith(t =>
             {
                 cancelTokenSource.Dispose();
@@ -167,7 +169,7 @@ namespace GW2EIParser
                         operation.ToUnCompleteState();
                     }
                 }
-                ProgramHelper.GenerateTraceFile(operation);
+                _programHelper.GenerateTraceFile(operation);
                 if (operation.State != OperationState.Complete)
                 {
                     operation.Reset();
@@ -188,7 +190,7 @@ namespace GW2EIParser
             BtnCancelAll.Enabled = true;
             BtnDiscordBatch.Enabled = false;
             ChkAutoDiscordBatch.Enabled = false;
-            if (ProgramHelper.ParseMultipleLogs() && _runningCount < ProgramHelper.GetMaxParallelRunning())
+            if (_programHelper.ParseMultipleLogs() && _runningCount < _programHelper.GetMaxParallelRunning())
             {
                 _RunOperation(operation);
             }
@@ -212,7 +214,7 @@ namespace GW2EIParser
         /// </summary>
         private void _RunNextOperation()
         {
-            if (_logQueue.Count > 0 && (ProgramHelper.ParseMultipleLogs() || !_anyRunning))
+            if (_logQueue.Count > 0 && (_programHelper.ParseMultipleLogs() || !_anyRunning))
             {
                 _RunOperation(_logQueue.Dequeue());
             }
@@ -546,7 +548,7 @@ namespace GW2EIParser
             {
                 AddTraceMessage("UI: Adding files from " + path);
                 var toAdd = new List<string>();
-                foreach (string format in SupportedFileFormats.SupportedFormats)
+                foreach (string format in ProgramHelper.SupportedFormats)
                 {
                     try
                     {
@@ -599,7 +601,7 @@ namespace GW2EIParser
         private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
             AddTraceMessage("File Watcher: created " + e.FullPath);
-            if (SupportedFileFormats.IsSupportedFormat(e.FullPath))
+            if (ProgramHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -608,10 +610,10 @@ namespace GW2EIParser
         private void LogFileWatcher_Renamed(object sender, RenamedEventArgs e)
         {
             AddTraceMessage("File Watcher: renamed " + e.OldFullPath + " to " + e.FullPath);
-            if (SupportedFileFormats.IsTemporaryCompressedFormat(e.OldFullPath) && SupportedFileFormats.IsCompressedFormat(e.FullPath))
+            if (ProgramHelper.IsTemporaryCompressedFormat(e.OldFullPath) && ProgramHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
-            } else if (SupportedFileFormats.IsTemporaryFormat(e.OldFullPath) && SupportedFileFormats.IsSupportedFormat(e.FullPath))
+            } else if (ProgramHelper.IsTemporaryFormat(e.OldFullPath) && ProgramHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -621,7 +623,7 @@ namespace GW2EIParser
         {
             ids = new List<ulong>();
             AddTraceMessage("Discord: Sending batch to Discord");
-            if (Properties.Settings.Default.WebhookURL == null)
+            if (_programHelper.Settings.WebhookURL == null)
             {
                 AddTraceMessage("Discord: No webhook url given");
                 return "Set a discord webhook url in settings first";
@@ -678,7 +680,7 @@ namespace GW2EIParser
                 }
                 foreach (List<FormOperationController> dpsReportLogs in splitDpsReportLogs)
                 {
-                    EmbedBuilder embedBuilder = ProgramHelper.GetEmbedBuilder();
+                    EmbedBuilder embedBuilder = _programHelper.GetEmbedBuilder();
                     AddTraceMessage("Discord: Creating embed for " + dpsReportLogs.Count + " logs");
                     var first = DateTime.Parse(dpsReportLogs.First().BasicMetaData.LogStart);
                     var last = DateTime.Parse(dpsReportLogs.Last().BasicMetaData.LogEnd);
@@ -728,7 +730,7 @@ namespace GW2EIParser
                     AddTraceMessage("Discord: Sending embed");
                     try
                     {
-                        ids.Add(WebhookController.SendMessage(Properties.Settings.Default.WebhookURL, embedBuilder.Build(), out string curMessage));
+                        ids.Add(WebhookController.SendMessage(_programHelper.Settings.WebhookURL, embedBuilder.Build(), out string curMessage));
                         AddTraceMessage("Discord: embed sent " + curMessage);
                         message += curMessage + " - ";
                     } 
@@ -755,7 +757,7 @@ namespace GW2EIParser
                 AddTraceMessage("Discord: deleting existing message " + id);
                 try
                 {
-                    WebhookController.DeleteMessage(Properties.Settings.Default.WebhookURL, id, out string message);
+                    WebhookController.DeleteMessage(_programHelper.Settings.WebhookURL, id, out string message);
                     AddTraceMessage("Discord: deleted existing message " + message);
                 } 
                 catch (Exception ex)

@@ -1,4 +1,7 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using GW2EIEvtcParser.ParsedData;
+using System.Collections.Generic;
+
+namespace GW2EIEvtcParser.EIData
 {
     public abstract class FormDecorationCombatReplayDescription : GenericAttachedDecorationCombatReplayDescription
     {
@@ -7,7 +10,7 @@
         public bool GrowingReverse { get; }
         public string Color { get; }
 
-        internal FormDecorationCombatReplayDescription(ParsedEvtcLog log, FormDecoration decoration, CombatReplayMap map) : base(log, decoration, map)
+        internal FormDecorationCombatReplayDescription(ParsedEvtcLog log, FormDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
         {
             Fill = decoration.Filled;
             Color = decoration.Color;

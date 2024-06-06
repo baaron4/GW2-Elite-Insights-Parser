@@ -1,11 +1,12 @@
 <template>
     <div class="d-flex flex-column justify-content-center align-items-center">
-        <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select">
-            <h6 class="actor-shorten text-center" :title="target.name + ' - ' + target.health + ' health'">
+        <div class="target-status" :style="{'background': getHPGradient(time, status)}" @click="select" :title="target.name + ' - ' + target.health + ' health'">
+            <h6 class="actor-shorten-cr text-center">
+                <img v-for="(marker, index) in activeMarkers()" :src="marker.imageUrl" height="16" width="16">
                 <img :src="target.icon" height="18" width="18"/>
                 {{target.name}}
             </h6>
-            <p class="text-right cr-hp-display cr-hp-display-target">
+            <p class="text-right cr-hp-display">
                 {{(Math.round(100*getHPPercent(time))/100).toFixed(2)}} %
             </p>
             <p v-if="hasBarrier" class="text-right cr-barrier-display cr-barrier-display-target">
@@ -30,6 +31,9 @@
         methods: {
             select() {
                 animator.selectActor(this.target.uniqueID);
+            },
+            activeMarkers: function() {
+                return animator.getActiveActorMarkers(this.target.uniqueID);
             },
             getBreakbarPercent: function (time) {
                 if (!this.hasBreakbarPercent) {

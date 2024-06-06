@@ -26,7 +26,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="LI.ico"/></td>
   <td id="projectalign">
-   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.62.0.0+</span>
+   <div id="projectname">Guild Wars 2 - Elite Insights<span id="projectnumber">&#160;2.68.0.0+</span>
    </div>
    <div id="projectbrief">JSON doc</div>
   </td>
@@ -123,6 +123,10 @@ Length == # of players and the length of each sub array is equal to # of phases.
 <tr class="memdesc:af32fc2ecd001d3923d9644b96bc0d93a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S outgoing barrier points <br  />
 Length == # of phases.  <br /></td></tr>
 <tr class="separator:af32fc2ecd001d3923d9644b96bc0d93a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab88571d85de65bada37896c56f971dfc" id="r_ab88571d85de65bada37896c56f971dfc"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_barrier_stats.html#ab88571d85de65bada37896c56f971dfc">BarrierReceived1S</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:ab88571d85de65bada37896c56f971dfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of int representing 1S incoming barrier points <br  />
+Length == # of phases.  <br /></td></tr>
+<tr class="separator:ab88571d85de65bada37896c56f971dfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacb377aed96f80a588fa81dee5b8dd66" id="r_aacb377aed96f80a588fa81dee5b8dd66"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; IReadOnlyList&lt; IReadOnlyList&lt; <a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_barrier_dist.html">EXTJsonBarrierDist</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_barrier_stats.html#aacb377aed96f80a588fa81dee5b8dd66">AlliedBarrierDist</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:aacb377aed96f80a588fa81dee5b8dd66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total Outgoing Allied Barrier distribution array <br  />
 Length == # of players and the length of each sub array is equal to # of phases.  <br /></td></tr>
@@ -213,6 +217,33 @@ Length == # of players and the length of each sub array is equal to # of phases.
 </div><div class="memdoc">
 
 <p>Array of int representing 1S outgoing barrier points <br  />
+Length == # of phases. </p>
+<p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
+ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>
+
+</div>
+</div>
+<a id="ab88571d85de65bada37896c56f971dfc" name="ab88571d85de65bada37896c56f971dfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab88571d85de65bada37896c56f971dfc">&#9670;&#160;</a></span>BarrierReceived1S</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;IReadOnlyList&lt;int&gt; &gt; GW2EIJSON.EXTJsonPlayerBarrierStats.BarrierReceived1S</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span><span class="mlabel">set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of int representing 1S incoming barrier points <br  />
 Length == # of phases. </p>
 <p>If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point <br  />
 ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250] </p>

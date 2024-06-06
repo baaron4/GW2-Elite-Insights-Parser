@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
@@ -39,7 +40,12 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
-            new BuffOnActorDamageModifier(UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.NoPets, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, BuffImages.UrnOfSaintViktor, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.NoPets, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, BuffImages.UrnOfSaintViktor, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2024LonelyTowerFractalRelease),
+            new BuffOnActorDamageModifier(UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-33%", DamageSource.NoPets, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, BuffImages.UrnOfSaintViktor, DamageModifierMode.sPvP)
+                .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
+            new BuffOnActorDamageModifier(UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.NoPets, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, BuffImages.UrnOfSaintViktor, DamageModifierMode.PvEWvW)
+                .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

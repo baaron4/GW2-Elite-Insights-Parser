@@ -39,6 +39,23 @@
 </template>
 
 <script>
+    function getDefaultDamageModifiersSubSubComponent(incoming, dmgModifiersItem, dmgModifiersCommon) {
+        let path = "Statistics/DamageModifiers/" + (incoming ? "IncomingDamageModifiers" : "OutgoingDamageModifiers");
+        if (!validateStartPath(path)) {
+            return dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[3];
+        switch (compo) {
+            case "GearBasedDamageModifiers":
+                return dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2;
+            case "SharedDamageModifiers":
+                return dmgModifiersCommon.length > 0 ? 1 : dmgModifiersItem.length > 0 ? 0 : 2;
+            case "ClassBasedDamageModifiers":
+                return 2;
+        }
+        return dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2;
+    }
     Vue.component("dmgmodifier-stats-component", {
         props: ['phaseindex', 'playerindex', 'activetargets', 'incoming'],
         template: `${template}`,
@@ -48,7 +65,7 @@
             return {
                 mode: logData.targetless ? 0 : 1,
                 targetless: logData.targetless,
-                displaymode: dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2
+                displaymode: getDefaultDamageModifiersSubSubComponent(this.incoming, dmgModifiersItem, dmgModifiersCommon)
             };
         },
         computed: {

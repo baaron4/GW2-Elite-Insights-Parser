@@ -47,6 +47,7 @@ namespace GW2EIEvtcParser
         public const string RelicOfTheWizardsTower = "2A1D0C23F448C348A83E9A4F2669B73F";
         public const string RelicOfPeitha = "0CBFB70434661647B68003ECD77207E6"; // Projectile
         public const string RelicOfAkeem = "8181E21A43EAFB42BC8FFB001F02CF44"; // Target Src
+        public const string RelicOfTheTwinGenerals = "40ECD58F39B30041B3E6C7CEDB7C4D8C";
         #endregion
         #region Mesmer
         public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
@@ -62,8 +63,12 @@ namespace GW2EIEvtcParser
         public const string MesmerDiversion = "916D8385083F144EBAA5BEEDE21FD47A";
         public const string MesmerDistortionOrMindWrack = "3D29ABD39CB5BD458C4D50A22FCC0E4B";
         public const string MesmerMantraOfResolveAndPowerCleanse = "593E668A006AB24D84999AED68F2E4C4";
+        public const string MesmerMantraOfResolveAndPowerCleanse2 = "ABF2332D28C7D6449A5B822E5714ADA4";
         public const string MesmerMantraOfConcentrationAndPowerBreak = "5B488D552E316045AD99C4A98EEDDB1E";
         public const string MesmerPowerReturn = "F53E2CE3B06B934085D46FA59468477B";
+        public const string MesmerDimensionalAperturePortal = "9246D82C91B5274396DBAB561DC8EFAF";
+        public const string MesmerIllusionOfLife1 = "F7D8B60F91335741AB6CDCC9B7CEF2C5";
+        public const string MesmerIllusionOfLife2 = "40818C8E9CC6EF4388C2821FCC26A9EC"; // Collides with other fields
         public const string ChronomancerSeizeTheMomentShatter = "4C7A5E148F7FD642B34EE4996DDCBBAB"; // This seems to happen everytime split second, rewinder, time sink or continuum split are cast under SeizeTheMoment
         public const string ChronomancerSplitSecond = "C035166E3E4C414ABE640F47797D9B4A"; // this is also triggered by the clones while being sourced to the chrono
         public const string ChronomancerRewinder = "DC1C8A043ADCD24B9458688A792B04BA"; // this is also triggered by the clones while being sourced to the chrono
@@ -90,7 +95,8 @@ namespace GW2EIEvtcParser
         public const string MirageCloak = "4C7A5E148F7FD642B34EE4996DDCBBAB";
         public const string MirageMirror = "1370CDF5F2061445A656A1D77C37A55C";
         public const string MirageJaunt = "3A5A38C26A1FFB438EAD734F3ED42E5E"; // may have collisions! not known which
-        public const string VirtuosoUnstableBladestorm = "DEF12997FAEA6847A8786CD2920ACA91";
+        public const string VirtuosoUnstableBladestorm = "DEF12997FAEA6847A8786CD2920ACA91"; // has effect end
+        public const string VirtuosoUnstableBladestorm2 = "242B1513FCF07842B658A56CDE4851C8";
         public const string VirtuosoBladeturnRequiem = "87B761200637AC48B71469F553BA6F60";
         public const string VirtuosoRainOfSwords = "83834EDBA8E79946A6D5665E3519B72C";
         public const string VirtuosoThousandCuts = "E4002B7AD7DF024394D0184B47A316E7";
@@ -122,6 +128,9 @@ namespace GW2EIEvtcParser
         public const string NecromancerPutridMarkActivated2 = "EFB9CDA30AEBC744B9D377A99BEBC0B2";
         public const string NecromancerPutridMarkActivated3 = "CAF4E62C2C5CC04499657C2A6A78087B"; // No src or dst
         public const string NecromancerReapersMarkActivated = "255FBE1C15D0C6488BD018748184624F";
+        public const string NecromancerSignetOfUndeathOverhead = "1FEB5ECC28F92245A04646869B4A8169";
+        public const string NecromancerSignetOfUndeathGroundMark = "28FE26F58FB0534BAF091C2D9D2261EA";
+        public const string NecromancerSpectralRing = "99D0D6FC6817E24396180B07711013EE"; // infinite duration, has effect end
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
@@ -184,7 +193,16 @@ namespace GW2EIEvtcParser
         public const string RevenantEnergyExpulsion = "BE191381B1BC984A989D94D215DDEA1F";
         public const string RevenantInspiringReinforcement = "09171204F3936841813E518123E2F867";
         public const string RevenantInspiringReinforcementPart = "E6D6CD56B9A61E40A86F982C60421625";
-        public const string RenegadeOrdersFromAbove = "F53F05F041957A47AD62B522FE030408";
+        public const string RevenantEternitysRequiemOnPlayer = "40240467597E2746A5CCFA31FAC22FAB";
+        public const string RevenantEternitysRequiemHit = "9BFCBED9DE8A6E4E8AB5F480629AE244";
+        public const string RevenantCoalescenceOfRuin = "D37B86D576586B489A951153B598CDE6";
+        public const string RevenantCoalescenceOfRuinLast = "D66761A11B8FF344B3CEBE31F458896C";
+        public const string RevenantDropTheHammer = "A4311C8684668348B427FA0162992E6C";
+        public const string RenegadeOrdersFromAboveRighteousRebel = "F53F05F041957A47AD62B522FE030408";
+        public const string RenegadeOrdersFromAbove = "B63D192DED78B1489DDB6E742D603CE5";
+        public const string RenegadeCitadelBombardmentPortal = "145B288ECA42CF43A40DFD759419C904";
+        public const string RenegadeCitadelBombardment1 = "5BBF59761E6B9D49A91E79D5474CC61C";
+        public const string RenegadeCitadelBombardment2 = "6C8201B551CF274C9C1AF51C33AA062A"; // duration 0
         #endregion
         #region Guardian
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
@@ -203,7 +221,20 @@ namespace GW2EIEvtcParser
         public const string GuardianSignetOfJudgement1 = "0AFA3936BD4D70458925660B54D47A90"; // happens twice?
         public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
         public const string GuardianShieldOfTheAvenger = "0885D553A0A0A341B4C31B7964243407";
+        public const string GuardianSignetOfMercyLightTray = "E9D10435E997D846B736B62EDCC6B4BD"; // Duration 2000 - light ray at the start of the cast
+        public const string GuardianSignetOfMercyEnd = "61ED02C4AA44C0429790A79E8EFCA7CC"; // Duration 0 - end cast
+        public const string GuardianSymbolOfPunishment1 = "D20225BED809BE4D86FFE87D6C5AD2B0"; // duration 5000
+        public const string GuardianSymbolOfPunishment2 = "5F56361FEE7463448CA988CE773F4F63"; // duration 6000 - has effect end after 5000
+        public const string GuardianSymbolOfPunishmentOrb = "A8C650860481DD48B1B41F76B3054576"; // duration 500
+        public const string GuardianSymbolOfResolution = "98C9834C6381204A85DC67C375D135E4"; // duration 4000
+        public const string GuardianSymbolOfBlades = "FA37E0B77272314AA1ADCFF824F24C27"; // duration 5000
         public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
+        public const string FirebrandStalwartStand1 = "E20B6672FDCE57409B229DB152BF2286"; // duration 4000
+        public const string FirebrandStalwartStand2 = "CA4F198982BFD44180D63EB043F9F710"; // duration 4000
+        public const string FirebrandShiningRiver1 = "D2803F97338434488CD789E22E797CE2"; // duration 4000
+        public const string FirebrandShiningRiver2 = "AEBF45AEDFF2CC48A64ED01441241288"; // duration 4000
+        public const string FirebrandScorchedAftermath1 = "3B0AF49A77811F4EA3CFD1BF671BDDE5"; // duration 4000
+        public const string FirebrandScorchedAftermath2 = "4CC8C2BAB89D1C488CD69D4F711D49B3"; // duration 0
         public const string FirebrandMantraOfLiberationCone = "86CC98C9D9D2B64689F8993AB02B09E5";
         public const string FirebrandMantraOfLiberationSymbol = "A8E0E4C48848424D85503B674015D247";
         public const string FirebrandMantraOfLoreCone = "C2B55AE44B295849A2983745203D19A1";
@@ -219,16 +250,23 @@ namespace GW2EIEvtcParser
         public const string FirebrandTomeOfJusticeOpen = "D573910FDB59434ABF6E7433061995BD";
         public const string FirebrandTomeOfResolveOpen = "39C1BD24ADA04C4788A99C7B0FD9B53F";
         public const string FirebrandTomeOfCourageOpen = "9EE3EAFEF333BE44AD8A7D234A1C3899";
+        public const string FirebrandSymbolOfVengeance1 = "9E41C2BEFD43D64299C41FD6EFB9ECBE";
+        public const string FirebrandSymbolOfVengeance2 = "0B22F631EBB04341A17FDC57431385EB";
+        public const string FirebrandSymbolOfVengeance3 = "60C2DD0478450F4B81BAA6486227872A";
         public const string DragonhunterTrapEffect = "CCF55B3EAA4D514BBB8340E01B6A1DEC";
         public const string DragonhunterTestOfFaith = "D7006AC247BBE74BA54E912188EF6B12";
         public const string DragonhunterFragmentsOfFaith = "C84644DDAA59E542989FDB98CD69134C";
+        public const string DragonhunterHuntersWardCage = "F70A6157503537478331C8F82C0AB76E";
+        public const string DragonhunterSymbolOfEnergy = "8493CB203B40E04BAE5DC6F141B40743";
         #endregion
         #region Engineer
         public const string EngineerHealingMist = "B02D3D0FF0A4FC47B23B1478D8E770AE"; // used with healing mist, soothing detonation
         public const string EngineerMagneticInversion = "F8BD502E5B0D9444AA6DC5B5918801EE";
-        public const string EngineerMineInactive = "2EE26B8656BD424B9BF9A7EA4CB0AA06";
-        public const string EngineerMineExplode1 = "885B7AAA68F09E48A926BFFE488DB5AD";
-        public const string EngineerMineExplode2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD";
+        public const string EngineerThrowMineInactive1 = "2EE26B8656BD424B9BF9A7EA4CB0AA06"; // infinite duration
+        public const string EngineerThrowMineInactive2 = "67649A4CB18C5C4A8D48ACFCF50B21CE"; // 0 duration
+        public const string EngineerMineField = "997750CA2636154E9FFBFEE4AA51A970"; // 0 duration and infinite duration, both logged at the same time
+        public const string EngineerMineExplosion1 = "885B7AAA68F09E48A926BFFE488DB5AD"; // 0 duration - Throw Mine and Mine Field use this effect
+        public const string EngineerMineExplosion2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD"; // 0 duration - Throw Mine and Mine Field use this effect
         public const string ScrapperThunderclap = "8C8E0AB8328CC1418F9A815E022E20B6"; // has owner, 5s duration
         public const string ScrapperThunderclapSpawn = "039F8B46E5595C4E9C2D52AA58FDD8B0"; // has owner, 1s duration
         public const string ScrapperFunctionGyro = "B4CA602E8A849F47BFC105C740005162"; // has owner, 5s duration
@@ -269,6 +307,8 @@ namespace GW2EIEvtcParser
         public const string DruidSeedOfLifeBlossom = "666BCBD61F72E042B08EFE1C62555245"; // has owner, ~720ms delayed
         public const string DruidSublimeConversion1 = "5707A4A2BFFAD048BBDEC9CA0F2A61E1";
         public const string DruidSublimeConversion2 = "2F74AC468871444BB66AF5D8B25EC870";
+        public const string DruidGlyphOfTheStars = "84BD2B25ADE2E34C8E8B508283BE8077";
+        public const string DruidGlyphOfTheStarsCA = "6AFF7DBF27F63D45940FEC1CB837475D";
         public const string SoulbeastEternalBond = "BF0A5B11A4076A4F98C6E1D655D507B1"; // has owner & target
         public const string UntamedMutateConditions = "D7DCD4ABF9E4A749950AF0175E02EA06";
         public const string UntamedUnnaturalTraversal = "8D36806A690A5442A983308EDCECB018";
@@ -318,16 +358,21 @@ namespace GW2EIEvtcParser
         // Nightmare Fractal
         public const string SmallFluxBomb = "B9CB27D38747A94F817208835C41BB35";
         public const string ToxicSicknessIndicator = "3C98B00B9E795F4B8744E186EEEA7DF7";
-        public const string ToxicSicknessPuke1 = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
-        public const string ToxicSicknessPuke2 = "E09CD66E417B59409401192201CE4B6E";
+        public const string ToxicSicknessOldIndicator = "B7DFF8C2A8DABD4C9C7F1D4CFC31FC8C";
+        public const string ToxicSicknessNewIndicator = "71469269D3A1F9469D74CC96153264C0";
+        public const string ToxicSicknessPuke = "E09CD66E417B59409401192201CE4B6E";
         public const string MAMAGrenadeBarrageIndicator = "8DDED161CE26964FA5952D821AD852F7";
         public const string NightmareMiasmaIndicator = "41883B3BD532124DACF93F7C2584E63C";
-        public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B";
-        public const string NightmareHallucinationsSpawn = "0C284B1C201D1846B4D9F249AD01A5C6";
-        public const string VileSpitSiax = "BC17A48E8DD2FF44864AA48A732BDC36";
+        public const string NightmareMiasmaDamage = "8A882A495793044D8C4A9AD9080283A7";
+        public const string ArkkShieldIndicator = "5B1B9D29D6242F47A82743330AE4225B"; // Duration 7400
+        public const string ArkkShieldIndicator2 = "1E267990C5098E49AFD5CFD5CA4E2B82"; // Duration 6400
+        public const string SiaxNightmareHallucinationsSpawnIndicator = "0C284B1C201D1846B4D9F249AD01A5C6"; // siax src
+        public const string SiaxVileSpitIndicator = "BC17A48E8DD2FF44864AA48A732BDC36";
+        public const string SiaxVileSpitPoison = "6589BB8F4EE227428CC3DDDE84A67015";
         public const string CausticBarrageIndicator = "C910F1B11A21014AA99F24DBDFBF13FB";
-        public const string CausticBarrageHitEffect = "CAF4E62C2C5CC04499657C2A6A78087B";
-        public const string VolatileExpulsionIndicator = "F22E201EAF24DD42A43D297B2E83CC66";
+        public const string CausticBarrageHitEffect = "CAF4E62C2C5CC04499657C2A6A78087B"; // 1000 duration - green explosion effect when orb lands - conflicts with player effects
+        public const string VolatileExpulsionIndicator = "DCA047DBD6E90A41B46CDDCE5405E4BC"; // 300 - 400 duration
+        public const string VolatileExpulsion2 = "F22E201EAF24DD42A43D297B2E83CC66"; // 0 duration
         public const string CascadeOfTormentRing0 = "EFF32973C7921F41AA3FD65745E06506";
         public const string CascadeOfTormentRing1 = "D919AC7D1B2ABD438F809B3B9DCE9226";
         public const string CascadeOfTormentRing2 = "A5D958EDAD66D7469CA40059915843CC";
@@ -338,8 +383,12 @@ namespace GW2EIEvtcParser
         public const string EnsolyssMiasmaDoughnut66_15 = "3AE042F82A10B84DB7487B0C0F4D2AB1";
         public const string EnsolyssMiasmaDoughnut15_0 = "AB294EC140644E48BC739B8E303D2762";
         public const string EnsolyssNightmareAltarShockwave = "AA31A20BDC52324B945FD660D60429EB";
+        public const string EnsolyssNightmareAltarLightOrangeAoE = "66C6DEE334653342BDC578817254F7C8";
+        public const string EnsolyssNightmareAltarOrangeAoE = "FA097ABEFB8CEF4B89EB12825EEE1FB9"; // same effect as Skorvald's Solar Bolt
+        public const string EnsolyssArrow = "3D85505CEBCF0E4D8993625957405977";
         // Shattered Observatory Fractal
-        public const string SolarBolt = "FA097ABEFB8CEF4B89EB12825EEE1FB9";
+        public const string SolarBoltIndicators = "FA097ABEFB8CEF4B89EB12825EEE1FB9";
+        public const string SkorvaldSolarBoltDamage = "49813989C508464B81FC45E6D24EA8C3";
         public const string KickGroundEffect = "47FE87414A88484AB05A84E1440F5FDD";
         public const string AoeIndicator130Radius = "8DDED161CE26964FA5952D821AD852F7";
         public const string MistBomb = "03FB41386DD2A54FA093795DF2870B7A";
@@ -594,8 +643,20 @@ namespace GW2EIEvtcParser
         public const string TempleOfFebeCerusGreen = "0651E35503F642419A21378FBD29F777"; // Owner Cerus Target Player
         public const string TempleOfFebeCerusGreen2 = "E7E95B11D4AAD2469DD2FD0AF9631ED5"; // Owner Cerus Target Player
         public const string TempleOfFebeRegretGreen = "015E5CF598A13D4F8D6CCFD66643525F"; // Owner Embodiment of Regret Target Player
-        public const string TempleOfFebeGreenSuccess = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
-        public const string TempleOfFebeGreenFailure = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeGreenFailure = "217289F02841EE498070E653723A3991"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeGreenSuccess = "D7C64FEAB21040428D14CC3B2B4018F0"; // Owner Cerus/Embodiment Target None
+        public const string TempleOfFebeWailOfDespair = "9EDCB6E2E3C11448B37F7D07B6B2D4F5"; // Owner Cerus/Embodiment Target Player Duration 5000
+        public const string TempleOfFebeWailOfDespair2 = "00E0C7FC6A454B43B0FB93A6CA7BE83F"; // No Owner Target Player Duration 0
+        public const string TempleOfFebeWailOfDespairEmpowered = "246326728CB3704C93FEA75C402D65CA"; // Owner Cerus/Embodiment Target Player Duration 5000
+        public const string TempleOfFebePoolOfDespair = "3CF93AB93143B64A879D1D63FBA9282A"; // Owner Cerus/Embodiment Duration 60000
+        public const string TempleOfFebePoolOfDespair2 = "4F982CD060507C44A25844BF0ADFCB54"; // No Owner Target Player Duration 0
+        public const string TempleOfFebePoolOfDespairEmpowered = "24E40E1F15BE2142B61F3568D23AE799"; // Owner Cerus/Embodiment Duration 999000
+        public const string TempleOfFebeEnviousGazeIndicator = "62B3766CDF54BD4EA964DAA462954A4A"; // Duration 1500
+        public const string TempleOfFebeEnviousGaze1 = "246ECEBC28173B498B9A6886D7937D59"; // Duration 12500
+        public const string TempleOfFebeEnviousGaze2 = "DA42718917F2304FBA10AF6898217788"; // Duration 12500
+        public const string TempleOfFebeEnviousGaze3 = "B77A06C842511949889877EDC1448D49"; // Duration 11000
+        public const string TempleOfFebeEnviousGaze4 = "0D2192849D53B4469F56B1C74542DBE9"; // Duration 11000
+        public const string TempleOfFebeMaliciousIntentTether = "518369328A12B74EAC49702A785FBA19"; // Duration 0
         #endregion
     }
 }

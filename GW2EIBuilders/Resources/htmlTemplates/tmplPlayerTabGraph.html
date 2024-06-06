@@ -31,6 +31,10 @@
                     this.layout.yaxis2.color = textColor;
                     this.layout.yaxis3.gridcolor = textColor;
                     this.layout.yaxis3.color = textColor;
+                    this.layout.yaxis4.gridcolor = textColor;
+                    this.layout.yaxis4.color = textColor;
+                    this.layout.yaxis5.gridcolor = textColor;
+                    this.layout.yaxis5.color = textColor;
                     this.layout.xaxis.gridcolor = textColor;
                     this.layout.xaxis.color = textColor;
                     this.layout.font.color = textColor;
@@ -62,23 +66,11 @@
                     shape: 'spline',
                     color: this.player.colTotal,
                 },
-                yaxis: 'y3',
+                yaxis: 'y5',
                 hoverinfo: 'name+y+x',
-                name: 'Total'
+                name: 'Taken',
             });
             if (!logData.targetless) {
-                this.data.push({
-                    x: this.phase.times,
-                    y: [],
-                    mode: 'lines',
-                    line: {
-                        shape: 'spline',
-                        color: this.player.colTarget,
-                    },
-                    yaxis: 'y3',
-                    hoverinfo: 'name+y+x',
-                    name: 'Target'
-                });
                 this.data.push({
                     x: this.phase.times,
                     y: [],
@@ -91,8 +83,32 @@
                     hoverinfo: 'name+y+x',
                     name: 'Cleave'
                 });
+                this.data.push({
+                    x: this.phase.times,
+                    y: [],
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        color: this.player.colTarget,
+                    },
+                    yaxis: 'y3',
+                    hoverinfo: 'name+y+x',
+                    name: 'Target'
+                });
             }
-            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs);
+            this.data.push({
+                x: this.phase.times,
+                y: [],
+                mode: 'lines',
+                line: {
+                    shape: 'spline',
+                    color: this.player.colTotal,
+                },
+                yaxis: 'y3',
+                hoverinfo: 'name+y+x',
+                name: 'Total'
+            });
+            this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, false);
             computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
             this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
         },
@@ -155,15 +171,16 @@
             },
             computeData: function () {
                 this.layout.datarevision = new Date().getTime();
-                this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
+                //this.layout.yaxis3.title = graphTypeEnumToString(this.graphdata.graphmode);
                 var res = this.data;
                 var data = this.computeDPSRelatedData();
-                this.data[this.playerOffset].y = data[0];
+                this.data[this.playerOffset].y = data[3];
                 if (!logData.targetless) {
-                    this.data[this.playerOffset + 1].y = data[1];
-                    this.data[this.playerOffset + 2].y = data[2];
+                    this.data[this.playerOffset + 1].y = data[2];
+                    this.data[this.playerOffset + 2].y = data[1];
                 }
-                var offset = 3;
+                this.data[this.playerOffset + 3].y = data[0];
+                var offset = 4;
                 for (var i = this.graphOffset; i < this.playerOffset; i++) {
                     this.data[i].y = data[offset++];
                 }
@@ -198,9 +215,10 @@
                 }
                 var dpsData = this.computeDPSData();
                 var res = [];
-                res.push(dpsData.playerDPS.total);
+                res.push(dpsData.playerDPS.total);            
                 res.push(dpsData.playerDPS.target);
                 res.push(dpsData.playerDPS.cleave);
+                res.push(dpsData.playerDPS.taken);
                 for (var i = 0; i < this.graph.targets.length; i++) {
                     addPointsToGraph(res, this.graph.targets[i].breakbarPercentStates, dpsData.maxDPS);
                 }

@@ -1,4 +1,7 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using GW2EIEvtcParser.ParsedData;
+using System.Collections.Generic;
+
+namespace GW2EIEvtcParser.EIData
 {
     public abstract class GenericDecoration
     {
@@ -10,7 +13,7 @@
         }
         //
 
-        public abstract GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
+        public abstract GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs);
 
     }
 }

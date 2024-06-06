@@ -13,6 +13,7 @@ namespace GW2EIEvtcParser.EIData
         internal List<ParametricPoint3D> Velocities { get; private set; } = new List<ParametricPoint3D>();
         internal List<ParametricPoint3D> Rotations { get; } = new List<ParametricPoint3D>();
         internal List<ParametricPoint3D> PolledRotations { get; private set; } = new List<ParametricPoint3D>();
+        internal List<Segment> Hidden { get; private set; } = new List<Segment>();
         private long _start = -1;
         private long _end = -1;
         internal (long start, long end) TimeOffsets => (_start, _end);
@@ -309,12 +310,26 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="segment">Lifespan interval</param>
         /// <param name="actor">actor to which the decoration will be attached to</param>
         /// <param name="icon">URL of the icon</param>
-        /// <param name="rotation">URL of the icon</param>
+        /// <param name="rotation">rotation of the icon</param>
         /// <param name="pixelSize">Size in pixel of the icon</param>
         /// <param name="opacity">Opacity of the icon</param>
         internal void AddRotatedOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
         {
             Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
+        }
+
+        /// <summary>
+        /// Add an overhead squad marker
+        /// </summary>
+        /// <param name="segment">Lifespan interval</param>
+        /// <param name="actor">actor to which the decoration will be attached to</param>
+        /// <param name="icon">URL of the icon</param>
+        /// <param name="rotation">rotation of the icon</param>
+        /// <param name="pixelSize">Size in pixel of the icon</param>
+        /// <param name="opacity">Opacity of the icon</param>
+        internal void AddRotatedOverheadMarkerIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+        {
+            Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingSquadMarker(true).UsingRotationConnector(new AngleConnector(rotation)));
         }
 
         /// <summary>
@@ -510,7 +525,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
         internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, AbstractPlayer player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
         {
-            var buffEvents = log.CombatData.GetBuffData(buffId).Where(x => x.To == player.AgentItem && x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
+            var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffId, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
             var buffApplies = buffEvents.OfType<BuffApplyEvent>().ToList();
             var buffRemoves = buffEvents.OfType<BuffRemoveAllEvent>().ToList();
             var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentId).ToList();
@@ -571,10 +586,28 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="radius">Radius of the circle.</param>
         internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
         {
+            if (startingPoint == null || endingPoint == null)
+            {
+                return;
+            }
             var startPoint = new ParametricPoint3D(startingPoint, lifespan.start);
             var endPoint = new ParametricPoint3D(endingPoint, lifespan.end);
             var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector(new List<ParametricPoint3D>() { startPoint, endPoint }));
             Decorations.Add(shootingCircle);
+        }
+        /// <summary>
+        /// Add hide based on buff's presence
+        /// </summary>
+        /// <param name="actor">Actor to check</param>
+        /// <param name="log"></param>
+        /// <param name="buffID">Buff id</param>
+        internal void AddHideByBuff(AbstractSingleActor actor, ParsedEvtcLog log, long buffID)
+        {
+            var invuls = actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            foreach (Segment segment in invuls)
+            {
+                Hidden.Add(new Segment(segment));
+            }
         }
     }
 }

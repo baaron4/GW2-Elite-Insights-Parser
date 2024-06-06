@@ -12,14 +12,14 @@
         #region FRACTALS
 
         // Encounters Icons
-        internal const string EncounterIconMAMA = "https://i.imgur.com/9URW7wh.png";
-        internal const string EncounterIconSiax = "https://i.imgur.com/ar5ELOI.png";
-        internal const string EncounterIconEnsolyss = "https://i.imgur.com/pqRYRGi.png";
-        internal const string EncounterIconSkorvald = "https://i.imgur.com/B1nhJ9m.png";
-        internal const string EncounterIconArtsariiv = "https://i.imgur.com/aFlYs1I.png";
-        internal const string EncounterIconArkk = "https://i.imgur.com/glLH8n8.png";
+        internal const string EncounterIconMAMA = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/MAMA.png?raw=true";
+        internal const string EncounterIconSiax = "https://wiki.guildwars2.com/images/3/31/Mini_Toxic_Nimross.png";
+        internal const string EncounterIconEnsolyss = "https://wiki.guildwars2.com/images/5/5e/Mini_Toxic_Hybrid.png";
+        internal const string EncounterIconSkorvald = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Skorvald.png?raw=true";
+        internal const string EncounterIconArtsariiv = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Artsariiv.png?raw=true";
+        internal const string EncounterIconArkk = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Arkk.png?raw=true";
         internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
-        internal const string EncounterIconKanaxai = "https://i.imgur.com/9hY6JFz.jpg";
+        internal const string EncounterIconKanaxai = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Kanaxai.png?raw=true";
 
         // Instances
         internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";
@@ -57,14 +57,14 @@
         internal const string EncounterIconCairn = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
         internal const string EncounterIconMursaatOverseer = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
         internal const string EncounterIconSamarog = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
-        internal const string EncounterIconDeimos = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+        internal const string EncounterIconDeimos = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Deimos.png?raw=true";
         internal const string EncounterIconSoullessHorror = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
-        internal const string EncounterIconRiver = "https://wiki.guildwars2.com/images/thumb/7/7b/Gold_River_of_Souls_Trophy.jpg/220px-Gold_River_of_Souls_Trophy.jpg";
-        internal const string EncounterIconStatueOfDarkness = "https://wiki.guildwars2.com/images/thumb/a/a7/Eye_of_Fate.jpg/188px-Eye_of_Fate.jpg";
-        internal const string EncounterIconStatueOfDeath = "https://wiki.guildwars2.com/images/thumb/2/24/Eater_of_Souls_%28Hall_of_Chains%29.jpg/194px-Eater_of_Souls_%28Hall_of_Chains%29.jpg";
+        internal const string EncounterIconRiver = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/River_Of_Souls.png?raw=true";
+        internal const string EncounterIconStatueOfDarkness = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Eyes_Of_Fate.png?raw=true";
+        internal const string EncounterIconStatueOfDeath = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Eater_Of_Souls.png?raw=true";
         internal const string EncounterIconStatueOfIce = "https://wiki.guildwars2.com/images/3/37/Mini_Broken_King.png";
         internal const string EncounterIconDhuum = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
-        internal const string EncounterIconConjuredAmalgamate = "https://i.imgur.com/eLyIWd2.png";
+        internal const string EncounterIconConjuredAmalgamate = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Conjured_Amalgamate.png?raw=true";
         internal const string EncounterIconTwinLargos = "https://i.imgur.com/6O5MT7v.png";
         internal const string EncounterIconQadim = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         internal const string EncounterIconAdina = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
@@ -119,12 +119,12 @@
         #region STRIKES
 
         // Encounters Icons
-        internal const string EncounterIconFreezie = "https://wiki.guildwars2.com/images/thumb/8/8b/Freezie.jpg/189px-Freezie.jpg";
-        internal const string EncounterIconIcebroodConstruct = "https://wiki.guildwars2.com/images/thumb/0/07/Icebrood_Construct_%28partially_buried%29.jpg/320px-Icebrood_Construct_%28partially_buried%29.jpg";
-        internal const string EncounterIconKodanBrothers = "https://i.imgur.com/lNXXbnC.png";
-        internal const string EncounterIconFraenirOfJormag = "https://wiki.guildwars2.com/images/thumb/6/67/Fraenir_of_Jormag.jpg/208px-Fraenir_of_Jormag.jpg";
-        internal const string EncounterIconBoneskinner = "https://i.imgur.com/meYwQmA.png";
-        internal const string EncounterIconWhisperOfJormag = "https://i.imgur.com/8GLwgfL.png";
+        internal const string EncounterIconFreezie = "https://i.imgur.com/PYtzWUT.png";
+        internal const string EncounterIconIcebroodConstruct = "https://i.imgur.com/Lm7X7r2.png";
+        internal const string EncounterIconKodanBrothers = "https://i.imgur.com/kYEno22.png";
+        internal const string EncounterIconFraenirOfJormag = "https://i.imgur.com/yahGpzg.png";
+        internal const string EncounterIconBoneskinner = "https://i.imgur.com/ylQGsIP.png";
+        internal const string EncounterIconWhisperOfJormag = "https://i.imgur.com/vOk4TDQ.png";
         internal const string EncounterIconColdWar = "https://i.imgur.com/r9b2oww.png";
         internal const string EncounterIconAetherbladeHideout = "https://i.imgur.com/UZmW8Sd.png";
         internal const string EncounterIconXunlaiJadeJunkyard = "https://i.imgur.com/orWH6qw.png";

@@ -416,7 +416,7 @@ namespace GW2EIBuilders.HtmlModels
             if (cr)
             {
                 log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay");
-                logData.CrData = new CombatReplayDto(log);
+                logData.CrData = new CombatReplayDto(log, usedSkills, usedBuffs);
             }
             log.UpdateProgressWithCancellationCheck("HTML: building Graph Data");
             logData.GraphData = new ChartDataDto(log);
@@ -482,7 +482,7 @@ namespace GW2EIBuilders.HtmlModels
             SkillDto.AssembleSkills(usedSkills.Values, logData.SkillMap, log);
             DamageModDto.AssembleDamageModifiers(usedDamageMods, logData.DamageModMap);
             DamageModDto.AssembleDamageModifiers(usedIncDamageMods, logData.DamageIncModMap);
-            BuffDto.AssembleBoons(usedBuffs.Values, logData.BuffMap, log);
+            BuffDto.AssembleBuffs(usedBuffs.Values, logData.BuffMap, log);
             MechanicDto.BuildMechanics(log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd), logData.MechanicMap);
             return logData;
         }

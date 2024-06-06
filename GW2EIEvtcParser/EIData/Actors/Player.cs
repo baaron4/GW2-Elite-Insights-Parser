@@ -13,6 +13,8 @@ namespace GW2EIEvtcParser.EIData
 {
     public class Player : AbstractPlayer
     {
+
+        private List<GenericSegment<string>> CommanderStates { get; set; } = null;
         // Constructors
         internal Player(AgentItem agent, bool noSquad) : base(agent)
         {
@@ -74,45 +76,118 @@ namespace GW2EIEvtcParser.EIData
         /// <returns><see langword="true"/> if a GUID was found, otherwise <see langword="false"/></returns>
         public bool IsCommander(ParsedEvtcLog log)
         {
-            return IsCommander(log, out _);
+            return GetCommanderStates(log).Count > 0;
         }
 
-        public bool IsCommander(ParsedEvtcLog log, out string tagGUID)
+        /// <summary>
+        /// Return commander status list, the value of the segment is currently active commander tag ID.
+        /// Player had said tag between every segment.Start and segment.End.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public IReadOnlyList<GenericSegment<string>> GetCommanderStates(ParsedEvtcLog log)
         {
-            IReadOnlyList<TagEvent> tagEvents = log.CombatData.GetTagEvents(AgentItem);
-
-            if (tagEvents.Count > 0)
+            if (CommanderStates == null)
             {
-                foreach (TagEvent tagEvent in tagEvents)
+                var statesByPlayer = new Dictionary<Player, IReadOnlyList<GenericSegment<string>>>();
+                foreach (Player player in log.PlayerList)
                 {
-                    MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(tagEvent.TagID);
-                    if (marker != null)
+                    var commanderMarkerStates = new List<GenericSegment<string>>();
+                    IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player.AgentItem);
+                    foreach (MarkerEvent markerEvent in markerEvents)
                     {
-                        if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))
+                        MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(markerEvent.MarkerID);
+                        if (marker != null)
                         {
-                            tagGUID = marker.HexContentGUID;
-                            return true;
+                            if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))
+                            {
+                                commanderMarkerStates.Add(new GenericSegment<string>(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
+                                if (markerEvent.EndNotSet)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        else if (markerEvent.MarkerID != 0)
+                        {
+                            commanderMarkerStates.Clear();
+                            commanderMarkerStates.Add(new GenericSegment<string>(player.FirstAware, log.FightData.LogEnd, MarkerGUIDs.BlueCommanderTag));
+                            break;
                         }
                     }
-                    else if (tagEvent.TagID != 0)
+                    if (commanderMarkerStates.Count > 0)
                     {
-                        tagGUID = MarkerGUIDs.BlueCommanderTag;
-                        return true;
+                        statesByPlayer[player] = commanderMarkerStates;
                     }
                 }
+                if (!statesByPlayer.ContainsKey(this))
+                {
+                    CommanderStates = new List<GenericSegment<string>>();
+                    return CommanderStates;
+                }
+                var states = new List<(Player p, GenericSegment<string> seg)>();
+                foreach (KeyValuePair<Player, IReadOnlyList<GenericSegment<string>>> item in statesByPlayer)
+                {
+                    foreach (GenericSegment<string> value in item.Value)
+                    {
+                        states.Add((item.Key, value));
+                    }
+                }
+                states = states.OrderBy(x => x.seg.Start).ToList();
+                var cleanStates = new List<(Player p, GenericSegment<string> seg)>();
+                GenericSegment<string> lastAdded = null;
+                Player lastPlayer = null;
+                foreach ((Player p, GenericSegment<string> seg) in states)
+                {
+                    if (lastPlayer == p && lastAdded.Value == seg.Value)
+                    {
+                        lastAdded.End = seg.End;
+                    }
+                    else
+                    {
+                        lastAdded = seg;
+                        lastPlayer = p;
+                        cleanStates.Add((p,seg));
+                    }
+                }
+                CommanderStates = cleanStates.Where(x => x.p == this).Select(x => x.seg).ToList();
             }
+            return CommanderStates;
+        }
 
-            tagGUID = null;
-            return false;
+        /// <summary>
+        /// Return commander status list, with no consideration of tag type.
+        /// Player had a commander tag between every segment.Start and segment.End.
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        public IReadOnlyList<Segment> GetCommanderStatesNoTagValues(ParsedEvtcLog log)
+        {
+            IReadOnlyList<GenericSegment<string>> commanderStates = GetCommanderStates(log);
+            var result = new List<Segment>();
+            Segment prev = null;
+            foreach (GenericSegment<string> state in commanderStates) 
+            {
+                if (prev == null || state.Start != prev.End)
+                {
+                    prev = new Segment(state.Start, state.End);
+                    result.Add(prev);
+                } 
+                else
+                {
+                    prev.End = state.End;
+                }
+            }
+            return result;
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
-            base.InitAdditionalCombatReplayData(log);
-            if (IsCommander(log, out string tagGUID))
+            foreach (GenericSegment<string> seg in GetCommanderStates(log))
             {
-                CombatReplay.AddRotatedOverheadIcon(new Segment(FirstAware, LastAware, 1), this, MarkerGUIDs.CommanderTagToIcon[tagGUID], 180f, 15);
+                CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, ParserIcons.CommanderTagToIcon[seg.Value], 180f, 15);
             }
+            base.InitAdditionalCombatReplayData(log);
         }
 
         public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)

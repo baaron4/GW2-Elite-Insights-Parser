@@ -134,8 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem mcLeod = agentData.GetNPCsByID(ArcDPSEnums.TargetID.McLeodTheSilent).FirstOrDefault();
-            if (mcLeod == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.McLeodTheSilent, out AgentItem mcLeod))
             {
                 throw new MissingKeyActorsException("McLeod not found");
             }
@@ -180,8 +179,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem mcLeod = agentData.GetNPCsByID(ArcDPSEnums.TargetID.McLeodTheSilent).FirstOrDefault();
-            if (mcLeod == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.McLeodTheSilent, out AgentItem mcLeod))
             {
                 throw new MissingKeyActorsException("McLeod not found");
             }
@@ -201,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 else
                 {
-                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
+                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)ArcDPSEnums.TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
                 }
             }
             return startToUse;
@@ -211,8 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             if (_hasPreEvent)
             {
-                AgentItem glenna = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Glenna).FirstOrDefault();
-                if (glenna == null)
+                if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.Glenna, out AgentItem glenna))
                 {
                     throw new MissingKeyActorsException("Glenna not found");
                 }
@@ -292,6 +289,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
                 if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
+            }
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            switch(target.ID)
+            {
+                case (int)ArcDPSEnums.TargetID.McLeodTheSilent:
+                    replay.AddHideByBuff(target, log, Invulnerability757);
+                    break;
             }
         }
 

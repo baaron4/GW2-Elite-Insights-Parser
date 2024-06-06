@@ -8,7 +8,7 @@
                     <span v-for="target in targets.values" @click="selectActor(target.uniqueID);"
                         class="btn btn-small ply-btn"
                         :class="{'active': selectedtargetid === target.uniqueID, 'btn-dark': !light, 'btn-light': light}"
-                        :title="target.name">
+                        :data-original-title="target.name">
                         <img :src="target.icon" :alt="target.name" class="icon">
                         {{ target.name }}
                     </span>

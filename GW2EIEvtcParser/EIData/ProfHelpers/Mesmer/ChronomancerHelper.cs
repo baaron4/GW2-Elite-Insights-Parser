@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -64,9 +65,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in wellsOfEternity)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfEternity, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfEternity);
                 }
             }
             // Well of Eternity - Pulses
@@ -123,9 +122,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in wellsOfCalamity)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfCalamity, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfCalamity);
                 }
             }
             // Well of Calamity - Pulses
@@ -148,9 +145,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (EffectEvent effect in wellsOfPrecognition)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfPrecognition, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfPrecognition);
                 }
             }
             // Well of Precognition - Pulses
@@ -203,19 +198,17 @@ namespace GW2EIEvtcParser.EIData
             // Gravity Well
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerGravityWell, out IReadOnlyList<EffectEvent> gravityWells))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell);
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell, SkillModeCategory.CC);
                 foreach (EffectEvent effect in gravityWells)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectGravityWell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGravityWell);
                 }
             }
             // Gravity Well - Pulses
             if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerGravityWellPulse, EffectGUIDs.ChronomancerGravityWellExplosion }, out IReadOnlyList<EffectEvent> gravityWellPulses))
             {
-                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell);
+                var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell, SkillModeCategory.CC);
                 foreach (EffectEvent effect in gravityWellPulses)
                 {
                     int effectTimeStart = (int)effect.Time;
