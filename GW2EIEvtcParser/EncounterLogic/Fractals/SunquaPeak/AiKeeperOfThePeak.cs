@@ -456,7 +456,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                         {
                                             end = detonate.Time;
                                             long hit = detonate.Time + hitDelay;
-                                            replay.Decorations.Add(new CircleDecoration(indicatorSize, (hit, hit + 300), Colors.Red, 0.1, new AgentConnector(target)));
+                                            replay.Decorations.Add(new CircleDecoration(indicatorSize, (hit, hit + 300), Colors.Red, 0.15, new AgentConnector(target)));
                                         }
                                         else
                                         {
@@ -468,7 +468,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                                                 end = Math.Min(end, dead.Time);
                                             }
                                         }
-                                        replay.AddDecorationWithGrowing(new CircleDecoration(indicatorSize, (start, end), Colors.Orange, 0.1, new AgentConnector(target)), fullEnd);
+                                        var decoration = new CircleDecoration(indicatorSize, (start, end), Colors.Orange, 0.15, new AgentConnector(target));
+                                        replay.Decorations.Add(decoration.Copy().UsingFilled(false));
+                                        replay.Decorations.Add(decoration.UsingGrowingEnd(fullEnd));
                                         break;
                                     }
                             }
@@ -646,7 +648,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long start = effect.Time;
                     long end = start + 6250;
                     var position = new AgentConnector(effect.Dst);
-                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingFilled(false));
+                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position));
                     EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingGrowingEnd(end));
                 }
             }
