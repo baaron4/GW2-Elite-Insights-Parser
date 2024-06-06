@@ -577,7 +577,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(300, (end, end + 300), Colors.Red, 0.15, position));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiRedCircleIndicator, out IReadOnlyList<EffectEvent> aroundRed))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiRedPointblankIndicator, out IReadOnlyList<EffectEvent> aroundRed))
             {
                 foreach (EffectEvent effect in aroundRed)
                 {
@@ -592,10 +592,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCircleDetonate, EffectGUIDs.AiFireCircleDetonate }, out IReadOnlyList<EffectEvent> circleDetonate))
             {
                 AddScalingCircleDecorations(log, circleDetonate, 300);
-            }
-            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing }, out IReadOnlyList<EffectEvent> circlePulsing))
-            {
-                AddScalingCircleDecorations(log, circlePulsing, 8000);
             }
             // we need to filter water & dark detonates due to reuse
             var detonateReusedGUIDs = new string[] { EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkCircleDetonate };
@@ -613,6 +609,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     });
                     AddScalingCircleDecorations(log, filteredCircles, 300);
                 }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing, EffectGUIDs.AiDarkCirclePulsing }, out IReadOnlyList<EffectEvent> circlePulsing))
+            {
+                AddScalingCircleDecorations(log, circlePulsing, 8000);
             }
 
             // air intermission lightning strikes

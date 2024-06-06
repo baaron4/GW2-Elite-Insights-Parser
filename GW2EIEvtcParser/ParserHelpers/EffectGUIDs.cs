@@ -411,7 +411,7 @@ namespace GW2EIEvtcParser
         public const string AiAoEAroundIndicator = "D11320204E28E643A48469AA8E4845BA"; // GENERIC, owned by ai
         public const string AiGreenCircleIndicator = "BFFF308926A8B647A729197D364C1095"; // GENERIC, owned by player, 6.250s duration
         public const string AiSpreadCircle = "DD3870359E8FFA41BE69D612E05C972E"; // owned by ai, 5s duration
-        public const string AiRedCircleIndicator = "46DCBA8A1BF48A46BDD5B533FFF20659"; // owned by ai, 4s duration
+        public const string AiRedPointblankIndicator = "46DCBA8A1BF48A46BDD5B533FFF20659"; // owned by ai, 4s duration
         public const string AiAirLine1 = "EFB7EF07C1CCD4479A73B34C56B53D7C"; // owned by ai, oriented towards ai
         public const string AiAirOrbFloat = "06E1712B62940C4CB8CEB23F06893370"; // owned by ai, 5s duration, higher up
         public const string AiAirOrbGround = "014DCBC1E960094C84CE145C2F813169"; // owned by ai, 5s duration
@@ -442,6 +442,7 @@ namespace GW2EIEvtcParser
         public const string AiDarkOrbFloat = "B8EED8719B64FC4DB0159097C5D00602"; // owned by ai, 5s duration, NOT used for line attack version
         public const string AiDarkOrbGround = "A244911C6EDC9C4F8F97AB7BB298B937"; // owned by ai, no duration, used for both versions
         public const string AiDarkDetonate = "FD02022B7D29BB40B991E1E1C25E46BE"; // no owner, no duration, used for spreads & orb detonate
+        public const string AiDarkCirclePulsing = "4BBF32BC8008C74282E7F6FD8DC459E3"; // owned by ai, no duration
         public const string AiDarkCircleDetonate = "F9CBDC860F82E14C8C06A90CE1674FCB"; // owned by ai, 500ms duration, REUSED for end of dash with duration 0ms
         public const string AiSorrowIndicator = "2A4BE7D8CB917A45B3BCA8AE696BA55C"; // owned by sorrow, 9.5s duration
         public const string AiSorrowDetonate = "F7C16B270D67E54F8E849B0FD579D23E"; // owned by sorrow, no duration
