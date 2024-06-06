@@ -482,23 +482,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             // spreads
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiSpreadCircle, out IReadOnlyList<EffectEvent> spreadIndicators))
             {
-                var spreadDetonateGUIDs = new string[] { EffectGUIDs.AiDarkDetonate };
+                var spreadDetonateGUIDs = new string[] { EffectGUIDs.AiAirDetonate, EffectGUIDs.AiFireDetonate, EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkDetonate };
                 const float maxDist = 40f;
+                const long duration = 5000;
 
-                IReadOnlyList<EffectEvent> detonates = new List<EffectEvent>();
-                log.CombatData.TryGetEffectEventsByGUIDs(spreadDetonateGUIDs, out detonates);
+                bool hasDetonates = log.CombatData.TryGetEffectEventsByGUIDs(spreadDetonateGUIDs, out IReadOnlyList<EffectEvent> detonates);
                 foreach (EffectEvent effect in spreadIndicators)
                 {
                     long start = effect.Time;
-                    long end = start + 5000;
+                    long end = start + duration;
                     var position = new AgentConnector(effect.Dst);
                     EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.3, position).UsingFilled(false));
                     EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.15, position).UsingGrowingEnd(end));
-                    Point3D endPos = effect.Dst.GetCurrentPosition(log, end);
-                    EffectEvent detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && x.Position.Distance2DToPoint(endPos) < maxDist);
-                    if (detonate != null)
+                    if (hasDetonates)
                     {
-                        EnvironmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));
+                        Point3D endPos = effect.Dst.GetCurrentPosition(log, end);
+                        EffectEvent detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && x.Position.Distance2DToPoint(endPos) < maxDist);
+                        if (detonate != null)
+                        {
+                            EnvironmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));
+                        }
                     }
                 }
             }
@@ -538,7 +541,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AddScalingCircleDecorations(log, circlePulsing, 8000);
             }
             // we need to filter water & dark detonates due to reuse
-            var detonateReusedGUIDs = new string[] { EffectGUIDs.AiWaterCircleDetonate, EffectGUIDs.AiDarkCircleDetonate };
+            var detonateReusedGUIDs = new string[] { EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkCircleDetonate };
             if (log.CombatData.TryGetEffectEventsByGUIDs(detonateReusedGUIDs, out IReadOnlyList<EffectEvent> circleDetonateReused))
             {
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiCircleAoEIndicator, out IReadOnlyList<EffectEvent> indicators))
