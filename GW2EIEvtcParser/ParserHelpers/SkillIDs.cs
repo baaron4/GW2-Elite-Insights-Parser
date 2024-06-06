@@ -4225,6 +4225,8 @@
         public const long FireBullet = 71936;
         public const long PathOfGluttonyFlipBuff = 71947;
         public const long PathToVictory = 71950;
+        public const long FireJurisdictionLevel1 = 71818;
+        public const long FireJurisdictionLevel2 = 71954;
         public const long FriendlyFireIllu = 71970;
         public const long NaturesStrength = 71976;
         public const long TappedOut = 71979;
@@ -4237,6 +4239,7 @@
         public const long SoothingSplash = 72033;
         public const long ShatteringStoneBuff = 72046;
         public const long DeathlyEnervation = 72051;
+        public const long FireJurisdictionLevel3 = 72053;
         public const long EchoingErosion = 72062;
         public const long DazingDischargeBuff = 72069;
         public const long GuildHallWvWMode = 72110;

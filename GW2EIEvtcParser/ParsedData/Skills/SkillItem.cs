@@ -140,6 +140,9 @@ namespace GW2EIEvtcParser.ParsedData
             { PortentOfFreedomOrUnhinderedDelivery, "Portent of Freedom or Unhindered Delivery" },
             { RushingJusticeStrike, "Rushing Justice (Hit)" },
             { ExecutionersCallingDualStrike, "Executioner's Calling (Dual Strike)" },
+            { FireJurisdictionLevel1, "Fire Jurisdiction (Level 1)" },
+            { FireJurisdictionLevel2, "Fire Jurisdiction (Level 2)" },
+            { FireJurisdictionLevel3, "Fire Jurisdiction (Level 3)" },
             // Mesmer
             { PowerReturn, "Power Return" },
             { PowerCleanse, "Power Cleanse" },
@@ -585,6 +588,9 @@ namespace GW2EIEvtcParser.ParsedData
             { ShieldOfTheAvengerShatter, "https://wiki.guildwars2.com/images/2/2c/Shield_of_the_Avenger.png" },
             { VirtueOfJusticePassiveBurn, BuffImages.VirtueOfJustice },
             { HuntersWardImpacts, "https://wiki.guildwars2.com/images/e/e6/Hunter%27s_Ward.png" },
+            { FireJurisdictionLevel1, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
+            { FireJurisdictionLevel2, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
+            { FireJurisdictionLevel3, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
 #endregion GuardianIcons
             #region MesmerIcons
             { HealingPrism, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
