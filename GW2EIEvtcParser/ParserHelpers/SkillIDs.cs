@@ -3302,6 +3302,7 @@
         public const long Enraged_300_strike_75_reduc = 61006;
         public const long Stealth2Skill = 61081;
         public const long Enraged_100_strike_25_reduc = 61138;
+        public const long OverwhelmingSorrowDetonate = 61168;
         public const long ElementalManipulationWater1 = 61172;
         public const long TorrentialBolt2 = 61177;
         public const long AchievementEligibilityDancingWithDemons = 61183;
@@ -3319,6 +3320,7 @@
         public const long ElementalManipulationFire2 = 61256;
         public const long EmpathicManipulation7 = 61260;
         public const long ElementalManipulationFire3 = 61271;
+        public const long OverwhelmingSorrowHit = 61241;
         public const long RoilingFlames1 = 61273;
         public const long AiDarkModeStart = 61277;
         public const long AiDarkModeStartCN = 61279;
@@ -3351,7 +3353,7 @@
         public const long FirestormAi = 61445;
         public const long ElementalWhirl = 61463;
         public const long VolatileWind = 61470;
-        public const long OverwhelmingSorrow = 61481;
+        public const long OverwhelmingSorrowWindup = 61481;
         public const long ElementalSurge4 = 61486;
         public const long FulgorSphere1 = 61487;
         public const long FocusedWrath2 = 61499;

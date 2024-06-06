@@ -443,6 +443,8 @@ namespace GW2EIEvtcParser
         public const string AiDarkOrbGround = "A244911C6EDC9C4F8F97AB7BB298B937"; // owned by ai, no duration, used for both versions
         public const string AiDarkDetonate = "FD02022B7D29BB40B991E1E1C25E46BE"; // no owner, no duration, used for spreads & orb detonate
         public const string AiDarkCircleDetonate = "F9CBDC860F82E14C8C06A90CE1674FCB"; // owned by ai, 500ms duration, REUSED for end of dash with duration 0ms
+        public const string AiSorrowIndicator = "2A4BE7D8CB917A45B3BCA8AE696BA55C"; // owned by sorrow, 9.5s duration
+        public const string AiSorrowDetonate = "F7C16B270D67E54F8E849B0FD579D23E"; // owned by sorrow, no duration
         // Silent Surf Fractal
         public const string FrighteningSpeedRedAoE = "96E8C6EA0D2FAF4C8F62B5C6CA4B611C";
         public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";

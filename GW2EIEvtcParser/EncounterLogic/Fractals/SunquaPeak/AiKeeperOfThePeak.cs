@@ -432,11 +432,56 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeNPCCombatReplayActors(target, log, replay);
 
-            // tether between guilt and player/boss, applied TO guilt
-            if (target.AgentItem.IsSpecies(TrashID.GuiltDemon))
+
+            IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
+            switch (target.ID)
             {
-                List<AbstractBuffEvent> fixations = GetFilteredList(log.CombatData, new long[] { FixatedGuilt }, target, true, true);
-                replay.AddTether(fixations, Colors.DarkPurple, 0.5);
+                case (int)TrashID.CCSorrowDemon:
+                    {
+                        const long fullCastDuration = 11840;
+                        const long hitDelay = 420;
+                        const uint indicatorSize = 2000;
+                        var detonates = casts.Where(x => x.SkillId == OverwhelmingSorrowDetonate).ToList();
+                        foreach (AnimatedCastEvent cast in casts)
+                        {
+                            switch (cast.SkillId)
+                            {
+                                case OverwhelmingSorrowWindup:
+                                    {
+                                        long start = cast.Time;
+                                        long fullEnd = start + fullCastDuration;
+                                        AnimatedCastEvent detonate = detonates.Where(x => x.Time > start && x.Time < fullEnd + ServerDelayConstant).FirstOrDefault();
+                                        long end;
+                                        if (detonate != null)
+                                        {
+                                            end = detonate.Time;
+                                            long hit = detonate.Time + hitDelay;
+                                            replay.Decorations.Add(new CircleDecoration(indicatorSize, (hit, hit + 300), Colors.Red, 0.1, new AgentConnector(target)));
+                                        }
+                                        else
+                                        {
+                                            // attempt to find end while handling missing cast durations
+                                            end = cast.EndTime > ServerDelayConstant ? cast.EndTime : fullEnd;
+                                            DeadEvent dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+                                            if (dead != null)
+                                            {
+                                                end = Math.Min(end, dead.Time);
+                                            }
+                                        }
+                                        replay.AddDecorationWithGrowing(new CircleDecoration(indicatorSize, (start, end), Colors.Orange, 0.1, new AgentConnector(target)), fullEnd);
+                                        break;
+                                    }
+                            }
+                        }
+                        break;
+                    }
+                case (int)TrashID.GuiltDemon:
+                    {
+                        // tether between guilt and player/boss, buff applied TO guilt
+                        List<AbstractBuffEvent> fixationBuffs = GetFilteredList(log.CombatData, new long[] { FixatedGuilt }, target, true, true);
+                        replay.AddTether(fixationBuffs, Colors.DarkPurple, 0.5);
+                        break;
+                    }
             }
         }
 
