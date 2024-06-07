@@ -14,6 +14,7 @@ using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using System.Security.Cryptography;
 using GW2EIEvtcParser.ParserHelpers;
+using System.Runtime.ConstrainedExecution;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -60,16 +61,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
             if (evtcVersion >= ArcDPSBuilds.NewLogStart)
             {
-                AgentItem cerus = agentData.GetNPCsByID(TargetID.CerusLonelyTower).FirstOrDefault();
-                if (cerus == null)
-                {
-                    throw new MissingKeyActorsException("Cerus not found");
-                }
-                AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault();
-                if (deimos == null)
-                {
-                    throw new MissingKeyActorsException("Deimos not found");
-                }
+                AgentItem cerus = agentData.GetNPCsByID(TargetID.CerusLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
+                AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Deimos not found");
                 CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
                 if (logStartNPCUpdate != null)
                 {
@@ -85,23 +78,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return Math.Min(initialDamageToPlayers.Time, initialDamageTimeToTargets);
                 }
                 return initialDamageTimeToTargets;
-                throw new MissingKeyActorsException("Cerus or Deimos not found");
             }
             return startToUse;
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
-            if (deimos == null)
-            {
-                throw new MissingKeyActorsException("Deimos not found");
-            }
-            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
-            if (cerus == null)
-            {
-                throw new MissingKeyActorsException("Cerus not found");
-            }
+            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
+            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
             BuffApplyEvent determinedApplyCerus = combatData.GetBuffDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
             BuffApplyEvent determinedApplyDeimos = combatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
             if (determinedApplyCerus != null && determinedApplyDeimos != null)
@@ -123,6 +107,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterStartStatus.Normal;
         }
 
+        private static PhaseData GetBossPhase(ParsedEvtcLog log, AbstractSingleActor target, string phaseName)
+        {
+            BuffApplyEvent determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+            long end = determinedApply != null ? determinedApply.Time : target.LastAware;
+            var bossPhase = new PhaseData(log.FightData.FightStart, end, phaseName)
+            {
+                CanBeSubPhase = false
+            };
+            bossPhase.AddTarget(target);
+            return bossPhase;
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
@@ -131,36 +127,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Cerus not found");
             }
-            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
-            if (deimos == null)
-            {
-                throw new MissingKeyActorsException("Deimos not found");
-            }
+            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
             phases[0].AddTarget(cerus);
             phases[0].AddTarget(deimos);
             if (!requirePhases)
             {
                 return phases;
             }
-            //
-            BuffApplyEvent determinedApplyCerus = log.CombatData.GetBuffDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
-            long cerusEnd = determinedApplyCerus != null ? determinedApplyCerus.Time : cerus.LastAware;
-            var cerusPhase = new PhaseData(log.FightData.FightStart, cerusEnd, "Cerus")
-            {
-                CanBeSubPhase = false
-            };
-            cerusPhase.AddTarget(cerus);
-            phases.Add(cerusPhase);
-            //
-            BuffApplyEvent determinedApplyDeimos = log.CombatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
-            long deimosEnd = determinedApplyDeimos != null ? determinedApplyDeimos.Time : deimos.LastAware;
-            var deimosPhase = new PhaseData(log.FightData.FightStart, deimosEnd, "Deimos")
-            {
-                CanBeSubPhase = false
-            };
-            deimosPhase.AddTarget(deimos);
-            phases.Add(deimosPhase);
+            phases.Add(GetBossPhase(log, cerus, "Cerus"));
+            phases.Add(GetBossPhase(log, deimos, "Deimos"));
             return phases;
+        }
+
+        private static void DoBrotherTether(ParsedEvtcLog log, AbstractSingleActor target, AbstractSingleActor brother, CombatReplay replay)
+        {
+            if (brother != null)
+            {
+                var brothers = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                foreach (Segment seg in brothers)
+                {
+                    replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(brother)));
+                }
+            }
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -170,28 +158,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TargetID.DeimosLonelyTower:
                     AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
-                    if (cerus != null)
-                    {
-                        var brothersDeimos = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                        foreach (Segment seg in brothersDeimos)
-                        {
-                            replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(cerus)));
-                        }
-                    }
+                    DoBrotherTether(log, target, cerus, replay);
                     break;
                 case (int)TargetID.CerusLonelyTower:
                     AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
-                    if (deimos != null)
-                    {
-                        var brothersCerus = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                        foreach (Segment seg in brothersCerus)
-                        {
-                            replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(deimos)));
-                        }
-                    }
+                    DoBrotherTether(log, target, deimos, replay);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private static void DoFixationTether(ParsedEvtcLog log, AbstractPlayer p, CombatReplay replay, AbstractSingleActor target, long fixationID, Color color)
+        {
+            if (target != null)
+            {
+                var fixated = p.GetBuffStatus(log, fixationID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                foreach (Segment seg in fixated)
+                {
+                    replay.Decorations.Add(new LineDecoration(seg, color, 0.3, new AgentConnector(p), new AgentConnector(target)));
+                    replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+                }
             }
         }
 
@@ -199,25 +186,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
-            if (cerus != null)
-            {
-                var fixadedCerus = p.GetBuffStatus(log, CerussFocus, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                foreach (Segment seg in fixadedCerus)
-                {
-                    replay.Decorations.Add(new LineDecoration(seg, Colors.Orange, 0.3, new AgentConnector(p), new AgentConnector(cerus)));
-                    replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
-                }
-            }
+            DoFixationTether(log, p, replay, cerus, CerussFocus, Colors.Orange);
             AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
-            if (deimos != null)
-            {
-                var fixatedDeimos = p.GetBuffStatus(log, DeimossFocus, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                foreach (Segment seg in fixatedDeimos)
-                {
-                    replay.Decorations.Add(new LineDecoration(seg, Colors.Red, 0.3, new AgentConnector(p), new AgentConnector(deimos)));
-                    replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
-                }
-            }
+            DoFixationTether(log, p, replay, deimos, DeimossFocus, Colors.Red);
         }
 
         protected override List<int> GetTargetsIDs()
