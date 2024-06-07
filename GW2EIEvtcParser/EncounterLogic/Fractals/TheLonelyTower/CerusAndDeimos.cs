@@ -17,9 +17,9 @@ using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
-    internal class LonelyTowerCerusAndDeimos : LonelyTower
+    internal class CerusAndDeimos : LonelyTower
     {
-        public LonelyTowerCerusAndDeimos(int triggerID) : base(triggerID)
+        public CerusAndDeimos(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

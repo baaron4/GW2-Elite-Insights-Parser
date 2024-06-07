@@ -255,7 +255,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.TargetID.CerusLonelyTower:
                 case ArcDPSEnums.TargetID.DeimosLonelyTower:
-                    Logic = new LonelyTowerCerusAndDeimos(id);
+                    Logic = new CerusAndDeimos(id);
                     break;
                 case ArcDPSEnums.TargetID.EparchLonelyTower:
                     Logic = new Eparch(id);
