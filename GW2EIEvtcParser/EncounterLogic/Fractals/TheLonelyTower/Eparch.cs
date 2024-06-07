@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
             });
             Extension = "eparch";
-            //Icon = EncounterIconMAMA;
+            Icon = EncounterIconEparch;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000002;
         }

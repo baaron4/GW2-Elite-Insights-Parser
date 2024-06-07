@@ -20,7 +20,8 @@
         internal const string EncounterIconArkk = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Arkk.png?raw=true";
         internal const string EncounterIconAi = "https://i.imgur.com/3mlCdI9.png";
         internal const string EncounterIconKanaxai = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Kanaxai.png?raw=true";
-        internal const string EncounterCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
+        internal const string EncounterIconCerusAndDeimos = "https://i.imgur.com/fzqnnCR.png";
+        internal const string EncounterIconEparch = "https://wiki.guildwars2.com/images/5/5a/Mini_Eparch.png";
 
         // Instances
         internal const string InstanceIconNightmare = "https://i.imgur.com/p8ckAUC.png";
