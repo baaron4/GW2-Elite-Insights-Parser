@@ -257,6 +257,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.DeimosLonelyTower:
                     Logic = new LonelyTowerCerusAndDeimos(id);
                     break;
+                case ArcDPSEnums.TargetID.EparchLonelyTower:
+                    Logic = new Eparch(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())
