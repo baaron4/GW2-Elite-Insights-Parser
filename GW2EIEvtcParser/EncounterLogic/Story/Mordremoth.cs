@@ -42,11 +42,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Vale Guardian not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -84,11 +80,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth));
-            if (mordremoth == null)
-            {
-                throw new EvtcAgentException("Mordremoth not found");
-            }
+            AbstractSingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth)) ?? throw new EvtcAgentException("Mordremoth not found");
             BuffApplyEvent buffApply = combatData.GetBuffDataByIDByDst(Determined895, mordremoth.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
             if (buffApply != null)
             {
@@ -98,11 +90,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth));
-            if (mordremoth == null)
-            {
-                throw new MissingKeyActorsException("Mordremoth not found");
-            }
+            AbstractSingleActor mordremoth = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Mordremoth)) ?? throw new MissingKeyActorsException("Mordremoth not found");
             return (mordremoth.GetHealth(combatData) > 9e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Story;
         }
 

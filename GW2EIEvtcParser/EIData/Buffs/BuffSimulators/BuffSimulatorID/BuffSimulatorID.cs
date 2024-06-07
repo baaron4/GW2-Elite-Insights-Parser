@@ -54,11 +54,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
         {
-            BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-            if (toExtend == null)
-            {
-                throw new EIBuffSimulatorIDException("Extend has failed");
-            }
+            BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Extend has failed");
             toExtend.Extend(extension, src);
         }
 
@@ -146,11 +142,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Reset(uint stackID, long toDuration)
         {
-            BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-            if (toDisable == null)
-            {
-                throw new EIBuffSimulatorIDException("Reset has failed");
-            }
+            BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Reset has failed");
             toDisable.Disable();
         }
 

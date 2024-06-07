@@ -145,11 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private AbstractSingleActor GetEparchActor()
         {
-            AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower));
-            if (eparch == null)
-            {
-                throw new MissingKeyActorsException("Eparch not found");
-            }
+            AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower)) ?? throw new MissingKeyActorsException("Eparch not found");
             return eparch;
         }
     }

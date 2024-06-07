@@ -222,11 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
-            if (nikare == null)
-            {
-                throw new MissingKeyActorsException("Nikare not found");
-            }
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
             phases[0].AddTarget(nikare);
             AbstractSingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
             if (kenut != null)
@@ -263,11 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             ComputeFightTargets(agentData, combatData, extensions);
             // discard hp update events after determined apply
-            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
-            if (nikare == null)
-            {
-                throw new MissingKeyActorsException("Nikare not found");
-            }
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
             var nikareHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(nikare.AgentItem)).ToList();
             if (nikareHPUpdates.Any(x => x.DstAgent != 10000 && x.DstAgent != 0))
             {
@@ -398,11 +390,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare));
-            if (nikare == null)
-            {
-                throw new MissingKeyActorsException("Nikare not found");
-            }
+            AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
             bool nikareHasCastAquaticDomain = combatData.GetAnimatedCastData(nikare.AgentItem).Any(x => x.SkillId == AquaticDomain);
             if (nikareHasCastAquaticDomain) // aquatic domain only present in CM
             {

@@ -293,11 +293,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Main target of the fight not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
             phases[0].AddTarget(mainTarget);
             return phases;
         }

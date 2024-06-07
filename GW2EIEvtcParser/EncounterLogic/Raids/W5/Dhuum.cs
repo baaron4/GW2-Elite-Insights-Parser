@@ -178,11 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightDuration = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum));
-            if (dhuum == null)
-            {
-                throw new MissingKeyActorsException("Dhuum not found");
-            }
+            AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
             phases[0].AddTarget(dhuum);
             if (!requirePhases)
             {
@@ -758,11 +754,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Dhuum not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
             return (target.GetHealth(combatData) > 35e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

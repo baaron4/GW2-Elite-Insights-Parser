@@ -288,11 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Special check since CM release, normal mode broke too, but we always trust reward events
             if (combatData.GetBuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
             {
-                AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
-                if (dagda == null)
-                {
-                    throw new MissingKeyActorsException("Dagda not found");
-                }
+                AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
                 HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HPPercent <= 1e-6);
                 if (hpUpdate != null)
                 {
@@ -312,11 +308,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Dagda not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -442,11 +434,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                 }
             }
-            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
-            if (dagda == null)
-            {
-                throw new MissingKeyActorsException("Dagda not found");
-            }
+            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
             // Security check to stop dagda from going back to 100%
             var dagdaHPUpdates = combatData.Where(x => x.SrcMatchesAgent(dagda.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
             if (dagdaHPUpdates.Count > 1 && dagdaHPUpdates.LastOrDefault().DstAgent == 10000)
@@ -482,11 +470,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return FightData.EncounterMode.Normal;
             }
-            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda));
-            if (dagda == null)
-            {
-                throw new MissingKeyActorsException("Dagda not found");
-            }
+            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
             return (dagda.GetHealth(combatData) > 56e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

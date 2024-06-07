@@ -109,11 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Peerless Qadim not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -646,11 +642,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Peerless Qadim not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
             return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

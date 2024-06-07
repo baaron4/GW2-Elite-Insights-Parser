@@ -81,11 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA));
-            if (mama == null)
-            {
-                throw new MissingKeyActorsException("MAMA not found");
-            }
+            AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
             phases[0].AddTarget(mama);
             if (!requirePhases)
             {

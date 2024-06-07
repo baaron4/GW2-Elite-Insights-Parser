@@ -67,11 +67,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem mainTarget = agentData.GetNPCsByID(ArcDPSEnums.TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(ArcDPSEnums.TargetID.VoiceOfTheFallen).FirstOrDefault();
-                if (mainTarget == null)
-                {
-                    throw new MissingKeyActorsException("Main target not found");
-                }
+                AgentItem mainTarget = (agentData.GetNPCsByID(ArcDPSEnums.TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(ArcDPSEnums.TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
                 CombatItem firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
                 if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + TimeThresholdConstant))
                 {

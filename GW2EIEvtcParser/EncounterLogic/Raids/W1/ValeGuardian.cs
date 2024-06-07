@@ -77,11 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Vale Guardian not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {

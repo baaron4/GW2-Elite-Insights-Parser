@@ -56,11 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (skorvald == null)
-            {
-                throw new MissingKeyActorsException("Skorvald not found");
-            }
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             phases[0].AddTarget(skorvald);
             if (!requirePhases)
             {
@@ -132,11 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (skorvald == null)
-            {
-                throw new MissingKeyActorsException("Skorvald not found");
-            }
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             skorvald.OverrideName("Skorvald");
             if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && x.DstAgent < 5e6 && x.DstAgent > 0))
             {
@@ -174,11 +166,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault();
-                if (skorvald == null)
-                {
-                    throw new MissingKeyActorsException("Skorvald not found");
-                }
+                AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault() ?? throw new MissingKeyActorsException("Skorvald not found");
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
                 // Skorvald may spawns with 0% hp
                 CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
@@ -190,11 +178,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Skorvald not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             if (combatData.GetBuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
             {
                 // Agent check not reliable, produces false positives and regular false negatives
@@ -254,11 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (skorvald == null)
-            {
-                throw new MissingKeyActorsException("Skorvald not found");
-            }
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken != null)
             {

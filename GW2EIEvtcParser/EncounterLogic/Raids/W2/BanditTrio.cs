@@ -199,21 +199,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor berg = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Berg));
-            if (berg == null)
-            {
-                throw new MissingKeyActorsException("Berg not found");
-            }
-            AbstractSingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Zane));
-            if (zane == null)
-            {
-                throw new MissingKeyActorsException("Zane not found");
-            }
-            AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Narella));
-            if (narella == null)
-            {
-                throw new MissingKeyActorsException("Narella not found");
-            }
+            AbstractSingleActor berg = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Berg)) ?? throw new MissingKeyActorsException("Berg not found");
+            AbstractSingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Zane)) ?? throw new MissingKeyActorsException("Zane not found");
+            AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Narella)) ?? throw new MissingKeyActorsException("Narella not found");
             phases[0].AddTargets(Targets);
             if (!requirePhases)
             {

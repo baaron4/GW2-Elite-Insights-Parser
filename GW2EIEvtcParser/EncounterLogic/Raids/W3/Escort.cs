@@ -93,11 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.McLeodTheSilent);
-            if (mcLeod == null)
-            {
-                throw new MissingKeyActorsException("McLeod not found");
-            }
+            AbstractSingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
             phases[0].AddTarget(mcLeod);
             if (!requirePhases)
             {

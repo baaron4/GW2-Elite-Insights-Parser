@@ -66,11 +66,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka));
-            if (ankka == null)
-            {
-                throw new MissingKeyActorsException("Ankka not found");
-            }
+            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
             phases[0].AddTarget(ankka);
             if (!requirePhases)
             {
@@ -134,11 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka));
-                if (ankka == null)
-                {
-                    throw new MissingKeyActorsException("Ankka not found");
-                }
+                AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
                 var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000).ToList();
                 if (buffApplies.Count == 3)
                 {
@@ -194,11 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka));
-            if (ankka == null)
-            {
-                throw new MissingKeyActorsException("Ankka not found");
-            }
+            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
             MapIDEvent map = combatData.GetMapIDEvents().FirstOrDefault();
             if (map != null && map.MapID == 1434)
             {

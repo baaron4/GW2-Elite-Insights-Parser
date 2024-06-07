@@ -271,11 +271,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
-            if (qadim == null)
-            {
-                throw new MissingKeyActorsException("Qadim not found");
-            }
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
             phases[0].AddTarget(qadim);
             var secondaryTargetIds = new HashSet<TrashID>
                         {
@@ -738,11 +734,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
                     var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
                     int velocityIndex = 0;
-                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
-                    if (qadim == null)
-                    {
-                        throw new MissingKeyActorsException("Qadim not found");
-                    }
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
                     HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HPPercent < 21);
                     long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
                     float threshold = 1f;
@@ -940,11 +932,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Qadim not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
             return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

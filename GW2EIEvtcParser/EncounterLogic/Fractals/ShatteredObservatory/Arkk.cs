@@ -124,11 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
-            if (arkk == null)
-            {
-                throw new MissingKeyActorsException("Arkk not found");
-            }
+            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
             phases[0].AddTarget(arkk);
             if (!requirePhases)
             {
@@ -206,11 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Arkk not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
             HashSet<AgentItem> adjustedPlayers = GetParticipatingPlayerAgents(target, combatData, playerAgents);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present

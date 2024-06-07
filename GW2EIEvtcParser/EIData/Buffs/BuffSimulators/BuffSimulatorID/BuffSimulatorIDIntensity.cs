@@ -17,11 +17,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Activate(uint stackID)
         {
-            BuffStackItemID active = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-            if (active == null)
-            {
-                throw new EIBuffSimulatorIDException("Activate has failed");
-            }
+            BuffStackItemID active = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Activate has failed");
             active.Activate();
         }
 

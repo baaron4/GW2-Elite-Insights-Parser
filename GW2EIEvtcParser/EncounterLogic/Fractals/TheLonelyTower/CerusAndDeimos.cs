@@ -33,16 +33,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
-            if (cerus == null)
-            {
-                throw new MissingKeyActorsException("Cerus not found");
-            }
-            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
-            if (deimos == null)
-            {
-                throw new MissingKeyActorsException("Deimos not found");
-            }
+            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
+            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
             if (cerus.GetHealth(combatData) < 5e6 || deimos.GetHealth(combatData) < 5e6)
             {
                 return FightData.EncounterMode.Normal;
@@ -122,11 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
-            if (cerus == null)
-            {
-                throw new MissingKeyActorsException("Cerus not found");
-            }
+            AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
             AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
             phases[0].AddTarget(cerus);
             phases[0].AddTarget(deimos);
