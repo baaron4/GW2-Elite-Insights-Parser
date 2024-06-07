@@ -519,8 +519,8 @@ function findState(states, timeS, start, end) {
     }
 }
 
-function getActorGraphLayout(images, color, hasBuffs) {
-    return {
+function getActorGraphLayout(images, color, hasBuffs, noIncoming) {
+    let layout =  {
         barmode: 'stack',
         yaxis2: {
             title: 'Rotation',
@@ -557,21 +557,6 @@ function getActorGraphLayout(images, color, hasBuffs) {
             overlaying: 'y',
             nticks: 10,
         },
-        yaxis3: {
-            title: 'Outgoing',
-            domain: hasBuffs ? [0.68, 1.0] : [0.23, 1.0],
-            color: color,
-            gridcolor: color,
-            tickformat: ",d",
-        },
-        yaxis5: {
-            title: 'Incoming',
-            domain: hasBuffs ? [0.55, 0.67] : [0.1, 0.22],
-            color: color,
-            gridcolor: color,
-            tickformat: ",d",
-            nticks: 2,
-        },
         images: images,
         font: {
             color: color
@@ -595,6 +580,36 @@ function getActorGraphLayout(images, color, hasBuffs) {
         height: 850,
         datarevision: new Date().getTime(),
     };
+    if (noIncoming) {
+        Object.assign(layout, {
+            yaxis3: {
+                title: 'Outgoing',
+                domain: hasBuffs ? [0.55, 1.0] : [0.1, 1.0],
+                color: color,
+                gridcolor: color,
+                tickformat: ",d",
+            },
+        });
+    } else {
+        Object.assign(layout, {
+            yaxis3: {
+                title: 'Outgoing',
+                domain: hasBuffs ? [0.68, 1.0] : [0.23, 1.0],
+                color: color,
+                gridcolor: color,
+                tickformat: ",d",
+            },
+            yaxis5: {
+                title: 'Incoming',
+                domain: hasBuffs ? [0.55, 0.67] : [0.1, 0.22],
+                color: color,
+                gridcolor: color,
+                tickformat: ",d",
+                nticks: 2,
+            },
+        });
+    }
+    return layout;
 }
 
 function _computeTargetGraphData(graph, targets, phase, data, yaxis, jsonGraphName, percentName, graphName, visible) {
@@ -926,8 +941,33 @@ function hasDamageMods() {
     return hasOutgoingDamageMods() || hasIncomingDamageMods();
 }
 
+function playerMechanics() {
+    var playerMechanics = [];
+    for (var i = 0; i < logData.mechanicMap.length; i++) {
+        var mech = logData.mechanicMap[i];
+        if (mech.playerMech) {
+            playerMechanics.push(mech);
+        }
+    }
+    return playerMechanics;
+}
+
+function enemyMechanics() {
+    var enemyMechanics = [];
+    for (var i = 0; i < logData.mechanicMap.length; i++) {
+        var mech = logData.mechanicMap[i];
+        if (mech.enemyMech) {
+            enemyMechanics.push(mech);
+        }
+    }
+    return enemyMechanics;
+}
+
 function hasMechanics() {
-    return logData.mechanicMap.length > 0 && !logData.noMechanics ;
+    if (logData.mechanicMap.length > 0 && !logData.noMechanics) {
+        return enemyMechanics().length > 0 || playerMechanics().length > 0;
+    }
+    return false;
 }
 
 function hasTargets() {

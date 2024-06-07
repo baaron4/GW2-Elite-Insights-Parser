@@ -70,6 +70,7 @@ namespace GW2EIEvtcParser
             internal const ulong February2024CerusCMHPFix = 158968;
             internal const ulong March2024BalanceAndCerusLegendary = 159951;
             internal const ulong May2024LonelyTowerFractalRelease = 163141;
+            internal const ulong June2024LonelyTowerCMRelease = 163807;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -1043,6 +1044,12 @@ namespace GW2EIEvtcParser
             LuxonMonkSpirit = 25571,
             CaptainThess1 = 25554,
             CaptainThess2 = 25557,
+            // Eparch
+            IncarnationOfCruelty = 26270,
+            IncarnationOfJudgement = 26260,
+            AvatarOfSpite = 26268,
+            TheTormentedLonelyTower = 26193,
+            TheCravenLonelyTower = 26193,
             // Open world Soo-Won
             SooWonTail = 51756,
             VoidGiant2 = 24310,
@@ -1187,6 +1194,9 @@ namespace GW2EIEvtcParser
             AiKeeperOfThePeak2 = ArcDPSEnums.AiKeeperOfThePeak2,
             KanaxaiScytheOfHouseAurkusNM = 25572,
             KanaxaiScytheOfHouseAurkusCM = 25577,
+            CerusLonelyTower = 26257,
+            DeimosLonelyTower = 26226,
+            EparchLonelyTower = 26231,
             // Golems
             MassiveGolem10M = 16169,
             MassiveGolem4M = 16202,

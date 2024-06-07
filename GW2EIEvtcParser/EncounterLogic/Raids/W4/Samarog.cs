@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             //fixated Rigom
             var fixatedRigom = p.GetBuffStatus(log, FixatedRigom, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in fixatedGuldhem)
+            foreach (Segment seg in fixatedRigom)
             {
                 long mid = (seg.Start + seg.End) / 2;
                 AbstractSingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);

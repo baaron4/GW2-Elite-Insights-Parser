@@ -190,6 +190,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetKanaxai = "https://i.imgur.com/AxKZDs8.png";
         private const string TargetDagda = "https://i.imgur.com/k6rQdML.png";
         private const string TargetCerus = "https://i.imgur.com/wDdN8O3.png";
+        private const string TargetEparch = "https://i.imgur.com/3NnhvUT.png";
         #endregion
 
         #region Trash
@@ -389,6 +390,9 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashCerusMalice = "https://i.imgur.com/13Z3dNF.png";
         private const string TrashCerusRage = "https://i.imgur.com/L0v8Goe.png";
         private const string TrashCerusRegret = "https://i.imgur.com/jZdx74j.png";
+        private const string TrashAvatarOfSpite = "https://i.imgur.com/FwIaQi8.png";
+        private const string TrashIncarnationOfJudgment = "https://i.imgur.com/XgR5rrk.png";
+        private const string TrashIncarnationOfCruelty = "https://i.imgur.com/QVXWHny.png";
         #endregion
 
         #region Minion
@@ -890,6 +894,9 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TargetID.KanaxaiScytheOfHouseAurkusCM, TargetKanaxai },
             { TargetID.Dagda, TargetDagda },
             { TargetID.Cerus, TargetCerus },
+            { TargetID.CerusLonelyTower, TargetCerus },
+            { TargetID.DeimosLonelyTower, TargetDeimos },
+            { TargetID.EparchLonelyTower, TargetEparch },
         };
 
         /// <summary>
@@ -1219,6 +1226,9 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TrashID.EliteTheTormented, TrashTheTormented },
             { TrashID.ChampionTheTormented, TrashTheTormented },
             { TrashID.SoulFeast, TrashSoulFeast },
+            { TrashID.AvatarOfSpite, TrashAvatarOfSpite },
+            { TrashID.IncarnationOfJudgement, TrashIncarnationOfJudgment },
+            { TrashID.IncarnationOfCruelty, TrashIncarnationOfCruelty },
         };
 
         /// <summary>

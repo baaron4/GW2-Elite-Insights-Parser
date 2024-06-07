@@ -335,7 +335,7 @@ var targetTabGraphComponent = {
             hoverinfo: 'name+y+x',
             name: 'Total'
         });
-        this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs);
+        this.layout = getActorGraphLayout(images, this.light ? '#495057' : '#cccccc', hasBuffs, true);
         computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, this.light ? '#495057' : '#cccccc');
         this.updateVisibily(this.layout.images, this.phase.start, this.phase.end);
     },

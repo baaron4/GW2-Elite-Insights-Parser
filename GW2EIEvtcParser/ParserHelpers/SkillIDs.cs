@@ -4163,6 +4163,7 @@
         public const long InsatiableHunger9 = 70792;
         public const long RelicOfIsgarrenTargetBuff = 70806;
         public const long EmpoweredDespairCerus = 70821;
+        public const long FearOfTheKing = 70822;
         public const long RainOfComets = 70837; // Health % damage, can't be tracked
         public const long RelicOfTheDaredevil = 70839;
         public const long PlanetCrashSkill = 70840;
@@ -4225,10 +4226,13 @@
         public const long FireBullet = 71936;
         public const long PathOfGluttonyFlipBuff = 71947;
         public const long PathToVictory = 71950;
+        public const long FireJurisdictionLevel1 = 71818;
+        public const long FireJurisdictionLevel2 = 71954;
         public const long FriendlyFireIllu = 71970;
         public const long NaturesStrength = 71976;
         public const long TappedOut = 71979;
         public const long EnervationBlade = 71986;
+        public const long DetonateJurisdiction = 71989;
         public const long Flourish = 71999;
         public const long ValiantLeap = 72002;
         public const long InspiringImagery = 72005;
@@ -4237,6 +4241,7 @@
         public const long SoothingSplash = 72033;
         public const long ShatteringStoneBuff = 72046;
         public const long DeathlyEnervation = 72051;
+        public const long FireJurisdictionLevel3 = 72053;
         public const long EchoingErosion = 72062;
         public const long DazingDischargeBuff = 72069;
         public const long GuildHallWvWMode = 72110;
@@ -4263,13 +4268,35 @@
         public const long RazorclawsRageSkillMinionReworked = 72370;
         public const long SoulcleavesSummitHitReworked = 72376;
         public const long RazorclawsRageHitReworked = 72388;
+        public const long RageEmpowerment = 72399;
+        public const long EnvyAttunement = 72403;
+        public const long GluttonyEmpowerment = 72499;
+        public const long RegretAttunement = 72515;
+        public const long Consume = 72519;
         public const long TormentingVisionSpinegazer = 72527;
         public const long RelicOfTheFoundingBarrier = 72548;
+        public const long EnvyEmpowerment = 72555;
+        public const long GluttonyAttunement = 72591;
         public const long EvilEye = 72603;
         public const long TormentingVisionsMergedSoulbeast = 72636;
+        public const long CerussFocus = 72647;
+        public const long DespairAttunement = 72658;
+        public const long RegretEmpowerment = 72699;
         public const long RelicOfTheTwinGenerals = 72707;
+        public const long DespairEmpowerment = 72726;
+        public const long AchievementEligibilityFissureWalker = 72742;
+        public const long MaliceAttunement = 72762;
+        public const long RageAttunement = 72781;
+        public const long MaliceEmpowerment = 72795;
+        public const long DevourLonelyTower = 72754;
+        public const long AchievementEligibilityBrothersTogether = 72812;
         public const long Panopticon = 72843;
+        public const long DeimossFocus = 72846;
         public const long StaringVoid = 72851;
+        public const long DeterminationEparch = 72883;
+        public const long Consumed = 72888;
+        public const long EnragedLonelyTower = 72878;
+        public const long BrothersUnited = 72892;
         #endregion
     }
 

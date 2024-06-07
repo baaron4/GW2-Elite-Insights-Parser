@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor> {
-            new BuffOnActorDamageModifier(FractalDefensive, "Fractal Defensive", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, BuffImages.FractalDefensive, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(FractalDefensive, "Fractal Defensive", "-5% per stack", DamageSource.NoPets, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Item, ByStack, BuffImages.FractalDefensive, DamageModifierMode.PvE),
             // Regroup consumables that reduce inc damage by their reduction instead of adding one modifier per consumable to reduce cluttering
             new BuffOnActorDamageModifier(CanOfStewedOysters, "Food: -8%", "-8%", DamageSource.All, -8.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
             new BuffOnActorDamageModifier(

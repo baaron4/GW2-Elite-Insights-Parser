@@ -121,7 +121,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (segment.Value >= 90)
                 {
-                    replay.AddOverheadIcon(segment, player, ParserIcons.DerangementRedOverhead);
+                    replay.AddOverheadIcon(segment, player, ParserIcons.MadnessRedOverhead);
                 }
                 else if (segment.Value >= 60)
                 {
