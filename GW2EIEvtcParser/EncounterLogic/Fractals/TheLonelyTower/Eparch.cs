@@ -30,7 +30,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            return FightData.EncounterMode.CMNoName;
+            const int healthCMRelease = 32_618_906;
+            const int healthThreshold = (int)(0.95 * healthCMRelease); // fractals lose hp as their scale lowers
+            AbstractSingleActor eparch = GetEparchActor();
+            if (combatData.GetBuildEvent().Build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
+            {
+                return FightData.EncounterMode.CM;
+            }
+            else
+            {
+                return FightData.EncounterMode.Normal;
+            }
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -63,11 +73,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower));
-            if (eparch == null)
-            {
-                throw new MissingKeyActorsException("Eparch not found");
-            }
+            AbstractSingleActor eparch = GetEparchActor();
             var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
             if (determinedApplies.Count >= 3)
             {
@@ -78,11 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower));
-            if (eparch == null)
-            {
-                throw new MissingKeyActorsException("Eparch not found");
-            }
+            AbstractSingleActor eparch = GetEparchActor();
             phases[0].AddTarget(eparch);
             if (!requirePhases)
             {
@@ -139,6 +141,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 TrashID.TheTormentedLonelyTower,
                 TrashID.TheCravenLonelyTower,
             };
+        }
+
+        private AbstractSingleActor GetEparchActor()
+        {
+            AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower));
+            if (eparch == null)
+            {
+                throw new MissingKeyActorsException("Eparch not found");
+            }
+            return eparch;
         }
     }
 }
