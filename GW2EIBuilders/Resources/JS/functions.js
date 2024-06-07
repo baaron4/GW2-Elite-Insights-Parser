@@ -941,8 +941,33 @@ function hasDamageMods() {
     return hasOutgoingDamageMods() || hasIncomingDamageMods();
 }
 
+function playerMechanics() {
+    var playerMechanics = [];
+    for (var i = 0; i < logData.mechanicMap.length; i++) {
+        var mech = logData.mechanicMap[i];
+        if (mech.playerMech) {
+            playerMechanics.push(mech);
+        }
+    }
+    return playerMechanics;
+}
+
+function enemyMechanics() {
+    var enemyMechanics = [];
+    for (var i = 0; i < logData.mechanicMap.length; i++) {
+        var mech = logData.mechanicMap[i];
+        if (mech.enemyMech) {
+            enemyMechanics.push(mech);
+        }
+    }
+    return enemyMechanics;
+}
+
 function hasMechanics() {
-    return logData.mechanicMap.length > 0 && !logData.noMechanics ;
+    if (logData.mechanicMap.length > 0 && !logData.noMechanics) {
+        return enemyMechanics().length > 0 || playerMechanics().length > 0;
+    }
+    return false;
 }
 
 function hasTargets() {
