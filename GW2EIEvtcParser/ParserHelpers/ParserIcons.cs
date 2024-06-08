@@ -1229,6 +1229,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TrashID.AvatarOfSpite, TrashAvatarOfSpite },
             { TrashID.IncarnationOfJudgement, TrashIncarnationOfJudgment },
             { TrashID.IncarnationOfCruelty, TrashIncarnationOfCruelty },
+            { TrashID.KryptisRift, TrashGenericRedEnemySkull },
         };
 
         /// <summary>

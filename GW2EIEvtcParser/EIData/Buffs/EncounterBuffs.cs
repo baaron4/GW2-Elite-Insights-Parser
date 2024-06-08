@@ -478,6 +478,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Determination", DeterminationEparch, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IonShield),
             new Buff("Fear of the King", FearOfTheKing, Source.FightSpecific, BuffClassification.Other, BuffImages.Crazed),
             new Buff("Achievement Eligibility: Fissure Walker", AchievementEligibilityFissureWalker, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Determined (Kryptis Rift)", DeterminedKryptisRift, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood

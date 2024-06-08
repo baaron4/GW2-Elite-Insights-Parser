@@ -4108,6 +4108,7 @@
         public const long InsatiableHunger2 = 70091;
         public const long SpinningNebulaWithTeleport = 70103; // The attack when Dagda teleports off the center
         public const long EmpoweredRegretCerus = 70123;
+        public const long DeterminedKryptisRift = 70133;
         public const long EmpoweredRageEmbodiment = 70181;
         public const long DagdaSharedDestruction_MeteorCrash = 70182; // Game maps it to Shared Destruction - Damage is Meteor Crash
         public const long WailOfDespairCM = 70187;

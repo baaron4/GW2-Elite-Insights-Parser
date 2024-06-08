@@ -50,14 +50,28 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+
+            var riftAgents = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.DstAgent == 149400).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
+            if (riftAgents.Any())
+            {
+                riftAgents.ForEach(x => {
+                    x.OverrideID(TrashID.KryptisRift);
+                    x.OverrideType(AgentItem.AgentType.NPC);
+                });
+                agentData.Refresh();
+            }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            
             int crueltyCount = 1;
             int judgementCount = 1;
             int avatarCount = 1;
+            int riftCount = 1;
             foreach (NPC target in _targets)
             {
-                switch (target.ID) {
+                switch (target.ID)
+                {
+                    case (int)TrashID.KryptisRift:
+                        target.OverrideName(target.Character + " " + riftCount++);
+                        break;
                     case (int)TrashID.IncarnationOfCruelty:
                         target.OverrideName(target.Character + " " + crueltyCount++);
                         break;
@@ -100,6 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         (int)TrashID.IncarnationOfCruelty,
                         (int)TrashID.IncarnationOfJudgement,
+                        (int)TrashID.KryptisRift,
                     };
                     AddTargetsToPhase(phase, ids);
                 }
@@ -120,6 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TrashID.IncarnationOfCruelty,
                 (int)TrashID.IncarnationOfJudgement,
                 (int)TrashID.AvatarOfSpite,
+                (int)TrashID.KryptisRift,
             };
         }
 
@@ -128,9 +144,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new Dictionary<int, int>()
             {
                 {(int)TargetID.EparchLonelyTower, 0},
-                {(int)TrashID.IncarnationOfCruelty, 1},
-                {(int)TrashID.IncarnationOfJudgement, 1},
-                {(int)TrashID.AvatarOfSpite, 2},
+                {(int)TrashID.KryptisRift, 1},
+                {(int)TrashID.IncarnationOfCruelty, 2},
+                {(int)TrashID.IncarnationOfJudgement, 2},
+                {(int)TrashID.AvatarOfSpite, 3},
             };
         }
 
