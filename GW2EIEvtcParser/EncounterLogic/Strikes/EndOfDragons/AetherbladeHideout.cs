@@ -155,7 +155,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private IEnumerable<AbstractSingleActor> GetHPScarletPhantoms(PhaseData phase)
         {
-            return Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHPCM)) && (phase.InInterval(x.FirstAware) || phase.InInterval(x.LastAware)));
+            return Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHPCM)) && phase.IntersectsWindow(x.FirstAware, x.LastAware));
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

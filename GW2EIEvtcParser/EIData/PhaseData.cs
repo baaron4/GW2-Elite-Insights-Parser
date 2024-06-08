@@ -48,6 +48,13 @@ namespace GW2EIEvtcParser.EIData
             return Start <= time && time <= End;
         }
 
+        public bool IntersectsWindow(long start, long end)
+        {
+            long maxStart = Math.Max(start, Start);
+            long minEnd = Math.Min(end, End);
+            return minEnd - maxStart > 0;
+        }
+
         internal void AddTarget(AbstractSingleActor target)
         {
             if (target == null || _targets.Contains(target))

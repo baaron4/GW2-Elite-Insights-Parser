@@ -314,7 +314,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (AbstractSingleActor target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware + ParserHelper.ServerDelayConstant, 0)))
+                if (ids.Contains(target.ID) && phase.IntersectsWindow(target.FirstAware, target.LastAware))
                 {
                     phase.AddTarget(target);
                 }
@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (AbstractSingleActor target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(Math.Max(target.FirstAware + ParserHelper.ServerDelayConstant, 0)))
+                if (ids.Contains(target.ID) && phase.IntersectsWindow(target.FirstAware, target.LastAware))
                 {
                     phase.AddSecondaryTarget(target);
                 }

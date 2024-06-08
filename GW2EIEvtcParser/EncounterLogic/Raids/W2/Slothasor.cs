@@ -126,7 +126,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var aliveUpdates = hpUpdates.Where(x => x.DstAgent == 10000).ToList();
                     var deadUpdates = hpUpdates.Where(x => x.DstAgent == 0).ToList();
                     long lastDeadTime = long.MinValue;
-                    var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(mushroom) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
                     foreach (CombatItem aliveEvent in aliveUpdates)
                     {
                         CombatItem deadEvent = deadUpdates.FirstOrDefault(x => x.Time > lastDeadTime && x.Time > aliveEvent.Time);
