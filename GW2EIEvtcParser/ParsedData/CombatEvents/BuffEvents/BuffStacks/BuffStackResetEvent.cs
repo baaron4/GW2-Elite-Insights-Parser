@@ -12,7 +12,12 @@ namespace GW2EIEvtcParser.ParsedData
             ResetToDuration = evtcItem.Value;
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
+        {
+            return useBuffInstanceSimulator && BuffInstance != 0 && base.IsBuffSimulatorCompliant(useBuffInstanceSimulator);
+        }
+
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
         {
             simulator.Reset(BuffInstance, ResetToDuration);
         }

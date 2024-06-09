@@ -42,11 +42,14 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal abstract void UpdateSimulator(AbstractBuffSimulator simulator);
+        internal abstract void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator);
 
         internal abstract void TryFindSrc(ParsedEvtcLog log);
 
-        internal abstract bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator);
+        internal virtual bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
+        {
+            return BuffID != SkillIDs.NoBuff;
+        }
 
         //internal abstract int CompareTo(AbstractBuffEvent abe);
     }

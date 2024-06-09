@@ -12,11 +12,6 @@ namespace GW2EIEvtcParser.ParsedData
             By = ParserHelper._unknownAgent;
         }
 
-        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
-        {
-            return useBuffInstanceSimulator && BuffInstance != 0;
-        }
-
         internal override void TryFindSrc(ParsedEvtcLog log)
         {
         }

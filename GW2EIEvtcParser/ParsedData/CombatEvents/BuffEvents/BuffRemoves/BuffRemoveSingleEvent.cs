@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
         {
-            if (BuffID == SkillIDs.NoBuff)
+            if (!base.IsBuffSimulatorCompliant(useBuffInstanceSimulator))
             {
                 return false;
             }
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser.ParsedData
             return !_overstackOrNaturalEnd;
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
         {
             simulator.Remove(CreditedBy, RemovedDuration, 1, Time, BuffRemove.Single, BuffInstance);
         }

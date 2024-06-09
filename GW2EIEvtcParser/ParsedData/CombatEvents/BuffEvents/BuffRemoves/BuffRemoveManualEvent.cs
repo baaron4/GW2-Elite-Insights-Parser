@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.ParsedData
             return false; // don't consider manual remove events
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
         {
         }
         /*internal override int CompareTo(AbstractBuffEvent abe)

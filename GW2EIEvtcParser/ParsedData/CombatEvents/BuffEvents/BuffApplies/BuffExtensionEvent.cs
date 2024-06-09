@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
         {
             if (ExtendedDuration <= 1)
             { 

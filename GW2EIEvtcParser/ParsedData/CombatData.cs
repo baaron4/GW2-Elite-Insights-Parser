@@ -542,7 +542,7 @@ namespace GW2EIEvtcParser.ParsedData
                 }
             }
             HasStackIDs = evtcVersion > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
-            UseBuffInstanceSimulator = HasStackIDs && false;// (fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced10 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced5 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Benchmark);
+            UseBuffInstanceSimulator = evtcVersion > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
             HasBreakbarDamageData = brkDamageData.Any();
             HasEffectData = _statusEvents.EffectEvents.Any();
