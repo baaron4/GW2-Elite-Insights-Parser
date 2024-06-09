@@ -438,41 +438,37 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TrashID.CCSorrowDemon:
                     {
-                        const long fullCastDuration = 11840;
-                        const long hitDelay = 400;
-                        const uint indicatorSize = 2000;
+                        const long sorrowFullCastDuration = 11840;
+                        const long sorrowHitDelay = 400;
+                        const uint sorrowIndicatorSize = 2000;
                         var detonates = casts.Where(x => x.SkillId == OverwhelmingSorrowDetonate).ToList();
                         foreach (AnimatedCastEvent cast in casts)
                         {
-                            switch (cast.SkillId)
+                            if (cast.SkillId == OverwhelmingSorrowWindup)
                             {
-                                case OverwhelmingSorrowWindup:
+                                long start = cast.Time;
+                                long fullEnd = start + sorrowFullCastDuration;
+                                AnimatedCastEvent detonate = detonates.Where(x => x.Time > start && x.Time < fullEnd + ServerDelayConstant).FirstOrDefault();
+                                long end;
+                                if (detonate != null)
+                                {
+                                    end = detonate.Time;
+                                    long hit = detonate.Time + sorrowHitDelay;
+                                    replay.Decorations.Add(new CircleDecoration(sorrowIndicatorSize, (hit, hit + 300), Colors.Red, 0.15, new AgentConnector(target)));
+                                }
+                                else
+                                {
+                                    // attempt to find end while handling missing cast durations
+                                    end = cast.EndTime > ServerDelayConstant ? cast.EndTime : fullEnd;
+                                    DeadEvent dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+                                    if (dead != null)
                                     {
-                                        long start = cast.Time;
-                                        long fullEnd = start + fullCastDuration;
-                                        AnimatedCastEvent detonate = detonates.Where(x => x.Time > start && x.Time < fullEnd + ServerDelayConstant).FirstOrDefault();
-                                        long end;
-                                        if (detonate != null)
-                                        {
-                                            end = detonate.Time;
-                                            long hit = detonate.Time + hitDelay;
-                                            replay.Decorations.Add(new CircleDecoration(indicatorSize, (hit, hit + 300), Colors.Red, 0.15, new AgentConnector(target)));
-                                        }
-                                        else
-                                        {
-                                            // attempt to find end while handling missing cast durations
-                                            end = cast.EndTime > ServerDelayConstant ? cast.EndTime : fullEnd;
-                                            DeadEvent dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
-                                            if (dead != null)
-                                            {
-                                                end = Math.Min(end, dead.Time);
-                                            }
-                                        }
-                                        var decoration = new CircleDecoration(indicatorSize, (start, end), Colors.Orange, 0.15, new AgentConnector(target));
-                                        replay.Decorations.Add(decoration.Copy().UsingFilled(false));
-                                        replay.Decorations.Add(decoration.UsingGrowingEnd(fullEnd));
-                                        break;
+                                        end = Math.Min(end, dead.Time);
                                     }
+                                }
+                                var decoration = new CircleDecoration(sorrowIndicatorSize, (start, end), Colors.Orange, 0.15, new AgentConnector(target));
+                                replay.Decorations.Add(decoration.Copy().UsingFilled(false));
+                                replay.Decorations.Add(decoration.UsingGrowingEnd(fullEnd));
                             }
                         }
                         break;
@@ -496,8 +492,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 const uint length = 360;
                 foreach (EffectEvent effect in arrows)
                 {
-                    long duration = effect.Duration != 0 ? effect.Duration : 1800;
-                    (long, long) lifespan = (effect.Time, effect.Time + duration);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1800);
                     var rotation = new AngleConnector(effect.Rotation.Z);
                     GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 0.5f * length), true);
                     EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
