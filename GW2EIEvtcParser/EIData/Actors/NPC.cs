@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
         {
             base.InitAdditionalCombatReplayData(log);
             log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
-            if (CombatReplay.Rotations.Any() && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
+            if (CombatReplay.Rotations.Count != 0 && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
             {
                 CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), AgentItem));
             }

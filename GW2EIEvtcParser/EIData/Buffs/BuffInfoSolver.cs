@@ -198,7 +198,7 @@ namespace GW2EIEvtcParser.EIData
                 operation.UpdateProgressWithCancellationCheck("Parsing: Incoherent Data in Buff Info Solver, no formula attribute adjustement will be done");
                 solved.Clear();
             }
-            else if (solved.Any())
+            else if (solved.Count != 0)
             {
                 operation.UpdateProgressWithCancellationCheck("Parsing: Deduced " + solved.Count + " unknown buff formulas");
             }

@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
-            if (padEnd && filtered.Any() && filtered.Last() is BuffApplyEvent)
+            if (padEnd && filtered.Count != 0 && filtered.Last() is BuffApplyEvent)
             {
                 AbstractBuffEvent last = filtered.Last();
                 filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
@@ -323,7 +323,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (EffectEvent startEffect in startEffects)
             {
                 var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
-                if (candidateEffectEvents.Any())
+                if (candidateEffectEvents.Count != 0)
                 {
                     EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => x.Position.Distance2DToPoint(startEffect.Position));
                     float minimalDistance = matchedEffect.Position.Distance2DToPoint(startEffect.Position);

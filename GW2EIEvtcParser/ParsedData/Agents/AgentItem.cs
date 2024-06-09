@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.ParsedData
             status.AddRange(combatData.GetSpawnEvents(this));
             status.AddRange(combatData.GetDespawnEvents(this));
             dc.Add(new Segment(long.MinValue, FirstAware, 1));
-            if (!status.Any())
+            if (status.Count == 0)
             {
                 dc.Add(new Segment(LastAware, long.MaxValue, 1));
                 return;
@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             var status = new List<BreakbarStateEvent>();
             status.AddRange(combatData.GetBreakbarStateEvents(this));
-            if (!status.Any())
+            if (status.Count == 0)
             {
                 nones.Add(new Segment(FirstAware, LastAware, 1));
                 return;

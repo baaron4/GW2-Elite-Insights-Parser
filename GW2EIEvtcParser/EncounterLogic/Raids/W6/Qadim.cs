@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     platform.OverrideID(TrashID.QadimPlatform);
                     platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
                 }
-                refresh = refresh || platformAgents.Any();
+                refresh = refresh || platformAgents.Count != 0;
             }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 lamp.OverrideType(AgentItem.AgentType.NPC);
                 lamp.OverrideID(TrashID.QadimLamp);
             }
-            refresh = refresh || lampAgents.Any();
+            refresh = refresh || lampAgents.Count != 0;
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
             var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };

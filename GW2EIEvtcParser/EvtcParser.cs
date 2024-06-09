@@ -627,7 +627,7 @@ namespace GW2EIEvtcParser
                 }
             }
             operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Discarded " + discardedCbtEvents);
-            if (!_combatItems.Any())
+            if (_combatItems.Count == 0)
             {
                 throw new EvtcCombatEventException("No combat events found");
             }
@@ -805,7 +805,7 @@ namespace GW2EIEvtcParser
                         greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
                     }
                 }
-                if (greenTeams.Any())
+                if (greenTeams.Count != 0)
                 {
                     greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
                 }
@@ -833,7 +833,7 @@ namespace GW2EIEvtcParser
                         agentsToPlayersToMerge[nonSquadPlayer.Agent] = nonSquadPlayer;
                     }
                 }
-                if (playersToMerge.Any())
+                if (playersToMerge.Count != 0)
                 {
                     foreach (CombatItem c in _combatItems)
                     {
@@ -859,7 +859,7 @@ namespace GW2EIEvtcParser
                 }
             }
             //
-            if (toRemove.Any())
+            if (toRemove.Count != 0)
             {
                 _agentData.RemoveAllFrom(toRemove);
             }
@@ -929,7 +929,7 @@ namespace GW2EIEvtcParser
                     }
                 }
             }
-            if (invalidCombatItems.Any())
+            if (invalidCombatItems.Count != 0)
             {
 #if DEBUG
                 throw new InvalidDataException("Must remove " + invalidCombatItems.Count + " invalid combat items");
@@ -970,7 +970,7 @@ namespace GW2EIEvtcParser
             }
 
             // Adjust extension events if needed
-            if (_enabledExtensions.Any())
+            if (_enabledExtensions.Count != 0)
             {
                 operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting extension events");
                 foreach (CombatItem combatItem in _combatItems)
@@ -1051,7 +1051,7 @@ namespace GW2EIEvtcParser
                         if (spawnEvent != null)
                         {
                             var damageEvents = _combatItems.Where(x => x.IsDamage() && x.SrcMatchesAgent(p.AgentItem)).ToList();
-                            if (!damageEvents.Any())
+                            if (damageEvents.Count == 0)
                             {
                                 agentsToRemove.Add(p.AgentItem);
                                 operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start in 10 men content)");

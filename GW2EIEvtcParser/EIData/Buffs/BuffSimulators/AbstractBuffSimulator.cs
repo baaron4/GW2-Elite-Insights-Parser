@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public void Simulate(List<AbstractBuffEvent> logs, long fightStart, long fightEnd)
         {
-            if (GenerationSimulation.Any())
+            if (GenerationSimulation.Count != 0)
             {
                 return;
             }

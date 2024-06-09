@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
         {
             if (dst.Spec == ParserHelper.Spec.Soulbeast && Math.Abs(extension - EssenceOfSpeed) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
             {
-                if (GetIDs(log, buffID, extension).Any())
+                if (GetIDs(log, buffID, extension).Count != 0)
                 {
                     // uncertain, needs to check more
                     return 0;
@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                 return dst;
             }
             HashSet<long> idsToCheck = GetIDs(log, buffID, extension);
-            if (idsToCheck.Any())
+            if (idsToCheck.Count != 0)
             {
                 List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
                 // If multiple casters, return unknown
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                 {
                     AbstractCastEvent item = cls.First();
                     // If uncertainty due to essence of speed, imbued melodies or imperial impact, return unknown
-                    if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, buffID, time, extension, log) || imperialImpactCheck.Any())
+                    if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, buffID, time, extension, log) || imperialImpactCheck.Count != 0)
                     {
                         return ParserHelper._unknownAgent;
                     }

@@ -255,7 +255,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
-            if (mainPhaseEnds.Any())
+            if (mainPhaseEnds.Count != 0)
             {
                 int phaseIndex = 1;
                 foreach (long quantumQake in mainPhaseEnds)
@@ -278,7 +278,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (phaseIndex + 1)));
                 }
             } 
-            else if (start > 0 && !invuls.Any())
+            else if (start > 0 && invuls.Count == 0)
             {
                 // no split
                 mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase 1"));

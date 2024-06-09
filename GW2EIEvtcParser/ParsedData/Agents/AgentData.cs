@@ -201,7 +201,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void RemoveAllFrom(HashSet<AgentItem> agents)
         {
-            if (!agents.Any())
+            if (agents.Count == 0)
             {
                 return;
             }

@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
             {
                 var spearAgents = combatData.Where(x => x.DstAgent == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
-                if (spearAgents.Any())
+                if (spearAgents.Count != 0)
                 {
                     foreach (AgentItem spear in spearAgents)
                     {

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             BuffStackItem first = stacks[0];
             BuffStackItem toRemove = stacks.Where(x => x != first).MinBy(x => x.TotalDuration);
             wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
-            if (toRemove.Extensions.Any())
+            if (toRemove.Extensions.Count != 0)
             {
                 foreach ((AgentItem src, long value) in toRemove.Extensions)
                 {

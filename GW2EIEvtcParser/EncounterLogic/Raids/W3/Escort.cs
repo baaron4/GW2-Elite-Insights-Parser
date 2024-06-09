@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(GetMcLeodPhases(mcLeod, log));
             var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware).ToList();
-            if (mcLeodWargs.Any())
+            if (mcLeodWargs.Count != 0)
             {
                 var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd)
                 {

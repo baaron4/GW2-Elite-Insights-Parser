@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 _buffDataByDst[a] = _buffDataByDst[a].OrderBy(x => x.Time).ToList();
             }
-            if (toAdd.Any())
+            if (toAdd.Count != 0)
             {
                 BuildBuffDependentContainers();
             }
@@ -544,8 +544,8 @@ namespace GW2EIEvtcParser.ParsedData
             HasStackIDs = evtcVersion > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
             UseBuffInstanceSimulator = HasStackIDs && false;// (fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced10 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced5 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
-            HasBreakbarDamageData = brkDamageData.Any();
-            HasEffectData = _statusEvents.EffectEvents.Any();
+            HasBreakbarDamageData = brkDamageData.Count != 0;
+            HasEffectData = _statusEvents.EffectEvents.Count != 0;
             //
             operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo with SkillData");
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);

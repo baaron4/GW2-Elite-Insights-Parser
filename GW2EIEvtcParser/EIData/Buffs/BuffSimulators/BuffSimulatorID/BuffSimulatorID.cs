@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                         {
                             BuffStackItem stackItem = BuffStack[i];
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Any())
+                            if (stackItem.Extensions.Count != 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 if (by == ParserHelper._unknownAgent)
                 {
                     WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
-                    if (toRemove.Extensions.Any())
+                    if (toRemove.Extensions.Count != 0)
                     {
                         foreach ((AgentItem src, long value) in toRemove.Extensions)
                         {
@@ -129,7 +129,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 else
                 {
                     WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
-                    if (toRemove.Extensions.Any())
+                    if (toRemove.Extensions.Count != 0)
                     {
                         foreach ((AgentItem src, long value) in toRemove.Extensions)
                         {

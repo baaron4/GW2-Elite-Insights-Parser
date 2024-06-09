@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
-            if (!_targetIDs.Any())
+            if (_targetIDs.Count == 0)
             {
                 return base.GetPhases(log, requirePhases);
             }
@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
         protected override List<int> GetTargetsIDs()
         {
-            if (_targetIDs.Any())
+            if (_targetIDs.Count != 0)
             {
                 return _targetIDs;
             }

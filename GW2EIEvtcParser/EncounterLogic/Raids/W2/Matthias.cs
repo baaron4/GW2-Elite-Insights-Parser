@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                 }
-                if (copies.Any())
+                if (copies.Count != 0)
                 {
                     combatData.AddRange(copies);
                 }

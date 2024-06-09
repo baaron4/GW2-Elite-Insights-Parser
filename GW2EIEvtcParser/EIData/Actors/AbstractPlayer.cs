@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EIData
             // Fight related stuff
             log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             ProfHelper.ComputeProfessionCombatReplayActors(this, log, CombatReplay);
-            if (CombatReplay.Rotations.Any())
+            if (CombatReplay.Rotations.Count != 0)
             {
                 CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), AgentItem));
             }

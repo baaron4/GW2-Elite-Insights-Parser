@@ -153,7 +153,7 @@ namespace GW2EIBuilders.JsonModels
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
             MechanicData mechanicData = log.MechanicData;
             IReadOnlyCollection<Mechanic> presentMechanics = log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd);
-            if (presentMechanics.Any())
+            if (presentMechanics.Count != 0)
             {
                 jsonLog.Mechanics = JsonMechanicsBuilder.GetJsonMechanicsList(log, mechanicData, presentMechanics);
             }

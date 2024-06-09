@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
 
             var riftAgents = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.DstAgent == 149400).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
-            if (riftAgents.Any())
+            if (riftAgents.Count != 0)
             {
                 riftAgents.ForEach(x => {
                     x.OverrideID(TrashID.KryptisRift);
