@@ -290,7 +290,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 .ToDictionary(x => x.Key, x => x.Select(y => y.Item1).ToList());
             foreach (AgentItem soul in yourSoul)
             {
-                if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out List<AgentItem> appliers) && appliers.Any())
+                if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out List<AgentItem> appliers) && appliers.Count != 0)
                 {
                     soul.OverrideType(AgentItem.AgentType.NPC);
                     soul.OverrideID(TrashID.YourSoul);

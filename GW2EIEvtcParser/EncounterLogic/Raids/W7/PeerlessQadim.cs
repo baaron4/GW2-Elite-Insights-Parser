@@ -292,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         int aimTime = (int)(c.ExpectedDuration * ratio);
-                        if (replay.Rotations.Any())
+                        if (replay.Rotations.Count != 0)
                         {
                             var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
                             var rotationConnector = new AgentFacingConnector(target);

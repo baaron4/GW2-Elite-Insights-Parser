@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<AbstractSingleActor> SecondaryTargets => _secondaryTargets;
         private readonly List<AbstractSingleActor> _secondaryTargets = new List<AbstractSingleActor>();
 
-        public IReadOnlyList<AbstractSingleActor> AllTargets => _secondaryTargets.Any() ? _allTargets : _targets;
+        public IReadOnlyList<AbstractSingleActor> AllTargets => _secondaryTargets.Count != 0 ? _allTargets : _targets;
         private readonly List<AbstractSingleActor> _allTargets = new List<AbstractSingleActor>();
 
         internal PhaseData(long start, long end)

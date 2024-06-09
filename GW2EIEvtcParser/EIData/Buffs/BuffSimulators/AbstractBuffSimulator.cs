@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public void Simulate(List<AbstractBuffEvent> buffEvents, long fightStart, long fightEnd)
         {
-            if (GenerationSimulation.Any())
+            if (GenerationSimulation.Count != 0)
             {
                 return;
             }

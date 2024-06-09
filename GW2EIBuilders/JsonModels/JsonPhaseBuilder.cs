@@ -46,7 +46,7 @@ namespace GW2EIBuilders.JsonModels
                     }
                     subPhases.Add(j);
                 }
-                if (subPhases.Any())
+                if (subPhases.Count != 0)
                 {
                     jsPhase.SubPhases = subPhases;
                 }

@@ -218,7 +218,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 uptimes.Add(jsonBuffs);
             }
 
-            if (!uptimes.Any())
+            if (uptimes.Count == 0)
             {
                 return null;
             }

@@ -341,7 +341,7 @@ namespace GW2EIEvtcParser.ParsedData
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
 
-            if (!_phases.Any())
+            if (_phases.Count == 0)
             {
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
                 _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));

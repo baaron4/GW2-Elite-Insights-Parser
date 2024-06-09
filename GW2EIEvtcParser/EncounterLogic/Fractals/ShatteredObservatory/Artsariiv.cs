@@ -121,10 +121,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
-            if (artsariivs.Any())
+            if (artsariivs.Count != 0)
             {
                 artsariivs.Remove(artsariivs.MaxBy(x => x.LastAware - x.FirstAware));
-                if (artsariivs.Any())
+                if (artsariivs.Count != 0)
                 {
                     foreach (AgentItem subartsariiv in artsariivs)
                     {

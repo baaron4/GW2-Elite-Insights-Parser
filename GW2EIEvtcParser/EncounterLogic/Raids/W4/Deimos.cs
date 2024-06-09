@@ -300,7 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 demonicBond.OverrideID(ArcDPSEnums.TrashID.DemonicBond);
                 demonicBond.OverrideType(AgentItem.AgentType.NPC);
             }
-            return demonicBonds.Any();
+            return demonicBonds.Count != 0;
         }
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

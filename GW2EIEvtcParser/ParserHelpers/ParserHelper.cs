@@ -345,7 +345,7 @@ namespace GW2EIEvtcParser
                 (x) => (x.IsStateChange == StateChange.EnterCombat || x.IsStateChange == StateChange.ExitCombat),
                 (x) => (x.IsStateChange == StateChange.Spawn || x.IsStateChange == StateChange.Despawn || x.IsStateChange == StateChange.ChangeDead || x.IsStateChange == StateChange.ChangeDown || x.IsStateChange == StateChange.ChangeUp),
             };
-            if (!copyPositionalDataFromAttackTarget || !attackTargetAgents.Any())
+            if (!copyPositionalDataFromAttackTarget || attackTargetAgents.Count == 0)
             {
                 stateChangeCopyFromAgentConditions.Add((x) => x.IsStateChange == StateChange.Position);
                 stateChangeCopyFromAgentConditions.Add((x) => x.IsStateChange == StateChange.Rotation);
@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser
                 }
             }
             // Copy positional data from attack targets
-            if (copyPositionalDataFromAttackTarget && attackTargetAgents.Any())
+            if (copyPositionalDataFromAttackTarget && attackTargetAgents.Count != 0)
             {
                 Func<CombatItem, bool> canCopyFromAttackTarget = (evt) => attackTargetAgents.Any(x => evt.SrcMatchesAgent(x));
                 var stateChangeCopyFromAttackTargetConditions = new List<Func<CombatItem, bool>>()

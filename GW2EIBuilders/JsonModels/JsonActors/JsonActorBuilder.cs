@@ -44,7 +44,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             }
             //
             var skillByID = actor.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            if (skillByID.Any())
+            if (skillByID.Count != 0)
             {
                 jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, skillByID, skillMap);
             }

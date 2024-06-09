@@ -636,7 +636,7 @@ namespace GW2EIParser
                     fullDpsReportLogs.Add(operation);
                 }
             }
-            if (!fullDpsReportLogs.Any())
+            if (fullDpsReportLogs.Count == 0)
             {
                 AddTraceMessage("Discord: Nothing to send");
                 return "Nothing to send";

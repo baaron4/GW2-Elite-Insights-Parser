@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Berg, out AgentItem berg))
             {
                 var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration).ToList();
-                if (movements.Any())
+                if (movements.Count != 0)
                 {
                     AbstractMovementEvent firstMove = movements.First();
                     // two minutes

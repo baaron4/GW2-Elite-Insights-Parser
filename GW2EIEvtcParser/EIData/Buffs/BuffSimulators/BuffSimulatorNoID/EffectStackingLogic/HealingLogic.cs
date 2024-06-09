@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
             }
             wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
-            if (toRemove.Extensions.Any())
+            if (toRemove.Extensions.Count != 0)
             {
                 foreach ((AgentItem src, long value) in toRemove.Extensions)
                 {

@@ -100,7 +100,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TrashID.HauntingStatue:
                     var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
-                    if (replay.Rotations.Any())
+                    if (replay.Rotations.Count != 0)
                     {
                         replay.Decorations.Add(new ActorOrientationDecoration(lifespan, npc.AgentItem));
                     }

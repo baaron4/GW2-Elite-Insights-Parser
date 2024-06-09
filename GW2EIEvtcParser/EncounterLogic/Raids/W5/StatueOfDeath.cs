@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 var peasants = new List<AgentItem>(agentData.GetNPCsByID(ArcDPSEnums.TrashID.AscalonianPeasant1));
                 peasants.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.AscalonianPeasant2));
-                if (peasants.Any())
+                if (peasants.Count != 0)
                 {
                     startToUse = peasants.Max(x => x.LastAware);
                 } 

@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 list.AddRange(combatData.GetBuffDataByIDByDst(attunement, agent).Where(x => x is BuffApplyEvent && x.Time <= time + ServerDelayConstant));
             }
-            if (list.Any())
+            if (list.Count != 0)
             {
                 return list.MaxBy(x => x.Time).BuffID;
             }

@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             AbstractSingleActor ministerLi = GetMinisterLi(fightData) ?? throw new MissingKeyActorsException("Minister Li not found");
             var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
-            if (buffApplies.Any())
+            if (buffApplies.Count != 0)
             {
                 fightData.SetSuccess(true, buffApplies[0].Time);
             }

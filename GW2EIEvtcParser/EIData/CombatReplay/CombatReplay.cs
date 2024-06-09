@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static int UpdateVelocityIndex(List<ParametricPoint3D> velocities, int time, int currentIndex)
         {
-            if (!velocities.Any())
+            if (velocities.Count == 0)
             {
                 return -1;
             }

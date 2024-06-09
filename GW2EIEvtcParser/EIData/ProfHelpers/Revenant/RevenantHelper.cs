@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser.EIData
                 tablet.OverrideID(MinionID.VentariTablet);
                 tablet.OverrideName("Ventari's Tablet");
             }
-            if (allTablets.Any())
+            if (allTablets.Count != 0)
             {
                 agentData.Refresh();
             }

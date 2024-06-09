@@ -393,7 +393,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
                 }
             }
-            if (dragonOrbMaxHPs.Any())
+            if (dragonOrbMaxHPs.Count != 0)
             {
                 needRefreshAgentPool = true;
             }
@@ -413,7 +413,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem atAgent = agentData.GetAgent(x.SrcAgent, x.Time);
                 if (targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables))
                 {
-                    return targetables.Any() ? targetables.Min(y => y.Time) : long.MaxValue;
+                    return targetables.Count != 0 ? targetables.Min(y => y.Time) : long.MaxValue;
                 }
                 return long.MaxValue;
             }).ToList();
@@ -424,7 +424,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
                 // There are only two relevant attack targets, one represents the first five and the last one Soo Won
-                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || !targetables.Any())
+                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || targetables.Count == 0)
                 {
                     continue;
                 }
