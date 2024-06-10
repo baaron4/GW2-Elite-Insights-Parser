@@ -121,7 +121,7 @@
                 case SubFightCategory.SilentSurf:
                     return "Silent Surf";
                 case SubFightCategory.LonelyTower:
-                    return "The Lonely Tower";
+                    return "Lonely Tower";
                 // 
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";
