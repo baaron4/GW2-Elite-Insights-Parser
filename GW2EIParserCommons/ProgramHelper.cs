@@ -88,7 +88,7 @@ namespace GW2EIParserCommons
         public EmbedBuilder GetEmbedBuilder()
         {
             var builder = new EmbedBuilder();
-            builder.WithAuthor("Elite Insights " + ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/ArenaNet/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            builder.WithAuthor("Elite Insights " + ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParserCommons/Content/ArenaNet/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
             return builder;
         }
 
