@@ -56,7 +56,7 @@ namespace GW2EIEvtcParser.EIData
             return LineTo(other, color.WithAlpha(opacity).ToString(true));
         }
 
-        public virtual GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
+        public GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
         {
             VariableDecoration.UsingRotationConnector(rotationConnectedTo);
             return this;
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="skill">Skill information</param>
         /// <returns></returns>
-        public virtual GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
+        public GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
         {
             VariableDecoration.UsingSkillMode(skill);
             return this;
