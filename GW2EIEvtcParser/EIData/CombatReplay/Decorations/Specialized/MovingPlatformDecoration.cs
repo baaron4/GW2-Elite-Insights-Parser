@@ -5,18 +5,44 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class MovingPlatformDecoration : BackgroundDecoration
     {
-        public string Image { get; }
-        public int Width { get; }
-        public int Height { get; }
-
-        public List<(float x, float y, float z, float angle, float opacity, int time)> Positions { get; } =
-            new List<(float x, float y, float z, float angle, float opacity, int time)>();
-
-        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base(lifespan)
+        internal class ConstantMovingPlatformDecoration : ConstantBackgroundDecoration
         {
-            Image = image;
-            Width = width;
-            Height = height;
+            public string Image { get; }
+            public int Width { get; }
+            public int Height { get; }
+            public ConstantMovingPlatformDecoration(string image, int width, int height)
+            {
+                Image = image;
+                Width = width;
+                Height = height;
+            }
+
+            public override string GetID()
+            {
+                return "MP" + Height + Image.GetHashCode().ToString() + Width;
+            }
+        }
+        internal class VariableMovingPlatformDecoration : VariableBackgroundDecoration
+        {
+            public List<(float x, float y, float z, float angle, float opacity, int time)> Positions { get; } =
+                new List<(float x, float y, float z, float angle, float opacity, int time)>();
+            public VariableMovingPlatformDecoration((long, long) lifespan) : base(lifespan)
+            {
+            }
+        }
+        private new ConstantMovingPlatformDecoration ConstantDecoration => (ConstantMovingPlatformDecoration)base.ConstantDecoration;
+        private new VariableMovingPlatformDecoration VariableDecoration => (VariableMovingPlatformDecoration)base.VariableDecoration;
+        //
+        public string Image => ConstantDecoration.Image;
+        public int Width => ConstantDecoration.Width;
+        public int Height => ConstantDecoration.Height;
+
+        public List<(float x, float y, float z, float angle, float opacity, int time)> Positions => VariableDecoration.Positions;
+
+        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base()
+        {
+            base.ConstantDecoration = new ConstantMovingPlatformDecoration(image, width, height);
+            base.VariableDecoration = new VariableMovingPlatformDecoration(lifespan);
         }
 
         public void AddPosition(float x, float y, float z, double angle, double opacity, int time)

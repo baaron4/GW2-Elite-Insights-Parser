@@ -2,7 +2,17 @@
 {
     internal abstract class BackgroundDecoration : GenericDecoration
     {
-        public BackgroundDecoration((long start, long end) lifespan) : base(lifespan)
+        internal abstract class ConstantBackgroundDecoration : ConstantGenericDecoration
+        {
+        }
+        internal abstract class VariableBackgroundDecoration : VariableGenericDecoration
+        {
+            protected VariableBackgroundDecoration((long, long) lifespan) : base(lifespan)
+            {
+            }
+        }
+
+        public BackgroundDecoration() : base()
         {
         }
     }
