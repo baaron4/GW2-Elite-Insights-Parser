@@ -102,10 +102,10 @@
                         {{row.player.acc}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{row.def[0]}}
+                        {{ formatNumber(row.def[0]) }}
                     </td>
                     <td :class="getBodyClass('Data', 1)">
-                        {{row.def[1]}}
+                        {{ formatNumber(row.def[1]) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)">
                         {{row.def[2]}}
@@ -135,7 +135,7 @@
                         {{row.def[12]}}
                     </td>
                     <td :class="getBodyClass('Data', 16)">
-                        {{row.def[16]}}
+                        {{ formatNumber(row.def[16]) }}
                     </td>
                     <td :class="getBodyClass('Data', 14)" :data-original-title="row.def[15]">
                         {{row.def[14]}}
@@ -148,8 +148,8 @@
                     <td></td>
                     <td class="text-left">{{sum.name}}</td>
                     <td></td>
-                    <td>{{sum.def[0]}}</td>
-                    <td>{{sum.def[1]}}</td>
+                    <td>{{ formatNumber(sum.def[0]) }}</td>
+                    <td>{{ formatNumber(sum.def[1]) }}</td>
                     <td>{{sum.def[2]}}</td>
                     <td>
                         {{sum.def[3]}}
@@ -161,7 +161,7 @@
                     <td>{{sum.def[8]}}</td>
                     <td>{{sum.def[10]}}</td>
                     <td>{{sum.def[12]}}</td>
-                    <td>{{sum.def[16]}}</td>
+                    <td>{{ formatNumber(sum.def[16]) }}</td>
                     <td>{{sum.def[14]}}</td>
                 </tr>
             </tfoot>

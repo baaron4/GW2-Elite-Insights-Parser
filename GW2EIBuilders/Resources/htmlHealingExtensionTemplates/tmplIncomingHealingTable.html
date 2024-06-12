@@ -55,7 +55,7 @@
                         {{row.player.acc}}
                     </td>
                     <td v-for="(value, index) in row.incomingHeal" :class="getBodyClass('Data', index)">
-                        {{value}}
+                        {{ formatNumber(value) }}
                     </td>
                 </tr>
             </tbody>
@@ -68,7 +68,7 @@
                     </td>
                     <td></td>
                     <td v-for="(value, index) in sum.incomingHeal">
-                        {{value}}
+                        {{ formatNumber(value) }}
                     </td>
                 </tr>
             </tfoot>

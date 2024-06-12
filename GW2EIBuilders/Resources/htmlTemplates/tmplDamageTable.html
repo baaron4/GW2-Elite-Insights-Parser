@@ -61,7 +61,7 @@
                         {{getPlayerCell(2, row)}}</td>
                     <td v-if="!targetless && hasBreakbarDamage" :class="getBodyClass('Data', 3)"
                         :data-original-title="computeTotalContribution(3, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 3, row.dps,tableData.sums)">
-                        {{round1(row.dps[3])}}
+                        {{ formatNumber(round1(row.dps[3])) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)"
                         :data-original-title="getPlayerTooltip(4, row, tableData.sums)">
@@ -75,7 +75,7 @@
 
                     <td v-if="hasBreakbarDamage" :class="getBodyClass('Data', 7)"
                         :data-original-title="computeTotalContribution(7, row.dps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, 7, row.dps,tableData.sums)">
-                        {{round1(row.dps[7])}}
+                        {{ formatNumber(round1(row.dps[7])) }}
                     </td>
                 </tr>
             </tbody>
@@ -92,7 +92,7 @@
                     <td v-if="!targetless" :data-original-title="getSumTooltip(2, sum)">
                         {{getSumCell(2, sum)}}</td>
                     <td v-if="!targetless && hasBreakbarDamage">
-                        {{round1(sum.dps[3])}}
+                        {{ formatNumber(round1(sum.dps[3])) }}
                     </td>
                     <td :data-original-title="getSumTooltip(4, sum)">
                         {{getSumCell(4, sum)}}</td>
@@ -101,7 +101,7 @@
                     <td :data-original-title="getSumTooltip(6, sum)">
                         {{getSumCell(6, sum)}}</td>
                     <td v-if="hasBreakbarDamage">
-                        {{round1(sum.dps[7])}}
+                        {{ formatNumber(round1(sum.dps[7])) }}
                     </td>
                 </tr>
             </tfoot>
@@ -176,18 +176,18 @@
                 return this.round2(row[index] * 100 / sums[sumId].dps[index]) + '% of group';
             },
             getPlayerTooltip: function(index, row, sums) {
-                return (!this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)) + ' damage'+
+                return this.formatNumber(!this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)) + ' damage'+
                  '<br>' + this.computeTotalContribution(index, row.dps, sums) +
                  '<br>'+ this.computeGroupContribution(row.player.group, index, row.dps, sums);
             },
             getPlayerCell: function(index, row) {
-                return this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)
+                return this.formatNumber(this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS));
             },
             getSumTooltip: function(index, row) {
-                return (!this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)) + ' damage';
+                return this.formatNumber(!this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)) + ' damage';
             },
             getSumCell: function(index, row) {
-                return this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS)
+                return this.formatNumber(this.showDamage ? row.dps[index] : this.round(row.dps[index]/this.phase.durationS));
             }
         },
         computed: {

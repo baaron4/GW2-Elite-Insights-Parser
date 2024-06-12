@@ -99,7 +99,7 @@
         },
         methods: {
             tableRound: function (value) {
-                return this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value)
+                return this.formatNumber(this.graphdata.damagemode == GraphType.Breakbar ? this.round1(value) : this.round(value));
             },
             sortBy: function (key, index) {
                 this.sortByBase(this.sortdata, key, index);

@@ -131,7 +131,7 @@
                     </td>
                     <td :class="getBodyClass('Data', 2)"
                         :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)' +
-                                    '<br>Total Critical Damage: ' + row.data[3] +
+                                    '<br>Total Critical Damage: ' + formatNumber(row.data[3]) +
                                     '<br>' + round2(100*row.data[3]/ row.data[18]) +'% of total damage' +
                                     '<br>' + round2(100*row.data[3]/ row.data[19]) +'% of total direct damage'">
                         {{round2(100*row.data[2] / row.data[1])}}%
@@ -199,7 +199,7 @@
                     <td></td>
                     <td
                         :data-original-title="row.data[2] + ' out of ' + row.data[1] + ' critable hit(s)' +
-                                    '<br>Total Critical Damage: ' + row.data[3] +
+                                    '<br>Total Critical Damage: ' + formatNumber(row.data[3]) +
                                     '<br>' + round2(100*row.data[3]/ row.data[18]) +'% of total damage' +
                                     '<br>' + round2(100*row.data[3]/ row.data[19]) +'% of total direct damage'">
                         {{round2(100*row.data[2] / row.data[1])}}%

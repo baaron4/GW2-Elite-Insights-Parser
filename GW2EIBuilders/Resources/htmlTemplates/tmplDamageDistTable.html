@@ -4,21 +4,21 @@
             <div v-if="isminion">
                 <p style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of its master's total
-                    {{istarget ? 'Target' :''}} damage ({{dmgdist.contributedDamage}})
+                    {{istarget ? 'Target' :''}} damage ({{ formatNumber(dmgdist.contributedDamage) }})
                 </p>
                 <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage)}}% of its master's total
-                    {{istarget ? 'Target' :''}} breakbar damage ({{round1(dmgdist.contributedBreakbarDamage)}})
+                    {{istarget ? 'Target' :''}} breakbar damage ({{ formatNumber(round1(dmgdist.contributedBreakbarDamage)) }})
                 </p>
             </div>
             <div v-else>
                 <p style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedDamage/dmgdist.totalDamage)}}% of their total {{istarget ?
-                        'Target' :''}} damage ({{dmgdist.contributedDamage}})
+                        'Target' :''}} damage ({{ formatNumber(dmgdist.contributedDamage) }})
                 </p>              
                 <p v-if="hasBreakbarDamage && dmgdist.contributedBreakbarDamage > 0" style="display: table-row;">
                     {{actor.name}} did {{round3(100*dmgdist.contributedBreakbarDamage/dmgdist.totalBreakbarDamage)}}% of their total
-                    {{istarget ? 'Target' :''}} breakbar damage ({{round1(dmgdist.contributedBreakbarDamage)}})
+                    {{istarget ? 'Target' :''}} breakbar damage ({{ formatNumber(round1(dmgdist.contributedBreakbarDamage)) }})
                 </p>
             </div>
         </div>
@@ -164,31 +164,31 @@
                         {{getSkill(row).name.length > 15 ? (getSkill(row).name.slice(0, 15)) + '...': getSkill(row).name}}
                     </td>
                     <td :class="getBodyClass('Data', 0)">
-                        {{ round3(100*getDamage(row)/dmgdist.contributedDamage) }}%
+                        {{ formatNumber(round3(100*getDamage(row)/dmgdist.contributedDamage)) }}%
                     </td>
                     <td :class="getBodyClass('Data', 1)"
-                        :data-original-title="round2(getDamage(row)/phase.durationS) +' dps'">
-                        {{ getDamage(row) }}
+                        :data-original-title="formatNumber(round2(getDamage(row)/phase.durationS)) +' dps'">
+                        {{ formatNumber(getDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)"
-                        :data-original-title="round2(getBarrierDamage(row)/phase.durationS) +' dps'">
-                        {{ getBarrierDamage(row) }}
+                        :data-original-title="formatNumber(round2(getBarrierDamage(row)/phase.durationS)) +' dps'">
+                        {{ formatNumber(getBarrierDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
-                        {{ getMinDamage(row) }}
+                        {{ formatNumber(getMinDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{ round(getDamage(row)/getConnectedHits(row)) }}
+                        {{ formatNumber(round(getDamage(row)/getConnectedHits(row))) }}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
-                        {{ getMaxDamage(row) }}
+                        {{ formatNumber(getMaxDamage(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 6)" v-if="hasBreakbarDamage">
-                        {{ round3(100*getBreakbarDamage(row)/dmgdist.contributedBreakbarDamage) }}%
+                        {{ formatNumber(round3(100*getBreakbarDamage(row)/dmgdist.contributedBreakbarDamage)) }}%
                     </td>
                     <td :class="getBodyClass('Data', 7)" v-if="hasBreakbarDamage" 
                         :data-original-title="round2(getBreakbarDamage(row)/phase.durationS) +' bps'">
-                        {{ getBreakbarDamage(row) }}
+                        {{ formatNumber(getBreakbarDamage(row)) }}
                     </td>
                     <td :class="getCastBodyClass('Data', 8, row)" v-if="actor !== null">
                         {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
@@ -202,7 +202,7 @@
                         {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? round2(getConnectedHits(row)/getCast(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 11)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getDamage(row)/(0.001 * getCastDuration(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? formatNumber(round2(getDamage(row)/(0.001 * getCastDuration(row)))) : ''}}
                     </td>              
                     <td :class="getBodyClass('Data', 18)" v-if="actor !== null" >
                         {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's': ' '}}
@@ -245,11 +245,11 @@
                         Total
                     </td>
                     <td></td>
-                    <td :data-original-title="Math.round(dmgdist.contributedDamage/phase.durationS) +' dps'">
-                        {{dmgdist.contributedDamage}}
+                    <td :data-original-title="formatNumber(Math.round(dmgdist.contributedDamage/phase.durationS)) +' dps'">
+                        {{ formatNumber(dmgdist.contributedDamage) }}
                     </td>
-                    <td :data-original-title="Math.round(dmgdist.contributedShieldDamage/phase.durationS) +' dps'">
-                        {{dmgdist.contributedShieldDamage}}
+                    <td :data-original-title="formatNumber(Math.round(dmgdist.contributedShieldDamage/phase.durationS)) +' dps'">
+                        {{ formatNumber(dmgdist.contributedShieldDamage) }}
                     </td>
                     <td></td>
                     <td></td>
@@ -262,7 +262,7 @@
                     <td></td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null">
-                        {{round2(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting))}}
+                        {{ formatNumber(round2(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting))) }}
                     </td>
                     <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>

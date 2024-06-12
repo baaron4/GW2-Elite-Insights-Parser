@@ -19,7 +19,7 @@
                             {{target.name}}
                         </div>
                         <div v-if="target.health > 0" class="super-small" style="text-align:center;">
-                            {{ target.health }} Health
+                            {{ formatNumber(target.health) }} Health
                         </div>
                         <div :data-original-title="healthRemaining(target)">
                             <div :style="{'background': getGradient(target), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
@@ -45,6 +45,7 @@
 
 <script>
     Vue.component("encounter-component", {
+        mixins: [numberComponent],
         props: [],
         template: `${template}`,
         data: function () {
@@ -71,13 +72,13 @@
                 var hpLeft = target.hpLeft;
                 var barrierLeft = target.barrierLeft;
                 if (hpLeft > 0 && barrierLeft > 0) {
-                    return 'Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;
+                    return `Health: ${this.formatNumber(hpLeft)}<br>Barrier: ${this.formatNumber(barrierLeft)}`;
                 }
                 else if (hpLeft > 0 && barrierLeft == 0) {
-                    return 'Health: ' + hpLeft;
+                    return `Health: ${this.formatNumber(hpLeft)}`;
                 }
                 else if (barrierLeft > 0) {
-                    return 'Barrier: ' + barrierLeft;
+                    return `Barrier: ${this.formatNumber(barrierLeft)}`;
                 }
                 return false;
             },
