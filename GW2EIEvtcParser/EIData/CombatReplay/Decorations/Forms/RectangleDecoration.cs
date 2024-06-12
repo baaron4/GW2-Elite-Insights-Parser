@@ -23,9 +23,9 @@ namespace GW2EIEvtcParser.EIData
         {
             return new RectangleDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
         }
-        public override FormDecoration Copy()
+        public override FormDecoration Copy(string color = null)
         {
-            return (FormDecoration)new RectangleDecoration(Width, Height, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (FormDecoration)new RectangleDecoration(Width, Height, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
 
         public override FormDecoration GetBorderDecoration(string borderColor = null)
@@ -34,11 +34,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidOperationException("Non filled rectangles can't have borders");
             }
-            var copy = (RectangleDecoration)Copy().UsingFilled(false);
-            if (borderColor != null)
-            {
-                copy.Color = borderColor;
-            }
+            var copy = (RectangleDecoration)Copy(borderColor).UsingFilled(false);
             return copy;
         }
     }

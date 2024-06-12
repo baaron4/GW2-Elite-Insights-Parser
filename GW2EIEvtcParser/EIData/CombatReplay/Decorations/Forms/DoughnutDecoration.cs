@@ -27,9 +27,9 @@ namespace GW2EIEvtcParser.EIData
         {
             return new DoughnutDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
         }
-        public override FormDecoration Copy()
+        public override FormDecoration Copy(string color = null)
         {
-            return (FormDecoration)new DoughnutDecoration(InnerRadius, OuterRadius, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (FormDecoration)new DoughnutDecoration(InnerRadius, OuterRadius, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
 
         public override FormDecoration GetBorderDecoration(string borderColor = null)
@@ -38,12 +38,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidOperationException("Non filled doughtnuts can't have borders");
             }
-            var copy = (DoughnutDecoration)Copy().UsingFilled(false);
-            if (borderColor != null)
-            {
-                copy.Color = borderColor;
-            }
-            return copy;
+            return (DoughnutDecoration)Copy(borderColor).UsingFilled(false);
         }
 
     }

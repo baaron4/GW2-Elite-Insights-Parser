@@ -20,9 +20,9 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public override FormDecoration Copy()
+        public override FormDecoration Copy(string color = null)
         {
-            return (PieDecoration)new PieDecoration(Radius, OpeningAngle, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (PieDecoration)new PieDecoration(Radius, OpeningAngle, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
 
         //

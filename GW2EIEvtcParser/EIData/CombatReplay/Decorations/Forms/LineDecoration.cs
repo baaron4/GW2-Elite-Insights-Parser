@@ -36,9 +36,9 @@ namespace GW2EIEvtcParser.EIData
         {
             return this;
         }
-        public override FormDecoration Copy()
+        public override FormDecoration Copy(string color = null)
         {
-            return (FormDecoration)new LineDecoration(Lifespan, Color, ConnectedTo, ConnectedFrom).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (FormDecoration)new LineDecoration(Lifespan, color ?? Color, ConnectedTo, ConnectedFrom).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
 
         public override FormDecoration GetBorderDecoration(string borderColor = null)

@@ -57,9 +57,9 @@ namespace GW2EIEvtcParser.EIData
             return new CircleDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
         }
 
-        public override FormDecoration Copy()
+        public override FormDecoration Copy(string color = null)
         {
-            return (FormDecoration)new CircleDecoration(Radius, MinRadius, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (FormDecoration)new CircleDecoration(Radius, MinRadius, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
         public override FormDecoration GetBorderDecoration(string borderColor = null)
         {
@@ -67,12 +67,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 throw new InvalidOperationException("Non filled circles can't have borders");
             }
-            var copy = (CircleDecoration)Copy().UsingFilled(false);
-            if (borderColor != null)
-            {
-                copy.Color = borderColor;
-            }
-            return copy;
+            return (CircleDecoration)Copy(borderColor).UsingFilled(false);
         }
     }
 }
