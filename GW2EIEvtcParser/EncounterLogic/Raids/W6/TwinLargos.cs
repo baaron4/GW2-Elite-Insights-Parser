@@ -329,7 +329,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 960;
                         int duration = 3000;
                         uint radius = 1200;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(100, 200, 255, 0.5)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                        (long, long) lifespan = (start + delay, start + delay + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespan, Colors.SkyBlue, 0.5, radius);
                     }
                     var boonSteal = cls.Where(x => x.SkillId == VaporJet).ToList();
                     foreach (AbstractCastEvent c in boonSteal)
