@@ -159,6 +159,10 @@ Note it may take some time for each file to parse and they will not be ready to 
 
 -__SendSimpleMessageToWebhook__: if true, only the dps.reports link will be sent to the webhook.
 
+### General Settings
+
+-__MemoryLimit__: In MB. If the application uses more RAM than provided number, the application will exit with code 2. 0 to disable the feature. When enabled, the maximum between given number and 100 MB will be used.
+
 ## HTML Overview
 
 For a more detailed look, please check [this guide](https://snowcrows.com/en/guides/starting-to-raid/reading-logs) written by Snow Crows.

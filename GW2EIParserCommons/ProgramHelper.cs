@@ -17,6 +17,8 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIParserCommons.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons
@@ -70,6 +72,8 @@ namespace GW2EIParserCommons
 
         public static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
+        private CancellationTokenSource RunningMemoryCheck = null;
+
         public int GetMaxParallelRunning()
         {
             return Settings.GetMaxParallelRunning();
@@ -83,6 +87,33 @@ namespace GW2EIParserCommons
         public bool ParseMultipleLogs()
         {
             return Settings.DoParseMultipleLogs();
+        }
+        public void ExecuteMemoryCheckTask()
+        {
+            if (Settings.MemoryLimit == 0 || RunningMemoryCheck != null)
+            {
+                if (RunningMemoryCheck != null)
+                {
+                    RunningMemoryCheck.Cancel();
+                }
+                return;
+            }
+            RunningMemoryCheck = new CancellationTokenSource();// Prepare task
+            Task.Run(async () =>
+            {
+                using (var proc = Process.GetCurrentProcess())
+                {
+                    while (true)
+                    {
+                        await Task.Delay(500);
+                        proc.Refresh();
+                        if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1e6)
+                        {
+                            Environment.Exit(2);
+                        }
+                    }
+                }
+            }, RunningMemoryCheck.Token);
         }
 
         public EmbedBuilder GetEmbedBuilder()
