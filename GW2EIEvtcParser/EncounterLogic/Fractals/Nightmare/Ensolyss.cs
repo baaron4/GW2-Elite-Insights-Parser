@@ -303,12 +303,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castDuration = 1333;
                         long expectedEndCast = c.Time + castDuration;
-                        long endTimeWave = c.Time + 3100;
                         (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                         (long start, long end) lifespanShockwave = (lifespan.end, c.Time + 3100);
-                        replay.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), expectedEndCast);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, connector), expectedEndCast);
                         // Shockwave
-                        replay.Decorations.Add(new CircleDecoration(1500, lifespanShockwave, Colors.Yellow, 0.4, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(endTimeWave));
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.4, 1500);
                     }
 
                     // 66% & 33% Breakbars
