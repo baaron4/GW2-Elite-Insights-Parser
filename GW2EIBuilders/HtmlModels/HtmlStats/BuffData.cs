@@ -261,7 +261,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             return new BuffData(buffs, log.StatisticsHelper.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AvgConditions);
         }
 
-        public static BuffData BuildTargetBoonData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
+        public static BuffData BuildTargetBoonUptimeData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
         {
             IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             return new BuffData(buffs, log.StatisticsHelper.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AvgBoons);

@@ -49,7 +49,7 @@
                 return this.phase.targets.indexOf(this.targetindex);
             },
             hasBoons: function () {
-                return this.phase.buffsStatContainer.targetsBoonTotals[this.targetPhaseIndex].avg > 0;
+                return this.phase.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex].avg > 0;
             },
             condiData: function () {
                 if (this.cacheCondi.has(this.phaseindex)) {
@@ -91,7 +91,7 @@
                         data: []
                     });
                 } else {
-                    var targetData = this.phase.buffsStatContainer.targetsCondiTotals[this.targetPhaseIndex];
+                    var targetData = this.phase.buffsStatContainer.targetsCondiUptimes[this.targetPhaseIndex];
                     res.push({
                         icon: this.target.icon,
                         name: this.target.name,
@@ -116,7 +116,7 @@
                         }
                     });
                 } else {
-                    var targetData = this.phase.buffsStatContainer.targetsBoonTotals[this.targetPhaseIndex];
+                    var targetData = this.phase.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex];
                     res.push({
                         player: this.target,
                         data: targetData

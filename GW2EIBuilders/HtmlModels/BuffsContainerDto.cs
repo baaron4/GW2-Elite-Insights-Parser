@@ -77,8 +77,8 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffData> DebuffActiveStats { get; set; }
 
         public List<List<BuffData>> TargetsCondiStats { get; set; }
-        public List<BuffData> TargetsCondiTotals { get; set; }
-        public List<BuffData> TargetsBoonTotals { get; set; }
+        public List<BuffData> TargetsCondiUptimes { get; set; }
+        public List<BuffData> TargetsBoonUptimes { get; set; }
 
         public BuffsContainerDto(PhaseData phase, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict)
         {
@@ -141,13 +141,13 @@ namespace GW2EIBuilders.HtmlModels
 
 
             TargetsCondiStats = new List<List<BuffData>>();
-            TargetsCondiTotals = new List<BuffData>();
-            TargetsBoonTotals = new List<BuffData>();
+            TargetsCondiUptimes = new List<BuffData>();
+            TargetsBoonUptimes = new List<BuffData>();
             foreach (AbstractSingleActor target in phase.AllTargets)
             {
                 TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase, target));
-                TargetsCondiTotals.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
-                TargetsBoonTotals.Add(BuffData.BuildTargetBoonData(log, phase, target));
+                TargetsCondiUptimes.Add(BuffData.BuildTargetCondiUptimeData(log, phase, target));
+                TargetsBoonUptimes.Add(BuffData.BuildTargetBoonUptimeData(log, phase, target));
             }
         }
     }
