@@ -595,6 +595,34 @@ namespace GW2EIEvtcParser.EIData
             var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector(new List<ParametricPoint3D>() { startPoint, endPoint }));
             Decorations.Add(shootingCircle);
         }
+
+        /// <summary>
+        /// Adds a non-filled growing circle resembling a shockwave.
+        /// </summary>
+        /// <param name="connector">Starting position point.</param>
+        /// <param name="lifespan">Lifespan of the shockwave.</param>
+        /// <param name="color">Color.</param>
+        /// <param name="opacity">Opacity of the <paramref name="color"/>.</param>
+        /// <param name="radius">Radius of the shockwave.</param>
+        /// <remarks>Uses <see cref="GeographicalConnector"/> which allows us to use <see cref="AgentConnector"/> and <see cref="PositionConnector"/>.</remarks>
+        internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, Color color, double opacity, uint radius)
+        {
+            AddShockwave(connector, lifespan, color.WithAlpha(opacity).ToString(true), radius);
+        }
+
+        /// <summary>
+        /// Adds a non-filled growing circle resembling a shockwave.
+        /// </summary>
+        /// <param name="connector">Starting position point.</param>
+        /// <param name="lifespan">Lifespan of the shockwave.</param>
+        /// <param name="color">Color.</param>
+        /// <param name="radius">Radius of the shockwave.</param>
+        /// <remarks>Uses <see cref="GeographicalConnector"/> which allows us to use <see cref="AgentConnector"/> and <see cref="PositionConnector"/>.</remarks>
+        internal void AddShockwave(GeographicalConnector connector, (long start, long end) lifespan, string color, uint radius)
+        {
+            Decorations.Add(new CircleDecoration(radius, lifespan, color, connector).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+        }
+
         /// <summary>
         /// Add hide based on buff's presence
         /// </summary>

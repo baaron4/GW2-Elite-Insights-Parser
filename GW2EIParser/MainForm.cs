@@ -98,6 +98,7 @@ namespace GW2EIParser
 
         private void _RunOperation(FormOperationController operation)
         {
+            _programHelper.ExecuteMemoryCheckTask();
             _runningCount++;
             _settingsForm.ConditionalSettingDisable(_anyRunning);
             operation.ToQueuedState();

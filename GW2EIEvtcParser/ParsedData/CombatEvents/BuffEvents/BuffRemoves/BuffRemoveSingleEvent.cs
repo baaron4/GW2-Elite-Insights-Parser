@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
         public uint BuffInstance { get; protected set; }
 
         private readonly bool _byShouldntBeUnknown;
-        private bool _overstackOrNaturalEnd => (IFF == IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
+        internal bool OverstackOrNaturalEnd => (IFF == IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
 
         internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.ParsedData
                 return true;
             }
             // overstack or natural end removals
-            return !_overstackOrNaturalEnd;
+            return !OverstackOrNaturalEnd;
         }
 
         internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)

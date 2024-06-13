@@ -523,9 +523,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                            (long, long) lifespanShockwave = (start + delay, start + delay + duration);
+                            GeographicalConnector connector = new PositionConnector(position);
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, connector));
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.7, connector));
+                            replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.7, radius);
                         }
                     }
                     break;
@@ -672,7 +674,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 1800;
                         int duration = 3000;
                         uint maxRadius = 2000;
-                        replay.Decorations.Add(new CircleDecoration( maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                        (long, long) lifespan = (start + delay, start + delay + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
                     }
                     var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp).ToList();
                     foreach (AbstractCastEvent c in stompShockwave)
