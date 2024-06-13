@@ -94,6 +94,9 @@
                 }
                 return data;
             },
+            buffsStatContainer: function() {
+                return this.phase.buffsStatContainer;
+            },
             buffData: function () {
                 var id = this.phaseindex + '-' + this.activeduration;
                 if (this.cache.has(id)) {
@@ -186,25 +189,65 @@
                 var res;
                 if (this.activeduration) {
                     res = {
-                        boonsData: getData(this.phase.boonActiveStats, this.phase.boonGenActiveSelfStats,
-                            this.phase.boonGenActiveGroupStats, this.phase.boonGenActiveOGroupStats, this.phase.boonGenActiveSquadStats),
-                        offsData: getData(this.phase.offBuffActiveStats, this.phase.offBuffGenActiveSelfStats,
-                            this.phase.offBuffGenActiveGroupStats, this.phase.offBuffGenActiveOGroupStats, this.phase.offBuffGenActiveSquadStats),
-                        defsData: getData(this.phase.defBuffActiveStats, this.phase.defBuffGenActiveSelfStats,
-                            this.phase.defBuffGenActiveGroupStats, this.phase.defBuffGenActiveOGroupStats, this.phase.defBuffGenActiveSquadStats),
-                        supsData: getData(this.phase.supBuffActiveStats, this.phase.supBuffGenActiveSelfStats,
-                            this.phase.supBuffGenActiveGroupStats, this.phase.supBuffGenActiveOGroupStats, this.phase.supBuffGenActiveSquadStats)
+                        boonsData: getData(
+                            this.buffsStatContainer.boonActiveStats, 
+                            this.buffsStatContainer.boonGenActiveSelfStats,
+                            this.buffsStatContainer.boonGenActiveGroupStats, 
+                            this.buffsStatContainer.boonGenActiveOGroupStats, 
+                            this.buffsStatContainer.boonGenActiveSquadStats
+                        ),
+                        offsData: getData(
+                            this.buffsStatContainer.offBuffActiveStats, 
+                            this.buffsStatContainer.offBuffGenActiveSelfStats,
+                            this.buffsStatContainer.offBuffGenActiveGroupStats, 
+                            this.buffsStatContainer.offBuffGenActiveOGroupStats, 
+                            this.buffsStatContainer.offBuffGenActiveSquadStats
+                        ),
+                        defsData: getData(
+                            this.buffsStatContainer.defBuffActiveStats, 
+                            this.buffsStatContainer.defBuffGenActiveSelfStats,
+                            this.buffsStatContainer.defBuffGenActiveGroupStats, 
+                            this.buffsStatContainer.defBuffGenActiveOGroupStats, 
+                            this.buffsStatContainer.defBuffGenActiveSquadStats
+                        ),
+                        supsData: getData(
+                            this.buffsStatContainer.supBuffActiveStats, 
+                            this.buffsStatContainer.supBuffGenActiveSelfStats,
+                            this.buffsStatContainer.supBuffGenActiveGroupStats, 
+                            this.buffsStatContainer.supBuffGenActiveOGroupStats, 
+                            this.buffsStatContainer.supBuffGenActiveSquadStats
+                        )
                     };
                 } else {
                     res = {
-                        boonsData: getData(this.phase.boonStats, this.phase.boonGenSelfStats,
-                            this.phase.boonGenGroupStats, this.phase.boonGenOGroupStats, this.phase.boonGenSquadStats),
-                        offsData: getData(this.phase.offBuffStats, this.phase.offBuffGenSelfStats,
-                            this.phase.offBuffGenGroupStats, this.phase.offBuffGenOGroupStats, this.phase.offBuffGenSquadStats),
-                        defsData: getData(this.phase.defBuffStats, this.phase.defBuffGenSelfStats,
-                            this.phase.defBuffGenGroupStats, this.phase.defBuffGenOGroupStats, this.phase.defBuffGenSquadStats),
-                        supsData: getData(this.phase.supBuffStats, this.phase.supBuffGenSelfStats,
-                            this.phase.supBuffGenGroupStats, this.phase.supBuffGenOGroupStats, this.phase.supBuffGenSquadStats)
+                        boonsData: getData(
+                            this.buffsStatContainer.boonStats, 
+                            this.buffsStatContainer.boonGenSelfStats,
+                            this.buffsStatContainer.boonGenGroupStats, 
+                            this.buffsStatContainer.boonGenOGroupStats, 
+                            this.buffsStatContainer.boonGenSquadStats
+                        ),
+                        offsData: getData(
+                            this.buffsStatContainer.offBuffStats, 
+                            this.buffsStatContainer.offBuffGenSelfStats,
+                            this.buffsStatContainer.offBuffGenGroupStats, 
+                            this.buffsStatContainer.offBuffGenOGroupStats,
+                             this.buffsStatContainer.offBuffGenSquadStats
+                            ),
+                        defsData: getData(
+                            this.buffsStatContainer.defBuffStats, 
+                            this.buffsStatContainer.defBuffGenSelfStats,
+                            this.buffsStatContainer.defBuffGenGroupStats, 
+                            this.buffsStatContainer.defBuffGenOGroupStats, 
+                            this.buffsStatContainer.defBuffGenSquadStats
+                        ),
+                        supsData: getData(
+                            this.buffsStatContainer.supBuffStats, 
+                            this.buffsStatContainer.supBuffGenSelfStats,
+                            this.buffsStatContainer.supBuffGenGroupStats, 
+                            this.buffsStatContainer.supBuffGenOGroupStats, 
+                            this.buffsStatContainer.supBuffGenSquadStats
+                        )
                     };
                 }
                 this.cache.set(id, res);

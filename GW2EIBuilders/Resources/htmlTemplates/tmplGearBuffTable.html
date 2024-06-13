@@ -49,9 +49,9 @@
                 };
                 var res;
                 if (this.activeduration) {
-                    res = getData(this.phase.gearBuffActiveStats);
+                    res = getData(this.phase.buffsStatContainer.gearBuffActiveStats);
                 } else {
-                    res = getData(this.phase.gearBuffStats);
+                    res = getData(this.phase.buffsStatContainer.gearBuffStats);
                 }
                 this.cache.set(id, res);
                 return res;

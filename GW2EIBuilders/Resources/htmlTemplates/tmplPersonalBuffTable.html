@@ -38,7 +38,7 @@
                     var spec = specs[i];
                     var pBySpec = [];
                     for (var j = 0; j < logData.players.length; j++) {
-                        if (logData.players[j].profession === spec && logData.phases[0].persBuffStats[j].data.length > 0) {
+                        if (logData.players[j].profession === spec && logData.phases[0].buffsStatContainer.persBuffStats[j].data.length > 0) {
                             pBySpec.push(j);
                         }
                     }
@@ -70,7 +70,7 @@
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
                             player: logData.players[spec.ids[j]],
-                            data: this.activeduration ? this.phase.persBuffActiveStats[spec.ids[j]] : this.phase.persBuffStats[spec.ids[j]]
+                            data: this.activeduration ? this.phase.buffsStatContainer.persBuffActiveStats[spec.ids[j]] : this.phase.buffsStatContainer.persBuffStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);

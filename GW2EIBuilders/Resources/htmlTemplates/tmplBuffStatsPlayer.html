@@ -44,6 +44,9 @@
             player: function() {
                 return logData.players[this.playerindex];
             },
+            buffsStatContainer: function() {
+                return this.phase.buffsStatContainer;
+            },
             boonData: function () {
                 var id = this.phaseindex + '-' + this.activeduration;
                 if (this.cacheBoon.has(id)) {
@@ -58,7 +61,7 @@
                     }
                     res.push({
                         player: logData.players[i],
-                        data: activeduration ? this.phase.boonActiveDictionaries[this.playerindex][i] : this.phase.boonDictionaries[this.playerindex][i]
+                        data: activeduration ? this.buffsStatContainer.boonActiveDictionaries[this.playerindex][i] : this.buffsStatContainer.boonDictionaries[this.playerindex][i]
                     });
                 }
                 this.cacheBoon.set(id, res);
@@ -71,7 +74,7 @@
                 }
                 var activeduration = this.activeduration;
                 var res = [];
-                var playerData = activeduration ? this.phase.boonActiveStats[this.playerindex] : this.phase.boonStats[this.playerindex];
+                var playerData = activeduration ? this.phase.boonActiveStats[this.playerindex] : this.phase.buffsStatContainer.boonStats[this.playerindex];
                 var activeTimes = this.phase.playerActiveTimes;
                 if (activeduration && activeTimes[this.playerindex] < 1e-6) {
                     res.push({

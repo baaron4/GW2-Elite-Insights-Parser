@@ -49,9 +49,9 @@
                 };
                 var res;
                 if (this.activeduration) {
-                    res = getData(this.phase.debuffActiveStats);
+                    res = getData(this.phase.buffsStatContainer.debuffActiveStats);
                 } else {
-                    res = getData(this.phase.debuffStats);
+                    res = getData(this.phase.buffsStatContainer.debuffStats);
                 }
                 this.cache.set(id, res);
                 return res;
