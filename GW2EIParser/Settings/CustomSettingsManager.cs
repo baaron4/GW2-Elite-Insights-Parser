@@ -159,6 +159,7 @@ namespace GW2EIParser
                 CompressRaw = Properties.Settings.Default.CompressRaw,
                 IndentJSON = Properties.Settings.Default.IndentJSON,
                 IndentXML = Properties.Settings.Default.IndentXML,
+                MemoryLimit = Properties.Settings.Default.MemoryLimit,
             };
             return settings;
         }

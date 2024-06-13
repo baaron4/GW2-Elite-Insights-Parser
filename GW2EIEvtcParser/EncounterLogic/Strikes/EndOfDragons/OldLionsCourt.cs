@@ -280,11 +280,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Vermilion() ?? Indigo() ?? Arsenite();
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Main target not found");
-            }
+            AbstractSingleActor target = (Vermilion() ?? Indigo() ?? Arsenite()) ?? throw new MissingKeyActorsException("Main target not found");
             return target.GetHealth(combatData) > 20e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

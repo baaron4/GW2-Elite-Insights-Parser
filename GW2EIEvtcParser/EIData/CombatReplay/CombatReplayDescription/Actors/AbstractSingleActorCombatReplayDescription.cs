@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 angles.Add(-Point3D.GetZRotationFromFacing(facing));
             }
-            if (replay.Hidden.Any())
+            if (replay.Hidden.Count != 0)
             {
                 var hide = new List<long>();
                 foreach (Segment seg in replay.Hidden)

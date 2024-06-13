@@ -427,6 +427,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Fixated (Fear 2)", FixatedFear2, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated (Fear 1)", FixatedFear1, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Fixated),
             new Buff("Fixated (Fear 4)", FixatedFear4, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.Fixated),
+            new Buff("Fixated (Enraged Water Sprite)", FixatedEnragedWaterSprite, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Fixated),
+            new Buff("Fixated (Guilt)", FixatedGuilt, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Fixated),
             new Buff("Charged Leap", ChargedLeap, Source.FightSpecific, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Other, BuffImages.IgniteArrowsDominion),
             new Buff("Tidal Bargain", TidalBargain, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Waterlogged),
             new Buff("Achievement Eligibility: Dancing with Demons", AchievementEligibilityDancingWithDemons, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
@@ -478,6 +480,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Determination", DeterminationEparch, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IonShield),
             new Buff("Fear of the King", FearOfTheKing, Source.FightSpecific, BuffClassification.Other, BuffImages.Crazed),
             new Buff("Achievement Eligibility: Fissure Walker", AchievementEligibilityFissureWalker, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            new Buff("Determined (Kryptis Rift)", DeterminedKryptisRift, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
             // Strike Mission
             new Buff("Exposed (Player)", ExposedPlayer, Source.Common, BuffStackType.Stacking, 10, BuffClassification.Debuff, BuffImages.Exposed),
             // Icebrood

@@ -71,11 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
         {
-            AbstractSingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog));
-            if (samarog == null)
-            {
-                throw new MissingKeyActorsException("Samarog not found");
-            }
+            AbstractSingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
             IReadOnlyList<AbstractHealthDamageEvent> damageTaken = combatData.GetDamageTakenData(samarog.AgentItem);
             var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, samarog, true, false).Select(x => x.Time).ToList();
             var fanaticalResilienceSegments = new List<Segment>();
@@ -103,11 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Samarog not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -143,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
             {
                 var spearAgents = combatData.Where(x => x.DstAgent == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
-                if (spearAgents.Any())
+                if (spearAgents.Count != 0)
                 {
                     foreach (AgentItem spear in spearAgents)
                     {
@@ -274,11 +266,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Samarog not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
             return (target.GetHealth(combatData) > 30e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }

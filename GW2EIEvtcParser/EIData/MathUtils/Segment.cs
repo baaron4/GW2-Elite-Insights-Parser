@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
 
         public static List<Segment> FromStates(List<(long start, double state)> states, long min, long max)
         {
-            if (!states.Any())
+            if (states.Count == 0)
             {
                 return new List<Segment>();
             }
@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EIData
             foreach ((long start, double state) in states)
             {
                 long end = Math.Min(Math.Max(start, min), max);
-                if (!res.Any())
+                if (res.Count == 0)
                 {
                     res.Add(new Segment(0, end, lastValue));
                 }

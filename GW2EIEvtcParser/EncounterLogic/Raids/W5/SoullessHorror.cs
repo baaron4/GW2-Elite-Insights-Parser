@@ -90,11 +90,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
-                if (mainTarget == null)
-                {
-                    throw new MissingKeyActorsException("Soulless Horror not found");
-                }
+                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
                 AbstractBuffEvent buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
                 {
@@ -113,11 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             ComputeFightTargets(agentData, combatData, extensions);
             // discard hp update events after determined apply
-            AbstractSingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
-            if (soullessHorror == null)
-            {
-                throw new MissingKeyActorsException("Soulless Horror not found");
-            }
+            AbstractSingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
             CombatItem determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
             if (determined895Apply != null)
             {
@@ -137,11 +129,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Soulless Horror not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {

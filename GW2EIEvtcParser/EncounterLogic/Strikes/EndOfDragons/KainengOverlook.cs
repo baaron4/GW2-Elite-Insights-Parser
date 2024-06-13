@@ -166,11 +166,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor ministerLi = GetMinisterLi(log.FightData);
-            if (ministerLi == null)
-            {
-                throw new MissingKeyActorsException("Minister Li not found");
-            }
+            AbstractSingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
             phases[0].AddTarget(ministerLi);
             //
             AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
@@ -204,13 +200,9 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor ministerLi = GetMinisterLi(fightData);
-            if (ministerLi == null)
-            {
-                throw new MissingKeyActorsException("Minister Li not found");
-            }
+            AbstractSingleActor ministerLi = GetMinisterLi(fightData) ?? throw new MissingKeyActorsException("Minister Li not found");
             var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
-            if (buffApplies.Any())
+            if (buffApplies.Count != 0)
             {
                 fightData.SetSuccess(true, buffApplies[0].Time);
             }

@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Extend(long extension, long oldValue, AgentItem src, long start, uint stackID)
         {
-            if ((BuffStack.Any() && oldValue > 0) || IsFull)
+            if ((BuffStack.Count != 0 && oldValue > 0) || IsFull)
             {
                 BuffStackItem minItem = BuffStack.MinBy(x => Math.Abs(x.TotalDuration - oldValue));
                 if (minItem != null)
@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             }
             else
             {
-                if (_lastSrcRemoves.Any())
+                if (_lastSrcRemoves.Count != 0)
                 {
                     Add(oldValue + extension, src, _lastSrcRemoves.First().agent, start, false, _lastSrcRemoves.First().extension, stackID);
                     _lastSrcRemoves.RemoveAt(0);
@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Any() && timePassed > 0)
+            if (BuffStack.Count != 0 && timePassed > 0)
             {
                 var toAdd = new BuffSimulationItemIntensity(BuffStack);
                 GenerationSimulation.Add(toAdd);

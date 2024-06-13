@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<AbstractSingleActor> SecondaryTargets => _secondaryTargets;
         private readonly List<AbstractSingleActor> _secondaryTargets = new List<AbstractSingleActor>();
 
-        public IReadOnlyList<AbstractSingleActor> AllTargets => _secondaryTargets.Any() ? _allTargets : _targets;
+        public IReadOnlyList<AbstractSingleActor> AllTargets => _secondaryTargets.Count != 0 ? _allTargets : _targets;
         private readonly List<AbstractSingleActor> _allTargets = new List<AbstractSingleActor>();
 
         internal PhaseData(long start, long end)
@@ -46,6 +46,13 @@ namespace GW2EIEvtcParser.EIData
         public bool InInterval(long time)
         {
             return Start <= time && time <= End;
+        }
+
+        public bool IntersectsWindow(long start, long end)
+        {
+            long maxStart = Math.Max(start, Start);
+            long minEnd = Math.Min(end, End);
+            return minEnd - maxStart > 0;
         }
 
         internal void AddTarget(AbstractSingleActor target)

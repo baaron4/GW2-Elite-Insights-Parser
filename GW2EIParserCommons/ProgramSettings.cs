@@ -46,6 +46,8 @@ namespace GW2EIParserCommons
         public bool CompressRaw { get; set; } = false;
         public bool IndentJSON { get; set; } = false;
         public bool IndentXML { get; set; } = false;
+        // Other
+        public int MemoryLimit { get; set; } = 0;
 
         public ProgramSettings()
         {
@@ -53,14 +55,20 @@ namespace GW2EIParserCommons
 
         public int GetMaxParallelRunning()
         {
+            int count;
             if (SendEmbedToWebhook || UploadToDPSReports || UploadToWingman)
             {
-                return Math.Max(Environment.ProcessorCount / 2, 1);
+                count = Math.Max(Environment.ProcessorCount / 2, 1);
             }
             else
             {
-                return Environment.ProcessorCount;
+                count = Environment.ProcessorCount;
             }
+            if (MemoryLimit > 0)
+            {
+                return count - 1;
+            }
+            return count;
         }
 
         public bool HasFormat()

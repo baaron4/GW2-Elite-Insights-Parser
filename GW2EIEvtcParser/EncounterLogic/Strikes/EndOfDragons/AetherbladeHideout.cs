@@ -143,11 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(fightData);
                 if (echoOfScarlet != null)
                 {
-                    AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike));
-                    if (maiTrin == null)
-                    {
-                        throw new MissingKeyActorsException("Mai Trin not found");
-                    }
+                    AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
                     BuffApplyEvent buffApply = combatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
                     if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                     {
@@ -159,17 +155,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private IEnumerable<AbstractSingleActor> GetHPScarletPhantoms(PhaseData phase)
         {
-            return Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHPCM)) && (phase.InInterval(x.FirstAware) || phase.InInterval(x.LastAware)));
+            return Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHP) || x.IsSpecies(ArcDPSEnums.TrashID.ScarletPhantomHPCM)) && phase.IntersectsWindow(x.FirstAware, x.LastAware));
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike));
-            if (maiTrin == null)
-            {
-                throw new MissingKeyActorsException("Mai Trin not found");
-            }
+            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
             phases[0].AddTarget(maiTrin);
             AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
             if (echoOfScarlet != null)
@@ -292,11 +284,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike));
-            if (maiTrin == null)
-            {
-                throw new MissingKeyActorsException("Mai Trin not found");
-            }
+            AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
             return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

@@ -400,12 +400,345 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
+        private AgentItem GetAiAgentAt(long time)
+        {
+            AgentItem elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak))?.AgentItem;
+            AgentItem darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2))?.AgentItem;
+            if (elementalAi != null && elementalAi.InAwareTimes(time))
+            {
+                return elementalAi;
+            }
+            else if (darkAi != null && darkAi.InAwareTimes(time))
+            {
+                return darkAi;
+            }
+            return null;
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
+
+            // tether between sprite and player
+            List<AbstractBuffEvent> spriteFixations = GetFilteredList(log.CombatData, new long[] { FixatedEnragedWaterSprite }, p, true, true);
+            replay.AddTether(spriteFixations, Colors.Purple, 0.5);
+
             // Tethering Players to Fears
             List<AbstractBuffEvent> fearFixations = GetFilteredList(log.CombatData, new long[] { FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4 }, p, true, true);
             replay.AddTether(fearFixations, Colors.Magenta, 0.5);
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+
+
+            IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
+            switch (target.ID)
+            {
+                case (int)TrashID.CCSorrowDemon:
+                    {
+                        const long sorrowFullCastDuration = 11840;
+                        const long sorrowHitDelay = 400;
+                        const uint sorrowIndicatorSize = 2000;
+                        var detonates = casts.Where(x => x.SkillId == OverwhelmingSorrowDetonate).ToList();
+                        foreach (AnimatedCastEvent cast in casts)
+                        {
+                            if (cast.SkillId == OverwhelmingSorrowWindup)
+                            {
+                                long start = cast.Time;
+                                long fullEnd = start + sorrowFullCastDuration;
+                                AnimatedCastEvent detonate = detonates.Where(x => x.Time > start && x.Time < fullEnd + ServerDelayConstant).FirstOrDefault();
+                                long end;
+                                if (detonate != null)
+                                {
+                                    end = detonate.Time;
+                                    long hit = detonate.Time + sorrowHitDelay;
+                                    replay.Decorations.Add(new CircleDecoration(sorrowIndicatorSize, (hit, hit + 300), Colors.Red, 0.15, new AgentConnector(target)));
+                                }
+                                else
+                                {
+                                    // attempt to find end while handling missing cast durations
+                                    end = cast.EndTime > ServerDelayConstant ? cast.EndTime : fullEnd;
+                                    DeadEvent dead = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+                                    if (dead != null)
+                                    {
+                                        end = Math.Min(end, dead.Time);
+                                    }
+                                }
+                                var decoration = new CircleDecoration(sorrowIndicatorSize, (start, end), Colors.Orange, 0.15, new AgentConnector(target));
+                                replay.Decorations.Add(decoration.Copy().UsingFilled(false));
+                                replay.Decorations.Add(decoration.UsingGrowingEnd(fullEnd));
+                            }
+                        }
+                        break;
+                    }
+                case (int)TrashID.GuiltDemon:
+                    {
+                        // tether between guilt and player/boss, buff applied TO guilt
+                        List<AbstractBuffEvent> fixationBuffs = GetFilteredList(log.CombatData, new long[] { FixatedGuilt }, target, true, true);
+                        replay.AddTether(fixationBuffs, Colors.DarkPurple, 0.5);
+                        break;
+                    }
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            // arrow indicators
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiArrowAttackIndicator, out IReadOnlyList<EffectEvent> arrows))
+            {
+                const uint width = 80;
+                const uint length = 360;
+                foreach (EffectEvent effect in arrows)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1800);
+                    var rotation = new AngleConnector(effect.Rotation.Z);
+                    GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 0.5f * length), true);
+                    EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
+                }
+            }
+
+            // orbs
+            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirOrbFloat, EffectGUIDs.AiFireOrbFloat, EffectGUIDs.AiWaterOrbFloat }, out IReadOnlyList<EffectEvent> orbs))
+            {
+                foreach (EffectEvent effect in orbs)
+                {
+                    long start = effect.Time;
+                    long end = start + 5000;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.3, position).UsingFilled(false));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiDarkOrbFloat, out IReadOnlyList<EffectEvent> darkOrbs))
+            {
+                foreach (EffectEvent effect in darkOrbs)
+                {
+                    long start = effect.Time;
+                    long end = start + 5000;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Purple, 0.3, position).UsingFilled(false));
+                }
+            }
+
+            // spreads
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiSpreadCircle, out IReadOnlyList<EffectEvent> spreadIndicators))
+            {
+                var spreadDetonateGUIDs = new string[] { EffectGUIDs.AiAirDetonate, EffectGUIDs.AiFireDetonate, EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkDetonate };
+                const float maxDist = 40f;
+                const long duration = 5000;
+
+                bool hasDetonates = log.CombatData.TryGetEffectEventsByGUIDs(spreadDetonateGUIDs, out IReadOnlyList<EffectEvent> detonates);
+                foreach (EffectEvent effect in spreadIndicators)
+                {
+                    long start = effect.Time;
+                    long end = start + duration;
+                    var position = new AgentConnector(effect.Dst);
+                    EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.3, position).UsingFilled(false));
+                    EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.15, position).UsingGrowingEnd(end));
+                    if (hasDetonates)
+                    {
+                        Point3D endPos = effect.Dst.GetCurrentPosition(log, end);
+                        EffectEvent detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && x.Position.Distance2DToPoint(endPos) < maxDist);
+                        if (detonate != null)
+                        {
+                            EnvironmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));
+                        }
+                    }
+                }
+            }
+
+            // frontals
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiConeIndicator, out IReadOnlyList<EffectEvent> frontal))
+            {
+                foreach (EffectEvent effect in frontal)
+                {
+                    long start = effect.Time;
+                    long end = start + 2000;
+                    var position = new PositionConnector(effect.Position);
+                    var rotation = new AgentFacingConnector(effect.Src);
+                    EnvironmentDecorations.Add(new PieDecoration(240, 170f, (start, end), Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration(240, 170f, (end, end + 300), Colors.Red, 0.15, position).UsingRotationConnector(rotation));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAoEAroundIndicator, out IReadOnlyList<EffectEvent> around))
+            {
+                foreach (EffectEvent effect in around)
+                {
+                    long start = effect.Time;
+                    long end = start + 2100;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (end, end + 300), Colors.Red, 0.15, position));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiRedPointblankIndicator, out IReadOnlyList<EffectEvent> aroundRed))
+            {
+                foreach (EffectEvent effect in aroundRed)
+                {
+                    long start = effect.Time;
+                    long end = start + 4000;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
+                }
+            }
+
+            // scaled circles
+            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCircleDetonate, EffectGUIDs.AiFireCircleDetonate }, out IReadOnlyList<EffectEvent> circleDetonate))
+            {
+                AddScalingCircleDecorations(log, circleDetonate, 300);
+            }
+            // we need to filter water & dark detonates due to reuse
+            var detonateReusedGUIDs = new string[] { EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkCircleDetonate };
+            if (log.CombatData.TryGetEffectEventsByGUIDs(detonateReusedGUIDs, out IReadOnlyList<EffectEvent> circleDetonateReused))
+            {
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiCircleAoEIndicator, out IReadOnlyList<EffectEvent> indicators))
+                {
+                    IEnumerable<EffectEvent> filteredCircles = circleDetonateReused.Where(detonate =>
+                    {
+                        return indicators.Any(indicator =>
+                        {
+                            long timeDifference = detonate.Time - indicator.Time;
+                            return timeDifference > 0 && timeDifference < 4000 && detonate.Position.Distance2DToPoint(indicator.Position) < 1.0f;
+                        });
+                    });
+                    AddScalingCircleDecorations(log, filteredCircles, 300);
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing, EffectGUIDs.AiDarkCirclePulsing }, out IReadOnlyList<EffectEvent> circlePulsing))
+            {
+                AddScalingCircleDecorations(log, circlePulsing, 8000);
+            }
+
+            // air intermission lightning strikes
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirIntermissionRedCircleIndicator, out IReadOnlyList<EffectEvent> intermissionReds))
+            {
+                foreach (EffectEvent effect in intermissionReds)
+                {
+                    long start = effect.Time;
+                    long end = start + 1500;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirLightningStrike, out IReadOnlyList<EffectEvent> lightningStrikes))
+            {
+                foreach (EffectEvent effect in lightningStrikes)
+                {
+                    long start = effect.Time;
+                    long end = start + 300;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Red, 0.15, position));
+                }
+            }
+
+            // fire intermission meteors
+            AddMeteorDecorations(log);
+
+            // water intermission greens
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiGreenCircleIndicator, out IReadOnlyList<EffectEvent> greens))
+            {
+                foreach (EffectEvent effect in greens)
+                {
+                    long start = effect.Time;
+                    long end = start + 6250;
+                    var position = new AgentConnector(effect.Dst);
+                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position));
+                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.3, position).UsingGrowingEnd(end));
+                }
+            }
+
+            // water tornados
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiWaterTornadoIndicator2, out IReadOnlyList<EffectEvent> tornados))
+            {
+                const uint directionLength = 360;
+                foreach (EffectEvent effect in tornados)
+                {
+                    long start = effect.Time;
+                    long end = start + 1800;
+                    var position = new PositionConnector(effect.Position);
+                    GeographicalConnector offset = new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 0.5f * directionLength), true);
+                    var rotation = new AngleConnector(effect.Rotation.Z);
+                    EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.15, position));
+                    EnvironmentDecorations.Add(new RectangleDecoration(80, directionLength, (start, end), Colors.Orange, 0.15, offset).UsingRotationConnector(rotation));
+                }
+            }
+        }
+
+        private void AddScalingCircleDecorations(ParsedEvtcLog log, IEnumerable<EffectEvent> effects, long damageDuration)
+        {
+            foreach (EffectEvent effect in effects)
+            {
+                // TODO: determine duration from previous indicator at same location
+                const long indicatorDuration = 1800;
+
+                long start = effect.Time - indicatorDuration;
+                long end = effect.Time;
+
+                AgentItem ai = GetAiAgentAt(effect.Time);
+                Point3D aiPos = ai.GetCurrentPosition(log, start);
+                float dist = aiPos.Distance2DToPoint(effect.Position);
+
+                // actual distances are 400, 670, 1080, 1630
+                uint radius;
+                if (dist > 1500f)
+                {
+                    radius = 320;
+                }
+                else if (dist > 900f)
+                {
+                    radius = 240;
+                }
+                else if (dist > 500f)
+                {
+                    radius = 160;
+                }
+                else {
+                    radius = 100;
+                }
+                var position = new PositionConnector(effect.Position);
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, end), Colors.Orange, 0.15, position));
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (end, end + damageDuration), Colors.Red, 0.15, position));
+            }
+        }
+
+        // TODO: find proper sizes
+        private const uint MeteorInnerSize = 90;
+        private const uint MeteorCircleDist = 95;
+        private const uint MeteorFullRadius = MeteorInnerSize + 7 * MeteorCircleDist;
+
+        private void AddMeteorDecorations(ParsedEvtcLog log)
+        {
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorIndicatorGround, out IReadOnlyList<EffectEvent> groundIndicators))
+            {
+                foreach (EffectEvent effect in groundIndicators)
+                {
+                    (long, long) lifespan = (effect.Time, effect.Time + 6000);
+                    GeographicalConnector position = effect.IsAroundDst ? new AgentConnector(effect.Dst) : (GeographicalConnector) new PositionConnector(effect.Position);
+                    AddMeteorIndicatorDecoration(lifespan, position, Colors.Orange);
+                    EnvironmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Orange, 0.15, position).UsingGrowingEnd(lifespan.Item2));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorImpact, out IReadOnlyList<EffectEvent> impacts))
+            {
+                foreach (EffectEvent effect in impacts)
+                {
+                    (long, long) lifespan = (effect.Time, effect.Time + 300);
+                    var position = new PositionConnector(effect.Position);
+                    AddMeteorIndicatorDecoration(lifespan, position, Colors.Red);
+                    EnvironmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Red, 0.15, position));
+                }
+            }
+        }
+
+        private void AddMeteorIndicatorDecoration((long, long) lifespan, GeographicalConnector connector, Color color)
+        {
+            EnvironmentDecorations.Add(new CircleDecoration(MeteorInnerSize, lifespan, color, 0.3, connector));
+            for (uint i = 1; i <= 7; i++)
+            {
+                uint radius = MeteorInnerSize + i * MeteorCircleDist;
+                EnvironmentDecorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingFilled(false));
+            }
         }
     }
 }

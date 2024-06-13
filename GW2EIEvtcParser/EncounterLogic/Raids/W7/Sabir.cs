@@ -91,11 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Sabir not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -181,13 +177,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 3000; // casttime 0 from skill def
                         int duration = 5000;
                         uint radius = 1200;
-                        Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
-                        if (targetPosition != null)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(start + duration));
-                        }
+                        (long, long) lifespanShockwave = (start + delay, start + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, connector));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, connector));
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
@@ -238,11 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Sabir not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
             return (target.GetHealth(combatData) > 32e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }

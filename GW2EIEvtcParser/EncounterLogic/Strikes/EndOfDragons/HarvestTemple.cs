@@ -393,7 +393,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
                 }
             }
-            if (dragonOrbMaxHPs.Any())
+            if (dragonOrbMaxHPs.Count != 0)
             {
                 needRefreshAgentPool = true;
             }
@@ -413,7 +413,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem atAgent = agentData.GetAgent(x.SrcAgent, x.Time);
                 if (targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables))
                 {
-                    return targetables.Any() ? targetables.Min(y => y.Time) : long.MaxValue;
+                    return targetables.Count != 0 ? targetables.Min(y => y.Time) : long.MaxValue;
                 }
                 return long.MaxValue;
             }).ToList();
@@ -424,7 +424,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
                 // There are only two relevant attack targets, one represents the first five and the last one Soo Won
-                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || !targetables.Any())
+                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || targetables.Count == 0)
                 {
                     continue;
                 }
@@ -1029,10 +1029,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in shockwaves)
                         {
+                            uint radius = 2000; // Assumed radius
                             (long start, long end) lifespan = (effect.Time, effect.Time + 1600); // Assumed duration, effect has 0
-                            var positionConnector = new PositionConnector(effect.Position);
-                            var shockwave = (CircleDecoration)new CircleDecoration(2000, lifespan, Colors.Black, 0.6, positionConnector).UsingFilled(false).UsingGrowingEnd(lifespan.end);
-                            replay.Decorations.Add(shockwave);
+                            GeographicalConnector connector = new PositionConnector(effect.Position);
+                            replay.AddShockwave(connector, lifespan, Colors.Black, 0.6, radius);
                         }
                     }
                     break;
@@ -1249,9 +1249,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in tsunamiEffects)
                         {
                             // Expanding wave - radius and duration are estimates, can't seem to line up the decoration with actual hits
-                            int waveStart = (int)effect.Time;
-                            int waveEnd = waveStart + 4500;
-                            replay.Decorations.Add(new CircleDecoration(2000, (waveStart, waveEnd), Colors.Blue, 0.5, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(waveEnd));
+                            uint radius = 2000; // Assumed radius
+                            (long, long) lifespan = (effect.Time, effect.Time + 4500); // Assumed duration
+                            GeographicalConnector connector = new PositionConnector(effect.Position);
+                            replay.AddShockwave(connector, lifespan, Colors.Blue, 0.5, radius);
                         }
                     }
                     break;
@@ -1594,8 +1595,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             uint radius = 1000; // Assumed radius
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 2500); // Assumed duration
                             var positionConnector = new PositionConnector(effect.Position);
-                            var shockwave = (CircleDecoration)new CircleDecoration(radius, lifespan, Colors.LightGrey, 0.5, positionConnector).UsingFilled(false).UsingGrowingEnd(lifespan.end);
-                            replay.Decorations.Add(shockwave);
+                            GeographicalConnector connector = new PositionConnector(effect.Position);
+                            replay.AddShockwave(connector, lifespan, Colors.LightGrey, 0.6, radius);
                         }
                     }
 

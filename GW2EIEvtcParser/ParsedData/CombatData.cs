@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 _buffDataByDst[a] = _buffDataByDst[a].OrderBy(x => x.Time).ToList();
             }
-            if (toAdd.Any())
+            if (toAdd.Count != 0)
             {
                 BuildBuffDependentContainers();
             }
@@ -544,8 +544,8 @@ namespace GW2EIEvtcParser.ParsedData
             HasStackIDs = evtcVersion > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
             UseBuffInstanceSimulator = HasStackIDs && false;// (fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced10 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Instanced5 || fightData.Logic.Mode == EncounterLogic.FightLogic.ParseMode.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
-            HasBreakbarDamageData = brkDamageData.Any();
-            HasEffectData = _statusEvents.EffectEvents.Any();
+            HasBreakbarDamageData = brkDamageData.Count != 0;
+            HasEffectData = _statusEvents.EffectEvents.Count != 0;
             //
             operation.UpdateProgressWithCancellationCheck("Parsing: Combining SkillInfo with SkillData");
             skillData.CombineWithSkillInfo(_metaDataEvents.SkillInfoEvents);
@@ -1232,6 +1232,32 @@ namespace GW2EIEvtcParser.ParsedData
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
+        public bool TryGetEffectEventsByGUIDs(string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            var result = new List<EffectEvent>();
+            var found = false;
+            foreach (string effectGUID in effectGUIDs)
+            {
+                if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+                {
+                    result.AddRange(effects);
+                    found = true;
+                }
+            }
+            if (found)
+            {
+                effectEvents = result;
+            }
+            return found;
         }
 
         /// <summary>

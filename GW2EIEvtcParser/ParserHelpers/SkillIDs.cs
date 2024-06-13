@@ -3302,6 +3302,7 @@
         public const long Enraged_300_strike_75_reduc = 61006;
         public const long Stealth2Skill = 61081;
         public const long Enraged_100_strike_25_reduc = 61138;
+        public const long OverwhelmingSorrowDetonate = 61168;
         public const long ElementalManipulationWater1 = 61172;
         public const long TorrentialBolt2 = 61177;
         public const long AchievementEligibilityDancingWithDemons = 61183;
@@ -3314,6 +3315,8 @@
         public const long EmpathicManipulation5 = 61217;
         public const long ResilientForm = 61220;
         public const long WhirlwindShield = 61224;
+        public const long FixatedGuilt = 61225;
+        public const long OverwhelmingSorrowHit = 61241;
         public const long FlameBurst = 61248;
         public const long AquaticBurst = 61251;
         public const long ElementalManipulationFire2 = 61256;
@@ -3351,7 +3354,7 @@
         public const long FirestormAi = 61445;
         public const long ElementalWhirl = 61463;
         public const long VolatileWind = 61470;
-        public const long OverwhelmingSorrow = 61481;
+        public const long OverwhelmingSorrowWindup = 61481;
         public const long ElementalSurge4 = 61486;
         public const long FulgorSphere1 = 61487;
         public const long FocusedWrath2 = 61499;
@@ -3380,6 +3383,7 @@
         public const long EmpathicManipulationGuilt = 61602;
         public const long EmpathicManipulation2 = 61604;
         public const long EmpathicManipulationSorrow = 61606;
+        public const long FixatedEnragedWaterSprite = 61615;
         #endregion
         #region End of Dragons
         public const long VoidObliteratorChargeWindup = 61713;
@@ -4108,6 +4112,7 @@
         public const long InsatiableHunger2 = 70091;
         public const long SpinningNebulaWithTeleport = 70103; // The attack when Dagda teleports off the center
         public const long EmpoweredRegretCerus = 70123;
+        public const long DeterminedKryptisRift = 70133;
         public const long EmpoweredRageEmbodiment = 70181;
         public const long DagdaSharedDestruction_MeteorCrash = 70182; // Game maps it to Shared Destruction - Damage is Meteor Crash
         public const long WailOfDespairCM = 70187;

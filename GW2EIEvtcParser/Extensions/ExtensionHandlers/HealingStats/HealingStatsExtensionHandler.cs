@@ -352,7 +352,7 @@ namespace GW2EIEvtcParser.Extensions
                 operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _healingEvents.Count + " heal events to CombatData");
             }          
             //
-            if (_barrierEvents.Any())
+            if (_barrierEvents.Count != 0)
             {
                 var barrierData = _barrierEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in barrierData)

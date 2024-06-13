@@ -86,11 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Slothasor));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Slothasor not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -116,7 +112,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // Mushrooms
             var mushroomAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
-            if (mushroomAgents.Any())
+            if (mushroomAgents.Count != 0)
             {
                 int idToKeep = mushroomAgents.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Count()).MaxBy(x => x.Value).Key;
                 foreach (AgentItem mushroom in mushroomAgents)
@@ -130,7 +126,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var aliveUpdates = hpUpdates.Where(x => x.DstAgent == 10000).ToList();
                     var deadUpdates = hpUpdates.Where(x => x.DstAgent == 0).ToList();
                     long lastDeadTime = long.MinValue;
-                    var posFacingHP = combatData.Where(x => x.SrcMatchesAgent(mushroom) && (x.IsStateChange == ArcDPSEnums.StateChange.Position || x.IsStateChange == ArcDPSEnums.StateChange.Rotation || x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)).ToList();
                     foreach (CombatItem aliveEvent in aliveUpdates)
                     {
                         CombatItem deadEvent = deadUpdates.FirstOrDefault(x => x.Time > lastDeadTime && x.Time > aliveEvent.Time);

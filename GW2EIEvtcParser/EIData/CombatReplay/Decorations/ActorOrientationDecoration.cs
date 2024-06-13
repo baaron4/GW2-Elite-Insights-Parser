@@ -5,10 +5,32 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class ActorOrientationDecoration : GenericAttachedDecoration
     {
-
-        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+        internal class ConstantActorOrientationDecoration : ConstantGenericAttachedDecoration
         {
-            RotationConnectedTo = new AgentFacingConnector(agent);
+            public override string GetID()
+            {
+                return "AO";
+            }
+        }
+        internal class VariableActorOrientationDecorationn : VariableGenericAttachedDecoration
+        {
+            public VariableActorOrientationDecorationn((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+            {
+                RotationConnectedTo = new AgentFacingConnector(agent);
+            }
+
+            public override void UsingRotationConnector(RotationConnector rotationConnectedTo)
+            {
+            }
+            public override void UsingSkillMode(SkillModeDescriptor skill)
+            {
+            }
+        }
+
+        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base()
+        {
+            ConstantDecoration = new ConstantActorOrientationDecoration();
+            VariableDecoration = new VariableActorOrientationDecorationn(lifespan, agent);
         }
 
         //
@@ -16,16 +38,6 @@ namespace GW2EIEvtcParser.EIData
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             return new ActorOrientationDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
-
-        public override GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
-        {
-            return this;
-        }
-
-        public override GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
-        {
-            return this;
         }
     }
 }

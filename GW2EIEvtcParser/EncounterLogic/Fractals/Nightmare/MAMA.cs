@@ -81,11 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA));
-            if (mama == null)
-            {
-                throw new MissingKeyActorsException("MAMA not found");
-            }
+            AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
             phases[0].AddTarget(mama);
             if (!requirePhases)
             {
@@ -204,7 +200,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 for (int i = 0; i < 3; i++)
                                 {
                                     long shockWaveStart = expectedEndCast + i * 120;
-                                    replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), Colors.Yellow, 0.3, new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
+                                    (long, long) lifespanShockwave = (shockWaveStart, shockWaveStart + duration);
+                                    GeographicalConnector connector = new PositionConnector(targetPosition);
+                                    replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, shockwaveRadius);
                                 }
                             }
                         }

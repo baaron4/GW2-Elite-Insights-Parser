@@ -71,11 +71,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
-            AbstractSingleActor mainTarget = GetMainTarget();
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Xera not found");
-            }
+            AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
             var res = new List<AbstractBuffEvent>();
             if (_xeraSecondPhaseStartTime != 0)
             {
@@ -102,11 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = GetMainTarget();
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Xera not found");
-            }
+            AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
             phases[0].AddTarget(mainTarget);
             if (requirePhases)
             {
@@ -150,11 +142,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {
-            AbstractBuffEvent determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
-            if (determined == null)
-            {
-                determined = log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
-            }
+            AbstractBuffEvent determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
             return determined;
         }
 
@@ -269,11 +257,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             ComputeFightTargets(agentData, combatData, extensions);
             // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
-            AbstractSingleActor mainTarget = GetMainTarget();
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Xera not found");
-            }
+            AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
             mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
             {
                 (22611300, 100),

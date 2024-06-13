@@ -93,6 +93,7 @@ namespace GW2EIEvtcParser
             internal const int LingeringAgents = 20231110;
             internal const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
             internal const int NewMarkerEventBehavior = 20240418;
+            internal const int StackType0ActiveChange = 20240609;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -573,6 +574,7 @@ namespace GW2EIEvtcParser
         private const int PermanentEmbodimentOfRegret = -56;
         private const int PermanentEmbodimentOfEnvy = -57;
         private const int PermanentEmbodimentOfMalice = -58;
+        private const int KryptisRift = -59;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -1050,6 +1052,7 @@ namespace GW2EIEvtcParser
             AvatarOfSpite = 26268,
             TheTormentedLonelyTower = 26193,
             TheCravenLonelyTower = 26193,
+            KryptisRift = ArcDPSEnums.KryptisRift,
             // Open world Soo-Won
             SooWonTail = 51756,
             VoidGiant2 = 24310,

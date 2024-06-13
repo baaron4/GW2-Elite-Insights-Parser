@@ -123,7 +123,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     platform.OverrideID(TrashID.QadimPlatform);
                     platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
                 }
-                refresh = refresh || platformAgents.Any();
+                refresh = refresh || platformAgents.Count != 0;
             }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 lamp.OverrideType(AgentItem.AgentType.NPC);
                 lamp.OverrideID(TrashID.QadimLamp);
             }
-            refresh = refresh || lampAgents.Any();
+            refresh = refresh || lampAgents.Count != 0;
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
             var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
@@ -271,11 +271,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // If changing phase detection, combat replay platform timings may have to be updated.
 
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
-            if (qadim == null)
-            {
-                throw new MissingKeyActorsException("Qadim not found");
-            }
+            AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
             phases[0].AddTarget(qadim);
             var secondaryTargetIds = new HashSet<TrashID>
                         {
@@ -527,9 +523,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                            (long, long) lifespanShockwave = (start + delay, start + delay + duration);
+                            GeographicalConnector connector = new PositionConnector(position);
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, connector));
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.7, connector));
+                            replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.7, radius);
                         }
                     }
                     break;
@@ -676,7 +674,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 1800;
                         int duration = 3000;
                         uint maxRadius = 2000;
-                        replay.Decorations.Add(new CircleDecoration( maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                        (long, long) lifespan = (start + delay, start + delay + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
                     }
                     var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp).ToList();
                     foreach (AbstractCastEvent c in stompShockwave)
@@ -738,11 +738,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
                     var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
                     int velocityIndex = 0;
-                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
-                    if (qadim == null)
-                    {
-                        throw new MissingKeyActorsException("Qadim not found");
-                    }
+                    AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
                     HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HPPercent < 21);
                     long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
                     float threshold = 1f;
@@ -940,11 +936,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Qadim not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
             return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

@@ -95,7 +95,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     foreach (BuffStackItem stackItem in BuffStack)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                        if (stackItem.Extensions.Any())
+                        if (stackItem.Extensions.Count != 0)
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
                             {
@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                         if (Math.Abs(removedDuration - stackItem.TotalDuration) < ParserHelper.BuffSimulatorDelayConstant)
                         {
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Any())
+                            if (stackItem.Extensions.Count != 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {

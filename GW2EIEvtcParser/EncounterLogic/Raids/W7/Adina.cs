@@ -178,13 +178,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 2000; // casttime 0 from skill def
                         int duration = 5000;
                         uint radius = 1100;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + duration));
+                        (long, long) lifespan = (start + delay, start + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespan, Colors.LightOrange, 0.6, radius);
                     }
                     //
                     var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in diamondPalisades)
                     {
-                        replay.Decorations.Add(new CircleDecoration( 90, seg, "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
                     }
                     //
                     var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
@@ -206,11 +208,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Adina not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -259,7 +257,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
-            if (mainPhaseEnds.Any())
+            if (mainPhaseEnds.Count != 0)
             {
                 int phaseIndex = 1;
                 foreach (long quantumQake in mainPhaseEnds)
@@ -282,7 +280,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (phaseIndex + 1)));
                 }
             } 
-            else if (start > 0 && !invuls.Any())
+            else if (start > 0 && invuls.Count == 0)
             {
                 // no split
                 mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase 1"));
@@ -359,11 +357,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Adina not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
             return (target.GetHealth(combatData) > 23e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 

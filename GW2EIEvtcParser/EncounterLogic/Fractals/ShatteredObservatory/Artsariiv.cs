@@ -78,11 +78,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv));
-            if (artsariiv == null)
-            {
-                throw new MissingKeyActorsException("Artsariiv not found");
-            }
+            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
             phases[0].AddTarget(artsariiv);
             if (!requirePhases)
             {
@@ -125,10 +121,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
-            if (artsariivs.Any())
+            if (artsariivs.Count != 0)
             {
                 artsariivs.Remove(artsariivs.MaxBy(x => x.LastAware - x.FirstAware));
-                if (artsariivs.Any())
+                if (artsariivs.Count != 0)
                 {
                     foreach (AgentItem subartsariiv in artsariivs)
                     {
@@ -190,11 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Artsariiv not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
             SetSuccessByBuffCount(combatData, fightData, GetParticipatingPlayerAgents(target, combatData, playerAgents), target, Determined762, 4);
         }
 

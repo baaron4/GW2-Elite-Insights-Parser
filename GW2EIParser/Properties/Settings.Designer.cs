@@ -566,5 +566,19 @@ namespace GW2EIParser.Properties {
                 this["DetailledWvW"] = value;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MemoryLimit
+        {
+            get
+            {
+                return ((int)(this["MemoryLimit"]));
+            }
+            set
+            {
+                this["MemoryLimit"] = value;
+            }
+        }
     }
 }

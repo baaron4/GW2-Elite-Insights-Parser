@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Any() && timePassed > 0)
+            if (BuffStack.Count != 0 && timePassed > 0)
             {
                 long diff = timePassed;
                 long leftOver = 0;

@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem toAdd, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
         {
-            if (!stacks.Any())
+            if (stacks.Count == 0)
             {
                 return false;
             }
@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Add(ParsedEvtcLog log, List<BuffStackItem> stacks, BuffStackItem stackItem)
         {
-            if (!stacks.Any())
+            if (stacks.Count == 0)
             {
                 stacks.Add(stackItem);
                 return;
