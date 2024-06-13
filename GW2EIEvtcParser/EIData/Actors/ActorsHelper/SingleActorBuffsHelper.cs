@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            if (_buffStats == null)
+            if (_buffVolumes == null)
             {
                 _buffVolumes = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffVolumes>[]>(log, BuffEnum.Self);
             }
