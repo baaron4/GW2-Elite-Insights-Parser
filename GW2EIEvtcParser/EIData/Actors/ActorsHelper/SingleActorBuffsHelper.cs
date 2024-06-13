@@ -531,6 +531,20 @@ namespace GW2EIEvtcParser.EIData
             return value[0];
         }
 
+        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            if (_buffsDictionary == null)
+            {
+                _buffsDictionary = new CachingCollection<Dictionary<long, FinalBuffsDictionary>[]>(log);
+            }
+            if (!_buffsDictionary.TryGetValue(start, end, out Dictionary<long, FinalBuffsDictionary>[] value))
+            {
+                value = ComputeBuffsDictionary(log, start, end);
+                _buffsDictionary.Set(start, end, value);
+            }
+            return value[1];
+        }
+
         public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
         {
             if (_buffVolumesDictionary == null)
@@ -544,17 +558,16 @@ namespace GW2EIEvtcParser.EIData
             }
             return value[0];
         }
-
-        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
         {
-            if (_buffsDictionary == null)
+            if (_buffVolumesDictionary == null)
             {
-                _buffsDictionary = new CachingCollection<Dictionary<long, FinalBuffsDictionary>[]>(log);
+                _buffVolumesDictionary = new CachingCollection<Dictionary<long, FinalBuffVolumesDictionary>[]>(log);
             }
-            if (!_buffsDictionary.TryGetValue(start, end, out Dictionary<long, FinalBuffsDictionary>[] value))
+            if (!_buffVolumesDictionary.TryGetValue(start, end, out Dictionary<long, FinalBuffVolumesDictionary>[] value))
             {
-                value = ComputeBuffsDictionary(log, start, end);
-                _buffsDictionary.Set(start, end, value);
+                value = ComputeBuffVolumesDictionary(log, start, end);
+                _buffVolumesDictionary.Set(start, end, value);
             }
             return value[1];
         }
