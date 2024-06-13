@@ -376,7 +376,7 @@ namespace GW2EIBuilders.HtmlModels
         {
             int downCount = 0;
             string downTooltip = "0% Downed";
-            if (defenses.downCount > 0)
+            if (defenses.DownCount > 0)
             {
                 var downDuration = TimeSpan.FromMilliseconds(defenses.DownDuration);
                 downCount = (defenses.DownCount);
