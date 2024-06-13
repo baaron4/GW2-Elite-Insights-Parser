@@ -29,6 +29,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<List<object>> SupportStats { get; set; }
 
         public BuffsContainerDto BuffsStatContainer { get; set; }
+        public BuffVolumesContainerDto BuffVolumesStatContainer { get; set; }
 
         public List<DamageModData> DmgModifiersCommon { get; set; }
         public List<DamageModData> DmgModifiersItem { get; set; }
@@ -117,6 +118,7 @@ namespace GW2EIBuilders.HtmlModels
                 MarkupLines = null;
             }
             BuffsStatContainer = new BuffsContainerDto(phase, log, persBuffDict);
+            BuffVolumesStatContainer = new BuffVolumesContainerDto(phase, log, persBuffDict);
             //
             DpsStats = BuildDPSData(log, phase);
             DpsStatsTargets = BuildDPSTargetsData(log, phase);
