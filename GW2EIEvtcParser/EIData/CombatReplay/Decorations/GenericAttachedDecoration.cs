@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.EIData
         {
             public GeographicalConnector ConnectedTo { get; }
             public RotationConnector RotationConnectedTo { get; protected set; }
-            public SkillModeDescriptor SkillMode;
+            public SkillModeDescriptor SkillMode { get; protected set; }
             protected VariableGenericAttachedDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan)
             {
                 ConnectedTo = connector;

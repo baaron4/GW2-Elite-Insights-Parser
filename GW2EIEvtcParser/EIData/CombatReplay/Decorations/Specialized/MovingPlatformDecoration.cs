@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
         public int Width => ConstantDecoration.Width;
         public int Height => ConstantDecoration.Height;
 
-        public List<(float x, float y, float z, float angle, float opacity, int time)> Positions => VariableDecoration.Positions;
+        public IReadOnlyList<(float x, float y, float z, float angle, float opacity, int time)> Positions => VariableDecoration.Positions;
 
         public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base()
         {
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
 
         public void AddPosition(float x, float y, float z, double angle, double opacity, int time)
         {
-            Positions.Add((x, y, z, (float)angle, (float)opacity, time));
+            VariableDecoration.Positions.Add((x, y, z, (float)angle, (float)opacity, time));
         }
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
