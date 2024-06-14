@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             // Handle potentially wrongly associated logs
             if (logStartNPCUpdate != null)
             {

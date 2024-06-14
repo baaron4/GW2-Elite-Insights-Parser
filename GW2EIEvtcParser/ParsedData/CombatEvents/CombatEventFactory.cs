@@ -52,17 +52,17 @@ namespace GW2EIEvtcParser.ParsedData
                 case StateChange.InstanceStart:
                     metaDataEvents.InstanceStartEvent = new InstanceStartEvent(stateChangeEvent);
                     break;
-                case StateChange.LogStart:
+                case StateChange.SquadCombatStart:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {
                         return;
                     }
                     metaDataEvents.LogStartEvent = new LogStartEvent(stateChangeEvent);
                     break;
-                case StateChange.LogStartNPCUpdate:
-                    metaDataEvents.LogStartNPCUpdateEvents.Add(new LogStartNPCUpdateEvent(stateChangeEvent, agentData));
+                case StateChange.LogNPCUpdate:
+                    metaDataEvents.LogNPCUpdateEvents.Add(new LogNPCUpdateEvent(stateChangeEvent, agentData));
                     break;
-                case StateChange.LogEnd:
+                case StateChange.SquadCombatEnd:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {
                         return;
@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.ParsedData
                     var bPEvt = new BreakbarPercentEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BreakbarPercentEvents, bPEvt.Src, bPEvt);
                     break;
-                case StateChange.Error:
+                case StateChange.Integrity:
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
                 case StateChange.Marker:

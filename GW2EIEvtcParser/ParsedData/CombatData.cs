@@ -884,9 +884,9 @@ namespace GW2EIEvtcParser.ParsedData
             return _metaDataEvents.LogStartEvent;
         }
 
-        public IReadOnlyList<LogStartNPCUpdateEvent> GetLogStartNPCUpdateEvents()
+        public IReadOnlyList<LogNPCUpdateEvent> GetLogNPCUpdateEvents()
         {
-            return _metaDataEvents.LogStartNPCUpdateEvents;
+            return _metaDataEvents.LogNPCUpdateEvents;
         }
 
         public LogEndEvent GetLogEndEvent()

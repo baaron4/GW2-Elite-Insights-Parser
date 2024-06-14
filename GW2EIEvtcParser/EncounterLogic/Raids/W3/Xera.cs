@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
         {
             // We expect pre event with logs with LogStartNPCUpdate events
-            if (!_hasPreEvent && combatData.GetLogStartNPCUpdateEvents().Any())
+            if (!_hasPreEvent && combatData.GetLogNPCUpdateEvents().Any())
             {
                 return FightData.EncounterStartStatus.NoPreEvent;
             }
