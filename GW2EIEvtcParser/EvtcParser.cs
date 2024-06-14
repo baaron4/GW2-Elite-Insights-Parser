@@ -268,57 +268,12 @@ namespace GW2EIEvtcParser
         /// <exception cref="EvtcAgentException"></exception>
         private string GetAgentProfString(uint prof, uint elite, ParserController operation)
         {
-            // Non player agents - Gadgets = GDG
-            if (elite == 0xFFFFFFFF)
+            string spec = _apiController.GetSpec(prof, elite);
+            if (spec == "Unknow")
             {
-                return (prof & 0xffff0000) == 0xffff0000 ? "GDG" : "NPC";
+                operation.UpdateProgressWithCancellationCheck("Parsing: Missing or outdated GW2 API Cache or unknown player spec");
             }
-            // Old way - Base Profession
-            else if (elite == 0)
-            {
-                switch (prof)
-                {
-                    case 1: return "Guardian";
-                    case 2: return "Warrior";
-                    case 3: return "Engineer";
-                    case 4: return "Ranger";
-                    case 5: return "Thief";
-                    case 6: return "Elementalist";
-                    case 7: return "Mesmer";
-                    case 8: return "Necromancer";
-                    case 9: return "Revenant";
-                    default: return "Unknown";
-                }
-            }
-            // Old way - Elite Specialization (HoT)
-            else if (elite == 1)
-            {
-                switch (prof)
-                {
-                    case 1: return "Dragonhunter";
-                    case 2: return "Berserker";
-                    case 3: return "Scrapper";
-                    case 4: return "Druid";
-                    case 5: return "Daredevil";
-                    case 6: return "Tempest";
-                    case 7: return "Chronomancer";
-                    case 8: return "Reaper";
-                    case 9: return "Herald";
-                    default: return "Unknown";
-                }
-            }
-            // Current way
-            else
-            {
-                GW2APISpec spec = _apiController.GetAPISpec((int)elite);
-                if (spec == null)
-                {
-                    operation.UpdateProgressWithCancellationCheck("Parsing: Missing or outdated GW2 API Cache or unknown player spec");
-                    return "Unknown";
-                }
-                return spec.Elite ? spec.Name : spec.Profession;
-            }
-            throw new EvtcAgentException("Unexpected profession pattern in evtc");
+            return spec;
         }
 
         /// <summary>
@@ -621,7 +576,7 @@ namespace GW2EIEvtcParser
                 {
                     _gw2Build = combatItem.SrcAgent;
                 }
-                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.LogEnd)
+                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.SquadCombatEnd)
                 {
                     keepOnlyExtensionEvents = true;
                 }

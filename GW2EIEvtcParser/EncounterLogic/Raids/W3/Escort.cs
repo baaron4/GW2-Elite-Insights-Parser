@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 throw new MissingKeyActorsException("McLeod not found");
             }
             long startToUse = GetGenericFightOffset(fightData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return FightData.EncounterStartStatus.Normal;
             } 
-            else if (combatData.GetLogStartNPCUpdateEvents().Any())
+            else if (combatData.GetLogNPCUpdateEvents().Any())
             {
                 return FightData.EncounterStartStatus.NoPreEvent;
             } 

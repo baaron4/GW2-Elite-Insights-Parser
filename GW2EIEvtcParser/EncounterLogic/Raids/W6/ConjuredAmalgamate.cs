@@ -64,7 +64,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     CombatItem firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);
                     if (firstArmSmash != null)
                     {
-                        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+                        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
                         if (logStartNPCUpdate != null)
                         {
                             // we couldn't have hit CA before the initial smash
