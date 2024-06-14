@@ -11,8 +11,8 @@ namespace GW2EIEvtcParser.EIData
     {
         private Dictionary<AbstractSingleActor, double> _incomingBy { get; } = new Dictionary<AbstractSingleActor, double>();
         public IReadOnlyDictionary<AbstractSingleActor, double> IncomingBy => _incomingBy;
-        private Dictionary<AbstractSingleActor, double> _incomingExtensionBy { get; } = new Dictionary<AbstractSingleActor, double>();
-        public IReadOnlyDictionary<AbstractSingleActor, double> IncomingExtensionBy => _incomingExtensionBy;
+        private Dictionary<AbstractSingleActor, double> _incomingByExtensionBy { get; } = new Dictionary<AbstractSingleActor, double>();
+        public IReadOnlyDictionary<AbstractSingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
 
 
         internal static (FinalBuffVolumesDictionary, FinalBuffVolumesDictionary) GetFinalBuffVolumesDictionary(ParsedEvtcLog log, Buff buff, AbstractSingleActor dstActor, long start, long end)
@@ -56,16 +56,16 @@ namespace GW2EIEvtcParser.EIData
                     incomingByExtension *= 100.0;
                 }
                 buffs._incomingBy[actor] = Math.Round(incoming / phaseDuration, ParserHelper.BuffDigit);
-                buffs._incomingExtensionBy[actor] = Math.Round(incomingByExtension / phaseDuration, ParserHelper.BuffDigit);
+                buffs._incomingByExtensionBy[actor] = Math.Round(incomingByExtension / phaseDuration, ParserHelper.BuffDigit);
                 if (activePhaseDuration > 0)
                 {
                     buffsActive._incomingBy[actor] = Math.Round(incoming / activePhaseDuration, ParserHelper.BuffDigit);
-                    buffsActive._incomingExtensionBy[actor] = Math.Round(incomingByExtension / activePhaseDuration, ParserHelper.BuffDigit);
+                    buffsActive._incomingByExtensionBy[actor] = Math.Round(incomingByExtension / activePhaseDuration, ParserHelper.BuffDigit);
                 }
                 else
                 {
                     buffsActive._incomingBy[actor] = 0.0;
-                    buffsActive._incomingExtensionBy[actor] = 0.0;
+                    buffsActive._incomingByExtensionBy[actor] = 0.0;
                 }
             }
             return (buffs, buffsActive);

@@ -36,7 +36,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     Data.Add(new List<object>()
                         {
                             toUse.IncomingBy[actor],
-                            toUse.IncomingExtensionBy[actor],
+                            toUse.IncomingByExtensionBy[actor],
                         });
                 }
                 else

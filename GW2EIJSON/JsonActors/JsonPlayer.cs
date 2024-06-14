@@ -214,12 +214,12 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonBuffsUptime> BuffUptimes { get; set; }
-        
+
         /// <summary>
         /// List of buff status on self generation  \n
         /// Key is "'b' + id"
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
+        /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffs { get; set; }
         
         /// <summary>
@@ -245,11 +245,11 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonBuffsUptime> BuffUptimesActive { get; set; }
-        
+
         /// <summary>
         /// List of buff status on self generation on active time
         /// </summary>
-        /// <seealso cref="JsonBuffsUptime"/>
+        /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffsActive { get; set; }
         
         /// <summary>
@@ -267,7 +267,66 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> SquadBuffsActive { get; set; }
-        
+
+
+        /// <summary>
+        /// List of volumes status
+        /// </summary>
+        /// <seealso cref="JsonBuffVolumes"/>
+        public IReadOnlyList<JsonBuffVolumes> BuffVolumes { get; set; }
+        /// <summary>
+        /// List of buff volumes on self outgoing  \n
+        /// Key is "'b' + id"
+        /// </summary>
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SelfBuffVolumes { get; set; }
+
+        /// <summary>
+        /// List of buff volumes on group outgoing
+        /// </summary>
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> GroupBuffVolumes { get; set; }
+
+        /// <summary>
+        /// List of buff volumes on off group outgoing
+        /// </summary>
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> OffGroupBuffVolumes { get; set; }
+
+        /// <summary>
+        /// List of buff volumes on squad outgoing
+        /// </summary>
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SquadBuffVolumes { get; set; }
+
+
+        /// <summary>
+        /// List of buff volumes on active time
+        /// </summary>
+        /// <seealso cref="JsonBuffVolumes"/>
+        public IReadOnlyList<JsonBuffVolumes> BuffVolumesActive { get; set; }
+        /// <summary>
+        /// List of buff volumes on self outgoing on active time
+        /// </summary>
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SelfBuffVolumesActive { get; set; }
+
+        /// <summary>
+        /// List of buff volumes on group outgoing on active time
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> GroupBuffVolumesActive { get; set; }
+
+        /// <summary>
+        /// List of buff volumes on off group outgoing on active time
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> OffGroupBuffVolumesActive { get; set; }
+
+        /// <summary>
+        /// List of buff volumes on squad outgoing on active time
+        /// </summary>
+        /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SquadBuffVolumesActive { get; set; }
+
         /// <summary>
         /// List of death recaps \n
         /// Length == number of death

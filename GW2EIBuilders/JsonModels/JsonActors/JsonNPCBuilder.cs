@@ -8,6 +8,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
 using Newtonsoft.Json;
 using static GW2EIJSON.JsonBuffsUptime;
+using static GW2EIJSON.JsonBuffVolumes;
 
 namespace GW2EIBuilders.JsonModels.JsonActors
 {
@@ -52,6 +53,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             jsonNPC.FinalBarrier = npc.GetCurrentBarrier(log, barrierLeft, log.FightData.FightEnd);
             //
             jsonNPC.Buffs = GetNPCJsonBuffsUptime(npc, log, settings, buffMap);
+            jsonNPC.BuffVolumes = GetNPCJsonBuffVolumes(npc, log, buffMap);
             // Breakbar
             if (settings.RawFormatTimelineArrays)
             {
@@ -88,6 +90,37 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                     }
                 }
                 res.Add(JsonBuffsUptimeBuilder.BuildJsonBuffsUptime(npc, pair.Key, log, settings, data, buffMap));
+            }
+            return res;
+        }
+        private static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(AbstractSingleActor npc, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
+        {
+            var res = new List<JsonBuffVolumes>();
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            var buffVolumes = phases.Select(x => npc.GetBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
+            var buffVolumeDictionaries = phases.Select(x => npc.GetBuffVolumesDictionary(log, x.Start, x.End)).ToList();
+            foreach (KeyValuePair<long, FinalActorBuffVolumes> pair in buffVolumes[0])
+            {
+                Buff buff = log.Buffs.BuffsByIds[pair.Key];
+                if (buff.Classification == Buff.BuffClassification.Hidden)
+                {
+                    continue;
+                }
+                var data = new List<JsonBuffVolumesData>();
+                for (int i = 0; i < phases.Count; i++)
+                {
+                    if (buffVolumes[i].TryGetValue(pair.Key, out FinalActorBuffVolumes val))
+                    {
+                        JsonBuffVolumesData value = JsonBuffVolumesBuilder.BuildJsonBuffVolumesData(val, buffVolumeDictionaries[i][pair.Key]);
+                        data.Add(value);
+                    }
+                    else
+                    {
+                        var value = new JsonBuffVolumesData();
+                        data.Add(value);
+                    }
+                }
+                res.Add(JsonBuffVolumesBuilder.BuildJsonBuffVolumes(pair.Key, log, data, buffMap));
             }
             return res;
         }

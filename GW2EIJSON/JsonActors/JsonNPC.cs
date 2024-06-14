@@ -51,6 +51,11 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonBuffsUptime> Buffs { get; set; }
+        /// <summary>
+        /// List of buff volumes
+        /// </summary>
+        /// <seealso cref="JsonBuffVolumes"/>
+        public IReadOnlyList<JsonBuffVolumes> BuffVolumes { get; set; }
 
         /// <summary>
         /// Indicates that the JsonNPC is actually an enemy player
