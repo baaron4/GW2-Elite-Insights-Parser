@@ -67,15 +67,19 @@ namespace GW2EIBuilders.Properties {
         ////*global animator, animateCanvas, noUpdateTime, deadIcon, dcIcon, downIcon*/
         ///&quot;use strict&quot;;
         /////// ACTORS
+        ///
+        ///function IsPresentInArray(array) {
+        ///    var time = animator.reactiveDataStatus.time;
+        ///    for (let i = 0; i &lt; array.length; i += 2) {
+        ///        if (array[i] &lt;= time &amp;&amp; array[i + 1] &gt;= time) {
+        ///            return true;
+        ///        }
+        ///    }
+        ///    return false;
+        ///}
+        ///
         ///class IconDrawable {
-        ///    constructor(pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, breakbarActive, hitboxWidth) {
-        ///        this.pos = pos;
-        ///        this.angles = angles;
-        ///        this.start = start;
-        ///        this.end = end;
-        ///        this.img = new Image();
-        ///        this.img.src = imgSrc;
-        ///        this.img.onload [rest of string was truncated]&quot;;.
+        ///    constructor(id, pos, angles, start, end, [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string actors {
             get {
@@ -560,13 +564,15 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex align-items-center actor-rotation&quot;&gt;
         ///        &lt;div v-if=&quot;rotation.current&quot;&gt;
-        ///            &lt;img class=&quot;icon-ll&quot; :class=&quot;getIconClass(rotation.current)&quot; :src=&quot;rotation.current.skill.icon&quot; :data-original-title=&quot;getTooltip(rotation.current)&quot;/&gt;
+        ///            &lt;img class=&quot;icon-ll&quot; :class=&quot;getIconClass(rotation.current)&quot; :src=&quot;rotation.current.skill.icon&quot; :title=&quot;getTooltip(rotation.current)&quot;/&gt;
         ///        &lt;/div&gt;
         ///        &lt;div v-else class=&quot;empty-icon-ll&quot;&gt;
         ///
         ///        &lt;/div&gt;
         ///        &lt;div v-for=&quot;next in rotation.nexts&quot;&gt;
-        ///            &lt;img class=&quot;icon-l&quot; :class=&quot;getIconClass(next)&quot; :src=&quot;next.skill.icon&quot; :data-original-title=&quot;getToolti [rest of string was truncated]&quot;;.
+        ///            &lt;img class=&quot;icon-l&quot; :class=&quot;getIconClass(next)&quot; :src=&quot;next.skill.icon&quot; :title=&quot;getTooltip(next)&quot;/&gt;
+        ///        &lt;/div&gt;
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayActorRotation {
             get {
@@ -579,10 +585,10 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot;&gt;
         ///        &lt;div v-if=&quot;showNormalPhases&quot; class=&quot;mb-1&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center&quot; style=&quot;max-width: 700px;&quot;&gt;
-        ///                &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in phases&quot;
+        ///                &lt;li class=&quot;nav-item&quot; v-for=&quot;(phase, id) in reactivePhases&quot;
         ///                    v-show=&quot;!getPhaseData(id).breakbarPhase&quot;
         ///                    :data-original-title=&quot;getPhaseData(id).durationS + &apos; seconds&apos;&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot; [rest of string was truncated]&quot;;.
+        ///                    &lt;a class=&quot;nav-link&quot;  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayAnimationControl {
             get {
@@ -627,9 +633,9 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot; style=&quot;max-width: 500px;&quot;&gt;           
         ///        &lt;h4&gt;General Settings&lt;/h4&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot;&gt;
-        ///            &lt;div class=&quot;form-check mb-2 mr-2&quot;&gt;
-        ///                &lt;input type=&quot;checkbox&quot; class=&quot;form-check-input&quot; id=&quot;subgroupCheck&quot; 
-        ///                    :checked=&quot;getAnimator().displaySettings.highlightSelectedGroup&quot; v-on:change=&quot;getAnimator().toggleHighlightSelectedGroup()&quot;&gt; [rest of string was truncated]&quot;;.
+        ///            &lt;div class=&quot;form-check mb-2 mr-2&quot; :data-original-title=&quot;&apos;Viewpoint will follow selected actor, as long as selected actor is drawn&apos;&quot;&gt;
+        ///                &lt;input type=&quot;checkbox&quot; class=&quot;form-check-input&quot; id=&quot;followCheck&quot; 
+        ///                    :checked=&quot;getAnimator().dis [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayExtraDecorations {
             get {
@@ -640,13 +646,13 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-row flex-wrap justify-content-center align-items-center&quot;&gt;
-        ///        &lt;div class=&quot;combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y&quot;
+        ///        &lt;div id=&quot;combat-replay-mechanics-list&quot; class=&quot;combat-replay-mechanics-list-container d-flex d-flex-row justify-content-center w-100 scrollable-y&quot;
         ///            style=&quot;max-width:450px&quot;&gt;
         ///            &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///                &lt;thead&gt;
         ///                    &lt;tr&gt;
-        ///                        &lt;th style=&quot;min-width:80px&quot;&gt;Time&lt;/th&gt;
-        ///                        &lt;th style=&quot;min-wid [rest of string was truncated]&quot;;.
+        ///                        &lt;th style=&quot;width:100px&quot;&gt;Time&lt;/th&gt;
+        ///            [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayMechanicsList {
             get {
@@ -702,12 +708,13 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
-        ///    &lt;div class=&quot;player-status&quot; :style=&quot;{&apos;background&apos;: getHPGradient(time, status)}&quot; @click=&quot;select&quot;&gt;
-        ///        &lt;h6 class=&quot;actor-shorten text-center&quot; :title=&quot;player.name&quot;&gt;
-        ///            &lt;img v-if=&quot;player.isCommander&quot;
-        ///                            src=&quot;https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png&quot; alt=&quot;Commander&quot;
-        ///                            height=&quot;18&quot; width=&quot;18&quot; data-original-title=&quot;Commander&quot;&gt;
-        ///            &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; height=&quot;18&quot; width=&quot; [rest of string was truncated]&quot;;.
+        ///    &lt;div class=&quot;player-status&quot; :style=&quot;{&apos;background&apos;: getHPGradient(time, status)}&quot; @click=&quot;select&quot; :data-original-title=&quot;player.name + &apos; - &apos; + player.acc&quot;&gt;
+        ///        &lt;h6 class=&quot;actor-shorten-cr text-center&quot;&gt;     
+        ///            &lt;img v-for=&quot;(marker, index) in activeMarkers()&quot; :src=&quot;marker.imageUrl&quot; height=&quot;16&quot; width=&quot;16&quot;&gt;
+        ///            &lt;img :src=&quot;player.icon&quot; :alt=&quot;player.profession&quot; height=&quot;16&quot; width=&quot;16&quot;&gt;
+        ///            {{player.name}}
+        ///        &lt;/h6&gt;     
+        ///        &lt;p v-if=&quot;hasHealth&quot; class=&quot;text-rig [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayPlayerStatus {
             get {
@@ -786,13 +793,11 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div class=&quot;d-flex flex-column justify-content-center align-items-center&quot;&gt;
-        ///        &lt;div class=&quot;target-status&quot; :style=&quot;{&apos;background&apos;: getHPGradient(time, status)}&quot; @click=&quot;select&quot;&gt;
-        ///            &lt;h6 class=&quot;actor-shorten text-center&quot; :title=&quot;target.name + &apos; - &apos; + target.health + &apos; health&apos;&quot;&gt;
+        ///        &lt;div class=&quot;target-status&quot; :style=&quot;{&apos;background&apos;: getHPGradient(time, status)}&quot; @click=&quot;select&quot; :title=&quot;target.name + &apos; - &apos; + target.health + &apos; health&apos;&quot;&gt;
+        ///            &lt;h6 class=&quot;actor-shorten-cr text-center&quot;&gt;
+        ///                &lt;img v-for=&quot;(marker, index) in activeMarkers()&quot; :src=&quot;marker.imageUrl&quot; height=&quot;16&quot; width=&quot;16&quot;&gt;
         ///                &lt;img :src=&quot;target.icon&quot; height=&quot;18&quot; width=&quot;18&quot;/&gt;
-        ///                {{target.name}}
-        ///            &lt;/h6&gt;
-        ///            &lt;p class=&quot;text-right cr-hp-display cr-hp-display-target&quot;&gt;
-        ///                 [rest of string was truncated]&quot;;.
+        ///                {{target [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplCombatReplayTargetStatus {
             get {
@@ -917,11 +922,11 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///            &lt;li v-if=&quot;itemModifiers.length &gt; 0&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displayMode === 0}&quot; @click=&quot;displayMode = 0&quot;&gt; Gear Based Damage
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displaymode === 0}&quot; @click=&quot;displaymode = 0&quot;&gt; Gear Based Damage
         ///                    Modifiers &lt;/a&gt;
         ///            &lt;/li&gt;
         ///            &lt;li v-if=&quot;commonModifiers.length &gt; 0&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displayMode === 1}&quot; @click=&quot;displayMode = 1&quot;&gt; Shared Damage
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: displaymode === 1}&quot; @click=&quot;displaymode = 1&quot;&gt; Shared Damage
         ///                    Modifiers &lt;/a&gt;
         ///            &lt;/li&gt;
         ///           [rest of string was truncated]&quot;;.
@@ -1210,17 +1215,16 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;div v-if=&quot;!targetless&quot;&gt;
+        ///        &lt;div&gt;
         ///            &lt;ul class=&quot;nav nav-tabs&quot;&gt;
         ///                &lt;li&gt;
         ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 0}&quot; @click=&quot;mode = 0&quot;&gt;Total&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li&gt;
+        ///                &lt;li v-if=&quot;!targetless&quot;&gt;
         ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 1}&quot; @click=&quot;mode = 1&quot;&gt;Target&lt;/a&gt;
         ///                &lt;/li&gt;
-        ///                &lt;li&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 2}&quot; @click=&quot;mode = 2&quot;&gt;Cleave&lt;/a&gt;
-        ///      [rest of string was truncated]&quot;;.
+        ///                &lt;li v-if=&quot;!targetless&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; :class=&quot;{active: mode === 2}&quot; @click=&quot;mode = 2 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGraphStats {
             get {
@@ -1271,13 +1275,12 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1&quot; id=&quot;healing-phase-nav&quot;&gt;
-        ///            &lt;phase-component :phases=&quot;logdata.phases&quot;&gt;&lt;/phase-component&gt;
+        ///            &lt;phase-component :phases=&quot;reactiveLogdata.phases&quot;&gt;&lt;/phase-component&gt;
         ///        &lt;/div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mb-2 mt-2&quot; id=&quot;healing-actors&quot;&gt;
         ///            &lt;div class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
-        ///                &lt;player-target-component :players=&quot;logdata.players&quot;&gt;&lt;/player-target-component&gt;
-        ///            &lt;/div&gt;
-        ///         [rest of string was truncated]&quot;;.
+        ///                &lt;player-target-component :players=&quot;reactiveLogdata.players&quot;&gt;&lt;/player-target-component&gt;
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplHealingExtensionView {
             get {
@@ -1317,10 +1320,11 @@ namespace GW2EIBuilders.Properties {
         ///            &lt;li&gt;
         ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 1}&quot; @click=&quot;tab = 1&quot;&gt;Incoming Healing Stats&lt;/a&gt;
         ///            &lt;/li&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 2}&quot; @click=&quot;tab = 2&quot;&gt;Support Stats&lt;/a&gt;
+        ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
-        ///        &lt;keep-alive&gt;
-        ///            &lt;outgoing-healing-stats-component v-if=&quot;tab === 0&quot; :key=&quot;&apos;healing&apos;&quot; :phaseindex=&quot;phaseindex&quot;
-        ///                : [rest of string was truncated]&quot;;.
+        ///        [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplHealingStatTables {
             get {
@@ -1430,12 +1434,12 @@ namespace GW2EIBuilders.Properties {
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1&quot; id=&quot;phase-nav&quot;&gt;
-        ///            &lt;phase-component :phases=&quot;logdata.phases&quot;&gt;&lt;/phase-component&gt;
+        ///            &lt;phase-component :phases=&quot;reactiveLogdata.phases&quot;&gt;&lt;/phase-component&gt;
         ///        &lt;/div&gt;
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mb-2 mt-2&quot; id=&quot;actors&quot;&gt;
         ///            &lt;div v-if=&quot;hasTargets&quot; v-show=&quot;tab !== 5&quot; :class=&quot;{&apos;d-flex&apos;: tab !== 5}&quot;
         ///                class=&quot;flex-row justify-content-center align-items-center flex-wrap mr-5&quot;&gt;
-        ///                &lt;target-component :targets=&quot;logdata.tar [rest of string was truncated]&quot;;.
+        ///                &lt;target-component :targets=&quot;rea [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplMainView {
             get {
@@ -1862,9 +1866,9 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div class=&quot;d-flex flex-row justify-content-center flex-wrap&quot; style=&quot;max-width: 500px;&quot;&gt;
         ///        &lt;div v-for=&quot;(target, id) in targets&quot; v-show=&quot;show(id)&quot;&gt;
         ///            &lt;img class=&quot;icon-lg mr-2 ml-2 target-cell&quot; :src=&quot;getTargetData(id).icon&quot; :alt=&quot;getTargetData(id).name&quot;
-        ///                :data-original-title=&quot;getTargetData(id).name&quot; :class=&quot;{active: target.active}&quot;
-        ///                @click=&quot;target.active = !target.active&quot;&gt;
-        ///            &lt;target-data-component :targetid=&quot;id&quot;&gt;&lt;/target-data-compone [rest of string was truncated]&quot;;.
+        ///                :data-original-title=&quot;getTargetData(id).name&quot; :class=&quot;{active: target[phaseindex].active}&quot;
+        ///                @click=&quot;target[phaseindex].active = !target[phaseindex].active&quot;&gt;
+        ///            &lt;target-data-component  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplTargets {
             get {
