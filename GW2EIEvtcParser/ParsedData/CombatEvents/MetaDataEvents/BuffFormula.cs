@@ -137,7 +137,7 @@ namespace GW2EIEvtcParser.ParsedData
                 formulaBytes[offset++] = bt;
             }
             //
-            float[] formulaFloats = new float[10];
+            float[] formulaFloats = new float[11];
             Buffer.BlockCopy(formulaBytes, 0, formulaFloats, 0, formulaBytes.Length);
             //
             Type = (int)formulaFloats[0];
