@@ -84,7 +84,8 @@ namespace GW2EIEvtcParser.ParsedData
             Npc = evtcItem.IsFlanking == 0;
             Player = evtcItem.IsShields == 0;
             Break = evtcItem.IsOffcycle > 0;
-            byte[] formulaBytes = new byte[11 * sizeof(float)];
+            int size = 11;
+            byte[] formulaBytes = new byte[size * sizeof(float)];
             int offset = 0;
             // 2 
             foreach (byte bt in BitConverter.GetBytes(evtcItem.Time))
@@ -137,7 +138,7 @@ namespace GW2EIEvtcParser.ParsedData
                 formulaBytes[offset++] = bt;
             }
             //
-            float[] formulaFloats = new float[11];
+            float[] formulaFloats = new float[size];
             Buffer.BlockCopy(formulaBytes, 0, formulaFloats, 0, formulaBytes.Length);
             //
             Type = (int)formulaFloats[0];
