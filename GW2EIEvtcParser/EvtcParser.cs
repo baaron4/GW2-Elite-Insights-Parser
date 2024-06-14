@@ -728,7 +728,7 @@ namespace GW2EIEvtcParser
                     _playerList.Add(player);
                 }
             }
-            _playerList = _playerList.OrderBy(a => a.Group).ToList();
+            _playerList = _playerList.OrderBy(a => a.Group).ThenBy(x => x.Account).ToList();
             if (_playerList.Exists(x => x.Group == 0))
             {
                 _playerList.ForEach(x => x.MakeSquadless());
@@ -757,9 +757,14 @@ namespace GW2EIEvtcParser
                 {
                     if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
                     {
-                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => _evtcVersion >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn ? (ulong)x.Value : x.DstAgent));
+                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
+                        if (_evtcVersion > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+                        {
+                            greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => (ulong)x.Value));
+                        }
                     }
                 }
+                greenTeams.RemoveAll(x => x == 0);
                 if (greenTeams.Count != 0)
                 {
                     greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();

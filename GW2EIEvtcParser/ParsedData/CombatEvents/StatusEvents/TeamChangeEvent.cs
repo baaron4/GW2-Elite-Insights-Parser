@@ -2,21 +2,17 @@
 {
     public class TeamChangeEvent : AbstractStatusEvent
     {
-        public ulong TeamID { get; }
+        public ulong TeamIDComingFrom { get; }
 
         public ulong TeamIDInto { get; }
 
         internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, int evtcVersion) : base(evtcItem, agentData)
         {
+            TeamIDInto = evtcItem.DstAgent;
             if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
             {
-                TeamID = (ulong)evtcItem.Value;
-                TeamIDInto = evtcItem.DstAgent;
+                TeamIDComingFrom = (ulong)evtcItem.Value;
             } 
-            else
-            {
-                TeamID = evtcItem.DstAgent;
-            }
         }
 
     }
