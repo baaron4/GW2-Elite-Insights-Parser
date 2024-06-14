@@ -100,7 +100,7 @@
                 if (this.activeduration) {
                     res = getData(this.phase.buffsStatContainer.conditionsActiveStats);
                 } else {
-                    res = getData(this.phase.conditionsStats);
+                    res = getData(this.phase.buffsStatContainer.conditionsStats);
                 }
                 this.cache.set(id, res);
                 return res;
