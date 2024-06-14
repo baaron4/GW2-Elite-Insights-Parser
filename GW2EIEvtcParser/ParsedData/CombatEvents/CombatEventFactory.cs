@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.ParsedData
 #endif
                     break;
                 case StateChange.TeamChange:
-                    var tcEvt = new TeamChangeEvent(stateChangeEvent, agentData);
+                    var tcEvt = new TeamChangeEvent(stateChangeEvent, agentData, evtcVersion);
                     Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                     break;
                 case StateChange.AttackTarget:

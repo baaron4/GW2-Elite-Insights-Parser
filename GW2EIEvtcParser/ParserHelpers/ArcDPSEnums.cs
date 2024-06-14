@@ -94,6 +94,7 @@ namespace GW2EIEvtcParser
             internal const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
             internal const int NewMarkerEventBehavior = 20240418;
             internal const int StackType0ActiveChange = 20240609;
+            internal const int TeamChangeOnDespawn = 20240612;
             //
             internal const int EndOfLife = int.MaxValue;
         }

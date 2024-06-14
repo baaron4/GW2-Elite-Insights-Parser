@@ -757,7 +757,7 @@ namespace GW2EIEvtcParser
                 {
                     if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
                     {
-                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
+                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => _evtcVersion >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn ? (ulong)x.Value : x.DstAgent));
                     }
                 }
                 if (greenTeams.Count != 0)
