@@ -728,7 +728,7 @@ namespace GW2EIEvtcParser
                     _playerList.Add(player);
                 }
             }
-            _playerList = _playerList.OrderBy(a => a.Group).ThenBy(x => x.Account).ToList();
+            _playerList = _playerList.OrderBy(a => a.Group).ThenBy(x => x.Character).ToList();
             if (_playerList.Exists(x => x.Group == 0))
             {
                 _playerList.ForEach(x => x.MakeSquadless());

@@ -248,12 +248,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
             // Handle non squad players
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-            var garbageList = new List<AbstractSingleActor>();
             //
+            var garbageList = new List<AbstractSingleActor>();
+            var auxTargets = new List<AbstractSingleActor>();
+            var auxFriendlies = new List<AbstractSingleActor>();
             foreach (AgentItem a in aList)
             {
                 var nonSquadPlayer = new PlayerNonSquad(a);
-                List<AbstractSingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? _nonPlayerFriendlies : _detailed ? _targets : garbageList;
+                List<AbstractSingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : _detailed ? auxTargets : garbageList;
                 actorListToFill.Add(nonSquadPlayer);
             }
             //
@@ -309,6 +311,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);
+            auxFriendlies = auxFriendlies.OrderBy(x => x.Character).ToList();
+            _nonPlayerFriendlies.AddRange(auxFriendlies);
+            auxTargets = auxTargets.OrderBy(x => x.Character).ToList();
+            _targets.AddRange(auxTargets);
         }
     }
 }
