@@ -13,16 +13,12 @@ namespace GW2EIEvtcParser.EIData
 
             public ConstantCircleDecoration(string color, uint radius, uint minRadius) : base(color)
             {
-                if (radius == 0)
-                {
-                    throw new InvalidOperationException("Radius must be strictly positive");
-                }
-                if (minRadius >= radius)
+                Radius = Math.Max(radius, 1);
+                MinRadius = minRadius;
+                if (MinRadius >= Radius)
                 {
                     throw new InvalidOperationException("Radius must be > MinRadius");
                 }
-                Radius = radius;
-                MinRadius = minRadius;
             }
 
             public override string GetID()

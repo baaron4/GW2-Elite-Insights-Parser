@@ -13,12 +13,12 @@ namespace GW2EIEvtcParser.EIData
 
             public ConstantDoughnutDecoration(string color, uint innerRadius, uint outerRadius) : base(color)
             {
-                if (outerRadius <= innerRadius)
-                {
-                    throw new InvalidOperationException("OuterRadius must be > then InnerRadius");
-                }
-                OuterRadius = outerRadius;
+                OuterRadius = Math.Max(outerRadius, 1);
                 InnerRadius = innerRadius;
+                if (OuterRadius <= InnerRadius)
+                {
+                    throw new InvalidOperationException("OuterRadius must be > to InnerRadius");
+                }
             }
 
             public override string GetID()
