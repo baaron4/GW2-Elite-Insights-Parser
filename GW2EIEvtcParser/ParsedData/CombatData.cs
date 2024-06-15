@@ -1228,8 +1228,12 @@ namespace GW2EIEvtcParser.ParsedData
             effectEvents = null;
             if (effectGUIDEvent != null)
             {
-                effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
-                return true;
+                IReadOnlyList<EffectEvent> result = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
+                if (result.Count > 0)
+                {
+                    effectEvents = result;
+                    return true;
+                }
             }
             return false;
         }
@@ -1244,24 +1248,23 @@ namespace GW2EIEvtcParser.ParsedData
         {
             effectEvents = null;
             var result = new List<EffectEvent>();
-            var found = false;
             foreach (string effectGUID in effectGUIDs)
             {
                 if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
                 {
                     result.AddRange(effects);
-                    found = true;
                 }
             }
-            if (found)
+            if (result.Count > 0)
             {
                 effectEvents = result;
+                return true;
             }
-            return found;
+            return false;
         }
 
         /// <summary>
-        /// Returns effect events for the given agent and effect GUID.
+        /// Returns effect events by the given agent and effect GUID.
         /// </summary>
         /// <param name="agent"></param>
         /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
@@ -1271,13 +1274,17 @@ namespace GW2EIEvtcParser.ParsedData
         {
             effectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
-                effectEvents = effects.Where(effect => effect.Src == agent).ToList();
-                return true;
+                var result = effects.Where(effect => effect.Src == agent).ToList();
+                if (result.Count > 0)
+                {
+                    effectEvents = result;
+                    return true;
+                }
             }
             return false;
         }
         /// <summary>
-        /// Returns effect events for the given agent and effect GUID.
+        /// Returns effect events on the given agent and effect GUID.
         /// </summary>
         /// <param name="agent"></param>
         /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
@@ -1288,13 +1295,17 @@ namespace GW2EIEvtcParser.ParsedData
             effectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
             {
-                effectEvents = effects.Where(effect => effect.Dst == agent).ToList();
-                return true;
+                var result = effects.Where(effect => effect.Dst == agent).ToList();
+                if (result.Count > 0)
+                {
+                    effectEvents = result;
+                    return true;
+                }
             }
             return false;
         }
         /// <summary>
-        /// Returns effect events for the given agent and effect GUIDs.
+        /// Returns effect events by the given agent and effect GUIDs.
         /// </summary>
         /// <param name="agent"></param>
         /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
@@ -1304,24 +1315,48 @@ namespace GW2EIEvtcParser.ParsedData
         {
             effectEvents = null;
             var result = new List<EffectEvent>();
-            var found = false;
             foreach (string effectGUID in effectGUIDs)
             {
-                if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+                if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effects))
                 {
-                    result.AddRange(effects.Where(effect => effect.Src == agent));
-                    found = true;
+                    result.AddRange(effects);
                 }
             }
-            if (found)
+            if (result.Count > 0)
             {
                 effectEvents = result;
+                return true;
             }
-            return found;
+            return false;
+        }
+        /// <summary>
+         /// Returns effect events on the given agent and effect GUIDs.
+         /// </summary>
+         /// <param name="agent"></param>
+         /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+         /// <param name="effectEvents"></param>
+         /// <returns></returns>
+        public bool TryGetEffectEventsByDstWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
+        {
+            effectEvents = null;
+            var result = new List<EffectEvent>();
+            foreach (string effectGUID in effectGUIDs)
+            {
+                if (TryGetEffectEventsByDstWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effects))
+                {
+                    result.AddRange(effects);
+                }
+            }
+            if (result.Count > 0)
+            {
+                effectEvents = result;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
-        /// Returns effect events for the given agent <b>including</b> minions and the given effect GUID.
+        /// Returns effect events by the given agent <b>including</b> minions and the given effect GUID.
         /// </summary>
         /// <param name="agent"></param>
         /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
@@ -1332,14 +1367,18 @@ namespace GW2EIEvtcParser.ParsedData
             effectEvents = null;
             if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
             {
-                effectEvents = effects.Where(effect => effect.Src.GetFinalMaster() == agent).ToList();
-                return true;
+                var result = effects.Where(effect => effect.Src.GetFinalMaster() == agent).ToList();
+                if (result.Count > 0)
+                {
+                    effectEvents = result;
+                    return true;
+                }
             }
             return false;
         }
 
         /// <summary>
-        /// Returns effect events for the given agent <b>including</b> minions and the given effect GUIDs.
+        /// Returns effect events by the given agent <b>including</b> minions and the given effect GUIDs.
         /// </summary>
         /// <param name="agent"></param>
         /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
@@ -1349,24 +1388,23 @@ namespace GW2EIEvtcParser.ParsedData
         {
             effectEvents = null;
             var result = new List<EffectEvent>();
-            var found = false;
             foreach (string effectGUID in effectGUIDs)
             {
                 if (TryGetEffectEventsByMasterWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effects))
                 {
-                    result.AddRange(effects.Where(effect => effect.Src == agent));
-                    found = true;
+                    result.AddRange(effects);
                 }
             }
-            if (found)
+            if (result.Count > 0)
             {
                 effectEvents = result;
+                return true;
             }
-            return found;
+            return false;
         }
 
         /// <summary>
-        /// Returns effect events for the given agent and effect GUID.
+        /// Returns effect events by the given agent and effect GUID.
         /// The same effects happening within epsilon milliseconds are grouped together.
         /// </summary>
         /// <param name="agent"></param>
@@ -1378,23 +1416,20 @@ namespace GW2EIEvtcParser.ParsedData
         {
             var effectGroups = new List<List<EffectEvent>>();
             groupedEffectEvents = null;
-            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+            if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effects)) {
                 var processedTimes = new HashSet<long>();
                 foreach (EffectEvent first in effects)
                 {
-                    if (first.Src == agent) {
-                        if (processedTimes.Contains(first.Time))
-                        {
-                            continue;
-                        }
-                        var group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
-                        foreach (EffectEvent effect in group)
-                        {
-                            processedTimes.Add(effect.Time);
-                        }
-
-                        effectGroups.Add(group);
+                    if (processedTimes.Contains(first.Time))
+                    {
+                        continue;
                     }
+                    var group = effects.Where(effect => effect.Time >= first.Time && effect.Time < first.Time + epsilon).ToList();
+                    foreach (EffectEvent effect in group)
+                    {
+                        processedTimes.Add(effect.Time);
+                    }
+                    effectGroups.Add(group);
                 }
                 groupedEffectEvents = effectGroups;
                 return true;
