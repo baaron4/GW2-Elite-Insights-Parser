@@ -331,7 +331,6 @@ namespace GW2EIParserCommons
             finally
             {
                 operation.Stop();
-                GC.Collect();
                 Thread.CurrentThread.CurrentCulture = before;
             }
         }
