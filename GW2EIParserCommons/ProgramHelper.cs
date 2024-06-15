@@ -10,7 +10,6 @@ using GW2EIBuilders;
 using GW2EIDiscord;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
-using GW2EIWingman;
 using GW2EIEvtcParser;
 using GW2EIGW2API;
 using GW2EIEvtcParser.ParserHelpers;

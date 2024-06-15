@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using GW2EIBuilders;
-using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
 using GW2EIGW2API;
 using GW2EIJSON;

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonDeathRecap;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities

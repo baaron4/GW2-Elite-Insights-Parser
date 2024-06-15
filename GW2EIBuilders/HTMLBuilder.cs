@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;
-using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
 using Newtonsoft.Json;
-using System.Linq;
 using System.IO.Compression;
 
 [assembly: System.CLSCompliant(false)]

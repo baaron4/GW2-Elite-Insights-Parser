@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIJSON

@@ -1,5 +1,4 @@
 ﻿using GW2EIEvtcParser.EIData;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonStatistics;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities
