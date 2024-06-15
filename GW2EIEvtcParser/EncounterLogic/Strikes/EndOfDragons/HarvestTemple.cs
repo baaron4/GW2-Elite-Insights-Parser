@@ -1099,10 +1099,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTormentOfTheVoidClawIndicator, out IReadOnlyList<EffectEvent> clawVoidOrbsAoEs))
                         {
-                            // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
-                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault().Time).ToList();
-                            List<(EffectEvent, EffectEvent, float)> orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
-                            List<(EffectEvent, EffectEvent, float)> aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
+                            var aoeToAoeMatches = new List<(EffectEvent, EffectEvent, float)>();
+                            var orbToAoeMatches = new List<(EffectEvent, EffectEvent, float)>();
+
+                            if (clawVoidOrbs.Count > 0 && clawVoidOrbsAoEs.Count > 0)
+                            {
+                                // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
+                                var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault().Time).ToList();
+                                orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
+                                aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
+                            }
 
                             // Hard coded the orb positions and the durations for older logs
                             var positions = new List<ParametricPoint3D>()
@@ -1190,6 +1196,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
+
                     // Tail Slam
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleTailSlamIndicator, out IReadOnlyList<EffectEvent> tailSlamEffects))
                     {
