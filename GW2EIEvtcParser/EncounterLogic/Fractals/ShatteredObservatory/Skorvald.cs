@@ -7,12 +7,12 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -136,11 +136,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                 combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale).OverrideSrcAgent(0);
                 // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
             }
-            
-            int[] nameCount = new [] { 0, 0, 0, 0 };
+
+            int[] nameCount = new[] { 0, 0, 0, 0 };
             foreach (NPC target in _targets)
             {
-                switch (target.ID) {
+                switch (target.ID)
+                {
                     case (int)TrashID.FluxAnomaly1:
                     case (int)TrashID.FluxAnomalyCM1:
                         target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
@@ -198,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     SolarBoltCM,
                     //SupernovaCM,
                 };
-                if (combatData.GetSkills().Intersect(cmSkills).Any() || 
+                if (combatData.GetSkills().Intersect(cmSkills).Any() ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||

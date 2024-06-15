@@ -15,7 +15,7 @@
 
         #region Custom
         /////////////// Custom IDS
-        public const long Unknown = -1; 
+        public const long Unknown = -1;
         public const long WeaponSwap = -2;
         public const long NumberOfBoons = -3;
         public const long NumberOfConditions = -4;
@@ -748,7 +748,7 @@
         public const long IllusionaryLeapBuff = 10353;
         public const long Mirror = 10357;
         public const long MindBlast = 10367;
-        public const long SealArea = 13099; 
+        public const long SealArea = 13099;
         public const long HealthfulRejuvenation = 10492;
         public const long DamageBonus5 = 10493;
         public const long SpeedBonus15 = 10495;
@@ -4086,7 +4086,7 @@
         public const long ShootingStarsTargetToDagdaBuff = 69735; // Buff applied from player to Dagda when the player is hit
         public const long IntoTheFray = 69764;
         public const long MaliciousIntentEmpoweredNM = 69779;
-        public const long RelicOfTheAristocracy = 69795;        
+        public const long RelicOfTheAristocracy = 69795;
         public const long PoolOfDespairNM = 69809;
         public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
         public const long EnviousGazeNM = 69814;

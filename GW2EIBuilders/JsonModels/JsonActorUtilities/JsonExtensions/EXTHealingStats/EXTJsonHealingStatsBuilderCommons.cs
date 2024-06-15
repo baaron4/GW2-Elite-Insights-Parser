@@ -57,7 +57,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
             jsonHealingDist.IndirectHealing = list.Exists(x => x is EXTNonDirectHealingEvent);
             if (jsonHealingDist.IndirectHealing)
             {
-                if (!buffMap.ContainsKey( id))
+                if (!buffMap.ContainsKey(id))
                 {
                     if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
                     {

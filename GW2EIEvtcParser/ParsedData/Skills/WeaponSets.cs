@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (weaponDescriptor.WeaponSlot == WeaponDescriptor.Hand.Dual)
             {
-                switch(swapped)
+                switch (swapped)
                 {
                     case WeaponSetIDs.FirstLandSet:
                         SetLand1MainHand(ApiSkill.WeaponType);

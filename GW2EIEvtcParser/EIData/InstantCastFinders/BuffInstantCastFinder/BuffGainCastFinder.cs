@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         }
 
         internal BuffGainCastFinder UsingDurationChecker(int duration, long epsilon = ServerDelayConstant)
-        {  
+        {
             UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - duration) < epsilon);
             return this;
         }

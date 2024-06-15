@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             if (Mode == DamageModifierMode.All)
-            {     
+            {
                 return true;
             }
             switch (skillMode)

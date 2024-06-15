@@ -31,7 +31,7 @@
             AgainstUnderFifty = evtcItem.IsFifty > 0;
             IsMoving = (evtcItem.IsMoving & 1) > 0;
             AgainstMoving = (evtcItem.IsMoving & 2) > 0;
-            IsFlanking = evtcItem.IsFlanking > 0; 
+            IsFlanking = evtcItem.IsFlanking > 0;
             _iff = evtcItem.IFF;
         }
 

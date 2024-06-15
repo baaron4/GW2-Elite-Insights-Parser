@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     PlateOfPeppercornSpicedCoqAuVin, MistsInfusedPeppercornCrustedSousVideSteak, PeppercornCrustedSousVideSteak, PlateOfPepperedClearTruffleRavioli,
                     PlateOfPeppercornSpicedBeefCarpaccio, PlateOfPeppercornSpicedPoultryAspic, PeppercornSpicedEggsBenedict, SpicedPepperCremeBrulee,
-                    SpicedPeppercornCheesecake, PepperedCuredMeatFlatbread, PeppercornAndVeggieFlatbread, BowlOfSpicedFruitSalad, 
+                    SpicedPeppercornCheesecake, PepperedCuredMeatFlatbread, PeppercornAndVeggieFlatbread, BowlOfSpicedFruitSalad,
                     SpherifiedPeppercornSpicedOysterSoup, MistsInfusedSpherifiedPeppercornSpicedOysterSoup,
                 }, "Ascended Food: -10%", "-10% Multiplicative", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
             new BuffOnActorDamageModifier(

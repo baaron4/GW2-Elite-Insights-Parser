@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.ParsedData
             //
             Type = (int)formulaFloats[0];
             ByteAttr1 = (byte)formulaFloats[1];
-            ByteAttr2 = (byte)formulaFloats[2];          
+            ByteAttr2 = (byte)formulaFloats[2];
             Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1, evtcVersion);
             Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2, evtcVersion);
             ConstantOffset = formulaFloats[3];
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             _solvedDescription += stat1;
             double variable = Math.Round(Variable, 6);
-            double totalOffset = Math.Round(Level(buff) * LevelOffset + ConstantOffset, 6);      
+            double totalOffset = Math.Round(Level(buff) * LevelOffset + ConstantOffset, 6);
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {

@@ -166,11 +166,11 @@ namespace GW2EIEvtcParser
                 {
                     actor = new Player(agentItem, true);
                     _operation.UpdateProgressWithCancellationCheck("Parsing: Found player " + actor.Character + " not in player list");
-                } 
+                }
                 else if (agentItem.Type == AgentItem.AgentType.NonSquadPlayer)
                 {
                     actor = new PlayerNonSquad(agentItem);
-                } 
+                }
                 else
                 {
                     actor = new NPC(agentItem);

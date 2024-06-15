@@ -22,7 +22,8 @@ namespace GW2EIEvtcParser.EIData
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
             var res = new List<DamageModifierEvent>();
-            if (ComputeGain(null, null, log, out double gain)) {
+            if (ComputeGain(null, null, log, out double gain))
+            {
 
                 IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (AbstractHealthDamageEvent evt in typeHits)

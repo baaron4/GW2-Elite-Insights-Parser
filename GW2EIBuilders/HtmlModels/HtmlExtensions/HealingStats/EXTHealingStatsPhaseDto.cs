@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
 
         public List<List<object>> OutgoingHealingStats { get; set; }
         public List<List<List<object>>> OutgoingHealingStatsTargets { get; set; }
-        public List<List<object>> IncomingHealingStats { get; set; } 
+        public List<List<object>> IncomingHealingStats { get; set; }
 
         public EXTHealingStatsPhaseDto(PhaseData phase, ParsedEvtcLog log)
         {
@@ -74,7 +74,7 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
                 list.Add(playerData);
             }
             return list;
-        } 
+        }
 
         public static List<List<object>> BuildIncomingHealingStatData(ParsedEvtcLog log, PhaseData phase)
         {

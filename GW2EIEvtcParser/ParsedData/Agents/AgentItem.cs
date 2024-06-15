@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
 
         private static int AgentCount = 0;
-        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer}
+        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
 
         public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
         public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
@@ -185,8 +185,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, long minTime, int index)
         {
-            long cTime = cur.Time; 
-            
+            long cTime = cur.Time;
+
             if (cur is DownEvent)
             {
                 down.Add(new Segment(cTime, nextTime, 1));
@@ -239,7 +239,7 @@ namespace GW2EIEvtcParser.ParsedData
                 if (cur is DeadEvent)
                 {
                     dead.Add(new Segment(LastAware, long.MaxValue, 1));
-                } 
+                }
                 else
                 {
                     dc.Add(new Segment(LastAware, long.MaxValue, 1));
@@ -308,7 +308,7 @@ namespace GW2EIEvtcParser.ParsedData
                             break;
                     }
                 }
-                
+
             }
         }
 

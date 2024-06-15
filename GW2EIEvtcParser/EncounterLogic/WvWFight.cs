@@ -5,9 +5,9 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 switch ((long)modeEvent.SkillID)
                 {
                     case GuildHallPvEMode:
-                        SkillMode = SkillModeEnum.PvE; 
+                        SkillMode = SkillModeEnum.PvE;
                         break;
                     case GuildHallsPvPMode:
                         SkillMode = SkillModeEnum.sPvP;

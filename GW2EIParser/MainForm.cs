@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Discord;
 using GW2EIDiscord;
-using GW2EIParserCommons.Exceptions;
 using GW2EIParser.Setting;
 using GW2EIParserCommons;
+using GW2EIParserCommons.Exceptions;
 
 namespace GW2EIParser
 {
@@ -558,7 +558,7 @@ namespace GW2EIParser
                             var fileList = new DirectoryInfo(path).EnumerateFiles("*" + format, SearchOption.AllDirectories).ToList();
                             var toKeep = fileList.Where(x => (currentTime - x.CreationTime).TotalHours < Properties.Settings.Default.PopulateHourLimit).ToList();
                             toAdd.AddRange(toKeep.Select(x => x.FullName));
-                        } 
+                        }
                         else
                         {
                             toAdd.AddRange(Directory.EnumerateFiles(path, "*" + format, SearchOption.AllDirectories));
@@ -614,7 +614,8 @@ namespace GW2EIParser
             if (ProgramHelper.IsTemporaryCompressedFormat(e.OldFullPath) && ProgramHelper.IsCompressedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
-            } else if (ProgramHelper.IsTemporaryFormat(e.OldFullPath) && ProgramHelper.IsSupportedFormat(e.FullPath))
+            }
+            else if (ProgramHelper.IsTemporaryFormat(e.OldFullPath) && ProgramHelper.IsSupportedFormat(e.FullPath))
             {
                 AddDelayed(e.FullPath);
             }
@@ -734,7 +735,7 @@ namespace GW2EIParser
                         ids.Add(WebhookController.SendMessage(_programHelper.Settings.WebhookURL, embedBuilder.Build(), out string curMessage));
                         AddTraceMessage("Discord: embed sent " + curMessage);
                         message += curMessage + " - ";
-                    } 
+                    }
                     catch (Exception ex)
                     {
                         AddTraceMessage("Discord: couldn't send embed " + ex.Message);
@@ -760,7 +761,7 @@ namespace GW2EIParser
                 {
                     WebhookController.DeleteMessage(_programHelper.Settings.WebhookURL, id, out string message);
                     AddTraceMessage("Discord: deleted existing message " + message);
-                } 
+                }
                 catch (Exception ex)
                 {
                     AddTraceMessage("Discord: couldn't deleted existing message " + ex.Message);

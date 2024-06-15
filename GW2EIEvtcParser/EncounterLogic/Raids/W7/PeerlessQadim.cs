@@ -6,11 +6,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -613,7 +613,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
         {
-            var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x =>!(x is BuffRemoveManualEvent)).ToList();
+            var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x => !(x is BuffRemoveManualEvent)).ToList();
             var tethersApplies = tethers.OfType<BuffApplyEvent>().ToList();
             var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
             foreach (BuffApplyEvent bae in tethersApplies)

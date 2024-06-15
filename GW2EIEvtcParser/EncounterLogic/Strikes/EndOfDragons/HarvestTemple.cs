@@ -4,12 +4,12 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -354,7 +354,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (agentData.GetGadgetsByID(ChestID).Any())
                         {
                             isSuccess = true;
-                        } 
+                        }
                         else
                         {
                             var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant).ToList();
@@ -496,7 +496,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Gravity Ball - Timecaster gadget
             if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out AgentItem timecaster))
             {
-                if (maxHPEvents.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialGravityBallHPs)) 
+                if (maxHPEvents.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialGravityBallHPs))
                 {
                     var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src).ToList();
                     var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
@@ -797,8 +797,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                             int velocity = 210;
                             int lifespan = 15000;
-                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z - Math.PI / 2), (float)Math.Sin(beeLaunchEffect.Orientation.Z - Math.PI/2)), end + lifespan);
-                            replay.Decorations.Add(new CircleDecoration(280, (end, end + lifespan), Colors.Red, 0.4, new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition})));
+                            var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z - Math.PI / 2), (float)Math.Sin(beeLaunchEffect.Orientation.Z - Math.PI / 2)), end + lifespan);
+                            replay.Decorations.Add(new CircleDecoration(280, (end, end + lifespan), Colors.Red, 0.4, new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition })));
                         }
                     }
                     // Zhaitan - Pool of Undeath
@@ -905,7 +905,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // We use the damage field for 2 reasons:
                     // 1: When the instance is bugged from a previous wipe, the orange warning indicator is not present but the red damage field is always visible.
                     // 2: The red damage field is not in the same position of the orange warning indicator, rending the indicator inaccurate.
-                    
+
                     var jawsOfDestructionPosition = new Point3D(591.0542f, -21528.8555f, -15418.3f);
                     var jawsOfDestructionConnector = new PositionConnector(jawsOfDestructionPosition);
                     int jawsOfDestructionIndicatorDuration = 6950;
@@ -1345,7 +1345,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Nightmare Epoch - AoEs
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidTimecasterNightmareEpoch, out IReadOnlyList<EffectEvent> nightmareEpoch))
                     {
-                        foreach(EffectEvent effect in nightmareEpoch)
+                        foreach (EffectEvent effect in nightmareEpoch)
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 10000);
                             var positionConnector = new PositionConnector(effect.Position);
@@ -1788,8 +1788,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     continue;
                 }
                 int puddleEnd = Math.Min((int)dragonVoid.LastAware, start + duration);
-                EnvironmentDecorations.Add(new CircleDecoration( radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)).UsingGrowingEnd(start + inactiveDuration));
-                EnvironmentDecorations.Add(new CircleDecoration( radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)).UsingGrowingEnd(start + inactiveDuration));
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
             }
         }
 
@@ -1806,8 +1806,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int start = (int)green.Time - duration;
                 int end = (int)green.Time;
                 Color color = isSuccessful ? Colors.DarkGreen : Colors.DarkRed;
-                EnvironmentDecorations.Add(new CircleDecoration( 180, (start, end), Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(end));
-                EnvironmentDecorations.Add(new CircleDecoration( 180, (start, end), color, 0.4, new PositionConnector(green.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(end));
+                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), color, 0.4, new PositionConnector(green.Position)));
             }
         }
 

@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected long GetTime(AbstractTimeCombatEvent evt, AgentItem caster, CombatData combatData)
         {
-            long time = evt.Time +  TimeOffset;
+            long time = evt.Time + TimeOffset;
             if (BeforeWeaponSwap || AfterWeaponSwap)
             {
                 var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - time) < ServerDelayConstant / 2).ToList();

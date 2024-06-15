@@ -5,10 +5,10 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         subPhase.Name = "Mai Trin Phase " + ((i / 2) + 1);
                         subPhase.AddTarget(maiTrin);
-                    } 
+                    }
                     else
                     {
                         subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            
+
             if (log.FightData.Success)
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityTriangulation).Any())
@@ -330,7 +330,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // The combinations are 2 players buffs for each bomb invulnerability buff, so 2 x 4 total.
             foreach (Segment invuln in bombInvulnSegments)
             {
-                foreach (Segment s in  beamsSegments)
+                foreach (Segment s in beamsSegments)
                 {
                     if (s.Start < invuln.Start && invuln.Start < s.End)
                     {

@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
             UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.BaseSpec == spec);
             return this;
         }
-        
+
         internal EffectCastFinder UsingSrcSpecChecker(Spec spec)
         {
             UsingChecker((evt, combatData, agentData, skillData) => evt.Src.Spec == spec);

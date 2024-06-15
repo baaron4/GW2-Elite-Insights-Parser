@@ -4,12 +4,12 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return FightData.EncounterStartStatus.Late;
                 }
 
-            } 
+            }
             else
             {
                 if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilion, fightData.FightStart, combatData, Targets) ||
@@ -120,7 +120,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (int)TargetID.PrototypeIndigoCM,
                         (int)TargetID.PrototypeArseniteCM,
                     };
-                } 
+                }
                 else
                 {
                     idsToCheck = new List<int>
@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (dead != null && dead.Time < end)
             {
                 end = dead.Time;
-            } 
+            }
             List<PhaseData> subPhases = GetPhasesByInvul(log, new[] { LeyWovenShielding, MalfunctioningLeyWovenShielding }, target, false, true, start, end);
             string[] phaseNames;
             if (log.FightData.IsCM)
@@ -307,7 +307,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            switch(target.ID)
+            switch (target.ID)
             {
                 case (int)TargetID.PrototypeVermilion:
                     replay.AddHideByBuff(target, log, Determined762);

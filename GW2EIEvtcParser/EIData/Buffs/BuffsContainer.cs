@@ -185,7 +185,7 @@ namespace GW2EIEvtcParser.EIData
                                     {
                                         int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;
                                         int elapsedTime = (int)(remove.Time - apply.Time);
-                                        remove.OverrideRemovedDuration(remove.RemovedDuration - activeTime - elapsedTime); 
+                                        remove.OverrideRemovedDuration(remove.RemovedDuration - activeTime - elapsedTime);
                                     }
                                 }
                             }

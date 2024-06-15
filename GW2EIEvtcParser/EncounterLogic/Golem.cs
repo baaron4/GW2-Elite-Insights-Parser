@@ -5,12 +5,12 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int combatPhase = 0;
                 EnterCombatEvent firstEnterCombat = log.CombatData.GetEnterCombatEvents(pov).FirstOrDefault();
                 ExitCombatEvent firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
-                if (firstExitCombat != null && (log.FightData.FightEnd  - firstExitCombat.Time) > 1000 && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
+                if (firstExitCombat != null && (log.FightData.FightEnd - firstExitCombat.Time) > 1000 && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
                 {
                     var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase))
                     {
@@ -197,7 +197,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 fightEndLogTime = deadEvt.Time;
                 success = true;
-            } 
+            }
             else
             {
                 IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
@@ -210,7 +210,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         fightEndLogTime = lastDamageTaken.Time;
                     }
                 }
-            }          
+            }
             fightData.SetSuccess(success, fightEndLogTime);
         }
 

@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         skillData.NotAccurate.Add(icf.SkillID);
                     }
-                    switch(icf.CastOrigin)
+                    switch (icf.CastOrigin)
                     {
                         case InstantCastFinder.InstantCastOrigin.Trait:
                             skillData.TraitProc.Add(icf.SkillID);
@@ -202,8 +202,9 @@ namespace GW2EIEvtcParser.ParsedData
         {
             List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
             ulong gw2Build = GetBuildEvent().Build;
-            foreach (Player p in players) {
-                switch(p.Spec)
+            foreach (Player p in players)
+            {
+                switch (p.Spec)
                 {
                     case Spec.Willbender:
                         toAdd.AddRange(ProfHelper.ComputeEndWithBuffApplyCastEvents(p, this, skillData, FlowingResolveSkill, 440, 500, FlowingResolveBuff));
@@ -211,7 +212,7 @@ namespace GW2EIEvtcParser.ParsedData
                     default:
                         break;
                 }
-                switch(p.BaseSpec)
+                switch (p.BaseSpec)
                 {
                     case Spec.Necromancer:
                         if (gw2Build < GW2Builds.March2024BalanceAndCerusLegendary)
@@ -495,13 +496,13 @@ namespace GW2EIEvtcParser.ParsedData
                             insertToSkillIDs = handler.IsSkillID(combatItem);
                             handler.InsertEIExtensionEvent(combatItem, agentData, skillData);
                         }
-                    } 
+                    }
                     else
                     {
                         insertToSkillIDs = combatItem.IsStateChange == StateChange.BuffInitial;
                         CombatEventFactory.AddStateChangeEvent(combatItem, agentData, skillData, _metaDataEvents, _statusEvents, _rewardEvents, wepSwaps, buffEvents, evtcVersion);
                     }
-                    
+
                 }
                 else if (combatItem.IsActivation != Activation.None)
                 {
@@ -611,7 +612,7 @@ namespace GW2EIEvtcParser.ParsedData
                         if (dict.TryGetValue(buffInstance, out List<AbstractBuffEvent> list))
                         {
                             list.Add(abe);
-                        } 
+                        }
                         else
                         {
                             dict[buffInstance] = new List<AbstractBuffEvent> { abe };
@@ -1273,7 +1274,8 @@ namespace GW2EIEvtcParser.ParsedData
         public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
-            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+            if (TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
                 var result = effects.Where(effect => effect.Src == agent).ToList();
                 if (result.Count > 0)
                 {
@@ -1330,12 +1332,12 @@ namespace GW2EIEvtcParser.ParsedData
             return false;
         }
         /// <summary>
-         /// Returns effect events on the given agent and effect GUIDs.
-         /// </summary>
-         /// <param name="agent"></param>
-         /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
-         /// <param name="effectEvents"></param>
-         /// <returns></returns>
+        /// Returns effect events on the given agent and effect GUIDs.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
+        /// <param name="effectEvents"></param>
+        /// <returns></returns>
         public bool TryGetEffectEventsByDstWithGUIDs(AgentItem agent, string[] effectGUIDs, out IReadOnlyList<EffectEvent> effectEvents)
         {
             effectEvents = null;
@@ -1416,7 +1418,8 @@ namespace GW2EIEvtcParser.ParsedData
         {
             var effectGroups = new List<List<EffectEvent>>();
             groupedEffectEvents = null;
-            if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effects)) {
+            if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
                 var processedTimes = new HashSet<long>();
                 foreach (EffectEvent first in effects)
                 {

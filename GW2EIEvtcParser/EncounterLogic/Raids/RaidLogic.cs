@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ParseMode = ParseModeEnum.Instanced10;
             SkillMode = SkillModeEnum.PvE;
             EncounterCategoryInformation.Category = FightCategory.Raid;
-            EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
+            EncounterID |= EncounterIDs.EncounterMasks.RaidMask;
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

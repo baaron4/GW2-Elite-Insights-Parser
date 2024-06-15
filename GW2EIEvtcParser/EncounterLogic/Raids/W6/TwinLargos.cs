@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     p1.OverrideStart(hit.Time);
                     p1.Name += " (Fallback)";
-                } 
+                }
                 else
                 {
                     p1.Name += " (Bad Fallback)";

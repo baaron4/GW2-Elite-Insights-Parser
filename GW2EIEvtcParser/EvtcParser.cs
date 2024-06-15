@@ -624,7 +624,7 @@ namespace GW2EIEvtcParser
                     }
                     // No need to keep that event, it'll be immediately parsed by the handler
                     return false;
-                } 
+                }
                 else
                 {
                     return _enabledExtensions.ContainsKey(combatItem.Pad);
@@ -646,7 +646,7 @@ namespace GW2EIEvtcParser
         /// <param name="checkInstid"></param>
         /// <returns></returns>
         private static bool UpdateAgentData(AgentItem ag, long logTime, ushort instid, bool checkInstid)
-        {       
+        {
             if (instid != 0)
             {
                 if (ag.InstID == 0)
@@ -658,14 +658,14 @@ namespace GW2EIEvtcParser
                     return false;
                 }
             }
-            
+
             if (ag.FirstAware == 0)
             {
                 ag.OverrideAwareTimes(logTime, logTime);
             }
             else
             {
-                ag.OverrideAwareTimes(Math.Min(ag.FirstAware, logTime), Math.Max(ag.LastAware,logTime));
+                ag.OverrideAwareTimes(Math.Min(ag.FirstAware, logTime), Math.Max(ag.LastAware, logTime));
             }
             return true;
         }
@@ -832,7 +832,7 @@ namespace GW2EIEvtcParser
         /// <exception cref="EvtcAgentException"></exception>
         private void CompleteAgents(ParserController operation)
         {
-            var allAgentValues = new HashSet<ulong> ( _combatItems.Where(x => x.SrcIsAgent()).Select(x => x.SrcAgent) );
+            var allAgentValues = new HashSet<ulong>(_combatItems.Where(x => x.SrcIsAgent()).Select(x => x.SrcAgent));
             allAgentValues.UnionWith(_combatItems.Where(x => x.DstIsAgent()).Select(x => x.DstAgent));
             allAgentValues.ExceptWith(_allAgentsList.Select(x => x.Agent));
             allAgentValues.Remove(0);
@@ -1005,7 +1005,7 @@ namespace GW2EIEvtcParser
                     if (p.FirstAware > 100)
                     {
                         // look for a spawn event close to first aware
-                        CombatItem spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn 
+                        CombatItem spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn
                             && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
                         if (spawnEvent != null)
                         {

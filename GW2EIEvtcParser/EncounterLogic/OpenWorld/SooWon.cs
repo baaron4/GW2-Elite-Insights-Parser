@@ -5,10 +5,10 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
 {
@@ -17,13 +17,13 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
         public SooWon(int triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
-            { 
+            {
             new PlayerDstHitMechanic(TsunamiSlamOW, "Tsunami Slam", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.DarkRed), "Slam", "Soo-Won slams the ground in front of her creating a circular tsunami", "Tsunami Slam", 0),
             new PlayerDstHitMechanic(VoidPurgeOW, "Void Purge", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkPurple), "Acid", "Player took damage from an acid pool", "Acid Pool", 0),
             new PlayerDstSkillMechanic(ClawSlapOW, "Claw Slap", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Orange), "Claw Slap", "Soo-Won swipes in an arc in front of her knocking players back", "Claw Slap", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant) ^ de.HasDowned ^ de.HasKilled),
             new PlayerDstHitMechanic(TailSlap, "Tail Slap", new MechanicPlotlySetting(Symbols.Square,Colors.Orange), "Tail Slap", "Soo-Won slaps the majority of the platform, opposite her head, with her tail", "Tail Slap", 0),
             new PlayerDstHitMechanic(BiteOW, "Bite", new MechanicPlotlySetting(Symbols.Diamond,Colors.Orange), "Bite", "Soo-Won bites half the platform while swapping sides", "Bite", 0),
-            new PlayerDstSkillMechanic(NightmareDevastationOW1, "Nightmare Devastation", new MechanicPlotlySetting(Symbols.Square,Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", 0),            
+            new PlayerDstSkillMechanic(NightmareDevastationOW1, "Nightmare Devastation", new MechanicPlotlySetting(Symbols.Square,Colors.Purple), "Wave (Half)", "Tidal wave that covers one half of the platform", "Tidal Wave (Half)", 0),
             new PlayerDstSkillMechanic(NightmareDevastationOW2, "Nightmare Devastation", new MechanicPlotlySetting(Symbols.Square,Colors.DarkPurple), "Wave (Full)", "Tidal wave that covers the entire platform", "Tidal Wave (Full)", 0),
             new PlayerDstBuffApplyMechanic(WispForm, "Wisp Form", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Wisp", "Wisp Form from standing in a green circle", "Wisp Form", 0),
             new PlayerDstSkillMechanic(SeveredFromBody, "Severed from Body", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Failed Green", "Player failed to return to the top of the Harvest Temple after becoming a wisp", "Failed Green", 0).UsingChecker((de, log) => de.HasKilled),

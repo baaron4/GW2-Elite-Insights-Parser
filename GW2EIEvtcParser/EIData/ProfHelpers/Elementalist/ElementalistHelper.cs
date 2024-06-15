@@ -291,7 +291,7 @@ namespace GW2EIEvtcParser.EIData
             SkillItem skill = skillData.Get(Updraft);
             if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
             {
-                foreach(EffectEvent effect in updrafts)
+                foreach (EffectEvent effect in updrafts)
                 {
                     res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 1000));
                 }
@@ -402,7 +402,7 @@ namespace GW2EIEvtcParser.EIData
                         AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGeyser);
                     }
                 }
-                
+
             }
         }
     }

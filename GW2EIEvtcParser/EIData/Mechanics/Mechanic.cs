@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EIData
             if (isAchievementEligibility)
             {
                 _enableConditions.Add(EligibilityKeeper);
-            } 
+            }
             else
             {
                 _enableConditions.Remove(EligibilityKeeper);

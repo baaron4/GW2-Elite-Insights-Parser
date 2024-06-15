@@ -16,7 +16,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
     /// </summary>
     internal static class JsonMinionsBuilder
     {
-        
+
         public static JsonMinions BuildJsonMinions(Minions minions, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonMinions = new JsonMinions();
@@ -89,10 +89,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             {
                 PhaseData phase = phases[i];
                 totalDamageDist[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                    minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    minions.GetBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    log, 
-                    skillMap, 
+                    minions.GetDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    minions.GetBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    log,
+                    skillMap,
                     buffMap
                 );
             }
@@ -108,10 +108,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                     {
                         PhaseData phase = phases[j];
                         targetDamageDist[i][j] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                            minions.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                            minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                            log, 
-                            skillMap, 
+                            minions.GetDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                            minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                            log,
+                            skillMap,
                             buffMap
                         );
                     }

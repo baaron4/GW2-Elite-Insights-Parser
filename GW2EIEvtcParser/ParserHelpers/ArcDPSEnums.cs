@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser
             internal const ulong May2023Balance = 145038;
             internal const ulong May2023BalanceHotFix = 146069;
             internal const ulong June2023Balance = 147734;
-            internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
+            internal const ulong SOTOBetaAndSilentSurfNM = 147830;
             internal const ulong July2023BalanceAndSilentSurfCM = 148697;
             internal const ulong SOTOReleaseAndBalance = 150431;
             internal const ulong September2023Balance = 151966;
@@ -272,7 +272,7 @@ namespace GW2EIEvtcParser
             Integrity = 36,
             Marker = 37,
             BarrierUpdate = 38,
-            StatReset = 39, 
+            StatReset = 39,
             Extension = 40,
             APIDelayed = 41,
             InstanceStart = 42,
@@ -422,12 +422,13 @@ namespace GW2EIEvtcParser
                 {
                     // only apply +1 shift to enum higher or equal to the one removed
                     res = bt < (byte)BuffAttribute.FlatOutgoing ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
-                } 
+                }
                 else
                 {
                     res = BuffAttribute.Unknown;
                 }
-            } else
+            }
+            else
             {
                 res = bt <= (byte)BuffAttribute.SiphonIncomingAdditive1 ? (BuffAttribute)bt : BuffAttribute.Unknown;
             }

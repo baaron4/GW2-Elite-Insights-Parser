@@ -248,9 +248,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endTime = (int)deathEmbrace.Time + deathsEmbraceCastDuration;
 
                         Point3D ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
-                        if (ankkaPosition == null) 
-                        { 
-                            continue; 
+                        if (ankkaPosition == null)
+                        {
+                            continue;
                         }
 
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out IReadOnlyList<EffectEvent> deathsEmbraceEffects))
@@ -322,7 +322,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 {
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
-                            } 
+                            }
                             else if (log.FightData.IsCM)
                             {
                                 AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 33000);

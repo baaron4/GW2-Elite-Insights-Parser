@@ -32,8 +32,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             switch (baseSpec)
             {
 
-                case ParserHelper.Spec.Warrior: 
-                    return ("rgb(255,209,102)","rgb(190,159,84)","rgb(125,109,66)");
+                case ParserHelper.Spec.Warrior:
+                    return ("rgb(255,209,102)", "rgb(190,159,84)", "rgb(125,109,66)");
                 case ParserHelper.Spec.Guardian:
                     return ("rgb(114,193,217)", "rgb(88,147,165)", "rgb(62,101,113)");
                 case ParserHelper.Spec.Revenant:
@@ -51,7 +51,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 case ParserHelper.Spec.Necromancer:
                     return ("rgb(82,167,111)", "rgb(64,127,85)", "rgb(46,88,60)");
                 default:
-                    return ("","","");
+                    return ("", "", "");
             }
 
         }

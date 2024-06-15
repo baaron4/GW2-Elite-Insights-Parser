@@ -290,7 +290,7 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, HashSet<OutgoingDamageModifier> usedDamageMods, 
+        private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, HashSet<OutgoingDamageModifier> usedDamageMods,
             HashSet<string> allDamageMods, List<OutgoingDamageModifier> commonDamageModifiers, List<OutgoingDamageModifier> itemDamageModifiers)
         {
             foreach (AbstractSingleActor actor in log.Friendlies)
@@ -461,7 +461,7 @@ namespace GW2EIBuilders.HtmlModels
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                var phaseDto = new PhaseDto(phase, phases, log, persBuffDict, 
+                var phaseDto = new PhaseDto(phase, phases, log, persBuffDict,
                     commonOutDamageModifiers, itemOutDamageModifiers, persOutDamageModDict,
                     commonIncDamageModifiers, itemIncDamageModifiers, persIncDamageModDict
                     );
