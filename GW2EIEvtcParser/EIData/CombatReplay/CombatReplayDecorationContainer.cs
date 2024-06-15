@@ -30,7 +30,8 @@ namespace GW2EIEvtcParser.EIData
             if (!Decorations.TryGetValue(cached, out List<VariableGenericDecoration> list))
             {
                 Decorations[cached] = new List<VariableGenericDecoration> { decoration.VariableDecoration };
-            } else
+            }
+            else
             {
                 list.Add(decoration.VariableDecoration);
             }

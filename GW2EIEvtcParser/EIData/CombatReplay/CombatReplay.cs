@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Add( new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Blue, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
@@ -206,7 +206,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Add( new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Green, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
@@ -255,12 +255,12 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Add( new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
 
-                    replay.Decorations.Add( new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
+                    replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new PositionConnector(effectEvt.Position)));
                 }
             }
         }
@@ -279,7 +279,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 if (effectEvt.IsAroundDst)
                 {
-                    replay.Decorations.Add( new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
+                    replay.Decorations.Add(new CircleDecoration(180, lifeSpan, Colors.Teal, 0.5, new AgentConnector(log.FindActor(effectEvt.Dst))));
                 }
                 else
                 {
