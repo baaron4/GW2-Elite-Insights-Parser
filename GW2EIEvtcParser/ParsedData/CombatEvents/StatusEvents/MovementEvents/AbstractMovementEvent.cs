@@ -33,19 +33,18 @@ namespace GW2EIEvtcParser.ParsedData
 
         public Point3D GetPoint3D()
         {
-            return GetPoint3D(_dstAgent, _value);
+            return GetParametricPoint3D();
         }
 
         /// <summary>
         /// Uses <see cref="UnpackMovementData(ulong, int)"/> to get X, Y, Z coordinates.<br></br>
         /// Converts the coordinate points to a <see cref="Point3D"/> to access the class methods.
         /// </summary>
-        /// <param name="packedXY"></param>
-        /// <param name="intZ"></param>
-        /// <returns><see cref="Point3D"/> containing coordinates obtained from <paramref name="packedXY"/> and <paramref name="intZ"/>.</returns>
-        internal static Point3D GetPoint3D(ulong packedXY, int intZ)
+        /// <param name="evt">CombatItem</param>
+        /// <returns><see cref="Point3D"/> containing coordinates obtained from <paramref name="evt"/>.</returns>
+        internal static Point3D GetPoint3D(CombatItem evt)
         {
-            (var x, var y, var z) = UnpackMovementData(packedXY, intZ);
+            (var x, var y, var z) = UnpackMovementData(evt.DstAgent, evt.Value);
             return new Point3D(x, y, z);
         }
 

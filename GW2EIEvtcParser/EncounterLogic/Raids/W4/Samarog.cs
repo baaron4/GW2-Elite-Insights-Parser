@@ -134,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // With lingering agents, last aware of the spears are properly set
             if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
             {
-                var spearAgents = combatData.Where(x => x.DstAgent == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
+                var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
                 if (spearAgents.Count != 0)
                 {
                     foreach (AgentItem spear in spearAgents)

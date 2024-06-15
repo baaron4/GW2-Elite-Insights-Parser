@@ -56,9 +56,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // time starts at first smash
-            if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID))
+            var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).ToList();
+            if (effectIDToGUIDs.Count > 0)
             {
-                CombatItem armSmashGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).FirstOrDefault(x => IDToGUIDEvent.UnpackGUID(x.SrcAgent, x.DstAgent).hex == EffectGUIDs.CAArmSmash);
+                CombatItem armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => IDToGUIDEvent.UnpackGUID(x.SrcAgent, x.DstAgent).hex == EffectGUIDs.CAArmSmash);
                 if (armSmashGUID != null)
                 {
                     CombatItem firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);

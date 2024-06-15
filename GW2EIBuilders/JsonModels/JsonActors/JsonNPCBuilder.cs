@@ -40,7 +40,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             {
                 if (hpUpdates.Count > 0)
                 {
-                    hpLeft = hpUpdates.Last().HPPercent;
+                    hpLeft = hpUpdates.Last().HealthPercent;
                 }
                 if (barrierUpdates.Count > 0)
                 {

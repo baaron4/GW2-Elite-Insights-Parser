@@ -261,7 +261,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // discard hp update events after determined apply
             AbstractSingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
             var nikareHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(nikare.AgentItem)).ToList();
-            if (nikareHPUpdates.Any(x => x.DstAgent != 10000 && x.DstAgent != 0))
+            if (nikareHPUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
             {
                 CombatItem lastHPUpdate = nikareHPUpdates.Last();
                 if (lastHPUpdate.DstAgent == 10000)
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (kenut != null)
             {
                 var kenutHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(kenut.AgentItem)).ToList();
-                if (kenutHPUpdates.Any(x => x.DstAgent != 10000 && x.DstAgent != 0))
+                if (kenutHPUpdates.Any(x => HealthUpdateEvent.GetHealthPercent(x) != 100 && HealthUpdateEvent.GetHealthPercent(x) != 0))
                 {
                     CombatItem lastHPUpdate = kenutHPUpdates.Last();
                     if (lastHPUpdate.DstAgent == 10000)
@@ -415,7 +415,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     mode = FightData.EncounterMode.Normal;
                 }
             }
-            if (mode == FightData.EncounterMode.CM && combatData.GetHealthUpdateEvents(nikare.AgentItem).Any(x => x.HPPercent < 70) && !nikareHasCastAquaticDomain) // Nikare went below 70% but never cast Aquatic Domain
+            if (mode == FightData.EncounterMode.CM && combatData.GetHealthUpdateEvents(nikare.AgentItem).Any(x => x.HealthPercent < 70) && !nikareHasCastAquaticDomain) // Nikare went below 70% but never cast Aquatic Domain
             {
                 mode = FightData.EncounterMode.Normal;
             }

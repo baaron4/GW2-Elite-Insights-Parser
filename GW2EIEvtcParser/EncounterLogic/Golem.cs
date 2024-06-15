@@ -133,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // Fifth number would the equivalent of full fight phase
                 for (int j = 0; j < thresholds.Count - 1; j++)
                 {
-                    HealthUpdateEvent hpUpdate = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[j]);
+                    HealthUpdateEvent hpUpdate = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[j]);
                     if (hpUpdate != null)
                     {
                         var phase = new PhaseData(log.FightData.FightStart, hpUpdate.Time, numberNames[j])
@@ -205,7 +205,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (hpUpdates.Count > 0)
                 {
                     AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
-                    success = hpUpdates.Last().HPPercent < 2.00;
+                    success = hpUpdates.Last().HealthPercent < 2.00;
                     if (success && lastDamageTaken != null)
                     {
                         fightEndLogTime = lastDamageTaken.Time;

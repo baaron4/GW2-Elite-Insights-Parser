@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             return false;
                         }
                         // Deimos can't go above 10% hp during that phase
-                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && evt.DstAgent > 1001)
+                        if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(evt) > 1001)
                         {
                             return false;
                         }
@@ -227,7 +227,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return 0;
             }
             gadgetAgents.Add(deimosStructBody);
-            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
+            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0);
             if (armDeimosDamageEvent != null)
             {
                 gadgetAgents.Add(agentData.GetAgent(armDeimosDamageEvent.SrcAgent, armDeimosDamageEvent.Time));
@@ -237,7 +237,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static AgentItem GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem shackledPrisonerMaxHP = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent == 1000980);
+            CombatItem shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate);
             if (shackledPrisonerMaxHP != null)
             {
                 AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             CombatItem firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
                             CombatItem firstHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(shackledPrisoner));
-                            if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && firstHPUpdate.DstAgent == 10000) // sanity check
+                            if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && HealthUpdateEvent.GetHealthPercent(firstHPUpdate) == 100) // sanity check
                             {
                                 _hasPreEvent = true;
                                 _deimos100PercentTime = start - firstHPUpdate.Time;
@@ -293,7 +293,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static bool HandleDemonicBonds(AgentData agentData,List<CombatItem> combatData)
         {
-            var maxHPUpdates = combatData.Where(x => x.DstAgent == 239040 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).ToList();
+            var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).ToList();
             var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem demonicBond in demonicBonds)
             {
@@ -428,7 +428,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     HealthUpdateEvent prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
                     if (prevHPUpdate != null)
                     {
-                        mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HPPercent)}%";
+                        mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HealthPercent)}%";
                         npcDeimosEnd = prevHPUpdate.Time;
                     }
                 }

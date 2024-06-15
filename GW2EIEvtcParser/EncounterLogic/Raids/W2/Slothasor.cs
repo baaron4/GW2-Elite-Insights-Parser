@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Mushrooms
-            var mushroomAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
+            var mushroomAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
             if (mushroomAgents.Count != 0)
             {
                 int idToKeep = mushroomAgents.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Count()).MaxBy(x => x.Value).Key;
@@ -123,8 +123,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     var copyEventsFrom = new List<AgentItem>() { mushroom };
                     var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
-                    var aliveUpdates = hpUpdates.Where(x => x.DstAgent == 10000).ToList();
-                    var deadUpdates = hpUpdates.Where(x => x.DstAgent == 0).ToList();
+                    var aliveUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 100).ToList();
+                    var deadUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
                     long lastDeadTime = long.MinValue;
                     foreach (CombatItem aliveEvent in aliveUpdates)
                     {

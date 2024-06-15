@@ -90,12 +90,13 @@ namespace GW2EIParserCommons
         }
         public void ExecuteMemoryCheckTask()
         {
+            if (Settings.MemoryLimit == 0 && RunningMemoryCheck != null)
+            {
+                RunningMemoryCheck.Cancel();
+                RunningMemoryCheck = null;
+            }
             if (Settings.MemoryLimit == 0 || RunningMemoryCheck != null)
             {
-                if (RunningMemoryCheck != null)
-                {
-                    RunningMemoryCheck.Cancel();
-                }
                 return;
             }
             RunningMemoryCheck = new CancellationTokenSource();// Prepare task

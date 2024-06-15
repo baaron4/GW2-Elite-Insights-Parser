@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             for (int i = 0; i < thresholds.Count; i++)
             {
-                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[i]);
+                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[i]);
                 if (evt == null)
                 {
                     break;

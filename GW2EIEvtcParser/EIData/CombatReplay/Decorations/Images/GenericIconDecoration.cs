@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -12,8 +13,8 @@ namespace GW2EIEvtcParser.EIData
             protected ConstantGenericIconDecoration(string icon, uint pixelSize, uint worldSize) : base()
             {
                 Image = icon;
-                PixelSize = pixelSize;
-                WorldSize = worldSize;
+                PixelSize = Math.Max(pixelSize, 1);
+                WorldSize = Math.Max(worldSize, 1);
             }
         }
         internal abstract class VariableGenericIconDecoration : VariableGenericAttachedDecoration

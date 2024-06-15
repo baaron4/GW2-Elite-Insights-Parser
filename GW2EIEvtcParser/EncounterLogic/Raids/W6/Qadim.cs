@@ -114,26 +114,33 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool refresh = false;
+            var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
             if (evtcVersion >= ArcDPSBuilds.FunctionalEffect2Events)
             {
-                var platformAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
-                foreach (AgentItem platform in platformAgents)
+                if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialPlatformAgentMaxHPs))
                 {
-                    platform.OverrideType(AgentItem.AgentType.NPC);
-                    platform.OverrideID(TrashID.QadimPlatform);
-                    platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
+                    var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
+                    foreach (AgentItem platform in platformAgents)
+                    {
+                        platform.OverrideType(AgentItem.AgentType.NPC);
+                        platform.OverrideID(TrashID.QadimPlatform);
+                        platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
+                    }
+                    refresh = refresh || platformAgents.Count != 0;
                 }
-                refresh = refresh || platformAgents.Count != 0;
             }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
-            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
-            foreach (AgentItem lamp in lampAgents)
+            if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialLampAgentMaxHPs))
             {
-                lamp.OverrideType(AgentItem.AgentType.NPC);
-                lamp.OverrideID(TrashID.QadimLamp);
+                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+                foreach (AgentItem lamp in lampAgents)
+                {
+                    lamp.OverrideType(AgentItem.AgentType.NPC);
+                    lamp.OverrideID(TrashID.QadimLamp);
+                }
+                refresh = refresh || lampAgents.Count != 0;
             }
-            refresh = refresh || lampAgents.Count != 0;
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
             var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
@@ -143,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
                 if (positionEvt != null)
                 {
-                    Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                    Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt);
                     if (protectPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
                         pyre.OverrideID(TrashID.PyreGuardianProtect);
@@ -739,7 +746,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
                     int velocityIndex = 0;
                     AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-                    HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HPPercent < 21);
+                    HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);
                     long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
                     float threshold = 1f;
                     switch (target.Character)
