@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
 
         public FinalDefensesAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
         {
-            (IReadOnlyList<Segment>  dead, IReadOnlyList<Segment>  down, IReadOnlyList<Segment>  dc) = actor.GetStatus(log);
+            (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = actor.GetStatus(log);
 
             // We can't use mechanics due to down event vs down buff desync
             if (actor.AgentItem.Type == AgentItem.AgentType.Player)
@@ -31,11 +31,11 @@ namespace GW2EIEvtcParser.EIData
                 {
                     DownCount = log.CombatData.GetBuffDataByIDByDst(SkillIDs.Downed, actor.AgentItem).Where(be => be.Time >= start && be.Time <= end && be is BuffApplyEvent).Count();
                 }
-            } 
+            }
             else
             {
                 DownCount = log.CombatData.GetDownEvents(actor.AgentItem).Count(x => x.Time >= start && x.Time <= end);
-            }        
+            }
             DeadCount = log.CombatData.GetDeadEvents(actor.AgentItem).Count(x => x.Time >= start && x.Time <= end);
             DcCount = log.CombatData.GetDespawnEvents(actor.AgentItem).Count(x => x.Time >= start && x.Time <= end);
 

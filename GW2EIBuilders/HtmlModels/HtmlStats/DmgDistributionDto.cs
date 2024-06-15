@@ -47,7 +47,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     }
                 }
                 long castTime = Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-                
+
                 timeSpentCasting += castTime;
             }
             if (timeSpentCasting == 0)

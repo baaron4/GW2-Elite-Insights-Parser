@@ -45,8 +45,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             var damagingPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => x.CreditedFrom.IsPlayer).Select(x => x.CreditedFrom));
             long damageDoneWithinOneSec = combatData.GetDamageTakenData(target.AgentItem).Where(x => x.Time >= time && x.Time <= time + 1000).Sum(x => x.HealthDamage);
-            double damageThreshold = Math.Max(damagingPlayers.Count * 80000, 2*damageDoneWithinOneSec);
-            double threshold = (expectedInitialPercent/100.0 - damageThreshold / targetTotalHP) * 100;
+            double damageThreshold = Math.Max(damagingPlayers.Count * 80000, 2 * damageDoneWithinOneSec);
+            double threshold = (expectedInitialPercent / 100.0 - damageThreshold / targetTotalHP) * 100;
             return hpUpdate.HealthPercent < threshold - 2;
         }
 
@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
         {
             bool needStart = beginWithStart;
-            var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x =>(x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x => (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
             var filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {

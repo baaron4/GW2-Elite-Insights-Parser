@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         {
             Health = health;
             HpDistribution = hpDistribution;
-            if (hpDistribution != null && (hpDistribution.Count == 0 || hpDistribution[0].percent != 100)) 
+            if (hpDistribution != null && (hpDistribution.Count == 0 || hpDistribution[0].percent != 100))
             {
                 throw new InvalidOperationException("In SetManualHealth, first element should always have a threshold of 100");
             }

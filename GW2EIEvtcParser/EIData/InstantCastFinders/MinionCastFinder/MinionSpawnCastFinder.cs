@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
 
         public MinionSpawnCastFinder(long skillID, IList<int> speciesIDs) : base(skillID)
         {
-            SpeciesIDs = new List<int> ( speciesIDs );
+            SpeciesIDs = new List<int>(speciesIDs);
         }
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            
+
             return result;
         }
     }

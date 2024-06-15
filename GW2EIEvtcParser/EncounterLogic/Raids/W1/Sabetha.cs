@@ -4,9 +4,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int phaseID = (i + 1) / 2;
                     phase.Name = "Phase " + phaseID;
                     phase.AddTarget(mainTarget);
-                    switch(phaseID)
+                    switch (phaseID)
                     {
                         case 2:
                             phase.AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Kernan) && phase.Start < x.LastAware));
@@ -183,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             var connector = new AgentConnector(target);
                             var rotationConnector = new AngleConnector(facing);
-                            replay.Decorations.Add(new PieDecoration( radius, 28, (firstConeStart, firstConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, 28, (firstConeStart, firstConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new PieDecoration(radius, 54, (secondConeStart, secondConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
                         }

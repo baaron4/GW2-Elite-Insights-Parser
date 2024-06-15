@@ -6,12 +6,12 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -105,8 +105,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (AgentItem gadget in gadgets)
             {
-                RedirectAllEvents(combatData, extensions, agentData, gadget, deimos, 
-                    (evt, from, to) => {
+                RedirectAllEvents(combatData, extensions, agentData, gadget, deimos,
+                    (evt, from, to) =>
+                    {
                         // skip events before last aware that are not attack target related
                         if (evt.Time < deimos.LastAware && evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable)
                         {
@@ -291,7 +292,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return res;
         }
 
-        private static bool HandleDemonicBonds(AgentData agentData,List<CombatItem> combatData)
+        private static bool HandleDemonicBonds(AgentData agentData, List<CombatItem> combatData)
         {
             var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).ToList();
             var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
@@ -422,7 +423,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (invulDei != null)
                 {
                     npcDeimosEnd = invulDei.Time;
-                } 
+                }
                 else if (log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).Any())
                 {
                     HealthUpdateEvent prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
@@ -464,7 +465,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             return phases;
-        }     
+        }
 
         private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
         {

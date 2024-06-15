@@ -8,12 +8,12 @@ namespace GW2EIJSON
     /// </summary>
     public class JsonNPC : JsonActor
     {
-        
+
         /// <summary>
         /// Game ID of the target
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
         /// Final health of the target
         /// </summary>
@@ -28,22 +28,22 @@ namespace GW2EIJSON
         /// % of barrier remaining on the target
         /// </summary>
         public double BarrierPercent { get; set; }
-        
+
         /// <summary>
         /// % of health burned
         /// </summary>
         public double HealthPercentBurned { get; set; }
-        
+
         /// <summary>
         /// Time at which target became active
         /// </summary>
         public int FirstAware { get; set; }
-        
+
         /// <summary>
         /// Time at which target became inactive 
         /// </summary>
         public int LastAware { get; set; }
-        
+
         /// <summary>
         /// List of buff status
         /// </summary>
@@ -67,7 +67,7 @@ namespace GW2EIJSON
         /// </summary>
         public IReadOnlyList<IReadOnlyList<double>> BreakbarPercents { get; set; }
 
-        
+
         public JsonNPC()
         {
 

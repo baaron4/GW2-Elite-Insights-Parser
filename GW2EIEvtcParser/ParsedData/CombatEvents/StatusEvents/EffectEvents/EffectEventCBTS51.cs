@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class EffectEventCBTS51 : EffectEvent
     {
-        const float OrientationConvertConstant = 1f/1000.0f;
+        const float OrientationConvertConstant = 1f / 1000.0f;
 
         internal static Point3D ReadOrientation(CombatItem evtcItem)
         {

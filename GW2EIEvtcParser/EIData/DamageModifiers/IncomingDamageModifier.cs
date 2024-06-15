@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
     {
         internal IncomingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor, DamageModifiersUtils.DamageSource.NotApplicable)
         {
-            ID = ("inc"+Name).GetHashCode();
+            ID = ("inc" + Name).GetHashCode();
             Incoming = true;
         }
 
@@ -19,9 +19,9 @@ namespace GW2EIEvtcParser.EIData
             switch (CompareType)
             {
                 case DamageType.All:
-                    return defenseData.DamageTaken ;
+                    return defenseData.DamageTaken;
                 case DamageType.Condition:
-                    return defenseData.ConditionDamageTaken ;
+                    return defenseData.ConditionDamageTaken;
                 case DamageType.Power:
                     return defenseData.PowerDamageTaken;
                 case DamageType.LifeLeech:
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
         {
-            return actor.GetHitDamageTakenEvents(t, log, start, end, SrcType) ;
+            return actor.GetHitDamageTakenEvents(t, log, start, end, SrcType);
         }
         internal override AgentItem GetFoe(AbstractHealthDamageEvent evt)
         {

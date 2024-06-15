@@ -16,7 +16,7 @@
 
     <PropertyGroup>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-        <Version>3.2.1</Version>
+        <Version>3.2.2</Version>
         <Product>GW2 Elite Insights</Product>
         <Company>GW2 Elite Insights</Company>
         <Authors>EliphasNUIT</Authors>

@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
             if (onlyMinions)
             {
                 Checkers.Add(OnlyMinionsChecker);
-            } 
+            }
             else
             {
                 Checkers.Remove(OnlyMinionsChecker);

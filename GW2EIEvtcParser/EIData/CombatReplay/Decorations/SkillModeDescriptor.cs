@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class SkillModeDescriptor 
+    internal class SkillModeDescriptor
     {
         [Flags]
         public enum SkillModeCategory : uint
@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
             if (owner == null)
             {
                 throw new InvalidOperationException("SkillModeDescriptor must have an owner");
-            } 
+            }
             Owner = new SkillConnector(owner.AgentItem.GetFinalMaster());
             Category = category;
             Category |= SkillModeCategory.ShowOnSelect;
@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EIData
             SkillID = skillID;
         }
 
-        
+
         /// <summary>
         /// No Spec version of SkillDescriptor
         /// </summary>

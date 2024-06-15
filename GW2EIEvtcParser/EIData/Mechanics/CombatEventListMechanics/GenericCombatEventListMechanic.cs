@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
                         }
                     }
                 }
-            } 
+            }
             else
             {
                 foreach (AbstractSingleActor actor in log.FightData.Logic.Hostiles)

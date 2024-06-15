@@ -7,10 +7,10 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TargetID.Dagda:
                     var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    
+
                     // Red AoE during 75-50-25 % phases
                     var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast).ToList();
                     foreach (AbstractCastEvent cast in demonicBlasts)
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Before then, the mechanic would continue during the phase and shoot.
                         if (log.LogData.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
                         {
-                            foreach(AbstractCastEvent demonicBlastCast in demonicBlasts)
+                            foreach (AbstractCastEvent demonicBlastCast in demonicBlasts)
                             {
                                 if (lifespan.Item1 < demonicBlastCast.Time && lifespan.Item2 > demonicBlastCast.Time)
                                 {
@@ -294,7 +294,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (fightData.Success)
                     {
                         fightData.SetSuccess(true, Math.Min(lastDamageEvent.Time, fightData.FightEnd));
-                    } 
+                    }
                     else
                     {
                         fightData.SetSuccess(true, lastDamageEvent.Time);
@@ -352,7 +352,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 List<AgentItem> group = tormentedGroups[i];
                 long start = Math.Max(log.FightData.FightStart, group.Min(x => x.FirstAware));
-                long end = Math.Min(log.FightData.FightEnd, group.Max(x => {
+                long end = Math.Min(log.FightData.FightEnd, group.Max(x =>
+                {
                     long res = x.LastAware;
                     if (log.CombatData.GetDeadEvents(x).Any())
                     {
@@ -408,7 +409,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int[] curTormenteds = new[] { 1, 1, 1, 1 }; 
+            int[] curTormenteds = new[] { 1, 1, 1, 1 };
             foreach (AbstractSingleActor target in Targets)
             {
                 switch (target.ID)

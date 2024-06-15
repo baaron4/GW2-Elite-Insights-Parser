@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.ParsedData
             if (evtcItem.DstAgent != 0)
             {
                 Dst = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
-            } 
+            }
             else
             {
                 Position = new Point3D(

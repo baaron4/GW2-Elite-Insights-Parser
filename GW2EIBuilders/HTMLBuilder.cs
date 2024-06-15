@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;
 using Newtonsoft.Json;
-using System.IO.Compression;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIBuilders
@@ -45,7 +45,7 @@ namespace GW2EIBuilders
                     }
                     return Convert.ToBase64String(mso.ToArray());
                 }
-            }       
+            }
         }
 
         public HTMLBuilder(ParsedEvtcLog log, HTMLSettings settings, HTMLAssets assets, Version parserVersion, UploadResults uploadResults)
@@ -195,17 +195,17 @@ namespace GW2EIBuilders
                 if (!File.Exists(filePath))
                 {
 #endif
-                    try
+                try
+                {
+                    using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                    using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
                     {
-                        using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        using (var scriptWriter = new StreamWriter(fs, NoBOMEncodingUTF8))
-                        {
-                            scriptWriter.Write(content);
-                        }
+                        scriptWriter.Write(content);
                     }
-                    catch (IOException)
-                    {
-                    }
+                }
+                catch (IOException)
+                {
+                }
 #if !DEBUG
                 }
 #endif
@@ -231,7 +231,7 @@ namespace GW2EIBuilders
             {
                 string fileName = "EliteInsights-CR-" + _scriptVersion + ".js";
                 string path = CreateAssetFile(externalPath, cdnPath, fileName, scriptContent);
-                return "<script src=\"" + path + "?version=" + _scriptVersionRev + "\"></script>\n";            
+                return "<script src=\"" + path + "?version=" + _scriptVersionRev + "\"></script>\n";
             }
             else
             {
@@ -269,7 +269,7 @@ namespace GW2EIBuilders
             {
                 string fileName = "EliteInsights-" + _scriptVersion + ".css";
                 string path = CreateAssetFile(externalPath, cdnPath, fileName, scriptContent);
-                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + path + "?version=" + _scriptVersionRev + "\">";             
+                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + path + "?version=" + _scriptVersionRev + "\">";
             }
             else
             {

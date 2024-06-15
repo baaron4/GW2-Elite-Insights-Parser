@@ -36,7 +36,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 if (teamChange.TeamIDInto > 0)
                 {
                     jsonActor.TeamID = teamChange.TeamIDInto;
-                } 
+                }
                 else if (teamChange.TeamIDComingFrom > 0)
                 {
                     jsonActor.TeamID = teamChange.TeamIDComingFrom;
@@ -112,10 +112,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             {
                 PhaseData phase = phases[i];
                 res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                    actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    log, 
-                    skillMap, 
+                    actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    log,
+                    skillMap,
                     buffMap
                 );
             }
@@ -129,10 +129,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             {
                 PhaseData phase = phases[i];
                 res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                    actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    log, 
-                    skillMap, 
+                    actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    log,
+                    skillMap,
                     buffMap
                );
             }

@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
         {
             Character = "Player " + index;
             Account = "Account " + index;
-            AgentItem.OverrideName(Character+"\0:" + Account+ "\01");
+            AgentItem.OverrideName(Character + "\0:" + Account + "\01");
         }
 
         internal override Dictionary<long, FinalActorBuffs>[] ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         lastAdded = seg;
                         lastPlayer = p;
-                        cleanStates.Add((p,seg));
+                        cleanStates.Add((p, seg));
                     }
                 }
                 CommanderStates = cleanStates.Where(x => x.p == this).Select(x => x.seg).ToList();
@@ -186,13 +186,13 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<GenericSegment<string>> commanderStates = GetCommanderStates(log);
             var result = new List<Segment>();
             Segment prev = null;
-            foreach (GenericSegment<string> state in commanderStates) 
+            foreach (GenericSegment<string> state in commanderStates)
             {
                 if (prev == null || state.Start != prev.End)
                 {
                     prev = new Segment(state.Start, state.End);
                     result.Add(prev);
-                } 
+                }
                 else
                 {
                     prev.End = state.End;

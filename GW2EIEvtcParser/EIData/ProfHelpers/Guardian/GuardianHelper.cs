@@ -3,14 +3,14 @@ using System.Linq;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
-using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EIData
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 10000); // 10s with trait
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    replay.Decorations.Add(new RectangleDecoration( 500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EIData
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandSymbolOfVengeance1, out IReadOnlyList<EffectEvent> symbolsOfVengeance))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfVengeance, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC); // CC when traited
-                foreach(EffectEvent effect in symbolsOfVengeance)
+                foreach (EffectEvent effect in symbolsOfVengeance)
                 {
                     (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfVengeance);

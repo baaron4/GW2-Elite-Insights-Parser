@@ -5,9 +5,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -120,7 +120,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return base.GetLogicName(combatData, agentData);
             }
-            switch(mapID.MapID)
+            switch (mapID.MapID)
             {
                 // Raids
                 case 1062:

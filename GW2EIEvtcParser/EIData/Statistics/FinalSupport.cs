@@ -35,12 +35,12 @@ namespace GW2EIEvtcParser.EIData
                         {
                             friendlyCount++;
                             friendlyTime = Math.Max(friendlyTime + brae.RemovedDuration, log.FightData.FightDuration);
-                        } 
+                        }
                         else if (brae.ToFoe)
                         {
                             foeCount++;
                             foeTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);
-                        } 
+                        }
                         else
                         {
                             unknownCount++;

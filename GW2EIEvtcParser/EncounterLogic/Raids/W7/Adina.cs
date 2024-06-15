@@ -5,11 +5,11 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in radiantBlindnesses)
             {
-                replay.Decorations.Add(new CircleDecoration( 90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 2990; // casttime 0
                         int duration = c.ActualDuration;
                         uint width = 1100; uint height = 60;
-                        foreach (int angle in new List<int> { 30, 150, 270})
+                        foreach (int angle in new List<int> { 30, 150, 270 })
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (phaseIndex + 1)));
                 }
-            } 
+            }
             else if (start > 0 && invuls.Count == 0)
             {
                 // no split
@@ -300,7 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(mainPhases);
             phases.AddRange(splitPhases);
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));       
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             //
             return phases;
         }
@@ -375,7 +375,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
             {
-                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
             }
         }
     }

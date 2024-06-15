@@ -6,11 +6,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -327,7 +327,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         for (int i = 1; i < ticks; i++)
                         {
                             float angle = initialAngle + i * 360 / 8;
-                            replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
+                            replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
                         }
                     }
                     foreach (AbstractCastEvent c in blades2)
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var connector = new AgentConnector(target);
                         replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
                         float initialAngle1 = Point3D.GetZRotationFromFacing(facing);
-                        replay.Decorations.Add(new PieDecoration( bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
+                        replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
                         float initialAngle2 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
                         replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
                         for (int i = 1; i < ticks; i++)
@@ -391,7 +391,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Henley:
                 case (int)ArcDPSEnums.TrashID.Galletta:
                 case (int)ArcDPSEnums.TrashID.Ianim:
-                    replay.Decorations.Add(new CircleDecoration( 600, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(600, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                     replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
                     Point3D firstPhantasmPosition = replay.PolledPositions.FirstOrDefault();
                     if (firstPhantasmPosition != null)

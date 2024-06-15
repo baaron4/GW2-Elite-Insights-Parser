@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case StateChange.HealthUpdate:
                     var healthEvt = new HealthUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
-                    break;                
+                    break;
                 case StateChange.BarrierUpdate:
                     var barrierEvt = new BarrierUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BarrierUpdateEvents, barrierEvt.Src, barrierEvt);
@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.ParsedData
                                 // We can't have the same markers active at the same time on one Src
                                 if (preMarker.MarkerID == markerEvent.MarkerID)
                                 {
-                                    if (preMarker.Time <=  markerEvent.Time && preMarker.EndTime > markerEvent.Time)
+                                    if (preMarker.Time <= markerEvent.Time && preMarker.EndTime > markerEvent.Time)
                                     {
                                         preMarker.SetEndTime(markerEvent.Time);
                                     }
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.ParsedData
                                 }
                             }
                         }
-                    } 
+                    }
                     else
                     {
                         // End event
@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case StateChange.Effect_45:
                 case StateChange.Effect_51:
                     EffectEvent effectEvt = null;
-                    switch(stateChangeEvent.IsStateChange)
+                    switch (stateChangeEvent.IsStateChange)
                     {
                         case StateChange.Effect_45:
                             // End event, not supported for 45
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.ParsedData
                             {
                                 var endEvent = new EffectEndEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
                                 return;
-                            } 
+                            }
                             else
                             {
                                 effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
@@ -356,7 +356,7 @@ namespace GW2EIEvtcParser.ParsedData
                             if (lastSquadMarker.Position.DistanceToPoint(squadMarkerEvent.Position) > 1e-6)
                             {
                                 lastSquadMarker.SetEndTime(squadMarkerEvent.Time);
-                            } 
+                            }
                             else
                             // Ignore current if last marker does not have an end set
                             if (lastSquadMarker.EndNotSet)

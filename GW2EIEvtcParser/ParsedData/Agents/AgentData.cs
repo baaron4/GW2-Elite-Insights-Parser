@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.ParsedData
                 return;
             }
             _allAgentsList.RemoveAll(x => agents.Contains(x));
-            
+
             Refresh();
         }
 

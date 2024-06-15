@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser
 {
-    public class CachingCollectionCustom<Q,T> : AbstractCachingCollection<T>
+    public class CachingCollectionCustom<Q, T> : AbstractCachingCollection<T>
     {
         private readonly Q _nullValue;
 

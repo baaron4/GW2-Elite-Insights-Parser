@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
     {
         private readonly List<(AgentItem agent, bool extension)> _lastSrcRemoves = new List<(AgentItem agent, bool extension)>();
         // Constructor
-        public BuffSimulatorIntensity(ParsedEvtcLog log, Buff buff,int capacity) : base(log, buff, capacity)
+        public BuffSimulatorIntensity(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff, capacity)
         {
         }
 

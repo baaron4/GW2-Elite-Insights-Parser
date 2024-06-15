@@ -7,11 +7,11 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -62,7 +62,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (agentItem.IsDC(log, log.FightData.FightEnd) && !despawns.Any(x => x.Time >= log.FightData.FightStart && x.Time <= log.FightData.FightEnd))
                         {
                             eligibilityRemovedEvents.Add(new PlaceHolderTimeCombatEvent(log.FightData.FightEnd - 1));
-                        } 
+                        }
                         else
                         {
                             eligibilityRemovedEvents.AddRange(despawns);
@@ -266,7 +266,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int[] curEmbodiments = new[] { 1, 1, 1, 1, 1, 1 }; 
+            int[] curEmbodiments = new[] { 1, 1, 1, 1, 1, 1 };
             int curShadow = 1;
             foreach (AbstractSingleActor target in Targets)
             {

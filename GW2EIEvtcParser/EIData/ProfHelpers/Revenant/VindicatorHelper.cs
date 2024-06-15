@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceBuff),
             //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect),
             new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance),
-            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff), 
+            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff),
         };
 
         private static readonly HashSet<long> _dodges = new HashSet<long>

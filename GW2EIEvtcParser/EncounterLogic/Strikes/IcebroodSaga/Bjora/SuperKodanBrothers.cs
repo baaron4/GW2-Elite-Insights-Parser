@@ -5,11 +5,11 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -124,7 +124,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (enterCombat != null)
                 {
                     phaseStart = enterCombat.Time;
-                } else
+                }
+                else
                 {
                     phaseStart = voiceAndClaw.FirstAware;
                 }
@@ -134,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     phaseEnd = nextUnmergedPhase.Start - 1;
                 }
-                var phase = new PhaseData(phaseStart, phaseEnd , "Voice and Claw " + ++voiceAndClawCount);
+                var phase = new PhaseData(phaseStart, phaseEnd, "Voice and Claw " + ++voiceAndClawCount);
                 phase.AddTarget(voiceAndClaw);
                 phases.Add(phase);
             }
@@ -154,7 +155,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (oldEnd != preTPPhaseEnd)
                     {
                         PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > voiceAndClaw.LastAware);
-                        if (nextUnmergedPhase != null) 
+                        if (nextUnmergedPhase != null)
                         {
                             long postMergedStart = nextUnmergedPhase.Start + 1;
                             long postMergedEnd = oldEnd;
@@ -163,7 +164,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             phase.AddTarget(voice);
                             phases.Add(phase);
                         }
-                        
+
                     }
                 }
                 if (preTPPhaseEnd - preTPPhaseStart > 2000)
@@ -175,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 preTPPhaseStart = teleport.EndTime;
             }
-            
+
             //
             AbstractBuffEvent enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
             if (enrage != null)

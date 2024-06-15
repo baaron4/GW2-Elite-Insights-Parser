@@ -80,7 +80,7 @@
 
         public string GetCategoryName()
         {
-            switch(Category)
+            switch (Category)
             {
                 case FightCategory.Strike:
                     return "Strike Mission";
