@@ -1,6 +1,7 @@
 ﻿using System;
 using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -23,9 +24,9 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Pie" + Radius + Color + MinRadius + OpeningAngle.ToString();
             }
         }
         internal class VariablePieDecoration : VariableCircleDecoration

@@ -13,12 +13,12 @@ namespace GW2EIEvtcParser.EIData
 
             public ConstantIconDecoration(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)
             {
-                Opacity = opacity;
+                Opacity = (float)Math.Round(opacity, 2);
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
         }
         internal class VariableIconDecoration : VariableGenericIconDecoration

@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
     {
         internal class ConstantActorOrientationDecoration : ConstantGenericAttachedDecoration
         {
-            public override string GetID()
+            public override string GetSignature()
             {
                 return "AO";
             }

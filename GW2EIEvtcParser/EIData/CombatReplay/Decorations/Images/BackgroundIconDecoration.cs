@@ -13,9 +13,9 @@ namespace GW2EIEvtcParser.EIData
             {
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
             }
         }
         internal class VariableBackgroundIconDecoration : VariableGenericIconDecoration

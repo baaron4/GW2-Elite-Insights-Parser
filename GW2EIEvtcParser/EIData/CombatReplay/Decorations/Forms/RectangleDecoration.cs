@@ -17,9 +17,9 @@ namespace GW2EIEvtcParser.EIData
                 Width = Math.Max(width, 1);
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Rect" + Height + Color + Width;
             }
         }
         internal class VariableRectangleDecoration : VariableFormDecoration

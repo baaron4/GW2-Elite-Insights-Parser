@@ -13,9 +13,9 @@ namespace GW2EIEvtcParser.EIData
             {
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Line" + Color;
             }
         }
         internal class VariableLineDecoration : VariableFormDecoration

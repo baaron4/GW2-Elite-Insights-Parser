@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
                 Height = height;
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
                 return "MP" + Height + Image.GetHashCode().ToString() + Width;
             }

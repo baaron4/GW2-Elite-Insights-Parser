@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
         public abstract class ConstantGenericDecoration
         {
 
-            public abstract string GetID();
+            public abstract string GetSignature();
         }
         public abstract class VariableGenericDecoration
         {
