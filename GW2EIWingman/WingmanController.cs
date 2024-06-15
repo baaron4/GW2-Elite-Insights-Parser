@@ -26,7 +26,7 @@ namespace GW2EIWingman
         };
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
         private static readonly HttpClient HTTPClient = new HttpClient();
-       
+
 
         ///////////////// URL Utilities
         private const string BaseURL = "https://gw2wingman.nevermindcreations.de/";
@@ -201,10 +201,10 @@ namespace GW2EIWingman
         public static bool CheckUploadPossible(FileInfo fi, string account, long triggerID, TraceHandler traceHandler)
         {
             string creationTime = new DateTimeOffset(fi.CreationTime).ToUnixTimeSeconds().ToString();
-            var data = new Dictionary<string, string> { 
-                { "account", account }, 
-                { "filesize", fi.Length.ToString() }, 
-                { "timestamp", creationTime }, 
+            var data = new Dictionary<string, string> {
+                { "account", account },
+                { "filesize", fi.Length.ToString() },
+                { "timestamp", creationTime },
                 { "file", fi.Name } ,
                 { "triggerID", triggerID.ToString() }
             };

@@ -12,7 +12,7 @@
             if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
             {
                 TeamIDComingFrom = GetTeamIDComingFrom(evtcItem);
-            } 
+            }
         }
 
         internal static ulong GetTeamIDInto(CombatItem evtcItem)

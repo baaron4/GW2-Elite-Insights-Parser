@@ -8,22 +8,22 @@ namespace GW2EIJSON
     /// </summary>
     public class JsonPhase
     {
-        
+
         /// <summary>
         /// Start time of the phase
         /// </summary>
         public long Start { get; set; }
-        
+
         /// <summary>
         /// End time of the phase
         /// </summary>
         public long End { get; set; }
-        
+
         /// <summary>
         /// Name of the phase
         /// </summary>
         public string Name { get; set; }
-        
+
         /// <summary>
         /// Index of targets tracked during the phase
         /// </summary>
@@ -41,7 +41,7 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonLog.Phases"/>
         public IReadOnlyList<int> SubPhases { get; set; }
-        
+
         /// <summary>
         /// Indicates that the phase is a breakbar phase \n
         /// Only one target will be present in <see cref="JsonPhase.Targets"/> \n
@@ -49,7 +49,7 @@ namespace GW2EIJSON
         /// </summary>
         public bool BreakbarPhase { get; set; }
 
-        
+
         public JsonPhase()
         {
 

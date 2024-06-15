@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
 
         public List<List<object>> OutgoingBarrierStats { get; set; }
         public List<List<List<object>>> OutgoingBarrierStatsTargets { get; set; }
-        public List<List<object>> IncomingBarrierStats { get; set; } 
+        public List<List<object>> IncomingBarrierStats { get; set; }
 
         public EXTBarrierStatsPhaseDto(PhaseData phase, ParsedEvtcLog log)
         {
@@ -66,7 +66,7 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
                 list.Add(playerData);
             }
             return list;
-        } 
+        }
 
         public static List<List<object>> BuildIncomingBarrierStatData(ParsedEvtcLog log, PhaseData phase)
         {

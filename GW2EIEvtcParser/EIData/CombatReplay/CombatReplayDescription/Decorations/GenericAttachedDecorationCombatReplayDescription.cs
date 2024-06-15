@@ -1,6 +1,6 @@
 ﻿
-using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -33,11 +33,12 @@ namespace GW2EIEvtcParser.EIData
                 };
                 if (log.Buffs.BuffsByIds.TryGetValue(decoration.SkillMode.SkillID, out Buff buff))
                 {
-                    if (!usedBuffs.ContainsKey(buff.ID)) {
+                    if (!usedBuffs.ContainsKey(buff.ID))
+                    {
                         usedBuffs.Add(buff.ID, buff);
                     }
                     skillModeDescription.IsBuff = true;
-                } 
+                }
                 else
                 {
                     SkillItem skill = log.SkillData.Get(decoration.SkillMode.SkillID);

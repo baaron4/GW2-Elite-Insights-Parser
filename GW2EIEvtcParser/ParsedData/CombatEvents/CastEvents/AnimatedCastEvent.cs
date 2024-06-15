@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Start missing
-        internal AnimatedCastEvent(AgentData agentData, SkillData skillData, CombatItem endItem) : base (endItem, agentData, skillData)
+        internal AnimatedCastEvent(AgentData agentData, SkillData skillData, CombatItem endItem) : base(endItem, agentData, skillData)
         {
             ActualDuration = endItem.Value;
             ExpectedDuration = ActualDuration;

@@ -5,11 +5,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -201,7 +201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsRefresh = true;
             }
             //
-            var bloodstoneShardsButton = maxHPUpdates.Where(x =>  x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsButton)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -210,7 +210,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsDummy = false;
             }
             //
-            var bloodstoneShardsRift = maxHPUpdates.Where(x =>  x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsRift)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);

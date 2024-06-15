@@ -196,7 +196,7 @@ namespace GW2EIBuilders.JsonModels
                 jsonLog.UsedExtensions = usedExtensions;
             }
             //
-            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
+            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
             jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
             foreach (KeyValuePair<long, SkillItem> pair in skillMap)
             {

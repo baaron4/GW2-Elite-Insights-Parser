@@ -8,6 +8,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         public Bjora(int triggerID) : base(triggerID)
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.Bjora;
-        }  
+        }
     }
 }

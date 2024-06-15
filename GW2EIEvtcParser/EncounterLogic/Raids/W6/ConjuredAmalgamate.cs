@@ -5,11 +5,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -70,12 +70,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             // we couldn't have hit CA before the initial smash
                             return firstArmSmash.Time > GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate).FirstOrDefault()) ? logStartNPCUpdate.Time : firstArmSmash.Time;
-                        } 
+                        }
                         else
                         {
                             // Before new logging, log would start when everyone in combat + boss in combat or enters combat
                             // as such the first smash can only happen within the first few seconds of the start
-                            return firstArmSmash.Time - fightData.LogStart > 6000 ? GetGenericFightOffset(fightData) : firstArmSmash.Time ;
+                            return firstArmSmash.Time - fightData.LogStart > 6000 ? GetGenericFightOffset(fightData) : firstArmSmash.Time;
                         }
                     }
                 }
@@ -327,12 +327,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         phase.Name = "Both Arms Phase " + (++bothArmPhase);
                         phase.AddTarget(leftArm);
                         phase.AddTarget(rightArm);
-                    } 
+                    }
                     else if (leftExists)
                     {
                         phase.Name = "Left Arm Phase " + (++leftArmPhase);
                         phase.AddTarget(leftArm);
-                    } 
+                    }
                     else if (rightExists)
                     {
                         phase.Name = "Right Arm Phase " + (++rightArmPhase);

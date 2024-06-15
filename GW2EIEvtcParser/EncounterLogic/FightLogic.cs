@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EIData.GenericDecoration;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using System.IO;
-using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.GenericDecoration;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -23,7 +23,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         public enum SkillModeEnum { PvE, WvW, sPvP };
 
         [Flags]
-        protected enum FallBackMethod { 
+        protected enum FallBackMethod
+        {
             None = 0,
             Death = 1 << 0,
             CombatExit = 1 << 1,
@@ -112,7 +113,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     InstanceBuffs.Add((fractalInstability, 1));
                 }
             }
-            int emboldenedStacks = (int)log.PlayerList.Select(x => {
+            int emboldenedStacks = (int)log.PlayerList.Select(x =>
+            {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
                 {
                     return graph.BuffChart.Where(y => y.IntersectSegment(log.FightData.FightStart, log.FightData.FightEnd)).Max(y => y.Value);
@@ -202,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             Dictionary<int, int> targetSortIDs = GetTargetsSortIDs();
             _targets = _targets.OrderBy(x =>
             {
-            if (targetSortIDs.TryGetValue(x.ID, out int sortKey))
+                if (targetSortIDs.TryGetValue(x.ID, out int sortKey))
                 {
                     return sortKey;
                 }
@@ -210,7 +212,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             }).ToList();
             //
             var trashIDs = new HashSet<TrashID>(GetTrashMobsIDs());
-            if (trashIDs.Any(x => targetIDs.Contains((int)x))) {
+            if (trashIDs.Any(x => targetIDs.Contains((int)x)))
+            {
                 throw new InvalidDataException("ID collision between trash and targets");
             }
             var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).ToList();
@@ -256,7 +259,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>();
         }
-        
+
         internal void InvalidateEncounterID()
         {
             EncounterID = EncounterIDs.EncounterMasks.Unsupported;

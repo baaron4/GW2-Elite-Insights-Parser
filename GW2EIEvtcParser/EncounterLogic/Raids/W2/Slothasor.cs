@@ -6,10 +6,10 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (deadEvent == null)
                         {
                             lastDeadTime = Math.Min(fightData.LogEnd, mushroom.LastAware);
-                        } 
+                        }
                         else
                         {
                             lastDeadTime = deadEvent.Time;
@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        var circle = new CircleDecoration( 700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
+                        var circle = new CircleDecoration(700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     }
                     break;
@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                var circle = new CircleDecoration( 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
+                var circle = new CircleDecoration(180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
                 replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)

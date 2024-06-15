@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser.EIData
             }
             if (downed != null)
             {
-                var damageToDown = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= downed.Time && (x.HasHit ||x.HasDowned)).ToList();
+                var damageToDown = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= downed.Time && (x.HasHit || x.HasDowned)).ToList();
                 ToDown = damageToDown.Count > 0 ? new List<DeathRecapDamageItem>() : null;
                 int damage = 0;
                 for (int i = damageToDown.Count - 1; i >= 0; i--)

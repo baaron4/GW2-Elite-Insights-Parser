@@ -7,17 +7,17 @@ namespace GW2EIJSON
     /// </summary>
     public class JsonPlayer : JsonActor
     {
-        
+
         /// <summary>
         /// Account name of the player
         /// </summary>
         public string Account { get; set; }
-        
+
         /// <summary>
         /// Group of the player
         /// </summary>
         public int Group { get; set; }
-        
+
         /// <summary>
         /// Indicates if a player has a commander tag
         /// </summary>
@@ -34,7 +34,7 @@ namespace GW2EIJSON
         /// Profession of the player
         /// </summary>
         public string Profession { get; set; }
-        
+
         /// <summary>
         /// Indicates that the JsonPlayer is actually a friendly NPC
         /// </summary>
@@ -130,7 +130,7 @@ namespace GW2EIJSON
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
         public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> TargetDamage1S { get; set; }
-        
+
         /// <summary>
         /// Array of int representing 1S power damage points \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
@@ -140,7 +140,7 @@ namespace GW2EIJSON
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
         public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> TargetPowerDamage1S { get; set; }
-        
+
         /// <summary>
         /// Array of int representing 1S condition damage points \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
@@ -150,7 +150,7 @@ namespace GW2EIJSON
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
         public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> TargetConditionDamage1S { get; set; }
-        
+
         /// <summary>
         /// Array of double representing 1S breakbar damage points \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
@@ -160,34 +160,34 @@ namespace GW2EIJSON
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
         public IReadOnlyList<IReadOnlyList<IReadOnlyList<double>>> TargetBreakbarDamage1S { get; set; }
-        
+
         /// <summary>
         /// Per Target Damage distribution array \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonDamageDist"/>
         public IReadOnlyList<IReadOnlyList<IReadOnlyList<JsonDamageDist>>> TargetDamageDist { get; set; }
-        
+
         /// <summary>
         /// Stats against targets  \n
         /// Length == # of targets and the length of each sub array is equal to # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonGameplayStats"/>
         public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonGameplayStats>> StatsTargets { get; set; }
-        
+
         /// <summary>
         /// Support stats \n
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="JsonStatistics.JsonPlayerSupport"/>
         public IReadOnlyList<JsonStatistics.JsonPlayerSupport> Support { get; set; }
-        
+
         /// <summary>
         /// Damage modifiers against all
         /// </summary>
         /// <seealso cref="JsonDamageModifierData"/>
         public IReadOnlyList<JsonDamageModifierData> DamageModifiers { get; set; }
-        
+
         /// <summary>
         /// Damage modifiers against targets \n
         /// Length == # of targets
@@ -213,73 +213,73 @@ namespace GW2EIJSON
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonBuffsUptime> BuffUptimes { get; set; }
-        
+
         /// <summary>
         /// List of buff status on self generation  \n
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffs { get; set; }
-        
+
         /// <summary>
         /// List of buff status on group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> GroupBuffs { get; set; }
-        
+
         /// <summary>
         /// List of buff status on off group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> OffGroupBuffs { get; set; }
-        
+
         /// <summary>
         /// List of buff status on squad generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> SquadBuffs { get; set; }
-        
+
         /// <summary>
         /// List of buff status on active time
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonBuffsUptime> BuffUptimesActive { get; set; }
-        
+
         /// <summary>
         /// List of buff status on self generation on active time
         /// </summary>
         /// <seealso cref="JsonBuffsUptime"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffsActive { get; set; }
-        
+
         /// <summary>
         /// List of buff status on group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> GroupBuffsActive { get; set; }
-        
+
         /// <summary>
         /// List of buff status on off group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> OffGroupBuffsActive { get; set; }
-        
+
         /// <summary>
         /// List of buff status on squad generation on active time
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
         public IReadOnlyList<JsonPlayerBuffsGeneration> SquadBuffsActive { get; set; }
-        
+
         /// <summary>
         /// List of death recaps \n
         /// Length == number of death
         /// </summary>
         /// <seealso cref="JsonDeathRecap"/>
         public IReadOnlyList<JsonDeathRecap> DeathRecap { get; set; }
-        
+
         /// <summary>
         /// List of used consumables
         /// </summary>
         /// <seealso cref="JsonConsumable"/>
         public IReadOnlyList<JsonConsumable> Consumables { get; set; }
-        
+
         /// <summary>
         /// List of time during which the player was active (not dead and not dc) \n
         /// Length == number of phases

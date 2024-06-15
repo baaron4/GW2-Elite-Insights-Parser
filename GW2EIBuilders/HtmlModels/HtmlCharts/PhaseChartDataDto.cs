@@ -18,7 +18,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             Players = PlayerChartDataDto.BuildPlayersGraphData(log, phase);
             foreach (AbstractSingleActor target in phase.AllTargets)
             {
-               Targets.Add(new TargetChartDataDto(log, phase, target));
+                Targets.Add(new TargetChartDataDto(log, phase, target));
             }
             if (addCRData)
             {

@@ -5,7 +5,7 @@
         public long Time { get; }
 
 
-        public ParametricPoint3D(float x, float y, float z, long time) : base(x,y,z)
+        public ParametricPoint3D(float x, float y, float z, long time) : base(x, y, z)
         {
             Time = time;
         }
@@ -19,7 +19,7 @@
             Time = time;
         }
 
-        public ParametricPoint3D(Point3D a, Point3D b, float ratio, long time) : base(a,b,ratio)
+        public ParametricPoint3D(Point3D a, Point3D b, float ratio, long time) : base(a, b, ratio)
         {
             Time = time;
         }

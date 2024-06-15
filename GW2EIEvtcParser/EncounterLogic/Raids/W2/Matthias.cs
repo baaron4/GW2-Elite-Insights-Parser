@@ -6,9 +6,9 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Blue, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Tornado:
-                    replay.Decorations.Add(new CircleDecoration( 90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 default:
                     break;

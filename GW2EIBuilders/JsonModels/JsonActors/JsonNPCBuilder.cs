@@ -14,7 +14,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
     /// </summary>
     internal static class JsonNPCBuilder
     {
-      
+
         public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonNPC = new JsonNPC();

@@ -4,10 +4,10 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             long icebrood2Start = invulRemoveIce.Time;
                             phases.Add(new PhaseData(icebroodStart + 1, invulApplyIce.Time, "Construct Intact"));
-                            AbstractBuffEvent invulRemoveFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x =>  x is BuffRemoveAllEvent).FirstOrDefault();
+                            AbstractBuffEvent invulRemoveFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                             if (invulRemoveFraenir != null)
                             {
                                 // fraenir came back
@@ -164,7 +164,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // If the Bound Icebrood Elemental hatches, an Icebrood Elemental spawns
                     // Due to the randomness of the time to hatch, we check the Elemental spawn position to match the Bound one
                     // When they match, override the Bound's LastAware to the Elemental's FirstAware
-                    foreach(AgentItem spawnedElemental in spawnedElementals)
+                    foreach (AgentItem spawnedElemental in spawnedElementals)
                     {
                         CombatItem itemBound = combatData.FirstOrDefault(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                         CombatItem itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);

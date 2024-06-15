@@ -32,23 +32,25 @@ namespace GW2EIEvtcParser.ParsedData
         }
         public bool Success { get; private set; }
 
-        internal enum EncounterMode { 
+        internal enum EncounterMode
+        {
             NotSet,
             Story,
             Normal,
-            LegendaryCM, 
-            CM, 
+            LegendaryCM,
+            CM,
             CMNoName
         }
         private EncounterMode _encounterMode = EncounterMode.NotSet;
         public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
-        public bool IsLegendaryCM =>  _encounterMode == EncounterMode.LegendaryCM;
-        
-        internal enum EncounterStartStatus { 
-            NotSet, 
-            Normal, 
-            Late, 
-            NoPreEvent 
+        public bool IsLegendaryCM => _encounterMode == EncounterMode.LegendaryCM;
+
+        internal enum EncounterStartStatus
+        {
+            NotSet,
+            Normal,
+            Late,
+            NoPreEvent
         }
         private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
         public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late || MissingPreEvent;
@@ -91,7 +93,7 @@ namespace GW2EIEvtcParser.ParsedData
                     if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
                     {
                         Logic = new Escort(id);
-                    }  
+                    }
                     else
                     {
                         Logic = new UnknownFightLogic(id);
@@ -306,7 +308,7 @@ namespace GW2EIEvtcParser.ParsedData
                             if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
                             {
                                 Logic = new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
-                            } 
+                            }
                             else
                             {
                                 Logic = new UnknownFightLogic(id);
@@ -325,11 +327,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void CompleteFightName(CombatData combatData, AgentData agentData)
         {
-            FightName = Logic.GetLogicName(combatData, agentData) 
+            FightName = Logic.GetLogicName(combatData, agentData)
                 + (_encounterMode == EncounterMode.CM ? " CM" : "")
                 + (_encounterMode == EncounterMode.LegendaryCM ? " LCM" : "")
                 + (_encounterMode == EncounterMode.Story ? " Story" : "")
-                + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "") 
+                + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "")
                 + (MissingPreEvent ? " (No Pre-Event)" : "");
         }
 
@@ -346,7 +348,8 @@ namespace GW2EIEvtcParser.ParsedData
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
                 _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
                 _phases.RemoveAll(x => x.AllTargets.Count == 0);
-                if (_phases.Any(phase => phase.AllTargets.Any(target => !Logic.Targets.Contains(target)))) {
+                if (_phases.Any(phase => phase.AllTargets.Any(target => !Logic.Targets.Contains(target))))
+                {
                     throw new InvalidOperationException("Phases can only have targets");
                 }
                 if (_phases.Exists(x => x.BreakbarPhase && x.Targets.Count != 1))

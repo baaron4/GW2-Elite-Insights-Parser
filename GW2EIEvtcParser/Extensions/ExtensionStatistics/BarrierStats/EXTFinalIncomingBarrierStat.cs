@@ -20,5 +20,5 @@ namespace GW2EIEvtcParser.Extensions
         }
 
     }
-    
+
 }

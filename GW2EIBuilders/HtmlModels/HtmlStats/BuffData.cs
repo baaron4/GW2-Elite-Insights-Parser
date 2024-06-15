@@ -148,7 +148,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                 if (boonTable)
                 {
                     avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgActiveBoons;
-                } 
+                }
                 else if (conditionTable)
                 {
                     avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgActiveConditions;

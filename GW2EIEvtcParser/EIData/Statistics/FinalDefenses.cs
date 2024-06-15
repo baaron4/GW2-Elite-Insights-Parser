@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         public int PowerDamageTaken { get; }
         public int LifeLeechDamageTaken { get; }
         public int StrikeDamageTaken { get; }
-        public int DownedDamageTaken { get; } 
+        public int DownedDamageTaken { get; }
         public double BreakbarDamageTaken { get; }
         public int BlockedCount { get; }
         public int MissedCount { get; }

@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.Extensions
         public int Bps { get; }
         public int Barrier { get; }
         private int DownedBps { get; }
-        private int DownedBarrier { get;}
+        private int DownedBarrier { get; }
 
         public int ActorBps { get; }
         public int ActorBarrier { get; }
@@ -47,5 +47,5 @@ namespace GW2EIEvtcParser.Extensions
         }
 
     }
-    
+
 }

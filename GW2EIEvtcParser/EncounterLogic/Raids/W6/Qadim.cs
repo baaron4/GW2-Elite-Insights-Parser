@@ -6,14 +6,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -617,7 +617,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
 
                             }
                         }
@@ -668,7 +668,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -729,7 +729,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -791,7 +791,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             break;
                         case "04":
                         case "4":
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity)) 
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
                                 if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
                                 {
@@ -839,7 +839,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    if(AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
                                         AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
                                     }
@@ -1437,7 +1437,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     !DistanceCheck(log, qadim, matriarch) &&
                     !DistanceCheck(log, qadim, patriarch);
             }
-            
+
             return false;
         }
 

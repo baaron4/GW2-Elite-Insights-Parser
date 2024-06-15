@@ -5,11 +5,11 @@
     /// </summary>
     public class EXTJsonBarrierDist
     {
-        
+
         /// <summary>
         /// Total barrier done
         /// </summary>
-        public int TotalBarrier{ get; set; }
+        public int TotalBarrier { get; set; }
 
         /// <summary>
         /// Minimum barrier done
@@ -20,7 +20,7 @@
         /// Maximum barrier done
         /// </summary>
         public int Max { get; set; }
-        
+
         /// <summary>
         /// Number of hits
         /// </summary>
@@ -39,11 +39,11 @@
         /// </summary>
         public bool IndirectBarrier { get; set; }
 
-        
+
         public EXTJsonBarrierDist()
         {
 
-        }  
+        }
 
     }
 }

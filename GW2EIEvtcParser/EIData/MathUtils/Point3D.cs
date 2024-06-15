@@ -108,7 +108,7 @@ namespace GW2EIEvtcParser.EIData
             Z = 0;
         }
 
-        public Point3D(float x, float y, float z) : this(x,y)
+        public Point3D(float x, float y, float z) : this(x, y)
         {
             Z = z;
         }

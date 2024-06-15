@@ -19,7 +19,7 @@
             Time = time;
         }
 
-        public ParametricPoint1D(Point1D a, Point1D b, float ratio, long time) : base(a,b,ratio)
+        public ParametricPoint1D(Point1D a, Point1D b, float ratio, long time) : base(a, b, ratio)
         {
             Time = time;
         }

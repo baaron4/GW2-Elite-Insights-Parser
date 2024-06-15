@@ -60,7 +60,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 //
                 actorCombatReplayData.Orientations = description.Angles;
             }
-            
+
             //
             return actorCombatReplayData;
         }

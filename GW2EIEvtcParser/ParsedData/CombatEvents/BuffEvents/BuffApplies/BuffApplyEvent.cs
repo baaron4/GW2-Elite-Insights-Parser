@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.ParsedData
             if (Initial && evtcVersion >= ArcDPSBuilds.BuffExtensionOverstackValueChanged)
             {
                 OriginalAppliedDuration = evtcItem.BuffDmg;
-            } 
+            }
             else
             {
                 OriginalAppliedDuration = AppliedDuration;

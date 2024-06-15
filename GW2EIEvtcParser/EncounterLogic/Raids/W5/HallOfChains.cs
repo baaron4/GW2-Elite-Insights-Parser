@@ -9,6 +9,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.HallOfChains;
             EncounterID |= EncounterIDs.RaidWingMasks.HallOfChainsMask;
-        }  
+        }
     }
 }

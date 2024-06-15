@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EIData
         internal CombatReplayMap Scale(double scale)
         {
             double centerX = (_rectInMap.bottomX + _rectInMap.topX) / 2.0;
-            double halfWidth = scale *(_rectInMap.bottomX - centerX);
+            double halfWidth = scale * (_rectInMap.bottomX - centerX);
             double centerY = (_rectInMap.bottomY + _rectInMap.topY) / 2.0;
             double halfHeigth = scale * (_rectInMap.bottomY - centerY);
             _rectInMap.bottomX = centerX + halfWidth;
