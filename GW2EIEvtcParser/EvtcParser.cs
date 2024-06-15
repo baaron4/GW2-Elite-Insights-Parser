@@ -572,9 +572,9 @@ namespace GW2EIEvtcParser
                     _logEndTime = combatItem.Time;
                 }
                 _combatItems.Add(combatItem);
-                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && combatItem.SrcAgent != 0)
+                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && BuildEvent.GetBuild(combatItem) != 0)
                 {
-                    _gw2Build = combatItem.SrcAgent;
+                    _gw2Build = BuildEvent.GetBuild(combatItem);
                 }
                 if (combatItem.IsStateChange == ArcDPSEnums.StateChange.SquadCombatEnd)
                 {
@@ -605,7 +605,7 @@ namespace GW2EIEvtcParser
         /// <returns>Returns <see langword="true"/> if the <see cref="CombatItem"/> is valid, otherwise <see langword="false"/>.</returns>
         private bool IsValid(CombatItem combatItem, ParserController operation)
         {
-            if (combatItem.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
+            if (combatItem.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(combatItem) > 200)
             {
                 // DstAgent should be target health % times 100, values higher than 10000 are unlikely. 
                 // If it is more than 200% health ignore this record
@@ -757,10 +757,10 @@ namespace GW2EIEvtcParser
                 {
                     if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
                     {
-                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
+                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => TeamChangeEvent.GetTeamIDInto(x)));
                         if (_evtcVersion > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
                         {
-                            greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => (ulong)x.Value));
+                            greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => TeamChangeEvent.GetTeamIDComingFrom(x)));
                         }
                     }
                 }

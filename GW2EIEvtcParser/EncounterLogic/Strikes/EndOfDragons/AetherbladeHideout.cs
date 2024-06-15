@@ -231,7 +231,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Ferrous Bombs
-            var bombs = combatData.Where(x => x.DstAgent == 89640 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem bomb in bombs)
             {
                 bomb.OverrideType(AgentItem.AgentType.NPC);
@@ -258,7 +258,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractSingleActor echoOfScarlet in echoesOfScarlet)
             {
                 var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
-                if (hpUpdates.Count > 1 && hpUpdates.LastOrDefault().DstAgent == 10000)
+                if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()) == 100)
                 {
                     hpUpdates.Last().OverrideDstAgent(hpUpdates[hpUpdates.Count - 2].DstAgent);
                 }

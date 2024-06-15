@@ -382,23 +382,26 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2);
             bool needRefreshAgentPool = false;
+            var maxHPEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
             //
-            var dragonOrbMaxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent == 491550).ToList();
-            foreach (CombatItem dragonOrbMaxHP in dragonOrbMaxHPs)
+            if (maxHPEvents.TryGetValue(491550, out List<MaxHealthUpdateEvent> dragonOrbMaxHPs))
             {
-                AgentItem dragonOrb = agentData.GetAgent(dragonOrbMaxHP.SrcAgent, dragonOrbMaxHP.Time);
-                if (dragonOrb != _unknownAgent)
+                foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
                 {
-                    dragonOrb.OverrideName("Dragon Orb");
-                    dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
+                    AgentItem dragonOrb = dragonOrbMaxHP.Src;
+                    if (dragonOrb != _unknownAgent)
+                    {
+                        dragonOrb.OverrideName("Dragon Orb");
+                        dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
+                    }
+                }
+                if (dragonOrbMaxHPs.Count != 0)
+                {
+                    needRefreshAgentPool = true;
                 }
             }
-            if (dragonOrbMaxHPs.Count != 0)
-            {
-                needRefreshAgentPool = true;
-            }
             //
-            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
+            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
             var idsToUse = new List<ArcDPSEnums.TargetID> {
                 ArcDPSEnums.TargetID.TheDragonVoidJormag,
                 ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
@@ -407,34 +410,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
-            var targetableEvents = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable).GroupBy(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToDictionary(x => x.Key, x => x.Where(y => y.Time > 2000).ToList());
-            attackTargetEvents = attackTargetEvents.OrderBy(x =>
+            var targetableEvents = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            attackTargetEvents.RemoveAll(x =>
             {
-                AgentItem atAgent = agentData.GetAgent(x.SrcAgent, x.Time);
-                if (targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables))
+                AgentItem atAgent = x.AttackTarget;
+                if (targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
                 {
-                    return targetables.Count != 0 ? targetables.Min(y => y.Time) : long.MaxValue;
+                    return !targetables.Any(y => y.Targetable);
                 }
-                return long.MaxValue;
-            }).ToList();
+                return true;
+            });
             int index = 0;
             var processedAttackTargets = new HashSet<AgentItem>();
-            foreach (CombatItem at in attackTargetEvents)
+            foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
             {
-                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
+                AgentItem atAgent = attackTargetEvent.AttackTarget;
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
                 // There are only two relevant attack targets, one represents the first five and the last one Soo Won
-                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<CombatItem> targetables) || targetables.Count == 0)
+                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
                 {
                     continue;
                 }
-                AgentItem dragonVoid = agentData.GetAgent(at.DstAgent, at.Time);
+                AgentItem dragonVoid = attackTargetEvent.Src;
                 var copyEventsFrom = new List<AgentItem>() { dragonVoid };
                 processedAttackTargets.Add(atAgent);
-                var targetOns = targetables.Where(x => x.DstAgent == 1).ToList();
-                var targetOffs = targetables.Where(x => x.DstAgent == 0).ToList();
+                var targetOns = targetables.Where(x => x.Targetable).ToList();
+                var targetOffs = targetables.Where(x => !x.Targetable).ToList();
                 //
-                foreach (CombatItem targetOn in targetOns)
+                foreach (TargetableEvent targetOn in targetOns)
                 {
                     // If Soo Won has been already created, we break
                     if (index >= idsToUse.Count)
@@ -444,28 +447,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                     ArcDPSEnums.TargetID id = idsToUse[index++];
                     long start = targetOn.Time;
                     long end = dragonVoid.LastAware;
-                    CombatItem targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                    TargetableEvent targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                     // Don't split Soo won into two
                     if (targetOff != null && id != ArcDPSEnums.TargetID.TheDragonVoidSooWon)
                     {
                         end = targetOff.Time;
                     }
-                    ulong lastHPUpdate = ulong.MaxValue;
+                    double lastHPUpdate = 1e6;
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, dragonVoid.Name, dragonVoid.Spec, id, false, dragonVoid.Toughness, dragonVoid.Healing, dragonVoid.Condition, dragonVoid.Concentration, atAgent.HitboxWidth, atAgent.HitboxHeight);
                     RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, dragonVoid, copyEventsFrom, extra, true,
                         (evt, from, to) =>
                         {
                             if (evt.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate)
                             {
+                                double healthPercent = HealthUpdateEvent.GetHealthPercent(evt);
                                 // Avoid making the gadget go back to 100% hp on "death"
                                 // Regenerating back to full HP
                                 // use mid life check to allow hp going back up to 100% around first aware
-                                if (evt.DstAgent > lastHPUpdate && evt.DstAgent > 9900 && evt.Time > (to.LastAware + to.FirstAware) / 2)
+                                if (healthPercent > lastHPUpdate && healthPercent > 99 && evt.Time > (to.LastAware + to.FirstAware) / 2)
                                 {
                                     return false;
                                 }
                                 // Remember last hp
-                                lastHPUpdate = evt.DstAgent;
+                                lastHPUpdate = HealthUpdateEvent.GetHealthPercent(evt);
                             }
                             return true;
                         }
@@ -492,16 +496,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Gravity Ball - Timecaster gadget
             if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out AgentItem timecaster))
             {
-                var gravityBalls = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.Master == null && x.FirstAware > timecaster.FirstAware && x.FirstAware < timecaster.LastAware + 2000).ToList();
-                var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
-                int referenceLength = 200;
-                gravityBalls = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y.DstAgent, y.Value).Length() - referenceLength) < 10)).ToList();
-                foreach (AgentItem ball in gravityBalls)
+                if (maxHPEvents.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialGravityBallHPs)) 
                 {
-                    ball.OverrideType(AgentItem.AgentType.NPC);
-                    ball.OverrideID(ArcDPSEnums.TrashID.GravityBall);
-                    ball.SetMaster(timecaster);
-                    needRefreshAgentPool = true;
+                    var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src).ToList();
+                    var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
+                    int referenceLength = 200;
+                    gravityBalls = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y).Length2D() - referenceLength) < 10)).ToList();
+                    foreach (AgentItem ball in gravityBalls)
+                    {
+                        ball.OverrideType(AgentItem.AgentType.NPC);
+                        ball.OverrideID(ArcDPSEnums.TrashID.GravityBall);
+                        ball.SetMaster(timecaster);
+                        needRefreshAgentPool = true;
+                    }
                 }
             }
             {
@@ -510,7 +517,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                         .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
                         .Distinct()
-                        .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPoint3D(evt.DstAgent, evt.Value).Length() > 0) > 2)
+                        .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPoint3D(evt).Length2D() > 0) > 2)
                         .ToList();
                     foreach (AgentItem frostBeam in frostBeams)
                     {

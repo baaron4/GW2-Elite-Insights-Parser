@@ -11,6 +11,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using System.Collections;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -58,41 +59,50 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
-            long first = 0;
+            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
+            var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            attackTargetEvents.RemoveAll(x =>
+            {
+                AgentItem atAgent = x.AttackTarget;
+                if (targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
+                {
+                    return !targetables.Any(y => y.Targetable);
+                }
+                return true;
+            });
             long final = fightData.FightEnd;
             var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) };
             var processedAttackTargets = new HashSet<AgentItem>();
-            foreach (CombatItem at in attackTargets)
+            foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
             {
-                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
-                if (processedAttackTargets.Contains(atAgent))
+                AgentItem atAgent = attackTargetEvent.AttackTarget;
+                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
                 {
                     continue;
                 }
                 processedAttackTargets.Add(atAgent);
-                AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
+                AgentItem hand = attackTargetEvent.Src;
                 var copyEventsFrom = new List<AgentItem>() { hand };
-                var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent)).ToList();
-                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
-                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
+                var attackOns = targetables.Where(x => x.Targetable).ToList();
+                var attackOffs = targetables.Where(x => !x.Targetable).ToList();
                 CombatItem posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
                 if (posEvt != null)
                 {
-                    Point3D pos = AbstractMovementEvent.GetPoint3D(posEvt.DstAgent, 0);
+                    Point3D pos = AbstractMovementEvent.GetPoint3D(posEvt);
                     if (handOfEruptionPositions.Any(x => x.Distance2DToPoint(pos) < InchDistanceThreshold))
                     {
                         id = ArcDPSEnums.TrashID.HandOfEruption;
                     }
                 }
-                for (int i = 0; i < attackOn.Count; i++)
+                foreach (TargetableEvent targetableEvent in attackOns)
                 {
-                    long start = attackOn[i];
+                    long start = targetableEvent.Time;
                     long end = final;
-                    if (i <= attackOff.Count - 1)
+                    TargetableEvent attackOff = attackOffs.FirstOrDefault(x => x.Time > start);
+                    if (attackOff != null)
                     {
-                        end = attackOff[i];
+                        end = attackOff.Time;
                     }
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
                     RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, hand, copyEventsFrom, extra, true);

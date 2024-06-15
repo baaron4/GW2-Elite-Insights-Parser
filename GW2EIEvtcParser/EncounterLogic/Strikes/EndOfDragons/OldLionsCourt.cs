@@ -220,7 +220,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AgentItem vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
             if (vermilion != null)
             {
-                CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && x.Value == 0);
+                CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && BreakbarStateEvent.GetBreakbarState(x) == BreakbarState.Active);
                 if (breakbarStateActive != null)
                 {
                     startToUse = breakbarStateActive.Time;

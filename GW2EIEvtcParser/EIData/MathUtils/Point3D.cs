@@ -90,6 +90,12 @@ namespace GW2EIEvtcParser.EIData
             return distance;
         }
 
+        public float Length2D()
+        {
+            float length = (float)Math.Sqrt(X * X + Y * Y);
+            return length;
+        }
+
         public float Length()
         {
             float length = (float)Math.Sqrt(X * X + Y * Y + Z * Z);

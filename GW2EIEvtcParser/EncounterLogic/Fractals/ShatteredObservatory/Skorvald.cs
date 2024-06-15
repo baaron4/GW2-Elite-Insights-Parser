@@ -130,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             skorvald.OverrideName("Skorvald");
-            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && x.DstAgent < 5e6 && x.DstAgent > 0))
+            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
             {
                 // Remove manual scale from T1 to T3 for now
                 combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale).OverrideSrcAgent(0);
@@ -169,7 +169,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault() ?? throw new MissingKeyActorsException("Skorvald not found");
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
                 // Skorvald may spawns with 0% hp
-                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
+                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && HealthUpdateEvent.GetHealthPercent(x) > 0);
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ServerDelayConstant);
                 return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
             }

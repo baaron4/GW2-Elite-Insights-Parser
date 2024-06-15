@@ -279,7 +279,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             _hasPrevent = !combatData.Any(x => x.SrcMatchesAgent(dhuum) && x.EndCasting() && (x.SkillID != WeaponStow && x.SkillID != WeaponDraw) && x.Time >= 0 && x.Time <= 40000);  
 
             // Player Souls - Filter out souls without master
-            var yourSoul = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
+            var yourSoul = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100)
                 .ToList();

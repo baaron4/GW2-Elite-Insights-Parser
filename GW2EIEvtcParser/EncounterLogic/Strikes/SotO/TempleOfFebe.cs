@@ -267,12 +267,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int curDespair = 1;
-            int curEnvy = 1;
-            int curGluttony = 1;
-            int curMalice = 1;
-            int curRage = 1;
-            int curRegret = 1;
+            int[] curEmbodiments = new[] { 1, 1, 1, 1, 1, 1 }; 
             int curShadow = 1;
             foreach (AbstractSingleActor target in Targets)
             {
@@ -280,7 +275,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     case (int)TrashID.EmbodimentOfDespair:
                         CombatItem despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                        target.OverrideName(target.Character + " (P" + curDespair++ + ")");
+                        target.OverrideName(target.Character + " (P" + curEmbodiments[0]++ + ")");
                         if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character);
@@ -288,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)TrashID.EmbodimentOfEnvy:
                         CombatItem envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                        target.OverrideName(target.Character + " (P" + curEnvy++ + ")");
+                        target.OverrideName(target.Character + " (P" + curEmbodiments[1]++ + ")");
                         if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character);
@@ -296,7 +291,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)TrashID.EmbodimentOfGluttony:
                         CombatItem gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                        target.OverrideName(target.Character + " (P" + curGluttony++ + ")");
+                        target.OverrideName(target.Character + " (P" + curEmbodiments[2]++ + ")");
                         if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character);
@@ -304,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)TrashID.EmbodimentOfMalice:
                         CombatItem malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                        target.OverrideName(target.Character + " (P" + curMalice++ + ")");
+                        target.OverrideName(target.Character + " (P" + curEmbodiments[3]++ + ")");
                         if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character);
@@ -312,7 +307,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)TrashID.EmbodimentOfRage:
                         CombatItem rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                        target.OverrideName(target.Character + " (P" + curRage++ + ")");
+                        target.OverrideName(target.Character + " (P" + curEmbodiments[4]++ + ")");
                         if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character);
@@ -320,7 +315,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     case (int)TrashID.EmbodimentOfRegret:
                         CombatItem regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
-                        target.OverrideName(target.Character + " (P" + curRegret++ + ")");
+                        target.OverrideName(target.Character + " (P" + curEmbodiments[5]++ + ")");
                         if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
                         {
                             target.OverrideName("Empowered " + target.Character);

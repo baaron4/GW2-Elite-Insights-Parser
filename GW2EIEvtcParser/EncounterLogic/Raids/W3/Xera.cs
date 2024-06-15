@@ -184,9 +184,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             _xeraFirstPhaseEndTime = firstXera.LastAware;
             //
-            var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent > 0).ToList();
+            var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).ToList();
             //
-            var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneFragments)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsRefresh = true;
             }
             //
-            var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsMainFight)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsRefresh = true;
             }
             //
-            var bloodstoneShardsButton = maxHPUpdates.Where(x =>  x.DstAgent == 597600).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsButton = maxHPUpdates.Where(x =>  x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsButton)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -211,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsDummy = false;
             }
             //
-            var bloodstoneShardsRift = maxHPUpdates.Where(x =>  x.DstAgent == 747000).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsRift = maxHPUpdates.Where(x =>  x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsRift)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -220,7 +220,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsDummy = false;
             }
             //
-            var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
+            var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
             foreach (AgentItem gadget in chargedBloodStones)
             {
                 if (!combatData.Any(x => x.IsDamage() && x.DstMatchesAgent(gadget)))

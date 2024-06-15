@@ -155,15 +155,16 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 throw new MissingKeyActorsException("Ai not found");
             }
-            _china = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Language && x.SrcAgent == (ulong)LanguageEvent.LanguageEnum.Chinese) != null;
-            CombatItem darkModePhaseEvent = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent) && x.SkillID == AiDarkPhaseEvent && x.SrcMatchesAgent(aiAgent));
+            var aiCastEvents = combatData.Where(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent)).ToList();
+            _china = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.Language && LanguageEvent.GetLanguage(x) == LanguageEvent.LanguageEnum.Chinese) != null;
+            CombatItem darkModePhaseEvent = aiCastEvents.FirstOrDefault(x => x.SkillID == AiDarkPhaseEvent);
             _hasDarkMode = combatData.Exists(x => (_china ? x.SkillID == AiHasDarkModeCN_SurgeOfDarkness : x.SkillID == AiHasDarkMode_SurgeOfDarkness) && x.SrcMatchesAgent(aiAgent));
             _hasElementalMode = !_hasDarkMode || darkModePhaseEvent != null;
             if (_hasDarkMode)
             {
                 if (_hasElementalMode)
                 {
-                    long darkModeStart = combatData.FirstOrDefault(x => x.StartCasting() && x.SrcMatchesAgent(aiAgent) && (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time && x.SrcMatchesAgent(aiAgent)).Time;
+                    long darkModeStart = aiCastEvents.FirstOrDefault(x => (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time).Time;
                     CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == BuffRemove.All && x.SrcMatchesAgent(aiAgent) && x.Value > Determined895Duration);
                     long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                     AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);

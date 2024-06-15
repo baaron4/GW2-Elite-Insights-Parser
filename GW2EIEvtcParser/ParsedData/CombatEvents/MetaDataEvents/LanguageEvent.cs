@@ -16,7 +16,12 @@
 
         internal LanguageEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            Language = evtcItem.SrcAgent < (byte)LanguageEnum.Unknown ? (LanguageEnum)evtcItem.SrcAgent
+            Language = GetLanguage(evtcItem);
+        }
+
+        internal static LanguageEnum GetLanguage(CombatItem evtcItem)
+        {
+            return evtcItem.SrcAgent < (byte)LanguageEnum.Unknown ? (LanguageEnum)evtcItem.SrcAgent
                 : LanguageEnum.Unknown;
         }
 

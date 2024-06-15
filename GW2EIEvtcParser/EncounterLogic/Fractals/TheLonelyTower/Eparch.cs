@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
 
-            var riftAgents = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.DstAgent == 149400).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
+            var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
             if (riftAgents.Count != 0)
             {
                 riftAgents.ForEach(x => {
@@ -61,25 +61,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int crueltyCount = 1;
-            int judgementCount = 1;
-            int avatarCount = 1;
-            int riftCount = 1;
+            int[] miniBossCount = new int[] { 1, 1, 1, 1 };
             foreach (NPC target in _targets)
             {
                 switch (target.ID)
                 {
                     case (int)TrashID.KryptisRift:
-                        target.OverrideName(target.Character + " " + riftCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[0]++);
                         break;
                     case (int)TrashID.IncarnationOfCruelty:
-                        target.OverrideName(target.Character + " " + crueltyCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[1]++);
                         break;
                     case (int)TrashID.IncarnationOfJudgement:
-                        target.OverrideName(target.Character + " " + judgementCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[2]++);
                         break;
                     case (int)TrashID.AvatarOfSpite:
-                        target.OverrideName(target.Character + " " + avatarCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[3]++);
                         break;
                 }
             }

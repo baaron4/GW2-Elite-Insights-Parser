@@ -8,11 +8,21 @@
 
         internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, int evtcVersion) : base(evtcItem, agentData)
         {
-            TeamIDInto = evtcItem.DstAgent;
+            TeamIDInto = GetTeamIDInto(evtcItem);
             if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
             {
-                TeamIDComingFrom = (ulong)evtcItem.Value;
+                TeamIDComingFrom = GetTeamIDComingFrom(evtcItem);
             } 
+        }
+
+        internal static ulong GetTeamIDInto(CombatItem evtcItem)
+        {
+            return evtcItem.DstAgent;
+        }
+
+        internal static ulong GetTeamIDComingFrom(CombatItem evtcItem)
+        {
+            return (ulong)evtcItem.Value;
         }
 
     }

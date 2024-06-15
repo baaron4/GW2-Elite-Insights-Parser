@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return true;
             }
             long minTime = Math.Max(target.FirstAware, time);
-            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HPPercent > 0));
+            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HealthPercent > 0));
             var targetTotalHP = target.GetHealth(combatData);
             if (hpUpdate == null || targetTotalHP < 0)
             {
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             long damageDoneWithinOneSec = combatData.GetDamageTakenData(target.AgentItem).Where(x => x.Time >= time && x.Time <= time + 1000).Sum(x => x.HealthDamage);
             double damageThreshold = Math.Max(damagingPlayers.Count * 80000, 2*damageDoneWithinOneSec);
             double threshold = (expectedInitialPercent/100.0 - damageThreshold / targetTotalHP) * 100;
-            return hpUpdate.HPPercent < threshold - 2;
+            return hpUpdate.HealthPercent < threshold - 2;
         }
 
         internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                Point3D position = AbstractMovementEvent.GetPoint3D(evt.DstAgent, evt.Value);
+                Point3D position = AbstractMovementEvent.GetPoint3D(evt);
                 if (position.Distance2DToPoint(chestPosition) < InchDistanceThreshold)
                 {
                     return true;
@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
             if (positionEvt != null)
             {
-                Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt);
                 foreach ((string suffix, Point3D expectedPosition) in positionData)
                 {
                     if (position.Distance2DToPoint(expectedPosition) < maxDiff)
