@@ -17,6 +17,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Line" + Color;
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableLineDecoration expectedVariable)
+                {
+                    return new LineDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableLineDecoration");
+            }
         }
         internal class VariableLineDecoration : VariableFormDecoration
         {
@@ -35,9 +43,13 @@ namespace GW2EIEvtcParser.EIData
         private new VariableLineDecoration VariableDecoration => (VariableLineDecoration)base.VariableDecoration;
         public GeographicalConnector ConnectedFrom => VariableDecoration.ConnectedFrom;
 
+        internal LineDecoration(ConstantLineDecoration constant, VariableLineDecoration variable) : base(constant, variable)
+        {
+        }
+
         public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base()
         {
-            base.ConstantDecoration = new ConstantLineDecoration(color);
+            ConstantDecoration = new ConstantLineDecoration(color);
             base.VariableDecoration = new VariableLineDecoration(lifespan, connector, targetConnector);
         }
 

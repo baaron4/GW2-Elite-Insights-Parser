@@ -1,7 +1,6 @@
 ﻿using System;
 using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -28,6 +27,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Pie" + Radius + Color + MinRadius + OpeningAngle.ToString();
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariablePieDecoration expectedVariable)
+                {
+                    return new PieDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariablePieDecoration");
+            }
         }
         internal class VariablePieDecoration : VariableCircleDecoration
         {
@@ -38,6 +45,9 @@ namespace GW2EIEvtcParser.EIData
         private new ConstantPieDecoration ConstantDecoration => (ConstantPieDecoration)base.ConstantDecoration;
         public float OpeningAngle => ConstantDecoration.OpeningAngle;
 
+        internal PieDecoration(ConstantPieDecoration constant, VariablePieDecoration variable) : base(constant, variable)
+        {
+        }
 
         //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
 

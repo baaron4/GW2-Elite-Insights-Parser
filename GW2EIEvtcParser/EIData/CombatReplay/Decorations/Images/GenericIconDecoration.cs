@@ -1,5 +1,4 @@
 ﻿using System;
-using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -27,6 +26,10 @@ namespace GW2EIEvtcParser.EIData
         public string Image => ConstantDecoration.Image;
         public uint PixelSize => ConstantDecoration.PixelSize;
         public uint WorldSize => ConstantDecoration.WorldSize;
+
+        internal GenericIconDecoration(ConstantGenericIconDecoration constant, VariableGenericIconDecoration variable) : base(constant, variable)
+        {
+        }
 
         public GenericIconDecoration() : base()
         {

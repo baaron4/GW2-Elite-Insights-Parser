@@ -18,6 +18,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "IO" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableIconOverheadDecoration expectedVariable)
+                {
+                    return new IconOverheadDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableIconOverheadDecoration");
+            }
         }
         internal class VariableIconOverheadDecoration : VariableIconDecoration
         {
@@ -27,6 +35,9 @@ namespace GW2EIEvtcParser.EIData
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
             }
+        }
+        internal IconOverheadDecoration(ConstantIconOverheadDecoration constant, VariableIconOverheadDecoration variable) : base(constant, variable)
+        {
         }
         public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base()
         {

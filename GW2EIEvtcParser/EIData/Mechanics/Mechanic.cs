@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.InstantCastFinder;
 
 namespace GW2EIEvtcParser.EIData
 {

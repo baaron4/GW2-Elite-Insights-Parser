@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -11,10 +12,19 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "AO";
             }
+
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableActorOrientationDecoration expectedVariable)
+                {
+                    return new ActorOrientationDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableActorOrientationDecoration");
+            }
         }
-        internal class VariableActorOrientationDecorationn : VariableGenericAttachedDecoration
+        internal class VariableActorOrientationDecoration : VariableGenericAttachedDecoration
         {
-            public VariableActorOrientationDecorationn((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+            public VariableActorOrientationDecoration((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
             {
                 RotationConnectedTo = new AgentFacingConnector(agent);
             }
@@ -27,10 +37,16 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        internal ActorOrientationDecoration(ConstantActorOrientationDecoration constant, VariableActorOrientationDecoration variable)
+        {
+            ConstantDecoration = constant;
+            VariableDecoration = variable;
+        }
+
         public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base()
         {
             ConstantDecoration = new ConstantActorOrientationDecoration();
-            VariableDecoration = new VariableActorOrientationDecorationn(lifespan, agent);
+            VariableDecoration = new VariableActorOrientationDecoration(lifespan, agent);
         }
 
         //

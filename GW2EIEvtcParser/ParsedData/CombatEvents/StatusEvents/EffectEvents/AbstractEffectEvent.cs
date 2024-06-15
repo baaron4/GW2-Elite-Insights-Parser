@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ParserHelper;
 

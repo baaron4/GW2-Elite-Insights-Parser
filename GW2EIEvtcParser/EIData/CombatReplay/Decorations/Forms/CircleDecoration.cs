@@ -25,6 +25,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Cir" + Radius + Color + MinRadius;
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableCircleDecoration expectedVariable)
+                {
+                    return new CircleDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableCircleDecoration");
+            }
         }
         internal class VariableCircleDecoration : VariableFormDecoration
         {
@@ -37,6 +45,10 @@ namespace GW2EIEvtcParser.EIData
         public uint MinRadius => ConstantDecoration.MinRadius;
 
         protected CircleDecoration()
+        {
+        }
+
+        internal CircleDecoration(ConstantCircleDecoration constant, VariableCircleDecoration variable) : base(constant, variable)
         {
         }
 

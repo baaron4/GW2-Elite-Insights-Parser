@@ -39,6 +39,9 @@ namespace GW2EIEvtcParser.EIData
         public RotationConnector RotationConnectedTo => VariableDecoration.RotationConnectedTo;
         public SkillModeDescriptor SkillMode => VariableDecoration.SkillMode;
 
+        internal GenericAttachedDecoration(ConstantGenericAttachedDecoration constant, VariableGenericAttachedDecoration variable) : base(constant, variable)
+        {
+        }
         protected GenericAttachedDecoration() : base()
         {
         }

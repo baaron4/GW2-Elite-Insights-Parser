@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -21,6 +22,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "MP" + Height + Image.GetHashCode().ToString() + Width;
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableMovingPlatformDecoration expectedVariable)
+                {
+                    return new MovingPlatformDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableMovingPlatformDecoration");
+            }
         }
         internal class VariableMovingPlatformDecoration : VariableBackgroundDecoration
         {
@@ -38,7 +47,9 @@ namespace GW2EIEvtcParser.EIData
         public int Height => ConstantDecoration.Height;
 
         public IReadOnlyList<(float x, float y, float z, float angle, float opacity, int time)> Positions => VariableDecoration.Positions;
-
+        internal MovingPlatformDecoration(ConstantMovingPlatformDecoration constant, VariableMovingPlatformDecoration variable) : base(constant, variable)
+        {
+        }
         public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base()
         {
             base.ConstantDecoration = new ConstantMovingPlatformDecoration(image, width, height);

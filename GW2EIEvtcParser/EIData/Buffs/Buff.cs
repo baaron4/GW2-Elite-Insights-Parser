@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.EIData.BuffSimulators;
 using GW2EIEvtcParser.EIData.BuffSourceFinders;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {

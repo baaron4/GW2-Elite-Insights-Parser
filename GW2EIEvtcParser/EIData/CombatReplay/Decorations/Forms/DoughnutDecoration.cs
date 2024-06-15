@@ -1,7 +1,6 @@
 ﻿using System;
 using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -26,6 +25,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Dough" + OuterRadius + Color + InnerRadius;
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableDoughnutDecoration expectedVariable)
+                {
+                    return new DoughnutDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableDoughnutDecoration");
+            }
         }
         internal class VariableDoughnutDecoration : VariableFormDecoration
         {
@@ -36,6 +43,10 @@ namespace GW2EIEvtcParser.EIData
         private new ConstantDoughnutDecoration ConstantDecoration => (ConstantDoughnutDecoration)base.ConstantDecoration;
         public uint OuterRadius => ConstantDecoration.OuterRadius;
         public uint InnerRadius => ConstantDecoration.InnerRadius;
+
+        internal DoughnutDecoration(ConstantDoughnutDecoration constant, VariableDoughnutDecoration variable) : base(constant, variable)
+        {
+        }
 
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
         {

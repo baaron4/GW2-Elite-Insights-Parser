@@ -20,6 +20,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableIconDecoration expectedVariable)
+                {
+                    return new IconDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableIconDecoration");
+            }
         }
         internal class VariableIconDecoration : VariableGenericIconDecoration
         {
@@ -38,6 +46,9 @@ namespace GW2EIEvtcParser.EIData
         public float Opacity => ConstantDecoration.Opacity;
         public bool IsSquadMarker => VariableDecoration.IsSquadMarker;
 
+        internal IconDecoration(ConstantIconDecoration constant, VariableIconDecoration variable) : base(constant, variable)
+        {
+        }
         protected IconDecoration()
         {
 

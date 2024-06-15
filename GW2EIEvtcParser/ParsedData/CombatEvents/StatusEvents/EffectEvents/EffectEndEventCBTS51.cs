@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using GW2EIEvtcParser.EIData;
+﻿using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.ParsedData
 {

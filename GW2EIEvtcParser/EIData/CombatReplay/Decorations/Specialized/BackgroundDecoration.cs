@@ -1,4 +1,5 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿
+namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BackgroundDecoration : GenericDecoration
     {
@@ -10,6 +11,9 @@
             protected VariableBackgroundDecoration((long, long) lifespan) : base(lifespan)
             {
             }
+        }
+        internal BackgroundDecoration(ConstantBackgroundDecoration constant, VariableBackgroundDecoration variable) : base(constant, variable)
+        {
         }
 
         public BackgroundDecoration() : base()

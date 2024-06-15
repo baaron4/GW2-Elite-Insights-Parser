@@ -8,7 +8,6 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonLog;
 
 namespace GW2EIBuilders.JsonModels

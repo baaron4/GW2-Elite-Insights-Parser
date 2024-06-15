@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData
 {
     internal abstract class FormDecoration : GenericAttachedDecoration
     {
@@ -41,6 +39,9 @@ namespace GW2EIEvtcParser.EIData
         public int GrowingEnd => VariableDecoration.GrowingEnd;
         public bool GrowingReverse => VariableDecoration.GrowingReverse;
 
+        internal FormDecoration(ConstantFormDecoration constant, VariableFormDecoration variable) : base(constant, variable)
+        {
+        }
         protected FormDecoration() : base()
         {
         }

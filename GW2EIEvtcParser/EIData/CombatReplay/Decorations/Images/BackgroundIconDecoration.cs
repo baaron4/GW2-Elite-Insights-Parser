@@ -17,6 +17,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableBackgroundIconDecoration expectedVariable)
+                {
+                    return new BackgroundIconDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableBackgroundIconDecoration");
+            }
         }
         internal class VariableBackgroundIconDecoration : VariableGenericIconDecoration
         {
@@ -35,6 +43,10 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<ParametricPoint1D> Opacities => VariableDecoration.Opacities;
         public IReadOnlyList<ParametricPoint1D> Heights => VariableDecoration.Heights;
+
+        internal BackgroundIconDecoration(ConstantBackgroundIconDecoration constant, VariableBackgroundIconDecoration variable) : base(constant, variable)
+        {
+        }
         public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base()
         {
             ConstantDecoration = new ConstantBackgroundIconDecoration(icon, pixelSize, worldSize);

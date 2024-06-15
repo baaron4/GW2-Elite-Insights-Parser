@@ -21,6 +21,14 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Rect" + Height + Color + Width;
             }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableRectangleDecoration expectedVariable)
+                {
+                    return new RectangleDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableRectangleDecoration");
+            }
         }
         internal class VariableRectangleDecoration : VariableFormDecoration
         {
@@ -31,6 +39,10 @@ namespace GW2EIEvtcParser.EIData
         private new ConstantRectangleDecoration ConstantDecoration => (ConstantRectangleDecoration)base.ConstantDecoration;
         public uint Height => ConstantDecoration.Height;
         public uint Width => ConstantDecoration.Width;
+
+        internal RectangleDecoration(ConstantRectangleDecoration constant, VariableRectangleDecoration variable) : base(constant, variable)
+        {
+        }
 
         public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
         {
