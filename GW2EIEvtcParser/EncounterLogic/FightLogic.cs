@@ -115,7 +115,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
                 {
-                    return graph.BuffChart.Where(y => y.IntersectSegment(log.FightData.FightStart, end).Max(y => y.Value);
+                    return graph.BuffChart.Where(y => y.IntersectSegment(log.FightData.FightStart, end)).Max(y => y.Value);
                 }
                 else
                 {
