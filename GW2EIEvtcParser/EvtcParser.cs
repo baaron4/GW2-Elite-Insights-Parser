@@ -777,7 +777,13 @@ namespace GW2EIEvtcParser
                 {
                     if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out List<CombatItem> teamChangeList))
                     {
-                        nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => x.DstAgent).Any(x => x == greenTeam));
+                        var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => TeamChangeEvent.GetTeamIDInto(x)).ToList();
+                        if (_evtcVersion > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+                        {
+                            team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => TeamChangeEvent.GetTeamIDComingFrom(x)));
+                        }
+                        team.RemoveAll(x => x == 0);
+                        nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(team.Any(x => x == greenTeam));
                     }
                     if (!encounteredNonSquadPlayerInstIDs.Contains(nonSquadPlayer.InstID))
                     {
