@@ -18,6 +18,7 @@ using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using GW2EIParserCommons.Exceptions;
+using GW2EIWingman;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons
