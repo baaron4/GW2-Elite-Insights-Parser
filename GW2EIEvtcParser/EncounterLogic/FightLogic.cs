@@ -110,11 +110,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     InstanceBuffs.Add((fractalInstability, 1));
                 }
             }
+            long end = log.FightData.Success ? log.FightData.FightEnd : (log.FightData.FightEnd + log.FightData.FightStart) / 2;
             int emboldenedStacks = (int)log.PlayerList.Select(x =>
             {
                 if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
                 {
-                    return graph.BuffChart.Where(y => y.IntersectSegment(log.FightData.FightStart, log.FightData.FightEnd)).Max(y => y.Value);
+                    return graph.BuffChart.Where(y => y.IntersectSegment(log.FightData.FightStart, end).Max(y => y.Value);
                 }
                 else
                 {
