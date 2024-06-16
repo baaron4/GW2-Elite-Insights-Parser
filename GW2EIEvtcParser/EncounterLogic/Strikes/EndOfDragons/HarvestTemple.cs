@@ -324,6 +324,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.DragonEnergyOrb,
                 ArcDPSEnums.TrashID.GravityBall,
                 ArcDPSEnums.TrashID.JormagMovingFrostBeam,
+                ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth,
+                ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter,
             };
         }
 
@@ -519,7 +521,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         .Distinct()
                         .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPoint3D(evt).Length2D() > 0) > 2)
                         .ToList();
-                    frostBeams.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamNew));
                     foreach (AgentItem frostBeam in frostBeams)
                     {
                         frostBeam.OverrideID(ArcDPSEnums.TrashID.JormagMovingFrostBeam);
@@ -527,6 +528,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         frostBeam.SetMaster(jormagAgent);
                         needRefreshAgentPool = true;
                     }
+                    var knownFrostBeams = agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth).ToList();
+                    knownFrostBeams.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter));
+                    knownFrostBeams.ForEach(x => x.SetMaster(jormagAgent));
                 }
             }
             if (needRefreshAgentPool)
@@ -874,6 +878,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeam:
+                case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth:
+                case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter:
                     VelocityEvent frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
                     // Beams are immobile at spawn for around 3 seconds
                     (long start, long end) lifespanBeam = (frostBeamMoveStartVelocity.Time, target.LastAware);
