@@ -389,7 +389,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
                 {
                     AgentItem dragonOrb = dragonOrbMaxHP.Src;
-                    if (dragonOrb != _unknownAgent)
+                    if (dragonOrb != _unknownAgent && combatData.Count(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
                     {
                         dragonOrb.OverrideName("Dragon Orb");
                         dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
@@ -519,6 +519,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         .Distinct()
                         .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPoint3D(evt).Length2D() > 0) > 2)
                         .ToList();
+                    frostBeams.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamNew));
                     foreach (AgentItem frostBeam in frostBeams)
                     {
                         frostBeam.OverrideID(ArcDPSEnums.TrashID.JormagMovingFrostBeam);
