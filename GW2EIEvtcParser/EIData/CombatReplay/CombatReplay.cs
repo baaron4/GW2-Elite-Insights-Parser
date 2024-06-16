@@ -27,10 +27,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal void Trim(long start, long end)
         {
-            PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
-            PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
             _start = Math.Max(start, _start);
             _end = Math.Max(_start, Math.Min(end, _end));
+            PolledPositions.RemoveAll(x => x.Time < _start || x.Time > _end);
+            PolledRotations.RemoveAll(x => x.Time < _start || x.Time > _end);
         }
 
         private static int UpdateVelocityIndex(List<ParametricPoint3D> velocities, int time, int currentIndex)

@@ -882,13 +882,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter:
                     VelocityEvent frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
                     // Beams are immobile at spawn for around 3 seconds
-                    (long start, long end) lifespanBeam = (frostBeamMoveStartVelocity.Time, target.LastAware);
                     if (frostBeamMoveStartVelocity != null)
                     {
+                        (long start, long end) lifespanBeam = (frostBeamMoveStartVelocity.Time, target.LastAware);
                         replay.Trim(lifespanBeam.start, lifespanBeam.end);
+                        var beamAoE = new CircleDecoration(300, lifespanBeam, Colors.LightBlue, 0.1, new AgentConnector(target));
+                        replay.AddDecorationWithBorder(beamAoE, Colors.Red, 0.5);
+                    } 
+                    else
+                    {
+                        // Completely hide it
+                        replay.Trim(0, 0);
                     }
-                    var beamAoE = new CircleDecoration(300, lifespanBeam, Colors.LightBlue, 0.1, new AgentConnector(target));
-                    replay.AddDecorationWithBorder(beamAoE, Colors.Red, 0.5);
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:
                     (int dragonOrbStart, int dragonOrbEnd) = ((int)target.FirstAware, (int)target.LastAware);
