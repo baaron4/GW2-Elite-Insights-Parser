@@ -600,16 +600,12 @@ namespace GW2EIEvtcParser.EIData
 
         private Dictionary<long, FinalBuffVolumesDictionary>[] ComputeBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
         {
-            BuffDistribution buffDistribution = GetBuffDistribution(log, start, end);
             var rates = new Dictionary<long, FinalBuffVolumesDictionary>();
             var ratesActive = new Dictionary<long, FinalBuffVolumesDictionary>();
 
             foreach (Buff buff in GetTrackedBuffs(log))
             {
-                if (buffDistribution.HasBuffID(buff.ID))
-                {
-                    (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffVolumesDictionary.GetFinalBuffVolumesDictionary(log, buff, Actor, start, end);
-                }
+                (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffVolumesDictionary.GetFinalBuffVolumesDictionary(log, buff, Actor, start, end);
             }
             return new Dictionary<long, FinalBuffVolumesDictionary>[] { rates, ratesActive };
         }

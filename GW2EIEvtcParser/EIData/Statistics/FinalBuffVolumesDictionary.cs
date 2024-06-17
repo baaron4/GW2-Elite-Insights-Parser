@@ -34,16 +34,19 @@ namespace GW2EIEvtcParser.EIData
                 double incomingByExtension = 0;
                 foreach (AbstractBuffApplyEvent abae in pair.Value)
                 {
-                    if (abae is BuffApplyEvent bae)
+                    if (abae.Time >= start && abae.Time <= end)
                     {
-                        incoming += bae.AppliedDuration;
-                    }
-                    if (abae is BuffExtensionEvent bee)
-                    {
-                        incomingByExtension += bee.ExtendedDuration;
-                        if (activePhaseDuration > 0)
+                        if (abae is BuffApplyEvent bae)
+                        {
+                            incoming += bae.AppliedDuration;
+                        }
+                        if (abae is BuffExtensionEvent bee)
                         {
                             incomingByExtension += bee.ExtendedDuration;
+                            if (activePhaseDuration > 0)
+                            {
+                                incomingByExtension += bee.ExtendedDuration;
+                            }
                         }
                     }
 

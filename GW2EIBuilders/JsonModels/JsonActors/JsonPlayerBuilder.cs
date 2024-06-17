@@ -255,9 +255,9 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 var data = new List<JsonBuffsUptimeData>();
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val))
+                    if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val) && buffDictionaries[i].TryGetValue(pair.Key, out FinalBuffsDictionary dict))
                     {
-                        JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(val, buffDictionaries[i][pair.Key]);
+                        JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(val, dict);
                         data.Add(value);
                     }
                     else
@@ -348,9 +348,9 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 var data = new List<JsonBuffVolumesData>();
                 for (int i = 0; i < phases.Count; i++)
                 {
-                    if (buffVolumes[i].TryGetValue(pair.Key, out FinalActorBuffVolumes val))
+                    if (buffVolumes[i].TryGetValue(pair.Key, out FinalActorBuffVolumes val) && buffVolumeDictionaries[i].TryGetValue(pair.Key, out FinalBuffVolumesDictionary dict))
                     {
-                        JsonBuffVolumesData value = JsonBuffVolumesBuilder.BuildJsonBuffVolumesData(val, buffVolumeDictionaries[i][pair.Key]);
+                        JsonBuffVolumesData value = JsonBuffVolumesBuilder.BuildJsonBuffVolumesData(val, dict);
                         data.Add(value);
                     }
                     else
