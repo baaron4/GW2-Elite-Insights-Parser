@@ -33,6 +33,8 @@ namespace GW2EIEvtcParser.ParsedData
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
+        private bool Unamed { get; }
+
         public bool IsFake { get; }
         public bool IsNotInSquadFriendlyPlayer { get; private set; }
 
@@ -70,6 +72,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
 
             }
+            Unamed = Name.Contains("ch"+ID+"-");
         }
 
         internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, AgentType.NPC, toughness, healing, condition, concentration, hbWidth, hbHeight)
@@ -98,6 +101,7 @@ namespace GW2EIEvtcParser.ParsedData
             InstID = other.InstID;
             Master = other.Master;
             IsFake = other.IsFake;
+            Unamed = other.Unamed;
         }
 
         internal AgentItem()
@@ -481,6 +485,15 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetCurrentBreakbarState(log, time);
+        }
+
+        public bool IsUnamedSpecies()
+        {
+            if (IsPlayer)
+            {
+                return false;
+            }
+            return IsNonIdentifiedSpecies() || Unamed;
         }
 
         public bool IsNonIdentifiedSpecies()

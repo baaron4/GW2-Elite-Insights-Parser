@@ -490,6 +490,11 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        public bool HasCombatReplayPositions(ParsedEvtcLog log)
+        {
+            return GetCombatReplayNonPolledPositions(log).Count > 0 && GetCombatReplayPolledPositions(log).Count > 0;
+        }
+
         public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledPositions(ParsedEvtcLog log)
         {
             if (CombatReplay == null)
@@ -561,7 +566,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightDuration);
+            CombatReplay.PollingRate(log.FightData.FightDuration, AgentItem.Type == AgentItem.AgentType.Player);
             TrimCombatReplay(log);
             if (!IsFakeActor)
             {
@@ -876,6 +881,10 @@ namespace GW2EIEvtcParser.EIData
         // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
         private static int BinarySearchRecursive(IReadOnlyList<ParametricPoint3D> position, long time, int minIndex, int maxIndex)
         {
+            if (position.Count == 0)
+            {
+                return -1;
+            }
             if (position[minIndex].Time > time)
             {
                 return minIndex - 1;
@@ -915,11 +924,11 @@ namespace GW2EIEvtcParser.EIData
         /// <returns></returns>
         public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
-            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-            if (!positions.Any())
+            if (!HasCombatReplayPositions(log))
             {
                 return null;
             }
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
             if (forwardWindow != 0)
             {
                 return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
@@ -934,11 +943,11 @@ namespace GW2EIEvtcParser.EIData
 
         public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
         {
-            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-            if (!positions.Any())
+            if (!HasCombatReplayPositions(log))
             {
                 return null;
             }
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
             ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
             ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
             Point3D res;

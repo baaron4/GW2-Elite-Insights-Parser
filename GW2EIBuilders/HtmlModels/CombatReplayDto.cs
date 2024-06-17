@@ -34,7 +34,7 @@ namespace GW2EIBuilders.HtmlModels
             var fromNonFriendliesSet = new HashSet<AbstractSingleActor>(log.FightData.Logic.Hostiles);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
-                if (actor.IsFakeActor || actor.GetCombatReplayPolledPositions(log).Count == 0)
+                if (actor.IsFakeActor || !actor.HasCombatReplayPositions(log))
                 {
                     continue;
                 }
@@ -57,7 +57,7 @@ namespace GW2EIBuilders.HtmlModels
             }
             foreach (AbstractSingleActor actor in fromNonFriendliesSet.ToList())
             {
-                if ((actor.LastAware - actor.FirstAware < 200) || actor.GetCombatReplayPolledPositions(log).Count == 0)
+                if ((actor.LastAware - actor.FirstAware < 200) || !actor.HasCombatReplayPositions(log))
                 {
                     continue;
                 }

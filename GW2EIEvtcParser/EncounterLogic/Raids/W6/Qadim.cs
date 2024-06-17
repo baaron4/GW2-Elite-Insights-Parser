@@ -1451,7 +1451,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static bool DistanceCheck(ParsedEvtcLog log, AbstractSingleActor qadim, AbstractSingleActor add)
         {
             // Get positions of Ancient Invoked Hydra, Apocalypse Bringer, Wyvern Matriarch and Patriarch
-            var addPositions = add.GetCombatReplayPolledPositions(log).ToList();
+            IReadOnlyList<ParametricPoint3D> addPositions = add.GetCombatReplayPolledPositions(log);
             if (addPositions.Count == 0)
             {
                 return true;
