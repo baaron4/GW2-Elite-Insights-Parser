@@ -239,7 +239,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
                 || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_45
-                || IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate
+                || IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_51;
             ;
         }

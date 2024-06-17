@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GW2EIEvtcParser.Extensions
+﻿namespace GW2EIEvtcParser.Extensions
 {
     public static class ExtensionHelper
     {

@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData
 {
     internal abstract class FormDecoration : GenericAttachedDecoration
     {

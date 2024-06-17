@@ -6,7 +6,6 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
 {
@@ -58,7 +57,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
             jsonHealingDist.IndirectHealing = list.Exists(x => x is EXTNonDirectHealingEvent);
             if (jsonHealingDist.IndirectHealing)
             {
-                if (!buffMap.ContainsKey( id))
+                if (!buffMap.ContainsKey(id))
                 {
                     if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
                     {

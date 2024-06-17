@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
 namespace GW2EIEvtcParser.Extensions
 {
@@ -12,7 +9,7 @@ namespace GW2EIEvtcParser.Extensions
         public int Bps { get; }
         public int Barrier { get; }
         private int DownedBps { get; }
-        private int DownedBarrier { get;}
+        private int DownedBarrier { get; }
 
         public int ActorBps { get; }
         public int ActorBarrier { get; }
@@ -50,5 +47,5 @@ namespace GW2EIEvtcParser.Extensions
         }
 
     }
-    
+
 }

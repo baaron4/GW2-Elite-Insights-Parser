@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.Extensions
                     if (CheckCondition(he, combatData, agentData, skillData))
                     {
                         lastTime = he.Time;
-                        res.Add(new InstantCastEvent(GetTime(he, he.From,combatData), skillData.Get(SkillID), he.From));
+                        res.Add(new InstantCastEvent(GetTime(he, he.From, combatData), skillData.Get(SkillID), he.From));
                     }
                 }
             }

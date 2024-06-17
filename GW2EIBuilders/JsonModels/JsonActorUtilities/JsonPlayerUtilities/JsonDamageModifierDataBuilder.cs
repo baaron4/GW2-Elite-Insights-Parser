@@ -3,7 +3,6 @@ using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonDamageModifierData;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities

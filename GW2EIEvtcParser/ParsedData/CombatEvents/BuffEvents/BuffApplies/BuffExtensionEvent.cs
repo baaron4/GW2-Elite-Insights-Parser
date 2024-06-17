@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EIData.BuffSimulators;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -39,7 +38,8 @@ namespace GW2EIEvtcParser.ParsedData
             long activeTime = 0;
             long previousTime = long.MinValue;
             long originalStackDuration = 0;
-            for (int i = 0; i < events.Count; i++) {
+            for (int i = 0; i < events.Count; i++)
+            {
                 AbstractBuffEvent cur = events[i];
                 if (i == 0)
                 {
@@ -50,18 +50,19 @@ namespace GW2EIEvtcParser.ParsedData
                         {
                             activeTime += bae.OriginalAppliedDuration - bae.AppliedDuration;
                         }
-                    } 
+                    }
                     else
                     {
                         throw new InvalidOperationException("OffsetNewDuration first element should be buff apply");
                     }
-                } else
+                }
+                else
                 {
                     if (cur is BuffStackActiveEvent)
                     {
                         // means stack was not active between previous and cur
                         activeTime = 0;
-                    } 
+                    }
                     else if (cur is BuffStackResetEvent bsre)
                     {
                         // means stack was active between previous and cur
@@ -72,7 +73,7 @@ namespace GW2EIEvtcParser.ParsedData
                     else if (cur is BuffExtensionEvent bee)
                     {
                         // This is a stack reset in disguise
-                        if (bee.OriginalNewDuration <= originalStackDuration) 
+                        if (bee.OriginalNewDuration <= originalStackDuration)
                         {
                             activeTime = 0;
                         }
@@ -104,7 +105,7 @@ namespace GW2EIEvtcParser.ParsedData
         internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
         {
             if (ExtendedDuration <= 1)
-            { 
+            {
                 // no need to bother with 0 extensions
                 return;
             }

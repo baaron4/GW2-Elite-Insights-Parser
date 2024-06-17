@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
@@ -31,7 +30,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
                 if (hpUpdates.Count > 0)
                 {
-                    HpLeftPercent = hpUpdates.Last().HPPercent;
+                    HpLeftPercent = hpUpdates.Last().HealthPercent;
                 }
                 IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(target.AgentItem);
                 if (barrierUpdates.Count > 0)

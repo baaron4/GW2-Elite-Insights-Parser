@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
                 var distances = new List<float>();
                 for (int time = 0; time < positions.Count; time++)
                 {
-                    if (time+offset >= reference.Count || reference[time + offset] == null)
+                    if (time + offset >= reference.Count || reference[time + offset] == null)
                     {
                         continue;
                     }
@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
             AvgConditions = Math.Round(avgCondis / duration, ParserHelper.BuffDigit);
             AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParserHelper.BuffDigit) : 0.0;
             //
-            if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.GetCombatReplayPolledPositions(log).Any(x => x.X > int.MinValue + 1))
+            if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.GetCombatReplayNonPolledPositions(log).Count > 0)
             {
                 StackDist = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCenterPositions(log));
                 DistToCom = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCommanderPositions(log));

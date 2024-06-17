@@ -5,20 +5,25 @@ namespace GW2EIEvtcParser.ParsedData
 {
     public class HealthUpdateEvent : AbstractStatusEvent, IStateable
     {
-        public double HPPercent { get; }
+        public double HealthPercent { get; }
 
         internal HealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
-            HPPercent = Math.Round(evtcItem.DstAgent / 100.0, 2);
-            if (HPPercent > 100.0)
+            HealthPercent = GetHealthPercent(evtcItem);
+            if (HealthPercent > 100.0)
             {
-                HPPercent = 100;
+                HealthPercent = 100;
             }
+        }
+
+        internal static double GetHealthPercent(CombatItem evtcItem)
+        {
+            return Math.Round(evtcItem.DstAgent / 100.0, 2);
         }
 
         public (long start, double value) ToState()
         {
-            return (Time, HPPercent);
+            return (Time, HealthPercent);
         }
     }
 }

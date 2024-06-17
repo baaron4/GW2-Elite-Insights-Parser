@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData.Buffs;
+using System.Linq;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using System.Linq;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using System;
-using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
-using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -313,7 +310,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Coalescence of Ruin
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, 
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem,
                 new string[] { EffectGUIDs.RevenantCoalescenceOfRuin, EffectGUIDs.RevenantCoalescenceOfRuinLast }, out IReadOnlyList<EffectEvent> coalescenceOfRuin))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, CoalescenceOfRuin);

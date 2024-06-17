@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
@@ -293,7 +291,7 @@ namespace GW2EIEvtcParser.EIData
             SkillItem skill = skillData.Get(Updraft);
             if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
             {
-                foreach(EffectEvent effect in updrafts)
+                foreach (EffectEvent effect in updrafts)
                 {
                     res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 1000));
                 }
@@ -404,7 +402,7 @@ namespace GW2EIEvtcParser.EIData
                         AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGeyser);
                     }
                 }
-                
+
             }
         }
     }

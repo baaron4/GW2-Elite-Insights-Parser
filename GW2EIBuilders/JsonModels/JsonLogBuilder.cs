@@ -8,7 +8,6 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonLog;
 
 namespace GW2EIBuilders.JsonModels
@@ -197,7 +196,7 @@ namespace GW2EIBuilders.JsonModels
                 jsonLog.UsedExtensions = usedExtensions;
             }
             //
-            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
+            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
             jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
             foreach (KeyValuePair<long, SkillItem> pair in skillMap)
             {

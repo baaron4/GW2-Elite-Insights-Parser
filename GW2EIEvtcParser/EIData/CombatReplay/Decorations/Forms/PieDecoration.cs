@@ -1,6 +1,6 @@
 ﻿using System;
-using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -12,15 +12,15 @@ namespace GW2EIEvtcParser.EIData
 
             public ConstantPieDecoration(string color, uint radius, uint minRadius, float openingAngle) : base(color, radius, minRadius)
             {
-                if (openingAngle < 0)
-                {
-                    throw new InvalidOperationException("openingAngle must be strictly positive");
-                }
-                if (openingAngle > 360)
-                {
-                    throw new InvalidOperationException("openingAngle must be <= 360");
-                }
                 OpeningAngle = openingAngle;
+                if (OpeningAngle < 0)
+                {
+                    throw new InvalidOperationException("OpeningAngle must be strictly positive");
+                }
+                if (OpeningAngle > 360)
+                {
+                    throw new InvalidOperationException("OpeningAngle must be <= 360");
+                }
             }
 
             public override string GetID()

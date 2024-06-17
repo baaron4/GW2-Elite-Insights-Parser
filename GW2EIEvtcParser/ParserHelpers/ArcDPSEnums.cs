@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser
             internal const ulong May2023Balance = 145038;
             internal const ulong May2023BalanceHotFix = 146069;
             internal const ulong June2023Balance = 147734;
-            internal const ulong SOTOBetaAndSilentSurfNM = 147830; 
+            internal const ulong SOTOBetaAndSilentSurfNM = 147830;
             internal const ulong July2023BalanceAndSilentSurfCM = 148697;
             internal const ulong SOTOReleaseAndBalance = 150431;
             internal const ulong September2023Balance = 151966;
@@ -94,6 +94,7 @@ namespace GW2EIEvtcParser
             internal const int RemovedDurationForInfiniteDurationStacksChanged = 20240211;
             internal const int NewMarkerEventBehavior = 20240418;
             internal const int StackType0ActiveChange = 20240609;
+            internal const int TeamChangeOnDespawn = 20240612;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -241,8 +242,8 @@ namespace GW2EIEvtcParser
             Spawn = 6,
             Despawn = 7,
             HealthUpdate = 8,
-            LogStart = 9,
-            LogEnd = 10,
+            SquadCombatStart = 9,
+            SquadCombatEnd = 10,
             WeaponSwap = 11,
             MaxHealthUpdate = 12,
             PointOfView = 13,
@@ -268,10 +269,10 @@ namespace GW2EIEvtcParser
             SkillTiming = 33,
             BreakbarState = 34,
             BreakbarPercent = 35,
-            Error = 36,
+            Integrity = 36,
             Marker = 37,
             BarrierUpdate = 38,
-            StatReset = 39, 
+            StatReset = 39,
             Extension = 40,
             APIDelayed = 41,
             InstanceStart = 42,
@@ -279,7 +280,7 @@ namespace GW2EIEvtcParser
             Last90BeforeDown = 44,
             Effect_45 = 45,
             EffectIDToGUID = 46,
-            LogStartNPCUpdate = 47,
+            LogNPCUpdate = 47,
             Idle = 48,
             ExtensionCombat = 49,
             FractalScale = 50,
@@ -421,12 +422,13 @@ namespace GW2EIEvtcParser
                 {
                     // only apply +1 shift to enum higher or equal to the one removed
                     res = bt < (byte)BuffAttribute.FlatOutgoing ? (BuffAttribute)(bt) : (BuffAttribute)(bt + 1);
-                } 
+                }
                 else
                 {
                     res = BuffAttribute.Unknown;
                 }
-            } else
+            }
+            else
             {
                 res = bt <= (byte)BuffAttribute.SiphonIncomingAdditive1 ? (BuffAttribute)bt : BuffAttribute.Unknown;
             }
@@ -908,6 +910,8 @@ namespace GW2EIEvtcParser
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
             GravityBall = ArcDPSEnums.GravityBall,
+            JormagMovingFrostBeamCenter = 23747,
+            JormagMovingFrostBeamNorth = 24541,
             JormagMovingFrostBeam = ArcDPSEnums.JormagMovingFrostBeam,
             // Aetherblade Hideout
             MaiTrinStrikeDuringEcho = 23826,

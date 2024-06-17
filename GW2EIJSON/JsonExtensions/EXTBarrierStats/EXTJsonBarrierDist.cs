@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-
-namespace GW2EIJSON
+﻿namespace GW2EIJSON
 {
     /// <summary>
     /// Class corresponding a barrier distribution
     /// </summary>
     public class EXTJsonBarrierDist
     {
-        
+
         /// <summary>
         /// Total barrier done
         /// </summary>
-        public int TotalBarrier{ get; set; }
+        public int TotalBarrier { get; set; }
 
         /// <summary>
         /// Minimum barrier done
@@ -25,7 +20,7 @@ namespace GW2EIJSON
         /// Maximum barrier done
         /// </summary>
         public int Max { get; set; }
-        
+
         /// <summary>
         /// Number of hits
         /// </summary>
@@ -44,11 +39,11 @@ namespace GW2EIJSON
         /// </summary>
         public bool IndirectBarrier { get; set; }
 
-        
+
         public EXTJsonBarrierDist()
         {
 
-        }  
+        }
 
     }
 }

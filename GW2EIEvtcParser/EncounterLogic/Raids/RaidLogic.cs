@@ -4,8 +4,6 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -17,7 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ParseMode = ParseModeEnum.Instanced10;
             SkillMode = SkillModeEnum.PvE;
             EncounterCategoryInformation.Category = FightCategory.Raid;
-            EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
+            EncounterID |= EncounterIDs.EncounterMasks.RaidMask;
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

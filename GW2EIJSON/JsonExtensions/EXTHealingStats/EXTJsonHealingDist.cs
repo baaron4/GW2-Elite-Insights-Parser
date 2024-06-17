@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-
-namespace GW2EIJSON
+﻿namespace GW2EIJSON
 {
     /// <summary>
     /// Class corresponding a healing distribution
     /// </summary>
     public class EXTJsonHealingDist
     {
-        
+
         /// <summary>
         /// Total healing done
         /// </summary>
-        public int TotalHealing{ get; set; }
+        public int TotalHealing { get; set; }
 
         /// <summary>
         /// Total healing done against downed
@@ -30,30 +25,30 @@ namespace GW2EIJSON
         /// Maximum healing done
         /// </summary>
         public int Max { get; set; }
-        
+
         /// <summary>
         /// Number of hits
         /// </summary>
         public int Hits { get; set; }
-        
+
         /// <summary>
         /// ID of the healing skill
         /// </summary>
         /// <seealso cref="JsonLog.SkillMap"/>
         /// <seealso cref="JsonLog.BuffMap"/>
         public long Id { get; set; }
-        
+
         /// <summary>
         /// True if indirect healing \n
         /// If true, the id is a buff
         /// </summary>
         public bool IndirectHealing { get; set; }
 
-        
+
         public EXTJsonHealingDist()
         {
 
-        }  
+        }
 
     }
 }

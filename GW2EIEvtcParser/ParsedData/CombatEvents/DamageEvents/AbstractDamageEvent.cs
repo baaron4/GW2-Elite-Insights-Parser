@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData;
-using System.Linq;
-
-namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractDamageEvent : AbstractTimeCombatEvent
     {
@@ -35,7 +31,7 @@ namespace GW2EIEvtcParser.ParsedData
             AgainstUnderFifty = evtcItem.IsFifty > 0;
             IsMoving = (evtcItem.IsMoving & 1) > 0;
             AgainstMoving = (evtcItem.IsMoving & 2) > 0;
-            IsFlanking = evtcItem.IsFlanking > 0; 
+            IsFlanking = evtcItem.IsFlanking > 0;
             _iff = evtcItem.IFF;
         }
 

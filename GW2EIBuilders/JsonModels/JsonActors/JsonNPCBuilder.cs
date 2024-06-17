@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonBuffsUptime;
 
 namespace GW2EIBuilders.JsonModels.JsonActors
@@ -16,7 +14,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
     /// </summary>
     internal static class JsonNPCBuilder
     {
-      
+
         public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonNPC = new JsonNPC();
@@ -39,7 +37,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             {
                 if (hpUpdates.Count > 0)
                 {
-                    hpLeft = hpUpdates.Last().HPPercent;
+                    hpLeft = hpUpdates.Last().HealthPercent;
                 }
                 if (barrierUpdates.Count > 0)
                 {

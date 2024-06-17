@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
                         if (agentItem.IsSpecies(ArcDPSEnums.TrashID.Environment) && Keep(effectEvent, log))
                         {
                             mechanicLogs[this].Add(new MechanicEvent(effectEvent.Time, this, log.FindActor(agentItem, true)));
-                        } 
+                        }
                         else
                         {
                             AbstractSingleActor actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -42,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
             public IReadOnlyList<float> Angles { get; private set; }
             public AngleConnectorDescriptor(AngleConnector connector, CombatReplayMap map) : base(connector, map)
             {
-                Angles = new List<float>() { 
+                Angles = new List<float>() {
                     -connector.StartAngle,
                     -connector.SpinAngle,
                 };

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 
 namespace GW2EIJSON
@@ -20,7 +19,7 @@ namespace GW2EIJSON
         /// Length == # of phases
         /// </summary>
         /// <seealso cref="EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics"/>
-        public IReadOnlyList<EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics> OutgoingHealing{ get; set; }
+        public IReadOnlyList<EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics> OutgoingHealing { get; set; }
         /// <summary>
         /// Array of Total Incoming Healing stats \n
         /// Length == # of phases

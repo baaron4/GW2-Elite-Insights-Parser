@@ -197,10 +197,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var sanctuaryPrism = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16).ToList();
+            var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16).ToList();
             foreach (AgentItem sanctuary in sanctuaryPrism)
             {
-                IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.DstAgent == 0);
+                IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
                 sanctuary.OverrideType(AgentItem.AgentType.NPC);
                 sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism);
                 sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.FirstOrDefault().Time : fightData.LogEnd);
@@ -248,9 +248,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endTime = (int)deathEmbrace.Time + deathsEmbraceCastDuration;
 
                         Point3D ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
-                        if (ankkaPosition == null) 
-                        { 
-                            continue; 
+                        if (ankkaPosition == null)
+                        {
+                            continue;
                         }
 
                         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out IReadOnlyList<EffectEvent> deathsEmbraceEffects))
@@ -322,7 +322,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 {
                                     AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 1000);
                                 }
-                            } 
+                            }
                             else if (log.FightData.IsCM)
                             {
                                 AddDeathsHandDecoration(replay, deathsHandEffect.Position, (int)deathsHandEffect.Time, 3000, 380, 33000);
@@ -421,7 +421,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Logs without effects, we add the dropped AoE manually
                         if (!log.CombatData.HasEffectData)
                         {
-                            ParametricPoint3D playerPosition = p.GetCombatReplayPolledPositions(log).Where(x => x.Time <= (int)segment.End).LastOrDefault();
+                            Point3D playerPosition = p.GetCurrentPosition(log, segment.End);  
                             if (playerPosition != null)
                             {
                                 AddDeathsHandDecoration(replay, playerPosition, (int)segment.End, 3000, deathsHandRadius, deathsHandDuration);

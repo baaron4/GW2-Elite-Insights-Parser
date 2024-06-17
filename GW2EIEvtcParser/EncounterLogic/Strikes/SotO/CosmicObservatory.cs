@@ -7,12 +7,10 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -69,7 +67,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TargetID.Dagda:
                     var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    
+
                     // Red AoE during 75-50-25 % phases
                     var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast).ToList();
                     foreach (AbstractCastEvent cast in demonicBlasts)
@@ -111,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Before then, the mechanic would continue during the phase and shoot.
                         if (log.LogData.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
                         {
-                            foreach(AbstractCastEvent demonicBlastCast in demonicBlasts)
+                            foreach (AbstractCastEvent demonicBlastCast in demonicBlasts)
                             {
                                 if (lifespan.Item1 < demonicBlastCast.Time && lifespan.Item2 > demonicBlastCast.Time)
                                 {
@@ -289,14 +287,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (combatData.GetBuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
             {
                 AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
-                HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HPPercent <= 1e-6);
+                HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HealthPercent <= 1e-6);
                 if (hpUpdate != null)
                 {
                     AbstractHealthDamageEvent lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
                     if (fightData.Success)
                     {
                         fightData.SetSuccess(true, Math.Min(lastDamageEvent.Time, fightData.FightEnd));
-                    } 
+                    }
                     else
                     {
                         fightData.SetSuccess(true, lastDamageEvent.Time);
@@ -354,7 +352,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 List<AgentItem> group = tormentedGroups[i];
                 long start = Math.Max(log.FightData.FightStart, group.Min(x => x.FirstAware));
-                long end = Math.Min(log.FightData.FightEnd, group.Max(x => {
+                long end = Math.Min(log.FightData.FightEnd, group.Max(x =>
+                {
                     long res = x.LastAware;
                     if (log.CombatData.GetDeadEvents(x).Any())
                     {
@@ -410,25 +409,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int curTormented = 1;
-            int curVeteranTormented = 1;
-            int curEliteTormented = 1;
-            int curChampionTormented = 1;
+            int[] curTormenteds = new[] { 1, 1, 1, 1 };
             foreach (AbstractSingleActor target in Targets)
             {
                 switch (target.ID)
                 {
                     case (int)TrashID.TheTormented:
-                        target.OverrideName(target.Character + " " + curTormented++);
+                        target.OverrideName(target.Character + " " + curTormenteds[0]++);
                         break;
                     case (int)TrashID.VeteranTheTormented:
-                        target.OverrideName("Veteran " + target.Character + " " + curVeteranTormented++);
+                        target.OverrideName("Veteran " + target.Character + " " + curTormenteds[1]++);
                         break;
                     case (int)TrashID.EliteTheTormented:
-                        target.OverrideName("Elite " + target.Character + " " + curEliteTormented++);
+                        target.OverrideName("Elite " + target.Character + " " + curTormenteds[2]++);
                         break;
                     case (int)TrashID.ChampionTheTormented:
-                        target.OverrideName("Champion " + target.Character + " " + curChampionTormented++);
+                        target.OverrideName("Champion " + target.Character + " " + curTormenteds[3]++);
                         break;
                     default:
                         break;
@@ -437,7 +433,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
             // Security check to stop dagda from going back to 100%
             var dagdaHPUpdates = combatData.Where(x => x.SrcMatchesAgent(dagda.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
-            if (dagdaHPUpdates.Count > 1 && dagdaHPUpdates.LastOrDefault().DstAgent == 10000)
+            if (dagdaHPUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(dagdaHPUpdates.LastOrDefault()) == 100)
             {
                 dagdaHPUpdates.Last().OverrideDstAgent(dagdaHPUpdates[dagdaHPUpdates.Count - 2].DstAgent);
             }

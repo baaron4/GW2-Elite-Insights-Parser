@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return false;
             }
-            return base.Keep(parseMode, skillMode,parserSettings);
+            return base.Keep(parseMode, skillMode, parserSettings);
         }
 
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)

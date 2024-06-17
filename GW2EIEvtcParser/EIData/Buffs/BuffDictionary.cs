@@ -43,13 +43,13 @@ namespace GW2EIEvtcParser.EIData
                             }
                         }
                         listExtension.Add(beeCurrent);
-                    } 
+                    }
                     else
                     {
                         dictExtension[beeCurrent.BuffInstance] = new List<BuffExtensionEvent>() { beeCurrent };
                     }
                 }
-            } 
+            }
             // handle duplicated application for buff initials
             else if (buffEvent is BuffApplyEvent bae && bae.BuffInstance != 0 && bae.Initial)
             {
@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
                 if (duplicated)
                 {
                     return;
-                } 
+                }
             }
             list.Add(buffEvent);
         }

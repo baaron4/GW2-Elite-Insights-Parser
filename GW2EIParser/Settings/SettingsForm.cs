@@ -106,7 +106,7 @@ namespace GW2EIParser.Setting
             ChkHtmlExternalScripts.Checked = Settings.HtmlExternalScripts;
             ChkHtmlCompressJson.Checked = Settings.HtmlCompressJson;
             TxtHtmlExternalScriptsPath.Text = Settings.HtmlExternalScriptsPath;
-            TxtHtmlExternalScriptsCdn.Text = Settings.HtmlExternalScriptsCdn;            
+            TxtHtmlExternalScriptsCdn.Text = Settings.HtmlExternalScriptsCdn;
 
             SetUIEnable();
         }
@@ -471,7 +471,7 @@ namespace GW2EIParser.Setting
         {
             try
             {
-                using(var fbd = new FolderBrowserDialog())
+                using (var fbd = new FolderBrowserDialog())
                 {
                     if (!string.IsNullOrWhiteSpace(Settings.HtmlExternalScriptsPath) && Directory.Exists(Settings.HtmlExternalScriptsPath))
                     {
@@ -483,7 +483,7 @@ namespace GW2EIParser.Setting
                     {
                         TxtHtmlExternalScriptsPath.Text = fbd.SelectedPath;
                     }
-                }       
+                }
             }
             catch { }
         }

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -14,7 +12,7 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(Bound, BoundingDodger), 
+            new BuffGainCastFinder(Bound, BoundingDodger),
             new BuffGainCastFinder(ImpalingLotus, LotusTraining),
             new BuffGainCastFinder(Dash, UnhinderedCombatant),
             //new DamageCastFinder(30520, 30520), // Debilitating Arc

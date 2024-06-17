@@ -1,6 +1,6 @@
 ﻿using System;
-using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData
 
             public ConstantRectangleDecoration(string color, uint width, uint height) : base(color)
             {
-                Height = height;
-                Width = width;
+                Height = Math.Max(height, 1);
+                Width = Math.Max(width, 1);
             }
 
             public override string GetID()

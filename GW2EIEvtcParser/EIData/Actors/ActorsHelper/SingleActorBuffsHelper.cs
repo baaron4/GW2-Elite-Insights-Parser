@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
         private HashSet<Buff> _trackedBuffs;
         private BuffDictionary _buffMap;
         private Dictionary<long, BuffsGraphModel> _buffGraphs { get; set; }
-        private Dictionary<AgentItem,Dictionary<long, BuffsGraphModel>> _buffGraphsPerAgent { get; set; }
+        private Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>> _buffGraphsPerAgent { get; set; }
         private CachingCollection<BuffDistribution> _buffDistribution;
         private CachingCollection<Dictionary<long, long>> _buffPresence;
         private CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffs>[]> _buffStats;
@@ -110,7 +110,7 @@ namespace GW2EIEvtcParser.EIData
             if (_buffGraphs == null)
             {
                 SetBuffGraphs(log);
-            } 
+            }
             if (_buffGraphsPerAgent == null)
             {
                 _buffGraphsPerAgent = new Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>>();

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
-using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -120,8 +117,8 @@ namespace GW2EIEvtcParser.EIData
 
         public static bool IsShroudTransform(long id)
         {
-            return _shroudTransform.Contains(id) 
-                || ReaperHelper.IsReaperShroudTransform(id) 
+            return _shroudTransform.Contains(id)
+                || ReaperHelper.IsReaperShroudTransform(id)
                 || HarbingerHelper.IsHarbingerShroudTransform(id);
         }
 
@@ -195,10 +192,10 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Plaguelands
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { 
-                            EffectGUIDs.NecromancerPlaguelandsPulse1, 
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] {
+                            EffectGUIDs.NecromancerPlaguelandsPulse1,
                             EffectGUIDs.NecromancerPlaguelandsPulse2,EffectGUIDs.NecromancerPlaguelandsPulse3
-                            } , out IReadOnlyList<EffectEvent> plaguelandPulses))
+                            }, out IReadOnlyList<EffectEvent> plaguelandPulses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, Plaguelands);
                 foreach (EffectEvent effect in plaguelandPulses)
@@ -240,7 +237,7 @@ namespace GW2EIEvtcParser.EIData
                             skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBlood);
                         }
                         icon = skill.SkillID == Chillblains ? ParserIcons.EffectChillblains : ParserIcons.EffectMarkOfBlood;
-                    } 
+                    }
                     else
                     {
                         skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblains);

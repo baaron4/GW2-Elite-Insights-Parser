@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
                     if (damageEvent.ConditionDamageBased(log))
                     {
                         conditionDamage += damageEvent.HealthDamage;
-                    } 
+                    }
                     else
                     {
                         powerDamage += damageEvent.HealthDamage;

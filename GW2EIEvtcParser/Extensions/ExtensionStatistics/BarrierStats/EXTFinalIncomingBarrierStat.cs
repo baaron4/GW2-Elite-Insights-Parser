@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
+﻿using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.Extensions
 {
@@ -25,5 +20,5 @@ namespace GW2EIEvtcParser.Extensions
         }
 
     }
-    
+
 }
