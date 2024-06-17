@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.EIData
                 _rectInMap.bottomY = int.MinValue;
                 foreach (Player p in log.PlayerList)
                 {
-                    if (p.GetCombatReplayNonPolledPositions(log).Count == 0)
+                    if (!p.HasCombatReplayPositions(log))
                     {
                         continue;
                     }

@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
             AvgConditions = Math.Round(avgCondis / duration, ParserHelper.BuffDigit);
             AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParserHelper.BuffDigit) : 0.0;
             //
-            if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.GetCombatReplayNonPolledPositions(log).Count > 0)
+            if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.HasCombatReplayPositions(log))
             {
                 StackDist = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCenterPositions(log));
                 DistToCom = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCommanderPositions(log));
