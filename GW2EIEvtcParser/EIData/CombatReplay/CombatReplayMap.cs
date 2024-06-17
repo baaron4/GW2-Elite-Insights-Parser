@@ -81,11 +81,11 @@ namespace GW2EIEvtcParser.EIData
                 _rectInMap.bottomY = int.MinValue;
                 foreach (Player p in log.PlayerList)
                 {
-                    IReadOnlyList<Point3D> pos = p.GetCombatReplayPolledPositions(log);
-                    if (pos.Count == 0)
+                    if (p.GetCombatReplayNonPolledPositions(log).Count == 0)
                     {
                         continue;
                     }
+                    IReadOnlyList<Point3D> pos = p.GetCombatReplayPolledPositions(log);
                     _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.X)) - 250, _rectInMap.topX);
                     _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Y)) - 250, _rectInMap.topY);
                     _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.X)) + 250, _rectInMap.bottomX);

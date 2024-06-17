@@ -421,7 +421,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Logs without effects, we add the dropped AoE manually
                         if (!log.CombatData.HasEffectData)
                         {
-                            ParametricPoint3D playerPosition = p.GetCombatReplayPolledPositions(log).Where(x => x.Time <= (int)segment.End).LastOrDefault();
+                            Point3D playerPosition = p.GetCurrentPosition(log, segment.End);  
                             if (playerPosition != null)
                             {
                                 AddDeathsHandDecoration(replay, playerPosition, (int)segment.End, 3000, deathsHandRadius, deathsHandDuration);
