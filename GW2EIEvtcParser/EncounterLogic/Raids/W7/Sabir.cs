@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             }
         }
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
         {
             // Find target
             if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Sabir, out AgentItem sabir))

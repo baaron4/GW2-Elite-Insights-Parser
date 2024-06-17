@@ -211,9 +211,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return subPhases;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
         {
-            long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
+            long startToUse = base.GetFightOffset(fightData, agentData, combatData, evtcVersion);
             AgentItem vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
             if (vermilion != null)
             {

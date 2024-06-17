@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             EncounterID |= 0x000401;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
         {
             long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EncounterLogic.OpenWorld
             }
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData,
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData,
             AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW);

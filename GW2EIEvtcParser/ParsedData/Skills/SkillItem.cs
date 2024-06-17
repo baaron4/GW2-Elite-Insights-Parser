@@ -12,9 +12,9 @@ namespace GW2EIEvtcParser.ParsedData
     public class SkillItem
     {
 
-        internal static (long, long) GetArcDPSCustomIDs(int evtcVersion)
+        internal static (long, long) GetArcDPSCustomIDs(EvtcVersionEvent evtcVersion)
         {
-            if (evtcVersion >= ArcDPSBuilds.InternalSkillIDsChange)
+            if (evtcVersion.Build >= ArcDPSBuilds.InternalSkillIDsChange)
             {
                 return (ArcDPSDodge20220307, ArcDPSGenericBreakbar20220307);
             }

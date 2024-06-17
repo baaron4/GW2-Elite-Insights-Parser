@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Virtuoso Blade", VirtuosoBlades, Source.Virtuoso, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.PowerAttribute),
         };
 
-        public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData, int evtcVersion)
+        public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData, EvtcVersionEvent evtcVersion)
         {
             var res = new List<AbstractBuffEvent>();
             var bladeIDs = new HashSet<long>
@@ -92,7 +92,7 @@ namespace GW2EIEvtcParser.EIData
                         elapsedTime = brae.Time - apply.Time;
                     }
                     int removedDuration = brae.RemovedDuration;
-                    if (evtcVersion >= ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged)
+                    if (evtcVersion.Build >= ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged)
                     {
                         removedDuration -= (int)elapsedTime;
                     }

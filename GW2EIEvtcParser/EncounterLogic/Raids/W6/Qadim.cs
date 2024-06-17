@@ -111,11 +111,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool refresh = false;
             var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
-            if (evtcVersion >= ArcDPSBuilds.FunctionalEffect2Events)
+            if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
             {
                 if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialPlatformAgentMaxHPs))
                 {
@@ -251,7 +251,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
         {
             // Find target
             if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))

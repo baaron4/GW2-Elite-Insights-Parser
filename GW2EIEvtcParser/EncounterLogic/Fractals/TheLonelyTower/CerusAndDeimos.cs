@@ -43,11 +43,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Cerus and Deimos";
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
         {
             // TODO: verify this
-            long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-            if (evtcVersion >= ArcDPSBuilds.NewLogStart)
+            long startToUse = base.GetFightOffset(fightData, agentData, combatData, evtcVersion);
+            if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
             {
                 AgentItem cerus = agentData.GetNPCsByID(TargetID.CerusLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
                 AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Deimos not found");

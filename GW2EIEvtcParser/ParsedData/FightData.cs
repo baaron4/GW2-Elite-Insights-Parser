@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
 
         // Constructors
-        internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, int evtcVersion)
+        internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, EvtcVersionEvent evtcVersion)
         {
             LogStart = start;
             LogEnd = end;
@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.TargetID.McLeodTheSilent:
                     // No proper escort support by arc dps before that build, redirect to unknown
-                    if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
+                    if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
                     {
                         Logic = new Escort(id);
                     }

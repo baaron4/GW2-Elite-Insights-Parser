@@ -250,7 +250,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return null;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(FightData fightData, AgentData agentData, List<CombatItem> combatData, EvtcVersionEvent evtcVersion)
         {
             IReadOnlyList<AgentItem> deimosAgents = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Deimos);
             long start = long.MinValue;
@@ -282,9 +282,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return start >= 0 ? start : genericStart;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, arcdpsVersion);
+            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, evtcVersion);
             if (!fightData.IsCM)
             {
                 res.Add(new ErrorEvent("Missing outgoing Saul damage due to % based damage"));
@@ -304,7 +304,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return demonicBonds.Count != 0;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
             bool needsDummy = !needsRefresh;
