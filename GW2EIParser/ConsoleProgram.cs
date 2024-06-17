@@ -74,6 +74,7 @@ namespace GW2EIParser
             {
                 programHelper.GenerateTraceFile(operation);
             }
+            GC.Collect();
         }
     }
 }

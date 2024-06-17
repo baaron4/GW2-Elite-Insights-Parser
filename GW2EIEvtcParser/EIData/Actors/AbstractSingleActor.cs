@@ -603,7 +603,7 @@ namespace GW2EIEvtcParser.EIData
                 return;
             }
             SetMovements(log);
-            CombatReplay.PollingRate(log.FightData.FightDuration);
+            CombatReplay.PollingRate(log.FightData.FightDuration, AgentItem.Type == AgentItem.AgentType.Player);
             TrimCombatReplay(log);
             if (!IsFakeActor)
             {
@@ -958,11 +958,11 @@ namespace GW2EIEvtcParser.EIData
         /// <returns></returns>
         public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
-            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-            if (!positions.Any())
+            if (GetCombatReplayNonPolledPositions(log).Count == 0)
             {
                 return null;
             }
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
             if (forwardWindow != 0)
             {
                 return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
@@ -977,11 +977,11 @@ namespace GW2EIEvtcParser.EIData
 
         public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
         {
-            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-            if (!positions.Any())
+            if (GetCombatReplayNonPolledPositions(log).Count == 0)
             {
                 return null;
             }
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
             ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
             ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
             Point3D res;

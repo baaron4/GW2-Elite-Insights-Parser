@@ -111,6 +111,7 @@ namespace GW2EIParser
                 _programHelper.DoWork(operation);
             }, cancelTokenSource.Token).ContinueWith(t =>
             {
+                GC.Collect();
                 cancelTokenSource.Dispose();
                 _runningCount--;
                 AddTraceMessage("Operation: Parsed " + operation.InputFile);

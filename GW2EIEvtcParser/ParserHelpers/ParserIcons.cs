@@ -1157,6 +1157,8 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TrashID.VoidTimeCaster2, TrashVoidTimeCaster },
             { TrashID.GravityBall, TrashGravityBall },
             { TrashID.JormagMovingFrostBeam, TrashGenericRedEnemySkull },
+            { TrashID.JormagMovingFrostBeamNorth, TrashGenericRedEnemySkull },
+            { TrashID.JormagMovingFrostBeamCenter, TrashGenericRedEnemySkull },
             { TrashID.VoidThornheart1, TrashVoidThornheart },
             { TrashID.VoidThornheart2, TrashVoidThornheart },
             { TrashID.VoidBrandfang1, TrashVoidBrandfang },

@@ -324,6 +324,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.DragonEnergyOrb,
                 ArcDPSEnums.TrashID.GravityBall,
                 ArcDPSEnums.TrashID.JormagMovingFrostBeam,
+                ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth,
+                ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter,
             };
         }
 
@@ -389,7 +391,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
                 {
                     AgentItem dragonOrb = dragonOrbMaxHP.Src;
-                    if (dragonOrb != _unknownAgent)
+                    if (dragonOrb != _unknownAgent && combatData.Count(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
                     {
                         dragonOrb.OverrideName("Dragon Orb");
                         dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
@@ -526,6 +528,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         frostBeam.SetMaster(jormagAgent);
                         needRefreshAgentPool = true;
                     }
+                    var knownFrostBeams = agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth).ToList();
+                    knownFrostBeams.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter));
+                    knownFrostBeams.ForEach(x => x.SetMaster(jormagAgent));
                 }
             }
             if (needRefreshAgentPool)
@@ -873,15 +878,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeam:
+                case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth:
+                case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter:
                     VelocityEvent frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
                     // Beams are immobile at spawn for around 3 seconds
-                    (long start, long end) lifespanBeam = (frostBeamMoveStartVelocity.Time, target.LastAware);
                     if (frostBeamMoveStartVelocity != null)
                     {
+                        (long start, long end) lifespanBeam = (frostBeamMoveStartVelocity.Time, target.LastAware);
                         replay.Trim(lifespanBeam.start, lifespanBeam.end);
+                        var beamAoE = new CircleDecoration(300, lifespanBeam, Colors.LightBlue, 0.1, new AgentConnector(target));
+                        replay.AddDecorationWithBorder(beamAoE, Colors.Red, 0.5);
+                    } 
+                    else
+                    {
+                        // Completely hide it
+                        replay.Trim(0, 0);
                     }
-                    var beamAoE = new CircleDecoration(300, lifespanBeam, Colors.LightBlue, 0.1, new AgentConnector(target));
-                    replay.AddDecorationWithBorder(beamAoE, Colors.Red, 0.5);
                     break;
                 case (int)ArcDPSEnums.TrashID.DragonEnergyOrb:
                     (int dragonOrbStart, int dragonOrbEnd) = ((int)target.FirstAware, (int)target.LastAware);

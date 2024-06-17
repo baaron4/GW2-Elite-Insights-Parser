@@ -910,6 +910,8 @@ namespace GW2EIEvtcParser
             VoidGoliath = 24761,
             DragonEnergyOrb = DragonOrb,
             GravityBall = ArcDPSEnums.GravityBall,
+            JormagMovingFrostBeamCenter = 23747,
+            JormagMovingFrostBeamNorth = 24541,
             JormagMovingFrostBeam = ArcDPSEnums.JormagMovingFrostBeam,
             // Aetherblade Hideout
             MaiTrinStrikeDuringEcho = 23826,

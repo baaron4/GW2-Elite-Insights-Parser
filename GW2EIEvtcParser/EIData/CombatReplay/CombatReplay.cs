@@ -27,10 +27,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal void Trim(long start, long end)
         {
-            PolledPositions.RemoveAll(x => x.Time < start || x.Time > end);
-            PolledRotations.RemoveAll(x => x.Time < start || x.Time > end);
             _start = Math.Max(start, _start);
             _end = Math.Max(_start, Math.Min(end, _end));
+            PolledPositions.RemoveAll(x => x.Time < _start || x.Time > _end);
+            PolledRotations.RemoveAll(x => x.Time < _start || x.Time > _end);
         }
 
         private static int UpdateVelocityIndex(List<ParametricPoint3D> velocities, int time, int currentIndex)
@@ -52,31 +52,38 @@ namespace GW2EIEvtcParser.EIData
             return res - 1;
         }
 
-        private void PositionPolling(int rate, long fightDuration)
+        private void PositionPolling(int rate, long fightDuration, bool forcePolling)
         {
-            if (Positions.Count == 0)
+            List<ParametricPoint3D> positions = Positions;
+            if (Positions.Count == 0 && forcePolling)
             {
-                Positions.Add(new ParametricPoint3D(int.MinValue, int.MinValue, 0, 0));
+                positions = new List<ParametricPoint3D>()
+                {
+                    new ParametricPoint3D(int.MinValue, int.MinValue, 0, 0)
+                };
+            } else if (Positions.Count == 0)
+            {
+                return;
             }
             int positionTablePos = 0;
             int velocityTablePos = 0;
             //
-            for (int i = (int)Math.Min(0, rate * ((Positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
+            for (int i = (int)Math.Min(0, rate * ((positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
             {
-                ParametricPoint3D pt = Positions[positionTablePos];
+                ParametricPoint3D pt = positions[positionTablePos];
                 if (i <= pt.Time)
                 {
                     PolledPositions.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
                 {
-                    if (positionTablePos == Positions.Count - 1)
+                    if (positionTablePos == positions.Count - 1)
                     {
                         PolledPositions.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
                     }
                     else
                     {
-                        ParametricPoint3D ptn = Positions[positionTablePos + 1];
+                        ParametricPoint3D ptn = positions[positionTablePos + 1];
                         if (ptn.Time < i)
                         {
                             positionTablePos++;
@@ -162,9 +169,9 @@ namespace GW2EIEvtcParser.EIData
             PolledRotations = PolledRotations.Where(x => x.Time >= 0).ToList();
         }
 
-        internal void PollingRate(long fightDuration)
+        internal void PollingRate(long fightDuration, bool forcePositionPolling)
         {
-            PositionPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
+            PositionPolling(ParserHelper.CombatReplayPollingRate, fightDuration, forcePositionPolling);
             RotationPolling(ParserHelper.CombatReplayPollingRate, fightDuration);
         }
 
@@ -217,7 +224,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
-            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsNonIdentifiedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
+            IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
             var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).HexContentGUID).ToList();
             var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in allEffectEvents)
