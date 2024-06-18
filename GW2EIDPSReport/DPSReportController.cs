@@ -117,8 +117,7 @@ namespace GW2EIDPSReport
             DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traceHandler, contentCreator);
             if (response != null && response.Error != null)
             {
-                traceHandler("UploadUsingEI failed - " + response.Error);
-                return null;
+                traceHandler("UploadUsingEI generated an error - " + response.Error);
             }
             return response;
         }
