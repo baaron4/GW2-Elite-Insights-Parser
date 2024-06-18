@@ -12,9 +12,10 @@ namespace GW2EIEvtcParser.ParsedData
 
         // Fields
         private readonly EvtcVersionEvent _EvtcVersionEvent;
-        public string ArcVersion => _EvtcVersionEvent.ToEVTCString();
-        public long EvtcBuild => _EvtcVersionEvent.Build;
-        public long EvtcRevision => _EvtcVersionEvent.Revision;
+        public string ArcVersion => _EvtcVersionEvent.ToEVTCString(false);
+        public string ArcVersionBuild => _EvtcVersionEvent.ToEVTCString(true);
+        public int EvtcBuild => _EvtcVersionEvent.Build;
+        public int EvtcRevision => _EvtcVersionEvent.Revision;
         public string Language { get; } = "N/A";
         public LanguageEvent.LanguageEnum LanguageID { get; }
         public ulong GW2Build { get; } = 0;

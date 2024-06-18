@@ -111,10 +111,10 @@ namespace GW2EIEvtcParser.ParsedData
             Build = version;
         }
 
-        internal string ToEVTCString()
+        internal string ToEVTCString(bool buildOnly)
         {
             var start = "EVTC";
-            if (Revision > -1)
+            if (Revision > -1 && !buildOnly)
             {
                 return start + Build + "." + Revision;
             }
