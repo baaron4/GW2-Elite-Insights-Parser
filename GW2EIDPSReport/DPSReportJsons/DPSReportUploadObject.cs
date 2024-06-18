@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace GW2EIDPSReport.DPSReportJsons
@@ -33,8 +34,24 @@ namespace GW2EIDPSReport.DPSReportJsons
         public DPSReportUploadEncounterObject Encounter { get; internal set; }
         [JsonProperty]
         public DPSReportUploadEvtcObject Evtc { get; internal set; }
-        [JsonProperty]
-        public Dictionary<string, DPSReportUploadPlayerObject> Players { get; internal set; }
+        [JsonIgnore]
+        public Dictionary<string, DPSReportUploadPlayerObject> Players
+        {
+            get
+            {
+                var json = PlayersJson.ToString();
+                try
+                {
+                    return JsonConvert.DeserializeObject<Dictionary<string, DPSReportUploadPlayerObject>>(json);
+                }
+                catch
+                {
+                    return new Dictionary<string, DPSReportUploadPlayerObject>();
+                }
+            }
+        }
+        [JsonProperty(PropertyName = "players")]
+        internal object PlayersJson { get; set; }
         [JsonProperty]
         public DPSReportReportObject Report { get; internal set; }
         [JsonProperty]
