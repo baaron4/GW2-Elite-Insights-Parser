@@ -348,7 +348,7 @@ namespace GW2EIEvtcParser.EIData
                     AbstractBuffSimulator simulator;
                     try
                     {
-                        if (AgentItem.Type == AgentItem.AgentType.NonSquadPlayer)
+                        if (log.CombatData.UseBuffInstanceSimulator && AgentItem.Type == AgentItem.AgentType.NonSquadPlayer)
                         {
                             buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
                             simulator = buff.CreateSimulator(log, true);
