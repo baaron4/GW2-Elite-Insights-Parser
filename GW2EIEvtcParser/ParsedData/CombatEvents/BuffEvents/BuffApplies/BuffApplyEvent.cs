@@ -41,9 +41,9 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
-            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || (!useBuffInstanceSimulator && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss), OverridenDurationInternal > 0 ? OverridenDurationInternal : OverridenDuration, OverridenInstance);
+            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || (forceStackType4ToBeActive && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss), OverridenDurationInternal > 0 ? OverridenDurationInternal : OverridenDuration, OverridenInstance);
         }
 
         /*internal override int CompareTo(AbstractBuffEvent abe)

@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.ParsedData
             return !OverstackOrNaturalEnd;
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
             simulator.Remove(CreditedBy, RemovedDuration, 1, Time, BuffRemove.Single, BuffInstance);
         }

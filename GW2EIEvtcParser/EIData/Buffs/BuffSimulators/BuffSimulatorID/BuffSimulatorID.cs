@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
         {
-            buffEvent.UpdateSimulator(this, true);
+            buffEvent.UpdateSimulator(this, false);
         }
 
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)

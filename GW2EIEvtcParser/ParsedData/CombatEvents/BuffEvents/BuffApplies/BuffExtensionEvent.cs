@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
             if (ExtendedDuration <= 1)
             {

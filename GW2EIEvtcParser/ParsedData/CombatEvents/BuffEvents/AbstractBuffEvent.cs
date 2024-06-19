@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal abstract void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator);
+        internal abstract void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive);
 
         internal abstract void TryFindSrc(ParsedEvtcLog log);
 
