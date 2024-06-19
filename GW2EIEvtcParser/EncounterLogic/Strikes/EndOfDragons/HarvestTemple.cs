@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new [] { Shockwave, TsunamiSlam1, TsunamiSlam2 }, "Shockwaves", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150).UsingAchievementEligibility(true),
                 new PlayerDstHitMechanic(new long [] { VoidExplosion, VoidExplosion2, VoidExplosion3 }, "Void Explosion", new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
                 new PlayerDstHitMechanic(MagicDischarge, "Magic Discharge", new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
-                new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleGreen, "Success Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleSuccessGreen, "Success Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
                 new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleFailedGreen, "Failed Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "F.Green", "Green Failed", "Failed Green", 0),
                 // Purification 1
                 new PlayerDstHitMechanic(LightningOfJormag, "Lightning of Jormag", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Ice), "Light.H", "Hit by Lightning of Jormag", "Lightning of Jormag", 0),
@@ -688,11 +688,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out IReadOnlyList<EffectEvent> greenEffects))
             {
-                AddShareTheVoidDecoration(greenEffects, true);
+                AddBaseShareTheVoidDecoration(greenEffects);
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSuccessGreen, out IReadOnlyList<EffectEvent> successGreenEffects))
+            {
+                AddResultShareTheVoidDecoration(successGreenEffects, true);
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleFailedGreen, out IReadOnlyList<EffectEvent> failedGreenEffects))
             {
-                AddShareTheVoidDecoration(failedGreenEffects, false);
+                AddResultShareTheVoidDecoration(failedGreenEffects, false);
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out IReadOnlyList<EffectEvent> redPuddleEffectsCM))
             {
@@ -1810,16 +1814,32 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// </summary>
         /// <param name="greenEffects">Effects List.</param>
         /// <param name="isSuccessful">Wether the mechanic was successful or not.</param>
-        private void AddShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects, bool isSuccessful)
+        private void AddBaseShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects)
         {
             foreach (EffectEvent green in greenEffects)
             {
-                int duration = 5000;
+                int duration = 6250;
+                int start = (int)green.Time;
+                int end = (int)green.Time + duration;
+                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new PositionConnector(green.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(end));
+            }
+        }
+
+        /// <summary>
+        /// Share the Void - Greens in CM.
+        /// </summary>
+        /// <param name="greenEffects">Effects List.</param>
+        /// <param name="isSuccessful">Wether the mechanic was successful or not.</param>
+        private void AddResultShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects, bool isSuccessful)
+        {
+            foreach (EffectEvent green in greenEffects)
+            {
+                int duration = 250;
                 int start = (int)green.Time - duration;
                 int end = (int)green.Time;
                 Color color = isSuccessful ? Colors.DarkGreen : Colors.DarkRed;
-                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(end));
-                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), color, 0.4, new PositionConnector(green.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), color, 0.6, new PositionConnector(green.Position)));
             }
         }
 
@@ -1847,7 +1867,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // fallback for late logs
-            if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleGreen) != null || agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+            if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen) != null || agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
             {
                 return FightData.EncounterMode.CM;
             }
