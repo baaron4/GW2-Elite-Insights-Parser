@@ -1817,7 +1817,7 @@
         public const long PieceOfUnderseaWurmSushi = 33936;
         public const long DragonsWings = 33963;
         public const long PresenceOfTheKeepII = 33974;
-        public const long ChillingFogBuff = 33978;
+        public const long ChillingFog_HealingMistBuff = 33978;
         public const long HardenedSiegeGear = 33983;
         public const long BowlOfTapiocaPudding = 34014;
         public const long MarkedSentryGreen = 34015;
