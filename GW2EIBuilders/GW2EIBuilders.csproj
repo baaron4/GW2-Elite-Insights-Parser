@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <Nullable>disable</Nullable>
-        <Version>0.49.1</Version>
+        <Version>0.49.2</Version>
         <Configurations>Debug;Release;NoRewards</Configurations>
     </PropertyGroup>
 
