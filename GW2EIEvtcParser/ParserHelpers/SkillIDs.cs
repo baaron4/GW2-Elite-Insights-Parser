@@ -1404,8 +1404,8 @@
         public const long Jade = 26925;
         public const long ReleaseHammers = 26956;
         public const long POV_ProtectiveSolaceBuff = 26957;
-        public const long NaturalHarmonyHeal = 26997;
         public const long Resistance = 26980;
+        public const long NaturalHarmonyHeal = 26997;
         public const long FacetOfElementsSkill = 27014;
         public const long ElevatedCompassion = 27028;
         public const long CeleritasSpores = 27048;
