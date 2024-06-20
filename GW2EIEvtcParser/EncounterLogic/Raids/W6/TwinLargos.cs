@@ -253,7 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterStartStatus.Normal;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData, extensions);
             // discard hp update events after determined apply

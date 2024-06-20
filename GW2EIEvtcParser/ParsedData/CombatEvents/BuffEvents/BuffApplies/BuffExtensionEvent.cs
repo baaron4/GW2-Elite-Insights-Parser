@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal void OffsetNewDuration(IReadOnlyList<AbstractBuffEvent> events, int evtcVersion)
+        internal void OffsetNewDuration(IReadOnlyList<AbstractBuffEvent> events, EvtcVersionEvent evtcVersion)
         {
             long activeTime = 0;
             long previousTime = long.MinValue;
@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.ParsedData
                 return;
             }
             NewDuration -= activeTime;
-            if (evtcVersion < ArcDPSEnums.ArcDPSBuilds.BuffExtensionOverstackValueChanged && evtcVersion >= ArcDPSEnums.ArcDPSBuilds.BuffExtensionBroken)
+            if (evtcVersion.Build < ArcDPSEnums.ArcDPSBuilds.BuffExtensionOverstackValueChanged && evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.BuffExtensionBroken)
             {
                 ExtendedDuration = Math.Max(ExtendedDuration - activeTime, 0);
             }

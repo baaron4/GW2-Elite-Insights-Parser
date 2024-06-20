@@ -11,8 +11,11 @@ namespace GW2EIEvtcParser.ParsedData
         private const string DefaultTimeValue = "MISSING";
 
         // Fields
-        public string ArcVersion => "EVTC" + EvtcVersion;
-        public long EvtcVersion { get; } = -1;
+        private readonly EvtcVersionEvent _EvtcVersionEvent;
+        public string ArcVersion => _EvtcVersionEvent.ToEVTCString(false);
+        public string ArcVersionBuild => _EvtcVersionEvent.ToEVTCString(true);
+        public int EvtcBuild => _EvtcVersionEvent.Build;
+        public int EvtcRevision => _EvtcVersionEvent.Revision;
         public string Language { get; } = "N/A";
         public LanguageEvent.LanguageEnum LanguageID { get; }
         public ulong GW2Build { get; } = 0;
@@ -32,9 +35,9 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly List<string> _logErrors = new List<string>();
 
         // Constructors
-        internal LogData(long evtcVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
+        internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
         {
-            EvtcVersion = evtcVersion;
+            _EvtcVersionEvent = evtcVersion;
             double unixStart = 0;
             double unixEnd = 0;
             //

@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Set manual FractalScale for old logs without the event
             AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, GenericTriggerID, Determined762);
         }

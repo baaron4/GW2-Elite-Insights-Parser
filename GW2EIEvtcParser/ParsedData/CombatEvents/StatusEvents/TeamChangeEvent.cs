@@ -6,10 +6,10 @@
 
         public ulong TeamIDInto { get; }
 
-        internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, int evtcVersion) : base(evtcItem, agentData)
+        internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData)
         {
             TeamIDInto = GetTeamIDInto(evtcItem);
-            if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+            if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
             {
                 TeamIDComingFrom = GetTeamIDComingFrom(evtcItem);
             }

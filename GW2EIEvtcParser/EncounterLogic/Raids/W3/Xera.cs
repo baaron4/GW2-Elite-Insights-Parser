@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return determined;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem xera))
             {
@@ -172,7 +172,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool needsRefresh = false;
             bool needsDummy = true;
