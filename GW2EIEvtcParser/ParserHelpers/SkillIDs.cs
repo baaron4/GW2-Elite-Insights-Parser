@@ -953,6 +953,7 @@
         public const long OpeningStrike = 13988;
         public const long NaturalHealing = 14024;
         public const long Spotter = 14055;
+        public const long VigorousShouts = 14219;
         public const long EmpowerAllies = 14222;
         public const long RecklessImpact = 14268;
         public const long MendingMight = 14282;
@@ -1403,8 +1404,8 @@
         public const long Jade = 26925;
         public const long ReleaseHammers = 26956;
         public const long POV_ProtectiveSolaceBuff = 26957;
-        public const long NaturalHarmonyHeal = 26977;
         public const long Resistance = 26980;
+        public const long NaturalHarmonyHeal = 26997;
         public const long FacetOfElementsSkill = 27014;
         public const long ElevatedCompassion = 27028;
         public const long CeleritasSpores = 27048;
@@ -1817,7 +1818,7 @@
         public const long PieceOfUnderseaWurmSushi = 33936;
         public const long DragonsWings = 33963;
         public const long PresenceOfTheKeepII = 33974;
-        public const long ChillingFogBuff = 33978;
+        public const long ChillingFog_HealingMistBuff = 33978;
         public const long HardenedSiegeGear = 33983;
         public const long BowlOfTapiocaPudding = 34014;
         public const long MarkedSentryGreen = 34015;
