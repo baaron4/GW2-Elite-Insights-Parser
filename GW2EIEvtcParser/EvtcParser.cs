@@ -976,7 +976,7 @@ namespace GW2EIEvtcParser
         /// </summary>
         private void OffsetEvtcData()
         {
-            long offset = _fightData.Logic.GetFightOffset(_fightData, _agentData, _combatItems, _evtcVersion);
+            long offset = _fightData.Logic.GetFightOffset(_evtcVersion, _fightData, _agentData, _combatItems);
             // apply offset to everything
             foreach (CombatItem c in _combatItems)
             {
