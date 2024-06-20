@@ -1810,10 +1810,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
 
         /// <summary>
-        /// Share the Void - Greens in CM.
+        /// Share the Void - Greens in CM, area effect.
         /// </summary>
         /// <param name="greenEffects">Effects List.</param>
-        /// <param name="isSuccessful">Wether the mechanic was successful or not.</param>
         private void AddBaseShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects)
         {
             foreach (EffectEvent green in greenEffects)
@@ -1827,7 +1826,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
 
         /// <summary>
-        /// Share the Void - Greens in CM.
+        /// Share the Void - Greens in CM, trigger effect.
         /// </summary>
         /// <param name="greenEffects">Effects List.</param>
         /// <param name="isSuccessful">Wether the mechanic was successful or not.</param>
