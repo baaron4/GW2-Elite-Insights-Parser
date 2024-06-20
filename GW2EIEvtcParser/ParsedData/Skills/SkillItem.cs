@@ -12,9 +12,9 @@ namespace GW2EIEvtcParser.ParsedData
     public class SkillItem
     {
 
-        internal static (long, long) GetArcDPSCustomIDs(int evtcVersion)
+        internal static (long, long) GetArcDPSCustomIDs(EvtcVersionEvent evtcVersion)
         {
-            if (evtcVersion >= ArcDPSBuilds.InternalSkillIDsChange)
+            if (evtcVersion.Build >= ArcDPSBuilds.InternalSkillIDsChange)
             {
                 return (ArcDPSDodge20220307, ArcDPSGenericBreakbar20220307);
             }
@@ -905,6 +905,7 @@ namespace GW2EIEvtcParser.ParsedData
             { MagebaneTetherSkill, BuffImages.MagebaneTether },
             { EnchantmentCollapse, "https://wiki.guildwars2.com/images/7/7f/Enchantment_Collapse.png" },
             { LineBreakerHeal, "https://wiki.guildwars2.com/images/0/0e/Line_Breaker.png" },
+            { VigorousShouts, "https://wiki.guildwars2.com/images/d/de/Vigorous_Shouts.png" },
             #endregion WarriorIcons
             #region EncounterIcons
             // Silent Surf Fractal

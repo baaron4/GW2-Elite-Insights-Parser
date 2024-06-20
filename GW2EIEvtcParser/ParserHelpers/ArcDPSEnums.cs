@@ -287,6 +287,7 @@ namespace GW2EIEvtcParser
             Effect_51 = 51,
             RuleSet = 52,
             SquadMarker = 53,
+            ArcBuild = 54,
             Unknown
         };
 
@@ -412,10 +413,10 @@ namespace GW2EIEvtcParser
             SiphonIncomingAdditive2 = -34,
             HealingEffectivenessIncomingMultiplicative = -35,
         }
-        internal static BuffAttribute GetBuffAttribute(short bt, int evtcVersion)
+        internal static BuffAttribute GetBuffAttribute(short bt, int evtcBuild)
         {
             BuffAttribute res;
-            if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
+            if (evtcBuild >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 // Enum has shifted by -1
                 if (bt <= (byte)BuffAttribute.SiphonIncomingAdditive1 - 1)

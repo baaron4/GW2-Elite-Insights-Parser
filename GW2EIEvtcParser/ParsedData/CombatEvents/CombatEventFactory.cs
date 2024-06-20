@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
     internal static class CombatEventFactory
     {
 
-        public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, int evtcVersion)
+        public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, EvtcVersionEvent evtcVersion)
         {
             switch (stateChangeEvent.IsStateChange)
             {
@@ -166,7 +166,7 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case StateChange.Marker:
                     var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
-                    if (evtcVersion >= ArcDPSBuilds.NewMarkerEventBehavior)
+                    if (evtcVersion.Build >= ArcDPSBuilds.NewMarkerEventBehavior)
                     {
                         // End event
                         if (markerEvent.IsEnd)
@@ -307,7 +307,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     break;
                 case StateChange.EffectIDToGUID:
-                    if (evtcVersion >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
+                    if (evtcVersion.Build >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
                     {
                         switch (GetContentLocal((byte)stateChangeEvent.OverstackValue))
                         {
@@ -372,7 +372,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public static void AddBuffApplyEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData, int evtcVersion)
+        public static void AddBuffApplyEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
         {
             if (buffEvent.IsOffcycle > 0)
             {

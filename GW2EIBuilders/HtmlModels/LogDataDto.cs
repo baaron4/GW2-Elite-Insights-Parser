@@ -67,7 +67,7 @@ namespace GW2EIBuilders.HtmlModels
         public string EncounterStart { get; set; }
         public string EncounterEnd { get; set; }
         public string ArcVersion { get; set; }
-        public long EvtcVersion { get; set; }
+        public long EvtcBuild { get; set; }
         public ulong Gw2Build { get; set; }
         public long TriggerID { get; set; }
         public long EncounterID { get; set; }
@@ -85,7 +85,7 @@ namespace GW2EIBuilders.HtmlModels
             EncounterStart = log.LogData.LogStartStd;
             EncounterEnd = log.LogData.LogEndStd;
             ArcVersion = log.LogData.ArcVersion;
-            EvtcVersion = log.LogData.EvtcVersion;
+            EvtcBuild = log.LogData.EvtcBuild;
             Gw2Build = log.LogData.GW2Build;
             TriggerID = log.FightData.TriggerID;
             EncounterID = log.FightData.Logic.EncounterID;

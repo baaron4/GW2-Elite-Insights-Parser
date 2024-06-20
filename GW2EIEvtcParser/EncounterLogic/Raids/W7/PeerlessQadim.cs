@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return base.GetEncounterStartStatus(combatData, agentData, fightData);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 

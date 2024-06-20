@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return participatingPlayerAgents;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Set manual FractalScale for old logs without the event
             AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>

@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.ParsedData
             RemovedStacks = removedStacks;
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
             simulator.Remove(CreditedBy, RemovedDuration, RemovedStacks, Time, BuffRemove.All, 0);
         }

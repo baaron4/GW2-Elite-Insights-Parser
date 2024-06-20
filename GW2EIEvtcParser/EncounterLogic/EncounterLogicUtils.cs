@@ -96,9 +96,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }*/
 
-        internal static List<ErrorEvent> GetConfusionDamageMissingMessage(int arcdpsVersion)
+        internal static List<ErrorEvent> GetConfusionDamageMissingMessage(EvtcVersionEvent evtcVersion)
         {
-            if (arcdpsVersion > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation)
+            if (evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation)
             {
                 return new List<ErrorEvent>();
             }

@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser
         private ushort _id;
         private long _logStartTime;
         private long _logEndTime;
-        private int _evtcVersion;
+        private EvtcVersionEvent _evtcVersion;
         private ulong _gw2Build;
         private readonly EvtcParserSettings _parserSettings;
         private readonly GW2APIController _apiController;
@@ -240,10 +240,11 @@ namespace GW2EIEvtcParser
         {
             // 12 bytes: arc build version
             string evtcVersion = GetString(reader, 12);
-            if (!evtcVersion.StartsWith("EVTC") || !int.TryParse(new string(evtcVersion.Where(char.IsDigit).ToArray()), out _evtcVersion))
+            if (!evtcVersion.StartsWith("EVTC") || !int.TryParse(new string(evtcVersion.Where(char.IsDigit).ToArray()), out int headerVersion))
             {
                 throw new EvtcFileException("Not EVTC");
             }
+            _evtcVersion = new EvtcVersionEvent(headerVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: ArcDPS Build " + evtcVersion);
 
             // 1 byte: revision
@@ -562,6 +563,19 @@ namespace GW2EIEvtcParser
                     discardedCbtEvents++;
                     continue;
                 }
+                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.ArcBuild)
+                {
+                    EvtcVersionEvent oldEvent = _evtcVersion;
+                    try
+                    {
+                        _evtcVersion = new EvtcVersionEvent(combatItem);
+                    } 
+                    catch
+                    {
+                        _evtcVersion = oldEvent;
+                    }
+                    continue;
+                }
                 if (combatItem.HasTime())
                 {
                     if (_logStartTime == 0)
@@ -757,7 +771,7 @@ namespace GW2EIEvtcParser
                     if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
                     {
                         greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => TeamChangeEvent.GetTeamIDInto(x)));
-                        if (_evtcVersion > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+                        if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
                         {
                             greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => TeamChangeEvent.GetTeamIDComingFrom(x)));
                         }
@@ -778,7 +792,7 @@ namespace GW2EIEvtcParser
                     if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out List<CombatItem> teamChangeList))
                     {
                         var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => TeamChangeEvent.GetTeamIDInto(x)).ToList();
-                        if (_evtcVersion > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
+                        if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
                         {
                             team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => TeamChangeEvent.GetTeamIDComingFrom(x)));
                         }
