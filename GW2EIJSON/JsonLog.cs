@@ -227,6 +227,11 @@ namespace GW2EIJSON
         public string ArcVersion { get; set; }
 
         /// <summary>
+        /// The used arcdps revision
+        /// </summary>
+        public int ArcRevision { get; set; }
+
+        /// <summary>
         /// GW2 build
         /// </summary>
         public ulong GW2Build { get; set; }

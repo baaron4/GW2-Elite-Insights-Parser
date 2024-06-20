@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.ParsedData
             return useBuffInstanceSimulator && BuffInstance != 0 && base.IsBuffSimulatorCompliant(useBuffInstanceSimulator);
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool useBuffInstanceSimulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
             simulator.Reset(BuffInstance, ResetToDuration);
         }

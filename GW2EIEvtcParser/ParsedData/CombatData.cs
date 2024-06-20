@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.ParsedData
         public bool HasBreakbarDamageData { get; } = false;
         public bool HasEffectData { get; } = false;
 
-        private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, int evtcVersion)
+        private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, EvtcVersionEvent evtcVersion)
         {
             var toAdd = new List<AbstractBuffEvent>();
             foreach (Player p in players)
@@ -337,7 +337,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void EIMetaAndStatusParse(FightData fightData, int arcdpsVersion)
+        private void EIMetaAndStatusParse(FightData fightData, EvtcVersionEvent evtcVersion)
         {
             foreach (KeyValuePair<AgentItem, List<AbstractHealthDamageEvent>> pair in _damageTakenData)
             {
@@ -383,10 +383,10 @@ namespace GW2EIEvtcParser.ParsedData
                     _statusEvents.DownEvents[pair.Key] = agentDowns.OrderBy(x => x.Time).ToList();
                 }
             }
-            _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData, arcdpsVersion));
+            _metaDataEvents.ErrorEvents.AddRange(fightData.Logic.GetCustomWarningMessages(fightData, evtcVersion));
         }
 
-        private void EIExtraEventProcess(IReadOnlyList<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, int arcdpsVersion)
+        private void EIExtraEventProcess(IReadOnlyList<Player> players, SkillData skillData, AgentData agentData, FightData fightData, ParserController operation, EvtcVersionEvent evtcVersion)
         {
             // Add missing breakbar active state
             foreach (KeyValuePair<AgentItem, List<BreakbarStateEvent>> pair in _statusEvents.BreakbarStateEvents)
@@ -410,18 +410,18 @@ namespace GW2EIEvtcParser.ParsedData
             ProfHelper.ProcessRacialGadgets(players, this);
             // Custom events
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Buff Events");
-            EIBuffParse(players, skillData, fightData, arcdpsVersion);
+            EIBuffParse(players, skillData, fightData, evtcVersion);
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Damage Events");
             EIDamageParse(skillData, fightData);
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Cast Events");
             EICastParse(players, skillData, fightData, agentData);
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Status Events");
-            EIMetaAndStatusParse(fightData, arcdpsVersion);
+            EIMetaAndStatusParse(fightData, evtcVersion);
         }
 
-        private void OffsetBuffExtensionEvents(int evtcVersion)
+        private void OffsetBuffExtensionEvents(EvtcVersionEvent evtcVersion)
         {
-            if (evtcVersion <= ArcDPSBuilds.BuffExtensionBroken)
+            if (evtcVersion.Build <= ArcDPSBuilds.BuffExtensionBroken)
             {
                 return;
             }
@@ -474,7 +474,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, int evtcVersion)
+        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
         {
             var combatEvents = allCombatItems.OrderBy(x => x.Time).ToList();
             _skillIds = new HashSet<long>();
@@ -542,8 +542,8 @@ namespace GW2EIEvtcParser.ParsedData
                     _skillIds.Add(combatItem.SkillID);
                 }
             }
-            HasStackIDs = evtcVersion > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
-            UseBuffInstanceSimulator = evtcVersion > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
+            HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
+            UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
             HasBreakbarDamageData = brkDamageData.Count != 0;
             HasEffectData = _statusEvents.EffectEvents.Count != 0;

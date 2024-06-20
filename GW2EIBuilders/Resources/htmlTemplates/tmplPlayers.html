@@ -90,7 +90,7 @@
         },
         computed: {
             scoreV2: function() {
-                return logData.evtcVersion > 20210800;
+                return logData.evtcBuild > 20210800;
             },
             scoreExpl: function () {
                 if (this.scoreV2) {

@@ -1120,6 +1120,7 @@
         public const string UnboundBlizzard = "https://wiki.guildwars2.com/images/7/7a/Unbound_Blizzard.png";
         public const string GloriousFervor = "https://wiki.guildwars2.com/images/7/76/Glorious_Fervor.png";
         public const string ChallengeOfTheAncients = "https://wiki.guildwars2.com/images/0/02/Challenge_of_the_Ancients.png";
+        public const string HealingMistWvW = "https://wiki.guildwars2.com/images/8/85/Healing_Mist_%28WvW_effect%29.png";
         #endregion Misc
 
         #region Cast

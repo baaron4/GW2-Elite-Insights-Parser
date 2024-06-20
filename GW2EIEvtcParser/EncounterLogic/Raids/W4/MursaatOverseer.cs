@@ -74,10 +74,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, arcdpsVersion);
-            res.AddRange(GetConfusionDamageMissingMessage(arcdpsVersion));
+            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, evtcVersion);
+            res.AddRange(GetConfusionDamageMissingMessage(evtcVersion));
             return res;
         }
 

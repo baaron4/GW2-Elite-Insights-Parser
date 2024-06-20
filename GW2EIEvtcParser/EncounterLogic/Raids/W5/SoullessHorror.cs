@@ -77,10 +77,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, arcdpsVersion);
-            res.AddRange(GetConfusionDamageMissingMessage(arcdpsVersion));
+            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, evtcVersion);
+            res.AddRange(GetConfusionDamageMissingMessage(evtcVersion));
             return res;
         }
 
@@ -100,7 +100,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
         }
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             if (FindChestGadget(ChestID, agentData, combatData, ChestOfDesminaPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100))
             {

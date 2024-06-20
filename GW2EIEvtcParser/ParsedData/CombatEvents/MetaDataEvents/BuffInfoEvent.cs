@@ -26,13 +26,13 @@ namespace GW2EIEvtcParser.ParsedData
         public uint DurationCap { get; private set; }
         public List<BuffFormula> Formulas { get; } = new List<BuffFormula>();
 
-        internal BuffInfoEvent(CombatItem evtcItem, int evtcVersion) : base(evtcItem)
+        internal BuffInfoEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
         {
             BuffID = evtcItem.SkillID;
             CompleteBuffInfoEvent(evtcItem, evtcVersion);
         }
 
-        internal void CompleteBuffInfoEvent(CombatItem evtcItem, int evtcVersion)
+        internal void CompleteBuffInfoEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
         {
             if (evtcItem.SkillID != BuffID)
             {
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void BuildFromBuffInfo(CombatItem evtcItem, int evtcVersion)
+        private void BuildFromBuffInfo(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
         {
             ProbablyInvul = evtcItem.IsFlanking > 0;
             ProbablyInvert = evtcItem.IsShields > 0;
@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.ParsedData
             MaxStacks = evtcItem.SrcMasterInstid;
             DurationCap = evtcItem.OverstackValue;
             // This was most likely working correctly before that evtc build but I can't remember when the missing Pad1 issue was fixed.
-            if (evtcVersion >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
+            if (evtcVersion.Build >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
                 StackingTypeByte = evtcItem.Pad1;
                 StackingType = GetBuffStackType(StackingTypeByte);
@@ -81,7 +81,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void BuildFromBuffFormula(CombatItem evtcItem, int evtcVersion)
+        private void BuildFromBuffFormula(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
         {
             Formulas.Add(new BuffFormula(evtcItem, evtcVersion));
         }

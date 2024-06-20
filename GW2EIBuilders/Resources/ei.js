@@ -210,7 +210,7 @@ function mainLoad() {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
             mode: getDefaultMainComponent(),
             cr: !!crData,
-            healingExtShow: !!healingStatsExtension || logData.evtcVersion >= 20210701,
+            healingExtShow: !!healingStatsExtension || logData.evtcBuild >= 20210701,
             healingExt: !!healingStatsExtension
         },
         methods: {

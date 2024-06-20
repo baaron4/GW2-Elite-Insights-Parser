@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new HashSet<int>();
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)

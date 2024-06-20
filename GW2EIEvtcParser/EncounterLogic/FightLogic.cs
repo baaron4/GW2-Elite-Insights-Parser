@@ -305,9 +305,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
+        internal virtual List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            if (arcdpsVersion >= ArcDPSBuilds.DirectX11Update)
+            if (evtcVersion.Build >= ArcDPSBuilds.DirectX11Update)
             {
                 return new List<ErrorEvent>
                 {
@@ -444,7 +444,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal virtual long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal virtual long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
             CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
@@ -460,7 +460,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return this;
         }
 
-        internal virtual void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             ComputeFightTargets(agentData, combatData, extensions);
         }

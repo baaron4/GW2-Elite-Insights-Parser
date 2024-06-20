@@ -76,7 +76,8 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Commander's Presence", CommandersPresence, Source.Common, BuffClassification.Support, BuffImages.MightyBlow),
             new Buff("Inferno Hound", InfernoHound, Source.Common, BuffClassification.Other, BuffImages.HoundsOfBalthazar),
             new Buff("Smoke Form", SmokeForm, Source.Common, BuffClassification.Other, BuffImages.InkShot),
-            new Buff("Chilling Fog", ChillingFogBuff, Source.Common, BuffClassification.Debuff, BuffImages.FreezingGust),
+            new Buff("Chilling Fog", ChillingFog_HealingMistBuff, Source.Common, BuffClassification.Debuff, BuffImages.FreezingGust).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2024LonelyTowerFractalRelease),
+            new Buff("Healing Mist", ChillingFog_HealingMistBuff, Source.Common, BuffClassification.Defensive, BuffImages.HealingMistWvW).WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
             new Buff("Banner Drop Warning", BannerDropWarning, Source.Common, BuffClassification.Other, BuffImages.Tracked),
             new Buff("Greater Call of the Mists (WvW)", GreaterCallOfTheMistsWvW, Source.Common, BuffClassification.Other, BuffImages.GloriousFervor),
             // Edge of the Mists
@@ -90,8 +91,8 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Koda's Armor", KodasArmor, Source.Common, BuffClassification.Support, BuffImages.KodasArmor),
             // Guild Hall
             new Buff("Guild Hall - PvE", GuildHallPvEMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallPvEMode),
-            new Buff("Guild Hall - sPvP", GuildHallsPvPMode, Source.Common, BuffClassification.Support, BuffImages.GuildHallsPvPMode),
-            new Buff("Guild Hall - WvW", GuildHallWvWMode, Source.Common, BuffClassification.Support, BuffImages.GuildHallWvWMode),
+            new Buff("Guild Hall - sPvP", GuildHallsPvPMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallsPvPMode),
+            new Buff("Guild Hall - WvW", GuildHallWvWMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallWvWMode),
         };
     }
 }
