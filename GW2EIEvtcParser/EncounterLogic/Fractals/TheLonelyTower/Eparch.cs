@@ -50,7 +50,14 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            // remove eparch agents used in roleplay by checking for relevant casts
+            IEnumerable<AgentItem> dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
+            {
+                return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.StartCasting() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
+            });
+            agentData.RemoveAllFrom(new HashSet<AgentItem>(dummyEparchs));
 
+            // identify rift agents by their health and hitbox dimensions
             var riftAgents = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.DstAgent == 149400).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
             if (riftAgents.Count != 0)
             {
@@ -60,7 +67,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                 });
                 agentData.Refresh();
             }
+
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+
             int crueltyCount = 1;
             int judgementCount = 1;
             int avatarCount = 1;
