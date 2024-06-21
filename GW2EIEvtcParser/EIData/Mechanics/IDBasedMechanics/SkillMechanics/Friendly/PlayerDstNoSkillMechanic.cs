@@ -50,8 +50,8 @@ namespace GW2EIEvtcParser.EIData
                         {
                             regroupedSkillDst[time] = new HashSet<AbstractSingleActor> { amp };
                         }
-                    }    
-                    
+                    }
+
                     lastTime = ahde.Time;
                 }
             }

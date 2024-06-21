@@ -6,13 +6,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using System.Collections;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -101,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return phases;
         }
-        
+
         static readonly List<(string, Point3D)> EchoLocations = new List<(string, Point3D)> {
             ("N", new Point3D(1870.630f, -2205.379f)),
             ("E", new Point3D(2500.260f, -3288.280f)),
@@ -113,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("SW", new Point3D(891.370f, -3722.450f)),
         };
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
@@ -170,7 +168,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var circle = new CircleDecoration(1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, expectedEndCast);
                     }
-                    
+
                     break;
                 case (int)TrashID.EchoOfTheUnclean:
                     var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();

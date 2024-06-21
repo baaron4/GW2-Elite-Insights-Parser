@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
@@ -37,7 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return true;
             }
             long minTime = Math.Max(target.FirstAware, time);
-            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HPPercent > 0));
+            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HealthPercent > 0));
             var targetTotalHP = target.GetHealth(combatData);
             if (hpUpdate == null || targetTotalHP < 0)
             {
@@ -46,9 +45,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             var damagingPlayers = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => x.CreditedFrom.IsPlayer).Select(x => x.CreditedFrom));
             long damageDoneWithinOneSec = combatData.GetDamageTakenData(target.AgentItem).Where(x => x.Time >= time && x.Time <= time + 1000).Sum(x => x.HealthDamage);
-            double damageThreshold = Math.Max(damagingPlayers.Count * 80000, 2*damageDoneWithinOneSec);
-            double threshold = (expectedInitialPercent/100.0 - damageThreshold / targetTotalHP) * 100;
-            return hpUpdate.HPPercent < threshold - 2;
+            double damageThreshold = Math.Max(damagingPlayers.Count * 80000, 2 * damageDoneWithinOneSec);
+            double threshold = (expectedInitialPercent / 100.0 - damageThreshold / targetTotalHP) * 100;
+            return hpUpdate.HealthPercent < threshold - 2;
         }
 
         internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
@@ -97,9 +96,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }*/
 
-        internal static List<ErrorEvent> GetConfusionDamageMissingMessage(int arcdpsVersion)
+        internal static List<ErrorEvent> GetConfusionDamageMissingMessage(EvtcVersionEvent evtcVersion)
         {
-            if (arcdpsVersion > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation)
+            if (evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation)
             {
                 return new List<ErrorEvent>();
             }
@@ -111,7 +110,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
         {
             bool needStart = beginWithStart;
-            var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x =>(x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
+            var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x => (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
             var filtered = new List<AbstractBuffEvent>();
             for (int i = 0; i < main.Count; i++)
             {
@@ -204,7 +203,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return false;
                 }
-                Point3D position = AbstractMovementEvent.GetPoint3D(evt.DstAgent, evt.Value);
+                Point3D position = AbstractMovementEvent.GetPoint3D(evt);
                 if (position.Distance2DToPoint(chestPosition) < InchDistanceThreshold)
                 {
                     return true;
@@ -225,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
             if (positionEvt != null)
             {
-                Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt);
                 foreach ((string suffix, Point3D expectedPosition) in positionData)
                 {
                     if (position.Distance2DToPoint(expectedPosition) < maxDiff)

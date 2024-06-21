@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.ParsedData;
-
-namespace GW2EIEvtcParser
+﻿namespace GW2EIEvtcParser
 {
     public static class EffectGUIDs
     {
@@ -601,7 +596,8 @@ namespace GW2EIEvtcParser
         public const string HarvestTempleRedPuddleNM = "60EE2CA1A95C514F8A325B654E0D9478";
         public const string HarvestTempleRedPuddleSelectCM = "61C1CD7E89346843B04FCE613EC487AA";
         public const string HarvestTempleRedPuddleCM = "FF0A7D32AD894E45993BE5ED748BF484";
-        public const string HarvestTempleGreen = "72EE47DE4F63D3438E193578011FBCBF";
+        public const string HarvestTempleGreen = "3EEDE16455C8C8449237BCC77F107548";
+        public const string HarvestTempleSuccessGreen = "72EE47DE4F63D3438E193578011FBCBF";
         public const string HarvestTempleFailedGreen = "F4F80E9AF2B6AF49AFE46D8CF797B604";
         public const string HarvestTempleOrbExplosion = "B329CFB6B354C148A537E114DC14CED6";
         public const string HarvestTemplePurificationOrbSpawns = "4F982CD060507C44A25844BF0ADFCB54";

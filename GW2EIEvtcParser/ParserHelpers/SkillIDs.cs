@@ -15,7 +15,7 @@
 
         #region Custom
         /////////////// Custom IDS
-        public const long Unknown = -1; 
+        public const long Unknown = -1;
         public const long WeaponSwap = -2;
         public const long NumberOfBoons = -3;
         public const long NumberOfConditions = -4;
@@ -748,7 +748,7 @@
         public const long IllusionaryLeapBuff = 10353;
         public const long Mirror = 10357;
         public const long MindBlast = 10367;
-        public const long SealArea = 13099; 
+        public const long SealArea = 13099;
         public const long HealthfulRejuvenation = 10492;
         public const long DamageBonus5 = 10493;
         public const long SpeedBonus15 = 10495;
@@ -953,6 +953,7 @@
         public const long OpeningStrike = 13988;
         public const long NaturalHealing = 14024;
         public const long Spotter = 14055;
+        public const long VigorousShouts = 14219;
         public const long EmpowerAllies = 14222;
         public const long RecklessImpact = 14268;
         public const long MendingMight = 14282;
@@ -1403,8 +1404,8 @@
         public const long Jade = 26925;
         public const long ReleaseHammers = 26956;
         public const long POV_ProtectiveSolaceBuff = 26957;
-        public const long NaturalHarmonyHeal = 26977;
         public const long Resistance = 26980;
+        public const long NaturalHarmonyHeal = 26997;
         public const long FacetOfElementsSkill = 27014;
         public const long ElevatedCompassion = 27028;
         public const long CeleritasSpores = 27048;
@@ -1817,7 +1818,7 @@
         public const long PieceOfUnderseaWurmSushi = 33936;
         public const long DragonsWings = 33963;
         public const long PresenceOfTheKeepII = 33974;
-        public const long ChillingFogBuff = 33978;
+        public const long ChillingFog_HealingMistBuff = 33978;
         public const long HardenedSiegeGear = 33983;
         public const long BowlOfTapiocaPudding = 34014;
         public const long MarkedSentryGreen = 34015;
@@ -4086,7 +4087,7 @@
         public const long ShootingStarsTargetToDagdaBuff = 69735; // Buff applied from player to Dagda when the player is hit
         public const long IntoTheFray = 69764;
         public const long MaliciousIntentEmpoweredNM = 69779;
-        public const long RelicOfTheAristocracy = 69795;        
+        public const long RelicOfTheAristocracy = 69795;
         public const long PoolOfDespairNM = 69809;
         public const long RelicTargetToPlayerBuff = 69813; // Same for Dragonhunter, Isgarren and Peitha
         public const long EnviousGazeNM = 69814;

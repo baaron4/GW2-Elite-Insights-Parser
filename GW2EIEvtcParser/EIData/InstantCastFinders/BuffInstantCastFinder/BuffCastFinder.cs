@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where Event: AbstractBuffEvent
+    internal abstract class BuffCastFinder<Event> : CheckedCastFinder<Event> where Event : AbstractBuffEvent
     {
         protected bool Minions { get; set; } = false;
         protected long BuffID { get; }

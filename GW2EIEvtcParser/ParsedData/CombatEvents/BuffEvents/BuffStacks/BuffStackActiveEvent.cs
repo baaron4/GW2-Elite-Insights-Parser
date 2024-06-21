@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EIData.BuffSimulators;
+﻿using GW2EIEvtcParser.EIData.BuffSimulators;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -12,10 +11,10 @@ namespace GW2EIEvtcParser.ParsedData
         }
         internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
         {
-            return BuffInstance != 0;
+            return BuffInstance != 0 && base.IsBuffSimulatorCompliant(hasStackIDs);
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
             simulator.Activate(BuffInstance);
         }

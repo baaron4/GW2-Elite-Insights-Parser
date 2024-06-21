@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.Extensions
             return graph;
         }
 
-        public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, EXTHealingType healingType = EXTHealingType.All )
+        public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, EXTHealingType healingType = EXTHealingType.All)
         {
             if (!_healing1S.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
             {

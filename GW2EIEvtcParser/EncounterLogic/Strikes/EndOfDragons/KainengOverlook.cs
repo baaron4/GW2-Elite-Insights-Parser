@@ -5,13 +5,11 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -431,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.SpiritOfDestruction:
                     // Volatile Burst - Orange AoE around the spirit with safe zone in the center
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem,EffectGUIDs.KainengOverlookVolatileBurstAoE, out IReadOnlyList<EffectEvent> volatileBurst))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileBurstAoE, out IReadOnlyList<EffectEvent> volatileBurst))
                     {
                         foreach (EffectEvent effect in volatileBurst)
                         {
@@ -545,7 +543,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = effect.ComputeLifespan(log, 0);
                     var connector = new PositionConnector(effect.Position);
                     var rotationConnector = new AngleConnector(effect.Rotation.Z);
-                    EnvironmentDecorations.Add(new RectangleDecoration( 50, 145, lifespan, Colors.Red, 0.2, connector).UsingRotationConnector(rotationConnector));
+                    EnvironmentDecorations.Add(new RectangleDecoration(50, 145, lifespan, Colors.Red, 0.2, connector).UsingRotationConnector(rotationConnector));
                 }
             }
 
@@ -587,9 +585,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static void AddFallOfTheAxeDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration, int angle)
         {
             Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-            if (facingDirection == null) 
-            { 
-                return; 
+            if (facingDirection == null)
+            {
+                return;
             }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);
@@ -601,9 +599,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddDragonSlashWaveDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration)
         {
             Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-            if (facingDirection == null) 
-            { 
-                return; 
+            if (facingDirection == null)
+            {
+                return;
             }
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(facingDirection);

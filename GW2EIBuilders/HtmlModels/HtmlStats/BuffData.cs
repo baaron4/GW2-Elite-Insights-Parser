@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
@@ -149,7 +148,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                 if (boonTable)
                 {
                     avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgActiveBoons;
-                } 
+                }
                 else if (conditionTable)
                 {
                     avg = actor.GetGameplayStats(log, phase.Start, phase.End).AvgActiveConditions;

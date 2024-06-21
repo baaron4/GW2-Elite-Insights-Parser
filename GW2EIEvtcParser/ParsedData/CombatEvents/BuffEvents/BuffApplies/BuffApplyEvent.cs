@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EIData.BuffSimulators;
+﻿using GW2EIEvtcParser.EIData.BuffSimulators;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -15,14 +14,14 @@ namespace GW2EIEvtcParser.ParsedData
         internal uint OverridenInstance { get; set; }
         private readonly bool _addedActive;
 
-        internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, int evtcVersion) : base(evtcItem, agentData, skillData)
+        internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData, skillData)
         {
             Initial = evtcItem.IsStateChange == StateChange.BuffInitial;
             AppliedDuration = evtcItem.Value;
-            if (Initial && evtcVersion >= ArcDPSBuilds.BuffExtensionOverstackValueChanged)
+            if (Initial && evtcVersion.Build >= ArcDPSBuilds.BuffExtensionOverstackValueChanged)
             {
                 OriginalAppliedDuration = evtcItem.BuffDmg;
-            } 
+            }
             else
             {
                 OriginalAppliedDuration = AppliedDuration;
@@ -42,9 +41,9 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
-            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || simulator.Buff.StackType == BuffStackType.StackingConditionalLoss, OverridenDurationInternal > 0 ? OverridenDurationInternal : OverridenDuration, OverridenInstance);
+            simulator.Add(AppliedDuration, CreditedBy, Time, BuffInstance, _addedActive || (forceStackType4ToBeActive && simulator.Buff.StackType == BuffStackType.StackingConditionalLoss), OverridenDurationInternal > 0 ? OverridenDurationInternal : OverridenDuration, OverridenInstance);
         }
 
         /*internal override int CompareTo(AbstractBuffEvent abe)

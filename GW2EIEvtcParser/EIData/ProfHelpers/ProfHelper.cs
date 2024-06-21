@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EncounterLogic;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using GW2EIEvtcParser.Extensions;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -666,7 +664,7 @@ namespace GW2EIEvtcParser.EIData
         private static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(IReadOnlyList<BuffApplyEvent> buffs, SkillItem skill, long startOffset, long skillDuration)
         {
             var res = new List<AnimatedCastEvent>();
-            foreach (BuffApplyEvent bae in buffs) 
+            foreach (BuffApplyEvent bae in buffs)
             {
                 res.Add(new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
             }

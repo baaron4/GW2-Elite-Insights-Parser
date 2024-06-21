@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData.Buffs;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -18,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(LegendaryAllianceStanceSkill, LegendaryAllianceStanceBuff),
             //new BuffGainCastFinder(LegendaryAllianceStanceUWSkill, LegendaryAllianceStanceEffect),
             new DamageCastFinder(CallOfTheAlliance, CallOfTheAlliance),
-            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff), 
+            new BuffGainCastFinder(UrnOfSaintViktorSkill, UrnOfSaintViktorBuff),
         };
 
         private static readonly HashSet<long> _dodges = new HashSet<long>

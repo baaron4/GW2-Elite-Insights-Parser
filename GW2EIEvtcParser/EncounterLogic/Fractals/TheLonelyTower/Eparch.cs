@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -48,7 +44,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return "Eparch";
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // remove eparch agents used in roleplay by checking for relevant casts
             IEnumerable<AgentItem> dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
@@ -57,11 +53,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             agentData.RemoveAllFrom(new HashSet<AgentItem>(dummyEparchs));
 
-            // identify rift agents by their health and hitbox dimensions
-            var riftAgents = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.DstAgent == 149400).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
+            var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
             if (riftAgents.Count != 0)
             {
-                riftAgents.ForEach(x => {
+                riftAgents.ForEach(x =>
+                {
                     x.OverrideID(TrashID.KryptisRift);
                     x.OverrideType(AgentItem.AgentType.NPC);
                 });
@@ -69,26 +65,22 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-
-            int crueltyCount = 1;
-            int judgementCount = 1;
-            int avatarCount = 1;
-            int riftCount = 1;
+            int[] miniBossCount = new int[] { 1, 1, 1, 1 };
             foreach (NPC target in _targets)
             {
                 switch (target.ID)
                 {
                     case (int)TrashID.KryptisRift:
-                        target.OverrideName(target.Character + " " + riftCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[0]++);
                         break;
                     case (int)TrashID.IncarnationOfCruelty:
-                        target.OverrideName(target.Character + " " + crueltyCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[1]++);
                         break;
                     case (int)TrashID.IncarnationOfJudgement:
-                        target.OverrideName(target.Character + " " + judgementCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[2]++);
                         break;
                     case (int)TrashID.AvatarOfSpite:
-                        target.OverrideName(target.Character + " " + avatarCount++);
+                        target.OverrideName(target.Character + " " + miniBossCount[3]++);
                         break;
                 }
             }
@@ -117,7 +109,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                if (i % 2 == 0) {
+                if (i % 2 == 0)
+                {
                     phase.Name = "Split " + i / 2;
                     var ids = new List<int>
                     {

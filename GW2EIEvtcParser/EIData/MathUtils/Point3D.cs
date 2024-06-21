@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -90,6 +89,12 @@ namespace GW2EIEvtcParser.EIData
             return distance;
         }
 
+        public float Length2D()
+        {
+            float length = (float)Math.Sqrt(X * X + Y * Y);
+            return length;
+        }
+
         public float Length()
         {
             float length = (float)Math.Sqrt(X * X + Y * Y + Z * Z);
@@ -103,7 +108,7 @@ namespace GW2EIEvtcParser.EIData
             Z = 0;
         }
 
-        public Point3D(float x, float y, float z) : this(x,y)
+        public Point3D(float x, float y, float z) : this(x, y)
         {
             Z = z;
         }

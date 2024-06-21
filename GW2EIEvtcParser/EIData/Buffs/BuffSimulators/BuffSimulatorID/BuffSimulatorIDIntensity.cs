@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
@@ -32,7 +30,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 long diff = timePassed;
                 long leftOver = 0;
-                var activeStacks = BuffStack.Where(x => x.Active && x.Duration > 0).Take(_capacity).ToList();
+                var activeStacks = BuffStack.Where(x => x.Active && x.Duration > 0).ToList();
+                if (activeStacks.Count > _capacity)
+                {
+                    activeStacks = activeStacks.Take(_capacity).ToList();
+                }
                 if (activeStacks.Count != 0)
                 {
                     var toAdd = new BuffSimulationItemIntensity(activeStacks);

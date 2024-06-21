@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 
@@ -16,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         public int PowerDamageTaken { get; }
         public int LifeLeechDamageTaken { get; }
         public int StrikeDamageTaken { get; }
-        public int DownedDamageTaken { get; } 
+        public int DownedDamageTaken { get; }
         public double BreakbarDamageTaken { get; }
         public int BlockedCount { get; }
         public int MissedCount { get; }

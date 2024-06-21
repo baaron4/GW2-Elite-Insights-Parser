@@ -81,11 +81,11 @@ namespace GW2EIEvtcParser.EIData
                 _rectInMap.bottomY = int.MinValue;
                 foreach (Player p in log.PlayerList)
                 {
-                    IReadOnlyList<Point3D> pos = p.GetCombatReplayPolledPositions(log);
-                    if (pos.Count == 0)
+                    if (!p.HasCombatReplayPositions(log))
                     {
                         continue;
                     }
+                    IReadOnlyList<Point3D> pos = p.GetCombatReplayPolledPositions(log);
                     _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.X)) - 250, _rectInMap.topX);
                     _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Y)) - 250, _rectInMap.topY);
                     _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.X)) + 250, _rectInMap.bottomX);
@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EIData
         internal CombatReplayMap Scale(double scale)
         {
             double centerX = (_rectInMap.bottomX + _rectInMap.topX) / 2.0;
-            double halfWidth = scale *(_rectInMap.bottomX - centerX);
+            double halfWidth = scale * (_rectInMap.bottomX - centerX);
             double centerY = (_rectInMap.bottomY + _rectInMap.topY) / 2.0;
             double halfHeigth = scale * (_rectInMap.bottomY - centerY);
             _rectInMap.bottomX = centerX + halfWidth;

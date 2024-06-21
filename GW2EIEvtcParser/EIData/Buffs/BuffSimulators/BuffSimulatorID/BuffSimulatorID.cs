@@ -52,6 +52,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             BuffStack.Clear();
         }
 
+        protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
+        {
+            buffEvent.UpdateSimulator(this, false);
+        }
+
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
         {
             BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Extend has failed");

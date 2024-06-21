@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EIData.BuffSimulators;
+﻿using GW2EIEvtcParser.EIData.BuffSimulators;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -42,11 +41,14 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal abstract void UpdateSimulator(AbstractBuffSimulator simulator);
+        internal abstract void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive);
 
         internal abstract void TryFindSrc(ParsedEvtcLog log);
 
-        internal abstract bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator);
+        internal virtual bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
+        {
+            return BuffID != SkillIDs.NoBuff;
+        }
 
         //internal abstract int CompareTo(AbstractBuffEvent abe);
     }

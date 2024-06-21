@@ -5,12 +5,11 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -44,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             // Handle potentially wrongly associated logs
             if (logStartNPCUpdate != null)
             {
@@ -56,43 +55,52 @@ namespace GW2EIEvtcParser.EncounterLogic
             return base.AdjustLogic(agentData, combatData);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var attackTargets = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
-            long first = 0;
+            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
+            var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            attackTargetEvents.RemoveAll(x =>
+            {
+                AgentItem atAgent = x.AttackTarget;
+                if (targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
+                {
+                    return !targetables.Any(y => y.Targetable);
+                }
+                return true;
+            });
             long final = fightData.FightEnd;
             var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) };
             var processedAttackTargets = new HashSet<AgentItem>();
-            foreach (CombatItem at in attackTargets)
+            foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
             {
-                AgentItem atAgent = agentData.GetAgent(at.SrcAgent, at.Time);
-                if (processedAttackTargets.Contains(atAgent))
+                AgentItem atAgent = attackTargetEvent.AttackTarget;
+                if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
                 {
                     continue;
                 }
                 processedAttackTargets.Add(atAgent);
-                AgentItem hand = agentData.GetAgent(at.DstAgent, at.Time);
+                AgentItem hand = attackTargetEvent.Src;
                 var copyEventsFrom = new List<AgentItem>() { hand };
-                var attackables = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.SrcMatchesAgent(atAgent)).ToList();
-                var attackOn = attackables.Where(x => x.DstAgent == 1 && x.Time >= first + 2000).Select(x => x.Time).ToList();
-                var attackOff = attackables.Where(x => x.DstAgent == 0 && x.Time >= first + 2000).Select(x => x.Time).ToList();
+                var attackOns = targetables.Where(x => x.Targetable).ToList();
+                var attackOffs = targetables.Where(x => !x.Targetable).ToList();
                 CombatItem posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                 ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
                 if (posEvt != null)
                 {
-                    Point3D pos = AbstractMovementEvent.GetPoint3D(posEvt.DstAgent, 0);
+                    Point3D pos = AbstractMovementEvent.GetPoint3D(posEvt);
                     if (handOfEruptionPositions.Any(x => x.Distance2DToPoint(pos) < InchDistanceThreshold))
                     {
                         id = ArcDPSEnums.TrashID.HandOfEruption;
                     }
                 }
-                for (int i = 0; i < attackOn.Count; i++)
+                foreach (TargetableEvent targetableEvent in attackOns)
                 {
-                    long start = attackOn[i];
+                    long start = targetableEvent.Time;
                     long end = final;
-                    if (i <= attackOff.Count - 1)
+                    TargetableEvent attackOff = attackOffs.FirstOrDefault(x => x.Time > start);
+                    if (attackOff != null)
                     {
-                        end = attackOff[i];
+                        end = attackOff.Time;
                     }
                     AgentItem extra = agentData.AddCustomNPCAgent(start, end, hand.Name, hand.Spec, id, false, hand.Toughness, hand.Healing, hand.Condition, hand.Concentration, hand.HitboxWidth, hand.HitboxHeight);
                     RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, hand, copyEventsFrom, extra, true);
@@ -127,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in radiantBlindnesses)
             {
-                replay.Decorations.Add(new CircleDecoration( 90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
+                replay.Decorations.Add(new CircleDecoration(90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
             }
         }
 
@@ -162,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 2990; // casttime 0
                         int duration = c.ActualDuration;
                         uint width = 1100; uint height = 60;
-                        foreach (int angle in new List<int> { 30, 150, 270})
+                        foreach (int angle in new List<int> { 30, 150, 270 })
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
                             replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
@@ -178,13 +186,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 2000; // casttime 0 from skill def
                         int duration = 5000;
                         uint radius = 1100;
-                        replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + duration));
+                        (long, long) lifespan = (start + delay, start + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespan, Colors.LightOrange, 0.6, radius);
                     }
                     //
                     var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in diamondPalisades)
                     {
-                        replay.Decorations.Add(new CircleDecoration( 90, seg, "rgba(200, 0, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
                     }
                     //
                     var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
@@ -277,7 +287,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     mainPhases.Add(new PhaseData(start, log.FightData.FightEnd, "Phase " + (phaseIndex + 1)));
                 }
-            } 
+            }
             else if (start > 0 && invuls.Count == 0)
             {
                 // no split
@@ -290,7 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(mainPhases);
             phases.AddRange(splitPhases);
-            phases.Sort((x, y) => x.Start.CompareTo(y.Start));       
+            phases.Sort((x, y) => x.Start.CompareTo(y.Start));
             //
             return phases;
         }
@@ -365,7 +375,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityConserveTheLand).Any())
             {
-                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityConserveTheLand));
             }
         }
     }

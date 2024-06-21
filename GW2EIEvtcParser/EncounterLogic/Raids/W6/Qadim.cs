@@ -6,14 +6,14 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -111,29 +111,36 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool refresh = false;
-            if (evtcVersion >= ArcDPSBuilds.FunctionalEffect2Events)
+            var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
+            if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
             {
-                var platformAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
-                foreach (AgentItem platform in platformAgents)
+                if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialPlatformAgentMaxHPs))
                 {
-                    platform.OverrideType(AgentItem.AgentType.NPC);
-                    platform.OverrideID(TrashID.QadimPlatform);
-                    platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
+                    var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
+                    foreach (AgentItem platform in platformAgents)
+                    {
+                        platform.OverrideType(AgentItem.AgentType.NPC);
+                        platform.OverrideID(TrashID.QadimPlatform);
+                        platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
+                    }
+                    refresh = refresh || platformAgents.Count != 0;
                 }
-                refresh = refresh || platformAgents.Count != 0;
             }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
-            var lampAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
-            foreach (AgentItem lamp in lampAgents)
+            if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialLampAgentMaxHPs))
             {
-                lamp.OverrideType(AgentItem.AgentType.NPC);
-                lamp.OverrideID(TrashID.QadimLamp);
+                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+                foreach (AgentItem lamp in lampAgents)
+                {
+                    lamp.OverrideType(AgentItem.AgentType.NPC);
+                    lamp.OverrideID(TrashID.QadimLamp);
+                }
+                refresh = refresh || lampAgents.Count != 0;
             }
-            refresh = refresh || lampAgents.Count != 0;
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
             var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
@@ -143,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
                 if (positionEvt != null)
                 {
-                    Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt.DstAgent, 0);
+                    Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt);
                     if (protectPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
                     {
                         pyre.OverrideID(TrashID.PyreGuardianProtect);
@@ -244,7 +251,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
             if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))
@@ -523,9 +530,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (facing != null && targetPosition != null)
                         {
                             var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.7)", new PositionConnector(position)));
-                            replay.Decorations.Add(new CircleDecoration(radius, (start + delay, start + delay + duration), "rgba(255, 200, 0, 0.7)", new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                            (long, long) lifespanShockwave = (start + delay, start + delay + duration);
+                            GeographicalConnector connector = new PositionConnector(position);
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, connector));
+                            replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.7, connector));
+                            replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.7, radius);
                         }
                     }
                     break;
@@ -608,7 +617,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
 
                             }
                         }
@@ -659,7 +668,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -672,7 +681,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int delay = 1800;
                         int duration = 3000;
                         uint maxRadius = 2000;
-                        replay.Decorations.Add(new CircleDecoration( maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
+                        (long, long) lifespan = (start + delay, start + delay + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
                     }
                     var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp).ToList();
                     foreach (AbstractCastEvent c in stompShockwave)
@@ -718,7 +729,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             for (uint i = 0; i < coneAmount; i++)
                             {
                                 var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration( maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                                replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                             }
                         }
                     }
@@ -735,7 +746,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
                     int velocityIndex = 0;
                     AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-                    HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HPPercent < 21);
+                    HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);
                     long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
                     float threshold = 1f;
                     switch (target.Character)
@@ -780,7 +791,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             break;
                         case "04":
                         case "4":
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity)) 
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                             {
                                 if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
                                 {
@@ -828,7 +839,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    if(AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
                                         AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
                                     }
@@ -1426,7 +1437,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     !DistanceCheck(log, qadim, matriarch) &&
                     !DistanceCheck(log, qadim, patriarch);
             }
-            
+
             return false;
         }
 
@@ -1440,7 +1451,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static bool DistanceCheck(ParsedEvtcLog log, AbstractSingleActor qadim, AbstractSingleActor add)
         {
             // Get positions of Ancient Invoked Hydra, Apocalypse Bringer, Wyvern Matriarch and Patriarch
-            var addPositions = add.GetCombatReplayPolledPositions(log).ToList();
+            IReadOnlyList<ParametricPoint3D> addPositions = add.GetCombatReplayPolledPositions(log);
             if (addPositions.Count == 0)
             {
                 return true;

@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public class LogStartNPCUpdateEvent : LogDateEvent
+    public class LogNPCUpdateEvent : LogDateEvent
     {
         public int AgentID { get; }
 
@@ -10,7 +10,7 @@
 
         public bool TriggerIsGadget { get; }
 
-        internal LogStartNPCUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
+        internal LogNPCUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
         {
             AgentID = (ushort)evtcItem.SrcAgent;
             if (evtcItem.DstAgent > 0)

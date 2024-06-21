@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
@@ -79,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetGenericFightOffset(fightData);
         }
@@ -243,17 +241,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
             // Handle non squad players
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-            var garbageList = new List<AbstractSingleActor>();
             //
+            var garbageList = new List<AbstractSingleActor>();
+            var auxTargets = new List<AbstractSingleActor>();
+            var auxFriendlies = new List<AbstractSingleActor>();
             foreach (AgentItem a in aList)
             {
                 var nonSquadPlayer = new PlayerNonSquad(a);
-                List<AbstractSingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? _nonPlayerFriendlies : _detailed ? _targets : garbageList;
+                List<AbstractSingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : _detailed ? auxTargets : garbageList;
                 actorListToFill.Add(nonSquadPlayer);
             }
             //
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 switch ((long)modeEvent.SkillID)
                 {
                     case GuildHallPvEMode:
-                        SkillMode = SkillModeEnum.PvE; 
+                        SkillMode = SkillModeEnum.PvE;
                         break;
                     case GuildHallsPvPMode:
                         SkillMode = SkillModeEnum.sPvP;
@@ -309,6 +309,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);
+            auxFriendlies = auxFriendlies.OrderBy(x => x.Character).ToList();
+            _nonPlayerFriendlies.AddRange(auxFriendlies);
+            auxTargets = auxTargets.OrderBy(x => x.Character).ToList();
+            _targets.AddRange(auxTargets);
         }
     }
 }

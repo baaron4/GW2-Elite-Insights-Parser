@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
     internal static class CombatEventFactory
     {
 
-        public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, int evtcVersion)
+        public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, EvtcVersionEvent evtcVersion)
         {
             switch (stateChangeEvent.IsStateChange)
             {
@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case StateChange.HealthUpdate:
                     var healthEvt = new HealthUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.HealthUpdateEvents, healthEvt.Src, healthEvt);
-                    break;                
+                    break;
                 case StateChange.BarrierUpdate:
                     var barrierEvt = new BarrierUpdateEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BarrierUpdateEvents, barrierEvt.Src, barrierEvt);
@@ -52,17 +52,17 @@ namespace GW2EIEvtcParser.ParsedData
                 case StateChange.InstanceStart:
                     metaDataEvents.InstanceStartEvent = new InstanceStartEvent(stateChangeEvent);
                     break;
-                case StateChange.LogStart:
+                case StateChange.SquadCombatStart:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {
                         return;
                     }
                     metaDataEvents.LogStartEvent = new LogStartEvent(stateChangeEvent);
                     break;
-                case StateChange.LogStartNPCUpdate:
-                    metaDataEvents.LogStartNPCUpdateEvents.Add(new LogStartNPCUpdateEvent(stateChangeEvent, agentData));
+                case StateChange.LogNPCUpdate:
+                    metaDataEvents.LogNPCUpdateEvents.Add(new LogNPCUpdateEvent(stateChangeEvent, agentData));
                     break;
-                case StateChange.LogEnd:
+                case StateChange.SquadCombatEnd:
                     if (stateChangeEvent.Value == 0 || stateChangeEvent.BuffDmg == 0)
                     {
                         return;
@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.ParsedData
 #endif
                     break;
                 case StateChange.TeamChange:
-                    var tcEvt = new TeamChangeEvent(stateChangeEvent, agentData);
+                    var tcEvt = new TeamChangeEvent(stateChangeEvent, agentData, evtcVersion);
                     Add(statusEvents.TeamChangeEvents, tcEvt.Src, tcEvt);
                     break;
                 case StateChange.AttackTarget:
@@ -161,12 +161,12 @@ namespace GW2EIEvtcParser.ParsedData
                     var bPEvt = new BreakbarPercentEvent(stateChangeEvent, agentData);
                     Add(statusEvents.BreakbarPercentEvents, bPEvt.Src, bPEvt);
                     break;
-                case StateChange.Error:
+                case StateChange.Integrity:
                     metaDataEvents.ErrorEvents.Add(new ErrorEvent(stateChangeEvent));
                     break;
                 case StateChange.Marker:
                     var markerEvent = new MarkerEvent(stateChangeEvent, agentData);
-                    if (evtcVersion >= ArcDPSBuilds.NewMarkerEventBehavior)
+                    if (evtcVersion.Build >= ArcDPSBuilds.NewMarkerEventBehavior)
                     {
                         // End event
                         if (markerEvent.IsEnd)
@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.ParsedData
                                 // We can't have the same markers active at the same time on one Src
                                 if (preMarker.MarkerID == markerEvent.MarkerID)
                                 {
-                                    if (preMarker.Time <=  markerEvent.Time && preMarker.EndTime > markerEvent.Time)
+                                    if (preMarker.Time <= markerEvent.Time && preMarker.EndTime > markerEvent.Time)
                                     {
                                         preMarker.SetEndTime(markerEvent.Time);
                                     }
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.ParsedData
                                 }
                             }
                         }
-                    } 
+                    }
                     else
                     {
                         // End event
@@ -268,7 +268,7 @@ namespace GW2EIEvtcParser.ParsedData
                 case StateChange.Effect_45:
                 case StateChange.Effect_51:
                     EffectEvent effectEvt = null;
-                    switch(stateChangeEvent.IsStateChange)
+                    switch (stateChangeEvent.IsStateChange)
                     {
                         case StateChange.Effect_45:
                             // End event, not supported for 45
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.ParsedData
                             {
                                 var endEvent = new EffectEndEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
                                 return;
-                            } 
+                            }
                             else
                             {
                                 effectEvt = new EffectEventCBTS51(stateChangeEvent, agentData, statusEvents.EffectEventsByTrackingID);
@@ -307,7 +307,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     break;
                 case StateChange.EffectIDToGUID:
-                    if (evtcVersion >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
+                    if (evtcVersion.Build >= ArcDPSBuilds.FunctionalIDToGUIDEvents)
                     {
                         switch (GetContentLocal((byte)stateChangeEvent.OverstackValue))
                         {
@@ -356,7 +356,7 @@ namespace GW2EIEvtcParser.ParsedData
                             if (lastSquadMarker.Position.DistanceToPoint(squadMarkerEvent.Position) > 1e-6)
                             {
                                 lastSquadMarker.SetEndTime(squadMarkerEvent.Time);
-                            } 
+                            }
                             else
                             // Ignore current if last marker does not have an end set
                             if (lastSquadMarker.EndNotSet)
@@ -372,7 +372,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public static void AddBuffApplyEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData, int evtcVersion)
+        public static void AddBuffApplyEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
         {
             if (buffEvent.IsOffcycle > 0)
             {

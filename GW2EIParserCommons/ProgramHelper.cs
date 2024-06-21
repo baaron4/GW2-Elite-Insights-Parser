@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Discord;
 using GW2EIBuilders;
 using GW2EIDiscord;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
-using GW2EIWingman;
 using GW2EIEvtcParser;
-using GW2EIGW2API;
-using GW2EIEvtcParser.ParserHelpers;
-using GW2EIParserCommons.Exceptions;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
+using GW2EIGW2API;
+using GW2EIParserCommons.Exceptions;
+using GW2EIWingman;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons
@@ -24,7 +26,8 @@ namespace GW2EIParserCommons
     public class ProgramHelper
     {
 
-        public ProgramHelper(Version parserVersion, ProgramSettings settings) {
+        public ProgramHelper(Version parserVersion, ProgramSettings settings)
+        {
             ParserVersion = parserVersion;
             Settings = settings;
         }
@@ -70,6 +73,8 @@ namespace GW2EIParserCommons
 
         public static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
+        private CancellationTokenSource RunningMemoryCheck = null;
+
         public int GetMaxParallelRunning()
         {
             return Settings.GetMaxParallelRunning();
@@ -84,11 +89,39 @@ namespace GW2EIParserCommons
         {
             return Settings.DoParseMultipleLogs();
         }
+        public void ExecuteMemoryCheckTask()
+        {
+            if (Settings.MemoryLimit == 0 && RunningMemoryCheck != null)
+            {
+                RunningMemoryCheck.Cancel();
+                RunningMemoryCheck = null;
+            }
+            if (Settings.MemoryLimit == 0 || RunningMemoryCheck != null)
+            {
+                return;
+            }
+            RunningMemoryCheck = new CancellationTokenSource();// Prepare task
+            Task.Run(async () =>
+            {
+                using (var proc = Process.GetCurrentProcess())
+                {
+                    while (true)
+                    {
+                        await Task.Delay(500);
+                        proc.Refresh();
+                        if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1e6)
+                        {
+                            Environment.Exit(2);
+                        }
+                    }
+                }
+            }, RunningMemoryCheck.Token);
+        }
 
         public EmbedBuilder GetEmbedBuilder()
         {
             var builder = new EmbedBuilder();
-            builder.WithAuthor("Elite Insights " + ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParser/Content/ArenaNet/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
+            builder.WithAuthor("Elite Insights " + ParserVersion.ToString(), "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EIParserCommons/Content/ArenaNet/LI.png?raw=true", "https://github.com/baaron4/GW2-Elite-Insights-Parser");
             return builder;
         }
 
@@ -278,10 +311,10 @@ namespace GW2EIParserCommons
                     {
                         WebhookController.SendMessage(Settings.WebhookURL, uploadStrings[0], out string message);
                         operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
-                    } 
+                    }
                     else
                     {
-                        WebhookController.SendMessage(Settings.WebhookURL, BuildEmbed(log, uploadStrings[0]),out string message);
+                        WebhookController.SendMessage(Settings.WebhookURL, BuildEmbed(log, uploadStrings[0]), out string message);
                         operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
                     }
                 }
@@ -299,7 +332,6 @@ namespace GW2EIParserCommons
             finally
             {
                 operation.Stop();
-                GC.Collect();
                 Thread.CurrentThread.CurrentCulture = before;
             }
         }
@@ -401,9 +433,9 @@ namespace GW2EIParserCommons
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
                 {
-                    var builder = new HTMLBuilder(log, 
+                    var builder = new HTMLBuilder(log,
                         new HTMLSettings(
-                            Settings.LightTheme, 
+                            Settings.LightTheme,
                             Settings.HtmlExternalScripts,
                             Settings.HtmlExternalScriptsPath,
                             Settings.HtmlExternalScriptsCdn,

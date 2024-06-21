@@ -8,7 +8,6 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonLog;
 
 namespace GW2EIBuilders.JsonModels
@@ -99,7 +98,8 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.FightName = log.FightData.FightName;
             jsonLog.FightIcon = log.FightData.Logic.Icon;
             jsonLog.EliteInsightsVersion = parserVersion.ToString();
-            jsonLog.ArcVersion = log.LogData.ArcVersion;
+            jsonLog.ArcVersion = log.LogData.ArcVersionBuild;
+            jsonLog.ArcRevision = log.LogData.EvtcRevision;
             jsonLog.RecordedBy = log.LogData.PoVName;
             jsonLog.RecordedAccountBy = log.LogData.PoVAccount;
             jsonLog.TimeStart = log.LogData.LogStart;
@@ -197,7 +197,7 @@ namespace GW2EIBuilders.JsonModels
                 jsonLog.UsedExtensions = usedExtensions;
             }
             //
-            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
+            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
             jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
             foreach (KeyValuePair<long, SkillItem> pair in skillMap)
             {

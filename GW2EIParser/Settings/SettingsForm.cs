@@ -50,6 +50,7 @@ namespace GW2EIParser.Setting
             TxtHtmlExternalScriptsPath.Enabled = !busy;
             TxtHtmlExternalScriptsCdn.Enabled = !busy;
             BtnHtmlExternalScriptPathSelect.Enabled = !busy;
+            NumericMemoryLimit.Enabled = !busy;
         }
 
         private void SetUIEnable()
@@ -71,6 +72,7 @@ namespace GW2EIParser.Setting
             ChkDefaultOutputLoc.Checked = Settings.SaveAtOut;
             TxtCustomSaveLocation.Text = Settings.OutLocation;
             NumericCustomTooShort.Value = Settings.CustomTooShort;
+            NumericMemoryLimit.Value = Settings.MemoryLimit;
             ChkOutputHtml.Checked = Settings.SaveOutHTML;
             ChkOutputCsv.Checked = Settings.SaveOutCSV;
             ChkPhaseParsing.Checked = Settings.ParsePhases;
@@ -104,7 +106,7 @@ namespace GW2EIParser.Setting
             ChkHtmlExternalScripts.Checked = Settings.HtmlExternalScripts;
             ChkHtmlCompressJson.Checked = Settings.HtmlCompressJson;
             TxtHtmlExternalScriptsPath.Text = Settings.HtmlExternalScriptsPath;
-            TxtHtmlExternalScriptsCdn.Text = Settings.HtmlExternalScriptsCdn;            
+            TxtHtmlExternalScriptsCdn.Text = Settings.HtmlExternalScriptsCdn;
 
             SetUIEnable();
         }
@@ -151,6 +153,12 @@ namespace GW2EIParser.Setting
         {
             Settings.CustomTooShort = (long)NumericCustomTooShort.Value;
             Properties.Settings.Default.CustomTooShort = Settings.CustomTooShort;
+        }
+
+        private void NumericMemoryLimitValueChanged(object sender, EventArgs e)
+        {
+            Settings.MemoryLimit = (int)NumericMemoryLimit.Value;
+            Properties.Settings.Default.MemoryLimit = Settings.MemoryLimit;
         }
 
         private void TxtWebhookURLChanged(object sender, EventArgs e)
@@ -463,7 +471,7 @@ namespace GW2EIParser.Setting
         {
             try
             {
-                using(var fbd = new FolderBrowserDialog())
+                using (var fbd = new FolderBrowserDialog())
                 {
                     if (!string.IsNullOrWhiteSpace(Settings.HtmlExternalScriptsPath) && Directory.Exists(Settings.HtmlExternalScriptsPath))
                     {
@@ -475,7 +483,7 @@ namespace GW2EIParser.Setting
                     {
                         TxtHtmlExternalScriptsPath.Text = fbd.SelectedPath;
                     }
-                }       
+                }
             }
             catch { }
         }

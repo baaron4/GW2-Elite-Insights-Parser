@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         internal MechanicData(List<Mechanic> fightMechanics)
         {
             var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
-            var errorMechanicNaming= new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
+            var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
             foreach (Mechanic m in fightMechanics.OrderBy(x => !x.IsAchievementEligibility))
             {
                 {
@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EIData
                             presentOnFriendliesMechanics.Add(pair.Key);
                         }
                     }
-                    
+
                 }
             }
             // ready enemy list
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (MechanicEvent mechanicEvent in _mechanicLogs[m].Where(x => x.Time >= start && x.Time <= end))
                 {
-                   enemyHash.Add(mechanicEvent.Actor);
+                    enemyHash.Add(mechanicEvent.Actor);
                 }
             }
             _presentMechanics.Set(start, end, presentMechanics);

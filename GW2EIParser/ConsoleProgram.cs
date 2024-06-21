@@ -53,6 +53,7 @@ namespace GW2EIParser
 
         private static void ParseLog(string logFile, ProgramHelper programHelper)
         {
+            programHelper.ExecuteMemoryCheckTask();
             var operation = new ConsoleOperationController(logFile);
             try
             {
@@ -73,6 +74,7 @@ namespace GW2EIParser
             {
                 programHelper.GenerateTraceFile(operation);
             }
+            GC.Collect();
         }
     }
 }

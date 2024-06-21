@@ -6,7 +6,12 @@
 
         internal MaxHealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
         {
-            MaxHealth = (int)evtcItem.DstAgent;
+            MaxHealth = GetMaxHealth(evtcItem);
+        }
+
+        internal static int GetMaxHealth(CombatItem evtcItem)
+        {
+            return (int)evtcItem.DstAgent;
         }
 
     }

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -56,10 +52,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-            if (evtcVersion >= ArcDPSBuilds.NewLogStart)
+            if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
             {
                 // players may enter combat with knights or an invisible hitbox before
                 AgentItem mama = agentData.GetNPCsByID(TargetID.MAMA).FirstOrDefault();
@@ -191,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (targetPosition != null)
                         {
                             replay.AddDecorationWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), expectedEndCast);
-                        
+
                             // 3 rounds of decorations for the 3 waves
                             if (lifespan.end == expectedEndCast)
                             {
@@ -200,7 +196,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 for (int i = 0; i < 3; i++)
                                 {
                                     long shockWaveStart = expectedEndCast + i * 120;
-                                    replay.Decorations.Add(new CircleDecoration(shockwaveRadius, (shockWaveStart, shockWaveStart + duration), Colors.Yellow, 0.3, new PositionConnector(targetPosition)).UsingFilled(false).UsingGrowingEnd(shockWaveStart + duration));
+                                    (long, long) lifespanShockwave = (shockWaveStart, shockWaveStart + duration);
+                                    GeographicalConnector connector = new PositionConnector(targetPosition);
+                                    replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, shockwaveRadius);
                                 }
                             }
                         }

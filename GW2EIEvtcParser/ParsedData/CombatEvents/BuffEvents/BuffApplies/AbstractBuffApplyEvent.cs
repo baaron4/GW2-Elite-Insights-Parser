@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.EIData;
-using static GW2EIEvtcParser.ArcDPSEnums;
+﻿using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -19,11 +18,6 @@ namespace GW2EIEvtcParser.ParsedData
             By = by;
             To = to;
             BuffInstance = id;
-        }
-
-        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
-        {
-            return BuffID != SkillIDs.NoBuff;
         }
     }
 }

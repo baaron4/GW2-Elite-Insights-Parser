@@ -54,6 +54,7 @@ namespace GW2EIEvtcParser.ParsedData
         // Effect Condition
         public int TraitSrc { get; }
         public int TraitSelf { get; }
+        public float ContentReference { get; }
         public int BuffSrc { get; }
         public int BuffSelf { get; }
         internal long SortKey => TraitSrc + TraitSelf + BuffSrc + BuffSelf;
@@ -78,12 +79,13 @@ namespace GW2EIEvtcParser.ParsedData
 
         private int Level(Buff buff) => buff.Classification == Buff.BuffClassification.Enhancement || buff.Classification == Buff.BuffClassification.Nourishment || buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
-        internal BuffFormula(CombatItem evtcItem, int evtcVersion)
+        internal BuffFormula(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
         {
             Npc = evtcItem.IsFlanking == 0;
             Player = evtcItem.IsShields == 0;
             Break = evtcItem.IsOffcycle > 0;
-            byte[] formulaBytes = new byte[10 * sizeof(float)];
+            int size = 11;
+            byte[] formulaBytes = new byte[size * sizeof(float)];
             int offset = 0;
             // 2 
             foreach (byte bt in BitConverter.GetBytes(evtcItem.Time))
@@ -110,6 +112,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 formulaBytes[offset++] = bt;
             }
+            // 1
+            foreach (byte bt in BitConverter.GetBytes(evtcItem.OverstackValue))
+            {
+                formulaBytes[offset++] = bt;
+            }
             // 0.5
             foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcInstid))
             {
@@ -131,21 +138,22 @@ namespace GW2EIEvtcParser.ParsedData
                 formulaBytes[offset++] = bt;
             }
             //
-            float[] formulaFloats = new float[10];
+            float[] formulaFloats = new float[size];
             Buffer.BlockCopy(formulaBytes, 0, formulaFloats, 0, formulaBytes.Length);
             //
             Type = (int)formulaFloats[0];
             ByteAttr1 = (byte)formulaFloats[1];
-            ByteAttr2 = (byte)formulaFloats[2];          
-            Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1, evtcVersion);
-            Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2, evtcVersion);
+            ByteAttr2 = (byte)formulaFloats[2];
+            Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1, evtcVersion.Build);
+            Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2, evtcVersion.Build);
             ConstantOffset = formulaFloats[3];
             LevelOffset = formulaFloats[4];
             Variable = formulaFloats[5];
             TraitSrc = (int)formulaFloats[6];
             TraitSelf = (int)formulaFloats[7];
-            BuffSrc = (int)formulaFloats[8];
-            BuffSelf = (int)formulaFloats[9];
+            ContentReference = formulaFloats[8];
+            BuffSrc = (int)formulaFloats[9];
+            BuffSelf = (int)formulaFloats[10];
             ExtraNumber = evtcItem.OverstackValue;
             ExtraNumberState = evtcItem.Pad1;
         }
@@ -196,7 +204,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             _solvedDescription += stat1;
             double variable = Math.Round(Variable, 6);
-            double totalOffset = Math.Round(Level(buff) * LevelOffset + ConstantOffset, 6);      
+            double totalOffset = Math.Round(Level(buff) * LevelOffset + ConstantOffset, 6);
             bool addParenthesis = totalOffset != 0 && Variable != 0;
             if (Attr2 != None)
             {

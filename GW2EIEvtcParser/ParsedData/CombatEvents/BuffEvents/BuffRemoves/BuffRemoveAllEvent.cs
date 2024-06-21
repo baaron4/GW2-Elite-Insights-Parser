@@ -1,5 +1,4 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EIData.BuffSimulators;
+﻿using GW2EIEvtcParser.EIData.BuffSimulators;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
@@ -22,12 +21,8 @@ namespace GW2EIEvtcParser.ParsedData
             _lastRemovedDuration = lastRemovedDuration;
             RemovedStacks = removedStacks;
         }
-        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
-        {
-            return BuffID != SkillIDs.NoBuff;
-        }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
             simulator.Remove(CreditedBy, RemovedDuration, RemovedStacks, Time, BuffRemove.All, 0);
         }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
@@ -73,6 +71,10 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 _logic.Activate(BuffStack, toAdd);
             }
+        }
+        protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
+        {
+            buffEvent.UpdateSimulator(this, true);
         }
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
-using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -164,7 +162,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (EffectEvent exit in shadowPortalActiveExit)
                 {
-                    var skill = new SkillModeDescriptor(player, Spec.Thief, ShadowPortal, SkillModeCategory.Portal); 
+                    var skill = new SkillModeDescriptor(player, Spec.Thief, ShadowPortal, SkillModeCategory.Portal);
                     (long, long) lifespan = exit.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                     var connector = new PositionConnector(exit.Position);
                     replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));

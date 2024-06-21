@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser
 
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
-        internal ParsedEvtcLog(int evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
+        internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
                 List<CombatItem> combatItems, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
@@ -166,11 +166,11 @@ namespace GW2EIEvtcParser
                 {
                     actor = new Player(agentItem, true);
                     _operation.UpdateProgressWithCancellationCheck("Parsing: Found player " + actor.Character + " not in player list");
-                } 
+                }
                 else if (agentItem.Type == AgentItem.AgentType.NonSquadPlayer)
                 {
                     actor = new PlayerNonSquad(agentItem);
-                } 
+                }
                 else
                 {
                     actor = new NPC(agentItem);

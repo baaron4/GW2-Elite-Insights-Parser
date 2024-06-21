@@ -5,10 +5,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -61,7 +60,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetGenericFightOffset(fightData);
         }
@@ -84,7 +83,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             FillSubLogics(agentData);
             foreach (FightLogic logic in _subLogics)
@@ -121,7 +120,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return base.GetLogicName(combatData, agentData);
             }
-            switch(mapID.MapID)
+            switch (mapID.MapID)
             {
                 // Raids
                 case 1062:
@@ -209,12 +208,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return res;
         }
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
             var res = new List<ErrorEvent>();
             foreach (FightLogic logic in _subLogics)
             {
-                res.AddRange(logic.GetCustomWarningMessages(fightData, arcdpsVersion));
+                res.AddRange(logic.GetCustomWarningMessages(fightData, evtcVersion));
             }
             return res;
         }

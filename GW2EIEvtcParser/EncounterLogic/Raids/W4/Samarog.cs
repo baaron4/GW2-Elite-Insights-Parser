@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IReadOnlyList<AbstractHealthDamageEvent> damageTaken = combatData.GetDamageTakenData(samarog.AgentItem);
             var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, samarog, true, false).Select(x => x.Time).ToList();
             var fanaticalResilienceSegments = new List<Segment>();
-            for (int i = 0; i < fanaticalResilienceTimes.Count; i +=2)
+            for (int i = 0; i < fanaticalResilienceTimes.Count; i += 2)
             {
                 long start = fanaticalResilienceTimes[i];
                 long end = long.MaxValue;
@@ -129,12 +129,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // With lingering agents, last aware of the spears are properly set
-            if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
+            if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
             {
-                var spearAgents = combatData.Where(x => x.DstAgent == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
+                var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
                 if (spearAgents.Count != 0)
                 {
                     foreach (AgentItem spear in spearAgents)
@@ -173,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>() { 
+            return new List<ArcDPSEnums.TrashID>() {
                 ArcDPSEnums.TrashID.SpearAggressionRevulsion
             };
         }
@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (log.CombatData.GetBuffDataByIDByDst(SpearOfAggressionBuff, target.AgentItem).Any())
                     {
                         replay.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15);
-                    } 
+                    }
                     else
                     {
                         replay.AddOverheadIcon(spearLifespan, target, BuffImages.Fear, 15);

@@ -9,6 +9,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.StrongholdOfTheFaithful;
             EncounterID |= EncounterIDs.RaidWingMasks.StrongholdOfTheFaithfulMask;
-        }  
+        }
     }
 }

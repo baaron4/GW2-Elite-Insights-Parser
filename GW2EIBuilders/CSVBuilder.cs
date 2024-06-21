@@ -96,7 +96,7 @@ namespace GW2EIBuilders
             WriteLine(new[] { "Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString() });
             IReadOnlyList<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
             double hpLeft = hpUpdates.Count > 0
-                ? hpUpdates.Last().HPPercent
+                ? hpUpdates.Last().HealthPercent
                 : 100.0;
             WriteLine(new[] { "Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
             WriteLine(new[] { "Boss Health Burned %", (100.0 - hpLeft).ToString() });

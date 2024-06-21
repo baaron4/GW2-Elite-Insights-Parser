@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -96,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return FightData.EncounterStartStatus.Late;
                 }
 
-            } 
+            }
             else
             {
                 if (TargetHPPercentUnderThreshold(TargetID.PrototypeVermilion, fightData.FightStart, combatData, Targets) ||
@@ -123,7 +120,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (int)TargetID.PrototypeIndigoCM,
                         (int)TargetID.PrototypeArseniteCM,
                     };
-                } 
+                }
                 else
                 {
                     idsToCheck = new List<int>
@@ -176,7 +173,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (dead != null && dead.Time < end)
             {
                 end = dead.Time;
-            } 
+            }
             List<PhaseData> subPhases = GetPhasesByInvul(log, new[] { LeyWovenShielding, MalfunctioningLeyWovenShielding }, target, false, true, start, end);
             string[] phaseNames;
             if (log.FightData.IsCM)
@@ -214,13 +211,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             return subPhases;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
             AgentItem vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
             if (vermilion != null)
             {
-                CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && x.Value == 0);
+                CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && BreakbarStateEvent.GetBreakbarState(x) == BreakbarState.Active);
                 if (breakbarStateActive != null)
                 {
                     startToUse = breakbarStateActive.Time;
@@ -310,7 +307,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            switch(target.ID)
+            switch (target.ID)
             {
                 case (int)TargetID.PrototypeVermilion:
                     replay.AddHideByBuff(target, log, Determined762);

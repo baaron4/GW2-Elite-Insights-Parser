@@ -6,7 +6,12 @@
 
         internal BuildEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            Build = evtcItem.SrcAgent;
+            Build = GetBuild(evtcItem);
+        }
+
+        internal static ulong GetBuild(CombatItem evtcItem)
+        {
+            return evtcItem.SrcAgent;
         }
 
     }

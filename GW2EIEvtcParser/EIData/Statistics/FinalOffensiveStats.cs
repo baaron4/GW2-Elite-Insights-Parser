@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
         public int ConnectedConditionCount { get; }
         public int ConnectedConditionAbove90HPCount { get; }
 
-    public int DownContribution { get; }
+        public int DownContribution { get; }
 
 
         internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
@@ -120,7 +120,7 @@ namespace GW2EIEvtcParser.EIData
                             {
                                 ConnectedConditionAbove90HPCount++;
                             }
-                        } 
+                        }
                         else
                         {
                             ConnectedPowerCount++;

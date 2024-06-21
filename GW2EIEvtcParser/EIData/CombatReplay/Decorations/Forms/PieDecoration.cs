@@ -1,28 +1,58 @@
 ﻿using System;
-using GW2EIEvtcParser.ParsedData;
 using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal class PieDecoration : CircleDecoration
     {
-        public float OpeningAngle { get; } //in degrees
+        internal class ConstantPieDecoration : ConstantCircleDecoration
+        {
+            public float OpeningAngle { get; } //in degrees
+
+            public ConstantPieDecoration(string color, uint radius, uint minRadius, float openingAngle) : base(color, radius, minRadius)
+            {
+                OpeningAngle = openingAngle;
+                if (OpeningAngle < 0)
+                {
+                    throw new InvalidOperationException("OpeningAngle must be strictly positive");
+                }
+                if (OpeningAngle > 360)
+                {
+                    throw new InvalidOperationException("OpeningAngle must be <= 360");
+                }
+            }
+
+            public override string GetID()
+            {
+                throw new NotImplementedException();
+            }
+        }
+        internal class VariablePieDecoration : VariableCircleDecoration
+        {
+            public VariablePieDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            {
+            }
+        }
+        private new ConstantPieDecoration ConstantDecoration => (ConstantPieDecoration)base.ConstantDecoration;
+        public float OpeningAngle => ConstantDecoration.OpeningAngle;
 
 
         //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
 
-        public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(radius, lifespan, color, connector)
+        public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
         {
-            OpeningAngle = openingAngle;
+            base.ConstantDecoration = new ConstantPieDecoration(color, radius, 0, openingAngle);
+            VariableDecoration = new VariablePieDecoration(lifespan, connector);
         }
 
         public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, openingAngle, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {
         }
 
-        public override FormDecoration Copy()
+        public override FormDecoration Copy(string color = null)
         {
-            return (PieDecoration)new PieDecoration(Radius, OpeningAngle, Lifespan, Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+            return (PieDecoration)new PieDecoration(Radius, OpeningAngle, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
 
         //

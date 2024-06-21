@@ -6,12 +6,10 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -108,10 +106,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Mushrooms
-            var mushroomAgents = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
+            var mushroomAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300).ToList();
             if (mushroomAgents.Count != 0)
             {
                 int idToKeep = mushroomAgents.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Count()).MaxBy(x => x.Value).Key;
@@ -123,8 +121,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     var copyEventsFrom = new List<AgentItem>() { mushroom };
                     var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
-                    var aliveUpdates = hpUpdates.Where(x => x.DstAgent == 10000).ToList();
-                    var deadUpdates = hpUpdates.Where(x => x.DstAgent == 0).ToList();
+                    var aliveUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 100).ToList();
+                    var deadUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
                     long lastDeadTime = long.MinValue;
                     foreach (CombatItem aliveEvent in aliveUpdates)
                     {
@@ -132,7 +130,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (deadEvent == null)
                         {
                             lastDeadTime = Math.Min(fightData.LogEnd, mushroom.LastAware);
-                        } 
+                        }
                         else
                         {
                             lastDeadTime = deadEvent.Time;
@@ -188,7 +186,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
-                        var circle = new CircleDecoration( 700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
+                        var circle = new CircleDecoration(700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     }
                     break;
@@ -209,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
-                var circle = new CircleDecoration( 180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
+                var circle = new CircleDecoration(180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
                 replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
                 Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)

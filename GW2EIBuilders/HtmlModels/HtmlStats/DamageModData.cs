@@ -68,7 +68,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         }
         private DamageModData(AbstractSingleActor actor, ParsedEvtcLog log, IReadOnlyList<IncomingDamageModifier> listToUse, PhaseData phase)
         {
-            IReadOnlyDictionary<string, DamageModifierStat> dModData = actor.GetIncomingDamageModifierStats(null, log, phase.Start, phase.End) ;
+            IReadOnlyDictionary<string, DamageModifierStat> dModData = actor.GetIncomingDamageModifierStats(null, log, phase.Start, phase.End);
             foreach (IncomingDamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))

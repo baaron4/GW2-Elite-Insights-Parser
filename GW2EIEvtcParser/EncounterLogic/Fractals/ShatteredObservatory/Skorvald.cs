@@ -7,12 +7,12 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -91,7 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var manualFractalScaleSet = false;
             if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
@@ -130,17 +130,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             skorvald.OverrideName("Skorvald");
-            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && x.DstAgent < 5e6 && x.DstAgent > 0))
+            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
             {
                 // Remove manual scale from T1 to T3 for now
                 combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale).OverrideSrcAgent(0);
                 // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
             }
-            
-            int[] nameCount = new [] { 0, 0, 0, 0 };
+
+            int[] nameCount = new[] { 0, 0, 0, 0 };
             foreach (NPC target in _targets)
             {
-                switch (target.ID) {
+                switch (target.ID)
+                {
                     case (int)TrashID.FluxAnomaly1:
                     case (int)TrashID.FluxAnomalyCM1:
                         target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
@@ -161,15 +162,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault() ?? throw new MissingKeyActorsException("Skorvald not found");
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
                 // Skorvald may spawns with 0% hp
-                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
+                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && HealthUpdateEvent.GetHealthPercent(x) > 0);
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ServerDelayConstant);
                 return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
             }
@@ -198,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     SolarBoltCM,
                     //SupernovaCM,
                 };
-                if (combatData.GetSkills().Intersect(cmSkills).Any() || 
+                if (combatData.GetSkills().Intersect(cmSkills).Any() ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
@@ -369,8 +370,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                         if (expectedEndCast <= lifespan.end)
                         {
-                            // Shockwave
-                            AddSolarDischargeDecoration(replay, target, lifespanWave);
+                            GeographicalConnector connector = new AgentConnector(target);
+                            replay.AddShockwave(connector, lifespanWave, Colors.Red, 0.6, 1200);
                         }
                     }
 
@@ -423,9 +424,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long start, long end) lifespanShockwave = (lifespan.end, lifespan.end + castDuration);
 
                         // Stomp
-                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), lifespan.end);
-                        // Shockwave
-                        AddSolarDischargeDecoration(replay, target, lifespanShockwave);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, connector), lifespan.end);
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Red, 0.6, 1200);
                     }
 
                     // Punishing Kick
@@ -475,7 +476,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long start, long end) lifespanShockwave = (lifespan.end, lifespan.end + 2250);
                         replay.AddDecorationWithGrowing(new CircleDecoration(160, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
                         // Nightmare Discharge Shockwave
-                        replay.Decorations.Add(new CircleDecoration(1200, lifespanShockwave, Colors.Yellow, 0.3, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespanShockwave.end));
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, 1200);
                     }
 
                     // Wave of Mutilation
@@ -575,17 +577,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             var pieHit = (PieDecoration)new PieDecoration(1200, 70, lifespanHit, Colors.Red, 0.2, connector).UsingGrowingEnd(lifespanHit.end);
             replay.Decorations.Add(pieHit.UsingRotationConnector(frontRotationConnector));
             replay.Decorations.Add(pieHit.Copy().UsingRotationConnector(flipRotationConnector));
-        }
-
-        /// <summary>
-        /// Add Solar Discharge decoration.
-        /// </summary>
-        /// <param name="replay">Combat Replay.</param>
-        /// <param name="target">Actor.</param>
-        /// <param name="lifespan">Start and End of cast.</param>
-        private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan)
-        {
-            replay.Decorations.Add(new CircleDecoration(1200, lifespan, Colors.Red, 0.6, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
         }
 
         /// <summary>

@@ -139,7 +139,7 @@ namespace GW2EIEvtcParser.EIData
                 if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
-                } 
+                }
                 else
                 {
                     return new List<AbstractBreakbarDamageEvent>();

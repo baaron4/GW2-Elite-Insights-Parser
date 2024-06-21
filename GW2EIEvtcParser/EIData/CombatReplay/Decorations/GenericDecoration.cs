@@ -1,15 +1,33 @@
-﻿using GW2EIEvtcParser.ParsedData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     public abstract class GenericDecoration
     {
-        public (int start, int end) Lifespan { get; }
 
-        protected GenericDecoration((long start, long end) lifespan)
+        public abstract class ConstantGenericDecoration
         {
-            Lifespan = ((int)lifespan.start, (int)lifespan.end);
+
+            public abstract string GetID();
+        }
+        public abstract class VariableGenericDecoration
+        {
+            public (int start, int end) Lifespan { get; }
+
+            protected VariableGenericDecoration((long start, long end) lifespan)
+            {
+                Lifespan = ((int)lifespan.start, (int)lifespan.end);
+            }
+        }
+
+        public ConstantGenericDecoration ConstantDecoration { get; protected set; }
+        public VariableGenericDecoration VariableDecoration { get; protected set; }
+
+        public (int start, int end) Lifespan => VariableDecoration.Lifespan;
+
+        protected GenericDecoration()
+        {
         }
         //
 

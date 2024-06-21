@@ -94,10 +94,11 @@ namespace GW2EIParserCommons
         public void Start()
         {
             _stopWatch.Restart();
-            _stopWatch.Start(); 
+            _stopWatch.Start();
         }
 
-        public void Stop() { 
+        public void Stop()
+        {
             _stopWatch.Stop();
             Elapsed = ("Elapsed " + _stopWatch.ElapsedMilliseconds + " ms");
             _stopWatch.Restart();

@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
 
         private static int AgentCount = 0;
-        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer}
+        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
 
         public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
         public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
@@ -32,6 +32,8 @@ namespace GW2EIEvtcParser.ParsedData
         public ushort Concentration { get; }
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
+
+        private bool Unamed { get; }
 
         public bool IsFake { get; }
         public bool IsNotInSquadFriendlyPlayer { get; private set; }
@@ -70,6 +72,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
 
             }
+            Unamed = Name.Contains("ch"+ID+"-");
         }
 
         internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, AgentType.NPC, toughness, healing, condition, concentration, hbWidth, hbHeight)
@@ -98,6 +101,7 @@ namespace GW2EIEvtcParser.ParsedData
             InstID = other.InstID;
             Master = other.Master;
             IsFake = other.IsFake;
+            Unamed = other.Unamed;
         }
 
         internal AgentItem()
@@ -185,8 +189,8 @@ namespace GW2EIEvtcParser.ParsedData
 
         private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, long minTime, int index)
         {
-            long cTime = cur.Time; 
-            
+            long cTime = cur.Time;
+
             if (cur is DownEvent)
             {
                 down.Add(new Segment(cTime, nextTime, 1));
@@ -239,7 +243,7 @@ namespace GW2EIEvtcParser.ParsedData
                 if (cur is DeadEvent)
                 {
                     dead.Add(new Segment(LastAware, long.MaxValue, 1));
-                } 
+                }
                 else
                 {
                     dc.Add(new Segment(LastAware, long.MaxValue, 1));
@@ -308,7 +312,7 @@ namespace GW2EIEvtcParser.ParsedData
                             break;
                     }
                 }
-                
+
             }
         }
 
@@ -481,6 +485,15 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetCurrentBreakbarState(log, time);
+        }
+
+        public bool IsUnamedSpecies()
+        {
+            if (IsPlayer)
+            {
+                return false;
+            }
+            return IsNonIdentifiedSpecies() || Unamed;
         }
 
         public bool IsNonIdentifiedSpecies()

@@ -2,21 +2,27 @@
 {
     public class LanguageEvent : AbstractMetaDataEvent
     {
-        public enum LanguageEnum : byte { 
-            English = 0, 
-            Missing = 1, 
-            French = 2, 
-            German = 3, 
-            Spanish = 4, 
-            Chinese = 5, 
-            Unknown = 6 
+        public enum LanguageEnum : byte
+        {
+            English = 0,
+            Missing = 1,
+            French = 2,
+            German = 3,
+            Spanish = 4,
+            Chinese = 5,
+            Unknown = 6
         }
 
         public LanguageEnum Language { get; }
 
         internal LanguageEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            Language = evtcItem.SrcAgent < (byte)LanguageEnum.Unknown ? (LanguageEnum)evtcItem.SrcAgent
+            Language = GetLanguage(evtcItem);
+        }
+
+        internal static LanguageEnum GetLanguage(CombatItem evtcItem)
+        {
+            return evtcItem.SrcAgent < (byte)LanguageEnum.Unknown ? (LanguageEnum)evtcItem.SrcAgent
                 : LanguageEnum.Unknown;
         }
 

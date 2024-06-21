@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
     internal class DamageCastFinder : CheckedCastFinder<AbstractHealthDamageEvent>
     {
         private readonly long _damageSkillID;
-        public DamageCastFinder(long skillID, long damageSkillID ) : base(skillID)
+        public DamageCastFinder(long skillID, long damageSkillID) : base(skillID)
         {
             UsingNotAccurate(true);
             _damageSkillID = damageSkillID;
