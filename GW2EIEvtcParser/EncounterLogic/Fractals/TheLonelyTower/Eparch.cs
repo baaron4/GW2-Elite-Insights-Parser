@@ -165,5 +165,45 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower)) ?? throw new MissingKeyActorsException("Eparch not found");
             return eparch;
         }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            AbstractSingleActor eparch = GetEparchActor();
+            IReadOnlyList<AnimatedCastEvent> eparchCasts = log.CombatData.GetAnimatedCastData(eparch.AgentItem);
+
+            // globule gadgets as decorations
+            var globuleColors = new Dictionary<long, Color> {
+                { RainOfDespair, Colors.Blue },
+                { WaveOfEnvy, Colors.Green },
+                { Inhale, Colors.Orange },
+                { SpikeOfMalice, Colors.Purple },
+                { EnragedSmashEparch, Colors.Red },
+                { RegretSkillEparch, Colors.Yellow },
+            };
+            foreach (AgentItem gadget in log.AgentData.GetAgentByType(AgentItem.AgentType.Gadget))
+            {
+                const int globuleHealth = 14_940;
+                const uint globuleWidth = 16;
+                const uint globuleHeight = 160;
+                MaxHealthUpdateEvent health = log.CombatData.GetMaxHealthUpdateEvents(gadget).FirstOrDefault();
+                if (gadget.HitboxWidth == globuleWidth && gadget.HitboxHeight == globuleHeight && health?.MaxHealth == globuleHealth)
+                {
+                    SpawnEvent spawn = log.CombatData.GetSpawnEvents(gadget).FirstOrDefault();
+                    DespawnEvent despawn = log.CombatData.GetDespawnEvents(gadget).FirstOrDefault();
+                    if (spawn != null && despawn != null)
+                    {
+                        AnimatedCastEvent currentCast = eparchCasts.LastOrDefault(x => x.Time <= spawn.Time && x.EndTime > spawn.Time);
+                        if (currentCast != null && globuleColors.TryGetValue(currentCast.SkillId, out Color color))
+                        {
+                            Point3D position = gadget.GetCurrentPosition(log, despawn.Time); // position should not change, use despawn to make sure its set
+                            (long, long) lifespan = (spawn.Time, despawn.Time);
+                            EnvironmentDecorations.Add(new CircleDecoration(globuleWidth, lifespan, color, 0.7, new PositionConnector(position)));
+                        }
+                    }
+                }
+            }
+        }
     }
 }
