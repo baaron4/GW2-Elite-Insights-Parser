@@ -16,6 +16,7 @@
 <script>
     Vue.component("buff-stats-target-component", {
         props: ['phaseindex', 'playerindex', 'targetindex'],
+        mixins: [buffComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -25,20 +26,6 @@
             };
         },
         computed: {
-            boons: function() {
-                var data = [];
-                for (var i = 0; i < logData.boons.length; i++) {
-                    data[i] = findSkill(true, logData.boons[i]);
-                }
-                return data;
-            },
-            conditions: function() {
-                var data = [];
-                for (var i = 0; i < logData.conditions.length; i++) {
-                    data[i] = findSkill(true, logData.conditions[i]);
-                }
-                return data;
-            },
             phase: function() {
                 return logData.phases[this.phaseindex];
             },
@@ -49,14 +36,13 @@
                 return this.phase.targets.indexOf(this.targetindex);
             },
             hasBoons: function () {
-                return this.phase.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex].avg > 0;
+                return this.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex].avg > 0;
             },
             condiData: function () {
                 if (this.cacheCondi.has(this.phaseindex)) {
                     return this.cacheCondi.get(this.phaseindex);
                 }
-                var res = [];
-                var i;
+                const res = [];
                 if (this.targetPhaseIndex === -1) {
                     for (i = 0; i < logData.players.length; i++) {
                         res.push({
@@ -68,10 +54,10 @@
                         });
                     }
                 } else {
-                    for (i = 0; i < logData.players.length; i++) {
+                    for (let i = 0; i < logData.players.length; i++) {
                         res.push({
                             player: logData.players[i],
-                            data: this.phase.buffsStatContainer.targetsCondiStats[this.targetPhaseIndex][i]
+                            data: this.buffsStatContainer.targetsCondiStats[this.targetPhaseIndex][i]
                         });
                     }
                 }
@@ -82,7 +68,7 @@
                 if (this.cacheCondiSums.has(this.phaseindex)) {
                     return this.cacheCondiSums.get(this.phaseindex);
                 }
-                var res = [];
+                const res = [];
                 if (this.targetPhaseIndex === -1) {
                     res.push({
                         icon: this.target.icon,
@@ -91,7 +77,7 @@
                         data: []
                     });
                 } else {
-                    var targetData = this.phase.buffsStatContainer.targetsCondiUptimes[this.targetPhaseIndex];
+                    const targetData = this.buffsStatContainer.targetsCondiUptimes[this.targetPhaseIndex];
                     res.push({
                         icon: this.target.icon,
                         name: this.target.name,
@@ -106,7 +92,7 @@
                 if (this.cacheBoon.has(this.phaseindex)) {
                     return this.cacheBoon.get(this.phaseindex);
                 }
-                var res = [];
+                const res = [];
                 if (this.targetPhaseIndex === -1 || !this.hasBoons) {
                     res.push({
                         player: this.target,
@@ -116,7 +102,7 @@
                         }
                     });
                 } else {
-                    var targetData = this.phase.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex];
+                    const targetData = this.phase.buffsStatContainer.targetsBoonUptimes[this.targetPhaseIndex];
                     res.push({
                         player: this.target,
                         data: targetData

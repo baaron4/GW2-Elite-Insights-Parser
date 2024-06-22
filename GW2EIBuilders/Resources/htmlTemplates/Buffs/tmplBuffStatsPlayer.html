@@ -22,6 +22,7 @@
 <script>
     Vue.component("buff-stats-player-component", {
         props: ['phaseindex', 'playerindex'],
+        mixins: [buffComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -31,31 +32,21 @@
             };
         },
         computed: {
-            boons: function() {
-                var data = [];
-                for (var i = 0; i < logData.boons.length; i++) {
-                    data[i] = findSkill(true, logData.boons[i]);
-                }
-                return data;
-            },
             phase: function() {
                 return logData.phases[this.phaseindex];
             },
             player: function() {
                 return logData.players[this.playerindex];
             },
-            buffsStatContainer: function() {
-                return this.phase.buffsStatContainer;
-            },
             boonData: function () {
-                var id = this.phaseindex + '-' + this.activeduration;
+                const id = this.phaseindex + '-' + this.activeduration;
                 if (this.cacheBoon.has(id)) {
                     return this.cacheBoon.get(id);
                 }
-                var res = [];
-                var activeTimes = this.phase.playerActiveTimes;
-                var activeduration = this.activeduration;
-                for (var i = 0; i < logData.players.length; i++) {
+                const res = [];
+                const activeTimes = this.phase.playerActiveTimes;
+                const activeduration = this.activeduration;
+                for (let i = 0; i < logData.players.length; i++) {
                     if (activeduration && activeTimes[i] < 1e-6) {
                         continue;
                     }
@@ -68,14 +59,14 @@
                 return res;
             },
             boonSums: function () {
-                var id = this.phaseindex + '-' + this.activeduration;
+                const id = this.phaseindex + '-' + this.activeduration;
                 if (this.cacheBoonSums.has(id)) {
                     return this.cacheBoonSums.get(id);
                 }
-                var activeduration = this.activeduration;
-                var res = [];
-                var playerData = activeduration ? this.phase.boonActiveStats[this.playerindex] : this.phase.buffsStatContainer.boonStats[this.playerindex];
-                var activeTimes = this.phase.playerActiveTimes;
+                const activeduration = this.activeduration;
+                const res = [];
+                const playerData = activeduration ? this.buffsStatContainer.boonActiveStats[this.playerindex] : this.buffsStatContainer.boonStats[this.playerindex];
+                const activeTimes = this.phase.playerActiveTimes;
                 if (activeduration && activeTimes[this.playerindex] < 1e-6) {
                     res.push({
                         icon: this.player.icon,
