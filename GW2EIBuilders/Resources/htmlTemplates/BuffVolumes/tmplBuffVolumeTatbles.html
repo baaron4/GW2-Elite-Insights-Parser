@@ -22,15 +22,6 @@
             <li v-if="hasDebuffs">
                 <a class="nav-link" :class="{active: tab === 7}" @click="tab = 7">Debuffs</a>
             </li>
-            <li v-if="hasNourishments">
-                <a class="nav-link" :class="{active: tab === 8}" @click="tab = 8">Nourishments</a>
-            </li>
-            <li v-if="hasEnhancements">
-                <a class="nav-link" :class="{active: tab === 9}" @click="tab = 9">Enhancements</a>
-            </li>
-            <li v-if="hasOtherConsumables">
-                <a class="nav-link" :class="{active: tab === 10}" @click="tab = 10">Other Consumables</a>
-            </li>
             <li v-if="hasPersBuffs">
                 <a class="nav-link" :class="{active: tab === 6}" @click="tab = 6">Personal Buffs</a>
             </li>
@@ -52,12 +43,6 @@
                 :playerindex="playerindex" :activeduration="activeduration"></buff-volume-stats-component>
             <gear-buff-volume-table-component v-if="tab === 4" :key="'gearbuffs-volume'" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activeduration="activeduration"></gear-buff-volume-table-component>
-            <nourishement-buff-volume-table-component v-if="tab === 8" :key="'nourishments-volume'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></nourishement-buff-volume-table-component>
-            <enhancement-buff-volume-table-component v-if="tab === 9" :key="'enhancements-volume'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></enhancement-buff-volume-table-component>
-            <otherconsumable-buff-volume-table-component v-if="tab === 10" :key="'otherconsumables-volume'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></otherconsumable-buff-volume-table-component>
             <conditions-volume-table-component v-if="tab === 5" :key="'conditions-volume'" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activeduration="activeduration"></conditions-volume-table-component>
             <debuff-volume-table-component v-if="tab === 7" :key="'debuffs-volume'" :phaseindex="phaseindex"
@@ -97,12 +82,6 @@
                 return hasGearBuffs() ? 4 : 0;
             case "Debuffs":
                 return hasDebuffs() ? 7 : 0;
-            case "Nourishments":
-                return hasNourishments() ? 8 : 0;
-            case "Enhancements":
-                return hasEnhancements() ? 9 : 0;
-            case "Other Consumables":
-                return hasOtherConsumables() ? 10 : 0;
             case "Personal Buffs":
                 return hasPersBuffs() ? 6 : 0;
         }
@@ -138,15 +117,6 @@
             },
             hasConditions: function () {
                 return hasConditions();
-            },
-            hasNourishments: function () {
-                return hasNourishments();
-            },
-            hasEnhancements: function () {
-                return hasEnhancements();
-            },
-            hasOtherConsumables: function () {
-                return hasOtherConsumables();
             },
             hasPersBuffs: function () {
                 return hasPersBuffs()

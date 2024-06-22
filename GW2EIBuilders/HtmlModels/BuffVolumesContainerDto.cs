@@ -40,9 +40,6 @@ namespace GW2EIBuilders.HtmlModels
         public List<BuffVolumeData> ConditionsVolumeStats { get; set; }
         public List<BuffVolumeData> PersBuffVolumeStats { get; set; }
         public List<BuffVolumeData> GearBuffVolumeStats { get; set; }
-        public List<BuffVolumeData> NourishmentVolumeStats { get; set; }
-        public List<BuffVolumeData> EnhancementVolumeStats { get; set; }
-        public List<BuffVolumeData> OtherConsumableVolumeStats { get; set; }
         public List<BuffVolumeData> DebuffVolumeStats { get; set; }
 
         // active
@@ -91,9 +88,6 @@ namespace GW2EIBuilders.HtmlModels
             DefBuffVolumeStats = BuffVolumeData.BuildBuffIncomingVolumeData(log, statistics.PresentDefbuffs, phase);
             PersBuffVolumeStats = BuffVolumeData.BuildPersonalBuffIncomingVolueData(log, persBuffDict, phase);
             GearBuffVolumeStats = BuffVolumeData.BuildBuffIncomingVolumeData(log, statistics.PresentGearbuffs, phase);
-            NourishmentVolumeStats = BuffVolumeData.BuildBuffIncomingVolumeData(log, statistics.PresentNourishements, phase);
-            EnhancementVolumeStats = BuffVolumeData.BuildBuffIncomingVolumeData(log, statistics.PresentEnhancements, phase);
-            OtherConsumableVolumeStats = BuffVolumeData.BuildBuffIncomingVolumeData(log, statistics.PresentOtherConsumables, phase);
             DebuffVolumeStats = BuffVolumeData.BuildBuffIncomingVolumeData(log, statistics.PresentDebuffs, phase);
             ConditionsVolumeStats = BuffVolumeData.BuildBuffIncomingVolumeData(log, statistics.PresentConditions, phase);
             BoonOutgoingVolumeSelfStats = BuffVolumeData.BuildBuffOutgoingVolumeData(log, statistics.PresentBoons, phase, BuffEnum.Self);
