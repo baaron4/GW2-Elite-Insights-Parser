@@ -163,6 +163,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (death != null)
                     {
                         encounterStart = death.Time + 1000;
+                    } 
+                    else
+                    {
+                        CombatItem exitCombat = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(fakeXera));
+                        if (exitCombat != null)
+                        {
+                            encounterStart = exitCombat.Time + 1000;
+                        }
                     }
                     _xeraFirstPhaseStart = enterCombat.Time - encounterStart;
                     return encounterStart;
