@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    Vue.component("personal-buff-table-component", {
+    Vue.component("personal-buff-volume-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
@@ -44,7 +44,7 @@
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
                             player: logData.players[spec.ids[j]],
-                            data: this.activeduration ? this.phase.buffsStatContainer.persBuffActiveStats[spec.ids[j]] : this.phase.buffsStatContainer.persBuffStats[spec.ids[j]]
+                            data: this.activeduration ? this.buffVolumesStatContainer.ersBuffVolumeActiveStats[spec.ids[j]] : this.buffVolumesStatContainer.ersBuffVolumeStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);

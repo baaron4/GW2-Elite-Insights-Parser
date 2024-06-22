@@ -35,8 +35,6 @@
                         totalAvg = [];
                     var groupCount = [],
                         totalCount = 0;
-                    var groupConditionAvg = [],
-                        totalConditionAvg = 0;
                     for (var i = 0; i < logData.players.length; i++) {
                         var player = logData.players[i];
                         if (player.isFake) {
@@ -57,11 +55,8 @@
                         if (!groupeAvg[player.group]) {
                             groupeAvg[player.group] = [];
                             groupCount[player.group] = 0;
-                            groupConditionAvg[player.group] = 0;
                         }
                         totalCount += playerWeight;
-                        totalConditionAvg += playerWeight * uptimesStats[i].avg;
-                        groupConditionAvg[player.group] += playerWeight * uptimesStats[i].avg;
                         groupCount[player.group] += playerWeight;
                         for (var j = 0; j < uptimesStats[i].data.length; j++) {
                             totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
@@ -76,7 +71,6 @@
                             avg.push({
                                 name: "Group " + i,
                                 data: groupeAvg[i],
-                                avg: Math.round(1000 * groupConditionAvg[i] / groupCount[i]) / 1000
                             });
                         }
                     }
@@ -86,7 +80,6 @@
                     avg.push({
                         name: "Total",
                         data: totalAvg,
-                        avg: Math.round(1000 * totalConditionAvg / totalCount) / 1000
                     });
                     return [uptimes, avg];
                 };

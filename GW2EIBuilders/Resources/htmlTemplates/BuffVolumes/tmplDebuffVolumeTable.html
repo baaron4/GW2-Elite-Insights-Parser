@@ -1,6 +1,6 @@
 <template>
     <div>
-        <buff-volume-table-component :key="'debuff-stats-table'"  :outgoing="false"
+        <buff-volume-table-component :key="'debuff-volume-stats-table'"  :outgoing="false"
             :id="'debuff-volume-stats-table'" :buffs="debuffs" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
         </buff-volume-table-component>
     </div>
@@ -43,9 +43,9 @@
                 };
                 var res;
                 if (this.activeduration) {
-                    res = getData(this.phase.buffsStatContainer.debuffActiveStats);
+                    res = getData(this.buffVolumesStatContainer.debuffVolumeActiveStats);
                 } else {
-                    res = getData(this.phase.buffsStatContainer.debuffStats);
+                    res = getData(this.buffVolumesStatContainer.debuffVolumeStats);
                 }
                 this.cache.set(id, res);
                 return res;
