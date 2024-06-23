@@ -2,11 +2,11 @@
     <div>
         <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
             <li v-for="base in bases" class="nav-item">
-                <a class="nav-link" @click="mode = base" :class="{active: mode === base}">{{ base }}</a>
+                <a class="nav-link" @click="persBuffMode = base" :class="{active: persBuffMode === base}">{{ base }}</a>
             </li>
         </ul>
         <div v-for="(spec, id) in orderedSpecs" class="mt-1 mb-1">
-            <div v-show="specToBase[spec.name] === mode">
+            <div v-show="specToBase[spec.name] === persBuffMode">
                 <h3 class="text-center">{{ spec.name }}</h3>
                 <buff-volume-table-component :target="null"  :outgoing="false" :id="'persbuffs-volume-stats-table' + '_' + spec.name"
                     :buffs="persBuffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex" :hidecustom="false"></buff-table-component>
@@ -23,7 +23,7 @@
         data: function () {
             return {
                 bases: [],
-                mode: "Warrior",
+                persBuffMode: "Warrior",
                 cache: new Map(),
                 specToBase: SpecToBase
             };
