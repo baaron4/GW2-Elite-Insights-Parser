@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
     public abstract class GenericDecoration
     {
 
-        public abstract class GenericDecorationMetadata
+        internal abstract class GenericDecorationMetadata
         {
 
             public abstract string GetSignature();
@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
             internal abstract GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable);
 
         }
-        public abstract class VariableGenericDecoration
+        internal abstract class VariableGenericDecoration
         {
             public (int start, int end) Lifespan { get; }
 
@@ -24,8 +24,8 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public GenericDecorationMetadata DecorationMetadata { get; protected set; }
-        public VariableGenericDecoration VariableDecoration { get; protected set; }
+        internal GenericDecorationMetadata DecorationMetadata { get; }
+        internal VariableGenericDecoration VariableDecoration { get; }
 
         public (int start, int end) Lifespan => VariableDecoration.Lifespan;
         internal GenericDecoration(GenericDecorationMetadata metaData, VariableGenericDecoration variable)

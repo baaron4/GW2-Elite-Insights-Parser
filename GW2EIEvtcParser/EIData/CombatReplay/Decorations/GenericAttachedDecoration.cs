@@ -42,9 +42,6 @@ namespace GW2EIEvtcParser.EIData
         internal GenericAttachedDecoration(GenericAttachedDecorationMetadata metadata, VariableGenericAttachedDecoration variable) : base(metadata, variable)
         {
         }
-        protected GenericAttachedDecoration() : base()
-        {
-        }
 
         /// <summary>Creates a new line towards the other decoration</summary>
         public LineDecoration LineTo(GenericAttachedDecoration other, string color)

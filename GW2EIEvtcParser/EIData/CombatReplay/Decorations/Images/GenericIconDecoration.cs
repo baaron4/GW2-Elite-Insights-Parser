@@ -30,9 +30,5 @@ namespace GW2EIEvtcParser.EIData
         internal GenericIconDecoration(GenericIconDecorationMetadata metadata, VariableGenericIconDecoration variable) : base(metadata, variable)
         {
         }
-
-        public GenericIconDecoration() : base()
-        {
-        }
     }
 }

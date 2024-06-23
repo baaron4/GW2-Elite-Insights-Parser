@@ -47,10 +47,8 @@ namespace GW2EIEvtcParser.EIData
         internal BackgroundIconDecoration(BackgroundIconDecorationMetadata metadata, VariableBackgroundIconDecoration variable) : base(metadata, variable)
         {
         }
-        public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base()
+        public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base(new BackgroundIconDecorationMetadata(icon, pixelSize, worldSize), new VariableBackgroundIconDecoration(lifespan, opacities, heights, connector))
         {
-            DecorationMetadata = new BackgroundIconDecorationMetadata(icon, pixelSize, worldSize);
-            base.VariableDecoration = new VariableBackgroundIconDecoration(lifespan, opacities, heights, connector);
         }
 
         public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacities, heights, (lifespan.Start, lifespan.End), connector)

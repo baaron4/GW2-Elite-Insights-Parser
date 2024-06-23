@@ -41,10 +41,8 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base()
+        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(new ActorOrientationDecorationMetadata(), new VariableActorOrientationDecoration(lifespan, agent))
         {
-            DecorationMetadata = new ActorOrientationDecorationMetadata();
-            VariableDecoration = new VariableActorOrientationDecoration(lifespan, agent);
         }
 
         //

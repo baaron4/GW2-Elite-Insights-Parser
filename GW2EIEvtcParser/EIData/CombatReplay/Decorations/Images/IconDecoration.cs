@@ -49,21 +49,13 @@ namespace GW2EIEvtcParser.EIData
         internal IconDecoration(IconDecorationMetadata metadata, VariableIconDecoration variable) : base(metadata, variable)
         {
         }
-        protected IconDecoration()
-        {
 
+        public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : this(icon, pixelSize, 0, opacity, lifespan, connector)
+        {
         }
 
-        public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
+        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, worldSize, opacity), new VariableIconDecoration(lifespan, connector))
         {
-            base.DecorationMetadata = new IconDecorationMetadata(icon, pixelSize, 0, opacity);
-            base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
-        }
-
-        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
-        {
-            base.DecorationMetadata = new IconDecorationMetadata(icon, pixelSize, worldSize, opacity);
-            base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
         }
 
         public IconDecoration(string icon, uint pixelSize, float opacity, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, opacity, (lifespan.Start, lifespan.End), connector)

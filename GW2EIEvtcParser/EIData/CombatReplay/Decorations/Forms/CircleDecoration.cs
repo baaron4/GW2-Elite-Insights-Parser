@@ -44,18 +44,13 @@ namespace GW2EIEvtcParser.EIData
         public uint Radius => DecorationMetadata.Radius;
         public uint MinRadius => DecorationMetadata.MinRadius;
 
-        protected CircleDecoration()
-        {
-        }
 
         internal CircleDecoration(CircleDecorationMetadata metadata, VariableCircleDecoration variable) : base(metadata, variable)
         {
         }
 
-        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new CircleDecorationMetadata(color, radius, minRadius), new VariableCircleDecoration(lifespan, connector))
         {
-            base.DecorationMetadata = new CircleDecorationMetadata(color, radius, minRadius);
-            VariableDecoration = new VariableCircleDecoration(lifespan, connector);
         }
 
         public CircleDecoration(uint radius, (long start, long end) lifespan, string color, GeographicalConnector connector) : this(radius, 0, lifespan, color, connector)

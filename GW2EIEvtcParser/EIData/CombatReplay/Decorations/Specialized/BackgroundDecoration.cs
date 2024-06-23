@@ -15,9 +15,5 @@ namespace GW2EIEvtcParser.EIData
         internal BackgroundDecoration(BackgroundDecorationMetadata metadata, VariableBackgroundDecoration variable) : base(metadata, variable)
         {
         }
-
-        public BackgroundDecoration() : base()
-        {
-        }
     }
 }

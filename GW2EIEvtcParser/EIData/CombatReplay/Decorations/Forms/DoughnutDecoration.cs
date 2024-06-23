@@ -48,10 +48,8 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new DoughnutDecorationMetadata(color, innerRadius, outerRadius), new VariableDoughnutDecoration(lifespan, connector))
         {
-            base.DecorationMetadata = new DoughnutDecorationMetadata(color, innerRadius, outerRadius);
-            VariableDecoration = new VariableDoughnutDecoration(lifespan, connector);
         }
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {

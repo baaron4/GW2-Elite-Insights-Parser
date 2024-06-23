@@ -47,10 +47,8 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base()
+        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base(new LineDecorationMetadata(color), new VariableLineDecoration(lifespan, connector, targetConnector))
         {
-            DecorationMetadata = new LineDecorationMetadata(color);
-            base.VariableDecoration = new VariableLineDecoration(lifespan, connector, targetConnector);
         }
 
         public LineDecoration((long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector, GeographicalConnector targetConnector) : this(lifespan, color.WithAlpha(opacity).ToString(true), connector, targetConnector)

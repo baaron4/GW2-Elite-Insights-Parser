@@ -42,9 +42,6 @@
         internal FormDecoration(FormDecorationMetadata metadata, VariableFormDecoration variable) : base(metadata, variable)
         {
         }
-        protected FormDecoration() : base()
-        {
-        }
 
         public virtual FormDecoration UsingFilled(bool filled)
         {

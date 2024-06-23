@@ -50,10 +50,8 @@ namespace GW2EIEvtcParser.EIData
         internal MovingPlatformDecoration(MovingPlatformDecorationMetadata metadata, VariableMovingPlatformDecoration variable) : base(metadata, variable)
         {
         }
-        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base()
+        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base(new MovingPlatformDecorationMetadata(image, width, height), new VariableMovingPlatformDecoration(lifespan))
         {
-            base.DecorationMetadata = new MovingPlatformDecorationMetadata(image, width, height);
-            base.VariableDecoration = new VariableMovingPlatformDecoration(lifespan);
         }
 
         public void AddPosition(float x, float y, float z, double angle, double opacity, int time)

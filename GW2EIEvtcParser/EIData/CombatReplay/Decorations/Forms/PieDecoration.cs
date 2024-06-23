@@ -51,10 +51,8 @@ namespace GW2EIEvtcParser.EIData
 
         //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
 
-        public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+        public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new PieDecorationMetadata(color, radius, 0, openingAngle), new VariablePieDecoration(lifespan, connector))
         {
-            base.DecorationMetadata = new PieDecorationMetadata(color, radius, 0, openingAngle);
-            VariableDecoration = new VariablePieDecoration(lifespan, connector);
         }
 
         public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, openingAngle, lifespan, color.WithAlpha(opacity).ToString(true), connector)
