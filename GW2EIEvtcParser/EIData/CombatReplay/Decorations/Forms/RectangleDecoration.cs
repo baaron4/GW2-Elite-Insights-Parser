@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class RectangleDecoration : FormDecoration
     {
-        internal class ConstantRectangleDecoration : ConstantFormDecoration
+        internal class RectangleDecorationMetadata : FormDecorationMetadata
         {
             public uint Height { get; }
             public uint Width { get; }
 
-            public ConstantRectangleDecoration(string color, uint width, uint height) : base(color)
+            public RectangleDecorationMetadata(string color, uint width, uint height) : base(color)
             {
                 Height = Math.Max(height, 1);
                 Width = Math.Max(width, 1);
@@ -36,17 +36,17 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantRectangleDecoration ConstantDecoration => (ConstantRectangleDecoration)base.ConstantDecoration;
-        public uint Height => ConstantDecoration.Height;
-        public uint Width => ConstantDecoration.Width;
+        private new RectangleDecorationMetadata DecorationMetadata => (RectangleDecorationMetadata)base.DecorationMetadata;
+        public uint Height => DecorationMetadata.Height;
+        public uint Width => DecorationMetadata.Width;
 
-        internal RectangleDecoration(ConstantRectangleDecoration constant, VariableRectangleDecoration variable) : base(constant, variable)
+        internal RectangleDecoration(RectangleDecorationMetadata metadata, VariableRectangleDecoration variable) : base(metadata, variable)
         {
         }
 
         public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
         {
-            base.ConstantDecoration = new ConstantRectangleDecoration(color, width, height);
+            base.DecorationMetadata = new RectangleDecorationMetadata(color, width, height);
             VariableDecoration = new VariableRectangleDecoration(lifespan, connector);
         }
         public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(width, height, lifespan, color.WithAlpha(opacity).ToString(true), connector)

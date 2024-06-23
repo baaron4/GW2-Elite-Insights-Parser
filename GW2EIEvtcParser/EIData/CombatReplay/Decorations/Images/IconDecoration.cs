@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class IconDecoration : GenericIconDecoration
     {
-        internal class ConstantIconDecoration : ConstantGenericIconDecoration
+        internal class IconDecorationMetadata : GenericIconDecorationMetadata
         {
             public float Opacity { get; }
 
 
-            public ConstantIconDecoration(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)
+            public IconDecorationMetadata(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)
             {
                 Opacity = (float)Math.Round(opacity, 2);
             }
@@ -40,13 +40,13 @@ namespace GW2EIEvtcParser.EIData
                 IsSquadMarker = isSquadMarker;
             }
         }
-        private new ConstantIconDecoration ConstantDecoration => (ConstantIconDecoration)base.ConstantDecoration;
+        private new IconDecorationMetadata DecorationMetadata => (IconDecorationMetadata)base.DecorationMetadata;
         private new VariableIconDecoration VariableDecoration => (VariableIconDecoration)base.VariableDecoration;
 
-        public float Opacity => ConstantDecoration.Opacity;
+        public float Opacity => DecorationMetadata.Opacity;
         public bool IsSquadMarker => VariableDecoration.IsSquadMarker;
 
-        internal IconDecoration(ConstantIconDecoration constant, VariableIconDecoration variable) : base(constant, variable)
+        internal IconDecoration(IconDecorationMetadata metadata, VariableIconDecoration variable) : base(metadata, variable)
         {
         }
         protected IconDecoration()
@@ -56,13 +56,13 @@ namespace GW2EIEvtcParser.EIData
 
         public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
         {
-            base.ConstantDecoration = new ConstantIconDecoration(icon, pixelSize, 0, opacity);
+            base.DecorationMetadata = new IconDecorationMetadata(icon, pixelSize, 0, opacity);
             base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
         }
 
         public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
         {
-            base.ConstantDecoration = new ConstantIconDecoration(icon, pixelSize, worldSize, opacity);
+            base.DecorationMetadata = new IconDecorationMetadata(icon, pixelSize, worldSize, opacity);
             base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
         }
 

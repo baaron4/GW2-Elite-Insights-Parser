@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class DoughnutDecoration : FormDecoration
     {
-        internal class ConstantDoughnutDecoration : ConstantFormDecoration
+        internal class DoughnutDecorationMetadata : FormDecorationMetadata
         {
             public uint OuterRadius { get; }
             public uint InnerRadius { get; }
 
-            public ConstantDoughnutDecoration(string color, uint innerRadius, uint outerRadius) : base(color)
+            public DoughnutDecorationMetadata(string color, uint innerRadius, uint outerRadius) : base(color)
             {
                 OuterRadius = Math.Max(outerRadius, 1);
                 InnerRadius = innerRadius;
@@ -40,17 +40,17 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantDoughnutDecoration ConstantDecoration => (ConstantDoughnutDecoration)base.ConstantDecoration;
-        public uint OuterRadius => ConstantDecoration.OuterRadius;
-        public uint InnerRadius => ConstantDecoration.InnerRadius;
+        private new DoughnutDecorationMetadata DecorationMetadata => (DoughnutDecorationMetadata)base.DecorationMetadata;
+        public uint OuterRadius => DecorationMetadata.OuterRadius;
+        public uint InnerRadius => DecorationMetadata.InnerRadius;
 
-        internal DoughnutDecoration(ConstantDoughnutDecoration constant, VariableDoughnutDecoration variable) : base(constant, variable)
+        internal DoughnutDecoration(DoughnutDecorationMetadata metadata, VariableDoughnutDecoration variable) : base(metadata, variable)
         {
         }
 
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
         {
-            base.ConstantDecoration = new ConstantDoughnutDecoration(color, innerRadius, outerRadius);
+            base.DecorationMetadata = new DoughnutDecorationMetadata(color, innerRadius, outerRadius);
             VariableDecoration = new VariableDoughnutDecoration(lifespan, connector);
         }
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)

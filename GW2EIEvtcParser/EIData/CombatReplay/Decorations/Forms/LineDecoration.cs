@@ -6,10 +6,10 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class LineDecoration : FormDecoration
     {
-        internal class ConstantLineDecoration : ConstantFormDecoration
+        internal class LineDecorationMetadata : FormDecorationMetadata
         {
 
-            public ConstantLineDecoration(string color) : base(color)
+            public LineDecorationMetadata(string color) : base(color)
             {
             }
 
@@ -43,13 +43,13 @@ namespace GW2EIEvtcParser.EIData
         private new VariableLineDecoration VariableDecoration => (VariableLineDecoration)base.VariableDecoration;
         public GeographicalConnector ConnectedFrom => VariableDecoration.ConnectedFrom;
 
-        internal LineDecoration(ConstantLineDecoration constant, VariableLineDecoration variable) : base(constant, variable)
+        internal LineDecoration(LineDecorationMetadata metadata, VariableLineDecoration variable) : base(metadata, variable)
         {
         }
 
         public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base()
         {
-            ConstantDecoration = new ConstantLineDecoration(color);
+            DecorationMetadata = new LineDecorationMetadata(color);
             base.VariableDecoration = new VariableLineDecoration(lifespan, connector, targetConnector);
         }
 

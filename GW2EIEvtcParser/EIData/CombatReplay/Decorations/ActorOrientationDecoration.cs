@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class ActorOrientationDecoration : GenericAttachedDecoration
     {
-        internal class ConstantActorOrientationDecoration : ConstantGenericAttachedDecoration
+        internal class ActorOrientationDecorationMetadata : GenericAttachedDecorationMetadata
         {
             public override string GetSignature()
             {
@@ -37,15 +37,13 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal ActorOrientationDecoration(ConstantActorOrientationDecoration constant, VariableActorOrientationDecoration variable)
+        internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, VariableActorOrientationDecoration variable) : base (metadata, variable)
         {
-            ConstantDecoration = constant;
-            VariableDecoration = variable;
         }
 
         public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base()
         {
-            ConstantDecoration = new ConstantActorOrientationDecoration();
+            DecorationMetadata = new ActorOrientationDecorationMetadata();
             VariableDecoration = new VariableActorOrientationDecoration(lifespan, agent);
         }
 

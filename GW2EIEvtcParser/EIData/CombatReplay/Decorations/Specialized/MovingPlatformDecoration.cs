@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class MovingPlatformDecoration : BackgroundDecoration
     {
-        internal class ConstantMovingPlatformDecoration : ConstantBackgroundDecoration
+        internal class MovingPlatformDecorationMetadata : BackgroundDecorationMetadata
         {
             public string Image { get; }
             public int Width { get; }
             public int Height { get; }
-            public ConstantMovingPlatformDecoration(string image, int width, int height)
+            public MovingPlatformDecorationMetadata(string image, int width, int height)
             {
                 Image = image;
                 Width = width;
@@ -39,20 +39,20 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantMovingPlatformDecoration ConstantDecoration => (ConstantMovingPlatformDecoration)base.ConstantDecoration;
+        private new MovingPlatformDecorationMetadata DecorationMetadata => (MovingPlatformDecorationMetadata)base.DecorationMetadata;
         private new VariableMovingPlatformDecoration VariableDecoration => (VariableMovingPlatformDecoration)base.VariableDecoration;
         //
-        public string Image => ConstantDecoration.Image;
-        public int Width => ConstantDecoration.Width;
-        public int Height => ConstantDecoration.Height;
+        public string Image => DecorationMetadata.Image;
+        public int Width => DecorationMetadata.Width;
+        public int Height => DecorationMetadata.Height;
 
         public IReadOnlyList<(float x, float y, float z, float angle, float opacity, int time)> Positions => VariableDecoration.Positions;
-        internal MovingPlatformDecoration(ConstantMovingPlatformDecoration constant, VariableMovingPlatformDecoration variable) : base(constant, variable)
+        internal MovingPlatformDecoration(MovingPlatformDecorationMetadata metadata, VariableMovingPlatformDecoration variable) : base(metadata, variable)
         {
         }
         public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base()
         {
-            base.ConstantDecoration = new ConstantMovingPlatformDecoration(image, width, height);
+            base.DecorationMetadata = new MovingPlatformDecorationMetadata(image, width, height);
             base.VariableDecoration = new VariableMovingPlatformDecoration(lifespan);
         }
 

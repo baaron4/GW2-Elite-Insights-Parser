@@ -4,12 +4,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class GenericIconDecoration : GenericAttachedDecoration
     {
-        internal abstract class ConstantGenericIconDecoration : ConstantGenericAttachedDecoration
+        internal abstract class GenericIconDecorationMetadata : GenericAttachedDecorationMetadata
         {
             public string Image { get; }
             public uint PixelSize { get; }
             public uint WorldSize { get; }
-            protected ConstantGenericIconDecoration(string icon, uint pixelSize, uint worldSize) : base()
+            protected GenericIconDecorationMetadata(string icon, uint pixelSize, uint worldSize) : base()
             {
                 Image = icon;
                 PixelSize = Math.Max(pixelSize, 1);
@@ -22,12 +22,12 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantGenericIconDecoration ConstantDecoration => (ConstantGenericIconDecoration)base.ConstantDecoration;
-        public string Image => ConstantDecoration.Image;
-        public uint PixelSize => ConstantDecoration.PixelSize;
-        public uint WorldSize => ConstantDecoration.WorldSize;
+        private new GenericIconDecorationMetadata DecorationMetadata => (GenericIconDecorationMetadata)base.DecorationMetadata;
+        public string Image => DecorationMetadata.Image;
+        public uint PixelSize => DecorationMetadata.PixelSize;
+        public uint WorldSize => DecorationMetadata.WorldSize;
 
-        internal GenericIconDecoration(ConstantGenericIconDecoration constant, VariableGenericIconDecoration variable) : base(constant, variable)
+        internal GenericIconDecoration(GenericIconDecorationMetadata metadata, VariableGenericIconDecoration variable) : base(metadata, variable)
         {
         }
 

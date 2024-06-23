@@ -6,11 +6,11 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class PieDecoration : CircleDecoration
     {
-        internal class ConstantPieDecoration : ConstantCircleDecoration
+        internal class PieDecorationMetadata : CircleDecorationMetadata
         {
             public float OpeningAngle { get; } //in degrees
 
-            public ConstantPieDecoration(string color, uint radius, uint minRadius, float openingAngle) : base(color, radius, minRadius)
+            public PieDecorationMetadata(string color, uint radius, uint minRadius, float openingAngle) : base(color, radius, minRadius)
             {
                 OpeningAngle = openingAngle;
                 if (OpeningAngle < 0)
@@ -42,10 +42,10 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantPieDecoration ConstantDecoration => (ConstantPieDecoration)base.ConstantDecoration;
-        public float OpeningAngle => ConstantDecoration.OpeningAngle;
+        private new PieDecorationMetadata DecorationMetadata => (PieDecorationMetadata)base.DecorationMetadata;
+        public float OpeningAngle => DecorationMetadata.OpeningAngle;
 
-        internal PieDecoration(ConstantPieDecoration constant, VariablePieDecoration variable) : base(constant, variable)
+        internal PieDecoration(PieDecorationMetadata metadata, VariablePieDecoration variable) : base(metadata, variable)
         {
         }
 
@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EIData
 
         public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
         {
-            base.ConstantDecoration = new ConstantPieDecoration(color, radius, 0, openingAngle);
+            base.DecorationMetadata = new PieDecorationMetadata(color, radius, 0, openingAngle);
             VariableDecoration = new VariablePieDecoration(lifespan, connector);
         }
 

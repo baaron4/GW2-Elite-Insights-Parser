@@ -5,13 +5,13 @@ namespace GW2EIEvtcParser.EIData
 {
     public class CombatReplayDecorationContainer
     {
-        private Dictionary<string, ConstantGenericDecoration> DecorationCache { get; }
-        private List<(ConstantGenericDecoration constant, VariableGenericDecoration variable)> Decorations { get; }
+        private Dictionary<string, GenericDecorationMetadata> DecorationCache { get; }
+        private List<(GenericDecorationMetadata constant, VariableGenericDecoration variable)> Decorations { get; }
 
-        internal CombatReplayDecorationContainer(Dictionary<string, ConstantGenericDecoration> cache)
+        internal CombatReplayDecorationContainer(Dictionary<string, GenericDecorationMetadata> cache)
         {
             DecorationCache = cache;
-            Decorations = new List<(ConstantGenericDecoration constant, VariableGenericDecoration variable)>();
+            Decorations = new List<(GenericDecorationMetadata constant, VariableGenericDecoration variable)>();
         }
 
         internal void Add(GenericDecoration decoration)
@@ -20,9 +20,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            ConstantGenericDecoration constantPart = decoration.ConstantDecoration;
+            GenericDecorationMetadata constantPart = decoration.DecorationMetadata;
             var id = constantPart.GetSignature();
-            if (!DecorationCache.TryGetValue(id, out ConstantGenericDecoration cached))
+            if (!DecorationCache.TryGetValue(id, out GenericDecorationMetadata cached))
             {
                 cached = constantPart;
                 DecorationCache[id] = constantPart;
@@ -33,7 +33,7 @@ namespace GW2EIEvtcParser.EIData
         internal IReadOnlyList<GenericDecoration> ToList()
         {
             var result = new List<GenericDecoration>();
-            foreach ((ConstantGenericDecoration constant, VariableGenericDecoration variable) in Decorations)
+            foreach ((GenericDecorationMetadata constant, VariableGenericDecoration variable) in Decorations)
             {
                 result.Add(constant.GetDecorationFromVariable(variable));
             }

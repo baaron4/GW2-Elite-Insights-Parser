@@ -6,11 +6,11 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class IconOverheadDecoration : IconDecoration
     {
-        internal class ConstantIconOverheadDecoration : ConstantIconDecoration
+        internal class IconOverheadDecorationMetadata : IconDecorationMetadata
         {
 
 
-            public ConstantIconOverheadDecoration(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize, opacity)
+            public IconOverheadDecorationMetadata(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize, opacity)
             {
             }
 
@@ -36,12 +36,12 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        internal IconOverheadDecoration(ConstantIconOverheadDecoration constant, VariableIconOverheadDecoration variable) : base(constant, variable)
+        internal IconOverheadDecoration(IconOverheadDecorationMetadata metadata, VariableIconOverheadDecoration variable) : base(metadata, variable)
         {
         }
         public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base()
         {
-            ConstantDecoration = new ConstantIconDecoration(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity);
+            DecorationMetadata = new IconDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity);
             VariableDecoration = new VariableIconDecoration(lifespan, connector);
         }
 

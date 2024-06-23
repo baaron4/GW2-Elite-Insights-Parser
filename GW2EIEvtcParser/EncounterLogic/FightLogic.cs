@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<AbstractSingleActor> _targets { get; private set; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _hostiles { get; private set; } = new List<AbstractSingleActor>();
 
-        internal Dictionary<string, ConstantGenericDecoration> DecorationCache { get; } = new Dictionary<string, ConstantGenericDecoration>();
+        internal Dictionary<string, GenericDecorationMetadata> DecorationCache { get; } = new Dictionary<string, GenericDecorationMetadata>();
 
         protected CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
 

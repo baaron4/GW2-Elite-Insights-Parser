@@ -6,10 +6,10 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class BackgroundIconDecoration : GenericIconDecoration
     {
-        internal class ConstantBackgroundIconDecoration : ConstantGenericIconDecoration
+        internal class BackgroundIconDecorationMetadata : GenericIconDecorationMetadata
         {
 
-            public ConstantBackgroundIconDecoration(string icon, uint pixelSize, uint worldSize) : base(icon, pixelSize, worldSize)
+            public BackgroundIconDecorationMetadata(string icon, uint pixelSize, uint worldSize) : base(icon, pixelSize, worldSize)
             {
             }
 
@@ -44,12 +44,12 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyList<ParametricPoint1D> Opacities => VariableDecoration.Opacities;
         public IReadOnlyList<ParametricPoint1D> Heights => VariableDecoration.Heights;
 
-        internal BackgroundIconDecoration(ConstantBackgroundIconDecoration constant, VariableBackgroundIconDecoration variable) : base(constant, variable)
+        internal BackgroundIconDecoration(BackgroundIconDecorationMetadata metadata, VariableBackgroundIconDecoration variable) : base(metadata, variable)
         {
         }
         public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base()
         {
-            ConstantDecoration = new ConstantBackgroundIconDecoration(icon, pixelSize, worldSize);
+            DecorationMetadata = new BackgroundIconDecorationMetadata(icon, pixelSize, worldSize);
             base.VariableDecoration = new VariableBackgroundIconDecoration(lifespan, opacities, heights, connector);
         }
 
