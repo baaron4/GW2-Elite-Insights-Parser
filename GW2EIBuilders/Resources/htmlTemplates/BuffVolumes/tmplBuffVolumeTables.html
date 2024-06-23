@@ -55,36 +55,29 @@
 </template>
 
 <script>
-    function getDefaultBuffTableSubComponent(key) {
-        let header = 'N/A';
-        if (key === "healingbuff-tables") {
-            header = "HealingStatistics";
-        } else if (key === "buff-tables") {
-            header = "Statistics";
-        }
-        if (!validateStartPath(header+"/Buffs")) {
-            return 0;
-        }
-        const setting = EIUrlParams.get("startPage");
-        const compo = setting.split('/')[2];
-        switch (compo) {
-            case "Boons":
-                return 0;
-            case "OffensiveBuffs":
-                return hasOffBuffs() ? 1 : 0;
-            case "SupportBuffs":
-                return hasSupBuffs() ? 2 : 0;
-            case "DefensiveBuffs":
-                return hasDefBuffs() ? 3 : 0;
-            case "Conditions":
-                return hasConditions() ? 5 : 0;
-            case "GearBuffs":
-                return hasGearBuffs() ? 4 : 0;
-            case "Debuffs":
-                return hasDebuffs() ? 7 : 0;
-            case "Personal Buffs":
-                return hasPersBuffs() ? 6 : 0;
-        }
+    function getDefaultBuffVolumeTableSubComponent() {
+        if (validateStartPath("HealingStatistics/Buffs/Volumes") || validateStartPath("Statistics/Buffs/Volumes")) {
+            const setting = EIUrlParams.get("startPage");
+            const compo = setting.split('/')[2];
+            switch (compo) {
+                case "Boons":
+                    return 0;
+                case "OffensiveBuffs":
+                    return hasOffBuffs() ? 1 : 0;
+                case "SupportBuffs":
+                    return hasSupBuffs() ? 2 : 0;
+                case "DefensiveBuffs":
+                    return hasDefBuffs() ? 3 : 0;
+                case "Conditions":
+                    return hasConditions() ? 5 : 0;
+                case "GearBuffs":
+                    return hasGearBuffs() ? 4 : 0;
+                case "Debuffs":
+                    return hasDebuffs() ? 7 : 0;
+                case "Personal Buffs":
+                    return hasPersBuffs() ? 6 : 0;
+            }
+        }      
         return 0;
     }
     Vue.component("buff-volume-tables-component", {
@@ -93,7 +86,7 @@
         data: function () {
             return {
                 activeduration: 0,
-                tab: getDefaultBuffTableSubComponent(this.$vnode.key),
+                tab: getDefaultBuffVolumeTableSubComponent(),
             };
         },
         computed: {

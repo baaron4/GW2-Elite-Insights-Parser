@@ -457,11 +457,11 @@ namespace GW2EIBuilders.Properties {
         ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
         ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 0&quot; :class=&quot;{active: mode === 0}&quot;&gt;Uptime&lt;/a&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;buffMode = 0&quot; :class=&quot;{active: buffMode === 0}&quot;&gt;Uptime&lt;/a&gt;
         ///                &lt;/li&gt;
         ///                &lt;li class=&quot;nav-item&quot;&gt;
-        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;mode = 1&quot; :class=&quot;{active: mode === 1 }&quot;&gt;Generation Self&lt;/a&gt;
-        ///                &lt;/l [rest of string was truncated]&quot;;.
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;buffMode = 1&quot; :class=&quot;{active: buffMode === 1 }&quot;&gt;Generation Self&lt;/a&gt;
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplBuffStats {
             get {
@@ -507,6 +507,27 @@ namespace GW2EIBuilders.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 0}&quot; @click=&quot;tab = 0&quot;&gt;Uptimes&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;hasOffBuffs&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 1}&quot; @click=&quot;tab = 1&quot;&gt;Volumes&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;buff-tables-component v-if=&quot;tab == 0&quot; :key=&quot;&apos;buff-tables&apos;&quot; :type=&quot;tab&quot; :phaseindex=&quot;phaseindex&quot;
+        ///                :playeri [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBuffTab {
+            get {
+                return ResourceManager.GetString("tmplBuffTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div v-if=&quot;buffs.length &gt; 0&quot;&gt;
         ///        &lt;img v-if=&quot;generation&quot; class=&quot;mb-1 icon&quot; src=&quot;https://i.imgur.com/nSYuby8.png&quot;
         ///            :data-original-title=&quot;tooltipExpl&quot; /&gt;
@@ -539,6 +560,97 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplBuffTables {
             get {
                 return ResourceManager.GetString("tmplBuffTables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;buffMode = 0&quot; :class=&quot;{active: buffMode === 0}&quot;&gt;Incoming&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;buffMode = 1&quot; :class=&quot;{active: buffMode === 1 }&quot;&gt;Outgoing Self&lt;/a&gt;
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBuffVolumeStats {
+            get {
+                return ResourceManager.GetString("tmplBuffVolumeStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;    
+        ///        &lt;div :key=&quot;&apos;activedurationplayer&apos;&quot; class=&quot;d-flex flex-row justify-content-center mt-1 mb-1&quot;&gt;
+        ///            &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center scale85&quot;&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @click=&quot;activeduration = 0&quot; :class=&quot;{active: activeduration === 0}&quot;&gt;Phase
+        ///                        duration&lt;/a&gt;
+        ///                &lt;/li&gt;
+        ///                &lt;li class=&quot;nav-item&quot;&gt;
+        ///                    &lt;a class=&quot;nav-link&quot; @c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBuffVolumeStatsPlayer {
+            get {
+                return ResourceManager.GetString("tmplBuffVolumeStatsPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;div&gt;
+        ///            &lt;h3 class=&quot;text-center&quot;&gt;Conditions&lt;/h3&gt;
+        ///            &lt;buff-volume-table-component :outgoing=&quot;true&quot; :id=&quot;&apos;condition-volume-stats-target-table-&apos; + target.id&quot; :buffs=&quot;conditions&quot;
+        ///                :playerdata=&quot;condiData&quot; :sums=&quot;condiSums&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;&lt;/buff-volume-table-component&gt;
+        ///        &lt;/div&gt;
+        ///        &lt;div v-show=&quot;hasBoons&quot; class=&quot;mt-2&quot;&gt;
+        ///            &lt;h3 class=&quot;text-center&quot;&gt;Boons&lt;/h3&gt;
+        ///            &lt;buff-volume-table-compone [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBuffVolumeStatsTarget {
+            get {
+                return ResourceManager.GetString("tmplBuffVolumeStatsTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div v-if=&quot;buffs.length &gt; 0&quot;&gt;
+        ///        &lt;img v-if=&quot;generation&quot; class=&quot;mb-1 icon&quot; src=&quot;https://i.imgur.com/nSYuby8.png&quot;
+        ///            :data-original-title=&quot;tooltipExpl&quot; /&gt;
+        ///        &lt;div v-if=&quot;colPageCount &gt; 0&quot;&gt;
+        ///            &lt;table-scroll-component :min=&quot;0&quot; :max=&quot;colPageCount&quot; :width=&quot;&apos;600px&apos;&quot; :height=&quot;&apos;10px&apos;&quot; :transform=&quot;&apos;translate(500px)&apos;&quot; :pagestructure=&quot;colStructure&quot;&gt;&lt;/table-scroll-component&gt;
+        ///        &lt;/div&gt;
+        ///        &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; wid [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBuffVolumeTable {
+            get {
+                return ResourceManager.GetString("tmplBuffVolumeTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 0}&quot; @click=&quot;tab = 0&quot;&gt;Boons&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;hasOffBuffs&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 1}&quot; @click=&quot;tab = 1&quot;&gt;Offensive Buffs&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;hasSupBuffs&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 2}&quot; @click=&quot;tab = 2&quot;&gt;Support Buffs&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplBuffVolumeTables {
+            get {
+                return ResourceManager.GetString("tmplBuffVolumeTables", resourceCulture);
             }
         }
         
@@ -833,12 +945,32 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;conditions-table-component&quot;, {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        template: `${template}`,
-        ///        da [rest of string was truncated]&quot;;.
+        ///        mixins: [buffComponent],
+        ///        te [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplConditionsTable {
             get {
                 return ResourceManager.GetString("tmplConditionsTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;buff-volume-table-component :key=&quot;&apos;conditions-volume-stats-table&apos;&quot; :outgoing=&quot;false&quot;
+        ///            :id=&quot;&apos;conditions-volume-stats-table&apos;&quot; :buffs=&quot;conditions&quot; :playerdata=&quot;buffData[0]&quot; :sums=&quot;buffData[1]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
+        ///        &lt;/buff-volume-table-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;conditions-volume-table-component&quot;, {
+        ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
+        ///        mixins: [buffComponen [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplConditionsVolumeTable {
+            get {
+                return ResourceManager.GetString("tmplConditionsVolumeTable", resourceCulture);
             }
         }
         
@@ -1048,13 +1180,34 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;debuff-table-component&quot;, {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
+        ///        mixins: [buffComponent],
         ///        template: `${template}`,
-        ///        data: function () {
-        ///        [rest of string was truncated]&quot;;.
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplDebuffTable {
             get {
                 return ResourceManager.GetString("tmplDebuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;buff-volume-table-component :key=&quot;&apos;debuff-volume-stats-table&apos;&quot;  :outgoing=&quot;false&quot;
+        ///            :id=&quot;&apos;debuff-volume-stats-table&apos;&quot; :buffs=&quot;debuffs&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
+        ///        &lt;/buff-volume-table-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;debuff-volume-table-component&quot;, {
+        ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
+        ///        mixins: [buffComponent],
+        ///        template: `${ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplDebuffVolumeTable {
+            get {
+                return ResourceManager.GetString("tmplDebuffVolumeTable", resourceCulture);
             }
         }
         
@@ -1132,8 +1285,8 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;buff-table-component :key=&quot;&apos;gear-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
-        ///            :id=&quot;&apos;gear-buff-stats-table&apos;&quot; :buffs=&quot;enhancements&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
+        ///        &lt;buff-table-component :key=&quot;&apos;enhancement-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
+        ///            :id=&quot;&apos;enhancement-buff-stats-table&apos;&quot; :buffs=&quot;enhancements&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
         ///        &lt;/buff-table-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
@@ -1141,8 +1294,8 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;enhancement-buff-table-component&quot;, {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        template: `${template}`,
-        ///        data: f [rest of string was truncated]&quot;;.
+        ///        mixins: [buffComponent],
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplEnhancementBuffTable {
             get {
@@ -1202,13 +1355,33 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;gear-buff-table-component&quot;, {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        template: `${template}`,
-        ///        data: function () {
-        /// [rest of string was truncated]&quot;;.
+        ///        mixins: [buffComponent],
+        ///        template: `${template [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplGearBuffTable {
             get {
                 return ResourceManager.GetString("tmplGearBuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;buff-volume-table-component :key=&quot;&apos;gear-buff-volume-stats-table&apos;&quot;  :outgoing=&quot;false&quot;
+        ///            :id=&quot;&apos;gear-buff-volume-stats-table&apos;&quot; :buffs=&quot;gears&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
+        ///        &lt;/buff-volume-table-component&gt;
+        ///    &lt;/div&gt;
+        ///&lt;/template&gt;
+        ///
+        ///&lt;script&gt;
+        ///    Vue.component(&quot;gear-buff-volume-table-component&quot;, {
+        ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
+        ///        mixins: [buffComponent],
+        ///        templa [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplGearBuffVolumeTable {
+            get {
+                return ResourceManager.GetString("tmplGearBuffVolumeTable", resourceCulture);
             }
         }
         
@@ -1467,8 +1640,8 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;buff-table-component :key=&quot;&apos;gear-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
-        ///            :id=&quot;&apos;gear-buff-stats-table&apos;&quot; :buffs=&quot;nourishments&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
+        ///        &lt;buff-table-component :key=&quot;&apos;nourishement-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
+        ///            :id=&quot;&apos;nourishement-buff-stats-table&apos;&quot; :buffs=&quot;nourishments&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
         ///        &lt;/buff-table-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
@@ -1476,8 +1649,7 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;nourishement-buff-table-component&quot;, {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        template: `${template}`,
-        ///        data:  [rest of string was truncated]&quot;;.
+        ///        mixins: [buffComponent], [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplNourishmentBuffTable {
             get {
@@ -1509,8 +1681,8 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
-        ///        &lt;buff-table-component :key=&quot;&apos;gear-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
-        ///            :id=&quot;&apos;gear-buff-stats-table&apos;&quot; :buffs=&quot;otherConsumables&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
+        ///        &lt;buff-table-component :key=&quot;&apos;otherconsumable-buff-stats-table&apos;&quot; :condition=&quot;false&quot; :generation=&quot;false&quot;
+        ///            :id=&quot;&apos;otherconsumable-buff-stats-table&apos;&quot; :buffs=&quot;otherConsumables&quot; :playerdata=&quot;buffData&quot; :sums=&quot;[]&quot; :playerindex=&quot;playerindex&quot; :hidecustom=&quot;false&quot;&gt;
         ///        &lt;/buff-table-component&gt;
         ///    &lt;/div&gt;
         ///&lt;/template&gt;
@@ -1518,8 +1690,7 @@ namespace GW2EIBuilders.Properties {
         ///&lt;script&gt;
         ///    Vue.component(&quot;otherconsumable-buff-table-component&quot;, {
         ///        props: [&apos;phaseindex&apos;, &apos;playerindex&apos;, &apos;activeduration&apos;],
-        ///        template: `${template}`,
-        ///        [rest of string was truncated]&quot;;.
+        ///        mixins: [bu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplOtherConsumableBuffTable {
             get {
@@ -1552,17 +1723,34 @@ namespace GW2EIBuilders.Properties {
         ///    &lt;div&gt;
         ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85&quot;&gt;
         ///            &lt;li v-for=&quot;base in bases&quot; class=&quot;nav-item&quot;&gt;
-        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;mode = base&quot; :class=&quot;{active: mode === base}&quot;&gt;{{ base }}&lt;/a&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;persBuffMode = base&quot; :class=&quot;{active: persBuffMode === base}&quot;&gt;{{ base }}&lt;/a&gt;
         ///            &lt;/li&gt;
         ///        &lt;/ul&gt;
         ///        &lt;div v-for=&quot;(spec, id) in orderedSpecs&quot; class=&quot;mt-1 mb-1&quot;&gt;
-        ///            &lt;div v-show=&quot;specToBase[spec.name] === mode&quot;&gt;
-        ///                &lt;h3 class=&quot;text-center&quot;&gt;{{ spec.name }}&lt;/h3&gt;
-        ///           [rest of string was truncated]&quot;;.
+        ///            &lt;div v-show=&quot;specToBase[spec.name] === persBuffMode&quot;&gt;
+        ///                &lt;h3 class=&quot;text-center&quot;&gt;{{ spec. [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tmplPersonalBuffTable {
             get {
                 return ResourceManager.GetString("tmplPersonalBuffTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85&quot;&gt;
+        ///            &lt;li v-for=&quot;base in bases&quot; class=&quot;nav-item&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; @click=&quot;persBuffMode = base&quot; :class=&quot;{active: persBuffMode === base}&quot;&gt;{{ base }}&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///        &lt;div v-for=&quot;(spec, id) in orderedSpecs&quot; class=&quot;mt-1 mb-1&quot;&gt;
+        ///            &lt;div v-show=&quot;specToBase[spec.name] === persBuffMode&quot;&gt;
+        ///                &lt;h3 class=&quot;text-center&quot;&gt;{{ spec. [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPersonalBuffVolumeTable {
+            get {
+                return ResourceManager.GetString("tmplPersonalBuffVolumeTable", resourceCulture);
             }
         }
         

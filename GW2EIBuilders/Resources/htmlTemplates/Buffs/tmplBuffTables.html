@@ -70,41 +70,34 @@
 </template>
 
 <script>
-    function getDefaultBuffTableSubComponent(key) {
-        let header = 'N/A';
-        if (key === "healingbuff-tables") {
-            header = "HealingStatistics";
-        } else if (key === "buff-tables") {
-            header = "Statistics";
-        }
-        if (!validateStartPath(header+"/Buffs")) {
-            return 0;
-        }
-        const setting = EIUrlParams.get("startPage");
-        const compo = setting.split('/')[2];
-        switch (compo) {
-            case "Boons":
-                return 0;
-            case "OffensiveBuffs":
-                return hasOffBuffs() ? 1 : 0;
-            case "SupportBuffs":
-                return hasSupBuffs() ? 2 : 0;
-            case "DefensiveBuffs":
-                return hasDefBuffs() ? 3 : 0;
-            case "Conditions":
-                return hasConditions() ? 5 : 0;
-            case "GearBuffs":
-                return hasGearBuffs() ? 4 : 0;
-            case "Debuffs":
-                return hasDebuffs() ? 7 : 0;
-            case "Nourishments":
-                return hasNourishments() ? 8 : 0;
-            case "Enhancements":
-                return hasEnhancements() ? 9 : 0;
-            case "Other Consumables":
-                return hasOtherConsumables() ? 10 : 0;
-            case "Personal Buffs":
-                return hasPersBuffs() ? 6 : 0;
+    function getDefaultBuffTableSubComponent() {
+        if (validateStartPath("HealingStatistics/Buffs/Uptimes") || validateStartPath("Statistics/Buffs/Uptimes")) {
+            const setting = EIUrlParams.get("startPage");
+            const compo = setting.split('/')[3];
+            switch (compo) {
+                case "Boons":
+                    return 0;
+                case "OffensiveBuffs":
+                    return hasOffBuffs() ? 1 : 0;
+                case "SupportBuffs":
+                    return hasSupBuffs() ? 2 : 0;
+                case "DefensiveBuffs":
+                    return hasDefBuffs() ? 3 : 0;
+                case "Conditions":
+                    return hasConditions() ? 5 : 0;
+                case "GearBuffs":
+                    return hasGearBuffs() ? 4 : 0;
+                case "Debuffs":
+                    return hasDebuffs() ? 7 : 0;
+                case "Nourishments":
+                    return hasNourishments() ? 8 : 0;
+                case "Enhancements":
+                    return hasEnhancements() ? 9 : 0;
+                case "Other Consumables":
+                    return hasOtherConsumables() ? 10 : 0;
+                case "Personal Buffs":
+                    return hasPersBuffs() ? 6 : 0;
+            }
         }
         return 0;
     }
@@ -114,11 +107,11 @@
         data: function () {
             return {
                 activeduration: 0,
-                tab: getDefaultBuffTableSubComponent(this.$vnode.key),
+                tab: getDefaultBuffTableSubComponent(),
             };
         },
         computed: {
-            showActiveDuration: function() {
+            showActiveDuration: function () {
                 return this.tab < 8 || this.tab > 10;
             },
             hasOffBuffs: function () {
