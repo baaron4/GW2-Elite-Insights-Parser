@@ -9,6 +9,7 @@
 <script>
     Vue.component("debuff-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -18,13 +19,6 @@
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
-            },
-            debuffs: function () {
-                var data = [];
-                for (var i = 0; i < logData.debuffs.length; i++) {
-                    data[i] = findSkill(true, logData.debuffs[i]);
-                }
-                return data;
             },
             buffData: function () {
                 var id = this.phaseindex + '-' + this.activeduration;

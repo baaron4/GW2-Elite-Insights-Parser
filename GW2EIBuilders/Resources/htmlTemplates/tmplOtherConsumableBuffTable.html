@@ -9,6 +9,7 @@
 <script>
     Vue.component("otherconsumable-buff-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -18,13 +19,6 @@
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
-            },
-            otherConsumables: function () {
-                var data = [];
-                for (var i = 0; i < logData.otherConsumables.length; i++) {
-                    data[i] = findSkill(true, logData.otherConsumables[i]);
-                }
-                return data;
             },
             buffData: function () {
                 var id = this.phaseindex;

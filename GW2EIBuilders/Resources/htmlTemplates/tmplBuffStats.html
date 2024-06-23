@@ -3,44 +3,44 @@
         <div class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
-                    <a class="nav-link" @click="mode = 0" :class="{active: mode === 0}">Uptime</a>
+                    <a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Uptime</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="mode = 1" :class="{active: mode === 1 }">Generation Self</a>
+                    <a class="nav-link" @click="buffMode = 1" :class="{active: buffMode === 1 }">Generation Self</a>
                 </li>
                 <li v-if="!singlePlayer" class="nav-item">
-                    <a class="nav-link" @click="mode = 2" :class="{active: mode === 2 }"
+                    <a class="nav-link" @click="buffMode = 2" :class="{active: buffMode === 2 }"
                         data-original-title="Self excluded">Generation Group</a>
                 </li>
                 <li v-if="!singleGroup" class="nav-item">
-                    <a class="nav-link" @click="mode = 3" :class="{active: mode === 3 }"
+                    <a class="nav-link" @click="buffMode = 3" :class="{active: buffMode === 3 }"
                         data-original-title="Self excluded">Generation Off-Group</a>
                 </li>
                 <li v-if="!singleGroup" class="nav-item">
-                    <a class="nav-link" @click="mode = 4" :class="{active: mode === 4 }"
+                    <a class="nav-link" @click="buffMode = 4" :class="{active: buffMode === 4 }"
                         data-original-title="Self excluded">Generation Squad</a>
                 </li>
             </ul>
         </div>
         <keep-alive>
-            <buff-table-component v-if="type === 0" :key="'boon-stats-table'" :condition="false" :generation="mode > 0"
-                :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[mode]"
-                :sums="mode === 0 ? buffData.boonsData[5] : []" :playerindex="playerindex" :hidecustom="mode > 1">
+            <buff-table-component v-if="type === 0" :key="'boon-stats-table'" :condition="false" :generation="buffMode > 0"
+                :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[buffMode]"
+                :sums="buffMode === 0 ? buffData.boonsData[5] : []" :playerindex="playerindex" :hidecustom="buffMode > 1">
             </buff-table-component>
             <buff-table-component v-if="type === 1" :key="'offensivebuff-stats-table'" :condition="false"
-                :generation="mode > 0" :id="'offensivebuff-stats-table'" :buffs="offs"
-                :playerdata="buffData.offsData[mode]" :sums="mode === 0 ? buffData.offsData[5] : []"
-                :playerindex="playerindex" :hidecustom="mode > 1">
+                :generation="buffMode > 0" :id="'offensivebuff-stats-table'" :buffs="offs"
+                :playerdata="buffData.offsData[buffMode]" :sums="buffMode === 0 ? buffData.offsData[5] : []"
+                :playerindex="playerindex" :hidecustom="buffMode > 1">
             </buff-table-component>
             <buff-table-component v-if="type === 2" :key="'supportbuff-stats-table'" :condition="false"
-                :generation="mode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
-                :playerdata="buffData.supsData[mode]" :sums="mode === 0 ? buffData.supsData[5] : []"
-                :playerindex="playerindex" :hidecustom="mode > 1">
+                :generation="buffMode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
+                :playerdata="buffData.supsData[buffMode]" :sums="buffMode === 0 ? buffData.supsData[5] : []"
+                :playerindex="playerindex" :hidecustom="buffMode > 1">
             </buff-table-component>
             <buff-table-component v-if="type === 3" :key="'defensivebuff-stats-table'" :condition="false"
-                :generation="mode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
-                :playerdata="buffData.defsData[mode]" :sums="mode === 0 ? buffData.defsData[5] : []"
-                :playerindex="playerindex" :hidecustom="mode > 1">
+                :generation="buffMode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
+                :playerdata="buffData.defsData[buffMode]" :sums="buffMode === 0 ? buffData.defsData[5] : []"
+                :playerindex="playerindex" :hidecustom="buffMode > 1">
             </buff-table-component>
         </keep-alive>
     </div>
@@ -49,10 +49,11 @@
 <script>
     Vue.component("buff-stats-component", {
         props: ['type', 'phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
         template: `${template}`,
         data: function () {
             return {
-                mode: 0,
+                buffMode: 0,
                 cache: new Map()
             };
         },
@@ -65,34 +66,6 @@
             },
             phase: function () {
                 return logData.phases[this.phaseindex];
-            },
-            boons: function () {
-                var data = [];
-                for (var i = 0; i < logData.boons.length; i++) {
-                    data[i] = findSkill(true, logData.boons[i]);
-                }
-                return data;
-            },
-            offs: function () {
-                var data = [];
-                for (var i = 0; i < logData.offBuffs.length; i++) {
-                    data[i] = findSkill(true, logData.offBuffs[i]);
-                }
-                return data;
-            },
-            defs: function () {
-                var data = [];
-                for (var i = 0; i < logData.defBuffs.length; i++) {
-                    data[i] = findSkill(true, logData.defBuffs[i]);
-                }
-                return data;
-            },
-            sups: function () {
-                var data = [];
-                for (var i = 0; i < logData.supBuffs.length; i++) {
-                    data[i] = findSkill(true, logData.supBuffs[i]);
-                }
-                return data;
             },
             buffData: function () {
                 var id = this.phaseindex + '-' + this.activeduration;
