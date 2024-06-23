@@ -16,6 +16,7 @@
 <script>
     Vue.component("buff-stats-target-component", {
         props: ['phaseindex', 'playerindex', 'targetindex'],
+        mixins: [buffComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -25,20 +26,6 @@
             };
         },
         computed: {
-            boons: function() {
-                var data = [];
-                for (var i = 0; i < logData.boons.length; i++) {
-                    data[i] = findSkill(true, logData.boons[i]);
-                }
-                return data;
-            },
-            conditions: function() {
-                var data = [];
-                for (var i = 0; i < logData.conditions.length; i++) {
-                    data[i] = findSkill(true, logData.conditions[i]);
-                }
-                return data;
-            },
             phase: function() {
                 return logData.phases[this.phaseindex];
             },

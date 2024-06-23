@@ -1,7 +1,7 @@
 <template>
     <div>
-        <buff-table-component :key="'gear-buff-stats-table'" :condition="false" :generation="false"
-            :id="'gear-buff-stats-table'" :buffs="nourishments" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
+        <buff-table-component :key="'nourishment-buff-stats-table'" :condition="false" :generation="false"
+            :id="'nourishment-buff-stats-table'" :buffs="nourishments" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
         </buff-table-component>
     </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
     Vue.component("nourishement-buff-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
         template: `${template}`,
         data: function () {
             return {
@@ -18,13 +19,6 @@
         computed: {
             phase: function () {
                 return logData.phases[this.phaseindex];
-            },
-            nourishments: function () {
-                var data = [];
-                for (var i = 0; i < logData.nourishments.length; i++) {
-                    data[i] = findSkill(true, logData.nourishments[i]);
-                }
-                return data;
             },
             buffData: function () {
                 var id = this.phaseindex;

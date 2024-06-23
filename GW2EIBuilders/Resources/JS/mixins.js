@@ -127,6 +127,126 @@ var timeRefreshComponent = {
     },
 };
 
+var buffComponent = {
+    computed: {         
+        boons: function () {
+            var data = [];
+            for (var i = 0; i < logData.boons.length; i++) {
+                data[i] = findSkill(true, logData.boons[i]);
+            }
+            return data;
+        },
+        conditions: function() {
+            var data = [];
+            for (var i = 0; i < logData.conditions.length; i++) {
+                data[i] = findSkill(true, logData.conditions[i]);
+            }
+            return data;
+        },
+        offs: function () {
+            var data = [];
+            for (var i = 0; i < logData.offBuffs.length; i++) {
+                data[i] = findSkill(true, logData.offBuffs[i]);
+            }
+            return data;
+        },
+        defs: function () {
+            var data = [];
+            for (var i = 0; i < logData.defBuffs.length; i++) {
+                data[i] = findSkill(true, logData.defBuffs[i]);
+            }
+            return data;
+        },
+        sups: function () {
+            var data = [];
+            for (var i = 0; i < logData.supBuffs.length; i++) {
+                data[i] = findSkill(true, logData.supBuffs[i]);
+            }
+            return data;
+        },
+        nourishments: function () {
+            var data = [];
+            for (var i = 0; i < logData.nourishments.length; i++) {
+                data[i] = findSkill(true, logData.nourishments[i]);
+            }
+            return data;
+        },
+        enhancements: function () {
+            var data = [];
+            for (var i = 0; i < logData.enhancements.length; i++) {
+                data[i] = findSkill(true, logData.enhancements[i]);
+            }
+            return data;
+        },
+        otherConsumables: function () {
+            var data = [];
+            for (var i = 0; i < logData.otherConsumables.length; i++) {
+                data[i] = findSkill(true, logData.otherConsumables[i]);
+            }
+            return data;
+        },
+        orderedSpecs: function () {
+            var res = [];
+            var aux = new Set();
+            for (var i = 0; i < specs.length; i++) {
+                var spec = specs[i];
+                var pBySpec = [];
+                for (var j = 0; j < logData.players.length; j++) {
+                    if (logData.players[j].profession === spec && logData.phases[0].buffsStatContainer.persBuffStats[j].data.length > 0) {
+                        pBySpec.push(j);
+                    }
+                }
+                if (pBySpec.length) {
+                    aux.add(SpecToBase[spec]);
+                    res.push({
+                        ids: pBySpec,
+                        name: spec
+                    });
+                }
+            }
+            this.bases = [];
+            var _this = this;
+            aux.forEach(function (value, value2, set) {
+                _this.bases.push(value);
+            });
+            this.persBuffMode = this.bases[0];
+            return res;
+        },
+        persBuffs: function () {
+            var res = [];
+            for (var i = 0; i < this.orderedSpecs.length; i++) {
+                var spec = this.orderedSpecs[i];
+                var data = [];
+                for (var j = 0; j < logData.persBuffs[spec.name].length; j++) {
+                    data.push(findSkill(true, logData.persBuffs[spec.name][j]));
+                }
+                res.push(data);
+            }
+            return res;
+        },
+        gears: function () {
+            var data = [];
+            for (var i = 0; i < logData.gearBuffs.length; i++) {
+                data[i] = findSkill(true, logData.gearBuffs[i]);
+            }
+            return data;
+        },
+        debuffs: function () {
+            var data = [];
+            for (var i = 0; i < logData.debuffs.length; i++) {
+                data[i] = findSkill(true, logData.debuffs[i]);
+            }
+            return data;
+        },
+        buffsStatContainer: function() {
+            return this.phase.buffsStatContainer;
+        },
+        buffVolumesStatContainer: function () {
+            return this.phase.buffVolumesStatContainer;
+        },
+    }
+};
+
 var sortedTableComponent = {
     methods:  {       
         sortByBase: function(sortdata, key, index) {
