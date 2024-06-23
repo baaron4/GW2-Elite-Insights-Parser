@@ -11,6 +11,12 @@ namespace GW2EIEvtcParser.EIData
 
             public abstract string GetSignature();
 
+            /// <summary>
+            /// Temporary method to keep code outside of the solution intact.
+            /// Will remain as a debugging tool down the line
+            /// </summary>
+            /// <param name="variable"></param>
+            /// <returns></returns>
             internal abstract GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable);
 
         }
