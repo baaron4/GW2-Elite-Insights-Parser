@@ -232,7 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="distanceThreshold">Threshold distance of the effect from the caster.</param>
         /// <param name="onDistanceSuccessDuration">Duration of the AoE effects closer to the caster.</param>
         /// <param name="onDistanceFailDuration">Duration of the AoE effects farther away from the caster.</param>
-        protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, List<GenericDecoration> environmentDecorations, string effectGUID, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
+        protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, string effectGUID, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
         {
             if (!log.AgentData.TryGetFirstAgentItem(target, out AgentItem agent))
             {

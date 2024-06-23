@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData
 {
     internal abstract class GenericAttachedDecoration : GenericDecoration
     {
-        internal abstract class ConstantGenericAttachedDecoration : ConstantGenericDecoration
+        internal abstract class GenericAttachedDecorationMetadata : GenericDecorationMetadata
         {
         }
         internal abstract class VariableGenericAttachedDecoration : VariableGenericDecoration
@@ -39,7 +39,7 @@ namespace GW2EIEvtcParser.EIData
         public RotationConnector RotationConnectedTo => VariableDecoration.RotationConnectedTo;
         public SkillModeDescriptor SkillMode => VariableDecoration.SkillMode;
 
-        protected GenericAttachedDecoration() : base()
+        internal GenericAttachedDecoration(GenericAttachedDecorationMetadata metadata, VariableGenericAttachedDecoration variable) : base(metadata, variable)
         {
         }
 

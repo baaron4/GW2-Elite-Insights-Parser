@@ -2,11 +2,11 @@
 {
     internal abstract class FormDecoration : GenericAttachedDecoration
     {
-        internal abstract class ConstantFormDecoration : ConstantGenericAttachedDecoration
+        internal abstract class FormDecorationMetadata : GenericAttachedDecorationMetadata
         {
             public string Color { get; }
 
-            protected ConstantFormDecoration(string color)
+            protected FormDecorationMetadata(string color)
             {
                 Color = color;
             }
@@ -31,15 +31,15 @@
                 GrowingReverse = reverse;
             }
         }
-        private new ConstantFormDecoration ConstantDecoration => (ConstantFormDecoration)base.ConstantDecoration;
+        private new FormDecorationMetadata DecorationMetadata => (FormDecorationMetadata)base.DecorationMetadata;
         private new VariableFormDecoration VariableDecoration => (VariableFormDecoration)base.VariableDecoration;
 
         public bool Filled => VariableDecoration.Filled;
-        public string Color => ConstantDecoration.Color;
+        public string Color => DecorationMetadata.Color;
         public int GrowingEnd => VariableDecoration.GrowingEnd;
         public bool GrowingReverse => VariableDecoration.GrowingReverse;
 
-        protected FormDecoration() : base()
+        internal FormDecoration(FormDecorationMetadata metadata, VariableFormDecoration variable) : base(metadata, variable)
         {
         }
 

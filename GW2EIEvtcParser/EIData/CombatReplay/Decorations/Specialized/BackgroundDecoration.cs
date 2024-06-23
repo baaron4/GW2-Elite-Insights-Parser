@@ -1,8 +1,9 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿
+namespace GW2EIEvtcParser.EIData
 {
     internal abstract class BackgroundDecoration : GenericDecoration
     {
-        internal abstract class ConstantBackgroundDecoration : ConstantGenericDecoration
+        internal abstract class BackgroundDecorationMetadata : GenericDecorationMetadata
         {
         }
         internal abstract class VariableBackgroundDecoration : VariableGenericDecoration
@@ -11,8 +12,7 @@
             {
             }
         }
-
-        public BackgroundDecoration() : base()
+        internal BackgroundDecoration(BackgroundDecorationMetadata metadata, VariableBackgroundDecoration variable) : base(metadata, variable)
         {
         }
     }

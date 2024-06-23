@@ -6,19 +6,27 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class IconDecoration : GenericIconDecoration
     {
-        internal class ConstantIconDecoration : ConstantGenericIconDecoration
+        internal class IconDecorationMetadata : GenericIconDecorationMetadata
         {
             public float Opacity { get; }
 
 
-            public ConstantIconDecoration(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)
+            public IconDecorationMetadata(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)
             {
-                Opacity = opacity;
+                Opacity = (float)Math.Round(opacity, 2);
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
+            }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableIconDecoration expectedVariable)
+                {
+                    return new IconDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableIconDecoration");
             }
         }
         internal class VariableIconDecoration : VariableGenericIconDecoration
@@ -32,27 +40,22 @@ namespace GW2EIEvtcParser.EIData
                 IsSquadMarker = isSquadMarker;
             }
         }
-        private new ConstantIconDecoration ConstantDecoration => (ConstantIconDecoration)base.ConstantDecoration;
+        private new IconDecorationMetadata DecorationMetadata => (IconDecorationMetadata)base.DecorationMetadata;
         private new VariableIconDecoration VariableDecoration => (VariableIconDecoration)base.VariableDecoration;
 
-        public float Opacity => ConstantDecoration.Opacity;
+        public float Opacity => DecorationMetadata.Opacity;
         public bool IsSquadMarker => VariableDecoration.IsSquadMarker;
 
-        protected IconDecoration()
+        internal IconDecoration(IconDecorationMetadata metadata, VariableIconDecoration variable) : base(metadata, variable)
         {
-
         }
 
-        public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
+        public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : this(icon, pixelSize, 0, opacity, lifespan, connector)
         {
-            base.ConstantDecoration = new ConstantIconDecoration(icon, pixelSize, 0, opacity);
-            base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
         }
 
-        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
+        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, worldSize, opacity), new VariableIconDecoration(lifespan, connector))
         {
-            base.ConstantDecoration = new ConstantIconDecoration(icon, pixelSize, worldSize, opacity);
-            base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
         }
 
         public IconDecoration(string icon, uint pixelSize, float opacity, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, opacity, (lifespan.Start, lifespan.End), connector)

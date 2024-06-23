@@ -1,25 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal class MovingPlatformDecoration : BackgroundDecoration
     {
-        internal class ConstantMovingPlatformDecoration : ConstantBackgroundDecoration
+        internal class MovingPlatformDecorationMetadata : BackgroundDecorationMetadata
         {
             public string Image { get; }
             public int Width { get; }
             public int Height { get; }
-            public ConstantMovingPlatformDecoration(string image, int width, int height)
+            public MovingPlatformDecorationMetadata(string image, int width, int height)
             {
                 Image = image;
                 Width = width;
                 Height = height;
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
                 return "MP" + Height + Image.GetHashCode().ToString() + Width;
+            }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableMovingPlatformDecoration expectedVariable)
+                {
+                    return new MovingPlatformDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableMovingPlatformDecoration");
             }
         }
         internal class VariableMovingPlatformDecoration : VariableBackgroundDecoration
@@ -30,19 +39,19 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantMovingPlatformDecoration ConstantDecoration => (ConstantMovingPlatformDecoration)base.ConstantDecoration;
+        private new MovingPlatformDecorationMetadata DecorationMetadata => (MovingPlatformDecorationMetadata)base.DecorationMetadata;
         private new VariableMovingPlatformDecoration VariableDecoration => (VariableMovingPlatformDecoration)base.VariableDecoration;
         //
-        public string Image => ConstantDecoration.Image;
-        public int Width => ConstantDecoration.Width;
-        public int Height => ConstantDecoration.Height;
+        public string Image => DecorationMetadata.Image;
+        public int Width => DecorationMetadata.Width;
+        public int Height => DecorationMetadata.Height;
 
         public IReadOnlyList<(float x, float y, float z, float angle, float opacity, int time)> Positions => VariableDecoration.Positions;
-
-        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base()
+        internal MovingPlatformDecoration(MovingPlatformDecorationMetadata metadata, VariableMovingPlatformDecoration variable) : base(metadata, variable)
         {
-            base.ConstantDecoration = new ConstantMovingPlatformDecoration(image, width, height);
-            base.VariableDecoration = new VariableMovingPlatformDecoration(lifespan);
+        }
+        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base(new MovingPlatformDecorationMetadata(image, width, height), new VariableMovingPlatformDecoration(lifespan))
+        {
         }
 
         public void AddPosition(float x, float y, float z, double angle, double opacity, int time)

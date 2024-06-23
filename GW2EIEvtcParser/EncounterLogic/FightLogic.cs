@@ -8,6 +8,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.GenericDecoration;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -51,7 +52,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<AbstractSingleActor> _targets { get; private set; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _hostiles { get; private set; } = new List<AbstractSingleActor>();
 
-        protected List<GenericDecoration> EnvironmentDecorations { get; private set; } = null;
+        internal Dictionary<string, GenericDecorationMetadata> DecorationCache { get; } = new Dictionary<string, GenericDecorationMetadata>();
+
+        protected CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
 
         protected ArcDPSEnums.ChestID ChestID { get; set; } = ChestID.None;
 
@@ -391,11 +394,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             if (EnvironmentDecorations == null)
             {
-                EnvironmentDecorations = new List<GenericDecoration>();
+                EnvironmentDecorations = new CombatReplayDecorationContainer(DecorationCache);
                 ComputeEnvironmentCombatReplayDecorations(log);
-                EnvironmentDecorations.RemoveAll(x => x.Lifespan.end <= x.Lifespan.start);
             }
-            return EnvironmentDecorations;
+            return EnvironmentDecorations.ToList();
         }
 
         internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

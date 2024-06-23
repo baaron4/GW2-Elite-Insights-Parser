@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class DoughnutDecoration : FormDecoration
     {
-        internal class ConstantDoughnutDecoration : ConstantFormDecoration
+        internal class DoughnutDecorationMetadata : FormDecorationMetadata
         {
             public uint OuterRadius { get; }
             public uint InnerRadius { get; }
 
-            public ConstantDoughnutDecoration(string color, uint innerRadius, uint outerRadius) : base(color)
+            public DoughnutDecorationMetadata(string color, uint innerRadius, uint outerRadius) : base(color)
             {
                 OuterRadius = Math.Max(outerRadius, 1);
                 InnerRadius = innerRadius;
@@ -21,9 +21,17 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Dough" + OuterRadius + Color + InnerRadius;
+            }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableDoughnutDecoration expectedVariable)
+                {
+                    return new DoughnutDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableDoughnutDecoration");
             }
         }
         internal class VariableDoughnutDecoration : VariableFormDecoration
@@ -32,14 +40,16 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantDoughnutDecoration ConstantDecoration => (ConstantDoughnutDecoration)base.ConstantDecoration;
-        public uint OuterRadius => ConstantDecoration.OuterRadius;
-        public uint InnerRadius => ConstantDecoration.InnerRadius;
+        private new DoughnutDecorationMetadata DecorationMetadata => (DoughnutDecorationMetadata)base.DecorationMetadata;
+        public uint OuterRadius => DecorationMetadata.OuterRadius;
+        public uint InnerRadius => DecorationMetadata.InnerRadius;
 
-        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+        internal DoughnutDecoration(DoughnutDecorationMetadata metadata, VariableDoughnutDecoration variable) : base(metadata, variable)
         {
-            base.ConstantDecoration = new ConstantDoughnutDecoration(color, innerRadius, outerRadius);
-            VariableDecoration = new VariableDoughnutDecoration(lifespan, connector);
+        }
+
+        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new DoughnutDecorationMetadata(color, innerRadius, outerRadius), new VariableDoughnutDecoration(lifespan, connector))
+        {
         }
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {

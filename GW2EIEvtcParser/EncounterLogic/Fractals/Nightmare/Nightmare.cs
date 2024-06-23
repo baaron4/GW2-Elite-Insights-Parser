@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= EncounterIDs.FractalMasks.NightmareMask;
         }
 
-        protected static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, List<GenericDecoration> environmentDecorations, string guid, uint innerRadius, uint outerRadius)
+        protected static void AddCascadeOfTormentDecoration(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, string guid, uint innerRadius, uint outerRadius)
         {
             int duration = 1000;
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> cascadeOfTorment))

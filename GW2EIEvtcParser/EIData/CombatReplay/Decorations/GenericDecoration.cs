@@ -6,12 +6,21 @@ namespace GW2EIEvtcParser.EIData
     public abstract class GenericDecoration
     {
 
-        public abstract class ConstantGenericDecoration
+        internal abstract class GenericDecorationMetadata
         {
 
-            public abstract string GetID();
+            public abstract string GetSignature();
+
+            /// <summary>
+            /// Temporary method to keep code outside of the solution intact.
+            /// Will remain as a debugging tool down the line
+            /// </summary>
+            /// <param name="variable"></param>
+            /// <returns></returns>
+            internal abstract GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable);
+
         }
-        public abstract class VariableGenericDecoration
+        internal abstract class VariableGenericDecoration
         {
             public (int start, int end) Lifespan { get; }
 
@@ -21,11 +30,15 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public ConstantGenericDecoration ConstantDecoration { get; protected set; }
-        public VariableGenericDecoration VariableDecoration { get; protected set; }
+        internal GenericDecorationMetadata DecorationMetadata { get; }
+        internal VariableGenericDecoration VariableDecoration { get; }
 
         public (int start, int end) Lifespan => VariableDecoration.Lifespan;
-
+        internal GenericDecoration(GenericDecorationMetadata metaData, VariableGenericDecoration variable)
+        {
+            DecorationMetadata = metaData;
+            VariableDecoration = variable;
+        }
         protected GenericDecoration()
         {
         }
