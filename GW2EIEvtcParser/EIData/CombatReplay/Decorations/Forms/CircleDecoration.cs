@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class CircleDecoration : FormDecoration
     {
-        internal class ConstantCircleDecoration : ConstantFormDecoration
+        internal class CircleDecorationMetadata : FormDecorationMetadata
         {
             public uint Radius { get; }
             public uint MinRadius { get; }
 
-            public ConstantCircleDecoration(string color, uint radius, uint minRadius) : base(color)
+            public CircleDecorationMetadata(string color, uint radius, uint minRadius) : base(color)
             {
                 Radius = Math.Max(radius, 1);
                 MinRadius = minRadius;
@@ -21,9 +21,17 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Cir" + Radius + Color + MinRadius;
+            }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableCircleDecoration expectedVariable)
+                {
+                    return new CircleDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableCircleDecoration");
             }
         }
         internal class VariableCircleDecoration : VariableFormDecoration
@@ -32,18 +40,17 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new ConstantCircleDecoration ConstantDecoration => (ConstantCircleDecoration)base.ConstantDecoration;
-        public uint Radius => ConstantDecoration.Radius;
-        public uint MinRadius => ConstantDecoration.MinRadius;
+        private new CircleDecorationMetadata DecorationMetadata => (CircleDecorationMetadata)base.DecorationMetadata;
+        public uint Radius => DecorationMetadata.Radius;
+        public uint MinRadius => DecorationMetadata.MinRadius;
 
-        protected CircleDecoration()
+
+        internal CircleDecoration(CircleDecorationMetadata metadata, VariableCircleDecoration variable) : base(metadata, variable)
         {
         }
 
-        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new CircleDecorationMetadata(color, radius, minRadius), new VariableCircleDecoration(lifespan, connector))
         {
-            base.ConstantDecoration = new ConstantCircleDecoration(color, radius, minRadius);
-            VariableDecoration = new VariableCircleDecoration(lifespan, connector);
         }
 
         public CircleDecoration(uint radius, (long start, long end) lifespan, string color, GeographicalConnector connector) : this(radius, 0, lifespan, color, connector)

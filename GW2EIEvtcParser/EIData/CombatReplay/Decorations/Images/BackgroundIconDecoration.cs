@@ -6,16 +6,24 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class BackgroundIconDecoration : GenericIconDecoration
     {
-        internal class ConstantBackgroundIconDecoration : ConstantGenericIconDecoration
+        internal class BackgroundIconDecorationMetadata : GenericIconDecorationMetadata
         {
 
-            public ConstantBackgroundIconDecoration(string icon, uint pixelSize, uint worldSize) : base(icon, pixelSize, worldSize)
+            public BackgroundIconDecorationMetadata(string icon, uint pixelSize, uint worldSize) : base(icon, pixelSize, worldSize)
             {
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
+            }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableBackgroundIconDecoration expectedVariable)
+                {
+                    return new BackgroundIconDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableBackgroundIconDecoration");
             }
         }
         internal class VariableBackgroundIconDecoration : VariableGenericIconDecoration
@@ -35,10 +43,12 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyList<ParametricPoint1D> Opacities => VariableDecoration.Opacities;
         public IReadOnlyList<ParametricPoint1D> Heights => VariableDecoration.Heights;
-        public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base()
+
+        internal BackgroundIconDecoration(BackgroundIconDecorationMetadata metadata, VariableBackgroundIconDecoration variable) : base(metadata, variable)
         {
-            ConstantDecoration = new ConstantBackgroundIconDecoration(icon, pixelSize, worldSize);
-            base.VariableDecoration = new VariableBackgroundIconDecoration(lifespan, opacities, heights, connector);
+        }
+        public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base(new BackgroundIconDecorationMetadata(icon, pixelSize, worldSize), new VariableBackgroundIconDecoration(lifespan, opacities, heights, connector))
+        {
         }
 
         public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacities, heights, (lifespan.Start, lifespan.End), connector)

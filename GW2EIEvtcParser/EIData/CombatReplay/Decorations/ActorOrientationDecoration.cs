@@ -1,20 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal class ActorOrientationDecoration : GenericAttachedDecoration
     {
-        internal class ConstantActorOrientationDecoration : ConstantGenericAttachedDecoration
+        internal class ActorOrientationDecorationMetadata : GenericAttachedDecorationMetadata
         {
-            public override string GetID()
+            public override string GetSignature()
             {
                 return "AO";
             }
+
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableActorOrientationDecoration expectedVariable)
+                {
+                    return new ActorOrientationDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableActorOrientationDecoration");
+            }
         }
-        internal class VariableActorOrientationDecorationn : VariableGenericAttachedDecoration
+        internal class VariableActorOrientationDecoration : VariableGenericAttachedDecoration
         {
-            public VariableActorOrientationDecorationn((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+            public VariableActorOrientationDecoration((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
             {
                 RotationConnectedTo = new AgentFacingConnector(agent);
             }
@@ -27,10 +37,12 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base()
+        internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, VariableActorOrientationDecoration variable) : base (metadata, variable)
         {
-            ConstantDecoration = new ConstantActorOrientationDecoration();
-            VariableDecoration = new VariableActorOrientationDecorationn(lifespan, agent);
+        }
+
+        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(new ActorOrientationDecorationMetadata(), new VariableActorOrientationDecoration(lifespan, agent))
+        {
         }
 
         //

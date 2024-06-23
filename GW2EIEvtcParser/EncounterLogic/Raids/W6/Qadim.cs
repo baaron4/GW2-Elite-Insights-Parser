@@ -947,7 +947,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
 
-        private static void AddManuallyAnimatedPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, List<GenericDecoration> decorations)
+        private static void AddManuallyAnimatedPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
         {
             // We later use the target to find out the timing of the last move
             Debug.Assert(qadim.IsSpecies(TargetID.Qadim));

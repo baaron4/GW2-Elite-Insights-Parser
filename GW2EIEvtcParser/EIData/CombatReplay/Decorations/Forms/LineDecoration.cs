@@ -6,16 +6,24 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class LineDecoration : FormDecoration
     {
-        internal class ConstantLineDecoration : ConstantFormDecoration
+        internal class LineDecorationMetadata : FormDecorationMetadata
         {
 
-            public ConstantLineDecoration(string color) : base(color)
+            public LineDecorationMetadata(string color) : base(color)
             {
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Line" + Color;
+            }
+            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            {
+                if (variable is VariableLineDecoration expectedVariable)
+                {
+                    return new LineDecoration(this, expectedVariable);
+                }
+                throw new InvalidOperationException("Expected VariableLineDecoration");
             }
         }
         internal class VariableLineDecoration : VariableFormDecoration
@@ -35,10 +43,12 @@ namespace GW2EIEvtcParser.EIData
         private new VariableLineDecoration VariableDecoration => (VariableLineDecoration)base.VariableDecoration;
         public GeographicalConnector ConnectedFrom => VariableDecoration.ConnectedFrom;
 
-        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base()
+        internal LineDecoration(LineDecorationMetadata metadata, VariableLineDecoration variable) : base(metadata, variable)
         {
-            base.ConstantDecoration = new ConstantLineDecoration(color);
-            base.VariableDecoration = new VariableLineDecoration(lifespan, connector, targetConnector);
+        }
+
+        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base(new LineDecorationMetadata(color), new VariableLineDecoration(lifespan, connector, targetConnector))
+        {
         }
 
         public LineDecoration((long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector, GeographicalConnector targetConnector) : this(lifespan, color.WithAlpha(opacity).ToString(true), connector, targetConnector)
