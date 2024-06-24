@@ -94,13 +94,13 @@ namespace GW2EIEvtcParser.EIData
                 case FightLogic.SkillModeEnum.PvE:
                     if (parseMode == FightLogic.ParseModeEnum.OpenWorld || parseMode == FightLogic.ParseModeEnum.Unknown)
                     {
-                        return Mode == DamageModifierMode.PvE;
+                        return !Approximate && (Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEWvW || Mode == DamageModifierMode.PvEsPvP);
                     }
-                    return Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEInstanceOnly || Mode == DamageModifierMode.PvEWvW;
+                    return Mode == DamageModifierMode.PvE || Mode == DamageModifierMode.PvEInstanceOnly || Mode == DamageModifierMode.PvEWvW || Mode == DamageModifierMode.PvEsPvP;
                 case FightLogic.SkillModeEnum.WvW:
                     return (Mode == DamageModifierMode.WvW || Mode == DamageModifierMode.sPvPWvW || Mode == DamageModifierMode.PvEWvW);
                 case FightLogic.SkillModeEnum.sPvP:
-                    return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW;
+                    return Mode == DamageModifierMode.sPvP || Mode == DamageModifierMode.sPvPWvW || Mode == DamageModifierMode.PvEsPvP;
             }
             return false;
         }
