@@ -65,6 +65,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
+        internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+        {
+            // Nothing to do
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             if (_targetIDs.Count == 0)

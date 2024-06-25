@@ -246,6 +246,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             FinalizeComputeFightTargets();
         }
 
+        internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+        {
+            foreach (Player p in players)
+            {
+                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= fightData.FightStart + 5000).LastOrDefault();
+                if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown)
+                {
+                    p.AgentItem.OverrideSpec(enterCombat.Spec);
+                    p.OverrideGroup(enterCombat.Subgroup);
+                }
+            }
+        }
+
         protected void FinalizeComputeFightTargets()
         {
             //

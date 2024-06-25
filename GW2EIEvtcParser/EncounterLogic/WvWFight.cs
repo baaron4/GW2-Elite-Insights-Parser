@@ -77,6 +77,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
+        internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+        {
+            foreach (Player p in players)
+            {
+                // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
+                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
+                if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
+                {
+                    p.AgentItem.OverrideSpec(enterCombat.Spec);
+                    p.OverrideGroup(enterCombat.Subgroup);
+                }
+            }
+        }
+
         internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetGenericFightOffset(fightData);
