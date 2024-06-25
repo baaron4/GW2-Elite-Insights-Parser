@@ -15,29 +15,29 @@ namespace GW2EIEvtcParser.EIData
             /// Temporary method to keep code outside of the solution intact.
             /// Will remain as a debugging tool down the line
             /// </summary>
-            /// <param name="variable"></param>
+            /// <param name="renderingData"></param>
             /// <returns></returns>
-            internal abstract GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable);
+            internal abstract GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData);
 
         }
-        internal abstract class VariableGenericDecoration
+        internal abstract class GenericDecorationRenderingData
         {
             public (int start, int end) Lifespan { get; }
 
-            protected VariableGenericDecoration((long start, long end) lifespan)
+            protected GenericDecorationRenderingData((long start, long end) lifespan)
             {
                 Lifespan = ((int)lifespan.start, (int)lifespan.end);
             }
         }
 
         internal GenericDecorationMetadata DecorationMetadata { get; }
-        internal VariableGenericDecoration VariableDecoration { get; }
+        internal GenericDecorationRenderingData DecorationRenderingData { get; }
 
-        public (int start, int end) Lifespan => VariableDecoration.Lifespan;
-        internal GenericDecoration(GenericDecorationMetadata metaData, VariableGenericDecoration variable)
+        public (int start, int end) Lifespan => DecorationRenderingData.Lifespan;
+        internal GenericDecoration(GenericDecorationMetadata metaData, GenericDecorationRenderingData renderingData)
         {
             DecorationMetadata = metaData;
-            VariableDecoration = variable;
+            DecorationRenderingData = renderingData;
         }
         protected GenericDecoration()
         {

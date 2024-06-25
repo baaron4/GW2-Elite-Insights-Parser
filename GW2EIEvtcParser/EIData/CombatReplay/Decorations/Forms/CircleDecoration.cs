@@ -25,18 +25,18 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Cir" + Radius + Color + MinRadius;
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableCircleDecoration expectedVariable)
+                if (renderingData is CircleDecorationRenderingData  expectedRenderingData)
                 {
-                    return new CircleDecoration(this, expectedVariable);
+                    return new CircleDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableCircleDecoration");
             }
         }
-        internal class VariableCircleDecoration : VariableFormDecoration
+        internal class CircleDecorationRenderingData : FormDecorationRenderingData
         {
-            public VariableCircleDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public CircleDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
         }
@@ -45,11 +45,11 @@ namespace GW2EIEvtcParser.EIData
         public uint MinRadius => DecorationMetadata.MinRadius;
 
 
-        internal CircleDecoration(CircleDecorationMetadata metadata, VariableCircleDecoration variable) : base(metadata, variable)
+        internal CircleDecoration(CircleDecorationMetadata metadata, CircleDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
-        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new CircleDecorationMetadata(color, radius, minRadius), new VariableCircleDecoration(lifespan, connector))
+        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new CircleDecorationMetadata(color, radius, minRadius), new CircleDecorationRenderingData(lifespan, connector))
         {
         }
 

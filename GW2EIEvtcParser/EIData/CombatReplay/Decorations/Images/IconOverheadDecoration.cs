@@ -18,28 +18,28 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "IO" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableIconOverheadDecoration expectedVariable)
+                if (renderingData is IconOverheadDecorationRenderingData  expectedRenderingData)
                 {
-                    return new IconOverheadDecoration(this, expectedVariable);
+                    return new IconOverheadDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableIconOverheadDecoration");
             }
         }
-        internal class VariableIconOverheadDecoration : VariableIconDecoration
+        internal class IconOverheadDecorationRenderingData : IconDecorationRenderingData
         {
-            public VariableIconOverheadDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public IconOverheadDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
             }
         }
-        internal IconOverheadDecoration(IconOverheadDecorationMetadata metadata, VariableIconOverheadDecoration variable) : base(metadata, variable)
+        internal IconOverheadDecoration(IconOverheadDecorationMetadata metadata, IconOverheadDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
-        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity), new VariableIconDecoration(lifespan, connector))
+        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity), new IconDecorationRenderingData(lifespan, connector))
         {
         }
 

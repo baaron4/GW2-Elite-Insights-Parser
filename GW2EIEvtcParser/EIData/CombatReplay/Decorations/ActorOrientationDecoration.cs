@@ -13,18 +13,18 @@ namespace GW2EIEvtcParser.EIData
                 return "AO";
             }
 
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableActorOrientationDecoration expectedVariable)
+                if (renderingData is ActorOrientationDecorationRenderingData  expectedRenderingData)
                 {
-                    return new ActorOrientationDecoration(this, expectedVariable);
+                    return new ActorOrientationDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableActorOrientationDecoration");
             }
         }
-        internal class VariableActorOrientationDecoration : VariableGenericAttachedDecoration
+        internal class ActorOrientationDecorationRenderingData : GenericAttachedDecorationRenderingData
         {
-            public VariableActorOrientationDecoration((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+            public ActorOrientationDecorationRenderingData((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
             {
                 RotationConnectedTo = new AgentFacingConnector(agent);
             }
@@ -37,11 +37,11 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, VariableActorOrientationDecoration variable) : base (metadata, variable)
+        internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, ActorOrientationDecorationRenderingData renderingData) : base (metadata, renderingData)
         {
         }
 
-        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(new ActorOrientationDecorationMetadata(), new VariableActorOrientationDecoration(lifespan, agent))
+        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(new ActorOrientationDecorationMetadata(), new ActorOrientationDecorationRenderingData(lifespan, agent))
         {
         }
 

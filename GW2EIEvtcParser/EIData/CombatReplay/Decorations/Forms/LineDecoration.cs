@@ -17,19 +17,19 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Line" + Color;
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableLineDecoration expectedVariable)
+                if (renderingData is LineDecorationRenderingData  expectedRenderingData)
                 {
-                    return new LineDecoration(this, expectedVariable);
+                    return new LineDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableLineDecoration");
             }
         }
-        internal class VariableLineDecoration : VariableFormDecoration
+        internal class LineDecorationRenderingData : FormDecorationRenderingData
         {
             public GeographicalConnector ConnectedFrom { get; }
-            public VariableLineDecoration((long, long) lifespan, GeographicalConnector connector, GeographicalConnector targetConnector) : base(lifespan, connector)
+            public LineDecorationRenderingData((long, long) lifespan, GeographicalConnector connector, GeographicalConnector targetConnector) : base(lifespan, connector)
             {
                 ConnectedFrom = targetConnector;
             }
@@ -40,14 +40,14 @@ namespace GW2EIEvtcParser.EIData
             {
             }
         }
-        private new VariableLineDecoration VariableDecoration => (VariableLineDecoration)base.VariableDecoration;
-        public GeographicalConnector ConnectedFrom => VariableDecoration.ConnectedFrom;
+        private new LineDecorationRenderingData DecorationRenderingData => (LineDecorationRenderingData)base.DecorationRenderingData;
+        public GeographicalConnector ConnectedFrom => DecorationRenderingData.ConnectedFrom;
 
-        internal LineDecoration(LineDecorationMetadata metadata, VariableLineDecoration variable) : base(metadata, variable)
+        internal LineDecoration(LineDecorationMetadata metadata, LineDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
-        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base(new LineDecorationMetadata(color), new VariableLineDecoration(lifespan, connector, targetConnector))
+        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base(new LineDecorationMetadata(color), new LineDecorationRenderingData(lifespan, connector, targetConnector))
         {
         }
 

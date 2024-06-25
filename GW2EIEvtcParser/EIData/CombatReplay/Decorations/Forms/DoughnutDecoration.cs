@@ -25,18 +25,18 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Dough" + OuterRadius + Color + InnerRadius;
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableDoughnutDecoration expectedVariable)
+                if (renderingData is DoughnutDecorationRenderingData  expectedRenderingData)
                 {
-                    return new DoughnutDecoration(this, expectedVariable);
+                    return new DoughnutDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableDoughnutDecoration");
             }
         }
-        internal class VariableDoughnutDecoration : VariableFormDecoration
+        internal class DoughnutDecorationRenderingData : FormDecorationRenderingData
         {
-            public VariableDoughnutDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public DoughnutDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
         }
@@ -44,11 +44,11 @@ namespace GW2EIEvtcParser.EIData
         public uint OuterRadius => DecorationMetadata.OuterRadius;
         public uint InnerRadius => DecorationMetadata.InnerRadius;
 
-        internal DoughnutDecoration(DoughnutDecorationMetadata metadata, VariableDoughnutDecoration variable) : base(metadata, variable)
+        internal DoughnutDecoration(DoughnutDecorationMetadata metadata, DoughnutDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
-        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new DoughnutDecorationMetadata(color, innerRadius, outerRadius), new VariableDoughnutDecoration(lifespan, connector))
+        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new DoughnutDecorationMetadata(color, innerRadius, outerRadius), new DoughnutDecorationRenderingData(lifespan, connector))
         {
         }
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
