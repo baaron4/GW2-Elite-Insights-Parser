@@ -110,10 +110,14 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance)
                 .UsingApproximate(true),
             new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
-                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife)
+                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance)
                 .UsingApproximate(true),
             new DamageLogDamageModifier("Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.sPvPWvW)
-                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife)
+                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance),
+            new DamageLogDamageModifier("Flow like Water (>= 50%)", "10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.June2024Balance, GW2Builds.EndOfLife),
+            new DamageLogDamageModifier("Flow like Water (< 50%)", "5% if hp <50%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.June2024Balance, GW2Builds.EndOfLife)
                 .UsingApproximate(true),
             //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance, GW2Builds.EndOfLife),
             // Arcane
