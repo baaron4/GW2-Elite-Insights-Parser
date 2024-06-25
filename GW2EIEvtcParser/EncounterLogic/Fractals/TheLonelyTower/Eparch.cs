@@ -26,10 +26,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            int healthCMRelease = combatData.GetBuildEvent().Build >= GW2Builds.June2024Balance ? 32_618_906 : 32_618_906;
+            ulong build = combatData.GetBuildEvent().Build;
+            int healthCMRelease = build >= GW2Builds.June2024Balance ? 22_833_236 : 32_618_906;
             int healthThreshold = (int)(0.95 * healthCMRelease); // fractals lose hp as their scale lowers
             AbstractSingleActor eparch = GetEparchActor();
-            if (combatData.GetBuildEvent().Build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
+            if (build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
             {
                 return FightData.EncounterMode.CM;
             }
@@ -46,15 +47,21 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-
-            var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
-            if (riftAgents.Count != 0)
+            var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
             {
-                riftAgents.ForEach(x =>
-                {
-                    x.OverrideID(TrashID.KryptisRift);
-                    x.OverrideType(AgentItem.AgentType.NPC);
-                });
+                return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.StartCasting() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
+            }).ToList();
+            dummyEparchs.ForEach(x => x.OverrideID(TrashID.EparchLonelyTowerDummy));
+            //
+            var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000).ToList();
+            riftAgents.ForEach(x =>
+            {
+                x.OverrideID(TrashID.KryptisRift);
+                x.OverrideType(AgentItem.AgentType.NPC);
+            });
+            //
+            if (riftAgents.Count != 0 || dummyEparchs.Count != 0)
+            {
                 agentData.Refresh();
             }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
