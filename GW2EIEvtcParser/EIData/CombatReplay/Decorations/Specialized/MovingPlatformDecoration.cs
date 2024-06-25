@@ -22,41 +22,41 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "MP" + Height + Image.GetHashCode().ToString() + Width;
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableMovingPlatformDecoration expectedVariable)
+                if (renderingData is MovingPlatformDecorationRenderingData  expectedRenderingData)
                 {
-                    return new MovingPlatformDecoration(this, expectedVariable);
+                    return new MovingPlatformDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableMovingPlatformDecoration");
             }
         }
-        internal class VariableMovingPlatformDecoration : VariableBackgroundDecoration
+        internal class MovingPlatformDecorationRenderingData : BackgroundDecorationRenderingData
         {
             public List<(float x, float y, float z, float angle, float opacity, int time)> Positions { get; } =
                 new List<(float x, float y, float z, float angle, float opacity, int time)>();
-            public VariableMovingPlatformDecoration((long, long) lifespan) : base(lifespan)
+            public MovingPlatformDecorationRenderingData((long, long) lifespan) : base(lifespan)
             {
             }
         }
         private new MovingPlatformDecorationMetadata DecorationMetadata => (MovingPlatformDecorationMetadata)base.DecorationMetadata;
-        private new VariableMovingPlatformDecoration VariableDecoration => (VariableMovingPlatformDecoration)base.VariableDecoration;
+        private new MovingPlatformDecorationRenderingData DecorationRenderingData => (MovingPlatformDecorationRenderingData)base.DecorationRenderingData;
         //
         public string Image => DecorationMetadata.Image;
         public int Width => DecorationMetadata.Width;
         public int Height => DecorationMetadata.Height;
 
-        public IReadOnlyList<(float x, float y, float z, float angle, float opacity, int time)> Positions => VariableDecoration.Positions;
-        internal MovingPlatformDecoration(MovingPlatformDecorationMetadata metadata, VariableMovingPlatformDecoration variable) : base(metadata, variable)
+        public IReadOnlyList<(float x, float y, float z, float angle, float opacity, int time)> Positions => DecorationRenderingData.Positions;
+        internal MovingPlatformDecoration(MovingPlatformDecorationMetadata metadata, MovingPlatformDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
-        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base(new MovingPlatformDecorationMetadata(image, width, height), new VariableMovingPlatformDecoration(lifespan))
+        public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base(new MovingPlatformDecorationMetadata(image, width, height), new MovingPlatformDecorationRenderingData(lifespan))
         {
         }
 
         public void AddPosition(float x, float y, float z, double angle, double opacity, int time)
         {
-            VariableDecoration.Positions.Add((x, y, z, (float)angle, (float)opacity, time));
+            DecorationRenderingData.Positions.Add((x, y, z, (float)angle, (float)opacity, time));
         }
 
         public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)

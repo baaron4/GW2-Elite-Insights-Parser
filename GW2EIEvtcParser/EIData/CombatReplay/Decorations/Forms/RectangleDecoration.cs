@@ -21,18 +21,18 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Rect" + Height + Color + Width;
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableRectangleDecoration expectedVariable)
+                if (renderingData is RectangleDecorationRenderingData  expectedRenderingData)
                 {
-                    return new RectangleDecoration(this, expectedVariable);
+                    return new RectangleDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableRectangleDecoration");
             }
         }
-        internal class VariableRectangleDecoration : VariableFormDecoration
+        internal class RectangleDecorationRenderingData : FormDecorationRenderingData
         {
-            public VariableRectangleDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public RectangleDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
         }
@@ -40,11 +40,11 @@ namespace GW2EIEvtcParser.EIData
         public uint Height => DecorationMetadata.Height;
         public uint Width => DecorationMetadata.Width;
 
-        internal RectangleDecoration(RectangleDecorationMetadata metadata, VariableRectangleDecoration variable) : base(metadata, variable)
+        internal RectangleDecoration(RectangleDecorationMetadata metadata, RectangleDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
-        public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new RectangleDecorationMetadata(color, width, height), new VariableRectangleDecoration(lifespan, connector))
+        public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new RectangleDecorationMetadata(color, width, height), new RectangleDecorationRenderingData(lifespan, connector))
         {
         }
         public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(width, height, lifespan, color.WithAlpha(opacity).ToString(true), connector)

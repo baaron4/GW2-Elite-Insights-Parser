@@ -27,31 +27,31 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Pie" + Radius + Color + MinRadius + OpeningAngle.ToString();
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariablePieDecoration expectedVariable)
+                if (renderingData is PieDecorationRenderingData  expectedRenderingData)
                 {
-                    return new PieDecoration(this, expectedVariable);
+                    return new PieDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariablePieDecoration");
             }
         }
-        internal class VariablePieDecoration : VariableCircleDecoration
+        internal class PieDecorationRenderingData : CircleDecorationRenderingData
         {
-            public VariablePieDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public PieDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
         }
         private new PieDecorationMetadata DecorationMetadata => (PieDecorationMetadata)base.DecorationMetadata;
         public float OpeningAngle => DecorationMetadata.OpeningAngle;
 
-        internal PieDecoration(PieDecorationMetadata metadata, VariablePieDecoration variable) : base(metadata, variable)
+        internal PieDecoration(PieDecorationMetadata metadata, PieDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
         //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
 
-        public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new PieDecorationMetadata(color, radius, 0, openingAngle), new VariablePieDecoration(lifespan, connector))
+        public PieDecoration(uint radius, float openingAngle, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new PieDecorationMetadata(color, radius, 0, openingAngle), new PieDecorationRenderingData(lifespan, connector))
         {
         }
 

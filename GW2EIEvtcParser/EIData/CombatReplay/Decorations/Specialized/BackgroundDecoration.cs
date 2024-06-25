@@ -6,13 +6,13 @@ namespace GW2EIEvtcParser.EIData
         internal abstract class BackgroundDecorationMetadata : GenericDecorationMetadata
         {
         }
-        internal abstract class VariableBackgroundDecoration : VariableGenericDecoration
+        internal abstract class BackgroundDecorationRenderingData : GenericDecorationRenderingData
         {
-            protected VariableBackgroundDecoration((long, long) lifespan) : base(lifespan)
+            protected BackgroundDecorationRenderingData((long, long) lifespan) : base(lifespan)
             {
             }
         }
-        internal BackgroundDecoration(BackgroundDecorationMetadata metadata, VariableBackgroundDecoration variable) : base(metadata, variable)
+        internal BackgroundDecoration(BackgroundDecorationMetadata metadata, BackgroundDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
     }

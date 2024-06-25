@@ -7,12 +7,12 @@ namespace GW2EIEvtcParser.EIData
         internal abstract class GenericAttachedDecorationMetadata : GenericDecorationMetadata
         {
         }
-        internal abstract class VariableGenericAttachedDecoration : VariableGenericDecoration
+        internal abstract class GenericAttachedDecorationRenderingData : GenericDecorationRenderingData
         {
             public GeographicalConnector ConnectedTo { get; }
             public RotationConnector RotationConnectedTo { get; protected set; }
             public SkillModeDescriptor SkillMode { get; protected set; }
-            protected VariableGenericAttachedDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan)
+            protected GenericAttachedDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan)
             {
                 ConnectedTo = connector;
             }
@@ -33,13 +33,13 @@ namespace GW2EIEvtcParser.EIData
                 SkillMode = skill;
             }
         }
-        private new VariableGenericAttachedDecoration VariableDecoration => (VariableGenericAttachedDecoration)base.VariableDecoration;
+        private new GenericAttachedDecorationRenderingData DecorationRenderingData => (GenericAttachedDecorationRenderingData)base.DecorationRenderingData;
 
-        public GeographicalConnector ConnectedTo => VariableDecoration.ConnectedTo;
-        public RotationConnector RotationConnectedTo => VariableDecoration.RotationConnectedTo;
-        public SkillModeDescriptor SkillMode => VariableDecoration.SkillMode;
+        public GeographicalConnector ConnectedTo => DecorationRenderingData.ConnectedTo;
+        public RotationConnector RotationConnectedTo => DecorationRenderingData.RotationConnectedTo;
+        public SkillModeDescriptor SkillMode => DecorationRenderingData.SkillMode;
 
-        internal GenericAttachedDecoration(GenericAttachedDecorationMetadata metadata, VariableGenericAttachedDecoration variable) : base(metadata, variable)
+        internal GenericAttachedDecoration(GenericAttachedDecorationMetadata metadata, GenericAttachedDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
@@ -58,7 +58,7 @@ namespace GW2EIEvtcParser.EIData
 
         public GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
         {
-            VariableDecoration.UsingRotationConnector(rotationConnectedTo);
+            DecorationRenderingData.UsingRotationConnector(rotationConnectedTo);
             return this;
         }
 
@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EIData
         /// <returns></returns>
         public GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
         {
-            VariableDecoration.UsingSkillMode(skill);
+            DecorationRenderingData.UsingSkillMode(skill);
             return this;
         }
     }

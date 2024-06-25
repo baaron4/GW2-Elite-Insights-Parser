@@ -20,19 +20,19 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
-            internal override GenericDecoration GetDecorationFromVariable(VariableGenericDecoration variable)
+            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
             {
-                if (variable is VariableIconDecoration expectedVariable)
+                if (renderingData is IconDecorationRenderingData  expectedRenderingData)
                 {
-                    return new IconDecoration(this, expectedVariable);
+                    return new IconDecoration(this,  expectedRenderingData);
                 }
                 throw new InvalidOperationException("Expected VariableIconDecoration");
             }
         }
-        internal class VariableIconDecoration : VariableGenericIconDecoration
+        internal class IconDecorationRenderingData : GenericIconDecorationRenderingData
         {
             public bool IsSquadMarker { get; private set; }
-            public VariableIconDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public IconDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
             public void UsingSquadMarker(bool isSquadMarker)
@@ -41,12 +41,12 @@ namespace GW2EIEvtcParser.EIData
             }
         }
         private new IconDecorationMetadata DecorationMetadata => (IconDecorationMetadata)base.DecorationMetadata;
-        private new VariableIconDecoration VariableDecoration => (VariableIconDecoration)base.VariableDecoration;
+        private new IconDecorationRenderingData DecorationRenderingData => (IconDecorationRenderingData)base.DecorationRenderingData;
 
         public float Opacity => DecorationMetadata.Opacity;
-        public bool IsSquadMarker => VariableDecoration.IsSquadMarker;
+        public bool IsSquadMarker => DecorationRenderingData.IsSquadMarker;
 
-        internal IconDecoration(IconDecorationMetadata metadata, VariableIconDecoration variable) : base(metadata, variable)
+        internal IconDecoration(IconDecorationMetadata metadata, IconDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, worldSize, opacity), new VariableIconDecoration(lifespan, connector))
+        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, worldSize, opacity), new IconDecorationRenderingData(lifespan, connector))
         {
         }
 
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IconDecoration UsingSquadMarker(bool isSquadMarker)
         {
-            VariableDecoration.UsingSquadMarker(isSquadMarker);
+            DecorationRenderingData.UsingSquadMarker(isSquadMarker);
             return this;
         }
         //

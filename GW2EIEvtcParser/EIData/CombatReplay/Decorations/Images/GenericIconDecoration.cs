@@ -16,9 +16,9 @@ namespace GW2EIEvtcParser.EIData
                 WorldSize = Math.Max(worldSize, 1);
             }
         }
-        internal abstract class VariableGenericIconDecoration : VariableGenericAttachedDecoration
+        internal abstract class GenericIconDecorationRenderingData : GenericAttachedDecorationRenderingData
         {
-            protected VariableGenericIconDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            protected GenericIconDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
         }
@@ -27,7 +27,7 @@ namespace GW2EIEvtcParser.EIData
         public uint PixelSize => DecorationMetadata.PixelSize;
         public uint WorldSize => DecorationMetadata.WorldSize;
 
-        internal GenericIconDecoration(GenericIconDecorationMetadata metadata, VariableGenericIconDecoration variable) : base(metadata, variable)
+        internal GenericIconDecoration(GenericIconDecorationMetadata metadata, GenericIconDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
     }
