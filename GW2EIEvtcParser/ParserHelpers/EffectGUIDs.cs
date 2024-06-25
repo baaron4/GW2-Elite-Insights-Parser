@@ -95,6 +95,7 @@
         public const string VirtuosoBladeturnRequiem = "87B761200637AC48B71469F553BA6F60";
         public const string VirtuosoRainOfSwords = "83834EDBA8E79946A6D5665E3519B72C";
         public const string VirtuosoThousandCuts = "E4002B7AD7DF024394D0184B47A316E7";
+        public const string MesmerRifleAbstraction = "90A4ECA144416A4790FC0D68EB0C1A8C";
         // public const string MirageJauntConflict1 = "B6557C336041B24FA7CC198B6EBDAD9A"; // used with e.g. jaunt & axes of symmetry
 
         // public const string MirageJauntConflict2 = "D7A05478BA0E164396EB90C037DCCF42"; // used with e.g. jaunt, axes of symmetry, illusionary ambush

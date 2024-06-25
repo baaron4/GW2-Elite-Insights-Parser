@@ -77,6 +77,7 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
             // Rifle
             new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
+            new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction),
         };
 
 

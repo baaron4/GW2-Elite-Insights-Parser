@@ -4250,6 +4250,7 @@
         public const long FireJurisdictionLevel3 = 72053;
         public const long EchoingErosion = 72062;
         public const long DazingDischargeBuff = 72069;
+        public const long Abstraction = 72076;
         public const long GuildHallWvWMode = 72110;
         public const long GuildHallPvEMode = 72113;
         public const long RelicOfTheFlockBarrier = 72115;
