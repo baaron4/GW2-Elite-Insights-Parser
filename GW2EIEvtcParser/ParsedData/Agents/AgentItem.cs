@@ -24,8 +24,8 @@ namespace GW2EIEvtcParser.ParsedData
         public long FirstAware { get; protected set; }
         public long LastAware { get; protected set; } = long.MaxValue;
         public string Name { get; protected set; } = "UNKNOWN";
-        public ParserHelper.Spec Spec { get; } = ParserHelper.Spec.Unknown;
-        public ParserHelper.Spec BaseSpec { get; } = ParserHelper.Spec.Unknown;
+        public ParserHelper.Spec Spec { get; private set; } = ParserHelper.Spec.Unknown;
+        public ParserHelper.Spec BaseSpec { get; private set; } = ParserHelper.Spec.Unknown;
         public ushort Toughness { get; protected set; }
         public ushort Healing { get; }
         public ushort Condition { get; }
@@ -107,6 +107,12 @@ namespace GW2EIEvtcParser.ParsedData
         internal AgentItem()
         {
             UniqueID = ++AgentCount;
+        }
+
+        internal void OverrideSpec(ParserHelper.Spec spec)
+        {
+            Spec = spec;
+            BaseSpec = ParserHelper.SpecToBaseSpec(spec);
         }
 
         internal void OverrideIsNotInSquadFriendlyPlayer(bool status)

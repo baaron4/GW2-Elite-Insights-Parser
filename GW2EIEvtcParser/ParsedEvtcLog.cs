@@ -43,25 +43,6 @@ namespace GW2EIEvtcParser
             PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
             ParserSettings = parserSettings;
             _operation = operation;
-            if (parserSettings.AnonymousPlayers)
-            {
-                operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
-                for (int i = 0; i < PlayerList.Count; i++)
-                {
-                    PlayerList[i].Anonymize(i + 1);
-                }
-                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-                int playerOffset = PlayerList.Count;
-                foreach (AgentItem playerAgent in allPlayerAgents)
-                {
-                    if (!PlayerAgents.Contains(playerAgent))
-                    {
-                        string character = "Player " + playerOffset;
-                        string account = "Account " + (playerOffset++);
-                        playerAgent.OverrideName(character + "\0:" + account + "\01");
-                    }
-                }
-            }
             //
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
@@ -82,6 +63,9 @@ namespace GW2EIEvtcParser
             FightData.ProcessEncounterStatus(CombatData, AgentData);
             operation.UpdateProgressWithCancellationCheck("Parsing: Setting Fight Name");
             FightData.CompleteFightName(CombatData, AgentData);
+            //
+            FightData.Logic.UpdatePlayersSpecAndGroup(PlayerList, CombatData, FightData);
+            PlayerList = PlayerList.OrderBy(a => a.Group).ThenBy(x => x.Character).ToList();
             //
             var friendlies = new List<AbstractSingleActor>();
             friendlies.AddRange(PlayerList);
@@ -111,6 +95,26 @@ namespace GW2EIEvtcParser
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
             StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
+            //
+            if (parserSettings.AnonymousPlayers)
+            {
+                operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    PlayerList[i].Anonymize(i + 1);
+                }
+                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+                int playerOffset = PlayerList.Count;
+                foreach (AgentItem playerAgent in allPlayerAgents)
+                {
+                    if (!PlayerAgents.Contains(playerAgent))
+                    {
+                        string character = "Player " + playerOffset;
+                        string account = "Account " + (playerOffset++);
+                        playerAgent.OverrideName(character + "\0:" + account + "\01");
+                    }
+                }
+            }
         }
 
         public void UpdateProgressWithCancellationCheck(string status)

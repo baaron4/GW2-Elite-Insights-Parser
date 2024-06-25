@@ -40,6 +40,11 @@ namespace GW2EIEvtcParser.EIData
             Group = 1;
         }
 
+        internal void OverrideGroup(int group)
+        {
+            Group = group;
+        }
+
         internal void Anonymize(int index)
         {
             Character = "Player " + index;
