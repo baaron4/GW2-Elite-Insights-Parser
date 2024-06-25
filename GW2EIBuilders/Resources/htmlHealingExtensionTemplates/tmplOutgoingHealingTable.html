@@ -85,12 +85,12 @@
                         {{row.player.acc}}
                     </td>
                     <td v-if="!showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
-                        :data-original-title="value + ' total' + '<br>' + computeTotalContribution(index, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, index, row.hps,tableData.sums)">
-                        {{round(value/phase.durationS)}}                
+                        :data-original-title="formatNumber(value) + ' total' + '<br>' + computeTotalContribution(index, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, index, row.hps,tableData.sums)">
+                        {{ formatNumber(round(value/phase.durationS)) }}                
                     </td>
                     <td v-if="showHealing" v-for="(value, index) in row.hps" :class="getBodyClass('Data', index)"
-                        :data-original-title="round(value/phase.durationS) + ' per second' + '<br>' + computeTotalContribution(index, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, index, row.hps,tableData.sums)">
-                        {{value}}               
+                        :data-original-title="formatNumber(round(value/phase.durationS)) + ' per second' + '<br>' + computeTotalContribution(index, row.hps,tableData.sums)+ '<br>'+ computeGroupContribution(row.player.group, index, row.hps,tableData.sums)">
+                        {{ formatNumber(value) }}               
                     </td>
                 </tr>
             </tbody>
@@ -102,11 +102,11 @@
                         {{sum.name}}
                     </td>
                     <td></td>
-                    <td v-if="!showHealing" v-for="(value, index) in sum.hps" :data-original-title="value + ' healing'">
-                        {{round(value/phase.durationS)}}                
+                    <td v-if="!showHealing" v-for="(value, index) in sum.hps" :data-original-title="formatNumber(value) + ' healing'">
+                        {{ formatNumber(round(value/phase.durationS)) }}
                     </td>
-                    <td v-if="showHealing" v-for="(value, index) in sum.hps" :data-original-title="round(value/phase.durationS) + ' hps'">
-                        {{value}}               
+                    <td v-if="showHealing" v-for="(value, index) in sum.hps" :data-original-title="formatNumber(round(value/phase.durationS)) + ' hps'">
+                        {{ formatNumber(value) }}               
                     </td>
                 </tr>
             </tfoot>

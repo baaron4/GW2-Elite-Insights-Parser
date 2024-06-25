@@ -121,19 +121,19 @@
                         {{ round3(100*getHealingOutput(row)/healingdist.contributedHealing) }}%
                     </td>
                     <td :class="getBodyClass('Data', 1)" :data-original-title="round2(getHealingOutput(row)/phase.durationS) +' hps'">
-                        {{ getHealingOutput(row) }}
+                        {{ formatNumber(getHealingOutput(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 2)" :data-original-title="round2(getDownedHealingOutput(row)/phase.durationS) +' hps'">
-                        {{ getDownedHealingOutput(row) }}
+                        {{ formatNumber(getDownedHealingOutput(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 3)">
-                        {{ getMinHealing(row) }}
+                        {{ formatNumber(getMinHealing(row)) }}
                     </td>
                     <td :class="getBodyClass('Data', 4)">
-                        {{ round(getHealingOutput(row)/getConnectedHits(row)) }}
+                        {{ formatNumber(round(getHealingOutput(row)/getConnectedHits(row))) }}
                     </td>
                     <td :class="getBodyClass('Data', 5)">
-                        {{ getMaxHealing(row) }}
+                        {{ formatNumber(getMaxHealing(row)) }}
                     </td>
                     <td :class="getCastBodyClass('Data', 6, row)" v-if="actor !== null">
                         {{ (!getSkill(row).condi && getCast(row)) ? getCast(row) : ''}}
@@ -145,7 +145,7 @@
                         {{(!getSkill(row).condi && getConnectedHits(row) && getCast(row)) ? round2(getConnectedHits(row)/getCast(row)) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 9)" v-if="actor !== null">
-                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getHealingOutput(row)/(0.001 * getCastDuration(row))) : ''}}
+                        {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? formatNumber(round2(getHealingOutput(row)/(0.001 * getCastDuration(row)))) : ''}}
                     </td>
                     <td :class="getBodyClass('Data', 12)" v-if="actor !== null" >
                         {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's': ' '}}

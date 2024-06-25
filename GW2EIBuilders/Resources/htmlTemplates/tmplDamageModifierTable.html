@@ -285,9 +285,9 @@
                 } else {
                     gain = "Pure Damage: ";
                 }
-                gain += this.round(item[2]);
+                gain += this.formatNumber(this.round(item[2]));
                 if (mod.nonMultiplier) {
-                    gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
+                    gain += "<br>Total Damage: " + this.formatNumber(this.round3(100.0 * item[2] / item[3])) + "%";
                 }
                 return res + "<br>" + gain;
             },
@@ -314,7 +314,7 @@
                 if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease) || !isFinite(damageIncrease)) {
                     return "-";
                 }
-                return damageIncrease + '%';
+                return this.formatNumber(damageIncrease) + '%';
             }
         },
     });

@@ -6,7 +6,7 @@ function compileTemplates() {
         template: '<div :id="id" class="d-flex flex-row justify-content-center"></div>',
         activated: function () {
             var div = document.querySelector(this.queryID);
-            Plotly.react(div, this.data, this.layout, { showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com" });
+            Plotly.react(div, this.data, this.layout, { locale: "custom", showEditInChartStudio: true, plotlyServerURL: "https://chart-studio.plotly.com" });
             var _this = this;
             div.on('plotly_animated', function () {
                 Plotly.relayout(div, _this.layout);
@@ -277,6 +277,14 @@ function mainLoad() {
 
 window.onload = function () {
     Vue.config.devtools = true;
+    Plotly.register({
+        moduleType: "locale",
+        name: "custom",
+        format: {
+            decimal: ".",
+            thousands: " "
+        }
+    });
     // trick from
     var img = document.createElement("img");
     img.style.display = "none";

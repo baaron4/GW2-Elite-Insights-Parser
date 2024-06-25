@@ -2,9 +2,8 @@
 
 var numberComponent = {
     methods: {
-        // https://stackoverflow.com/questions/16637051/adding-space-between-numbers
-        integerWithSpaces: function(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        formatNumber: function(x) {
+            return x.toLocaleString("fr").replace(",", "."); // french formatting uses spaces for thousands
         },
         round: function (value) {
             if (isNaN(value) || !isFinite(value)) {
