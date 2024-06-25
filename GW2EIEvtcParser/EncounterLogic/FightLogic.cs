@@ -250,7 +250,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             foreach (Player p in players)
             {
-                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= fightData.FightStart + 5000).LastOrDefault();
+                long threshold = fightData.FightStart + 5000;
+                EnterCombatEvent enterCombat = null;
+                if (p.FirstAware > threshold)
+                {
+                    enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
+                } 
+                else
+                {
+                    enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault();
+                }
                 if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown)
                 {
                     p.AgentItem.OverrideSpec(enterCombat.Spec);
