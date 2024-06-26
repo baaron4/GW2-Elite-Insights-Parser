@@ -246,7 +246,7 @@ namespace GW2EIEvtcParser.ParsedData
                     Add(statusEvents.MovementEvents, posEvt.Src, posEvt);
                     break;
                 case StateChange.WeaponSwap:
-                    wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData));
+                    wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData, evtcVersion));
                     break;
                 case StateChange.StackActive:
                     buffEvents.Add(new BuffStackActiveEvent(stateChangeEvent, agentData, skillData));
