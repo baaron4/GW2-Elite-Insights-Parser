@@ -43,9 +43,9 @@
                 };
                 var res;
                 if (this.activeduration) {
-                    res = getData(this.buffVolumessStatContainer.gearBuffVolumeActiveStats);
+                    res = getData(this.buffVolumesStatContainer.gearBuffVolumeActiveStats);
                 } else {
-                    res = getData(this.buffVolumessStatContainer.gearBuffVolumeStats);
+                    res = getData(this.buffVolumesStatContainer.gearBuffVolumeStats);
                 }
                 this.cache.set(id, res);
                 return res;

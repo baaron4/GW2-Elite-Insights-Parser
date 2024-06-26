@@ -55,6 +55,11 @@ namespace GW2EIEvtcParser.EIData
                             {
                                 if (abae is BuffApplyEvent bae)
                                 {
+                                    // We ignore infinite duration buffs
+                                    /*if (bae.AppliedDuration >= int.MaxValue)
+                                    {
+                                        continue;
+                                    }*/
                                     totalOutgoing += bae.AppliedDuration;
                                     if (playerActiveDuration > 0)
                                     {
@@ -73,7 +78,6 @@ namespace GW2EIEvtcParser.EIData
                         }
                     }
                 }
-
                 totalOutgoing += totalOutgoingByExtension;
                 totalActiveOutgoing = totalActiveOutgoingByExtension;
 
@@ -142,6 +146,11 @@ namespace GW2EIEvtcParser.EIData
                         {
                             if (abae is BuffApplyEvent bae)
                             {
+                                // We ignore infinite duration buffs
+                                /*if (bae.AppliedDuration >= int.MaxValue)
+                                {
+                                    continue;
+                                }*/
                                 totalOutgoing += bae.AppliedDuration;
                             }
                             if (abae is BuffExtensionEvent bee)
@@ -153,6 +162,11 @@ namespace GW2EIEvtcParser.EIData
                         {
                             if (abae is BuffApplyEvent bae)
                             {
+                                // We ignore infinite duration buffs
+                                /*if (bae.AppliedDuration >= int.MaxValue)
+                                {
+                                    continue;
+                                }*/
                                 totalIncoming += bae.AppliedDuration;
                             }
                             if (abae is BuffExtensionEvent bee)

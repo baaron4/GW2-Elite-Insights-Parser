@@ -38,6 +38,11 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (abae is BuffApplyEvent bae)
                         {
+                            // We ignore infinite duration buffs
+                            if (bae.AppliedDuration >= int.MaxValue)
+                            {
+                                continue;
+                            }
                             incoming += bae.AppliedDuration;
                         }
                         if (abae is BuffExtensionEvent bee)

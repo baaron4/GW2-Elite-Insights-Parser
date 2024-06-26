@@ -44,7 +44,7 @@
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
                             player: logData.players[spec.ids[j]],
-                            data: this.activeduration ? this.buffVolumesStatContainer.ersBuffVolumeActiveStats[spec.ids[j]] : this.buffVolumesStatContainer.ersBuffVolumeStats[spec.ids[j]]
+                            data: this.activeduration ? this.buffVolumesStatContainer.persBuffVolumeActiveStats[spec.ids[j]] : this.buffVolumesStatContainer.persBuffVolumeStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);

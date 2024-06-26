@@ -47,8 +47,8 @@
                 :playerindex="playerindex" :activeduration="activeduration"></conditions-volume-table-component>
             <debuff-volume-table-component v-if="tab === 7" :key="'debuffs-volume'" :phaseindex="phaseindex"
                 :playerindex="playerindex" :activeduration="activeduration"></debuff-volume-table-component>
-            <personal-volume-buff-table-component v-if="tab === 6" :key="'persbuffs-volume'" :phaseindex="phaseindex"
-                :playerindex="playerindex" :activeduration="activeduration"></personal-volume-buff-table-component>
+            <personal-buff-volume-table-component v-if="tab === 6" :key="'persbuffs-volume'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activeduration="activeduration"></personal-buff-volume-table-component>
         </keep-alive>
     </div>
 
