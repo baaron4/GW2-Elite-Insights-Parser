@@ -97,6 +97,8 @@ namespace GW2EIEvtcParser
             internal const int Last90BeforeDownRetired = 20240529;
             internal const int StackType0ActiveChange = 20240609;
             internal const int TeamChangeOnDespawn = 20240612;
+            // To be updated with the correct value
+            internal const int WeaponSwapValueIsPrevious = 20240626;
             //
             internal const int EndOfLife = int.MaxValue;
         }

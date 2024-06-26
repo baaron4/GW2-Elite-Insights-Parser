@@ -112,9 +112,9 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int swapped = WeaponSetIDs.NoSet;
             long swappedTime = 0;
-            var swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
+            List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
             {
-                return x.SwappedTo;
+                return (x.SwappedTo, x.SwappedFrom);
             }).ToList();
             foreach (AbstractCastEvent cl in casting)
             {
@@ -135,10 +135,10 @@ namespace GW2EIEvtcParser.EIData
                     swappedTime = swe.Time;
                 }
             }
-            int land1Swaps = swaps.Count(x => x == WeaponSetIDs.FirstLandSet);
-            int land2Swaps = swaps.Count(x => x == WeaponSetIDs.SecondLandSet);
-            int water1Swaps = swaps.Count(x => x == WeaponSetIDs.FirstWaterSet);
-            int water2Swaps = swaps.Count(x => x == WeaponSetIDs.SecondWaterSet);
+            int land1Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.FirstLandSet);
+            int land2Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.SecondLandSet);
+            int water1Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.FirstWaterSet);
+            int water2Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.SecondWaterSet);
             _weaponSets.HasLandSwapped = land1Swaps > 0 && land2Swaps > 0;
             _weaponSets.HasWaterSwapped = water1Swaps > 0 && water2Swaps > 0;
         }

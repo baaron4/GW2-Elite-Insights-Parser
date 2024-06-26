@@ -1337,7 +1337,7 @@ namespace GW2EIEvtcParser.ParsedData
             return true;
         }
 
-        internal int FindFirstWeaponSet(IReadOnlyList<int> swaps)
+        internal int FindFirstWeaponSet(IReadOnlyList<(int to, int from)> swaps)
         {
             int swapped = WeaponSetIDs.NoSet;
             // we started on a proper weapon set
