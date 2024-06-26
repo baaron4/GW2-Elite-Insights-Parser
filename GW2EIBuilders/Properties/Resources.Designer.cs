@@ -1774,6 +1774,27 @@ namespace GW2EIBuilders.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;template&gt;
         ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 0}&quot; @click=&quot;tab = 0&quot;&gt;Uptimes&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;hasOffBuffs&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 1}&quot; @click=&quot;tab = 1&quot;&gt;Volumes&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;buff-stats-player-component v-if=&quot;tab == 0&quot; :key=&quot;&apos;player-buff-tables&apos;&quot;:phaseindex=&quot;phaseindex&quot;
+        ///                :playeri [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplPlayerBuffTab {
+            get {
+                return ResourceManager.GetString("tmplPlayerBuffTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
         ///        &lt;h3 v-for=&quot;player in players&quot; :key=&quot;player.id&quot; v-show=&quot;player.id === activeplayer&quot;
         ///            class=&quot;text-center mt-2&quot;&gt;&lt;img :alt=&quot;player.profession&quot; class=&quot;icon&quot; :src=&quot;player.icon&quot;&gt;{{player.name}}&lt;/h3&gt;
         ///        &lt;ul class=&quot;nav nav-tabs&quot; v-show=&quot;activeplayer &gt; -1&quot;&gt;
@@ -2010,6 +2031,27 @@ namespace GW2EIBuilders.Properties {
         internal static string tmplSupportTable {
             get {
                 return ResourceManager.GetString("tmplSupportTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;template&gt;
+        ///    &lt;div&gt;
+        ///        &lt;ul class=&quot;nav nav-tabs&quot;&gt;
+        ///            &lt;li&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 0}&quot; @click=&quot;tab = 0&quot;&gt;Uptimes&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///            &lt;li v-if=&quot;hasOffBuffs&quot;&gt;
+        ///                &lt;a class=&quot;nav-link&quot; :class=&quot;{active: tab === 1}&quot; @click=&quot;tab = 1&quot;&gt;Volumes&lt;/a&gt;
+        ///            &lt;/li&gt;
+        ///        &lt;/ul&gt;
+        ///        &lt;keep-alive&gt;
+        ///            &lt;buff-stats-target-component v-if=&quot;tab == 0&quot; :key=&quot;&apos;target-buff-tables&apos;&quot;:targetindex=&quot;targetindex&quot;
+        ///            :phaseinde [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tmplTargetBuffTab {
+            get {
+                return ResourceManager.GetString("tmplTargetBuffTab", resourceCulture);
             }
         }
         

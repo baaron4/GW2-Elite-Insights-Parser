@@ -12,8 +12,8 @@
             </targetperplayer-graphs-tab-component>
             <simplerotation-component v-if="mode === 3" :key="'rot' + targetindex" :actorindex="targetindex"
                 :phaseindex="phaseindex" :target="true"></simplerotation-component>
-            <buff-stats-target-component v-if="mode === 4" :key="'buffs' + targetindex" :targetindex="targetindex"
-                :phaseindex="phaseindex" :playerindex="playerindex"></buff-stats-target-component>
+            <target-buff-tab-component v-if="mode === 4" :key="'buffs' + targetindex" :targetindex="targetindex"
+                :phaseindex="phaseindex" :playerindex="playerindex"></target-buff-tab-component>
         </keep-alive>
     </div>
 </template>
