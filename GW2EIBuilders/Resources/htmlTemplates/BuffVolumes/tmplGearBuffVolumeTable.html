@@ -1,0 +1,55 @@
+<template>
+    <div>
+        <buff-volume-table-component :key="'gear-buff-volume-stats-table'"  :outgoing="false"
+            :id="'gear-buff-volume-stats-table'" :buffs="gears" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
+        </buff-volume-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("gear-buff-volume-table-component", {
+        props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            buffData: function () {
+                var id = this.phaseindex;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }
+
+                var getData = function (stats) {
+                    var uptimes = [];
+                    var i;
+                    for (i = 0; i < logData.players.length; i++) {
+                        var player = logData.players[i];
+                        if (player.isFake) {
+                            continue;
+                        }
+                        uptimes.push({
+                            player: player,
+                            data: stats[i]
+                        });
+                    }
+                    return uptimes;
+                };
+                var res;
+                if (this.activeduration) {
+                    res = getData(this.buffVolumesStatContainer.gearBuffVolumeActiveStats);
+                } else {
+                    res = getData(this.buffVolumesStatContainer.gearBuffVolumeStats);
+                }
+                this.cache.set(id, res);
+                return res;
+            }
+        },
+    });
+</script>

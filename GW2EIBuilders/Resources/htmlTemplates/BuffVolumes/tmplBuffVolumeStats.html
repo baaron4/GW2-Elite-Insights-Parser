@@ -3,51 +3,52 @@
         <div class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
                 <li class="nav-item">
-                    <a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Uptime</a>
+                    <a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Incoming</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="buffMode = 1" :class="{active: buffMode === 1 }">Generation Self</a>
+                    <a class="nav-link" @click="buffMode = 1" :class="{active: buffMode === 1 }">Outgoing Self</a>
                 </li>
                 <li v-if="!singlePlayer" class="nav-item">
                     <a class="nav-link" @click="buffMode = 2" :class="{active: buffMode === 2 }"
-                        data-original-title="Self excluded">Generation Group</a>
+                        data-original-title="Self excluded">Outgoing Group</a>
                 </li>
                 <li v-if="!singleGroup" class="nav-item">
                     <a class="nav-link" @click="buffMode = 3" :class="{active: buffMode === 3 }"
-                        data-original-title="Self excluded">Generation Off-Group</a>
+                        data-original-title="Self excluded">Outgoing Off-Group</a>
                 </li>
                 <li v-if="!singleGroup" class="nav-item">
                     <a class="nav-link" @click="buffMode = 4" :class="{active: buffMode === 4 }"
-                        data-original-title="Self excluded">Generation Squad</a>
+                        data-original-title="Self excluded">Outgoing Squad</a>
                 </li>
             </ul>
         </div>
         <keep-alive>
-            <buff-table-component v-if="type === 0" :key="'boon-stats-table'" :condition="false" :generation="buffMode > 0"
-                :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[buffMode]"
-                :sums="buffMode === 0 ? buffData.boonsData[5] : []" :playerindex="playerindex" :hidecustom="buffMode > 1">
-            </buff-table-component>
-            <buff-table-component v-if="type === 1" :key="'offensivebuff-stats-table'" :condition="false"
-                :generation="buffMode > 0" :id="'offensivebuff-stats-table'" :buffs="offs"
+            <buff-volume-table-component v-if="type === 0" :key="'boon-volume-stats-table'" 
+                :outgoing="buffMode > 0" :id="'boon-volume-stats-table'" :buffs="boons"
+                :playerdata="buffData.boonsData[buffMode]" :sums="buffMode === 0 ? buffData.boonsData[5] : []"
+                :playerindex="playerindex" :hidecustom="buffMode > 1">
+            </buff-volume-table-component>
+            <buff-volume-table-component v-if="type === 1" :key="'offensivebuff-volume-stats-table'" 
+                :outgoing="buffMode > 0" :id="'offensivebuff-volume-stats-table'" :buffs="offs"
                 :playerdata="buffData.offsData[buffMode]" :sums="buffMode === 0 ? buffData.offsData[5] : []"
                 :playerindex="playerindex" :hidecustom="buffMode > 1">
-            </buff-table-component>
-            <buff-table-component v-if="type === 2" :key="'supportbuff-stats-table'" :condition="false"
-                :generation="buffMode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
+            </buff-volume-table-component>
+            <buff-volume-table-component v-if="type === 2" :key="'supportbuff-volume-stats-table'" 
+                :outgoing="buffMode > 0" :id="'supportbuff-volume-stats-table'" :buffs="sups"
                 :playerdata="buffData.supsData[buffMode]" :sums="buffMode === 0 ? buffData.supsData[5] : []"
                 :playerindex="playerindex" :hidecustom="buffMode > 1">
-            </buff-table-component>
-            <buff-table-component v-if="type === 3" :key="'defensivebuff-stats-table'" :condition="false"
-                :generation="buffMode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
+            </buff-volume-table-component>
+            <buff-volume-table-component v-if="type === 3" :key="'defensivebuff-volume-stats-table'" 
+                :outgoing="buffMode > 0" :id="'defensivebuff-volume-stats-table'" :buffs="defs"
                 :playerdata="buffData.defsData[buffMode]" :sums="buffMode === 0 ? buffData.defsData[5] : []"
                 :playerindex="playerindex" :hidecustom="buffMode > 1">
-            </buff-table-component>
+            </buff-volume-table-component>
         </keep-alive>
     </div>
 </template>
 
 <script>
-    Vue.component("buff-stats-component", {
+    Vue.component("buff-volume-stats-component", {
         props: ['type', 'phaseindex', 'playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
@@ -63,48 +64,47 @@
                 const activeTimes = this.phase.playerActiveTimes;
                 //
                 const activeString = (activeduration ? "Active" : "");
-                const uptimesStats = container[name + activeString + "Stats"];
-                const genSelfStats = container[name + "Gen" + activeString + "SelfStats"];
-                const genGroupStats = container[name + "Gen" + activeString + "GroupStats"];
-                const genOffGroupStats = container[name + "Gen" + activeString + "OGroupStats"];
-                const genSquadStats = container[name + "Gen" + activeString + "SquadStats"];
+                const incomingStats = container[name + "Volume" + activeString + "Stats"];
+                const outgoingSelfStats = container[name + "OutgoingVolume" + activeString + "SelfStats"];
+                const outgoingGroupStats = container[name + "OutgoingVolume" + activeString + "GroupStats"];
+                const outgoingOGroupStats = container[name + "OutgoingVolume" + activeString + "OGroupStats"];
+                const outgoingSquadStats = container[name + "OutgoingVolume" + activeString + "SquadStats"];
                 //
-                let uptimes = [];
-                let genSelf = [];
-                let genGroup = [];
-                let genOffGroup = [];
-                let genSquad = [];
+                let incoming = [];
+                let outSelf = [];
+                let outGroup = [];
+                let outOffGroup = [];
+                let outSquad = [];
                 let avg = [];
                 let groupAvg = [];
                 let totalAvg = [];
                 let groupCount = [];
                 let totalCount = 0;
-                let groupBoonAvg = [];
-                let totalBoonAvg = 0;
-                for (let i = 0; i < logData.players.length; i++) {
+                //
+                for (var i = 0; i < logData.players.length; i++) {
                     const player = logData.players[i];
                     if (player.isFake) {
                         continue;
                     }
-                    uptimes.push({
+                    incoming.push({
                         player: player,
-                        data: uptimesStats[i]
+                        data: incomingStats[i]
                     });
-                    genSelf.push({
+                    outSelf.push({
                         player: player,
-                        data: genSelfStats[i]
+                        data: outgoingSelfStats[i]
                     });
-                    genGroup.push({
+                    outGroup.push({
                         player: player,
-                        data: genGroupStats[i]
+                        data: outgoingGroupStats[i]
                     });
-                    genOffGroup.push({
+                    outOffGroup.push({
                         player: player,
-                        data: genOffGroupStats[i]
+                        data: outgoingOGroupStats[i]
                     });
-                    genSquad.push({
+                    outSquad.push({
                         player: player,
-                        data: genSquadStats[i]
+                        data: outgoingSquadStats[i]
                     });
                     if (activeduration && activeTimes[i] < 1e-6) {
                         continue;
@@ -116,15 +116,12 @@
                     if (!groupAvg[player.group]) {
                         groupAvg[player.group] = [];
                         groupCount[player.group] = 0;
-                        groupBoonAvg[player.group] = 0;
                     }
                     totalCount += playerWeight;
-                    totalBoonAvg += playerWeight * uptimesStats[i].avg;
-                    groupBoonAvg[player.group] += playerWeight * uptimesStats[i].avg;
                     groupCount[player.group] += playerWeight;
-                    for (let j = 0; j < uptimesStats[i].data.length; j++) {
-                        totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
-                        groupAvg[player.group][j] = (groupAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                    for (let j = 0; j < incomingStats[i].data.length; j++) {
+                        totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (incomingStats[i].data[j][0] || 0);
+                        groupAvg[player.group][j] = (groupAvg[player.group][j] || 0) + playerWeight * (incomingStats[i].data[j][0] || 0);
                     }
                 }
                 for (let i = 0; i < groupAvg.length; i++) {
@@ -135,7 +132,6 @@
                         avg.push({
                             name: "Group " + i,
                             data: groupAvg[i],
-                            avg: Math.round(1000 * groupBoonAvg[i] / groupCount[i]) / 1000
                         });
                     }
                 }
@@ -145,9 +141,9 @@
                 avg.push({
                     name: "Total",
                     data: totalAvg,
-                    avg: Math.round(1000 * totalBoonAvg / totalCount) / 1000
                 });
-                return [uptimes, genSelf, genGroup, genOffGroup, genSquad, avg];
+                return [incoming, outSelf, outGroup, outOffGroup, outSquad, avg];
+
             }
         },
         computed: {
@@ -166,11 +162,11 @@
                     return this.cache.get(id);
                 }
                 let res = {
-                    boonsData: this.getData("boon", this.phase),
-                    offsData: this.getData("offBuff", this.phase),
-                    offsData: this.getData("offBuff", this.phase),
-                    defsData: this.getData("defBuff", this.phase),
-                    supsData: this.getData("supBuff", this.phase),
+                    boonsData: this.getData("boon", this.buffVolumesStatContainer),
+                    offsData: this.getData("offBuff", this.buffVolumesStatContainer),
+                    offsData: this.getData("offBuff", this.buffVolumesStatContainer),
+                    defsData: this.getData("defBuff", this.buffVolumesStatContainer),
+                    supsData: this.getData("supBuff", this.buffVolumesStatContainer),
                 };
                 this.cache.set(id, res);
                 return res;

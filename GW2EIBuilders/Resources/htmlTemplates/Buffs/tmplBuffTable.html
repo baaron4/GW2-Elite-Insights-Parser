@@ -78,11 +78,11 @@
                 return this.getHeaderClassBase(this.sortdata, key, index);
             },
             getBodyClass: function(key, index) {
-                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                const classes = this.getBodyClassBase(this.sortdata, key, index);
                 return classes;
             },
             sortData: function(rows) {
-                var order = this.sortdata.order === "asc" ? 1 : -1;
+                const order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Sub":
                         rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
@@ -94,9 +94,9 @@
                         rows.sort((x,y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "Data":
-                        var index = this.sortdata.index;
+                        const index = this.sortdata.index;
                         function getValue(rowValue) {
-                            var value = rowValue.data.data[index];
+                            const value = rowValue.data.data[index];
                             if (value instanceof Array) {
                                 return value[0] ?? 0;
                             }
@@ -120,11 +120,12 @@
                 }
                 return false;
             },
-            getCellTooltip: function (buff, val, uptime) {
+            getCellTooltip: function (buff, val, actorSum) {
                 if (val instanceof Array) {
-                    if (!uptime && this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0)) {
-                        var res = '';
+                    if (!actorSum && this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0)) {
+                        let res = '';
                         if (val[1] !== val[0]) {
+                            res += res.length > 0 ? "<br>" : '';
                             res += (val[1] || 0) + (buff.stacking ? "" : "%") + " with overstack";
                         }
                         if (val[4] > 0) {
@@ -153,8 +154,8 @@
                 return false;
             },
             getCellValue: function (buff, val) {
-                var value = val;
-                var force = false;
+                let value = val;
+                let force = false;
                 if (val instanceof Array) {
                     value = val[0];
                     force = this.generation && (val[1] > 0 || val[2] > 0 || val[3] > 0 || val[4] > 0);

@@ -18,18 +18,18 @@ namespace GW2EIEvtcParser.EIData
         public double ByExtension { get; internal set; }
         public double Extended { get; internal set; }
 
-        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem agentItem, long start, long end)
+        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
         {
 
             long phaseDuration = end - start;
 
-            var buffDistribution = new Dictionary<Player, BuffDistribution>();
+            var buffDistributionPerPlayer = new Dictionary<Player, BuffDistribution>();
             foreach (Player p in playerList)
             {
-                buffDistribution[p] = p.GetBuffDistribution(log, start, end);
+                buffDistributionPerPlayer[p] = p.GetBuffDistribution(log, start, end);
             }
 
-            var buffsToTrack = new HashSet<Buff>(buffDistribution.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
+            var buffsToTrack = new HashSet<Buff>(buffDistributionPerPlayer.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
 
             var buffs =
                 new Dictionary<long, FinalActorBuffs>();
@@ -53,19 +53,19 @@ namespace GW2EIEvtcParser.EIData
                 double totalActiveExtended = 0;
                 bool hasGeneration = false;
                 int activePlayerCount = 0;
-                foreach (KeyValuePair<Player, BuffDistribution> pair in buffDistribution)
+                foreach (KeyValuePair<Player, BuffDistribution> buffDistributionByPlayer in buffDistributionPerPlayer)
                 {
-                    BuffDistribution boons = pair.Value;
-                    long playerActiveDuration = pair.Key.GetActiveDuration(log, start, end);
-                    if (boons.HasBuffID(boon.ID))
+                    BuffDistribution buffDistribution = buffDistributionByPlayer.Value;
+                    long playerActiveDuration = buffDistributionByPlayer.Key.GetActiveDuration(log, start, end);
+                    if (buffDistribution.HasBuffID(boon.ID))
                     {
-                        hasGeneration = hasGeneration || boons.HasSrc(boon.ID, agentItem);
-                        double generation = boons.GetGeneration(boon.ID, agentItem);
-                        double overstack = boons.GetOverstack(boon.ID, agentItem);
-                        double wasted = boons.GetWaste(boon.ID, agentItem);
-                        double unknownExtension = boons.GetUnknownExtension(boon.ID, agentItem);
-                        double extension = boons.GetExtension(boon.ID, agentItem);
-                        double extended = boons.GetExtended(boon.ID, agentItem);
+                        hasGeneration = hasGeneration || buffDistribution.HasSrc(boon.ID, srcAgentItem);
+                        double generation = buffDistribution.GetGeneration(boon.ID, srcAgentItem);
+                        double overstack = buffDistribution.GetOverstack(boon.ID, srcAgentItem);
+                        double wasted = buffDistribution.GetWaste(boon.ID, srcAgentItem);
+                        double unknownExtension = buffDistribution.GetUnknownExtension(boon.ID, srcAgentItem);
+                        double extension = buffDistribution.GetExtension(boon.ID, srcAgentItem);
+                        double extended = buffDistribution.GetExtended(boon.ID, srcAgentItem);
 
                         totalGeneration += generation;
                         totalOverstack += overstack;
@@ -143,19 +143,19 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
+        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor dstActor, long start, long end)
         {
             var buffs = new Dictionary<long, FinalActorBuffs>();
             var activeBuffs = new Dictionary<long, FinalActorBuffs>();
 
-            BuffDistribution selfBuffs = actor.GetBuffDistribution(log, start, end);
-            IReadOnlyDictionary<long, long> buffPresence = actor.GetBuffPresence(log, start, end);
+            BuffDistribution buffDistribution = dstActor.GetBuffDistribution(log, start, end);
+            IReadOnlyDictionary<long, long> buffPresence = dstActor.GetBuffPresence(log, start, end);
 
             long phaseDuration = end - start;
-            long playerActiveDuration = actor.GetActiveDuration(log, start, end);
-            foreach (Buff boon in actor.GetTrackedBuffs(log))
+            long playerActiveDuration = dstActor.GetActiveDuration(log, start, end);
+            foreach (Buff buff in dstActor.GetTrackedBuffs(log))
             {
-                if (selfBuffs.HasBuffID(boon.ID))
+                if (buffDistribution.HasBuffID(buff.ID))
                 {
                     var uptime = new FinalActorBuffs
                     {
@@ -177,16 +177,16 @@ namespace GW2EIEvtcParser.EIData
                         ByExtension = 0,
                         Extended = 0
                     };
-                    buffs[boon.ID] = uptime;
-                    activeBuffs[boon.ID] = uptimeActive;
-                    double generationValue = selfBuffs.GetGeneration(boon.ID, actor.AgentItem);
-                    double uptimeValue = selfBuffs.GetUptime(boon.ID);
-                    double overstackValue = selfBuffs.GetOverstack(boon.ID, actor.AgentItem);
-                    double wasteValue = selfBuffs.GetWaste(boon.ID, actor.AgentItem);
-                    double unknownExtensionValue = selfBuffs.GetUnknownExtension(boon.ID, actor.AgentItem);
-                    double extensionValue = selfBuffs.GetExtension(boon.ID, actor.AgentItem);
-                    double extendedValue = selfBuffs.GetExtended(boon.ID, actor.AgentItem);
-                    if (boon.Type == BuffType.Duration)
+                    buffs[buff.ID] = uptime;
+                    activeBuffs[buff.ID] = uptimeActive;
+                    double generationValue = buffDistribution.GetGeneration(buff.ID, dstActor.AgentItem);
+                    double uptimeValue = buffDistribution.GetUptime(buff.ID);
+                    double overstackValue = buffDistribution.GetOverstack(buff.ID, dstActor.AgentItem);
+                    double wasteValue = buffDistribution.GetWaste(buff.ID, dstActor.AgentItem);
+                    double unknownExtensionValue = buffDistribution.GetUnknownExtension(buff.ID, dstActor.AgentItem);
+                    double extensionValue = buffDistribution.GetExtension(buff.ID, dstActor.AgentItem);
+                    double extendedValue = buffDistribution.GetExtended(buff.ID, dstActor.AgentItem);
+                    if (buff.Type == BuffType.Duration)
                     {
                         uptime.Uptime = Math.Round(100.0 * uptimeValue / phaseDuration, ParserHelper.BuffDigit);
                         uptime.Generation = Math.Round(100.0 * generationValue / phaseDuration, ParserHelper.BuffDigit);
@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EIData
                             uptimeActive.Extended = Math.Round(100.0 * extendedValue / playerActiveDuration, ParserHelper.BuffDigit);
                         }
                     }
-                    else if (boon.Type == BuffType.Intensity)
+                    else if (buff.Type == BuffType.Intensity)
                     {
                         uptime.Uptime = Math.Round(uptimeValue / phaseDuration, ParserHelper.BuffDigit);
                         uptime.Generation = Math.Round(generationValue / phaseDuration, ParserHelper.BuffDigit);
@@ -228,7 +228,7 @@ namespace GW2EIEvtcParser.EIData
                             uptimeActive.Extended = Math.Round(extendedValue / playerActiveDuration, ParserHelper.BuffDigit);
                         }
                         //
-                        if (buffPresence.TryGetValue(boon.ID, out long presenceValueBoon))
+                        if (buffPresence.TryGetValue(buff.ID, out long presenceValueBoon))
                         {
                             uptime.Presence = Math.Round(100.0 * presenceValueBoon / phaseDuration, ParserHelper.BuffDigit);
                             //

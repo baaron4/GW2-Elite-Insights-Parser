@@ -73,6 +73,27 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        internal override Dictionary<long, FinalActorBuffVolumes>[] ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        {
+            switch (type)
+            {
+                case BuffEnum.Group:
+                    var otherPlayersInGroup = log.PlayerList
+                        .Where(p => p.Group == Group && this != p)
+                        .ToList();
+                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
+                case BuffEnum.OffGroup:
+                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
+                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(offGroupPlayers, log, AgentItem, start, end);
+                case BuffEnum.Squad:
+                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
+                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayers, log, AgentItem, start, end);
+                case BuffEnum.Self:
+                default:
+                    return FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end);
+            }
+        }
+
         /// <summary>
         /// Checks if the player has a Commander Tag GUID.
         /// </summary>

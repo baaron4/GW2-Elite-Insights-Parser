@@ -28,12 +28,12 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             {
                 Uptime = buffs.Uptime,
                 Presence = buffs.Presence,
-                Generated = ConvertKeys(buffsDictionary.Generated),
-                Overstacked = ConvertKeys(buffsDictionary.Overstacked),
-                Wasted = ConvertKeys(buffsDictionary.Wasted),
-                UnknownExtended = ConvertKeys(buffsDictionary.UnknownExtension),
-                ByExtension = ConvertKeys(buffsDictionary.Extension),
-                Extended = ConvertKeys(buffsDictionary.Extended)
+                Generated = ConvertKeys(buffsDictionary.GeneratedBy),
+                Overstacked = ConvertKeys(buffsDictionary.OverstackedBy),
+                Wasted = ConvertKeys(buffsDictionary.WastedFrom),
+                UnknownExtended = ConvertKeys(buffsDictionary.UnknownExtensionFrom),
+                ByExtension = ConvertKeys(buffsDictionary.ExtensionBy),
+                Extended = ConvertKeys(buffsDictionary.ExtendedFrom)
             };
             return jsonBuffsUptimeData;
         }
@@ -57,7 +57,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 if (buffDicts.TryGetValue(buffID, out FinalBuffsDictionary buffDict))
                 {
                     var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<int>>>();
-                    foreach (AbstractSingleActor source in buffDict.Generated.Keys)
+                    foreach (AbstractSingleActor source in buffDict.GeneratedBy.Keys)
                     {
                         statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
                     }

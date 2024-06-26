@@ -1,13 +1,13 @@
 <template>
     <div>
-        <buff-table-component :key="'conditions-stats-table'" :condition="true" :generation="false"
-            :id="'conditions-stats-table'" :buffs="conditions" :playerdata="buffData[0]" :sums="buffData[1]" :playerindex="playerindex" :hidecustom="false">
-        </buff-table-component>
+        <buff-volume-table-component :key="'conditions-volume-stats-table'" :outgoing="false"
+            :id="'conditions-volume-stats-table'" :buffs="conditions" :playerdata="buffData[0]" :sums="buffData[1]" :playerindex="playerindex" :hidecustom="false">
+        </buff-volume-table-component>
     </div>
 </template>
 
 <script>
-    Vue.component("conditions-table-component", {
+    Vue.component("conditions-volume-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
@@ -35,8 +35,6 @@
                         totalAvg = [];
                     var groupCount = [],
                         totalCount = 0;
-                    var groupConditionAvg = [],
-                        totalConditionAvg = 0;
                     for (var i = 0; i < logData.players.length; i++) {
                         var player = logData.players[i];
                         if (player.isFake) {
@@ -57,11 +55,8 @@
                         if (!groupeAvg[player.group]) {
                             groupeAvg[player.group] = [];
                             groupCount[player.group] = 0;
-                            groupConditionAvg[player.group] = 0;
                         }
                         totalCount += playerWeight;
-                        totalConditionAvg += playerWeight * uptimesStats[i].avg;
-                        groupConditionAvg[player.group] += playerWeight * uptimesStats[i].avg;
                         groupCount[player.group] += playerWeight;
                         for (var j = 0; j < uptimesStats[i].data.length; j++) {
                             totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
@@ -76,7 +71,6 @@
                             avg.push({
                                 name: "Group " + i,
                                 data: groupeAvg[i],
-                                avg: Math.round(1000 * groupConditionAvg[i] / groupCount[i]) / 1000
                             });
                         }
                     }
@@ -86,15 +80,14 @@
                     avg.push({
                         name: "Total",
                         data: totalAvg,
-                        avg: Math.round(1000 * totalConditionAvg / totalCount) / 1000
                     });
                     return [uptimes, avg];
                 };
                 var res;
                 if (this.activeduration) {
-                    res = getData(this.phase.conditionsActiveStats);
+                    res = getData(this.buffVolumesStatContainer.conditionsVolumeActiveStats);
                 } else {
-                    res = getData(this.phase.conditionsStats);
+                    res = getData(this.buffVolumesStatContainer.conditionsVolumeStats);
                 }
                 this.cache.set(id, res);
                 return res;

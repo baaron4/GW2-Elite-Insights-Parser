@@ -4,12 +4,12 @@
 namespace GW2EIJSON
 {
     /// <summary>
-    /// Class representing buff on targets
+    /// Class representing buff uptimes
     /// </summary>
     public class JsonBuffsUptime
     {
         /// <summary>
-        /// Target buff item
+        /// Buff uptime data
         /// </summary>
         public class JsonBuffsUptimeData
         {

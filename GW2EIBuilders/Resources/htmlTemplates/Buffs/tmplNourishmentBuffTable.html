@@ -1,7 +1,7 @@
 <template>
     <div>
-        <buff-table-component :key="'nourishment-buff-stats-table'" :condition="false" :generation="false"
-            :id="'nourishment-buff-stats-table'" :buffs="nourishments" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
+        <buff-table-component :key="'nourishement-buff-stats-table'" :condition="false" :generation="false"
+            :id="'nourishement-buff-stats-table'" :buffs="nourishments" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
         </buff-table-component>
     </div>
 </template>
@@ -21,16 +21,16 @@
                 return logData.phases[this.phaseindex];
             },
             buffData: function () {
-                var id = this.phaseindex;
+                const id = this.phaseindex;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
 
                 var getData = function (stats) {
-                    var uptimes = [];
+                    const uptimes = [];
                     var i;
                     for (i = 0; i < logData.players.length; i++) {
-                        var player = logData.players[i];
+                        const player = logData.players[i];
                         if (player.isFake) {
                             continue;
                         }
@@ -41,7 +41,7 @@
                     }
                     return uptimes;
                 };
-                var res = getData(this.phase.nourishmentStats);
+                const res = getData(this.buffsStatContainer.nourishmentStats);
                 this.cache.set(id, res);
                 return res;
             }

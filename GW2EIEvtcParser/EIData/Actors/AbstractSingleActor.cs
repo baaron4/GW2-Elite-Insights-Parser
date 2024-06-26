@@ -379,6 +379,28 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        internal virtual Dictionary<long, FinalActorBuffVolumes>[] ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        {
+            Dictionary<long, FinalActorBuffVolumes>[] empty =
+            {
+                        new Dictionary<long, FinalActorBuffVolumes>(),
+                        new Dictionary<long, FinalActorBuffVolumes>()
+             };
+            switch (type)
+            {
+                case BuffEnum.Group:
+                    return empty;
+                case BuffEnum.OffGroup:
+                    return empty;
+                case BuffEnum.Squad:
+                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
+                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayers, log, AgentItem, start, end);
+                case BuffEnum.Self:
+                default:
+                    return FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end);
+            }
+        }
+
 
         public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
         {
@@ -479,6 +501,26 @@ namespace GW2EIEvtcParser.EIData
         public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
             return _buffHelper.GetActiveBuffsDictionary(log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetBuffVolumes(type, log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetActiveBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetActiveBuffVolumes(type, log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetBuffVolumesDictionary(log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetActiveBuffVolumesDictionary(log, start, end);
         }
 
         //

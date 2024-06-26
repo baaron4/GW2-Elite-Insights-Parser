@@ -21,16 +21,15 @@
                 return logData.phases[this.phaseindex];
             },
             buffData: function () {
-                var id = this.phaseindex;
+                const id = this.phaseindex;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
 
                 var getData = function (stats) {
-                    var uptimes = [];
-                    var i;
-                    for (i = 0; i < logData.players.length; i++) {
-                        var player = logData.players[i];
+                    const uptimes = [];
+                    for (let i = 0; i < logData.players.length; i++) {
+                        const player = logData.players[i];
                         if (player.isFake) {
                             continue;
                         }
@@ -41,7 +40,7 @@
                     }
                     return uptimes;
                 };
-                var res = getData(this.phase.enhancementStats);
+                const res = getData(this.buffsStatContainer.enhancementStats);
                 this.cache.set(id, res);
                 return res;
             }

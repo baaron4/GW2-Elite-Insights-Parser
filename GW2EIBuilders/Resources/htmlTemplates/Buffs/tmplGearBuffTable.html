@@ -1,13 +1,13 @@
 <template>
     <div>
-        <buff-table-component :key="'otherconsumable-buff-stats-table'" :condition="false" :generation="false"
-            :id="'otherconsumable-buff-stats-table'" :buffs="otherConsumables" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
+        <buff-table-component :key="'gear-buff-stats-table'" :condition="false" :generation="false"
+            :id="'gear-buff-stats-table'" :buffs="gears" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
         </buff-table-component>
     </div>
 </template>
 
 <script>
-    Vue.component("otherconsumable-buff-table-component", {
+    Vue.component("gear-buff-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
@@ -21,16 +21,15 @@
                 return logData.phases[this.phaseindex];
             },
             buffData: function () {
-                var id = this.phaseindex;
+                const id = this.phaseindex;
                 if (this.cache.has(id)) {
                     return this.cache.get(id);
                 }
 
                 var getData = function (stats) {
-                    var uptimes = [];
-                    var i;
-                    for (i = 0; i < logData.players.length; i++) {
-                        var player = logData.players[i];
+                    const uptimes = [];
+                    for (let i = 0; i < logData.players.length; i++) {
+                        const player = logData.players[i];
                         if (player.isFake) {
                             continue;
                         }
@@ -41,7 +40,12 @@
                     }
                     return uptimes;
                 };
-                var res = getData(this.phase.otherConsumableStats);
+                let res;
+                if (this.activeduration) {
+                    res = getData(this.buffsStatContainer.gearBuffActiveStats);
+                } else {
+                    res = getData(this.buffsStatContainer.gearBuffStats);
+                }
                 this.cache.set(id, res);
                 return res;
             }

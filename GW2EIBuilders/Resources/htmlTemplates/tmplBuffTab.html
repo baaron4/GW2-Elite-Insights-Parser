@@ -1,0 +1,51 @@
+<template>
+    <div>
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Uptimes</a>
+            </li>
+            <li v-if="hasOffBuffs">
+                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Volumes</a>
+            </li>
+        </ul>
+        <keep-alive>
+            <buff-tables-component v-if="tab == 0" :key="'buff-tables'" :type="tab" :phaseindex="phaseindex"
+                :playerindex="playerindex"></buff-tables-component>
+            <buff-volume-tables-component v-if="tab == 1" :key="'buff-volume-tables'" :type="tab" :phaseindex="phaseindex"
+                :playerindex="playerindex"></buff-volume-tables-component>
+        </keep-alive>
+    </div>
+
+</template>
+
+<script>
+    function getDefaultBuffTabSubComponent(key) {
+        let header = 'N/A';
+        if (key === "healingbuff-tables") {
+            header = "HealingStatistics";
+        } else if (key === "buff-tables") {
+            header = "Statistics";
+        }
+        if (!validateStartPath(header+"/Buffs")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "Uptimes":
+                return 0;
+            case "Volumes":
+                return 1
+        }
+        return 0;
+    }
+    Vue.component("buff-tab-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                tab: getDefaultBuffTabSubComponent(this.$vnode.key),
+            };
+        },
+    });
+</script>

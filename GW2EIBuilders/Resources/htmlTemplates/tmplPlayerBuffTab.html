@@ -1,0 +1,45 @@
+<template>
+    <div>
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Uptimes</a>
+            </li>
+            <li v-if="hasOffBuffs">
+                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Volumes</a>
+            </li>
+        </ul>
+        <keep-alive>
+            <buff-stats-player-component v-if="tab == 0" :key="'player-buff-tables'":phaseindex="phaseindex"
+                :playerindex="playerindex"></buff-stats-player-component>
+            <buff-volume-stats-player-component v-if="tab == 1" :key="'player-buff-volume-tables'" :phaseindex="phaseindex"
+                :playerindex="playerindex"></buff-volume-stats-player-component>
+        </keep-alive>
+    </div>
+
+</template>
+
+<script>
+    function getDefaultPlayerBuffTabSubComponent() {
+        if (!validateStartPath("Statistics/PlayerSummary/BoonStatus") && !validateStartPath("HealingStatistics/PlayerSummary/BoonStatus")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[3];
+        switch (compo) {
+            case "Uptimes":
+                return 0;
+            case "Volumes":
+                return 1
+        }
+        return 0;
+    }
+    Vue.component("player-buff-tab-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        data: function () {
+            return {
+                tab: getDefaultPlayerBuffTabSubComponent(),
+            };
+        },
+    });
+</script>

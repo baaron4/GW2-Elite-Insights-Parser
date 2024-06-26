@@ -8,15 +8,15 @@
         <div v-for="(spec, id) in orderedSpecs" class="mt-1 mb-1">
             <div v-show="specToBase[spec.name] === persBuffMode">
                 <h3 class="text-center">{{ spec.name }}</h3>
-                <buff-table-component :target="null" :condition="false" :generation="false" :id="'persbuffs-stats-table' + '_' + spec.name"
-                    :persBuffs="persBuffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex" :hidecustom="false"></buff-table-component>
+                <buff-volume-table-component :target="null"  :outgoing="false" :id="'persbuffs-volume-stats-table' + '_' + spec.name"
+                    :buffs="persBuffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex" :hidecustom="false"></buff-table-component>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    Vue.component("personal-buff-table-component", {
+    Vue.component("personal-buff-volume-table-component", {
         props: ['phaseindex', 'playerindex', 'activeduration'],
         mixins: [buffComponent],
         template: `${template}`,
@@ -44,7 +44,7 @@
                     for (var j = 0; j < spec.ids.length; j++) {
                         dataBySpec.push({
                             player: logData.players[spec.ids[j]],
-                            data: this.activeduration ? this.phase.persBuffActiveStats[spec.ids[j]] : this.phase.persBuffStats[spec.ids[j]]
+                            data: this.activeduration ? this.buffVolumesStatContainer.persBuffVolumeActiveStats[spec.ids[j]] : this.buffVolumesStatContainer.persBuffVolumeStats[spec.ids[j]]
                         });
                     }
                     res.push(dataBySpec);

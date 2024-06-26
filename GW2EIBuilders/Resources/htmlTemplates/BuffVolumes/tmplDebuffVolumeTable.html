@@ -1,0 +1,55 @@
+<template>
+    <div>
+        <buff-volume-table-component :key="'debuff-volume-stats-table'"  :outgoing="false"
+            :id="'debuff-volume-stats-table'" :buffs="debuffs" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
+        </buff-volume-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("debuff-volume-table-component", {
+        props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            buffData: function () {
+                var id = this.phaseindex + '-' + this.activeduration;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }
+
+                var getData = function (stats) {
+                    var uptimes = [];
+                    var i;
+                    for (i = 0; i < logData.players.length; i++) {
+                        var player = logData.players[i];
+                        if (player.isFake) {
+                            continue;
+                        }
+                        uptimes.push({
+                            player: player,
+                            data: stats[i]
+                        });
+                    }
+                    return uptimes;
+                };
+                var res;
+                if (this.activeduration) {
+                    res = getData(this.buffVolumesStatContainer.debuffVolumeActiveStats);
+                } else {
+                    res = getData(this.buffVolumesStatContainer.debuffVolumeStats);
+                }
+                this.cache.set(id, res);
+                return res;
+            }
+        },
+    });
+</script>

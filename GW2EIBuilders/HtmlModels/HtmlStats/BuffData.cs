@@ -34,16 +34,16 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         {
             foreach (Buff buff in listToUse)
             {
-                if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.Generated.ContainsKey(actor))
+                if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.GeneratedBy.ContainsKey(actor))
                 {
                     Data.Add(new List<object>()
                         {
-                            toUse.Generated[actor],
-                            toUse.Overstacked[actor],
-                            toUse.Wasted[actor],
-                            toUse.UnknownExtension[actor],
-                            toUse.Extension[actor],
-                            toUse.Extended[actor]
+                            toUse.GeneratedBy[actor],
+                            toUse.OverstackedBy[actor],
+                            toUse.WastedFrom[actor],
+                            toUse.UnknownExtensionFrom[actor],
+                            toUse.ExtensionBy[actor],
+                            toUse.ExtendedFrom[actor]
                         });
                 }
                 else
@@ -260,7 +260,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             return new BuffData(buffs, log.StatisticsHelper.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AvgConditions);
         }
 
-        public static BuffData BuildTargetBoonData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
+        public static BuffData BuildTargetBoonUptimeData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
         {
             IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
             return new BuffData(buffs, log.StatisticsHelper.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AvgBoons);
