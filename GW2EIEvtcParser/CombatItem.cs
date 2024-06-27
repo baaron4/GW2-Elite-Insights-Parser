@@ -221,6 +221,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.Last90BeforeDown
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_45
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_51
+                || IsStateChange == ArcDPSEnums.StateChange.Glider
                 ;
         }
 
