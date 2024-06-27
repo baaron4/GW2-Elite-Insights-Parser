@@ -209,6 +209,7 @@ namespace GW2EIEvtcParser
             Downed = 9,
             BreakbarDamage = 10,
             Activation = 11,
+            CrowdControl = 12,
 
             Unknown
         };
@@ -292,6 +293,7 @@ namespace GW2EIEvtcParser
             RuleSet = 52,
             SquadMarker = 53,
             ArcBuild = 54,
+            Glider = 54,
             Unknown
         };
 
