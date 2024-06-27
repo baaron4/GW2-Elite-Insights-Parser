@@ -11,7 +11,7 @@
             Status = AnimationStatus.Instant;
             SwappedTo = (int)evtcItem.DstAgent;
             SwappedFrom = -1;
-            if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.WeaponSwapValueIsPrevious)
+            if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents)
             {
                 SwappedFrom = evtcItem.Value;
             }
