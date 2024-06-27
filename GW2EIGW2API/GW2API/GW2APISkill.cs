@@ -20,6 +20,8 @@ namespace GW2EIGW2API.GW2API
         [JsonProperty]
         public IReadOnlyList<string> Professions { get; internal set; }
         [JsonProperty]
+        public IReadOnlyList<string> Flags { get; internal set; }
+        [JsonProperty]
         public string Slot { get; internal set; }
         [JsonProperty]
         public IReadOnlyList<GW2APIFact> Facts { get; internal set; }

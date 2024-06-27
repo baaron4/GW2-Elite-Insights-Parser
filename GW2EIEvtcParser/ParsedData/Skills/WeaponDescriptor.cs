@@ -18,8 +18,8 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 IsLand = false;
                 WeaponSlot = Hand.TwoHand;
-                // Placeholder, very possible we may need some sort of id list for non weapon swapping classes/people
-                if (apiSkill.WeaponType == "Spear" && apiSkill.Id > 70000)
+                // Use flags to know if land or water
+                if (apiSkill.WeaponType == "Spear" && apiSkill.Flags != null && apiSkill.Flags.Contains("NoUnderwater"))
                 {
                     IsLand = true;
                 }
