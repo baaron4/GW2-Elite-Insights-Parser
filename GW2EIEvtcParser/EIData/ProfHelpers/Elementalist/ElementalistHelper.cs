@@ -295,6 +295,7 @@ namespace GW2EIEvtcParser.EIData
             SkillItem skill = skillData.Get(Updraft);
             if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
             {
+                skillData.NotAccurate.Add(Updraft);
                 foreach (EffectEvent effect in updrafts)
                 {
                     res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 1000));
