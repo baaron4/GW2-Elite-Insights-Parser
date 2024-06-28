@@ -111,6 +111,8 @@ namespace GW2EIEvtcParser.EIData
                     // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
                     return MineDetonationInstantCastChecker(effect, combatData, true, new string [] { EffectGUIDs.EngineerThrowMineInactive1 });
                 }),
+             new DamageCastFinder(FocusedDevastation, FocusedDevastation)
+                .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
@@ -211,6 +213,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Tool Kit", POV_ToolKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ToolKit),
             new Buff("Elite Mortar", POV_EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
             */
+            // Spear
+            new Buff("Conduit Surge", ConduitSurgeBuff, Source.Engineer, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
@@ -374,6 +381,29 @@ namespace GW2EIEvtcParser.EIData
             {
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
             }
+        }
+
+        /// <summary>
+        /// Compute <see cref="Devastator"/> cast cvents.
+        /// </summary>
+        /// <param name="player">The player casting.</param>
+        /// <param name="combatData">Combat Data.</param>
+        /// <param name="skillData">Skill Data.</param>
+        /// <param name="agentData">Agent Data.</param>
+        /// <returns>The list of <see cref="AnimatedCastEvent"/>.</returns>
+        public static IReadOnlyList<AnimatedCastEvent> ComputeDevastatorCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(Devastator);
+            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerSpearDevastator1, out IReadOnlyList<EffectEvent> devastator))
+            {
+                foreach (EffectEvent effect in devastator)
+                {
+                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time - 1000, 1000));
+                    skillData.NotAccurate.Add(Devastator);
+                }
+            }
+            return res;
         }
     }
 }

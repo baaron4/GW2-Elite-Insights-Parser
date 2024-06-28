@@ -106,6 +106,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Lead Attacks", LeadAttacks, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, BuffImages.LeadAttacks),
             new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, BuffImages.InstantReflexes),
             new Buff("Fluid Strikes", FluidStrikes, Source.Thief, BuffClassification.Other, BuffImages.FluidStrikes).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+            // Spear
+            new Buff("Distracting Throw", DistractingThrowBuff, Source.Thief, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Shadow Veil", ShadowVeilBuff, Source.Thief, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         private static HashSet<int> Minions = new HashSet<int>()

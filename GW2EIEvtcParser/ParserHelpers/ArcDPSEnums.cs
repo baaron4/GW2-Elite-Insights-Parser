@@ -1291,6 +1291,7 @@ namespace GW2EIEvtcParser
             IllusionaryWhaler = 9057,
             IllusionaryAvenger = 15188,
             IllusionarySharpShooter = 26152,
+            IllusionaryLancer = 26271,
             // Mesmer Clones
             // - Single Weapon
             CloneSword = 8108,

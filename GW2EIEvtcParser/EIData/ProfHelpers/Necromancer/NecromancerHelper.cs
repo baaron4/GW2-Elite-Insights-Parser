@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -44,6 +45,8 @@ namespace GW2EIEvtcParser.EIData
             new MinionCommandCastFinder(NecroticTraversal, (int) MinionID.FleshWurm),
             // new BuffGainWithMinionsCastFinder(RigorMortisSkill, RigorMortisEffect),
             // new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
+            // Spear
+            new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress).UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff).OfType<BuffRemoveAllEvent>(), effectEvent.Time).Any()),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
@@ -108,6 +111,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Vampiric Strikes", VampiricStrikes, Source.Necromancer, BuffClassification.Other, BuffImages.VampiricPresence),
             new Buff("Last Rites", LastRites, Source.Necromancer, BuffClassification.Defensive, BuffImages.LastRites),
             new Buff("Soul Barbs", SoulBarbs, Source.Necromancer, BuffClassification.Other, BuffImages.SoulBarbs),
+            // Spear
+            new Buff("Extirpation", Extirpation, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Soul Shards", SoulShards, Source.Necromancer, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Distress", DistressBuff, Source.Necromancer, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Dark Stalker", DarkStalker, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         private static readonly HashSet<long> _shroudTransform = new HashSet<long>
