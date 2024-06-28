@@ -649,9 +649,13 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        private static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(IReadOnlyList<AbstractBuffEvent> buffs, SkillItem skill)
+        private static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, IReadOnlyList<AbstractBuffEvent> buffs, SkillItem skill)
         {
             var res = new List<AnimatedCastEvent>();
+            if (combatData.GetAnimatedCastData(skill.ID).Count > 0)
+            {
+                return res;
+            }
             var applies = buffs.OfType<BuffApplyEvent>().ToList();
             var removals = buffs.OfType<BuffRemoveAllEvent>().ToList();
             for (int i = 0; i < applies.Count && i < removals.Count; i++)
@@ -661,9 +665,13 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        private static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(IReadOnlyList<BuffApplyEvent> buffs, SkillItem skill, long startOffset, long skillDuration)
+        private static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(CombatData combatData, IReadOnlyList<BuffApplyEvent> buffs, SkillItem skill, long startOffset, long skillDuration)
         {
             var res = new List<AnimatedCastEvent>();
+            if (combatData.GetAnimatedCastData(skill.ID).Count > 0)
+            {
+                return res;
+            }
             foreach (BuffApplyEvent bae in buffs)
             {
                 res.Add(new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
@@ -674,13 +682,13 @@ namespace GW2EIEvtcParser.EIData
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
         {
             SkillItem skill = skillData.Get(skillId);
-            return ComputeUnderBuffCastEvents(combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem), skill);
+            return ComputeUnderBuffCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem), skill);
         }
 
         internal static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
         {
             SkillItem skill = skillData.Get(skillId);
-            return ComputeEndWithBuffApplyCastEvents(combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>().ToList(), skill, startOffset, skillDuration);
+            return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>().ToList(), skill, startOffset, skillDuration);
         }
 
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillId, long buffId)
@@ -690,7 +698,7 @@ namespace GW2EIEvtcParser.EIData
             var res = new List<AnimatedCastEvent>();
             foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in dict)
             {
-                res.AddRange(ComputeUnderBuffCastEvents(pair.Value, skill));
+                res.AddRange(ComputeUnderBuffCastEvents(combatData, pair.Value, skill));
             }
             return res;
         }

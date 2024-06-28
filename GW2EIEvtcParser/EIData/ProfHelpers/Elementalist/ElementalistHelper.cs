@@ -292,6 +292,11 @@ namespace GW2EIEvtcParser.EIData
         public static IReadOnlyList<AnimatedCastEvent> ComputeUpdraftCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<AnimatedCastEvent>();
+            if (combatData.GetAnimatedCastData(Updraft).Count > 0)
+            {
+                // Already present in the log
+                return res;
+            }
             SkillItem skill = skillData.Get(Updraft);
             if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
             {
