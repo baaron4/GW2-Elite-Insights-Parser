@@ -174,7 +174,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphMoa),
             new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
             // Spear
-            new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Offensive, BuffImages.MonsterSkill),
+            new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         private static readonly HashSet<int> _cloneIDs = new HashSet<int>()

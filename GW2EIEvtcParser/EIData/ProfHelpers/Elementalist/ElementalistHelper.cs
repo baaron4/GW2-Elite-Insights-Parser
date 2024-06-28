@@ -242,11 +242,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Shattering Stone", ShatteringStoneBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ShatteringStone)
                 .WithBuilds(GW2Builds.February2024NewWeapons),
             // Spear
-            new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Offensive, BuffImages.MonsterSkill),
-            new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Support, BuffImages.MonsterSkill),
-            new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Offensive, BuffImages.MonsterSkill),
-            new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Offensive, BuffImages.MonsterSkill),
-            new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Support, BuffImages.MonsterSkill),
+            new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
 
