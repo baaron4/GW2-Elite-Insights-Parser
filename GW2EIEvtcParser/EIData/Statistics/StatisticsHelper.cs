@@ -212,7 +212,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     if (activePlayers == 0)
                     {
-                        _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
+                        _stackCenterPositions.Add(null);
                     }
                     else
                     {

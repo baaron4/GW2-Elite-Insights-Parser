@@ -90,9 +90,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             AbstractSingleActor eparch = GetEparchActor();
             var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-            if (determinedApplies.Count >= 3)
+            if (fightData.IsCM && determinedApplies.Count >= 3)
             {
                 fightData.SetSuccess(true, determinedApplies[2].Time);
+            } 
+            else if (!fightData.IsCM && determinedApplies.Count >= 1)
+            {
+                fightData.SetSuccess(true, determinedApplies[0].Time);
             }
         }
 
@@ -101,7 +105,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor eparch = GetEparchActor();
             phases[0].AddTarget(eparch);
-            if (!requirePhases)
+            if (!requirePhases || !log.FightData.IsCM)
             {
                 return phases;
             }

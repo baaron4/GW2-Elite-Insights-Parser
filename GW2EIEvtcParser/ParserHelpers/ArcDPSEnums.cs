@@ -97,6 +97,7 @@ namespace GW2EIEvtcParser
             internal const int Last90BeforeDownRetired = 20240529;
             internal const int StackType0ActiveChange = 20240609;
             internal const int TeamChangeOnDespawn = 20240612;
+            internal const int WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents = 20240627;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -207,6 +208,7 @@ namespace GW2EIEvtcParser
             Downed = 9,
             BreakbarDamage = 10,
             Activation = 11,
+            CrowdControl = 12,
 
             Unknown
         };
@@ -290,6 +292,7 @@ namespace GW2EIEvtcParser
             RuleSet = 52,
             SquadMarker = 53,
             ArcBuild = 54,
+            Glider = 54,
             Unknown
         };
 

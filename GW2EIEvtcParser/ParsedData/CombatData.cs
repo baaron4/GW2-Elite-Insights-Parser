@@ -25,8 +25,10 @@ namespace GW2EIEvtcParser.ParsedData
         private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffEvent>>> _buffDataByIDByDst;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
         private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageData;
+        private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
         private readonly Dictionary<long, List<AbstractBreakbarDamageEvent>> _breakbarDamageDataById;
         private readonly Dictionary<long, List<AbstractHealthDamageEvent>> _damageDataById;
+        private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
         private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
         private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
@@ -34,6 +36,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataById;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
         private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageTakenData;
+        private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
         // EXTENSIONS
         public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
@@ -489,6 +492,7 @@ namespace GW2EIEvtcParser.ParsedData
             var buffEvents = new List<AbstractBuffEvent>();
             var wepSwaps = new List<WeaponSwapEvent>();
             var brkDamageData = new List<AbstractBreakbarDamageEvent>();
+            var crowdControlData = new List<CrowdControlEvent>();
             var damageData = new List<AbstractHealthDamageEvent>();
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating EI Combat Data");
             foreach (CombatItem combatItem in combatEvents)
@@ -537,7 +541,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     else if (combatItem.IsBuff == 0)
                     {
-                        CombatEventFactory.AddDirectDamageEvent(combatItem, damageData, brkDamageData, agentData, skillData);
+                        CombatEventFactory.AddDirectDamageEvent(combatItem, damageData, brkDamageData, crowdControlData, agentData, skillData);
                     }
                     else if (combatItem.IsBuff != 0 && combatItem.Value == 0)
                     {
@@ -578,6 +582,9 @@ namespace GW2EIEvtcParser.ParsedData
             _breakbarDamageData = brkDamageData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageDataById = brkDamageData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _breakbarDamageTakenData = brkDamageData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            _crowControlData = crowdControlData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            _crowControlDataById = crowdControlData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
+            _crowControlTakenData = crowdControlData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             BuildBuffDependentContainers();
             //
             foreach (AbstractExtensionHandler handler in extensions.Values)
@@ -1091,6 +1098,34 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
+        /// Returns list of crowd control events done by agent
+        /// </summary>
+        /// <param name="src"></param> Agent
+        /// <returns></returns>
+        public IReadOnlyList<CrowdControlEvent> GetCrowdControlData(AgentItem src)
+        {
+            if (_crowControlData.TryGetValue(src, out List<CrowdControlEvent> res))
+            {
+                return res;
+            }
+            return new List<CrowdControlEvent>();
+        }
+
+        /// <summary>
+        /// Returns list of crowd control events done by skill id
+        /// </summary>
+        /// <param name="long"></param> ID
+        /// <returns></returns>
+        public IReadOnlyList<CrowdControlEvent> GetCrowdControlData(long skillID)
+        {
+            if (_crowControlDataById.TryGetValue(skillID, out List<CrowdControlEvent> res))
+            {
+                return res;
+            }
+            return new List<CrowdControlEvent>();
+        }
+
+        /// <summary>
         /// Returns list of animated cast events done by Agent
         /// </summary>
         /// <param name="caster"></param> Agent
@@ -1161,7 +1196,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Returns list of damage taken events by Agent
+        /// Returns list of damage events taken by Agent
         /// </summary>
         /// <param name="dst"></param> Agent
         /// <returns></returns>
@@ -1175,7 +1210,7 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Returns list of breakbar damage taken events by Agent
+        /// Returns list of breakbar damage events taken by Agent
         /// </summary>
         /// <param name="dst"></param> Agent
         /// <returns></returns>
@@ -1186,6 +1221,20 @@ namespace GW2EIEvtcParser.ParsedData
                 return res;
             }
             return new List<AbstractBreakbarDamageEvent>();
+        }
+
+        /// <summary>
+        /// Returns list of crowd control events taken by Agent
+        /// </summary>
+        /// <param name="dst"></param> Agent
+        /// <returns></returns>
+        public IReadOnlyList<CrowdControlEvent> GetCrowdControlTakenData(AgentItem dst)
+        {
+            if (_crowControlTakenData.TryGetValue(dst, out List<CrowdControlEvent> res))
+            {
+                return res;
+            }
+            return new List<CrowdControlEvent>();
         }
 
         public IReadOnlyList<AbstractMovementEvent> GetMovementData(AgentItem src)
@@ -1541,6 +1590,17 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return null;
         }
+
+        public IReadOnlyList<GliderEvent> GetGliderEvents(AgentItem src)
+        {
+            if (_statusEvents.GliderEventsBySrc.TryGetValue(src, out List<GliderEvent> list))
+            {
+                return list;
+            }
+            return new List<GliderEvent>();
+        }
+
+        /// 
 
         public static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T : AbstractTimeCombatEvent
         {

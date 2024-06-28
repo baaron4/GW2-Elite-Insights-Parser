@@ -246,7 +246,7 @@ namespace GW2EIEvtcParser.ParsedData
                     Add(statusEvents.MovementEvents, posEvt.Src, posEvt);
                     break;
                 case StateChange.WeaponSwap:
-                    wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData));
+                    wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData, evtcVersion));
                     break;
                 case StateChange.StackActive:
                     buffEvents.Add(new BuffStackActiveEvent(stateChangeEvent, agentData, skillData));
@@ -367,6 +367,10 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     Add(statusEvents.SquadMarkerEventsByIndex, squadMarkerEvent.MarkerIndex, squadMarkerEvent);
                     break;
+                case StateChange.Glider:
+                    var gliderEvent = new GliderEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.GliderEventsBySrc, gliderEvent.Src, gliderEvent);
+                    break;
                 default:
                     break;
             }
@@ -461,13 +465,16 @@ namespace GW2EIEvtcParser.ParsedData
             return res;
         }
 
-        public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, AgentData agentData, SkillData skillData)
+        public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
         {
             ArcDPSEnums.PhysicalResult result = GetPhysicalResult(damageEvent.Result);
             switch (result)
             {
                 case PhysicalResult.BreakbarDamage:
                     brkBarDamage.Add(new DirectBreakbarDamageEvent(damageEvent, agentData, skillData));
+                    break;
+                case PhysicalResult.CrowdControl:
+                    crowdControlEvents.Add(new CrowdControlEvent(damageEvent, agentData, skillData));
                     break;
                 case PhysicalResult.Activation:
                 case PhysicalResult.Unknown:
