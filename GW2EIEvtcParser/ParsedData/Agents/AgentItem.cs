@@ -388,6 +388,19 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.GetBuffStatus(log, by, buffId, start, end);
         }
 
+
+        /// <summary>
+        /// Checks if the agent will go into downstate before the next time they go above 90% health, or the fight ends.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Current log time</param>
+        /// <returns><see langword="true"/> if the agent will down before the next time they go above 90% health <see langword="false"/>.</returns>
+        public bool IsDownedBeforeNext90(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDownBefore90(log, time);
+        }
+
         /// <summary>
         /// Checks if the agent is downed at given time.
         /// </summary>

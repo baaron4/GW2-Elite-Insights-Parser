@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
@@ -90,6 +91,42 @@ namespace GW2EIEvtcParser.EIData
             return (end - start) -
                 (long)dead.Sum(x => x.IntersectingArea(start, end)) -
                 (long)dc.Sum(x => x.IntersectingArea(start, end));
+        }
+
+        public bool IsDownBeforeNext90(ParsedEvtcLog log, long curTime)
+        {
+            (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = GetStatus(log);
+
+            // get remaining fight segment
+            var remainingFightTime = new Segment(curTime, log.FightData.FightEnd);
+
+            // return false if actor currently above 90
+            if (Actor.GetCurrentHealthPercent(log, curTime) > 90)
+            {
+                return false;
+            }
+            
+            // return false if fight ends before any down events
+            Segment nextDown = down.FirstOrDefault(downSegment => downSegment.IntersectSegment(remainingFightTime));
+            if (nextDown == null)
+            {
+                return false;
+            }
+
+            IReadOnlyList<Segment> healthUpdatesBeforeEnd = Actor.GetHealthUpdates(log).Where(update => update.Start > curTime).ToList();
+            Segment next90 = healthUpdatesBeforeEnd.FirstOrDefault(update => update.Value > 90);
+           
+            // If there are no more 90 events before combat end and the actor has a down event remaining then the actor must down before next 90
+            if(next90 == null) { return true; }
+
+            // Otherwise return false if the next 90 is before the next down
+            if (next90.Start < nextDown.Start)
+            {
+                return false;
+            }
+
+            // Actor is below 90, will down before end of combat, and will not be above 90 again before end of combat
+            return true;
         }
 
 

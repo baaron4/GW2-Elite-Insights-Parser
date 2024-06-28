@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -104,10 +106,21 @@ namespace GW2EIEvtcParser.EIData
                     {
                         ConnectedDamageCount++;
                         ConnectedDmg += dl.HealthDamage;
-                        IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
-                        if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))
+                        // Derive down contribution from health updates as they are available after this build
+                        if (log.LogData.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.Last90BeforeDownRetired)
+                        {
+                            IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
+                            if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))
+                            {
+                                DownContribution += dl.HealthDamage;
+                            }
+                        }
+                        else
+                        {
+                            if (dl.To.IsDownedBeforeNext90(log, dl.Time))
                         {
                             DownContribution += dl.HealthDamage;
+                        }
                         }
                         if (dl.AgainstMoving)
                         {
