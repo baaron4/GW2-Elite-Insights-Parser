@@ -71,6 +71,8 @@ namespace GW2EIEvtcParser.EIData
                 .UsingToNotSpecChecker(Spec.Weaver)
                 .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            // Spear
+            new BuffGainCastFinder(EnergizeSkill, EnergizeBuff),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
@@ -239,6 +241,12 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.February2024NewWeapons),
             new Buff("Shattering Stone", ShatteringStoneBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ShatteringStone)
                 .WithBuilds(GW2Builds.February2024NewWeapons),
+            // Spear
+            new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Offensive, BuffImages.MonsterSkill),
+            new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Support, BuffImages.MonsterSkill),
+            new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Offensive, BuffImages.MonsterSkill),
+            new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Offensive, BuffImages.MonsterSkill),
+            new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Support, BuffImages.MonsterSkill),
         };
 
 

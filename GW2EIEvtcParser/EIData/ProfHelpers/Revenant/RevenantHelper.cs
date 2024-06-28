@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -69,8 +70,7 @@ namespace GW2EIEvtcParser.EIData
                 .UsingSrcBaseSpecChecker(Spec.Revenant)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
             new EffectCastFinder(BlitzMinesDrop, EffectGUIDs.RevenantSpearBlitzMines1)
-                .UsingSrcBaseSpecChecker(Spec.Revenant)
-                .UsingICD(500),
+                .UsingSrcBaseSpecChecker(Spec.Revenant),
             new EffectCastFinder(BlitzMines, EffectGUIDs.RevenantSpearBlitzMinesDetonation1)
                 .UsingSecondaryEffectChecker(EffectGUIDs.RevenantSpearBlitzMinesDetonation2)
                 .UsingSrcBaseSpecChecker(Spec.Revenant),
@@ -185,6 +185,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Steadfast Rejuvenation", SteadfastRejuvenation, Source.Revenant, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.SteadfastRejuvenation),
             // Scepter
             new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffClassification.Other, BuffImages.BlossomingAura),
+            // Spear
+            new Buff("Crushing Abyss", CrushingAbyss, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Offensive, BuffImages.MonsterSkill),
         };
 
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>
@@ -358,8 +360,13 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (EffectEvent effect in abyssalBlitz)
                 {
-                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 3000));
-                    skillData.NotAccurate.Add(AbyssalBlitz);
+                    // We only want the first effect, not all
+                    // We use the effect if there isn't another effect in the previous 300ms.
+                    if (abyssalBlitz.Where(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 300).FirstOrDefault() == null)
+                    {
+                        res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 3000));
+                        skillData.NotAccurate.Add(AbyssalBlitz);
+                    }
                 }
             }
             return res;

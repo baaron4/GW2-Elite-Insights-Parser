@@ -170,6 +170,7 @@ namespace GW2EIEvtcParser.ParsedData
             { OverbearingSmashLeap, "Overbearing Smash (Leap)" },
             { UnleashedOverbearingSmashLeap, "Unleashed Overbearing Smash (Leap)" },
             { RangerPetSpawned, "Ranger Pet Spawned" },
+            { WolfsOnslaughtFollowUp, "Wolf's Onslaught (Follow Up)" },
             // Revenant
 	        { EnergyExpulsion, "Energy Expulsion" },
             { RiftSlashRiftHit, "Rift Slash (Rift Hit)" },
@@ -188,6 +189,8 @@ namespace GW2EIEvtcParser.ParsedData
             { KallaSummonsSaluteAnimationSkill, "Salute" },
             { GenerousAbundanceCentaur, "Generous Abundance (Centaur)" },
             { GenerousAbundanceOther, "Generous Abundance (Other)" },
+            { BlitzMinesDrop, "Blitz Mines (Drop)" },
+            { BlitzMines, "Blitz Mines (Detonation)" },
             // Thief
 	        { EscapistsFortitude, "Escapist's Fortitude" }, // The game maps this to the wrong skill
             { SoulStoneVenomSkill, "Soul Stone Venom" },

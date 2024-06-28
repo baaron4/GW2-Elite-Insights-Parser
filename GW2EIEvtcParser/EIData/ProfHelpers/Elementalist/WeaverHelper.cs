@@ -205,6 +205,12 @@ namespace GW2EIEvtcParser.EIData
                 )
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
                 .UsingTimeOffset(-extraOrbHammerDelay),
+            // Spear
+            new BuffGainCastFinder(FrostfireWardSkill, FrostfireWardBuff),
+            new BuffGainCastFinder(GalvanizeSkill, GalvanizeBuff),
+            new BuffGainCastFinder(FieryImpactSkill, FieryImpactBuff),
+            new BuffGainCastFinder(ElutriateSkill, ElutriateBuff),
+            new BuffGainCastFinder(ShaleStormSkill, ShaleStormBuff),
         };
 
 
