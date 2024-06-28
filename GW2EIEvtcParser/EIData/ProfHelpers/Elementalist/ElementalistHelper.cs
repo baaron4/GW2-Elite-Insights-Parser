@@ -297,26 +297,6 @@ namespace GW2EIEvtcParser.EIData
             return Minions.Contains(id);
         }
 
-        public static IReadOnlyList<AnimatedCastEvent> ComputeUpdraftCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<AnimatedCastEvent>();
-            if (combatData.GetAnimatedCastData(Updraft).Count > 0)
-            {
-                // Already present in the log
-                return res;
-            }
-            SkillItem skill = skillData.Get(Updraft);
-            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
-            {
-                skillData.NotAccurate.Add(Updraft);
-                foreach (EffectEvent effect in updrafts)
-                {
-                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 1000));
-                }
-            }
-            return res;
-        }
-
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             Color color = Colors.Elementalist;

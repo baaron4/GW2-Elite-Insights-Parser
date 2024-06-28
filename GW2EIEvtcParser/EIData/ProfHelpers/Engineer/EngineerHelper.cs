@@ -383,27 +383,5 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        /// <summary>
-        /// Compute <see cref="Devastator"/> cast cvents.
-        /// </summary>
-        /// <param name="player">The player casting.</param>
-        /// <param name="combatData">Combat Data.</param>
-        /// <param name="skillData">Skill Data.</param>
-        /// <param name="agentData">Agent Data.</param>
-        /// <returns>The list of <see cref="AnimatedCastEvent"/>.</returns>
-        public static IReadOnlyList<AnimatedCastEvent> ComputeDevastatorCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<AnimatedCastEvent>();
-            SkillItem skill = skillData.Get(Devastator);
-            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerSpearDevastator1, out IReadOnlyList<EffectEvent> devastator))
-            {
-                foreach (EffectEvent effect in devastator)
-                {
-                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time - 1000, 1000));
-                    skillData.NotAccurate.Add(Devastator);
-                }
-            }
-            return res;
-        }
     }
 }

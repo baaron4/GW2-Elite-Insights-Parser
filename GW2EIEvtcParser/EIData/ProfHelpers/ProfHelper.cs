@@ -649,6 +649,43 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
+        public delegate bool EffectCastEventsChecker(IReadOnlyList<EffectEvent> effects, EffectEvent effect, CombatData combatData, SkillData skillData);
+
+        /// <summary>
+        /// Computes AnimatedCastEvents based on provided effectGUID
+        /// </summary>
+        /// <param name="actor">actor who is the source of the effect</param>
+        /// <param name="combatData"></param>
+        /// <param name="skillData"></param>
+        /// <param name="skillID"></param>
+        /// <param name="effectGUID"></param>
+        /// <param name="startOffset">offset to be applied to the time value of the effect</param>
+        /// <param name="castDuration"></param>
+        /// <returns></returns>
+        public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillID, string effectGUID, long startOffset, long castDuration, EffectCastEventsChecker checker = null)
+        {
+            var res = new List<AnimatedCastEvent>();
+            if (combatData.GetAnimatedCastData(skillID).Count > 0)
+            {
+                // Already present in the log
+                return res;
+            }
+            SkillItem skill = skillData.Get(skillID);
+            if (combatData.TryGetEffectEventsBySrcWithGUID(actor.AgentItem, effectGUID, out IReadOnlyList<EffectEvent> effects))
+            {
+                skillData.NotAccurate.Add(skillID);
+                foreach (EffectEvent effect in effects)
+                {
+                    if (checker == null || checker(effects, effect, combatData, skillData))
+                    {
+                        res.Add(new AnimatedCastEvent(actor.AgentItem, skill, effect.Time + startOffset, castDuration));
+                    }
+                }
+            }
+            return res;
+        }
+
+
         private static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, IReadOnlyList<AbstractBuffEvent> buffs, SkillItem skill)
         {
             var res = new List<AnimatedCastEvent>();

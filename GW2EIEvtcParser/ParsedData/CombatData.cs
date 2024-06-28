@@ -227,15 +227,19 @@ namespace GW2EIEvtcParser.ParsedData
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, AncestralGraceSkill, AncestralGraceBuff));
                         break;
                     case Spec.Elementalist:
-                        toAdd.AddRange(ElementalistHelper.ComputeUpdraftCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ProfHelper.ComputeEffectCastEvents(p, this, skillData, Updraft, EffectGUIDs.ElementalistUpdraft2, 0, 1000));
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, RideTheLightningSkill, RideTheLightningBuff));
                         break;
                     case Spec.Engineer:
-                        toAdd.AddRange(EngineerHelper.ComputeDevastatorCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ProfHelper.ComputeEffectCastEvents(p, this, skillData, Devastator, EffectGUIDs.EngineerSpearDevastator1, -1000, 1000));
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, ConduitSurge, ConduitSurgeBuff));
                         break;
                     case Spec.Revenant:
-                        toAdd.AddRange(RevenantHelper.ComputeAbyssalBlitzCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ProfHelper.ComputeEffectCastEvents(p, this, skillData, AbyssalBlitz, EffectGUIDs.RevenantSpearAbyssalBlitz1, 0, 3000, 
+                            (abyssalBlitz, effect, combatData, skllData) =>
+                            {
+                                return abyssalBlitz.Where(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 300).Count() == 0;
+                            }));
                         break;
                     default:
                         break;

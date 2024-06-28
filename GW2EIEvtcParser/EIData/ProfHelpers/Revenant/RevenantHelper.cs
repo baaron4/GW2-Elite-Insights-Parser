@@ -343,33 +343,5 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
-
-        /// <summary>
-        /// Compute <see cref="AbyssalBlitz"/> cast cvents.
-        /// </summary>
-        /// <param name="player">The player casting.</param>
-        /// <param name="combatData">Combat Data.</param>
-        /// <param name="skillData">Skill Data.</param>
-        /// <param name="agentData">Agent Data.</param>
-        /// <returns>The list of <see cref="AnimatedCastEvent"/>.</returns>
-        public static IReadOnlyList<AnimatedCastEvent> ComputeAbyssalBlitzCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<AnimatedCastEvent>();
-            SkillItem skill = skillData.Get(AbyssalBlitz);
-            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalBlitz1, out IReadOnlyList<EffectEvent> abyssalBlitz))
-            {
-                foreach (EffectEvent effect in abyssalBlitz)
-                {
-                    // We only want the first effect, not all
-                    // We use the effect if there isn't another effect in the previous 300ms.
-                    if (abyssalBlitz.Where(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 300).FirstOrDefault() == null)
-                    {
-                        res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 3000));
-                        skillData.NotAccurate.Add(AbyssalBlitz);
-                    }
-                }
-            }
-            return res;
-        }
     }
 }
