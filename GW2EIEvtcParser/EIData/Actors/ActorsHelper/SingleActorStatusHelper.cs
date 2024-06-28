@@ -100,8 +100,8 @@ namespace GW2EIEvtcParser.EIData
             // get remaining fight segment
             var remainingFightTime = new Segment(curTime, log.FightData.FightEnd);
 
-            // return false if actor currently above 90
-            if (Actor.GetCurrentHealthPercent(log, curTime) > 90)
+            // return false if actor currently above 90 or already downed
+            if (Actor.GetCurrentHealthPercent(log, curTime) > 90 || Actor.IsDowned(log, curTime))
             {
                 return false;
             }
