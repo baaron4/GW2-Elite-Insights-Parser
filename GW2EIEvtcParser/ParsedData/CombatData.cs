@@ -227,6 +227,13 @@ namespace GW2EIEvtcParser.ParsedData
                         toAdd.AddRange(ElementalistHelper.ComputeUpdraftCastEvents(p, this, skillData, agentData));
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, RideTheLightningSkill, RideTheLightningBuff));
                         break;
+                    case Spec.Engineer:
+                        toAdd.AddRange(EngineerHelper.ComputeDevastatorCastEvents(p, this, skillData, agentData));
+                        toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, ConduitSurge, ConduitSurgeBuff));
+                        break;
+                    case Spec.Revenant:
+                        toAdd.AddRange(RevenantHelper.ComputeAbyssalBlitzCastEvents(p, this, skillData, agentData));
+                        break;
                     default:
                         break;
                 }

@@ -127,6 +127,7 @@
         public const string NecromancerSignetOfUndeathOverhead = "1FEB5ECC28F92245A04646869B4A8169";
         public const string NecromancerSignetOfUndeathGroundMark = "28FE26F58FB0534BAF091C2D9D2261EA";
         public const string NecromancerSpectralRing = "99D0D6FC6817E24396180B07711013EE"; // infinite duration, has effect end
+        public const string NecromancerSpearDistress = "239BF9EA9B747B44ACC63B86DC49B0D0";
         public const string ReaperSuffer = "6C8C388BCD26F04CA6618D2916B8D796";
         public const string ReaperYouAreAllWeaklings1 = "37242DF51D238A409E822E7A1936D7A6"; // 3 potential candidates, 4th effect has collisions
         public const string ReaperYouAreAllWeaklings2 = "FEE4F26C2866E34C9D75506A8ED94F5E";
@@ -194,6 +195,12 @@
         public const string RevenantCoalescenceOfRuin = "D37B86D576586B489A951153B598CDE6";
         public const string RevenantCoalescenceOfRuinLast = "D66761A11B8FF344B3CEBE31F458896C";
         public const string RevenantDropTheHammer = "A4311C8684668348B427FA0162992E6C";
+        public const string RevenantSpearAbyssalBlitz1 = "25908EB455863D43AE70FB3F4A22D6E4"; // Duration 500 - Black smoke
+        public const string RevenantSpearAbyssalBlitz2 = "EA6D96295971F34094FB70A765204A02"; // Duration 0
+        public const string RevenantSpearBlitzMines1 = "0E5D42F70AF65E4ABBB7EE94C3D5BD1C"; // Infinite duration - Mine spawn
+        public const string RevenantSpearBlitzMines2 = "834EE816C77EFD4C99C001D9BAE6DDD7"; // Infinite duration - Mine
+        public const string RevenantSpearBlitzMinesDetonation1 = "40C9F5FE5BD3BD449B5E48DF1E5FD348"; // Duration 0 - Mine detonation
+        public const string RevenantSpearBlitzMinesDetonation2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD"; // Duration 0 - Mine detonation
         public const string RenegadeOrdersFromAboveRighteousRebel = "F53F05F041957A47AD62B522FE030408";
         public const string RenegadeOrdersFromAbove = "B63D192DED78B1489DDB6E742D603CE5";
         public const string RenegadeCitadelBombardmentPortal = "145B288ECA42CF43A40DFD759419C904";
@@ -266,6 +273,8 @@
         public const string EngineerMineField = "997750CA2636154E9FFBFEE4AA51A970"; // 0 duration and infinite duration, both logged at the same time
         public const string EngineerMineExplosion1 = "885B7AAA68F09E48A926BFFE488DB5AD"; // 0 duration - Throw Mine and Mine Field use this effect
         public const string EngineerMineExplosion2 = "1B3ACEE36F61DE42AB1C24BD33B5B5AD"; // 0 duration - Throw Mine and Mine Field use this effect
+        public const string EngineerSpearDevastator1 = "EFB9CDA30AEBC744B9D377A99BEBC0B2"; // Happens at the end of the cast
+        public const string EngineerSpearDevastator2 = "AA5B8BF4646103469C1846D51AA9E010"; // Happens at the end of the cast
         public const string ScrapperThunderclap = "8C8E0AB8328CC1418F9A815E022E20B6"; // has owner, 5s duration
         public const string ScrapperThunderclapSpawn = "039F8B46E5595C4E9C2D52AA58FDD8B0"; // has owner, 1s duration
         public const string ScrapperFunctionGyro = "B4CA602E8A849F47BFC105C740005162"; // has owner, 5s duration

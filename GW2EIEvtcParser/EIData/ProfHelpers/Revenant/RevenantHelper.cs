@@ -68,6 +68,12 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(ProtectiveSolaceSkill, EffectGUIDs.RevenantProtectiveSolace)
                 .UsingSrcBaseSpecChecker(Spec.Revenant)
                 .UsingChecker((evt, combatData, agentData, skillData) => evt.IsAroundDst && evt.Dst.IsSpecies(MinionID.VentariTablet)),
+            new EffectCastFinder(BlitzMinesDrop, EffectGUIDs.RevenantSpearBlitzMines1)
+                .UsingSrcBaseSpecChecker(Spec.Revenant)
+                .UsingICD(500),
+            new EffectCastFinder(BlitzMines, EffectGUIDs.RevenantSpearBlitzMinesDetonation1)
+                .UsingSecondaryEffectChecker(EffectGUIDs.RevenantSpearBlitzMinesDetonation2)
+                .UsingSrcBaseSpecChecker(Spec.Revenant),
         };
 
 
@@ -334,6 +340,29 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectDropTheHammer);
                 }
             }
+        }
+
+        /// <summary>
+        /// Compute <see cref="AbyssalBlitz"/> cast cvents.
+        /// </summary>
+        /// <param name="player">The player casting.</param>
+        /// <param name="combatData">Combat Data.</param>
+        /// <param name="skillData">Skill Data.</param>
+        /// <param name="agentData">Agent Data.</param>
+        /// <returns>The list of <see cref="AnimatedCastEvent"/>.</returns>
+        public static IReadOnlyList<AnimatedCastEvent> ComputeAbyssalBlitzCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
+        {
+            var res = new List<AnimatedCastEvent>();
+            SkillItem skill = skillData.Get(AbyssalBlitz);
+            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalBlitz1, out IReadOnlyList<EffectEvent> abyssalBlitz))
+            {
+                foreach (EffectEvent effect in abyssalBlitz)
+                {
+                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 3000));
+                    skillData.NotAccurate.Add(AbyssalBlitz);
+                }
+            }
+            return res;
         }
     }
 }

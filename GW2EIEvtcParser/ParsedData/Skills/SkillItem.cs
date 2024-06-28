@@ -204,6 +204,10 @@ namespace GW2EIEvtcParser.ParsedData
             { BoundHit, "Bound (Hit)" },
             // Warrior
             { RushDamage, "Rush (Hit)" },
+            { MightyThrowScatter, "Mighty Throw (Scattered Spear)" },
+            { HarriersTossAdrenalineLevel1, "Harrier's Toss (Adrenaline Level 1)" },
+            { HarriersTossAdrenalineLevel2, "Harrier's Toss (Adrenaline Level 2)" },
+            { HarriersTossAdrenalineLevel3, "Harrier's Toss (Adrenaline Level 3)" },
             // Special Forces Training Area
             { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
             // Gorseval

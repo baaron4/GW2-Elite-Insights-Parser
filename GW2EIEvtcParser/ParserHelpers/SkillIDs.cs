@@ -55,6 +55,7 @@
         public const long AchievementEligibilityApathetic = -36;
         public const long DetonateThrowMineOrMineField = -37;
         public const long SuperiorSigilOfLeeching = -38;
+        public const long BlitzMinesDrop = -39;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
@@ -1513,6 +1514,7 @@
         public const long HuntersWardImpacts = 30117;
         public const long InfusingTerrorBuff = 30129;
         public const long TimeAnchored = 30136;
+        public const long POV_SomeLeapBuff = 30146; // Used for Engineer Spear #5
         public const long ShredderGyroHit = 30176;
         public const long LesserPhantasmalDefender = 30192;
         public const long FuriousSurge = 30204;
@@ -4065,7 +4067,7 @@
         public const long AspectOfExposureBaseBuff = 69464;
         public const long AspectOfTormentNoTetherBuff = 69468;
         #endregion
-        #region Secret of the Obscure
+        #region Secrets of the Obscure
         public const long EmpoweredEnvyEmbodiment = 69479;
         public const long CrushingRegretCM = 69500;
         public const long MaliciousIntentEmpoweredCM = 69517;
@@ -4304,6 +4306,74 @@
         public const long Consumed = 72888;
         public const long EnragedLonelyTower = 72878;
         public const long BrothersUnited = 72892;
+        #endregion
+        #region Janthir Wilds
+        public const long MaimingSpear = 72897;
+        public const long ElectricArtilleryBuff = 72902;
+        public const long HarriersTossAdrenalineLevel1 = 72911;
+        public const long Psystrike_Clone = 72921;
+        public const long DaybreakingSlash1 = 72923;
+        public const long AbyssalStrike1 = 72931;
+        public const long Psycut_Clone = 72934;
+        public const long MindPierce_Clone = 72936;
+        public const long AbyssalBlitz = 72938;
+        public const long HelioRush = 72940;
+        public const long Extirpation = 72941;
+        public const long PuncturingJab = 72944;
+        public const long PhantasmalLancer = 72946;
+        public const long MightyThrowScatter = 72949;
+        public const long AbyssalBlot = 72954;
+        public const long MentalCollapse = 72957;
+        public const long MightyThrow = 72958;
+        public const long DisruptingThrow = 72959;
+        public const long CrushingAbyss = 72962;
+        public const long AbyssalForce = 72972;
+        public const long Devastator = 72974;
+        public const long SoulShards = 72975;
+        public const long DistressBuff = 72976; // Necromancer Spear - Buff applied from target to player
+        public const long GleamingDisc = 72978;
+        public const long SpearmarshalsSupport = 72992;
+        public const long AmplifyingSlice = 73001;
+        public const long LightningRod_EngineerSpear = 73002;
+        public const long HarriersTossAdrenalineLevel3 = 73006;
+        public const long Extirpate = 73007;
+        public const long SpearSwipe = 73009;
+        public const long DarkSlash = 73012;
+        public const long Addle = 73013;
+        public const long AbyssalStrike2 = 73015;
+        public const long DarkStalker = 73039; // Necromancer Spear - Buff applied from player to target
+        public const long DeadlySlice = 73040;
+        public const long HarriersTossAdrenalineLevel2 = 73042;
+        public const long SinisterStab = 73047;
+        public const long Clarity = 73048;
+        public const long Focused = 73053;
+        public const long DaybreakingSlash2 = 73055;
+        public const long AbyssalRaze = 73059;
+        public const long FocusedDevastation = 73064;
+        public const long Psystrike = 73066;
+        public const long FracturedGlass = 73067;
+        public const long Perforate = 73068; // Used by Abyssal Blitz too
+        public const long ImaginedImpairment = 73069;
+        public const long SymbolOfLuminanceBuff = 73025;
+        public const long ConduitSurgeBuff = 73090;
+        public const long MindTheGap = 73093;
+        public const long SolarStorm = 73094;
+        public const long MindPierce = 73095;
+        public const long WildThrow1 = 73103;
+        public const long Isolate = 73107;
+        public const long RendingStrike = 73109;
+        public const long SharpEdges = 73114;
+        public const long DistressSkill = 73116;
+        public const long ConduitSurge = 73122;
+        public const long LightningRodCharges = 73129;
+        public const long WildThrow2 = 73131;
+        public const long SymbolOfLuminanceSkill = 73132;
+        public const long AbyssalStrike3 = 73139;
+        public const long ElectricArtillery = 73143;
+        public const long BlitzMines = 73149;
+        public const long ImaginaryInversion = 73152;
+        public const long Psycut = 73154;
+        public const long Illuminated = 73101;
         #endregion
     }
 

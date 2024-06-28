@@ -29,6 +29,8 @@ namespace GW2EIEvtcParser.EIData
         {
             new Buff("Mirage Cloak", MirageCloak, Source.Mirage, BuffClassification.Other, BuffImages.MirageCloak),
             new Buff("False Oasis", FalseOasis, Source.Mirage, BuffClassification.Other, BuffImages.FalseOasis),
+            // Spear
+            new Buff("Sharp Edges", SharpEdges, Source.Mirage, BuffClassification.Offensive, BuffImages.MonsterSkill),
         };
 
         private static HashSet<int> Minions = new HashSet<int>();
