@@ -284,6 +284,12 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Elements of Rage", ElementsOfRage, Source.Weaver, BuffClassification.Other, BuffImages.ElementsOfRage),
             new Buff("Stone Resonance", StoneResonanceBuff, Source.Weaver, BuffClassification.Other, BuffImages.StoneResonance),
             new Buff("Grinding Stones", GrindingStones, Source.Weaver, BuffClassification.Other, BuffImages.GrindingStones),
+            // Spear
+            new Buff("Frostfire Ward", FrostfireWardBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Galvanize", GalvanizeBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
 
