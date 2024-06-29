@@ -175,7 +175,7 @@
                         :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
-                    <td v-if="wvw && !noLastDown90" :class="getBodyClass('Data', 17)"
+                    <td v-if="wvw" :class="getBodyClass('Data', 17)"
                         :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
                         {{row.data[17]}}
                     </td>
@@ -234,7 +234,7 @@
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
-                    <td v-if="wvw && !noLastDown90" :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
+                    <td v-if="wvw" :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
                         {{row.data[17]}}
                     </td>
                     <td v-if="wvw">
@@ -262,7 +262,6 @@
                 targetless: logData.targetless,
                 wvw: logData.wvw,
                 mode: logData.targetless ? 0 : 1,
-                noLastDown90: logData.evtcBuild >= 20240529,
                 cache: new Map(),
                 cacheTarget: new Map(),
                 sortdata: {

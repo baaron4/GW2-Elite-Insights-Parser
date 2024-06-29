@@ -100,6 +100,10 @@ namespace GW2EIEvtcParser.EIData
         {
             return _statusHelper.GetActiveDuration(log, start, end);
         }
+        public bool IsDownBefore90(ParsedEvtcLog log, long curTime)
+        {
+            return _statusHelper.IsDownBeforeNext90(log, curTime);
+        }
         public bool IsDowned(ParsedEvtcLog log, long time)
         {
             (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
