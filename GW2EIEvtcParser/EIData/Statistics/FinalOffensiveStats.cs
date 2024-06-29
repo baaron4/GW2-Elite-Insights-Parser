@@ -116,9 +116,9 @@ namespace GW2EIEvtcParser.EIData
                         else
                         {
                             if (dl.To.IsDownedBeforeNext90(log, dl.Time))
-                        {
-                            DownContribution += dl.HealthDamage;
-                        }
+                            {
+                                DownContribution += dl.HealthDamage;
+                            }
                         }
                         if (dl.AgainstMoving)
                         {
