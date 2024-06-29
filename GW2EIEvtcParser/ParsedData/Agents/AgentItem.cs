@@ -394,7 +394,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="time">Current log time</param>
-        /// <returns><see langword="true"/> if the agent will down before the next time they go above 90% health <see langword="false"/>.</returns>
+        /// <returns><see langword="true"/> if the agent will down before the next time they go above 90% health, otherwise <see langword="false"/>.</returns>
         public bool IsDownedBeforeNext90(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
