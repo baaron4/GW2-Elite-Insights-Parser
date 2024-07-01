@@ -38,10 +38,11 @@ var searchData=
   ['alliedhybridhealing1s_35',['AlliedHybridHealing1S',['../class_g_w2_e_i_j_s_o_n_1_1_e_x_t_json_player_healing_stats.html#afc5891f5cd2955976623caa72b499a33',1,'GW2EIJSON::EXTJsonPlayerHealingStats']]],
   ['anonymous_36',['Anonymous',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a43a0aac09135663213e64ed1614c8d5c',1,'GW2EIJSON::JsonLog']]],
   ['approximate_37',['Approximate',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_damage_mod_desc.html#a09b0116189f887de21e778cb683453de',1,'GW2EIJSON::JsonLog::DamageModDesc']]],
-  ['arcversion_38',['ArcVersion',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a47681fcdcbd7b0cb7456da99fe141bad',1,'GW2EIJSON::JsonLog']]],
-  ['autoattack_39',['AutoAttack',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a01f5fc7100a0de67cc1e83bf2bd3637b',1,'GW2EIJSON::JsonLog::SkillDesc']]],
-  ['avgactiveboons_40',['AvgActiveBoons',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a64ed1665b36c5a9b6f41bb64b55f62a1',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
-  ['avgactiveconditions_41',['AvgActiveConditions',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a18fac6ac1957f9796b9dcde16db9c17b',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
-  ['avgboons_42',['AvgBoons',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#acca703c2b8a2717b0c502df26888599d',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
-  ['avgconditions_43',['AvgConditions',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ab2ed1d3f0ecfb1c6af3b8e885c262fc7',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]]
+  ['arcrevision_38',['ArcRevision',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a1e8752c0834d45a8c5b667a75b348c7e',1,'GW2EIJSON::JsonLog']]],
+  ['arcversion_39',['ArcVersion',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a47681fcdcbd7b0cb7456da99fe141bad',1,'GW2EIJSON::JsonLog']]],
+  ['autoattack_40',['AutoAttack',['../class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_skill_desc.html#a01f5fc7100a0de67cc1e83bf2bd3637b',1,'GW2EIJSON::JsonLog::SkillDesc']]],
+  ['avgactiveboons_41',['AvgActiveBoons',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a64ed1665b36c5a9b6f41bb64b55f62a1',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
+  ['avgactiveconditions_42',['AvgActiveConditions',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#a18fac6ac1957f9796b9dcde16db9c17b',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
+  ['avgboons_43',['AvgBoons',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#acca703c2b8a2717b0c502df26888599d',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]],
+  ['avgconditions_44',['AvgConditions',['../class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats_all.html#ab2ed1d3f0ecfb1c6af3b8e885c262fc7',1,'GW2EIJSON::JsonStatistics::JsonGameplayStatsAll']]]
 ];

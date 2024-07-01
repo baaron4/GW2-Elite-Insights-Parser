@@ -7,6 +7,8 @@ var searchData=
   ['group_4',['Group',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a32d905a979ecfbb52c44d77f76900a55',1,'GW2EIJSON::JsonPlayer']]],
   ['groupbuffs_5',['GroupBuffs',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#abf1e6ce5e9e9628e47f2e590df7ceb7f',1,'GW2EIJSON::JsonPlayer']]],
   ['groupbuffsactive_6',['GroupBuffsActive',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#a9f244795cec16408d2ad64d00ab4b7fa',1,'GW2EIJSON::JsonPlayer']]],
-  ['guildid_7',['GuildID',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aa016e962ac12987c8f80233890b16df9',1,'GW2EIJSON::JsonPlayer']]],
-  ['gw2build_8',['GW2Build',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a750467c7376ac8703622acf59e2c517b',1,'GW2EIJSON::JsonLog']]]
+  ['groupbuffvolumes_7',['GroupBuffVolumes',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#ac74cf8b38c940935278522afb4bfd08b',1,'GW2EIJSON::JsonPlayer']]],
+  ['groupbuffvolumesactive_8',['GroupBuffVolumesActive',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aecc62b9db0867be26d84b441453f8403',1,'GW2EIJSON::JsonPlayer']]],
+  ['guildid_9',['GuildID',['../class_g_w2_e_i_j_s_o_n_1_1_json_player.html#aa016e962ac12987c8f80233890b16df9',1,'GW2EIJSON::JsonPlayer']]],
+  ['gw2build_10',['GW2Build',['../class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a750467c7376ac8703622acf59e2c517b',1,'GW2EIJSON::JsonLog']]]
 ];
