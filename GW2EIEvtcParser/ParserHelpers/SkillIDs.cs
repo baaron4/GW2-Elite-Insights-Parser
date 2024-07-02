@@ -4423,6 +4423,7 @@
         public const long RendingStrike = 73109;
         public const long MongoosesFrenzy = 73110;
         public const long WyvernsLash = 73112;
+        public const long ImplacableFoe = 73112;
         public const long SharpEdges = 73114;
         public const long DistressSkill = 73116;
         public const long RippleBuff = 73117;
