@@ -66,6 +66,7 @@ namespace GW2EIBuilders.HtmlModels
         public List<string> LogErrors { get; set; }
         public string EncounterStart { get; set; }
         public string EncounterEnd { get; set; }
+        public string InstanceStart { get; set; }
         public string ArcVersion { get; set; }
         public long EvtcBuild { get; set; }
         public ulong Gw2Build { get; set; }
@@ -84,6 +85,10 @@ namespace GW2EIBuilders.HtmlModels
             log.UpdateProgressWithCancellationCheck("HTML: building Meta Data");
             EncounterStart = log.LogData.LogStartStd;
             EncounterEnd = log.LogData.LogEndStd;
+            if (log.LogData.LogInstanceStartStd != null)
+            {
+                InstanceStart = log.LogData.LogInstanceStartStd;
+            }
             ArcVersion = log.LogData.ArcVersion;
             EvtcBuild = log.LogData.EvtcBuild;
             Gw2Build = log.LogData.GW2Build;

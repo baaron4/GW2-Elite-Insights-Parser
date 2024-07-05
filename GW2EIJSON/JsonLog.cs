@@ -304,10 +304,10 @@ namespace GW2EIJSON
         /// </summary>
         public long LogStartOffset { get; set; }
         /// <summary>
-        /// Instance was created at <see cref="TimeStartStd"/> - <see cref="InstanceCreationOffset"/> \n
-        /// Ignore if < 0
+        /// The time at which the instance started in "yyyy-mm-dd hh:mm:ss zzz" format \n
+        /// The value will be null if the event does not exist
         /// </summary>
-        public long InstanceCreationOffset { get; set; }
+        public string InstanceTimeStartStd { get; set; }
 
         /// <summary>
         /// The success status of the fight

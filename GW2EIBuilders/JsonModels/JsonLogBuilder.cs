@@ -109,14 +109,13 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.Duration = log.FightData.DurationString;
             jsonLog.DurationMS = log.FightData.FightDuration;
             jsonLog.LogStartOffset = log.FightData.FightStartOffset;
-            InstanceStartEvent instanceStartEvent = log.CombatData.GetInstanceStartEvent();
-            if (instanceStartEvent != null )
+            if (log.LogData.LogInstanceStartStd != null )
             {
-                jsonLog.InstanceCreationOffset = instanceStartEvent.OffsetFromInstanceCreation;
+                jsonLog.InstanceTimeStartStd = log.LogData.LogInstanceStartStd;
             } 
             else
             {
-                jsonLog.InstanceCreationOffset = -1;
+                jsonLog.InstanceTimeStartStd = null;
             }
             jsonLog.Success = log.FightData.Success;
             jsonLog.GW2Build = log.LogData.GW2Build;

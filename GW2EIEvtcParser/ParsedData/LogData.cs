@@ -27,6 +27,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string LogStart { get; private set; } = DefaultTimeValue;
         public string LogEnd { get; private set; } = DefaultTimeValue;
         public string LogStartStd { get; private set; } = DefaultTimeValue;
+        public string LogInstanceStartStd { get; private set; } = null;
         public string LogEndStd { get; private set; } = DefaultTimeValue;
 
         public IReadOnlyList<AbstractExtensionHandler> UsedExtensions { get; }
@@ -85,6 +86,7 @@ namespace GW2EIEvtcParser.ParsedData
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogEnd(dur + unixStart);
                 SetLogEndStd(dur + unixStart);
+                unixEnd = dur + unixStart;
             }
             // log start event is missing, log end is present
             if (LogEnd != DefaultTimeValue && LogStart == DefaultTimeValue)
@@ -93,9 +95,15 @@ namespace GW2EIEvtcParser.ParsedData
                 double dur = Math.Round(evtcLogDuration / 1000.0, 3);
                 SetLogStart(unixEnd - dur);
                 SetLogStartStd(unixEnd - dur);
+                unixStart = unixEnd - dur;
             }
             operation.UpdateProgressWithCancellationCheck("Parsing: Log Start " + LogStartStd);
             operation.UpdateProgressWithCancellationCheck("Parsing: Log End " + LogEndStd);
+            InstanceStartEvent instanceStart = combatData.GetInstanceStartEvent();
+            if (instanceStart != null)
+            {
+                LogInstanceStartStd = GetDateTimeStd(unixStart - instanceStart.OffsetFromInstanceCreation/1000);
+            }
             //
             foreach (ErrorEvent evt in combatData.GetErrorEvents())
             {
