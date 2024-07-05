@@ -303,6 +303,11 @@ namespace GW2EIJSON
         /// Offset between fight start and log start
         /// </summary>
         public long LogStartOffset { get; set; }
+        /// <summary>
+        /// Instance was created at <see cref="TimeStartStd"/> - <see cref="InstanceCreationOffset"/> \n
+        /// Ignore if < 0
+        /// </summary>
+        public long InstanceCreationOffset { get; set; }
 
         /// <summary>
         /// The success status of the fight
