@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser
 
         public const long MinimumInCombatDuration = 2200;
 
-        internal const int PhaseTimeLimit = 2000;
+        internal const int PhaseTimeLimit = 1000;
 
 
         public enum Source

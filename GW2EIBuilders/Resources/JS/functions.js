@@ -430,7 +430,8 @@ function computePlayerDPS(player, damageGraphs, lim, phasebreaks, activetargets,
         target: 0,
         taken: 0
     };
-    if (graphMode === GraphType.CenteredDPS) {
+    var centeredDPS = graphMode === GraphType.CenteredDPS && times[times.length - 1] > 2;
+    if (centeredDPS) {
         lim /= 2;
     }
     var end = times.length;
@@ -444,7 +445,7 @@ function computePlayerDPS(player, damageGraphs, lim, phasebreaks, activetargets,
             left = j;
         }
         right = j;    
-        if (graphMode === GraphType.CenteredDPS) {
+        if (centeredDPS) {
             if (lim > 0) {
                 right = Math.min(Math.round(time + lim), end - 1);
             } else if (phasebreaks) {
@@ -737,7 +738,8 @@ function computeTargetDPS(target, damageGraphs, lim, phasebreaks, cacheID, times
     var maxDPS = 0;
     var left = 0, right = 0;
     var end = times.length;
-    if (graphMode === GraphType.CenteredDPS) {
+    var centeredDPS = graphMode === GraphType.CenteredDPS && times[times.length - 1] > 2;
+    if (centeredDPS) {
         lim /= 2;
     }
     for (var j = 0; j < end; j++) {
@@ -748,7 +750,7 @@ function computeTargetDPS(target, damageGraphs, lim, phasebreaks, cacheID, times
             left = j;
         }
         right = j;
-        if (graphMode === GraphType.CenteredDPS) {
+        if (gcenteredDPS) {
             if (lim > 0) {
                 right = Math.min(Math.round(time + lim), end - 1);
             } else if (phasebreaks) {
