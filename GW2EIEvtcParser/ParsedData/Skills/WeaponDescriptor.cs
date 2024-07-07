@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal int FindFirstWeaponSet(IReadOnlyList<(int to, int from)> swaps)
         {
-            if (swaps.Count > 0 && swaps[0].from >= 0)
+            if (swaps.Count > 0 && WeaponSetIDs.IsWeaponSet(swaps[0].from))
             {
                 return swaps[0].from;
             }
@@ -58,9 +58,9 @@ namespace GW2EIEvtcParser.ParsedData
             if (IsLand)
             {
                 // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
-                if (firstSwap != WeaponSetIDs.FirstLandSet && firstSwap != WeaponSetIDs.SecondLandSet)
+                if (!WeaponSetIDs.IsLandSet(firstSwap))
                 {
-                    swapped = swaps.Any(x => x.to == WeaponSetIDs.FirstLandSet || x.to == WeaponSetIDs.SecondLandSet) ? swaps.First(x => x.to == WeaponSetIDs.FirstLandSet || x.to == WeaponSetIDs.SecondLandSet).to : WeaponSetIDs.FirstLandSet;
+                    swapped = swaps.Any(x => WeaponSetIDs.IsLandSet(x.to)) ? swaps.First(x => WeaponSetIDs.IsLandSet(x.to)).to : WeaponSetIDs.FirstLandSet;
                 }
                 else
                 {
@@ -70,9 +70,9 @@ namespace GW2EIEvtcParser.ParsedData
             else
             {
                 // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
-                if (firstSwap != WeaponSetIDs.FirstWaterSet && firstSwap != WeaponSetIDs.SecondWaterSet)
+                if (!WeaponSetIDs.IsWaterSet(firstSwap))
                 {
-                    swapped = swaps.Any(x => x.to == WeaponSetIDs.FirstWaterSet || x.to == WeaponSetIDs.SecondWaterSet) ? swaps.First(x => x.to == WeaponSetIDs.FirstWaterSet || x.to == WeaponSetIDs.SecondWaterSet).to : WeaponSetIDs.FirstWaterSet;
+                    swapped = swaps.Any(x => WeaponSetIDs.IsWaterSet(x.to)) ? swaps.First(x => WeaponSetIDs.IsWaterSet(x.to)).to : WeaponSetIDs.FirstWaterSet;
                 }
                 else
                 {

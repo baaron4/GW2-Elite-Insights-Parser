@@ -1357,7 +1357,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal bool EstimateWeapons(WeaponSets weaponSets, int swapped, bool validForCurrentSwap)
         {
-            bool keep = swapped == WeaponSetIDs.FirstLandSet || swapped == WeaponSetIDs.SecondLandSet || swapped == WeaponSetIDs.FirstWaterSet || swapped == WeaponSetIDs.SecondWaterSet;
+            bool keep = WeaponSetIDs.IsWeaponSet(swapped);
             if (_weaponDescriptor == null || !keep || !validForCurrentSwap)
             {
                 return false;

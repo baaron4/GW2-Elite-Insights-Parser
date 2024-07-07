@@ -111,6 +111,21 @@ namespace GW2EIEvtcParser
             public const int SecondWaterSet = 1;
             public const int TransformSet = 3;
             public const int KitSet = 2;
+
+            public static bool IsWeaponSet(int set)
+            {
+                return IsLandSet(set) || IsWaterSet(set);
+            }
+
+            public static bool IsLandSet(int set)
+            {
+                return set == FirstLandSet || set == SecondLandSet;
+            }
+
+            public static bool IsWaterSet(int set)
+            {
+                return set == FirstWaterSet || set == SecondWaterSet;
+            }
         }
 
         /// <summary>
