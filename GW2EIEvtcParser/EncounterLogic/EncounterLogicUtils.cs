@@ -186,31 +186,45 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal delegate bool ChestAgentChecker(AgentItem agent);
 
-        internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Point3D chestPosition, ChestAgentChecker chestChecker)
+        internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Point3D chestPosition, ChestAgentChecker chestChecker = null)
         {
             if (chestID == ArcDPSEnums.ChestID.None)
             {
                 return false;
             }
-            AgentItem chest = combatData.Where(evt =>
-            {
-                if (evt.IsStateChange != ArcDPSEnums.StateChange.Position)
+            var positions = combatData.Where(evt => {
+                if (evt.IsStateChange == ArcDPSEnums.StateChange.Position)
                 {
+                    AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
+                    if (agent.Type != AgentItem.AgentType.Gadget)
+                    {
+                        return false;
+                    }
+                    Point3D position = AbstractMovementEvent.GetPoint3D(evt);
+                    if (position.Distance2DToPoint(chestPosition) < InchDistanceThreshold)
+                    {
+                        return true;
+                    }
                     return false;
-                }
-                AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
-                if (agent.Type != AgentItem.AgentType.Gadget)
-                {
-                    return false;
-                }
-                Point3D position = AbstractMovementEvent.GetPoint3D(evt);
-                if (position.Distance2DToPoint(chestPosition) < InchDistanceThreshold)
-                {
-                    return true;
                 }
                 return false;
-            }
-            ).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).FirstOrDefault(x => chestChecker(x));
+            }).ToList();
+            var velocities = combatData.Where(evt => {
+                if (evt.IsStateChange == ArcDPSEnums.StateChange.Velocity)
+                {
+                    AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
+                    if (agent.Type != AgentItem.AgentType.Gadget)
+                    {
+                        return false;
+                    }
+                    return positions.Any(x => x.SrcMatchesAgent(agent));
+                }
+                return false;
+            }).ToList();
+            var candidates = positions.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
+            // Remove all candidates who moved, chests can not move
+            candidates.RemoveAll(candidate => velocities.Where(evt => evt.SrcMatchesAgent(candidate)).Any(evt => AbstractMovementEvent.GetPoint3D(evt).Length() >= 1e-6));
+            AgentItem chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
             if (chest != null)
             {
                 chest.OverrideID(chestID);

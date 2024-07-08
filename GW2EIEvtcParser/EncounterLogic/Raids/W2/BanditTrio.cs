@@ -126,7 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Reward Chest
-            FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
 
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData, extensions);
