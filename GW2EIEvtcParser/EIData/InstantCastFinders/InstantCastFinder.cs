@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return false;
             }
-            ulong gw2Build = combatData.GetBuildEvent().Build;
+            ulong gw2Build = combatData.GetGW2BuildEvent().Build;
             if (gw2Build < _maxBuild && gw2Build >= _minBuild)
             {
                 int evtcBuild = combatData.GetEvtcVersionEvent().Build;

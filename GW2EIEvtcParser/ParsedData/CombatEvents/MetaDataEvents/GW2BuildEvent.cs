@@ -1,10 +1,10 @@
 ﻿namespace GW2EIEvtcParser.ParsedData
 {
-    public class BuildEvent : AbstractMetaDataEvent
+    public class GW2BuildEvent : AbstractMetaDataEvent
     {
         public ulong Build { get; }
 
-        internal BuildEvent(CombatItem evtcItem) : base(evtcItem)
+        internal GW2BuildEvent(CombatItem evtcItem) : base(evtcItem)
         {
             Build = GetBuild(evtcItem);
         }

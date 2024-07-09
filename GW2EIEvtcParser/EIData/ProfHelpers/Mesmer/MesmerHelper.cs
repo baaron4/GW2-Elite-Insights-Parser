@@ -322,7 +322,7 @@ namespace GW2EIEvtcParser.EIData
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             Color color = Colors.Mesmer;
-            ulong gw2Build = log.CombatData.GetBuildEvent().Build;
+            ulong gw2Build = log.CombatData.GetGW2BuildEvent().Build;
             // Portal locations
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out IReadOnlyList<EffectEvent> portalInactives))
             {

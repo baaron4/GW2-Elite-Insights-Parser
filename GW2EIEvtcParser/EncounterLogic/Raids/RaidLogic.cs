@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>();
-            if (combatData.GetBuildEvent().Build < GW2Builds.June2019RaidRewards)
+            if (combatData.GetGW2BuildEvent().Build < GW2Builds.June2019RaidRewards)
             {
                 raidRewardsTypes = new HashSet<int> { RewardTypes.OldRaidReward1, RewardTypes.OldRaidReward2 };
             }

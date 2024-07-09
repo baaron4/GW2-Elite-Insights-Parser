@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
             operation.UpdateProgressWithCancellationCheck("Parsing: PoV " + PoVName);
             //
-            BuildEvent buildEvt = combatData.GetBuildEvent();
+            GW2BuildEvent buildEvt = combatData.GetGW2BuildEvent();
             if (buildEvt != null)
             {
                 GW2Build = buildEvt.Build;

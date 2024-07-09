@@ -284,7 +284,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             // Special check since CM release, normal mode broke too, but we always trust reward events
-            if (combatData.GetBuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
+            if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
             {
                 AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
                 HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HealthPercent <= 1e-6);
@@ -462,7 +462,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            if (combatData.GetBuildEvent().Build < GW2Builds.DagdaNMHPChangedAndCMRelease)
+            if (combatData.GetGW2BuildEvent().Build < GW2Builds.DagdaNMHPChangedAndCMRelease)
             {
                 return FightData.EncounterMode.Normal;
             }

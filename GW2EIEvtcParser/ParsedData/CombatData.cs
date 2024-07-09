@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.ParsedData
         private void EICastParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
         {
             List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
-            ulong gw2Build = GetBuildEvent().Build;
+            ulong gw2Build = GetGW2BuildEvent().Build;
             foreach (Player p in players)
             {
                 switch (p.Spec)
@@ -594,7 +594,7 @@ namespace GW2EIEvtcParser.ParsedData
             //
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
-                handler.AttachToCombatData(this, operation, GetBuildEvent().Build);
+                handler.AttachToCombatData(this, operation, GetGW2BuildEvent().Build);
             }
             EIExtraEventProcess(players, skillData, agentData, fightData, operation, evtcVersion);
         }
@@ -889,9 +889,9 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<BreakbarPercentEvent>();
         }
 
-        public BuildEvent GetBuildEvent()
+        public GW2BuildEvent GetGW2BuildEvent()
         {
-            return _metaDataEvents.BuildEvent;
+            return _metaDataEvents.GW2BuildEvent;
         }
 
         public LanguageEvent GetLanguageEvent()

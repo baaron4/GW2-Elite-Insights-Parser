@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
             AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
-            if (combatData.GetBuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
+            if (combatData.GetGW2BuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
             {
                 // Agent check not reliable, produces false positives and regular false negatives
                 /*if (agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any())

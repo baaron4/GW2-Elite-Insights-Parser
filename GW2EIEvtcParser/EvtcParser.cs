@@ -585,9 +585,9 @@ namespace GW2EIEvtcParser
                     _logEndTime = combatItem.Time;
                 }
                 _combatItems.Add(combatItem);
-                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && BuildEvent.GetBuild(combatItem) != 0)
+                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && GW2BuildEvent.GetBuild(combatItem) != 0)
                 {
-                    _gw2Build = BuildEvent.GetBuild(combatItem);
+                    _gw2Build = GW2BuildEvent.GetBuild(combatItem);
                 }
                 if (combatItem.IsStateChange == ArcDPSEnums.StateChange.SquadCombatEnd)
                 {

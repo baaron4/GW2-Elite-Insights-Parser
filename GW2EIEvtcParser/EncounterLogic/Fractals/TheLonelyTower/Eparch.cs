@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            ulong build = combatData.GetBuildEvent().Build;
+            ulong build = combatData.GetGW2BuildEvent().Build;
             int healthCMRelease = build >= GW2Builds.June2024Balance ? 22_833_236 : 32_618_906;
             int healthThreshold = (int)(0.95 * healthCMRelease); // fractals lose hp as their scale lowers
             AbstractSingleActor eparch = GetEparchActor();

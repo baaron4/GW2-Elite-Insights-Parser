@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
 
             public bool Available(CombatData combatData)
             {
-                ulong gw2Build = combatData.GetBuildEvent().Build;
+                ulong gw2Build = combatData.GetGW2BuildEvent().Build;
                 if (gw2Build < _maxBuild && gw2Build >= _minBuild)
                 {
                     int evtcBuild = combatData.GetEvtcVersionEvent().Build;

@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         return;
                     }
-                    metaDataEvents.BuildEvent = new BuildEvent(stateChangeEvent);
+                    metaDataEvents.GW2BuildEvent = new GW2BuildEvent(stateChangeEvent);
                     break;
                 case StateChange.ShardId:
                     metaDataEvents.ShardEvents.Add(new ShardEvent(stateChangeEvent));
