@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericDecorationCombatReplayDescription : AbstractCombatReplayDescription
+    public abstract class GenericDecorationCombatReplayDescription : AbstractRenderableCombatReplayDescription
     {
 
         protected GenericDecorationCombatReplayDescription(GenericDecoration decoration)

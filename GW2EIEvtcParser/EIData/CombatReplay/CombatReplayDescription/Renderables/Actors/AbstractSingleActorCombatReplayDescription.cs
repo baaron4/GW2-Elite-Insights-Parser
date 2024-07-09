@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class AbstractSingleActorCombatReplayDescription : AbstractCombatReplayDescription
+    public abstract class AbstractSingleActorCombatReplayDescription : AbstractRenderableCombatReplayDescription
     {
         public string Img { get; }
         public int ID { get; }
