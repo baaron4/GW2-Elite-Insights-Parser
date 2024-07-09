@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
         }
         //
 
-        public abstract GenericDecorationRenderableDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs);
+        public abstract GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs);
 
     }
 }

@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
             DecorationRenderingData.Positions.Add((x, y, z, (float)angle, (float)opacity, time));
         }
 
-        public override GenericDecorationRenderableDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public override GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             return new MovingPlatformDecorationRenderableDescription(this, map);
         }

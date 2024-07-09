@@ -41,7 +41,7 @@ namespace GW2EIBuilders.HtmlModels
                 actors.Add(actor.GetCombatReplayDescription(map, log));
                 foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
                 {
-                    actors.Add(a.GetCombatReplayDescription(map, log, usedSkills, usedBuffs));
+                    actors.Add(a.GetRenderableDescription(map, log, usedSkills, usedBuffs));
                 }
                 foreach (Minions minions in actor.GetMinions(log).Values)
                 {
@@ -64,12 +64,12 @@ namespace GW2EIBuilders.HtmlModels
                 actors.Add(actor.GetCombatReplayDescription(map, log));
                 foreach (GenericDecoration a in actor.GetCombatReplayDecorations(log))
                 {
-                    actors.Add(a.GetCombatReplayDescription(map, log, usedSkills, usedBuffs));
+                    actors.Add(a.GetRenderableDescription(map, log, usedSkills, usedBuffs));
                 }
             }
             foreach (GenericDecoration a in log.FightData.GetEnvironmentCombatReplayDecorations(log))
             {
-                actors.Add(a.GetCombatReplayDescription(map, log, usedSkills, usedBuffs));
+                actors.Add(a.GetRenderableDescription(map, log, usedSkills, usedBuffs));
             }
             return actors;
         }
