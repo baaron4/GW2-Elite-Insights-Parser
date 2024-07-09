@@ -412,7 +412,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        public IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        internal IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             if (EnvironmentDecorations == null)
             {
