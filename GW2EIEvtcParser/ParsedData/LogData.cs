@@ -11,14 +11,13 @@ namespace GW2EIEvtcParser.ParsedData
         private const string DefaultTimeValue = "MISSING";
 
         // Fields
-        private readonly EvtcVersionEvent _EvtcVersionEvent;
-        public string ArcVersion => _EvtcVersionEvent.ToEVTCString(false);
-        public string ArcVersionBuild => _EvtcVersionEvent.ToEVTCString(true);
-        public int EvtcBuild => _EvtcVersionEvent.Build;
-        public int EvtcRevision => _EvtcVersionEvent.Revision;
+        public string ArcVersion { get; }
+        public string ArcVersionBuild { get; }
+        public int EvtcBuild { get; }
+        public int EvtcRevision { get; }
         public string Language { get; } = "N/A";
         public LanguageEvent.LanguageEnum LanguageID { get; }
-        public ulong GW2Build { get; } = 0;
+        public ulong GW2Build { get; private set; } = 0;
         public AgentItem PoV { get; private set; } = null;
         public string PoVAccount { get; private set; } = "N/A";
         public string PoVName { get; private set; } = "N/A";
@@ -39,7 +38,13 @@ namespace GW2EIEvtcParser.ParsedData
         // Constructors
         internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
         {
-            _EvtcVersionEvent = evtcVersion;
+            if (evtcVersion != null)
+            {
+                ArcVersion = evtcVersion.ToEVTCString(false);
+                ArcVersionBuild = evtcVersion.ToEVTCString(true);
+                EvtcBuild = evtcVersion.Build;
+                EvtcRevision = evtcVersion.Revision;
+            }
             double unixStart = 0;
             double unixEnd = 0;
             //
@@ -50,10 +55,10 @@ namespace GW2EIEvtcParser.ParsedData
             }
             operation.UpdateProgressWithCancellationCheck("Parsing: PoV " + PoVName);
             //
-            GW2BuildEvent buildEvt = combatData.GetGW2BuildEvent();
-            if (buildEvt != null)
+            GW2BuildEvent gw2BuildEvent = combatData.GetGW2BuildEvent();
+            if (gw2BuildEvent != null)
             {
-                GW2Build = buildEvt.Build;
+                GW2Build = gw2BuildEvent.Build;
             }
             operation.UpdateProgressWithCancellationCheck("Parsing: GW2 Build " + GW2Build);
             //
