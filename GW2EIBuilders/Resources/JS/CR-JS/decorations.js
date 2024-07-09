@@ -104,7 +104,7 @@ class BackgroundDecorationMetadata extends GenericDecorationMetadata{
 }
 
 class MovingPlatformDecorationMetadata extends BackgroundDecorationMetadata{
-    constructor(image, width, height) {
+    constructor() {
         super(image, width, height);
         this.imageUrl = image;
         this.image = new Image();
