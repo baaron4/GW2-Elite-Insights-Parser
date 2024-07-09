@@ -57,7 +57,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Harmonious Conduit", HarmoniousConduit, Source.Tempest, BuffClassification.Other, BuffImages.HarmoniousConduit)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
             new Buff("Transcendent Tempest", TranscendentTempest, Source.Tempest, BuffClassification.Other, BuffImages.TranscendentTempest)
-                .WithBuilds(GW2Builds.October2019Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.October2019Balance),
             new Buff("Static Charge", StaticCharge, Source.Tempest, BuffClassification.Offensive, BuffImages.OverloadAir),
             new Buff("Heat Sync", HeatSync, Source.Tempest, BuffClassification.Support, BuffImages.HeatSync),
             new Buff("Tempestuous Aria", TempestuousAria, Source.Tempest, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.TempestuousAria)

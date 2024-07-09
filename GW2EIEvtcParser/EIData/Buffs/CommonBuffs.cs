@@ -24,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Swiftness", Swiftness, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Swiftness),
             new Buff("Retaliation", Retaliation, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Retaliation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new Buff("Resistance", Resistance, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resistance),
-            new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution).WithBuilds(GW2Builds.May2021Balance, GW2Builds.EndOfLife),
+            new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution).WithBuilds(GW2Builds.May2021Balance),
             //
             new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.BoonDuration),
         };
@@ -63,7 +63,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Superspeed", Superspeed, Source.Common, BuffClassification.Support, BuffImages.Superspeed)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2021Balance),
             new Buff("Superspeed", Superspeed, Source.Common, BuffStackType.Queue, 9, BuffClassification.Support, BuffImages.Superspeed)
-                .WithBuilds(GW2Builds.June2021Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.June2021Balance),
             new Buff("Determined (762)", Determined762, Source.Common, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (785)", Determined785, Source.Common, BuffClassification.Other, BuffImages.Determined),
             new Buff("Determined (788)", Determined788, Source.Common, BuffClassification.Other, BuffImages.Determined),
@@ -82,7 +82,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Exposed (31589)", Exposed31589, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Old Exposed", OldExposed, Source.Common, BuffClassification.Other, BuffImages.Exposed),
             new Buff("Unblockable", Unblockable, Source.Common, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Offensive, BuffImages.Unblockable)
-                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.February2020Balance),
             new Buff("Encumbered", Encumbered, Source.Common, BuffStackType.Queue, 9, BuffClassification.Debuff, BuffImages.Encumbered),
             new Buff("Celeritas Spores", CeleritasSpores, Source.FightSpecific, BuffClassification.Other, BuffImages.SpeedMushroom),
             new Buff("Branded Accumulation", BrandedAccumulation, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.AchillesBane),
@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Magnetic Aura", MagneticAura, Source.Common, BuffClassification.Support, BuffImages.MagneticAura),
             new Buff("Shocking Aura", ShockingAura, Source.Common, BuffClassification.Support, BuffImages.ShockingAura),
             new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura)
-                .WithBuilds(GW2Builds.April2019Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.April2019Balance),
             // Race
             new Buff("Take Root", TakeRootBufft, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
             new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, BuffImages.BecomeBear),
