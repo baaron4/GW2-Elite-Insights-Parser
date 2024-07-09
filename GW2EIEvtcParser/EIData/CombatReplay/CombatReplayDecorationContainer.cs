@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.GenericDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class CombatReplayDecorationContainer
+    internal class CombatReplayDecorationContainer
     {
         private Dictionary<string, GenericDecorationMetadata> DecorationCache { get; }
         private List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)> Decorations { get; }
@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EIData
             Decorations = new List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)>();
         }
 
-        internal void Add(GenericDecoration decoration)
+        public void Add(GenericDecoration decoration)
         {
             if (decoration.Lifespan.end <= decoration.Lifespan.start)
             {

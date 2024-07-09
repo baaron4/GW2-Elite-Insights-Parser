@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal Dictionary<string, GenericDecorationMetadata> DecorationCache { get; } = new Dictionary<string, GenericDecorationMetadata>();
 
-        protected CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
+        internal CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
 
         protected ArcDPSEnums.ChestID ChestID { get; set; } = ChestID.None;
 
