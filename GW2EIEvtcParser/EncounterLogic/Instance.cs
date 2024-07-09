@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             else
             {
-                return evt.OffsetFromInstanceCreation > 1000 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
+                return evt.TimeOffsetFromInstanceCreation > 1000 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
             }
         }
 

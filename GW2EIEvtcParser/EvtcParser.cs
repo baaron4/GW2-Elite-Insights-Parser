@@ -983,6 +983,10 @@ namespace GW2EIEvtcParser
                 {
                     c.OverrideTime(c.Time - offset);
                 }
+                if (c.IsStateChange == ArcDPSEnums.StateChange.InstanceStart)
+                {
+                    c.OverrideSrcAgent((ulong)(offset - (long)c.SrcAgent));
+                }
             }
             foreach (AgentItem a in _allAgentsList)
             {

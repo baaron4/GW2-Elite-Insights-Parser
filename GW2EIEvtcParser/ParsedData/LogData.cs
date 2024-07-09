@@ -29,6 +29,7 @@ namespace GW2EIEvtcParser.ParsedData
         public string LogStartStd { get; private set; } = DefaultTimeValue;
         public string LogInstanceStartStd { get; private set; } = null;
         public string LogEndStd { get; private set; } = DefaultTimeValue;
+        public string LogInstanceIP { get; } = null;
 
         public IReadOnlyList<AbstractExtensionHandler> UsedExtensions { get; }
 
@@ -102,8 +103,9 @@ namespace GW2EIEvtcParser.ParsedData
             InstanceStartEvent instanceStart = combatData.GetInstanceStartEvent();
             if (instanceStart != null)
             {
-                long instanceStartSeconds = instanceStart.OffsetFromInstanceCreation / 1000;
+                long instanceStartSeconds = instanceStart.TimeOffsetFromInstanceCreation / 1000;
                 LogInstanceStartStd = GetDateTimeStd(unixStart - instanceStartSeconds);
+                LogInstanceIP = instanceStart.InstanceIP;
             }
             //
             foreach (ErrorEvent evt in combatData.GetErrorEvents())

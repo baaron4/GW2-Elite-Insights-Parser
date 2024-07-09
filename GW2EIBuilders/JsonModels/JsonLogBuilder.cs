@@ -112,10 +112,12 @@ namespace GW2EIBuilders.JsonModels
             if (log.LogData.LogInstanceStartStd != null )
             {
                 jsonLog.InstanceTimeStartStd = log.LogData.LogInstanceStartStd;
+                jsonLog.InstanceIP = log.LogData.LogInstanceIP;
             } 
             else
             {
                 jsonLog.InstanceTimeStartStd = null;
+                jsonLog.InstanceIP = null;
             }
             jsonLog.Success = log.FightData.Success;
             jsonLog.GW2Build = log.LogData.GW2Build;

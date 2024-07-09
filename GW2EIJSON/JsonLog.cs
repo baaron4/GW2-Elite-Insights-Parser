@@ -309,6 +309,13 @@ namespace GW2EIJSON
         /// </summary>
         public string InstanceTimeStartStd { get; set; }
 
+
+        /// <summary>
+        /// XXX.XXX.XXX.XXX IP address of the instance \n
+        /// The value will be null if the event does not exist
+        /// </summary>
+        public string InstanceIP { get; set; }
+
         /// <summary>
         /// The success status of the fight
         /// </summary>
