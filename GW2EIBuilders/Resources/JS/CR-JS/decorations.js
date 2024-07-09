@@ -3,6 +3,119 @@
 /*jslint browser: true */
 /*global animator, ToRadians, overheadAnimationFrame, maxOverheadAnimationFrame, facingIcon, animateCanvas, noUpdateTime, SkillDecorationCategory*/
 "use strict";
+
+class GenericDecorationMetadata {
+    constructor() {
+
+    }
+}
+
+class GenericAttachedDecorationMetadata extends GenericDecorationMetadata{
+    constructor() {
+        super();
+    }
+}
+
+class ActorOrientationDecorationMetadata extends GenericAttachedDecorationMetadata {
+    constructor() {
+        super();
+    }
+}
+
+class FormDecorationMetadata extends GenericAttachedDecorationMetadata {
+    constructor(color) {
+        super();
+        this.color = color;
+    }
+}
+
+class CircleDecorationMetadata extends FormDecorationMetadata {
+    constructor(color, radius, minRadius) {
+        super(color);
+        this.radius = radius;
+        this.minRadius = minRadius;
+    }
+}
+
+class PieDecorationMetadata extends CircleDecorationMetadata {
+    constructor(color, radius, minRadius, openingAngle) {
+        super(color, radius, minRadius);
+        this.openingAngle = openingAngle;
+    }
+}
+
+class DoughnutDecorationMetadata extends FormDecorationMetadata {
+    constructor(color, outerRadius, innerRadius) {
+        super(color);
+        this.outerRadius = outerRadius;
+        this.innerRadius = innerRadius;
+    }
+}
+
+class LineDecorationMetadata extends FormDecorationMetadata {
+    constructor(color) {
+        super(color);
+    }
+}
+
+class RectangleDecorationMetadata extends FormDecorationMetadata {
+    constructor(color, width, height) {
+        super(color);
+        this.width = width;
+        this.height = height;
+    }
+}
+
+class GenericIconDecorationMetadata extends GenericAttachedDecorationMetadata{
+    constructor(image, pixelSize, worldSize) {
+        super();
+        this.imageUrl = image;
+        this.image = new Image();
+        this.image.src = this.imageUrl;
+        this.image.onload = () => animateCanvas(noUpdateTime);
+        this.pixelSize = pixelSize;
+        this.worldSize = worldSize;
+    }
+}
+
+class BackgroundIconDecorationMetadata extends GenericIconDecorationMetadata {
+    constructor(image, pixelSize, worldSize) {
+        super(image, pixelSize, worldSize);
+    }
+}
+
+class IconDecorationMetadata extends GenericIconDecorationMetadata {
+    constructor(image, pixelSize, worldSize, opacity) {
+        super(image, pixelSize, worldSize);
+        this.opacity = opacity;
+    }
+}
+
+class IconOverheadDecorationMetadata extends IconDecorationMetadata {
+    constructor(image, pixelSize, worldSize, opacity) {
+        super(image, pixelSize, worldSize, opacity);
+    }
+}
+
+class BackgroundDecorationMetadata extends GenericDecorationMetadata{
+    constructor() {
+        super();
+    }
+}
+
+class MovingPlatformDecorationMetadata extends BackgroundDecorationMetadata{
+    constructor(image, width, height) {
+        super(image, width, height);
+        this.imageUrl = image;
+        this.image = new Image();
+        this.image.src = this.imageUrl;
+        this.image.onload = () => animateCanvas(noUpdateTime);
+        this.width = width;
+        this.height = height;
+    }
+}
+
+
 //// BASE MECHANIC
 
 function interpolatedPositionFetcher(connection, master) {
