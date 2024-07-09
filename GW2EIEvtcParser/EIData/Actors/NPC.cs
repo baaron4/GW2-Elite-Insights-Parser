@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 InitCombatReplay(log);
             }
-            return new NPCDescription(this, log, map, CombatReplay);
+            return new NPCCombatReplayDescription(this, log, map, CombatReplay);
         }
         protected override void TrimCombatReplay(ParsedEvtcLog log)
         {

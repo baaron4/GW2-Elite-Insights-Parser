@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 InitCombatReplay(log);
             }
-            return new PlayerDescription(this, log, map, CombatReplay);
+            return new PlayerCombatReplayDescription(this, log, map, CombatReplay);
         }
     }
 }
