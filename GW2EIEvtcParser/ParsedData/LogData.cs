@@ -102,7 +102,8 @@ namespace GW2EIEvtcParser.ParsedData
             InstanceStartEvent instanceStart = combatData.GetInstanceStartEvent();
             if (instanceStart != null)
             {
-                LogInstanceStartStd = GetDateTimeStd(unixStart - instanceStart.OffsetFromInstanceCreation/1000);
+                long instanceStartSeconds = instanceStart.OffsetFromInstanceCreation / 1000;
+                LogInstanceStartStd = GetDateTimeStd(unixStart - instanceStartSeconds);
             }
             //
             foreach (ErrorEvent evt in combatData.GetErrorEvents())

@@ -6,7 +6,7 @@
 
         internal InstanceStartEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            OffsetFromInstanceCreation = (long)evtcItem.SrcAgent;
+            OffsetFromInstanceCreation = evtcItem.Time - (long)evtcItem.SrcAgent;
         }
 
     }
