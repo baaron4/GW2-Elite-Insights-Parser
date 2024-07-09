@@ -20,6 +20,8 @@ namespace GW2EIEvtcParser.EIData
         internal GainComputer GainComputer { get; }
         private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
         private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
+        private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
+        private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
         public bool Multiplier => GainComputer.Multiplier;
         public bool SkillBased => GainComputer.SkillBased;
 
@@ -58,6 +60,13 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal DamageModifierDescriptor WithEvtcBuilds(int minBuild, int maxBuild = ArcDPSBuilds.EndOfLife)
+        {
+            _minEvtcBuild = minBuild;
+            _maxEvtcBuild = maxBuild;
+            return this;
+        }
+
         internal virtual DamageModifierDescriptor UsingChecker(DamageLogChecker dlChecker)
         {
             _dlCheckers.Add(dlChecker);
@@ -72,7 +81,15 @@ namespace GW2EIEvtcParser.EIData
         public bool Available(CombatData combatData)
         {
             ulong gw2Build = combatData.GetBuildEvent().Build;
-            return gw2Build < _maxBuild && gw2Build >= _minBuild;
+            if (gw2Build < _maxBuild && gw2Build >= _minBuild)
+            {
+                int evtcBuild = combatData.GetEvtcVersionEvent().Build;
+                if (evtcBuild < _maxEvtcBuild && evtcBuild >= _minEvtcBuild)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         internal virtual bool Keep(FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)

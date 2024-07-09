@@ -65,6 +65,8 @@ namespace GW2EIEvtcParser.EIData
 
         private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
         private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
+        private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
+        private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
         public int Capacity { get; }
         public string Link { get; }
 
@@ -97,6 +99,13 @@ namespace GW2EIEvtcParser.EIData
         {
             _minBuild = minBuild;
             _maxBuild = maxBuild;
+            return this;
+        }
+
+        internal Buff WithEvtcBuilds(int minBuild, int maxBuild = ArcDPSBuilds.EndOfLife)
+        {
+            _minEvtcBuild = minBuild;
+            _maxEvtcBuild = maxBuild;
             return this;
         }
 
@@ -200,7 +209,15 @@ namespace GW2EIEvtcParser.EIData
         public bool Available(CombatData combatData)
         {
             ulong gw2Build = combatData.GetBuildEvent().Build;
-            return gw2Build < _maxBuild && gw2Build >= _minBuild;
+            if (gw2Build < _maxBuild && gw2Build >= _minBuild)
+            {
+                int evtcBuild = combatData.GetEvtcVersionEvent().Build;
+                if (evtcBuild < _maxEvtcBuild && evtcBuild >= _minEvtcBuild)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

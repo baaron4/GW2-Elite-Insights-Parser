@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.ParsedData
         public List<TickRateEvent> TickRateEvents { get; } = new List<TickRateEvent>();
         public PointOfViewEvent PointOfViewEvent { get; set; }
         public FractalScaleEvent FractalScaleEvent { get; set; }
+        public EvtcVersionEvent EvtcVersionEvent { get; set; }
         public Dictionary<AgentItem, List<GuildEvent>> GuildEvents { get; } = new Dictionary<AgentItem, List<GuildEvent>>();
         public Dictionary<long, BuffInfoEvent> BuffInfoEvents { get; } = new Dictionary<long, BuffInfoEvent>();
         public Dictionary<byte, List<BuffInfoEvent>> BuffInfoEventsByCategory { get; } = new Dictionary<byte, List<BuffInfoEvent>>();

@@ -20,11 +20,13 @@ namespace GW2EIEvtcParser.EIData
             private readonly int _traitSelf;
             private readonly long _buffSrc;
             private readonly long _buffSelf;
-            private readonly ulong _minBuild;
-            private readonly ulong _maxBuild;
+            private ulong _minBuild = GW2Builds.StartOfLife;
+            private ulong _maxBuild = GW2Builds.EndOfLife;
+            private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
+            private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
             private readonly ArcDPSEnums.BuffAttribute _result;
 
-            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, long buffSelf, int buffSrc, ArcDPSEnums.BuffAttribute result, ulong minBuild = GW2Builds.StartOfLife, ulong maxBuild = GW2Builds.EndOfLife)
+            public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, long buffSelf, int buffSrc, ArcDPSEnums.BuffAttribute result)
             {
                 _constantOffset = constantOffset;
                 _levelOffset = levelOffset;
@@ -34,14 +36,34 @@ namespace GW2EIEvtcParser.EIData
                 _buffSrc = buffSrc;
                 _buffSelf = buffSelf;
                 _result = result;
+            }
+
+            internal BuffFormulaDescriptor WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)
+            {
                 _minBuild = minBuild;
                 _maxBuild = maxBuild;
+                return this;
+            }
+
+            internal BuffFormulaDescriptor WithEvtcBuilds(int minBuild, int maxBuild = ArcDPSBuilds.EndOfLife)
+            {
+                _minEvtcBuild = minBuild;
+                _maxEvtcBuild = maxBuild;
+                return this;
             }
 
             public bool Available(CombatData combatData)
             {
                 ulong gw2Build = combatData.GetBuildEvent().Build;
-                return gw2Build < _maxBuild && gw2Build >= _minBuild;
+                if (gw2Build < _maxBuild && gw2Build >= _minBuild)
+                {
+                    int evtcBuild = combatData.GetEvtcVersionEvent().Build;
+                    if (evtcBuild < _maxEvtcBuild && evtcBuild >= _minEvtcBuild)
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             public bool Match(BuffFormula formula, Dictionary<byte, ArcDPSEnums.BuffAttribute> toFill)
@@ -82,8 +104,8 @@ namespace GW2EIEvtcParser.EIData
         }
         // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
         private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new Dictionary<BuffFormulaDescriptor, long> {
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingMultiplicative, GW2Builds.EODBeta3), Protection },
-            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingMultiplicative, GW2Builds.EODBeta3), Resolution },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Protection },
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Resolution },
             // CriticalChance
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CriticalChance), Fury },
             // Fishing Power      
@@ -92,9 +114,9 @@ namespace GW2EIEvtcParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfJadeSeaBounty },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.FishingPower), BowlOfEchovaldHotpot },
             // Life Leech      
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing, GW2Builds.May2021Balance), KallasFervor },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing, GW2Builds.May2021Balance), ImprovedKallasFervor },
-            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.SiphonOutgoing, GW2Builds.May2021Balance), Fury },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), KallasFervor },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), ImprovedKallasFervor },
+            { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), Fury },
             // ConditionDurationIncrease
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.ConditionDurationOutgoing), Fury },
             // SkillRechargeSpeedIncrease
@@ -106,7 +128,7 @@ namespace GW2EIEvtcParser.EIData
             // MovementSpeed
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.MovementSpeed), Swiftness },
             // DamageFormulaSquaredLevel
-            {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormulaSquaredLevel, GW2Builds.StartOfLife, GW2Builds.May2021Balance), Retaliation },
+            {  new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormulaSquaredLevel).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance), Retaliation },
             // DamageFormula
             { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Bleeding },
             { new BuffFormulaDescriptor(AnyPositive, AnyPositive, AnyPositive, 0, 0, 0, 0, BuffAttribute.DamageFormula), Burning },

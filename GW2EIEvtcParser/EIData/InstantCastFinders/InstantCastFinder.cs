@@ -38,6 +38,8 @@ namespace GW2EIEvtcParser.EIData
 
         private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
         private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
+        private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
+        private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
 
         protected InstantCastFinder(long skillID)
         {
@@ -49,6 +51,13 @@ namespace GW2EIEvtcParser.EIData
         {
             _maxBuild = maxBuild;
             _minBuild = minBuild;
+            return this;
+        }
+
+        internal InstantCastFinder WithEvtcBuilds(int minBuild, int maxBuild = ArcDPSBuilds.EndOfLife)
+        {
+            _maxEvtcBuild = maxBuild;
+            _minEvtcBuild = minBuild;
             return this;
         }
 
@@ -123,7 +132,15 @@ namespace GW2EIEvtcParser.EIData
                 return false;
             }
             ulong gw2Build = combatData.GetBuildEvent().Build;
-            return gw2Build < _maxBuild && gw2Build >= _minBuild;
+            if (gw2Build < _maxBuild && gw2Build >= _minBuild)
+            {
+                int evtcBuild = combatData.GetEvtcVersionEvent().Build;
+                if (evtcBuild < _maxEvtcBuild && evtcBuild >= _minEvtcBuild)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public abstract List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData);

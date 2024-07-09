@@ -490,6 +490,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
         {
+            _metaDataEvents.EvtcVersionEvent = evtcVersion;
             var combatEvents = allCombatItems.OrderBy(x => x.Time).ToList();
             _skillIds = new HashSet<long>();
             var castCombatEvents = new Dictionary<ulong, List<CombatItem>>();
@@ -758,6 +759,11 @@ namespace GW2EIEvtcParser.ParsedData
         public PointOfViewEvent GetPointOfViewEvent()
         {
             return _metaDataEvents.PointOfViewEvent;
+        }
+
+        public EvtcVersionEvent GetEvtcVersionEvent()
+        {
+            return _metaDataEvents.EvtcVersionEvent;
         }
 
         public FractalScaleEvent GetFractalScaleEvent()
