@@ -642,7 +642,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
+        public abstract AbstractSingleActorDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
         // Cast logs
         public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)

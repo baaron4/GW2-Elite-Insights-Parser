@@ -3,11 +3,11 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class NPCCombatReplayDescription : AbstractSingleActorCombatReplayDescription
+    public class NPCDescription : AbstractSingleActorDescription
     {
         public int MasterID { get; }
 
-        internal NPCCombatReplayDescription(NPC npc, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(npc, log, map, replay)
+        internal NPCDescription(NPC npc, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(npc, log, map, replay)
         {
             if (log.FriendlyAgents.Contains(npc.AgentItem))
             {

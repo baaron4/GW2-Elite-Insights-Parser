@@ -4,13 +4,13 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericIconDecorationCombatReplayDescription : GenericAttachedDecorationCombatReplayDescription
+    public abstract class GenericIconDecorationRenderableDescription : GenericAttachedDecorationRenderableDescription
     {
         public string Image { get; }
         public uint PixelSize { get; }
         public uint WorldSize { get; }
 
-        internal GenericIconDecorationCombatReplayDescription(ParsedEvtcLog log, GenericIconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
+        internal GenericIconDecorationRenderableDescription(ParsedEvtcLog log, GenericIconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
         {
             Image = decoration.Image;
             PixelSize = decoration.PixelSize;

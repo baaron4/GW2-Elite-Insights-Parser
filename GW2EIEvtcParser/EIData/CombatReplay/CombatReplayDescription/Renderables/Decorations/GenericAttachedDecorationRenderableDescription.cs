@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericAttachedDecorationCombatReplayDescription : GenericDecorationCombatReplayDescription
+    public abstract class GenericAttachedDecorationRenderableDescription : GenericDecorationRenderableDescription
     {
         public object ConnectedTo { get; }
         public object RotationConnectedTo { get; }
@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
         }
         public object SkillMode { get; } = null;
 
-        internal GenericAttachedDecorationCombatReplayDescription(ParsedEvtcLog log, GenericAttachedDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(decoration)
+        internal GenericAttachedDecorationRenderableDescription(ParsedEvtcLog log, GenericAttachedDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(decoration)
         {
             ConnectedTo = decoration.ConnectedTo.GetConnectedTo(map, log);
             RotationConnectedTo = decoration.RotationConnectedTo?.GetConnectedTo(map, log);

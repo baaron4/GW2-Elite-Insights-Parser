@@ -13,7 +13,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
         public static JsonActorCombatReplayData BuildJsonActorCombatReplayDataBuilder(AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings)
         {
             CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
-            AbstractSingleActorCombatReplayDescription description = actor.GetCombatReplayDescription(map, log);
+            AbstractSingleActorDescription description = actor.GetCombatReplayDescription(map, log);
             var actorCombatReplayData = new JsonActorCombatReplayData()
             {
                 IconURL = description.Img,

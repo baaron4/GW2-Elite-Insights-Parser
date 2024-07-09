@@ -2,10 +2,10 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericDecorationCombatReplayDescription : AbstractRenderableCombatReplayDescription
+    public abstract class GenericDecorationRenderableDescription : AbstractRenderableDescription
     {
 
-        protected GenericDecorationCombatReplayDescription(GenericDecoration decoration)
+        protected GenericDecorationRenderableDescription(GenericDecoration decoration)
         {
             Start = decoration.Lifespan.start;
             End = decoration.Lifespan.end;

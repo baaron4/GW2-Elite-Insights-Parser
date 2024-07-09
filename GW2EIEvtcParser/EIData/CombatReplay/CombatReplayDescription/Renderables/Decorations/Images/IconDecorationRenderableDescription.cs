@@ -4,11 +4,11 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class IconDecorationCombatReplayDescription : GenericIconDecorationCombatReplayDescription
+    public class IconDecorationRenderableDescription : GenericIconDecorationRenderableDescription
     {
         public float Opacity { get; }
 
-        internal IconDecorationCombatReplayDescription(ParsedEvtcLog log, IconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
+        internal IconDecorationRenderableDescription(ParsedEvtcLog log, IconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
         {
             Type = "IconDecoration";
             if (decoration.IsSquadMarker)

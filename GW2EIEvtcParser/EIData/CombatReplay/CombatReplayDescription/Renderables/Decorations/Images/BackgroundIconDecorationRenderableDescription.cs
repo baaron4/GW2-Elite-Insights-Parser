@@ -3,12 +3,12 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class BackgroundIconDecorationCombatReplayDescription : GenericIconDecorationCombatReplayDescription
+    public class BackgroundIconDecorationRenderableDescription : GenericIconDecorationRenderableDescription
     {
 
         public IReadOnlyList<float> Opacities { get; private set; }
         public IReadOnlyList<float> Heights { get; private set; }
-        internal BackgroundIconDecorationCombatReplayDescription(ParsedEvtcLog log, BackgroundIconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
+        internal BackgroundIconDecorationRenderableDescription(ParsedEvtcLog log, BackgroundIconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
         {
             Type = "BackgroundIconDecoration";
             IsMechanicOrSkill = false;
