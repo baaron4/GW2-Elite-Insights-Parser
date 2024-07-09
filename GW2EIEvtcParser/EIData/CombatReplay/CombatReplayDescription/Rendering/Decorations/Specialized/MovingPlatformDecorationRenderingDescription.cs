@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Newtonsoft.Json;
+using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class MovingPlatformDecorationRenderableDescription : BackgroundDecorationRenderableDescription
+    internal class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
     {
         private class PositionConverter : JsonConverter
         {
@@ -41,21 +42,13 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-
-        public string Image { get; }
-        public int Height { get; }
-        public int Width { get; }
-
         [JsonConverter(typeof(PositionConverter))]
         public (float x, float y, float z, float angle, float opacity, int time)[] Positions { get; set; }
 
 
-        internal MovingPlatformDecorationRenderableDescription(MovingPlatformDecoration decoration, CombatReplayMap map) : base(decoration)
+        internal MovingPlatformDecorationRenderingDescription(MovingPlatformDecorationRenderingData decoration, CombatReplayMap map, string metadataSignature) : base(decoration, metadataSignature)
         {
             Type = "MovingPlatform";
-            Image = decoration.Image;
-            Width = decoration.Width;
-            Height = decoration.Height;
             Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
             {
                 (float mapX, float mapY) = map.GetMapCoord((float)pos.x, (float)pos.y);

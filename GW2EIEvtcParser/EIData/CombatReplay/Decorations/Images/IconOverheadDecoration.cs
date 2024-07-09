@@ -18,14 +18,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "IO" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
-            {
-                if (renderingData is IconOverheadDecorationRenderingData  expectedRenderingData)
-                {
-                    return new IconOverheadDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableIconOverheadDecoration");
-            }
         }
         internal class IconOverheadDecorationRenderingData : IconDecorationRenderingData
         {
@@ -34,6 +26,11 @@ namespace GW2EIEvtcParser.EIData
             }
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
+            }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new IconOverheadDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
             }
         }
         internal IconOverheadDecoration(IconOverheadDecorationMetadata metadata, IconOverheadDecorationRenderingData renderingData) : base(metadata, renderingData)
@@ -47,10 +44,5 @@ namespace GW2EIEvtcParser.EIData
         {
         }
         //
-
-        public override GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new IconOverheadDecorationRenderableDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

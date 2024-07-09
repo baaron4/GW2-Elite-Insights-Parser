@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.PieDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class PieDecorationMetadataDescription : CircleDecorationMetadataDescription
+    internal class PieDecorationMetadataDescription : CircleDecorationMetadataDescription
     {
         public float OpeningAngle { get; set; }
 

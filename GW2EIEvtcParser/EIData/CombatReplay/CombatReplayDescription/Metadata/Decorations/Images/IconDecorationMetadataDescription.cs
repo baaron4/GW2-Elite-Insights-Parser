@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.EIData.IconDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class IconDecorationMetadataDescription : GenericIconDecorationMetadataDescription
+    internal class IconDecorationMetadataDescription : GenericIconDecorationMetadataDescription
     {
         public float Opacity { get; }
 

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class AbstractSingleActorDescription : AbstractCombatReplayDescription
+    public abstract class AbstractSingleActorCombatReplayDescription : AbstractCombatReplayDescription
     {
         public long Start { get; protected set; }
         public long End { get; protected set; }
@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.EIData
             return "Mob";
         }
 
-        internal AbstractSingleActorDescription(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay)
+        internal AbstractSingleActorCombatReplayDescription(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay)
         {
             Start = replay.TimeOffsets.start;
             End = replay.TimeOffsets.end;

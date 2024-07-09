@@ -105,7 +105,7 @@ namespace GW2EIEvtcParser.EIData
 
         //
 
-        public override AbstractSingleActorDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
+        public override AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
         {
             if (CombatReplay == null)
             {

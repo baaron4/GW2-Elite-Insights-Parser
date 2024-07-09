@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.CircleDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class CircleDecorationMetadataDescription : FormDecorationMetadataDescription
+    internal class CircleDecorationMetadataDescription : FormDecorationMetadataDescription
     {
         public uint Radius { get; }
         public uint MinRadius { get; }

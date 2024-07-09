@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class MovingPlatformDecorationMetadataDescription : BackgroundDecorationMetadataDescription
+    internal class MovingPlatformDecorationMetadataDescription : BackgroundDecorationMetadataDescription
     {
 
 

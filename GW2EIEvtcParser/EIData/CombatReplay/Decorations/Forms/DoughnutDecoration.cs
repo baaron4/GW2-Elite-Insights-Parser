@@ -25,19 +25,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Dough" + OuterRadius + Color + InnerRadius;
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
-            {
-                if (renderingData is DoughnutDecorationRenderingData  expectedRenderingData)
-                {
-                    return new DoughnutDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableDoughnutDecoration");
-            }
         }
         internal class DoughnutDecorationRenderingData : FormDecorationRenderingData
         {
             public DoughnutDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
+            }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new DoughnutDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
             }
         }
         private new DoughnutDecorationMetadata DecorationMetadata => (DoughnutDecorationMetadata)base.DecorationMetadata;
@@ -68,11 +65,6 @@ namespace GW2EIEvtcParser.EIData
             return (DoughnutDecoration)Copy(borderColor).UsingFilled(false);
         }
         //
-
-        public override GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new DoughnutDecorationRenderableDescription(log, this, map, usedSkills, usedBuffs);
-        }
 
     }
 }

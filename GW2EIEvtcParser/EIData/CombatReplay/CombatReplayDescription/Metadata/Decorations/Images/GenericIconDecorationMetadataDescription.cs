@@ -5,7 +5,7 @@ using static GW2EIEvtcParser.EIData.GenericIconDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericIconDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
+    internal abstract class GenericIconDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
     {
         public string Image { get; }
         public uint PixelSize { get; }

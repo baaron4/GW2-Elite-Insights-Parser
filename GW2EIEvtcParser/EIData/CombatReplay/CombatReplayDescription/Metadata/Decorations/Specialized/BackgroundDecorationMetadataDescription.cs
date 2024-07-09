@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class BackgroundDecorationMetadataDescription : GenericDecorationMetadataDescription
+    internal abstract class BackgroundDecorationMetadataDescription : GenericDecorationMetadataDescription
     {
         internal BackgroundDecorationMetadataDescription(BackgroundDecorationMetadata decoration) : base(decoration)
         {

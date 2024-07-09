@@ -17,14 +17,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
-            {
-                if (renderingData is BackgroundIconDecorationRenderingData  expectedRenderingData)
-                {
-                    return new BackgroundIconDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableBackgroundIconDecoration");
-            }
         }
         internal class BackgroundIconDecorationRenderingData : GenericIconDecorationRenderingData
         {
@@ -37,6 +29,11 @@ namespace GW2EIEvtcParser.EIData
             }
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
+            }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new BackgroundIconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
             }
         }
         private new BackgroundIconDecorationRenderingData DecorationRenderingData => (BackgroundIconDecorationRenderingData)base.DecorationRenderingData;
@@ -53,11 +50,6 @@ namespace GW2EIEvtcParser.EIData
 
         public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacities, heights, (lifespan.Start, lifespan.End), connector)
         {
-        }
-
-        public override GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new BackgroundIconDecorationRenderableDescription(log, this, map, usedSkills, usedBuffs);
         }
     }
 }

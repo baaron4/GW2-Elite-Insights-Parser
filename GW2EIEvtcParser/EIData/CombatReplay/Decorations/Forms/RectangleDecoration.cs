@@ -21,19 +21,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Rect" + Height + Color + Width;
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
-            {
-                if (renderingData is RectangleDecorationRenderingData  expectedRenderingData)
-                {
-                    return new RectangleDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableRectangleDecoration");
-            }
         }
         internal class RectangleDecorationRenderingData : FormDecorationRenderingData
         {
             public RectangleDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
+            }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new RectangleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
             }
         }
         private new RectangleDecorationMetadata DecorationMetadata => (RectangleDecorationMetadata)base.DecorationMetadata;
@@ -65,10 +62,5 @@ namespace GW2EIEvtcParser.EIData
             return copy;
         }
         //
-
-        public override GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new RectangleDecorationRenderableDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

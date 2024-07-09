@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.DoughnutDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
+    internal class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
     {
         public uint InnerRadius { get; }
         public uint OuterRadius { get; }

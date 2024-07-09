@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.GenericDecoration;
 
 namespace GW2EIEvtcParser.EIData
@@ -30,12 +31,12 @@ namespace GW2EIEvtcParser.EIData
             Decorations.Add((cached, decoration.DecorationRenderingData));
         }
 
-        internal IReadOnlyList<GenericDecoration> ToList()
+        public List<GenericDecorationRenderingDescription> GetCombatReplayRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            var result = new List<GenericDecoration>();
+            var result = new List<GenericDecorationRenderingDescription>();
             foreach ((GenericDecorationMetadata constant, GenericDecorationRenderingData renderingData) in Decorations)
             {
-                result.Add(constant.GetDecorationFromVariable(renderingData));
+                result.Add(renderingData.GetCombatReplayRenderingDescription(map, log, usedSkills, usedBuffs, constant.GetSignature()));
             }
             return result;
         }

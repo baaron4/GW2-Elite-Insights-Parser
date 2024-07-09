@@ -17,14 +17,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Line" + Color;
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
-            {
-                if (renderingData is LineDecorationRenderingData  expectedRenderingData)
-                {
-                    return new LineDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableLineDecoration");
-            }
         }
         internal class LineDecorationRenderingData : FormDecorationRenderingData
         {
@@ -38,6 +30,11 @@ namespace GW2EIEvtcParser.EIData
             }
             public override void UsingRotationConnector(RotationConnector rotationConnectedTo)
             {
+            }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new LineDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
             }
         }
         private new LineDecorationRenderingData DecorationRenderingData => (LineDecorationRenderingData)base.DecorationRenderingData;
@@ -71,10 +68,5 @@ namespace GW2EIEvtcParser.EIData
             throw new InvalidOperationException("Lines can't have borders");
         }
         //
-
-        public override GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new LineDecorationRenderableDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

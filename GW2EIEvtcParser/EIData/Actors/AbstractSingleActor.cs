@@ -620,13 +620,14 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<GenericDecoration> GetCombatReplayDecorations(ParsedEvtcLog log)
+        public IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
+
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            return CombatReplay.Decorations.ToList();
+            return CombatReplay.Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
         }
         protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
@@ -642,7 +643,7 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public abstract AbstractSingleActorDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
+        public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
         // Cast logs
         public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)

@@ -12,15 +12,6 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "AO";
             }
-
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
-            {
-                if (renderingData is ActorOrientationDecorationRenderingData  expectedRenderingData)
-                {
-                    return new ActorOrientationDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableActorOrientationDecoration");
-            }
         }
         internal class ActorOrientationDecorationRenderingData : GenericAttachedDecorationRenderingData
         {
@@ -35,6 +26,11 @@ namespace GW2EIEvtcParser.EIData
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
             }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new ActorOrientationDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
         }
 
         internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, ActorOrientationDecorationRenderingData renderingData) : base (metadata, renderingData)
@@ -46,10 +42,5 @@ namespace GW2EIEvtcParser.EIData
         }
 
         //
-
-        public override GenericDecorationRenderableDescription GetRenderableDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new ActorOrientationDecorationRenderableDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }
