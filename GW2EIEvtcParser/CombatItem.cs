@@ -129,7 +129,8 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.Reward
                 || IsStateChange == ArcDPSEnums.StateChange.TickRate
                 || IsStateChange == ArcDPSEnums.StateChange.SquadMarker
-                || IsStateChange == ArcDPSEnums.StateChange.InstanceStart;
+                || IsStateChange == ArcDPSEnums.StateChange.InstanceStart
+                ;
         }
 
         internal bool HasTime(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -146,7 +147,8 @@ namespace GW2EIEvtcParser
             return IsStateChange == ArcDPSEnums.StateChange.None &&
                         IsActivation == ArcDPSEnums.Activation.None &&
                         IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
-                        ((IsBuff != 0 && Value == 0) || (IsBuff == 0));
+                        ((IsBuff != 0 && Value == 0) || (IsBuff == 0))
+                        ;
         }
 
         internal bool IsDamagingDamage()
@@ -154,7 +156,8 @@ namespace GW2EIEvtcParser
             return IsStateChange == ArcDPSEnums.StateChange.None &&
                         IsActivation == ArcDPSEnums.Activation.None &&
                         IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
-                        ((IsBuff != 0 && Value == 0 && BuffDmg > 0) || (IsBuff == 0 && Value > 0));
+                        ((IsBuff != 0 && Value == 0 && BuffDmg > 0) || (IsBuff == 0 && Value > 0))
+                        ;
         }
 
         internal bool IsDamage(IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -180,7 +183,8 @@ namespace GW2EIEvtcParser
             return IsStateChange == ArcDPSEnums.StateChange.None &&
                         IsActivation == ArcDPSEnums.Activation.None &&
                         IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
-                        IsBuff == 0;
+                        IsBuff == 0
+                        ;
         }
 
         internal bool IsBuffDamage()
@@ -188,7 +192,8 @@ namespace GW2EIEvtcParser
             return IsStateChange == ArcDPSEnums.StateChange.None &&
                         IsActivation == ArcDPSEnums.Activation.None &&
                         IsBuffRemove == ArcDPSEnums.BuffRemove.None &&
-                        IsBuff != 0 && Value == 0;
+                        IsBuff != 0 && Value == 0
+                        ;
         }
 
         internal bool SrcIsAgent()
@@ -223,6 +228,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_45
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_51
                 || IsStateChange == ArcDPSEnums.StateChange.Glider
+                || IsStateChange == ArcDPSEnums.StateChange.StunBreak
                 ;
         }
 
@@ -242,7 +248,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
                 || IsStateChange == ArcDPSEnums.StateChange.Effect_45
                 || IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate
-                || IsStateChange == ArcDPSEnums.StateChange.Effect_51;
+                || IsStateChange == ArcDPSEnums.StateChange.Effect_51
             ;
         }
 

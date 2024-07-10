@@ -36,7 +36,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly List<string> _logErrors = new List<string>();
 
         // Constructors
-        internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
+        internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
         {
             if (evtcVersion != null)
             {
@@ -123,10 +123,10 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Setters
-        private void SetPOV(AgentItem pov, List<Player> playerList)
+        private void SetPOV(AgentItem pov, IReadOnlyList<Player> playerList)
         {
             PoV = pov;
-            Player povPlayer = playerList.Find(x => x.AgentItem == pov);
+            Player povPlayer = playerList.FirstOrDefault(x => x.AgentItem == pov);
             if (povPlayer != null)
             {
                 PoVName = povPlayer.Character;

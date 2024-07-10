@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser.ParsedData
         public Dictionary<AgentItem, List<Last90BeforeDownEvent>> Last90BeforeDownEventsBySrc { get; } = new Dictionary<AgentItem, List<Last90BeforeDownEvent>>();
         public List<Last90BeforeDownEvent> Last90BeforeDownEvents { get; } = new List<Last90BeforeDownEvent>();
         public Dictionary<AgentItem, List<GliderEvent>> GliderEventsBySrc { get; } = new Dictionary<AgentItem, List<GliderEvent>>();
+        public Dictionary<AgentItem, List<StunBreakEvent>> StunBreakEventsBySrc { get; } = new Dictionary<AgentItem, List<StunBreakEvent>>();
 
     }
 }

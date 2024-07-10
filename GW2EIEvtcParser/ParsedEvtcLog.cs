@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
+                IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -67,6 +67,26 @@ namespace GW2EIEvtcParser
             FightData.Logic.UpdatePlayersSpecAndGroup(PlayerList, CombatData, FightData);
             PlayerList = PlayerList.OrderBy(a => a.Group).ThenBy(x => x.Character).ToList();
             //
+            if (parserSettings.AnonymousPlayers)
+            {
+                operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    PlayerList[i].Anonymize(i + 1);
+                }
+                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+                int playerOffset = PlayerList.Count + 1;
+                foreach (AgentItem playerAgent in allPlayerAgents)
+                {
+                    if (!PlayerAgents.Contains(playerAgent))
+                    {
+                        string character = "Player " + playerOffset;
+                        string account = "Account " + (playerOffset++);
+                        playerAgent.OverrideName(character + "\0:" + account + "\00");
+                    }
+                }
+            }
+            //
             var friendlies = new List<AbstractSingleActor>();
             friendlies.AddRange(PlayerList);
             friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
@@ -95,26 +115,6 @@ namespace GW2EIEvtcParser
             MechanicData = FightData.Logic.GetMechanicData();
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating General Statistics Container");
             StatisticsHelper = new StatisticsHelper(CombatData, PlayerList, Buffs);
-            //
-            if (parserSettings.AnonymousPlayers)
-            {
-                operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
-                for (int i = 0; i < PlayerList.Count; i++)
-                {
-                    PlayerList[i].Anonymize(i + 1);
-                }
-                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-                int playerOffset = PlayerList.Count;
-                foreach (AgentItem playerAgent in allPlayerAgents)
-                {
-                    if (!PlayerAgents.Contains(playerAgent))
-                    {
-                        string character = "Player " + playerOffset;
-                        string account = "Account " + (playerOffset++);
-                        playerAgent.OverrideName(character + "\0:" + account + "\01");
-                    }
-                }
-            }
         }
 
         public void UpdateProgressWithCancellationCheck(string status)

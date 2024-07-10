@@ -488,7 +488,7 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        internal CombatData(List<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
+        internal CombatData(IReadOnlyList<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
         {
             _metaDataEvents.EvtcVersionEvent = evtcVersion;
             var combatEvents = allCombatItems.OrderBy(x => x.Time).ToList();
@@ -1608,6 +1608,15 @@ namespace GW2EIEvtcParser.ParsedData
                 return list;
             }
             return new List<GliderEvent>();
+        }
+
+        public IReadOnlyList<StunBreakEvent> GetStunBreakEvents(AgentItem src)
+        {
+            if (_statusEvents.StunBreakEventsBySrc.TryGetValue(src, out List<StunBreakEvent> list))
+            {
+                return list;
+            }
+            return new List<StunBreakEvent>();
         }
 
         /// 
