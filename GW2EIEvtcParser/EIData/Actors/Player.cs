@@ -49,7 +49,7 @@ namespace GW2EIEvtcParser.EIData
         {
             Character = "Player " + index;
             Account = "Account " + index;
-            AgentItem.OverrideName(Character + "\0:" + Account + "\01");
+            AgentItem.OverrideName(Character + "\0:" + Account + "\0" + Group);
         }
 
         internal override Dictionary<long, FinalActorBuffs>[] ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
