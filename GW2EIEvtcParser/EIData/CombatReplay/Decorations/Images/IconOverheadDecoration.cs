@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EIData
         internal IconOverheadDecoration(IconOverheadDecorationMetadata metadata, IconOverheadDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
-        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity), new IconDecorationRenderingData(lifespan, connector))
+        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(new IconOverheadDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity), new IconOverheadDecorationRenderingData(lifespan, connector))
         {
         }
 
