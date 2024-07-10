@@ -4,10 +4,8 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractCombatReplayDecorationMetadataDescription : AbstractCombatReplayDescription
     {
-        public string Signature { get; private set; }
-        internal AbstractCombatReplayDecorationMetadataDescription(GenericDecorationMetadata decoration) 
+        internal AbstractCombatReplayDecorationMetadataDescription() 
         {
-            Signature = decoration.GetSignature();
         }
     }
 }
