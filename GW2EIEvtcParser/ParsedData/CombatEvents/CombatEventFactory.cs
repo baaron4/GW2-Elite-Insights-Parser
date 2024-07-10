@@ -371,6 +371,10 @@ namespace GW2EIEvtcParser.ParsedData
                     var gliderEvent = new GliderEvent(stateChangeEvent, agentData);
                     Add(statusEvents.GliderEventsBySrc, gliderEvent.Src, gliderEvent);
                     break;
+                case StateChange.StunBreak:
+                    var stunbreakEvent = new StunBreakEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
+                    break;
                 default:
                     break;
             }

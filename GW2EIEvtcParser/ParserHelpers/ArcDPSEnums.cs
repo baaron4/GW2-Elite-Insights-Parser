@@ -308,7 +308,8 @@ namespace GW2EIEvtcParser
             RuleSet = 52,
             SquadMarker = 53,
             ArcBuild = 54,
-            Glider = 54,
+            Glider = 55,
+            StunBreak = 56,
             Unknown
         };
 

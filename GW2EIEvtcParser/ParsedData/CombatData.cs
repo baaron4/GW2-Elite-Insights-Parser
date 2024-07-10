@@ -1610,6 +1610,15 @@ namespace GW2EIEvtcParser.ParsedData
             return new List<GliderEvent>();
         }
 
+        public IReadOnlyList<StunBreakEvent> GetStunBreakEvents(AgentItem src)
+        {
+            if (_statusEvents.StunBreakEventsBySrc.TryGetValue(src, out List<StunBreakEvent> list))
+            {
+                return list;
+            }
+            return new List<StunBreakEvent>();
+        }
+
         /// 
 
         public static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T : AbstractTimeCombatEvent
