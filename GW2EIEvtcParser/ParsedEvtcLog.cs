@@ -75,7 +75,7 @@ namespace GW2EIEvtcParser
                     PlayerList[i].Anonymize(i + 1);
                 }
                 IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-                int playerOffset = PlayerList.Count;
+                int playerOffset = PlayerList.Count + 1;
                 foreach (AgentItem playerAgent in allPlayerAgents)
                 {
                     if (!PlayerAgents.Contains(playerAgent))
