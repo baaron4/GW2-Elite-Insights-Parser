@@ -20,6 +20,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new IconDecorationMetadataDescription(this);
+            }
         }
         internal class IconDecorationRenderingData : GenericIconDecorationRenderingData
         {

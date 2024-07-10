@@ -17,6 +17,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Line" + Color;
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new LineDecorationMetadataDescription(this);
+            }
         }
         internal class LineDecorationRenderingData : FormDecorationRenderingData
         {

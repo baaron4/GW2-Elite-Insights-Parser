@@ -27,6 +27,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Pie" + Radius + Color + MinRadius + OpeningAngle.ToString();
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new PieDecorationMetadataDescription(this);
+            }
         }
         internal class PieDecorationRenderingData : CircleDecorationRenderingData
         {

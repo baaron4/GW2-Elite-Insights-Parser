@@ -21,6 +21,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Rect" + Height + Color + Width;
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new RectangleDecorationMetadataDescription(this);
+            }
         }
         internal class RectangleDecorationRenderingData : FormDecorationRenderingData
         {

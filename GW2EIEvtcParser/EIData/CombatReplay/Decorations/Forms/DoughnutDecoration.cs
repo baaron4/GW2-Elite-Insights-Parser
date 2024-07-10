@@ -25,6 +25,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Dough" + OuterRadius + Color + InnerRadius;
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new DoughnutDecorationMetadataDescription(this);
+            }
         }
         internal class DoughnutDecorationRenderingData : FormDecorationRenderingData
         {

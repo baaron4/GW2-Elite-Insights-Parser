@@ -25,6 +25,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "Cir" + Radius + Color + MinRadius;
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new CircleDecorationMetadataDescription(this);
+            }
         }
         internal class CircleDecorationRenderingData : FormDecorationRenderingData
         {

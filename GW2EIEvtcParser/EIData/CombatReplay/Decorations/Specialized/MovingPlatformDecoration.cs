@@ -22,6 +22,10 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "MP" + Height + Image.GetHashCode().ToString() + Width;
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new MovingPlatformDecorationMetadataDescription(this);
+            }
         }
         internal class MovingPlatformDecorationRenderingData : BackgroundDecorationRenderingData
         {

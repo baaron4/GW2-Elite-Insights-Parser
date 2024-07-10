@@ -224,6 +224,10 @@ namespace GW2EIEvtcParser
 
             }
             decorationRenderings.AddRange(FightData.Logic.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+            foreach (var pair in FightData.Logic.DecorationCache)
+            {
+                decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription());
+            }
             return (actors, decorationRenderings, decorationMetadata);
         }
     }

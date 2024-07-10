@@ -8,9 +8,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal class ActorOrientationDecorationMetadata : GenericAttachedDecorationMetadata
         {
+
             public override string GetSignature()
             {
                 return "AO";
+            }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new ActorOrientationDecorationMetadataDescription(this);
             }
         }
         internal class ActorOrientationDecorationRenderingData : GenericAttachedDecorationRenderingData

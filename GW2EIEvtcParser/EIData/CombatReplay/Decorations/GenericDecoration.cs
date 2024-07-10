@@ -11,6 +11,8 @@ namespace GW2EIEvtcParser.EIData
 
             public abstract string GetSignature();
 
+            public abstract GenericDecorationMetadataDescription GetCombatReplayMetadataDescription();
+
         }
         internal abstract class GenericDecorationRenderingData
         {
