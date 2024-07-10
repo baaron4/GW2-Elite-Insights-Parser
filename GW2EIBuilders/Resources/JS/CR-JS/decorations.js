@@ -5,113 +5,115 @@
 "use strict";
 
 class GenericDecorationMetadata {
-    constructor() {
+    constructor(params) {
 
     }
 }
 
 class GenericAttachedDecorationMetadata extends GenericDecorationMetadata{
-    constructor() {
-        super();
+    constructor(params) {
+        super(params);
     }
 }
 
 class ActorOrientationDecorationMetadata extends GenericAttachedDecorationMetadata {
-    constructor() {
-        super();
+    constructor(params) {
+        super(params);
     }
 }
 
 class FormDecorationMetadata extends GenericAttachedDecorationMetadata {
-    constructor(color) {
-        super();
-        this.color = color;
+    constructor(params) {
+        super(params);
+        this.color = params.color;
     }
 }
 
 class CircleDecorationMetadata extends FormDecorationMetadata {
-    constructor(color, radius, minRadius) {
-        super(color);
-        this.radius = radius;
-        this.minRadius = minRadius;
-    }
-}
-
-class PieDecorationMetadata extends CircleDecorationMetadata {
-    constructor(color, radius, minRadius, openingAngle) {
-        super(color, radius, minRadius);
-        this.openingAngle = openingAngle;
+    constructor(params) {
+        super(params);
+        this.radius = InchToPixel * params.radius;
+        this.minRadius = InchToPixel * params.minRadius;
     }
 }
 
 class DoughnutDecorationMetadata extends FormDecorationMetadata {
-    constructor(color, outerRadius, innerRadius) {
-        super(color);
-        this.outerRadius = outerRadius;
-        this.innerRadius = innerRadius;
+    constructor(params) {
+        super(params);
+        this.outerRadius = InchToPixel * params.outerRadius;
+        this.innerRadius = InchToPixel * params.innerRadius;
     }
 }
 
 class LineDecorationMetadata extends FormDecorationMetadata {
-    constructor(color) {
-        super(color);
+    constructor(params) {
+        super(params);
+    }
+}
+
+class PieDecorationMetadata extends CircleDecorationMetadata {
+    constructor(params) {
+        super(params);
+        this.openingAngle = params.openingAngle;
+        this.openingAngleRadians = ToRadians(this.openingAngle);
+        this.halfOpeningAngle = 0.5 * this.openingAngle;
     }
 }
 
 class RectangleDecorationMetadata extends FormDecorationMetadata {
-    constructor(color, width, height) {
-        super(color);
-        this.width = width;
-        this.height = height;
+    constructor(params) {
+        super(params);
+        this.width = InchToPixel * params.width;
+        this.height = InchToPixel * params.height;
     }
 }
 
 class GenericIconDecorationMetadata extends GenericAttachedDecorationMetadata{
-    constructor(image, pixelSize, worldSize) {
-        super();
-        this.imageUrl = image;
+    constructor(params) {
+        super(params);
+        this.imageUrl = params.image;
         this.image = new Image();
         this.image.src = this.imageUrl;
         this.image.onload = () => animateCanvas(noUpdateTime);
-        this.pixelSize = pixelSize;
-        this.worldSize = worldSize;
+        this.pixelSize = params.pixelSize;
+        this.worldSize = InchToPixel * params.worldSize;
     }
 }
 
 class BackgroundIconDecorationMetadata extends GenericIconDecorationMetadata {
-    constructor(image, pixelSize, worldSize) {
-        super(image, pixelSize, worldSize);
+    constructor(params) {
+        super(params);
     }
 }
 
 class IconDecorationMetadata extends GenericIconDecorationMetadata {
-    constructor(image, pixelSize, worldSize, opacity) {
-        super(image, pixelSize, worldSize);
-        this.opacity = opacity;
+    constructor(params) {
+        super(params);
+        this.opacity = params.opacity;
     }
 }
 
 class IconOverheadDecorationMetadata extends IconDecorationMetadata {
-    constructor(image, pixelSize, worldSize, opacity) {
-        super(image, pixelSize, worldSize, opacity);
+    constructor(params) {
+        super(params);
     }
 }
 
 class BackgroundDecorationMetadata extends GenericDecorationMetadata{
-    constructor() {
-        super();
+    constructor(params) {
+        super(params);
     }
 }
 
 class MovingPlatformDecorationMetadata extends BackgroundDecorationMetadata{
-    constructor() {
-        super(image, width, height);
-        this.imageUrl = image;
+    constructor(params, ) {
+        super(params);
+        this.imageUrl = params.image;
         this.image = new Image();
         this.image.src = this.imageUrl;
         this.image.onload = () => animateCanvas(noUpdateTime);
-        this.width = width;
-        this.height = height;
+        this.width = InchToPixel * params.width;
+        this.height = InchToPixel * params.height;
     }
 }
 
@@ -176,8 +178,8 @@ function noOffsetFetcher(connection) {
 
 function staticOffsetFetcher(connection) {
     return {
-        x: animator.inchToPixel * connection.offset[0],
-        y: animator.inchToPixel * connection.offset[1]
+        x: InchToPixel * connection.offset[0],
+        y: InchToPixel * connection.offset[1]
     };
 }
 
@@ -259,37 +261,37 @@ const RotationOffsetMode = {
 };
 
 class MechanicDrawable {
-    constructor(start, end, connectedTo, rotationConnectedTo) {
-        this.start = start;
-        this.end = end;
+    constructor(params) {
+        this.start = params.start;
+        this.end = params.end;
         this.positionFetcher = null;
-        this.connectedTo = connectedTo;
-        if (connectedTo.interpolationMethod >= 0) {
+        this.connectedTo = params.connectedTo;
+        if (this.connectedTo.interpolationMethod >= 0) {
             this.positionFetcher = interpolatedPositionFetcher;
-        } else if (connectedTo.position) {
+        } else if (this.connectedTo.position) {
             this.positionFetcher = staticPositionFetcher;
-        } else if (connectedTo.masterId >= 0) {         
+        } else if (this.connectedTo.masterId >= 0) {         
             this.positionFetcher = masterPositionFetcher;
         }
         this.offsetFetcher = noOffsetFetcher;
-        if (connectedTo.offset) {
+        if (this.connectedTo.offset) {
             this.offsetFetcher = staticOffsetFetcher;
         }
         this.rotationFetcher = noAngleFetcher;
-        this.rotationConnectedTo = rotationConnectedTo;
+        this.rotationConnectedTo = params.rotationConnectedTo;
         this.rotationOffset = 0;
         this.rotationOffsetMode = RotationOffsetMode.addToMaster;
-        if (rotationConnectedTo) {
-            if (rotationConnectedTo.interpolationMethod >= 0) {
+        if (this.rotationConnectedTo) {
+            if (this.rotationConnectedTo.interpolationMethod >= 0) {
                 this.rotationFetcher = interpolatedAngleFetcher;
-            } else if (rotationConnectedTo.angles) {
+            } else if (this.rotationConnectedTo.angles) {
                 this.rotationFetcher = staticAngleFetcher;
-            } else if (rotationConnectedTo.dstMasterId) {
+            } else if (this.rotationConnectedTo.dstMasterId) {
                 this.rotationFetcher = masterToMasterRotationFetcher;
-            } else if (rotationConnectedTo.masterId) {
+            } else if (this.rotationConnectedTo.masterId) {
                 this.rotationFetcher = masterRotationFetcher;
-                this.rotationOffset = rotationConnectedTo.rotationOffset;
-                this.rotationOffsetMode = rotationConnectedTo.rotationOffsetMode;
+                this.rotationOffset = this.rotationConnectedTo.rotationOffset;
+                this.rotationOffsetMode = this.rotationConnectedTo.rotationOffsetMode;
             }
         }
         this.master = null;
@@ -299,12 +301,12 @@ class MechanicDrawable {
         this.ownerID = null;
         this.owner = null;
         this.category = 0;
-    }
-
-    usingSkillMode(ownerID, category) {
-        this.ownerID = ownerID;
-        this.category = category;
-        return this;
+        if (params.skillMode) {
+            this.ownerID = params.skillMode.owner;
+            this.category = params.skillMode.category;
+        }
+        //
+        this.metadata = params._metadataContainer.get(params.metadataSignature);
     }
 
     draw() {
@@ -415,8 +417,8 @@ class MechanicDrawable {
 }
 //// FACING
 class FacingMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, connectedTo, rotationConnectedTo) {
-        super(start, end, connectedTo, rotationConnectedTo);
+    constructor(params) {
+        super(params);
     }
 
     draw() {
@@ -437,7 +439,7 @@ class FacingMechanicDrawable extends MechanicDrawable {
             ctx.save(); 
             var coneOpening = ToRadians(animator.coneControl.openingAngle);
             ctx.rotate(0.5 * coneOpening);
-            var coneRadius = animator.inchToPixel * animator.coneControl.radius;
+            var coneRadius = InchToPixel * animator.coneControl.radius;
             ctx.beginPath();
             ctx.arc(0, 0, coneRadius, -coneOpening, 0, false);
             ctx.arc(0, 0, 0, 0, coneOpening, true);
@@ -452,12 +454,15 @@ class FacingMechanicDrawable extends MechanicDrawable {
 }
 //// FORMS
 class FormMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growingData, color, connectedTo, rotationConnectedTo) {
-        super(start, end, connectedTo, rotationConnectedTo);
-        this.fill = fill;
-        this.growingEnd = growingData.end;
-        this.growingReverse = growingData.reverse;
-        this.color = color;
+    constructor(params) {
+        super(params);
+        this.fill = !!params.fill;
+        this.growingEnd = !!params.growingEnd;
+        this.growingReverse = !!params.growingReverse;
+    }
+
+    get color() {
+        return this.metadata.color;
     }
 
     getPercent() {
@@ -474,10 +479,16 @@ class FormMechanicDrawable extends MechanicDrawable {
 }
 
 class CircleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingData, color, radius, connectedTo, rotationConnectedTo, minRadius) {
-        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
-        this.radius = radius;
-        this.minRadius = minRadius;
+    constructor(params) {
+        super(params);
+    }
+
+    get radius() {
+        return this.metadata.radius;
+    }
+
+    get minRadius() {
+        return this.metadata.minRadius;
     }
 
     draw() {
@@ -507,10 +518,16 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingData, color, innerRadius, outerRadius, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
-        this.outerRadius = outerRadius;
-        this.innerRadius = innerRadius;
+    constructor(params) {
+        super(params);
+    }
+
+    get outerRadius() {
+        return this.metadata.outerRadius;
+    }
+
+    get innerRadius() {
+        return this.metadata.innerRadius;
     }
 
     draw() {
@@ -548,10 +565,16 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingData, color, width, height, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
-        this.height = height;
-        this.width = width;
+    constructor(params) {
+        super(params);
+    }
+
+    get height() {
+        return this.metadata.height;
+    }
+
+    get width() {
+        return this.metadata.width;
     }
 
     draw() {
@@ -581,11 +604,20 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
     }
 }
 class PieMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, fill, growingData, color, openingAngle, radius, connectedTo, rotationConnectedTo) {
-        super(start, end, fill, growingData, color, connectedTo, rotationConnectedTo);
-        this.openingAngleRadians = ToRadians(openingAngle);
-        this.halfOpeningAngle = 0.5 * openingAngle;
-        this.radius = radius;
+    constructor(params) {
+        super(params);
+    }
+
+    get openingAngleRadians() {
+        return this.metadata.openingAngleRadians;
+    }
+
+    get halfOpeningAngle() {
+        return this.metadata.halfOpeningAngle;
+    }
+
+    get radius() {
+        return this.metadata.radius;
     }
 
     draw() {
@@ -618,19 +650,19 @@ class PieMechanicDrawable extends FormMechanicDrawable {
 }
 
 class LineMechanicDrawable extends FormMechanicDrawable {
-    constructor(start, end, growingData, color, connectedFrom, connectedTo) {
-        super(start, end, false, growingData, color, connectedTo, null);
-        this.connectedFrom = connectedFrom;
+    constructor(params) {
+        super(params);
+        this.connectedFrom = params.connectedFrom;
         this.targetPositionFetcher = null;
-        if (connectedFrom.interpolationMethod >= 0) {
+        if (this.connectedFrom.interpolationMethod >= 0) {
             this.targetPositionFetcher = interpolatedPositionFetcher;
-        } else if (connectedFrom.position instanceof Array) {
+        } else if (this.connectedFrom.position instanceof Array) {
             this.targetPositionFetcher = staticPositionFetcher;
         } else {
             this.targetPositionFetcher = masterPositionFetcher;
         }
         this.targetOffsetFetcher = noOffsetFetcher;
-        if (connectedFrom.offset) {
+        if (this.connectedFrom.offset) {
             this.targetOffsetFetcher = staticOffsetFetcher;
         }
         this.endMaster = null;
@@ -699,9 +731,10 @@ class LineMechanicDrawable extends FormMechanicDrawable {
 }
 //// BACKGROUND
 class BackgroundDrawable {
-    constructor(start, end) {
-        this.start = start;
-        this.end = end;
+    constructor(params) {
+        this.start = params.start;
+        this.end = params.end;
+        this.metadata = params._metadataContainer.get(params.metadataSignature);
     }
 
     draw() {
@@ -720,21 +753,30 @@ class BackgroundDrawable {
 }
 
 class MovingPlatformDrawable extends BackgroundDrawable {
-    constructor(start, end, image, width, height, positions) {
+    constructor(params) {
         super(start, end);
-        this.image = new Image();
-        this.image.src = image;
-        this.image.onload = function () {
-            animateCanvas(noUpdateTime);
-        };
-        this.width = width;
-        this.height = height;
-        this.positions = positions;
+        this.positions = params.positions;
         if (this.positions.length > 1) {
             this.currentIndex = 0;
             this.currentStart = Number.NEGATIVE_INFINITY;
             this.currentEnd = positions[0][5];
         }
+    }
+
+    get image() {
+        return this.metadata.image;
+    }
+    
+    get imageUrl() {
+        return this.metadata.imageUrl;
+    }
+    
+    get height() {
+        return this.metadata.height;
+    }
+
+    get width() {
+        return this.metadata.width;
     }
 
     draw() {
@@ -835,18 +877,27 @@ class MovingPlatformDrawable extends BackgroundDrawable {
         };
     }
 }
-
+///
 class IconMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
-        super(start, end, connectedTo, rotationConnectedTo);
-        this.imageUrl = image;
-        this.image = new Image();
-        this.image.src = this.imageUrl;
-        this.image.onload = () => animateCanvas(noUpdateTime);
-        this.pixelSize = pixelSize;
-        this.worldSize = worldSize;
-        this.opacity = opacity;
+    constructor(params) {
+        super(params);
         this.canRotate = false;
+    }
+
+    get image() {
+        return this.metadata.image;
+    }
+
+    get imageUrl() {
+        return this.metadata.imageUrl;
+    }
+    
+    get pixelSize() {
+        return this.metadata.pixelSize;
+    }
+
+    get worldSize() {
+        return this.metadata.worldSize;
     }
 
     getSize() {
@@ -860,7 +911,7 @@ class IconMechanicDrawable extends MechanicDrawable {
     }
 
     getOpacity() {
-        return this.opacity;
+        return this.metadata.opacity;
     }
 
     getSecondaryOffset() {
@@ -896,11 +947,11 @@ class IconMechanicDrawable extends MechanicDrawable {
 }
 
 class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
-    constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacities, heights) {
-        super(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, 0);
+    constructor(params) {
+        super(params);
         this.canRotate = true;
-        this.opacities = opacities;
-        this.heights = heights;
+        this.opacities = params.opacities;
+        this.heights = params.heights;
     }
 
     getHeight() {
@@ -951,8 +1002,8 @@ class BackgroundIconMechanicDrawable extends IconMechanicDrawable {
 }
 
 class IconOverheadMechanicDrawable extends IconMechanicDrawable {
-    constructor(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity) {
-        super(start, end, connectedTo, rotationConnectedTo, image, pixelSize, worldSize, opacity);
+    constructor(params) {
+        super(params);
     }
 
     getSize() {
@@ -969,7 +1020,7 @@ class IconOverheadMechanicDrawable extends IconMechanicDrawable {
             return null; 
         }
         const masterSize = this.master.getSize();
-        const scale = animator.displaySettings.useActorHitboxWidth ? 1/animator.inchToPixel : animator.scale;
+        const scale = animator.displaySettings.useActorHitboxWidth ? 1/InchToPixel : animator.scale;
         let offset = {
             x: 0,
             y: 0,
