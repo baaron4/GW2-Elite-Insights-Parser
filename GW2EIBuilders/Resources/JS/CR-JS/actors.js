@@ -16,26 +16,26 @@ function IsPresentInArray(array) {
 }
 
 class IconDrawable {
-    constructor(id, pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, hide, breakbarActive, hitboxWidth) {
-        this.pos = pos;
-        this.angles = angles;
-        this.start = start;
-        this.end = end;
+    constructor(params, pixelSize) {
+        this.positions = params.positions;
+        this.angles = params.angles;
+        this.start = params.start;
+        this.end = params.end;
         this.img = new Image();
-        this.img.src = imgSrc;
+        this.img.src = params.img;
         this.img.onload = function () {
             animateCanvas(noUpdateTime);
         };
         this.pixelSize = pixelSize;
         this.group = null;
-        this.dead = typeof dead !== "undefined" ? dead : null;
-        this.down = typeof down !== "undefined" ? down : null;
-        this.dc = typeof dc !== "undefined" ? dc : null;
-        this.hide = typeof hide !== "undefined" ? hide : null;
-        this.breakbarActive = typeof breakbarActive !== "undefined" ? breakbarActive : null;
-        this.hitboxWidth = hitboxWidth;
+        this.dead = typeof params.dead !== "undefined" ? params.dead : null;
+        this.down = typeof params.down !== "undefined" ? params.down : null;
+        this.dc = typeof params.dc !== "undefined" ? params.dc : null;
+        this.hide = typeof params.hide !== "undefined" ? params.hide : null;
+        this.breakbarActive = typeof params.breakbarActive !== "undefined" ? params.breakbarActive : null;
+        this.hitboxWidth = InchToPixel * params.hitboxWidth;
         //
-        uint32[0] = id;
+        uint32[0] = params.id;
         this.pickingColor = `rgba(${uint32ToUint8[0]}, ${uint32ToUint8[1]}, ${uint32ToUint8[2]}, 1)`;
     }
 
@@ -112,18 +112,18 @@ class IconDrawable {
 
     getInterpolatedPosition(startIndex, currentIndex) {
         const offsetedIndex = currentIndex - startIndex;
-        const positionX = this.pos[2 * offsetedIndex];
-        const positionY = this.pos[2 * offsetedIndex + 1];
+        const positionX = this.positions[2 * offsetedIndex];
+        const positionY = this.positions[2 * offsetedIndex + 1];
         const timeValue = animator.times[currentIndex];
         var pt = {
             x: 0,
             y: 0
         };
         var time = animator.reactiveDataStatus.time;
-        if (time - timeValue > 0 && offsetedIndex < 0.5 * this.pos.length - 1) {
+        if (time - timeValue > 0 && offsetedIndex < 0.5 * this.positions.length - 1) {
             const nextTimeValue = animator.times[currentIndex + 1];
-            const nextPositionX = this.pos[2 * offsetedIndex + 2];
-            const nextPositionY = this.pos[2 * offsetedIndex + 3];
+            const nextPositionX = this.positions[2 * offsetedIndex + 2];
+            const nextPositionY = this.positions[2 * offsetedIndex + 3];
             pt.x = positionX + (time - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX);
             pt.y = positionY + (time - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY);
         } else {
@@ -160,17 +160,17 @@ class IconDrawable {
     }
 
     getPosition() {
-        if (this.pos === null || this.pos.length === 0 || this.disconnected()) {
+        if (this.positions === null || this.positions.length === 0 || this.disconnected()) {
             return null;
         }
         var time = animator.reactiveDataStatus.time;
         if (this.start !== -1 && (this.start > time || this.end < time)) {
             return null;
         }
-        if (this.pos.length === 2) {
+        if (this.positions.length === 2) {
             return {
-                x: this.pos[0],
-                y: this.pos[1]
+                x: this.positions[0],
+                y: this.positions[1]
             };
         }
         const lastTime = animator.times[animator.times.length - 1];
@@ -219,7 +219,7 @@ class IconDrawable {
                 ctx.beginPath();
                 ctx.lineWidth = (2 / animator.scale).toString();
                 ctx.strokeStyle = 'green';
-                ctx.arc(pos.x, pos.y, animator.inchToPixel * element.radius, 0, 2 * Math.PI);
+                ctx.arc(pos.x, pos.y, InchToPixel * element.radius, 0, 2 * Math.PI);
                 ctx.stroke();
             });
         }
@@ -250,9 +250,9 @@ class IconDrawable {
 }
 
 class SquadIconDrawable extends IconDrawable {
-    constructor(id, start, end, imgSrc, pixelSize, group, pos, angles, dead, down, dc, hide, breakbarActive, hitboxWidth) {
-        super(id, pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, hide, breakbarActive, hitboxWidth);
-        this.group = group;
+    constructor(params, pixelSize) {
+        super(params, pixelSize);
+        this.group = params.group;
     }
 
     inSelectedGroup() {
@@ -262,9 +262,9 @@ class SquadIconDrawable extends IconDrawable {
 }
 
 class NonSquadIconDrawable extends IconDrawable {
-    constructor(id, start, end, imgSrc, pixelSize, pos, angles, dead, down, dc, hide, breakbarActive, masterID, hitboxWidth) {
-        super(id, pos, angles, start, end, imgSrc, pixelSize, dead, down, dc, hide, breakbarActive, hitboxWidth);
-        this.masterID = typeof masterID === "undefined" ? -1 : masterID;
+    constructor(params, pixelSize) {
+        super(params, pixelSize);
+        this.masterID = typeof params.masterID !== "undefined" && params.masterID >= 0 ? params.masterID : -1;
         this.master = null;
     }
 

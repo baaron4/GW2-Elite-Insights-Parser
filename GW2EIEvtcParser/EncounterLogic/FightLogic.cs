@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal Dictionary<string, GenericDecorationMetadata> DecorationCache { get; } = new Dictionary<string, GenericDecorationMetadata>();
 
-        protected CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
+        internal CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
 
         protected ArcDPSEnums.ChestID ChestID { get; set; } = ChestID.None;
 
@@ -412,14 +412,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        internal IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             if (EnvironmentDecorations == null)
             {
                 EnvironmentDecorations = new CombatReplayDecorationContainer(DecorationCache);
                 ComputeEnvironmentCombatReplayDecorations(log);
             }
-            return EnvironmentDecorations.ToList();
+            return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
         }
 
         internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

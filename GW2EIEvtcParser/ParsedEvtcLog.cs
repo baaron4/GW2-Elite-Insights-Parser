@@ -184,5 +184,51 @@ namespace GW2EIEvtcParser
             }
             return actor;
         }
+
+
+        public (List<AbstractSingleActorCombatReplayDescription>,List<AbstractCombatReplayRenderingDescription>, List<AbstractCombatReplayDecorationMetadataDescription>) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        {
+            var map = FightData.Logic.GetCombatReplayMap(this);
+            var actors = new List<AbstractSingleActorCombatReplayDescription>();
+            var decorationRenderings = new List<AbstractCombatReplayRenderingDescription>();
+            var decorationMetadata = new List<AbstractCombatReplayDecorationMetadataDescription>();
+            var fromNonFriendliesSet = new HashSet<AbstractSingleActor>(FightData.Logic.Hostiles);
+            foreach (AbstractSingleActor actor in Friendlies)
+            {
+                if (actor.IsFakeActor || !actor.HasCombatReplayPositions(this))
+                {
+                    continue;
+                }
+                actors.Add(actor.GetCombatReplayDescription(map, this));
+                decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+                foreach (Minions minions in actor.GetMinions(this).Values)
+                {
+                    if (minions.MinionList.Count > ParserHelper.MinionLimit)
+                    {
+                        continue;
+                    }
+                    if (ParserHelper.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
+                    {
+                        fromNonFriendliesSet.UnionWith(minions.MinionList);
+                    }
+                }
+            }
+            foreach (AbstractSingleActor actor in fromNonFriendliesSet.ToList())
+            {
+                if ((actor.LastAware - actor.FirstAware < 200) || !actor.HasCombatReplayPositions(this))
+                {
+                    continue;
+                }
+                actors.Add(actor.GetCombatReplayDescription(map, this));
+                decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+
+            }
+            decorationRenderings.AddRange(FightData.Logic.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+            foreach (var pair in FightData.Logic.DecorationCache)
+            {
+                decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription());
+            }
+            return (actors, decorationRenderings, decorationMetadata);
+        }
     }
 }

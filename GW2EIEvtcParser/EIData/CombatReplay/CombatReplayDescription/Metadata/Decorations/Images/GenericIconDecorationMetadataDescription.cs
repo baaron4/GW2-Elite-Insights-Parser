@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EIData.GenericIconDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericIconDecorationCombatReplayDescription : GenericAttachedDecorationCombatReplayDescription
+    internal abstract class GenericIconDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
     {
         public string Image { get; }
         public uint PixelSize { get; }
         public uint WorldSize { get; }
 
-        internal GenericIconDecorationCombatReplayDescription(ParsedEvtcLog log, GenericIconDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
+        internal GenericIconDecorationMetadataDescription(GenericIconDecorationMetadata decoration) : base(decoration)
         {
             Image = decoration.Image;
             PixelSize = decoration.PixelSize;

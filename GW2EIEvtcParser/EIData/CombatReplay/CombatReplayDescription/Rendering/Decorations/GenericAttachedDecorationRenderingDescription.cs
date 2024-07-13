@@ -1,10 +1,11 @@
 ﻿
 using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EIData.GenericAttachedDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericAttachedDecorationCombatReplayDescription : GenericDecorationCombatReplayDescription
+    internal abstract class GenericAttachedDecorationRenderingDescription : GenericDecorationRenderingDescription
     {
         public object ConnectedTo { get; }
         public object RotationConnectedTo { get; }
@@ -20,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
         }
         public object SkillMode { get; } = null;
 
-        internal GenericAttachedDecorationCombatReplayDescription(ParsedEvtcLog log, GenericAttachedDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(decoration)
+        internal GenericAttachedDecorationRenderingDescription(ParsedEvtcLog log, GenericAttachedDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(decoration, metadataSignature)
         {
             ConnectedTo = decoration.ConnectedTo.GetConnectedTo(map, log);
             RotationConnectedTo = decoration.RotationConnectedTo?.GetConnectedTo(map, log);

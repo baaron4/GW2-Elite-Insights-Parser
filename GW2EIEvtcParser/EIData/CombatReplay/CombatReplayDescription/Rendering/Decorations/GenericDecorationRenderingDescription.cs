@@ -1,14 +1,16 @@
 ﻿using System;
+using static GW2EIEvtcParser.EIData.GenericDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class GenericDecorationCombatReplayDescription : AbstractCombatReplayDescription
+    public abstract class GenericDecorationRenderingDescription : AbstractCombatReplayRenderingDescription
     {
-
-        protected GenericDecorationCombatReplayDescription(GenericDecoration decoration)
+        public string MetadataSignature { get; }
+        internal GenericDecorationRenderingDescription(GenericDecorationRenderingData decoration, string metadataSignature)
         {
             Start = decoration.Lifespan.start;
             End = decoration.Lifespan.end;
+            MetadataSignature = metadataSignature;
             if (End <= Start)
             {
                 // such things should be filtered way before coming here

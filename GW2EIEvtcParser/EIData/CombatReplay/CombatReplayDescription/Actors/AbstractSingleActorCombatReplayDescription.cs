@@ -5,6 +5,8 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractSingleActorCombatReplayDescription : AbstractCombatReplayDescription
     {
+        public long Start { get; protected set; }
+        public long End { get; protected set; }
         public string Img { get; }
         public int ID { get; }
         public IReadOnlyList<float> Positions { get; }

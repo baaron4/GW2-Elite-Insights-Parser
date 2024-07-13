@@ -22,13 +22,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "MP" + Height + Image.GetHashCode().ToString() + Width;
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
             {
-                if (renderingData is MovingPlatformDecorationRenderingData  expectedRenderingData)
-                {
-                    return new MovingPlatformDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableMovingPlatformDecoration");
+                return new MovingPlatformDecorationMetadataDescription(this);
             }
         }
         internal class MovingPlatformDecorationRenderingData : BackgroundDecorationRenderingData
@@ -37,6 +33,11 @@ namespace GW2EIEvtcParser.EIData
                 new List<(float x, float y, float z, float angle, float opacity, int time)>();
             public MovingPlatformDecorationRenderingData((long, long) lifespan) : base(lifespan)
             {
+            }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new MovingPlatformDecorationRenderingDescription(this, map, metadataSignature);
             }
         }
         private new MovingPlatformDecorationMetadata DecorationMetadata => (MovingPlatformDecorationMetadata)base.DecorationMetadata;
@@ -57,11 +58,6 @@ namespace GW2EIEvtcParser.EIData
         public void AddPosition(float x, float y, float z, double angle, double opacity, int time)
         {
             DecorationRenderingData.Positions.Add((x, y, z, (float)angle, (float)opacity, time));
-        }
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new MovingPlatformDecorationCombatReplayDescription(this, map);
         }
     }
 }

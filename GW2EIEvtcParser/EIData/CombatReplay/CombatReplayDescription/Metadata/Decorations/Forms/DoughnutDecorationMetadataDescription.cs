@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EIData.DoughnutDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class DoughnutDecorationCombatReplayDescription : FormDecorationCombatReplayDescription
+    internal class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
     {
         public uint InnerRadius { get; }
         public uint OuterRadius { get; }
 
-        internal DoughnutDecorationCombatReplayDescription(ParsedEvtcLog log, DoughnutDecoration decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs) : base(log, decoration, map, usedSkills, usedBuffs)
+        internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration) : base(decoration)
         {
             Type = "Doughnut";
             OuterRadius = decoration.OuterRadius;

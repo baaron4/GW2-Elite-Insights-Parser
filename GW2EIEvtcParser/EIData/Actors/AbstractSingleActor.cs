@@ -620,13 +620,14 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
-        public IReadOnlyList<GenericDecoration> GetCombatReplayDecorations(ParsedEvtcLog log)
+        internal IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
+
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            return CombatReplay.Decorations.ToList();
+            return CombatReplay.Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
         }
         protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {

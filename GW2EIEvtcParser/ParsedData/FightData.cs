@@ -335,11 +335,6 @@ namespace GW2EIEvtcParser.ParsedData
                 + (MissingPreEvent ? " (No Pre-Event)" : "");
         }
 
-        public IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
-        {
-            return Logic.GetEnvironmentCombatReplayDecorations(log);
-        }
-
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
 

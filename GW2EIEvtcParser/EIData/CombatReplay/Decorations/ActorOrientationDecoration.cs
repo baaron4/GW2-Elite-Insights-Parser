@@ -8,18 +8,14 @@ namespace GW2EIEvtcParser.EIData
     {
         internal class ActorOrientationDecorationMetadata : GenericAttachedDecorationMetadata
         {
+
             public override string GetSignature()
             {
                 return "AO";
             }
-
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
             {
-                if (renderingData is ActorOrientationDecorationRenderingData  expectedRenderingData)
-                {
-                    return new ActorOrientationDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableActorOrientationDecoration");
+                return new ActorOrientationDecorationMetadataDescription(this);
             }
         }
         internal class ActorOrientationDecorationRenderingData : GenericAttachedDecorationRenderingData
@@ -35,6 +31,11 @@ namespace GW2EIEvtcParser.EIData
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
             }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new ActorOrientationDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
         }
 
         internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, ActorOrientationDecorationRenderingData renderingData) : base (metadata, renderingData)
@@ -46,10 +47,5 @@ namespace GW2EIEvtcParser.EIData
         }
 
         //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new ActorOrientationDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

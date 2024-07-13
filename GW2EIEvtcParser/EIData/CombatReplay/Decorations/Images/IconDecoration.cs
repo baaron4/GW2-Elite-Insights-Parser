@@ -20,13 +20,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
             {
-                if (renderingData is IconDecorationRenderingData  expectedRenderingData)
-                {
-                    return new IconDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableIconDecoration");
+                return new IconDecorationMetadataDescription(this);
             }
         }
         internal class IconDecorationRenderingData : GenericIconDecorationRenderingData
@@ -38,6 +34,10 @@ namespace GW2EIEvtcParser.EIData
             public void UsingSquadMarker(bool isSquadMarker)
             {
                 IsSquadMarker = isSquadMarker;
+            }
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new IconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
             }
         }
         private new IconDecorationMetadata DecorationMetadata => (IconDecorationMetadata)base.DecorationMetadata;
@@ -72,9 +72,5 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
         //
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new IconDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

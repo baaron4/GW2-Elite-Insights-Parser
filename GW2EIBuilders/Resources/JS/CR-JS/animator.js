@@ -44,7 +44,7 @@ let overheadAnimationIncrement = 1;
 const uint32 = new Uint32Array(1);
 const uint32ToUint8 = new Uint8Array(uint32.buffer);
 
-function getDefaultCombatReplayTime() {  
+function getDefaultCombatReplayTime() {
     var time = EIUrlParams.get("crTime");
     if (!time) {
         return 0;
@@ -67,6 +67,11 @@ var sliderDelimiter = {
 }
 //
 
+let InchToPixel = 10;
+let PollingRate = 150;
+
+//
+
 class Animator {
     constructor(options) {
         var _this = this;
@@ -76,8 +81,6 @@ class Animator {
         this.prevTime = 0;
         this.times = [];
         // simulation params
-        this.inchToPixel = 10;
-        this.pollingRate = 150;
         this.speed = 1;
         this.backwards = false;
         this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
@@ -103,6 +106,7 @@ class Animator {
         this.playerData = new Map();
         this.trashMobData = new Map();
         this.friendlyMobData = new Map();
+        this.decorationMetadata = new Map();
         this.overheadActorData = [];
         this.mechanicActorData = [];
         this.skillMechanicActorData = [];
@@ -120,8 +124,12 @@ class Animator {
         this.scale = 1.0;
         // options
         if (options) {
-            if (options.inchToPixel) this.inchToPixel = options.inchToPixel;
-            if (options.pollingRate) this.pollingRate = options.pollingRate;
+            if (options.inchToPixel) {
+                InchToPixel = options.inchToPixel;
+            }
+            if (options.pollingRate) {
+                PollingRate = options.pollingRate;
+            }
             if (options.maps) {
                 for (var i = 0; i < options.maps.length; i++) {
                     var mapData = options.maps[i];
@@ -138,7 +146,9 @@ class Animator {
                     });
                 }
             }
-            if (options.actors) this._initActors(options.actors);
+            if (options.actors) {
+                this._initActors(options.actors, options.decorationRenderings, options.decorationMetadata);
+            }
             downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
             dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
             deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
@@ -189,91 +199,150 @@ class Animator {
         this._initTouchEvents();
     }
 
-    _initActors(actors) {
+    _initActors(actors, decorationRenderings, decorationMetadata) {
         this.playerData.clear();
         this.targetData.clear();
         this.trashMobData.clear();
         this.friendlyMobData.clear();
         this.actorOrientationData.clear();
+        this.decorationMetadata.clear();
         this.overheadActorData = [];
         this.mechanicActorData = [];
         this.squadMarkerData = [];
         this.overheadSquadMarkerData = [];
+        for (let i = 0; i < decorationMetadata.length; i++) {
+            const metadata = decorationMetadata[i];
+            let MetadataClass = null;
+            switch (metadata.type) {
+                case "ActorOrientation":
+                    MetadataClass = ActorOrientationDecorationMetadata;
+                    break;
+                case "Circle":
+                    MetadataClass = CircleDecorationMetadata;
+                    break;
+                case "Doughnut":
+                    MetadataClass = DoughnutDecorationMetadata;
+                    break;
+                case "Line":
+                    MetadataClass = LineDecorationMetadata;
+                    break;
+                case "Pie":
+                    MetadataClass = PieDecorationMetadata;
+                    break;
+                case "Rectangle":
+                    MetadataClass = RectangleDecorationMetadata;
+                    break;
+                case "BackgroundIconDecorationMetadata":
+                    MetadataClass = IconDecorationMetadata;
+                    break;
+                case "IconDecoration":
+                    MetadataClass = IconDecorationMetadata;
+                    break;
+                case "IconOverheadDecoration":
+                    MetadataClass = IconOverheadDecorationMetadata;
+                    break;
+                case "MovingPlatform":
+                    MetadataClass = MovingPlatformDecorationMetadata;
+                    break;
+                default:
+                    throw "Unknown decoration type " + metadata.type;
+            }
+            this.decorationMetadata.set(metadata.signature, new MetadataClass(metadata));
+        }
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            if (!actor.isMechanicOrSkill) {
-                switch (actor.type) {
-                    case "Player":
-                        this.playerData.set(actor.id, new SquadIconDrawable(actor.id, actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, this.inchToPixel * actor.hitboxWidth));
-                        if (this.times.length === 0) {
-                            for (let j = 0; j < actor.positions.length / 2; j++) {
-                                this.times.push(j * this.pollingRate);
-                            }
-                            reactiveAnimationData.time = Math.min(reactiveAnimationData.time, this.times[this.times.length - 1]);
+            let ActorClass;
+            let actorSize = 0;
+            let mapToFill;
+            switch (actor.type) {
+                case "Player":
+                    ActorClass = SquadIconDrawable;
+                    actorSize = 22;
+                    mapToFill = this.playerData;
+                    if (this.times.length === 0) {
+                        for (let j = 0; j < actor.positions.length / 2; j++) {
+                            this.times.push(j * PollingRate);
                         }
-                        break;
-                    case "Target":
-                    case "TargetPlayer":
-                        this.targetData.set(actor.id, new NonSquadIconDrawable(actor.id, actor.start, actor.end, actor.img, 30, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, -1, this.inchToPixel * actor.hitboxWidth));
-                        break;
-                    case "Mob":
-                        this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.id, actor.start, actor.end, actor.img, 25, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
-                        break;
-                    case "Friendly":
-                        this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.id, actor.start, actor.end, actor.img, 20, actor.positions, actor.angles, actor.dead, actor.down, actor.dc, actor.hide, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
-                        break;
+                        reactiveAnimationData.time = Math.min(reactiveAnimationData.time, this.times[this.times.length - 1]);
+                    }
+                    break;
+                case "Target":
+                case "TargetPlayer":
+                    ActorClass = NonSquadIconDrawable;
+                    actorSize = 30;
+                    mapToFill = this.targetData;
+                    break;
+                case "Mob":
+                    ActorClass = NonSquadIconDrawable;
+                    actorSize = 25;
+                    mapToFill = this.trashMobData;
+                    break;
+                case "Friendly":
+                    ActorClass = NonSquadIconDrawable;
+                    actorSize = 20;
+                    mapToFill = this.friendlyMobData;
+                    break;
+                default:
+                    throw "Unknown decoration type " + actor.type;
+            }
+            mapToFill.set(actor.id, new ActorClass(actor, actorSize));
+        }
+        for (let i = 0; i < decorationRenderings.length; i++) {
+            const decorationRendering = {};
+            decorationRendering._metadataContainer = this.decorationMetadata;
+            Object.assign(decorationRendering, decorationRenderings[i]);
+            if (!decorationRendering.isMechanicOrSkill) {
+                switch (decorationRendering.type) {
                     case "ActorOrientation":
-                        this.actorOrientationData.set(actor.connectedTo.masterId, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo));
+                        this.actorOrientationData.set(decorationRendering.connectedTo.masterId, new FacingMechanicDrawable(decorationRendering));
                         break;
                     case "MovingPlatform":
-                        this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
+                        this.backgroundActorData.push(new MovingPlatformDrawable(decorationRendering));
                         break;
                     case "BackgroundIconDecoration":
-                        this.backgroundActorData.push(new BackgroundIconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize, actor.opacities, actor.heights));
+                        this.backgroundActorData.push(new BackgroundIconMechanicDrawable(decorationRendering));
                         break;
                     default:
-                        throw "Unknown decoration type";
+                        throw "Unknown decoration type " + decorationRendering.type;
                 }
             } else {
-                let decoration = null;
-                switch (actor.type) {
+                let DecorationClass;
+                switch (decorationRendering.type) {
                     case "Circle":
-                        decoration = new CircleMechanicDrawable(actor.start, actor.end, actor.fill, { end: actor.growingEnd, reverse: actor.growingReverse }, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo, this.inchToPixel * actor.minRadius);
+                        DecorationClass = CircleMechanicDrawable;
                         break;
                     case "Rectangle":
-                        decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, { end: actor.growingEnd, reverse: actor.growingReverse }, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo, actor.rotationConnectedTo);
+                        DecorationClass = RectangleMechanicDrawable;
                         break;
                     case "Doughnut":
-                        decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, { end: actor.growingEnd, reverse: actor.growingReverse }, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo, actor.rotationConnectedTo);
+                        DecorationClass = DoughnutMechanicDrawable;
                         break;
                     case "Pie":
-                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, { end: actor.growingEnd, reverse: actor.growingReverse }, actor.color, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo, actor.rotationConnectedTo);
+                        DecorationClass = PieMechanicDrawable;
                         break;
                     case "Line":
-                        decoration = new LineMechanicDrawable(actor.start, actor.end, { end: actor.growingEnd, reverse: actor.growingReverse }, actor.color, actor.connectedFrom, actor.connectedTo);
+                        DecorationClass = LineMechanicDrawable;
                         break;
                     case "IconDecoration":
-                        decoration = new IconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize, actor.opacity);
+                        DecorationClass = IconMechanicDrawable;
                         break;
                     case "IconOverheadDecoration":
-                        this.overheadActorData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize, actor.opacity));
-                        break;
+                        this.overheadActorData.push(new IconOverheadMechanicDrawable(decorationRendering));
+                        continue;
                     case "SquadMarkerDecoration":
-                        this.squadMarkerData.push(new IconMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize, actor.opacity));
-                        break;
+                        this.squadMarkerData.push(new IconMechanicDrawable(decorationRendering));
+                        continue;
                     case "OverheadSquadMarkerDecoration":
-                        this.overheadSquadMarkerData.push(new IconOverheadMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.rotationConnectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize, actor.opacity));
-                        break;
+                        this.overheadSquadMarkerData.push(new IconOverheadMechanicDrawable(decorationRendering));
+                        continue;
                     default:
-                        throw "Unknown decoration type";
+                        throw "Unknown decoration type " + decorationRendering.type;
                 }
-                if (decoration) {
-                    if (actor.skillMode) {
-                        decoration.usingSkillMode(actor.skillMode.owner, actor.skillMode.category);
-                        this.skillMechanicActorData.push(decoration);
-                    } else {
-                        this.mechanicActorData.push(decoration);
-                    }
+                const decoration = new DecorationClass(decorationRendering);
+                if (decorationRendering.skillMode) {
+                    this.skillMechanicActorData.push(decoration);
+                } else {
+                    this.mechanicActorData.push(decoration);
                 }
             }
         }
@@ -712,7 +781,7 @@ class Animator {
                     ctx.font = "bold " + fontSize + "px Comic Sans MS";
                     ctx.fillStyle = "#CC2200";
                     ctx.textAlign = "center";
-                    ctx.fillText((50 / (this.inchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
+                    ctx.fillText((50 / (InchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
                 }
                 ctx.restore();
             }
@@ -746,7 +815,7 @@ class Animator {
         //ctx.save();
         {
             ctx.setTransform(mainTransform.a, mainTransform.b, mainTransform.c, mainTransform.d, mainTransform.e, mainTransform.f);
-            
+
             this.friendlyMobData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.drawPicking();

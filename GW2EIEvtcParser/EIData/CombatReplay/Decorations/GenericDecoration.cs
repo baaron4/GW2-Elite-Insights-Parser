@@ -11,13 +11,7 @@ namespace GW2EIEvtcParser.EIData
 
             public abstract string GetSignature();
 
-            /// <summary>
-            /// Temporary method to keep code outside of the solution intact.
-            /// Will remain as a debugging tool down the line
-            /// </summary>
-            /// <param name="renderingData"></param>
-            /// <returns></returns>
-            internal abstract GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData);
+            public abstract GenericDecorationMetadataDescription GetCombatReplayMetadataDescription();
 
         }
         internal abstract class GenericDecorationRenderingData
@@ -28,6 +22,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 Lifespan = ((int)lifespan.start, (int)lifespan.end);
             }
+            public abstract GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature);
         }
 
         internal GenericDecorationMetadata DecorationMetadata { get; }
@@ -43,8 +38,6 @@ namespace GW2EIEvtcParser.EIData
         {
         }
         //
-
-        public abstract GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs);
 
     }
 }

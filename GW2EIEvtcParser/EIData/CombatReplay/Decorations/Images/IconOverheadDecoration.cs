@@ -18,13 +18,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return "IO" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
             }
-            internal override GenericDecoration GetDecorationFromVariable(GenericDecorationRenderingData renderingData)
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
             {
-                if (renderingData is IconOverheadDecorationRenderingData  expectedRenderingData)
-                {
-                    return new IconOverheadDecoration(this,  expectedRenderingData);
-                }
-                throw new InvalidOperationException("Expected VariableIconOverheadDecoration");
+                return new IconOverheadDecorationMetadataDescription(this);
             }
         }
         internal class IconOverheadDecorationRenderingData : IconDecorationRenderingData
@@ -35,11 +31,16 @@ namespace GW2EIEvtcParser.EIData
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
             }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new IconOverheadDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
         }
         internal IconOverheadDecoration(IconOverheadDecorationMetadata metadata, IconOverheadDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
-        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity), new IconDecorationRenderingData(lifespan, connector))
+        public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(new IconOverheadDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity), new IconOverheadDecorationRenderingData(lifespan, connector))
         {
         }
 
@@ -47,10 +48,5 @@ namespace GW2EIEvtcParser.EIData
         {
         }
         //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new IconOverheadDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }
