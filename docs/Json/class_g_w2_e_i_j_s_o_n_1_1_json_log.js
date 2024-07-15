@@ -19,6 +19,8 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_log =
     [ "FightName", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ab27aa1635469fe3020b5d104b12772e4", null ],
     [ "FractalScale", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#ac075875f8eb8fb8be5a415655a951459", null ],
     [ "GW2Build", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a750467c7376ac8703622acf59e2c517b", null ],
+    [ "InstanceIP", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a909dcb880d38234ac1b209de97ee5b4d", null ],
+    [ "InstanceTimeStartStd", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a24912cdc158c2b8a6ebc5a50f8560144", null ],
     [ "IsCM", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#acaa0d773f609bb6ef25a59b0ff5ef8a8", null ],
     [ "IsLateStart", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a3dae87c28216f2ecb937c1eaa5618346", null ],
     [ "IsLegendaryCM", "class_g_w2_e_i_j_s_o_n_1_1_json_log.html#a5de911362d014d7118f6507e360a95c2", null ],
