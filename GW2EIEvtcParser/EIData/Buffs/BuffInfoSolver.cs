@@ -104,7 +104,37 @@ namespace GW2EIEvtcParser.EIData
         }
         // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
         private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new Dictionary<BuffFormulaDescriptor, long> {
+            
+            //
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AttackSpeed).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Quickness },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Power).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Condition).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Might },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfFuryBuff },
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Precision).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfAgilityBuff },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Toughness).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), DolyakSignetBuff },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Vitality).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureEarthShield },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Healing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureFrostBow },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Concentration).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMercyBuff },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, AnyPositive, 0, 0, 0, 0, 0, BuffAttribute.Expertise).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), SignetOfMidnightBuff },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingAdditive).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Vulnerability },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
+            //
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), KallasFervor },
+            // 
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.PhysIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Protection },
+            //
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CondIncomingMultiplicative).WithBuilds(GW2Builds.EODBeta3), Resolution },
             // CriticalChance
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.CriticalChance), Fury },
@@ -118,6 +148,7 @@ namespace GW2EIEvtcParser.EIData
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), ImprovedKallasFervor },
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.SiphonOutgoing).WithBuilds(GW2Builds.May2021Balance), Fury },
             // ConditionDurationIncrease
+            {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.ConditionDurationOutgoing).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), ConjureFrostBow },
             {new BuffFormulaDescriptor(AnyPositive, 0, 0, AnyPositive, 0, 0, 0, BuffAttribute.ConditionDurationOutgoing), Fury },
             // SkillRechargeSpeedIncrease
             { new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.SkillRechargeSpeedIncrease), Alacrity },
