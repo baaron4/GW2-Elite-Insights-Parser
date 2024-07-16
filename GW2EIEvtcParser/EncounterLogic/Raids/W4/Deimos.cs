@@ -205,37 +205,6 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        private static long AttackTargetSpecialParse(CombatItem targetable, AgentData agentData, List<CombatItem> combatData, HashSet<AgentItem> gadgetAgents)
-        {
-            if (targetable == null)
-            {
-                return 0;
-            }
-            long firstAware = targetable.Time;
-            AgentItem targetAgent = agentData.GetAgent(targetable.SrcAgent, targetable.Time);
-            if (targetAgent == _unknownAgent)
-            {
-                return 0;
-            }
-            CombatItem attackTargetEvent = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget && x.SrcMatchesAgent(targetAgent));
-            if (attackTargetEvent == null)
-            {
-                return 0;
-            }
-            AgentItem deimosStructBody = agentData.GetAgent(attackTargetEvent.DstAgent, attackTargetEvent.Time);
-            if (deimosStructBody == _unknownAgent)
-            {
-                return 0;
-            }
-            gadgetAgents.Add(deimosStructBody);
-            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= firstAware && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0);
-            if (armDeimosDamageEvent != null)
-            {
-                gadgetAgents.Add(agentData.GetAgent(armDeimosDamageEvent.SrcAgent, armDeimosDamageEvent.Time));
-            }
-            return firstAware;
-        }
-
         private static AgentItem GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
         {
             CombatItem shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate);
@@ -334,12 +303,36 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 invulApp.OverrideValue((int)(deimos.LastAware - invulApp.Time));
             }
-            // Deimos gadgets
-            CombatItem targetable = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware);
+            // Deimos gadgets via attack targets
+            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
+            var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware).ToList();
+            (CombatItem evt, AgentItem attackTargetAgent, AgentItem targetedAgent) targetable = targetableEvents
+                .Select(targetableEvent => (
+                    targetableEvent, 
+                    agentData.GetAgent(targetableEvent.SrcAgent, targetableEvent.Time), 
+                    attackTargetEvents
+                        .Where(attackTargetEvent => AttackTargetEvent.GetAttackTarget(attackTargetEvent, agentData) == agentData.GetAgent(targetableEvent.SrcAgent, targetableEvent.Time))
+                        .Select(attackTargetEvent => AttackTargetEvent.GetTargeted(attackTargetEvent, agentData)).FirstOrDefault())
+                       )
+                .Where(x => x.Item3 != null && x.Item3.Type == AgentItem.AgentType.Gadget)
+                .FirstOrDefault();
+            long deimos10PercentTargetable = 0;
             var gadgetAgents = new HashSet<AgentItem>();
-            long firstAware = AttackTargetSpecialParse(targetable, agentData, combatData, gadgetAgents);
-            // legacy method
-            if (firstAware == 0)
+            if (targetable != default)
+            {
+                CombatItem targetableEvent = targetable.evt;
+                AgentItem attackTargetAgent = targetable.attackTargetAgent;
+                AgentItem deimosStructBody = targetable.targetedAgent;
+                deimos10PercentTargetable = targetableEvent.Time;
+                gadgetAgents.Add(deimosStructBody);
+                CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos10PercentTargetable && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0);
+                if (armDeimosDamageEvent != null)
+                {
+                    gadgetAgents.Add(agentData.GetAgent(armDeimosDamageEvent.SrcAgent, armDeimosDamageEvent.Time));
+                }
+            }
+            // Deimos gadgets via legacy, when attack targets fail
+            if (gadgetAgents.Count == 0)
             {
                 CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0 && !x.IsExtension);
                 if (armDeimosDamageEvent != null)
@@ -347,14 +340,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();
                     if (deimosGadgets.Count > 0)
                     {
-                        firstAware = deimosGadgets.Max(x => x.FirstAware);
+                        deimos10PercentTargetable = deimosGadgets.Max(x => x.FirstAware);
                         gadgetAgents = new HashSet<AgentItem>(deimosGadgets);
                     }
                 }
             }
+            //
             if (gadgetAgents.Count > 0)
             {
-                _deimos10PercentTime = (firstAware >= deimos.LastAware ? firstAware : deimos.LastAware);
+                _deimos10PercentTime = (deimos10PercentTargetable >= deimos.LastAware ? deimos10PercentTargetable : deimos.LastAware);
                 MergeWithGadgets(deimos.AgentItem, gadgetAgents, combatData, agentData, extensions);
                 // Add custom spawn event
                 combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
