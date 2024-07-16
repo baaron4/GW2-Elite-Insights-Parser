@@ -304,15 +304,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 invulApp.OverrideValue((int)(deimos.LastAware - invulApp.Time));
             }
             // Deimos gadgets via attack targets
-            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).ToList();
-            var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware).ToList();
-            (CombatItem evt, AgentItem attackTargetAgent, AgentItem targetedAgent) targetable = targetableEvents
+            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
+            var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware).Select(x => new TargetableEvent(x, agentData)).ToList();
+            (TargetableEvent evt, AgentItem attackTargetAgent, AgentItem targetedAgent) targetable = targetableEvents
                 .Select(targetableEvent => (
                     targetableEvent, 
-                    agentData.GetAgent(targetableEvent.SrcAgent, targetableEvent.Time), 
+                    targetableEvent.Src, 
                     attackTargetEvents
-                        .Where(attackTargetEvent => AttackTargetEvent.GetAttackTarget(attackTargetEvent, agentData) == agentData.GetAgent(targetableEvent.SrcAgent, targetableEvent.Time))
-                        .Select(attackTargetEvent => AttackTargetEvent.GetTargeted(attackTargetEvent, agentData)).FirstOrDefault())
+                        .Where(attackTargetEvent => attackTargetEvent.AttackTarget == targetableEvent.Src)
+                        .Select(attackTargetEvent => attackTargetEvent.Src).FirstOrDefault())
                        )
                 .Where(x => x.Item3 != null && x.Item3.Type == AgentItem.AgentType.Gadget)
                 .FirstOrDefault();
@@ -320,7 +320,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var gadgetAgents = new HashSet<AgentItem>();
             if (targetable != default)
             {
-                CombatItem targetableEvent = targetable.evt;
+                TargetableEvent targetableEvent = targetable.evt;
                 AgentItem attackTargetAgent = targetable.attackTargetAgent;
                 AgentItem deimosStructBody = targetable.targetedAgent;
                 deimos10PercentTargetable = targetableEvent.Time;
