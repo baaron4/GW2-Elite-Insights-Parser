@@ -750,7 +750,7 @@ function computeTargetDPS(target, damageGraphs, lim, phasebreaks, cacheID, times
             left = j;
         }
         right = j;
-        if (gcenteredDPS) {
+        if (centeredDPS) {
             if (lim > 0) {
                 right = Math.min(Math.round(time + lim), end - 1);
             } else if (phasebreaks) {
