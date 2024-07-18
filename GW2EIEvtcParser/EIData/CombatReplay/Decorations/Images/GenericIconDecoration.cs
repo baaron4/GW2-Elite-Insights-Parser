@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData
         internal abstract class GenericIconDecorationMetadata : GenericAttachedDecorationMetadata
         {
             public string Image { get; }
-            public uint PixelSize { get; protected set;  }
+            public uint PixelSize { get; }
             public uint WorldSize { get; }
             protected GenericIconDecorationMetadata(string icon, uint pixelSize, uint worldSize) : base()
             {
