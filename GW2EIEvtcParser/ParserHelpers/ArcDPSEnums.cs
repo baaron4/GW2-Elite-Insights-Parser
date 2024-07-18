@@ -1,4 +1,5 @@
 ﻿using System;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser
 {
@@ -99,7 +100,7 @@ namespace GW2EIEvtcParser
             internal const int TeamChangeOnDespawn = 20240612;
             internal const int WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents = 20240627;
             internal const int MovementSkillDetection = 20240709;
-            internal const int EICanDoManualBuffAttributes = int.MaxValue;
+            internal const int EICanDoManualBuffAttributes = 20240716;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -440,7 +441,7 @@ namespace GW2EIEvtcParser
         {
             if (evtcBuild >= ArcDPSBuilds.EICanDoManualBuffAttributes)
             {
-                return BuffAttribute.Unknown;
+                return bt == 0 ? BuffAttribute.None : BuffAttribute.Unknown;
             }
             BuffAttribute res;
             if (evtcBuild >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
