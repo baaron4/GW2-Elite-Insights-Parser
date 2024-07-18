@@ -232,7 +232,7 @@ class Animator {
                 case "Rectangle":
                     MetadataClass = RectangleDecorationMetadata;
                     break;
-                case "BackgroundIconDecorationMetadata":
+                case "BackgroundIconDecoration":
                     MetadataClass = IconDecorationMetadata;
                     break;
                 case "IconDecoration":
