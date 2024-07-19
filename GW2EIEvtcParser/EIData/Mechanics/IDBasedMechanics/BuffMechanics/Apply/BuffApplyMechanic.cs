@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, BuffApplyEvent ba, AbstractSingleActor actor)
         {
-            mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, actor));
+            InsertMechanic(log, mechanicLogs, ba.Time, actor);
         }
 
 

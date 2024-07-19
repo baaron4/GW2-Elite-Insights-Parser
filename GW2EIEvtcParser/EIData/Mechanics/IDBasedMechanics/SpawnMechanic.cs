@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -25,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
                     AbstractSingleActor amp = MechanicHelper.FindEnemyActor(log, a, regroupedMobs);
                     if (amp != null && Keep(amp, log))
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(a.FirstAware, this, amp));
+                        InsertMechanic(log, mechanicLogs, a.FirstAware, amp);
                     }
                 }
             }

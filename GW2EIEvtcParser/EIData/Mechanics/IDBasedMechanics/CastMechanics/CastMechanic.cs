@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -30,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
                         AbstractSingleActor amp = GetActor(log, c.Caster, regroupedMobs);
                         if (amp != null)
                         {
-                            mechanicLogs[this].Add(new MechanicEvent(GetTime(c), this, amp));
+                            InsertMechanic(log, mechanicLogs, GetTime(c), amp);
                         }
                     }
                 }

@@ -71,7 +71,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (AbstractSingleActor p in pair.Value)
                 {
-                    mechanicLogs[this].Add(new MechanicEvent(pair.Key, this, p));
+                    InsertMechanic(log, mechanicLogs, pair.Key, p);
                 }
             }
         }
