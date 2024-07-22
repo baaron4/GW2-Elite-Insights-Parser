@@ -142,6 +142,14 @@ namespace GW2EIEvtcParser
             return HasTime();
         }
 
+        internal bool IsGeographical()
+        {
+            return IsStateChange == ArcDPSEnums.StateChange.Position ||
+                    IsStateChange == ArcDPSEnums.StateChange.Rotation ||
+                    IsStateChange == ArcDPSEnums.StateChange.Velocity
+                    ;
+        }
+
         internal bool IsDamage()
         {
             return IsStateChange == ArcDPSEnums.StateChange.None &&
@@ -211,9 +219,7 @@ namespace GW2EIEvtcParser
                 || IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate
                 || IsStateChange == ArcDPSEnums.StateChange.PointOfView
                 || IsStateChange == ArcDPSEnums.StateChange.BuffInitial
-                || IsStateChange == ArcDPSEnums.StateChange.Position
-                || IsStateChange == ArcDPSEnums.StateChange.Velocity
-                || IsStateChange == ArcDPSEnums.StateChange.Rotation
+                || IsGeographical()
                 || IsStateChange == ArcDPSEnums.StateChange.TeamChange
                 || IsStateChange == ArcDPSEnums.StateChange.AttackTarget
                 || IsStateChange == ArcDPSEnums.StateChange.Targetable
