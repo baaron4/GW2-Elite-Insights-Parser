@@ -101,18 +101,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        private static void MergeWithGadgets(AgentItem deimos, long upperTimeThreshold, HashSet<AgentItem> gadgets, AgentItem mainBody, AgentItem attackTargetAgent, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        private static void MergeWithGadgets(AgentItem deimos, long upperTimeThreshold, HashSet<AgentItem> gadgets, AgentItem mainBody, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             foreach (AgentItem gadget in gadgets)
             {
                 RedirectAllEvents(combatData, extensions, agentData, gadget, deimos,
                     (evt, from, to) =>
                     {
-                        // Only keep position data from attack target
-                        if (from == attackTargetAgent && !evt.IsGeographical())
-                        {
-                            return false;
-                        }
                         // Only keep damage events from arms
                         if (from != mainBody && !evt.IsDamage())
                         {
@@ -122,10 +117,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                         {
                             // skip events before targetable that are not attack target or position related
                             if (evt.IsStateChange != ArcDPSEnums.StateChange.AttackTarget && evt.IsStateChange != ArcDPSEnums.StateChange.Targetable && !evt.IsGeographical())
-                            {
-                                return false;
-                            }
-                            if (evt.IsGeographical() && attackTargetAgent != null && from != attackTargetAgent)
                             {
                                 return false;
                             }
@@ -333,12 +324,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 .FirstOrDefault();
             long deimos10PercentTargetable = long.MaxValue;
             AgentItem deimosStructBody = null;
-            AgentItem attackTargetAgent = null;
             var gadgetAgents = new HashSet<AgentItem>();
             if (targetable != default)
             {
                 TargetableEvent targetableEvent = targetable.evt;
-                attackTargetAgent = targetable.attackTargetAgent;
+                AgentItem attackTargetAgent = targetable.attackTargetAgent;
                 deimosStructBody = targetable.targetedAgent;
                 deimos10PercentTargetable = targetableEvent.Time;
                 gadgetAgents.Add(deimosStructBody);
@@ -375,7 +365,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //
             if (deimosStructBody != null)
             {
-                MergeWithGadgets(deimos.AgentItem, _deimos10PercentTime, gadgetAgents, deimosStructBody, attackTargetAgent, combatData, agentData, extensions);
+                MergeWithGadgets(deimos.AgentItem, _deimos10PercentTime, gadgetAgents, deimosStructBody, combatData, agentData, extensions);
                 // Add custom spawn event
                 combatData.Add(new CombatItem(_deimos10PercentTime, deimos.AgentItem.Agent, 0, 0, 0, 0, 0, deimos.AgentItem.InstID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0));
             }
