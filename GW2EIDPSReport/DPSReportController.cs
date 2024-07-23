@@ -71,9 +71,7 @@ namespace GW2EIDPSReport
             {
                 n--;
                 int k = rng.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                (list[n], list[k]) = (list[k], list[n]);
             }
             return list;
         }
@@ -190,14 +188,14 @@ namespace GW2EIDPSReport
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            Func<HttpContent> contentCreator = () =>
+            HttpContent contentCreator()
             {
                 var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
                 var byteArrayContent = new ByteArrayContent(fileContents);
                 byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
                 multiPartContent.Add(byteArrayContent, "file", fileName);
                 return multiPartContent;
-            };
+            }
 
             DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURLs(userToken, anonymous, detailedWvW), traceHandler, contentCreator);
             if (response != null && response.Error != null)
