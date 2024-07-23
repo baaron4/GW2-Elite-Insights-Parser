@@ -64,7 +64,7 @@ namespace GW2EIDPSReport
         // https://stackoverflow.com/questions/273313/randomize-a-listt
         private static readonly Random rng = new Random();
 
-        public static List<T> Shuffle<T>(List<T> list)
+        private static List<T> Shuffle<T>(List<T> list)
         {
             int n = list.Count;
             while (n > 1)
