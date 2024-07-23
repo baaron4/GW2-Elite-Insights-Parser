@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Only keep damage events from arms
                         if (from != mainBody && !evt.IsDamage())
                         {
-                            //return false;
+                            return false;
                         }
                         if  (evt.Time < upperTimeThreshold)
                         {
