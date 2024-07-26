@@ -485,6 +485,14 @@
         public const string BrokenKingIceBreakerGreenExplosion = "957ADB83D139704F8CB865E86E389228";
         public const string BrokenKingKingsWrathConeAoEIndicator = "FA4B726574C96E489D73529CFE390D3D"; // Currently unused, we don't know how to determinate the aoe size
         public const string BrokenKingKingsWrathConeAoEDamage = "22AC6BFC0B06C1459DFEF1E380F50165"; // Currently unused, we don't know how to determinate the aoe size
+        // Eater of Souls
+        public const string EaterOfSoulsLightOrbOnGround = "0ABBB74207F2D0419A49CE951321166D";
+        public const string EaterOfSoulsLightOrbThrowHitGround = "D44445C5713E9D47B0D653EB5A939A2B";
+        public const string EaterOfSoulsVomitFragment = "A52D0864063A8A489E5FB7690D9B5C9A";
+        public const string EaterOfSoulsSpiderWeb = "084A4E29CD66A04C9ECDB8033EFFE6A1";
+        public const string EaterOfSoulsSpiritOrbs = "D8FD90C7854D0B4CBE4B301DE17D7AEB";
+        public const string EaterOfSoulsSpiritShockwave1 = "1E318AEAA483F346B85DCD243FDC0204";
+        public const string EaterOfSoulsSpiritShockwave2 = "E3551E82FB4F0B4EB7A73C51CB73C664";
         // Dhuum
         public const string DhuumScytheSwingIndicator = "91A23D51294E80458BE9C3C89A2ED138"; // 1200 duration
         public const string DhuumScytheSwingDamage = "C79F5D95E11070448A39ACD7F6C5D0D3"; // 0 duration
