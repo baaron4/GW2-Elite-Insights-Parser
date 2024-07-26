@@ -457,7 +457,7 @@ class FormMechanicDrawable extends MechanicDrawable {
     constructor(params) {
         super(params);
         this.fill = !!params.fill;
-        this.growingEnd = !!params.growingEnd;
+        this.growingEnd = params.growingEnd;
         this.growingReverse = !!params.growingReverse;
     }
 
@@ -633,7 +633,7 @@ class PieMechanicDrawable extends FormMechanicDrawable {
         const percent = this.getPercent();
         ctx.save();
         this.moveContext(ctx, pos, rot + this.halfOpeningAngle);
-        ctx.beginPath();
+        ctx.beginPath();   
         ctx.arc(0, 0, percent * this.radius, -this.openingAngleRadians, 0, false);
         ctx.arc(0, 0, 0, 0, this.openingAngleRadians, true);
         ctx.closePath();
