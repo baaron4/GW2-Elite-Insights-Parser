@@ -231,7 +231,8 @@ namespace GW2EIEvtcParser.ParsedData
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, RideTheLightningSkill, RideTheLightningBuff));
                         break;
                     case Spec.Engineer:
-                        toAdd.AddRange(ProfHelper.ComputeEffectCastEvents(p, this, skillData, Devastator, EffectGUIDs.EngineerSpearDevastator1, -1000, 1000));
+                        // Collides with Detonate Supply Crate Turrets
+                        //toAdd.AddRange(ProfHelper.ComputeEffectCastEvents(p, this, skillData, Devastator, EffectGUIDs.EngineerSpearDevastator1, -1000, 1000));
                         toAdd.AddRange(ProfHelper.ComputeUnderBuffCastEvents(p, this, skillData, ConduitSurge, ConduitSurgeBuff));
                         break;
                     case Spec.Revenant:
