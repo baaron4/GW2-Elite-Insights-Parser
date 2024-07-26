@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -50,11 +51,31 @@ namespace GW2EIDPSReport
         }
         ///////////////// URL Utilities
 
-        private static string BaseUploadContentURL { get; } = "https://dps.report/uploadContent?json=1";
-        private static string BaseGetUploadsURL { get; } = "https://dps.report/getUploads?page=";
-        private static string BaseGetUserTokenURL { get; } = "https://dps.report/getUserToken";
-        private static string BaseGetUploadMetadataURL { get; } = "https://dps.report/getUploadMetadata?";
-        private static string BaseGetJsonURL { get; } = "https://dps.report/getJson?";
+        private static readonly string MainEntryPoint = "https://dps.report";
+        private static readonly string SecondaryEntryPoint = "https://a.dps.report";
+        private static readonly string TertiaryEntryPoint = "https://b.dps.report";
+
+        private static readonly string UploadContentURL = "/uploadContent";
+        private static readonly string GetUploadsURL = "/getUploads";
+        private static readonly string GetUserTokenURL = "/getUserToken";
+        private static readonly string GetUploadMetadataURL = "/getUploadMetadata";
+        private static readonly string GetJsonURL = "/getJson";
+
+        // https://stackoverflow.com/questions/273313/randomize-a-listt
+        private static readonly Random rng = new Random();
+
+        private static List<T> Shuffle<T>(List<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (list[n], list[k]) = (list[k], list[n]);
+            }
+            return list;
+        }
+        //
 
         private static string GetURL(string baseURL, string userToken)
         {
@@ -66,9 +87,9 @@ namespace GW2EIDPSReport
             return url;
         }
 
-        private static string GetUploadContentURL(string baseURL, string userToken, bool anonymous = false, bool detailedWvW = false)
+        private static List<string> GetUploadContentURLs(string userToken, bool anonymous = false, bool detailedWvW = false)
         {
-            string url = GetURL(baseURL, userToken);
+            string url = UploadContentURL + "?json=1";
             if (anonymous)
             {
                 url += "&anonymous=true";
@@ -77,11 +98,18 @@ namespace GW2EIDPSReport
             {
                 url += "&detailedwvw=true";
             }
-            return url;
+            url += "&generator=ei";
+            var urls = new List<string>()
+            {
+                GetURL(MainEntryPoint + url, userToken),
+                GetURL(SecondaryEntryPoint + url, userToken),
+                GetURL(TertiaryEntryPoint + url, userToken)
+            };
+            return Shuffle(urls);
         }
-        private static string GetGetUploadsURL(GetUploadsParameters parameters, string userToken)
+        private static List<string> GetGetUploadsURLs(GetUploadsParameters parameters, string userToken)
         {
-            string url = BaseGetUploadsURL + parameters.Page + "&perPage=" + parameters.PerPage;
+            string url = GetUploadsURL + "?page=" + parameters.Page + "&perPage=" + parameters.PerPage;
             if (parameters.Since > 0)
             {
                 url += "&since=" + parameters.Since;
@@ -98,23 +126,78 @@ namespace GW2EIDPSReport
             {
                 url += "&unique=1";
             }
-            return GetURL(url, userToken);
+            var urls = new List<string>()
+            {
+                GetURL(MainEntryPoint + url, userToken),
+                GetURL(SecondaryEntryPoint + url, userToken),
+                GetURL(TertiaryEntryPoint + url, userToken)
+            };
+            return Shuffle(urls);
+        }
+        private static List<string> GetUserTokenURLs()
+        {
+            string url = GetUserTokenURL;
+            var urls = new List<string>()
+            {
+                MainEntryPoint + url,
+                SecondaryEntryPoint + url,
+                TertiaryEntryPoint + url
+            };
+            return Shuffle(urls);
+        }
+        private static List<string> GetUploadMetadataURLs(string id, string permalink)
+        {
+            string url = GetUploadMetadataURL + "?";
+            if (id != null)
+            {
+                url += "id=" + id;
+            }
+            if (permalink != null)
+            {
+                url += "permalink=" + permalink;
+            }
+            var urls = new List<string>()
+            {
+                MainEntryPoint + url,
+                SecondaryEntryPoint + url,
+                TertiaryEntryPoint + url
+            };
+            return Shuffle(urls);
+        }
+        private static List<string> GetJsonURLs(string id, string permalink)
+        {
+            string url = GetJsonURL + "?";
+            if (id != null)
+            {
+                url += "id=" + id;
+            }
+            if (permalink != null)
+            {
+                url += "permalink=" + permalink;
+            }
+            var urls = new List<string>()
+            {
+                MainEntryPoint + url,
+                SecondaryEntryPoint + url,
+                TertiaryEntryPoint + url
+            };
+            return Shuffle(urls);
         }
         ///////////////// APIs
         public static DPSReportUploadObject UploadUsingEI(FileInfo fi, TraceHandler traceHandler, string userToken, bool anonymous = false, bool detailedWvW = false)
         {
             string fileName = fi.Name;
             byte[] fileContents = File.ReadAllBytes(fi.FullName);
-            Func<HttpContent> contentCreator = () =>
+            HttpContent contentCreator()
             {
                 var multiPartContent = new MultipartFormDataContent("----MyGreatBoundary");
                 var byteArrayContent = new ByteArrayContent(fileContents);
                 byteArrayContent.Headers.Add("Content-Type", "application/octet-stream");
                 multiPartContent.Add(byteArrayContent, "file", fileName);
                 return multiPartContent;
-            };
+            }
 
-            DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURL(BaseUploadContentURL, userToken, anonymous, detailedWvW) + "&generator=ei", traceHandler, contentCreator);
+            DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURLs(userToken, anonymous, detailedWvW), traceHandler, contentCreator);
             if (response != null && response.Error != null)
             {
                 traceHandler("UploadUsingEI generated an error - " + response.Error);
@@ -124,11 +207,11 @@ namespace GW2EIDPSReport
 
         public static DPSReportGetUploadsObject GetUploads(TraceHandler traceHandler, string userToken, GetUploadsParameters parameters)
         {
-            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetGetUploadsURL(parameters, userToken), traceHandler);
+            return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetGetUploadsURLs(parameters, userToken), traceHandler);
         }
         public static string GenerateUserToken(TraceHandler traceHandler)
         {
-            DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", BaseGetUserTokenURL, traceHandler);
+            DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", GetUserTokenURLs(), traceHandler);
             if (responseItem != null)
             {
                 return responseItem.UserToken;
@@ -141,7 +224,7 @@ namespace GW2EIDPSReport
             {
                 throw new InvalidDataException("Missing ID for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", BaseGetUploadMetadataURL + "id=" + id, traceHandler);
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", GetUploadMetadataURLs(id, null), traceHandler);
         }
         public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, TraceHandler traceHandler)
         {
@@ -149,7 +232,7 @@ namespace GW2EIDPSReport
             {
                 throw new InvalidDataException("Missing Permalink for GetUploadMetaData end point");
             }
-            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", BaseGetUploadMetadataURL + "permalink=" + permalink, traceHandler);
+            return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", GetUploadMetadataURLs(null, permalink), traceHandler);
         }
 
         public static T GetJsonWithID<T>(string id, TraceHandler traceHandler)
@@ -158,7 +241,7 @@ namespace GW2EIDPSReport
             {
                 throw new InvalidDataException("Missing ID for GetJson end point");
             }
-            return GetDPSReportResponse<T>("GetJsonWithID", BaseGetJsonURL + "id=" + id, traceHandler);
+            return GetDPSReportResponse<T>("GetJsonWithID", GetJsonURLs(id, null), traceHandler);
         }
         public static T GetJsonWithPermalink<T>(string permalink, TraceHandler traceHandler)
         {
@@ -166,64 +249,69 @@ namespace GW2EIDPSReport
             {
                 throw new InvalidDataException("Missing Permalink for GetJson end point");
             }
-            return GetDPSReportResponse<T>("GetJsonWithPermalink", BaseGetJsonURL + "permalink=" + permalink, traceHandler);
+            return GetDPSReportResponse<T>("GetJsonWithPermalink", GetJsonURLs(null, permalink), traceHandler);
         }
         ///////////////// Response Utilities
-        private static T GetDPSReportResponse<T>(string requestName, string URI, TraceHandler traceHandler, Func<HttpContent> content = null)
+        private static T GetDPSReportResponse<T>(string requestName, List<string> URIs, TraceHandler traceHandler, Func<HttpContent> content = null)
         {
             const int tentatives = 5;
             for (int i = 0; i < tentatives; i++)
             {
-                traceHandler(requestName + " tentative");
-                var webService = new Uri(@URI);
-                var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
-                requestMessage.Headers.ExpectContinue = false;
-
-                if (content != null)
+                foreach (string URI in URIs)
                 {
-                    requestMessage.Content = content();
-                }
-                try
-                {
-                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
-                    HttpResponseMessage httpResponse = httpRequest.Result;
-                    HttpStatusCode statusCode = httpResponse.StatusCode;
-                    HttpContent responseContent = httpResponse.Content;
+                    traceHandler(requestName + " tentative " + URI);
+                    var webService = new Uri(URI);
+                    var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
+                    requestMessage.Headers.ExpectContinue = false;
 
-                    if (statusCode != HttpStatusCode.OK)
+                    if (content != null)
                     {
-                        throw new HttpRequestException(statusCode.ToString());
+                        requestMessage.Content = content();
                     }
-
-                    if (responseContent != null)
+                    try
                     {
-                        Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
-                        string stringContents = stringContentsTask.Result;
-                        T item = JsonConvert.DeserializeObject<T>(stringContents, new JsonSerializerSettings
+                        Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                        HttpResponseMessage httpResponse = httpRequest.Result;
+                        HttpStatusCode statusCode = httpResponse.StatusCode;
+                        HttpContent responseContent = httpResponse.Content;
+
+                        if (statusCode != HttpStatusCode.OK)
                         {
-                            NullValueHandling = NullValueHandling.Ignore,
-                            ContractResolver = DefaultJsonContractResolver,
-                            StringEscapeHandling = StringEscapeHandling.EscapeHtml
-                        });
-                        traceHandler(requestName + " tentative successful");
-                        return item;
+                            throw new HttpRequestException(statusCode.ToString());
+                        }
+
+                        if (responseContent != null)
+                        {
+                            Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
+                            string stringContents = stringContentsTask.Result;
+                            T item = JsonConvert.DeserializeObject<T>(stringContents, new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore,
+                                ContractResolver = DefaultJsonContractResolver,
+                                StringEscapeHandling = StringEscapeHandling.EscapeHtml
+                            });
+                            traceHandler(requestName + " tentative successful " + URI);
+                            return item;
+                        }
                     }
-                }
-                catch (AggregateException agg)
-                {
-                    traceHandler(requestName + " tentative failed - main message - " + agg.Message);
-                    foreach (Exception e in agg.InnerExceptions)
+                    catch (AggregateException agg)
                     {
-                        traceHandler(requestName + " tentative failed - sub message - " + e.Message);
+                        traceHandler(requestName + " tentative failed " + URI);
+                        traceHandler("Main reasong: " + agg.Message);
+                        foreach (Exception e in agg.InnerExceptions)
+                        {
+                            traceHandler("Sub reason: " + e.Message);
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    traceHandler(requestName + " tentative failed - " + e.Message);
-                }
-                finally
-                {
-                    requestMessage.Dispose();
+                    catch (Exception e)
+                    {
+                        traceHandler(requestName + " tentative failed " + URI);
+                        traceHandler("Reason: " + e.Message);
+                    }
+                    finally
+                    {
+                        requestMessage.Dispose();
+                    }
                 }
             }
             return default;

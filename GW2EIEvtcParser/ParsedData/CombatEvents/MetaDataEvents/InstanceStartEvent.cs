@@ -9,7 +9,7 @@
         internal InstanceStartEvent(CombatItem evtcItem) : base(evtcItem)
         {
             TimeOffsetFromInstanceCreation = (long)evtcItem.SrcAgent;
-            if (evtcItem.Value > 0)
+            if (evtcItem.Value != 0)
             {
                 // TODO: verify format
                 long item1 = (evtcItem.Value & 0xFF000000) >> 24;

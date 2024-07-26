@@ -111,7 +111,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // Only keep damage events from arms
                         if (from != mainBody && !evt.IsDamage())
                         {
-                            //return false;
+                            return false;
                         }
                         if  (evt.Time < upperTimeThreshold)
                         {
@@ -332,7 +332,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 deimosStructBody = targetable.targetedAgent;
                 deimos10PercentTargetable = targetableEvent.Time;
                 gadgetAgents.Add(deimosStructBody);
-                gadgetAgents.Add(attackTargetAgent);
                 CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos10PercentTargetable && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0);
                 if (armDeimosDamageEvent != null)
                 {
