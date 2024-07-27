@@ -147,14 +147,14 @@ namespace GW2EIDPSReport
         }
         private static List<string> GetUploadMetadataURLs(string id, string permalink)
         {
-            string url = GetUploadMetadataURL + "?";
+            string url = GetUploadMetadataURL;
             if (id != null)
             {
-                url += "id=" + id;
+                url += "?id=" + id;
             }
             if (permalink != null)
             {
-                url += "permalink=" + permalink;
+                url += "?permalink=" + permalink;
             }
             var urls = new List<string>()
             {
@@ -166,14 +166,14 @@ namespace GW2EIDPSReport
         }
         private static List<string> GetJsonURLs(string id, string permalink)
         {
-            string url = GetJsonURL + "?";
+            string url = GetJsonURL;
             if (id != null)
             {
-                url += "id=" + id;
+                url += "?id=" + id;
             }
             if (permalink != null)
             {
-                url += "permalink=" + permalink;
+                url += "?permalink=" + permalink;
             }
             var urls = new List<string>()
             {
