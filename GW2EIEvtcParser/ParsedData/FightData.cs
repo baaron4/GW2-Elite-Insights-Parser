@@ -295,6 +295,9 @@ namespace GW2EIEvtcParser.ParsedData
                 default:
                     switch (ArcDPSEnums.GetTrashID(id))
                     {
+                        case ArcDPSEnums.TrashID.WallOfGhosts:
+                            Logic = new SpiritRace(id);
+                            break;
                         case ArcDPSEnums.TrashID.HauntingStatue:
                             Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
                             break;
