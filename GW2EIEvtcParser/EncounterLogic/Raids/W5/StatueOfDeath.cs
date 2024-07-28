@@ -164,7 +164,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effectEvent in webEffectEvents)
                 {
                     (long start, long end) lifespan = effectEvent.ComputeLifespan(log, effectEvent.Duration);
-                    EnvironmentDecorations.Add(new CircleDecoration(360, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effectEvent.Position)));
+                    uint webRadius = 320;
+                    var webIndicator = new CircleDecoration(webRadius, lifespan, Colors.Orange, 0.1, new PositionConnector(effectEvent.Position));
+                    var web = new CircleDecoration(webRadius, (lifespan.end, lifespan.end + 750), Colors.Orange, 0.3, new PositionConnector(effectEvent.Position));
+                    EnvironmentDecorations.Add(webIndicator);
+                    EnvironmentDecorations.Add(webIndicator.GetBorderDecoration(Colors.Orange, 0.3));
+                    EnvironmentDecorations.Add(webIndicator.Copy().UsingGrowingEnd(lifespan.end));
+                    EnvironmentDecorations.Add(web);
                 }
             }
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsLightOrbOnGround, out IReadOnlyList<EffectEvent> orbOnGroundEffectEvents))
@@ -188,7 +194,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 foreach (EffectEvent effectEvent in shockwaveEffectEvents)
                 {
                     (long start, long end) lifespan = effectEvent.ComputeLifespan(log, 3600);
-                    EnvironmentDecorations.Add(new CircleDecoration(1300, lifespan, Colors.Red, 0.3, new PositionConnector(effectEvent.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
+                    EnvironmentDecorations.Add(new CircleDecoration(1400, lifespan, Colors.Red, 0.3, new PositionConnector(effectEvent.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
                 }
             }
         }
