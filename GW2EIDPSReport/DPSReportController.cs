@@ -102,7 +102,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 GetURL(MainEntryPoint + url, userToken),
-                GetURL(SecondaryEntryPoint + url, userToken),
+                //GetURL(SecondaryEntryPoint + url, userToken),
                 GetURL(TertiaryEntryPoint + url, userToken)
             };
             return Shuffle(urls);
@@ -129,7 +129,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 GetURL(MainEntryPoint + url, userToken),
-                GetURL(SecondaryEntryPoint + url, userToken),
+                //GetURL(SecondaryEntryPoint + url, userToken),
                 GetURL(TertiaryEntryPoint + url, userToken)
             };
             return Shuffle(urls);
@@ -140,7 +140,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 MainEntryPoint + url,
-                SecondaryEntryPoint + url,
+                //SecondaryEntryPoint + url,
                 TertiaryEntryPoint + url
             };
             return Shuffle(urls);
@@ -159,7 +159,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 MainEntryPoint + url,
-                SecondaryEntryPoint + url,
+                //SecondaryEntryPoint + url,
                 TertiaryEntryPoint + url
             };
             return Shuffle(urls);
@@ -178,7 +178,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 MainEntryPoint + url,
-                SecondaryEntryPoint + url,
+                //SecondaryEntryPoint + url,
                 TertiaryEntryPoint + url
             };
             return Shuffle(urls);
