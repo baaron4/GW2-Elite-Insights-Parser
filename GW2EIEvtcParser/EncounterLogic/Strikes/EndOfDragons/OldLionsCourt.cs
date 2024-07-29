@@ -43,7 +43,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             default:
                                 return false;
                         }
-                        // To be tested more
+                        // To be tested more, if the behavior is the same without standing on doughnut, we can only check for one ID instead of 2 (and avoid multi hit)
                         BuffApplyEvent otherApply = log.CombatData.GetBuffData(buffToCheck).OfType<BuffApplyEvent>().LastOrDefault(x => x.To == bae.To && x.Time <= bae.Time);
                         if (otherApply != null && bae.Time - otherApply.Time < ParserHelper.ServerDelayConstant)
                         {
