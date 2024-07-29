@@ -254,7 +254,7 @@ namespace GW2EIDPSReport
         ///////////////// Response Utilities
         private static T GetDPSReportResponse<T>(string requestName, List<string> URIs, TraceHandler traceHandler, Func<HttpContent> content = null)
         {
-            const int tentatives = 5;
+            const int tentatives = 2;
             for (int i = 0; i < tentatives; i++)
             {
                 foreach (string URI in URIs)
