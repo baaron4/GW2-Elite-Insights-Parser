@@ -22,6 +22,35 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { BoilingAetherRedBlueNM, BoilingAetherRedBlueCM }, "Boiling Aether (Vermilion & Indigo)", new MechanicPlotlySetting(Symbols.Circle, Colors.LightRed), "Red.VermIndi.H", "Hit by Boiling Aether (Vermilion & Indigo)", "Boiling Aether Hit (Vermilion & Indigo)", 0),
                 new PlayerDstHitMechanic(new long [] { BoilingAetherGreenNM, BoilingAetherGreenCM }, "Boiling Aether (Arsenite)", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "Red.Arse.H", "Hit by Boiling Aether (Arsenite)", "Boiling Aether Hit (Arsenite)", 0),
                 new PlayerDstHitMechanic(new long [] { DualHorizon, DualHorizonCM }, "Dual Horizon", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightRed), "DualHrz.H", "Hit by Dual Horizon", "Dual Horizon Hit", 0),
+                new PlayerDstBuffApplyMechanic(new long[] {TidalTorment, TidalTormentCM, ErgoShear, ErgoShearCM}, "Gravitational Wave", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightRed, 20), "Grv.Wve.Unlshd", "Unleashed Gravitation Wave, failed to stand in white area", "Gravitational Wave Unleashed", 50)
+                    .UsingChecker((bae, log) =>
+                    {
+                        long buffToCheck;
+                        switch (bae.BuffID)
+                        {
+                            case TidalTorment:
+                                buffToCheck = ErgoShear;
+                                break;
+                            case TidalTormentCM:
+                                buffToCheck = ErgoShearCM;
+                                break;
+                            case ErgoShear:
+                                buffToCheck = TidalTorment;
+                                break;
+                            case ErgoShearCM:
+                                buffToCheck = TidalTormentCM;
+                                break;
+                            default:
+                                return false;
+                        }
+                        // To be tested more
+                        BuffApplyEvent otherApply = log.CombatData.GetBuffData(buffToCheck).OfType<BuffApplyEvent>().LastOrDefault(x => x.To == bae.To && x.Time <= bae.Time);
+                        if (otherApply != null && bae.Time - otherApply.Time < ParserHelper.ServerDelayConstant)
+                        {
+                            return true;
+                        }
+                        return false;
+                    }),
                 new PlayerDstHitMechanic(new long [] { TriBolt, TriBoltCM }, "Tri Bolt", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "TriBolt.H", "Hit by Tri Bolt (Spread AoEs)", "Tri Bolt Hit", 150),
                 new PlayerDstHitMechanic(new long [] { Tribocharge, TribochargeCM }, "Tribocharge", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightOrange), "TriChg.H", "Hit by Tribocharge", "Tribocharge Hit", 150),
                 new PlayerDstHitMechanic(new long [] { NoxiousVaporBlade, NoxiousVaporBladeCM }, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Green), "BladeOut.H", "Hit by Noxious Vapor Blade (to player)", "Noxious Vapor Blade Hit", 150),
