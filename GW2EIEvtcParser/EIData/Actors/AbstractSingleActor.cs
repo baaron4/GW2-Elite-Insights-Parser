@@ -960,16 +960,16 @@ namespace GW2EIEvtcParser.EIData
 
         #region BREAKBAR DAMAGE
 
-        public IReadOnlyList<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageEvents == null)
             {
-                BreakbarDamageEvents = new List<AbstractBreakbarDamageEvent>();
+                BreakbarDamageEvents = new List<BreakbarDamageEvent>();
                 BreakbarDamageEvents.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
                 IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
                 foreach (Minions mins in minionsList.Values)
@@ -981,30 +981,30 @@ namespace GW2EIEvtcParser.EIData
             }
             if (target != null)
             {
-                if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+                if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
                 else
                 {
-                    return new List<AbstractBreakbarDamageEvent>();
+                    return new List<BreakbarDamageEvent>();
                 }
             }
             return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenEvents == null)
             {
-                BreakbarDamageTakenEvents = new List<AbstractBreakbarDamageEvent>();
+                BreakbarDamageTakenEvents = new List<BreakbarDamageEvent>();
                 BreakbarDamageTakenEvents.AddRange(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
                 BreakbarDamageTakenEvents = BreakbarDamageTakenEvents.OrderBy(x => x.Time).ToList();
                 BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
             {
-                if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
+                if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
                 {
                     long targetStart = target.FirstAware;
                     long targetEnd = target.LastAware;
@@ -1012,7 +1012,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 else
                 {
-                    return new List<AbstractBreakbarDamageEvent>();
+                    return new List<BreakbarDamageEvent>();
                 }
             }
             return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();

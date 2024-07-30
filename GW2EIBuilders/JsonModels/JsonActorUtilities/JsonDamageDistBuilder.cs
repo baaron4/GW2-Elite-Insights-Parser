@@ -13,10 +13,10 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
     /// </summary>
     internal static class JsonDamageDistBuilder
     {
-        private static JsonDamageDist BuildJsonDamageDist(long id, List<AbstractHealthDamageEvent> dmList, List<AbstractBreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+        private static JsonDamageDist BuildJsonDamageDist(long id, List<AbstractHealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonDamageDist = new JsonDamageDist();
-            jsonDamageDist.IndirectDamage = dmList.Exists(x => x is NonDirectHealthDamageEvent) || brList.Exists(x => x is NonDirectBreakbarDamageEvent);
+            jsonDamageDist.IndirectDamage = dmList.Exists(x => x is NonDirectHealthDamageEvent);
             if (jsonDamageDist.IndirectDamage)
             {
                 if (!buffMap.ContainsKey(id))
@@ -78,18 +78,18 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             return jsonDamageDist;
         }
 
-        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, Dictionary<long, List<AbstractBreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+        internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var res = new List<JsonDamageDist>();
             foreach (KeyValuePair<long, List<AbstractHealthDamageEvent>> pair in dlsByID)
             {
-                if (!brlsByID.TryGetValue(pair.Key, out List<AbstractBreakbarDamageEvent> brls))
+                if (!brlsByID.TryGetValue(pair.Key, out List<BreakbarDamageEvent> brls))
                 {
-                    brls = new List<AbstractBreakbarDamageEvent>();
+                    brls = new List<BreakbarDamageEvent>();
                 }
                 res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, log, skillMap, buffMap));
             }
-            foreach (KeyValuePair<long, List<AbstractBreakbarDamageEvent>> pair in brlsByID)
+            foreach (KeyValuePair<long, List<BreakbarDamageEvent>> pair in brlsByID)
             {
                 if (dlsByID.ContainsKey(pair.Key))
                 {

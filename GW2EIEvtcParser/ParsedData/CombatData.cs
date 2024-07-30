@@ -24,9 +24,9 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
         private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffEvent>>> _buffDataByIDByDst;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
-        private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageData;
+        private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
         private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
-        private readonly Dictionary<long, List<AbstractBreakbarDamageEvent>> _breakbarDamageDataById;
+        private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataById;
         private readonly Dictionary<long, List<AbstractHealthDamageEvent>> _damageDataById;
         private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataById;
         private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataById;
         private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataById;
         private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
-        private readonly Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> _breakbarDamageTakenData;
+        private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
         private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
         private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
         // EXTENSIONS
@@ -497,7 +497,7 @@ namespace GW2EIEvtcParser.ParsedData
             var castCombatEvents = new Dictionary<ulong, List<CombatItem>>();
             var buffEvents = new List<AbstractBuffEvent>();
             var wepSwaps = new List<WeaponSwapEvent>();
-            var brkDamageData = new List<AbstractBreakbarDamageEvent>();
+            var brkDamageData = new List<BreakbarDamageEvent>();
             var crowdControlData = new List<CrowdControlEvent>();
             var damageData = new List<AbstractHealthDamageEvent>();
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating EI Combat Data");
@@ -551,7 +551,7 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     else if (combatItem.IsBuff != 0 && combatItem.Value == 0)
                     {
-                        CombatEventFactory.AddIndirectDamageEvent(combatItem, damageData, brkDamageData, agentData, skillData);
+                        CombatEventFactory.AddIndirectDamageEvent(combatItem, damageData, agentData, skillData);
                     }
                 }
                 if (insertToSkillIDs)
@@ -1071,13 +1071,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="src"></param> Agent
         /// <returns></returns>
-        public IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageData(AgentItem src)
+        public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageData(AgentItem src)
         {
-            if (_breakbarDamageData.TryGetValue(src, out List<AbstractBreakbarDamageEvent> res))
+            if (_breakbarDamageData.TryGetValue(src, out List<BreakbarDamageEvent> res))
             {
                 return res;
             }
-            return new List<AbstractBreakbarDamageEvent>();
+            return new List<BreakbarDamageEvent>();
         }
 
         /// <summary>
@@ -1085,13 +1085,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="long"></param> ID
         /// <returns></returns>
-        public IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageData(long skillID)
+        public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageData(long skillID)
         {
-            if (_breakbarDamageDataById.TryGetValue(skillID, out List<AbstractBreakbarDamageEvent> res))
+            if (_breakbarDamageDataById.TryGetValue(skillID, out List<BreakbarDamageEvent> res))
             {
                 return res;
             }
-            return new List<AbstractBreakbarDamageEvent>();
+            return new List<BreakbarDamageEvent>();
         }
 
         /// <summary>
@@ -1225,13 +1225,13 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="dst"></param> Agent
         /// <returns></returns>
-        public IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem dst)
+        public IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenData(AgentItem dst)
         {
-            if (_breakbarDamageTakenData.TryGetValue(dst, out List<AbstractBreakbarDamageEvent> res))
+            if (_breakbarDamageTakenData.TryGetValue(dst, out List<BreakbarDamageEvent> res))
             {
                 return res;
             }
-            return new List<AbstractBreakbarDamageEvent>();
+            return new List<BreakbarDamageEvent>();
         }
 
         /// <summary>
