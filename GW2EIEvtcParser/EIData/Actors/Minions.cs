@@ -33,6 +33,7 @@ namespace GW2EIEvtcParser.EIData
             _minionList.Add(minion);
         }
 
+        #region DAMAGE
         public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageEvents == null)
@@ -58,6 +59,34 @@ namespace GW2EIEvtcParser.EIData
             }
             return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (DamageTakenEvents == null)
+            {
+                DamageTakenEvents = new List<AbstractHealthDamageEvent>();
+                foreach (NPC minion in _minionList)
+                {
+                    DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                }
+                DamageTakenEvents = DamageTakenEvents.OrderBy(x => x.Time).ToList();
+                DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                }
+                else
+                {
+                    return new List<AbstractHealthDamageEvent>();
+                }
+            }
+            return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+        #endregion DAMAGE
+
+        #region BREAKBAR DAMAGE
 
         public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
@@ -86,42 +115,6 @@ namespace GW2EIEvtcParser.EIData
             return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        /*public List<DamageLog> getHealingLogs(ParsedEvtcLog log, long start, long end)
-        {
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (Minion minion in this)
-            {
-                res.AddRange(minion.getHealingLogs(log, start, end));
-            }
-            return res;
-        }*/
-
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (DamageTakenEvents == null)
-            {
-                DamageTakenEvents = new List<AbstractHealthDamageEvent>();
-                foreach (NPC minion in _minionList)
-                {
-                    DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
-                }
-                DamageTakenEvents = DamageTakenEvents.OrderBy(x => x.Time).ToList();
-                DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            }
-            if (target != null)
-            {
-                if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
-                {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
-                }
-                else
-                {
-                    return new List<AbstractHealthDamageEvent>();
-                }
-            }
-            return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
-        }
-
         public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenEvents == null)
@@ -147,7 +140,66 @@ namespace GW2EIEvtcParser.EIData
             }
             return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
+        #endregion BREAKBAR DAMAGE
 
+
+        #region CROWD CONTROL
+
+        public override IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (OutgoingCrowdControlEvents == null)
+            {
+                OutgoingCrowdControlEvents = new List<CrowdControlEvent>();
+                foreach (NPC minion in _minionList)
+                {
+                    OutgoingCrowdControlEvents.AddRange(minion.GetOutgoingCrowdControlEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                }
+                OutgoingCrowdControlEvents = OutgoingCrowdControlEvents.OrderBy(x => x.Time).ToList();
+                OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                }
+                else
+                {
+                    return new List<CrowdControlEvent>();
+                }
+            }
+
+            return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+
+        public override IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (IncomingCrowdControlEvents == null)
+            {
+                IncomingCrowdControlEvents = new List<CrowdControlEvent>();
+                foreach (NPC minion in _minionList)
+                {
+                    IncomingCrowdControlEvents.AddRange(minion.GetIncomingCrowdControlEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                }
+                IncomingCrowdControlEvents = IncomingCrowdControlEvents.OrderBy(x => x.Time).ToList();
+                IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                }
+                else
+                {
+                    return new List<CrowdControlEvent>();
+                }
+            }
+            return IncomingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+        #endregion CROWD CONTROL
+
+        #region CAST
         private void InitCastEvents(ParsedEvtcLog log)
         {
             CastEvents = new List<AbstractCastEvent>();
@@ -175,6 +227,7 @@ namespace GW2EIEvtcParser.EIData
             }
             return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
         }
+        #endregion CAST
 
         internal bool IsActive(ParsedEvtcLog log)
         {

@@ -35,6 +35,11 @@ namespace GW2EIEvtcParser.EIData
         protected Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> BreakbarDamageEventsByDst { get; set; }
         protected List<AbstractBreakbarDamageEvent> BreakbarDamageTakenEvents { get; set; }
         protected Dictionary<AgentItem, List<AbstractBreakbarDamageEvent>> BreakbarDamageTakenEventsBySrc { get; set; }
+        // Crowd Control
+        protected List<CrowdControlEvent> OutgoingCrowdControlEvents { get; set; }
+        protected Dictionary<AgentItem, List<CrowdControlEvent>> OutgoingCrowdControlEventsByDst { get; set; }
+        protected List<CrowdControlEvent> IncomingCrowdControlEvents { get; set; }
+        protected Dictionary<AgentItem, List<CrowdControlEvent>> IncomingCrowdControlEventsBySrc { get; set; }
         // Cast
         protected List<AbstractCastEvent> CastEvents { get; set; }
 
@@ -105,6 +110,7 @@ namespace GW2EIEvtcParser.EIData
         public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         private static void FilterDamageEvents(ParsedEvtcLog log, List<AbstractHealthDamageEvent> dls, ParserHelper.DamageType damageType)
         {
@@ -169,6 +175,7 @@ namespace GW2EIEvtcParser.EIData
         public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         public abstract IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
         public abstract IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);

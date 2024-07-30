@@ -1113,7 +1113,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="src"></param> Agent
         /// <returns></returns>
-        public IReadOnlyList<CrowdControlEvent> GetCrowdControlData(AgentItem src)
+        public IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlData(AgentItem src)
         {
             if (_crowControlData.TryGetValue(src, out List<CrowdControlEvent> res))
             {
@@ -1239,7 +1239,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="dst"></param> Agent
         /// <returns></returns>
-        public IReadOnlyList<CrowdControlEvent> GetCrowdControlTakenData(AgentItem dst)
+        public IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlData(AgentItem dst)
         {
             if (_crowControlTakenData.TryGetValue(dst, out List<CrowdControlEvent> res))
             {
