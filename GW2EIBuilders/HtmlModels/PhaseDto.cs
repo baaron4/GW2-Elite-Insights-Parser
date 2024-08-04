@@ -211,6 +211,8 @@ namespace GW2EIBuilders.HtmlModels
                     stats.AgainstDownedCount, // 24
                     stats.AgainstDownedDamage, // 25
                     stats.TotalDmg, // 26
+                    stats.AppliedCrowdControl,//27
+                    stats.AppliedCrowdControlDuration,//28
                 };
             return data;
         }
@@ -238,7 +240,9 @@ namespace GW2EIBuilders.HtmlModels
                     support.BoonStrips,
                     support.BoonStripsTime,
                     support.Resurrects,
-                    support.ResurrectTime
+                    support.ResurrectTime,
+                    support.StunBreak,
+                    support.RemovedStunDuration,
                 };
             return data;
         }
@@ -279,7 +283,9 @@ namespace GW2EIBuilders.HtmlModels
                     downTooltip,// 13
                     deadCount,// 14
                     deadTooltip,// 15
-                    defenses.DownedDamageTaken // 16
+                    defenses.DownedDamageTaken, // 16
+                    defenses.ReceivedCrowdControl, // 17
+                    defenses.ReceivedCrowdControlDuration, // 18
                 };
             return data;
         }
