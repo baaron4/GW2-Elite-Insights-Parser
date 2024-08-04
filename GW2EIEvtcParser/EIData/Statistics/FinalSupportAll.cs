@@ -38,6 +38,7 @@ namespace GW2EIEvtcParser.EIData
                 StunBreak++;
                 RemovedStunDuration += sbe.RemainingDuration;
             }
+            RemovedStunDuration = Math.Round(RemovedStunDuration / 1000, ParserHelper.TimeDigit);
         }
 
     }

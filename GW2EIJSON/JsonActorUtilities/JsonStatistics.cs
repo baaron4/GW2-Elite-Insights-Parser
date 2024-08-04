@@ -128,7 +128,7 @@ namespace GW2EIJSON
             /// </summary>
             public int ReceivedCrowdControl { get; set; }
             /// <summary>
-            /// Total crowd control duration received
+            /// Total crowd control duration received in ms
             /// </summary>
             public double ReceivedCrowdControlDuration { get; set; }
 
@@ -362,7 +362,7 @@ namespace GW2EIJSON
             /// </summary>
             public int AppliedCrowdControl { get; set; }
             /// <summary>
-            /// Total crowd control duration inflicted
+            /// Total crowd control duration inflicted in ms
             /// </summary>
             public double AppliedCrowdControlDuration { get; set; }
 
@@ -501,7 +501,7 @@ namespace GW2EIJSON
             /// </summary>
             public int StunBreak { get; set; }
             /// <summary>
-            /// Removed stun duration.
+            /// Removed stun duration in s.
             /// </summary>
             public double RemovedStunDuration { get; set; }
 
