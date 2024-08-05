@@ -3,6 +3,8 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats =
     [ "AgainstDownedCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a02b25bddd500db3d6918da18e22df679", null ],
     [ "AgainstDownedDamage", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a7261d1c8772f753122d129cafc639fc9", null ],
     [ "AgainstMovingRate", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#acc81131a972ec000df4ab55df6e31d36", null ],
+    [ "AppliedCrowdControl", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#aa63fb5925e315b55d47ee19f64d058d1", null ],
+    [ "AppliedCrowdControlDuration", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#aee50e8932c984f504129243a0cfd1588", null ],
     [ "Blocked", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#ad4387cf7a62f1133e221e0a5d843d2a1", null ],
     [ "ConnectedConditionAbove90HPCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a2de544156f019b3e571bd36e8d40876e", null ],
     [ "ConnectedConditionCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_gameplay_stats.html#a9951f119cc9ce1038caa2374c941a3eb", null ],

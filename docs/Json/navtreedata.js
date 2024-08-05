@@ -46,7 +46,7 @@ var NAVTREEINDEX =
 "class_g_w2_e_i_j_s_o_n_1_1_json_actor_combat_replay_data.html#ab026d9c2b92af14428df20012570fe01",
 "class_g_w2_e_i_j_s_o_n_1_1_json_log_1_1_buff_desc.html#a1d5cce90498986930346ebb4761e6c52",
 "class_g_w2_e_i_j_s_o_n_1_1_json_player.html#af1c3c39224bc30dd54f6c8d686ecea6e",
-"functions_k.html"
+"class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_player_support.html#af18d4004a889cbdfcac78aad6b88df2d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
