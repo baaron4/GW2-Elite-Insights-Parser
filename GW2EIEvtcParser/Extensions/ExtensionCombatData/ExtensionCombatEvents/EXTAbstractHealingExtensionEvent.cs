@@ -29,10 +29,5 @@ namespace GW2EIEvtcParser.Extensions
             }
         }
 
-        public override bool ConditionDamageBased(ParsedEvtcLog log)
-        {
-            return false;
-        }
-
     }
 }

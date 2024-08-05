@@ -1,8 +1,9 @@
 ﻿using System;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
 {
-    public class CrowdControlEvent : AbstractDamageEvent
+    public class CrowdControlEvent : AbstractSkillEvent
     {
         //
 
@@ -13,11 +14,6 @@ namespace GW2EIEvtcParser.ParsedData
         {
             Duration = evtcItem.Value;
             DefianceCalculation = evtcItem.Value + (int)evtcItem.OverstackValue;
-        }
-
-        public override bool ConditionDamageBased(ParsedEvtcLog log)
-        {
-            return false;
         }
     }
 }

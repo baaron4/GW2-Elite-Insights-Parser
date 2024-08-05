@@ -80,7 +80,10 @@
                         data-original-title="Times the enemy blocked an attack">
                         <img src="https://wiki.guildwars2.com/images/e/e5/Aegis.png" alt="Blocked"
                              class="icon icon-hover">
-                    </th>   
+                    </th>  
+                    <th class="stat-cell" :class="getHeaderClass('Data', 27)" @click="sortBy('Data', 27)">
+                        CC
+                    </th>    
                     <th class="stat-cell" v-if="wvw" :class="getHeaderClass('Data', 17)" @click="sortBy('Data', 17)"
                         data-original-title="Down Contribution">
                          <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
@@ -175,6 +178,9 @@
                         :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
                     </td>
+                    <td :class="getBodyClass('Data', 27)" :data-original-title="round3(row.data[28]/1000) + ' seconds'">
+                        {{row.data[27]}}
+                    </td>
                     <td v-if="wvw" :class="getBodyClass('Data', 17)"
                         :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
                         {{row.data[17]}}
@@ -233,6 +239,9 @@
                     </td>
                     <td :data-original-title="round2(100*row.data[10]/ row.data[0]) + '% of '+ row.data[0] + ' direct hit(s)'">
                         {{row.data[10]}}
+                    </td>
+                    <td :data-original-title="round3(row.data[28] / 1000) + ' seconds'">
+                        {{row.data[27]}}
                     </td>
                     <td v-if="wvw" :data-original-title="round2(100*row.data[17]/ row.data[26]) +'% of total damage'">
                         {{row.data[17]}}
@@ -326,16 +335,17 @@
                 if (this.cache.has(this.phaseindex)) {
                     return this.cache.get(this.phaseindex);
                 }
+                const dataLength = this.phase.offensiveStats[0].length;
                 var rows = [];
                 var sums = [];
                 var groups = [];
                 var total = {
                     name: "Total",
-                    data: [],
+                    data: new Array(dataLength).fill(0),
                     count: 0
                 };
                 for (var i = 0; i < this.phase.offensiveStats.length; i++) {
-                    var data = [];
+                    var data = new Array(dataLength).fill(0);
                     var player = logData.players[i];
                     if (player.isFake) {
                         continue;
@@ -343,7 +353,7 @@
                     if (!groups[player.group]) {
                         groups[player.group] = {
                             name: "Group " + player.group,
-                            data: [],
+                            data: new Array(dataLength).fill(0),
                             count: 0
                         };
                     }
@@ -352,8 +362,8 @@
                     var stats = this.phase.offensiveStats[i];
                     for (var j = 0; j < stats.length; j++) {
                         data[j] = stats[j];
-                        groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
-                        total.data[j] = (total.data[j] || 0) + data[j];
+                        groups[player.group].data[j] += data[j];
+                        total.data[j] += data[j];
                     }
                     rows.push({
                         player: player,
@@ -379,16 +389,17 @@
                 if (this.cacheTarget.has(cacheID)) {
                     return this.cacheTarget.get(cacheID);
                 }
+                const dataLength = this.phase.offensiveStats[0].length;
                 var rows = [];
                 var sums = [];
                 var groups = [];
                 var total = {
                     name: "Total",
-                    data: [],
+                    data: new Array(dataLength).fill(0),
                     count: 0
                 };
                 for (var i = 0; i < this.phase.offensiveStats.length; i++) {
-                    var data = [];
+                    var data = new Array(dataLength).fill(0);
                     var player = logData.players[i];
                     if (player.isFake) {
                         continue;
@@ -396,7 +407,7 @@
                     if (!groups[player.group]) {
                         groups[player.group] = {
                             name: "Group " + player.group,
-                            data: [],
+                            data: new Array(dataLength).fill(0),
                             count: 0
                         };
                     }
@@ -407,13 +418,13 @@
                         if (this.activetargets.length > 0) {
                             for (var k = 0; k < this.activetargets.length; k++) {
                                 var tar = this.phase.offensiveStatsTargets[i][this.activetargets[k]];
-                                data[j] = (data[j] || 0) + tar[j];
+                                data[j] += tar[j];
                             }
                         } else {
-                            data[j] = (data[j] || 0);
+                            data[j] = 0;
                         }
-                        groups[player.group].data[j] = (groups[player.group].data[j] || 0) + data[j];
-                        total.data[j] = (total.data[j] || 0) + data[j];
+                        groups[player.group].data[j] += data[j];
+                        total.data[j] += data[j];
                     }
                     rows.push({
                         player: player,

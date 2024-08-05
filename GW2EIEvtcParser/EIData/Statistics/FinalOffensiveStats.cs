@@ -38,6 +38,9 @@ namespace GW2EIEvtcParser.EIData
 
         public int DownContribution { get; }
 
+        public int AppliedCrowdControl { get; }
+        public double AppliedCrowdControlDuration { get; }
+
 
         internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {
@@ -163,6 +166,12 @@ namespace GW2EIEvtcParser.EIData
                 {
                     Downed++;
                 }
+            }
+            IReadOnlyList<CrowdControlEvent> ccs = actor.GetOutgoingCrowdControlEvents(target, log, start, end);
+            foreach (CrowdControlEvent cc in ccs)
+            {
+                AppliedCrowdControl++;
+                AppliedCrowdControlDuration += cc.Duration;
             }
         }
     }

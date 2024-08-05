@@ -469,13 +469,13 @@ namespace GW2EIEvtcParser.ParsedData
             return res;
         }
 
-        public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
+        public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
         {
             ArcDPSEnums.PhysicalResult result = GetPhysicalResult(damageEvent.Result);
             switch (result)
             {
                 case PhysicalResult.BreakbarDamage:
-                    brkBarDamage.Add(new DirectBreakbarDamageEvent(damageEvent, agentData, skillData));
+                    brkBarDamage.Add(new BreakbarDamageEvent(damageEvent, agentData, skillData));
                     break;
                 case PhysicalResult.CrowdControl:
                     crowdControlEvents.Add(new CrowdControlEvent(damageEvent, agentData, skillData));
@@ -489,14 +489,11 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public static void AddIndirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, AgentData agentData, SkillData skillData)
+        public static void AddIndirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, AgentData agentData, SkillData skillData)
         {
             ArcDPSEnums.ConditionResult result = GetConditionResult(damageEvent.Result);
             switch (result)
             {
-                /*case ArcDPSEnums.ConditionResult.BreakbarDamage:
-                    brkBarDamage.Add(new NonDirectBreakbarDamageEvent(c, agentData, skillData));
-                    break;*/
                 case ConditionResult.Unknown:
                     break;
                 default:

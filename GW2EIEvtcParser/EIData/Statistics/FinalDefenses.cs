@@ -27,6 +27,8 @@ namespace GW2EIEvtcParser.EIData
         public double BoonStripsTime { get; }
         public int ConditionCleanses { get; }
         public double ConditionCleansesTime { get; }
+        public int ReceivedCrowdControl { get; }
+        public double ReceivedCrowdControlDuration { get; }
 
         private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from, bool excludeSelf)
         {
@@ -105,6 +107,12 @@ namespace GW2EIEvtcParser.EIData
                 {
                     DownedDamageTaken += damageEvent.HealthDamage;
                 }
+            }
+            IReadOnlyList<CrowdControlEvent> ccs = actor.GetIncomingCrowdControlEvents(from, log, start, end);
+            foreach (CrowdControlEvent cc in ccs)
+            {
+                ReceivedCrowdControl++;
+                ReceivedCrowdControlDuration += cc.Duration;
             }
             DodgeCount = actor.GetCastEvents(log, start, end).Count(x => x.Skill.IsDodge(log.SkillData));
             BreakbarDamageTaken = Math.Round(actor.GetBreakbarDamageTakenEvents(from, log, start, end).Sum(x => x.BreakbarDamage), 1);
