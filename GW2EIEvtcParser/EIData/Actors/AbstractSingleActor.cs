@@ -1057,7 +1057,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (BreakbarDamageTakenEvents == null)
+            if (IncomingCrowdControlEvents == null)
             {
                 IncomingCrowdControlEvents = new List<CrowdControlEvent>();
                 IncomingCrowdControlEvents.AddRange(log.CombatData.GetIncomingCrowdControlData(AgentItem));
