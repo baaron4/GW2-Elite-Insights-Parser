@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
             });
-            Extension = "sprtrun";
+            Extension = "sprtrace";
             Icon = EncounterIconGeneric;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000004;

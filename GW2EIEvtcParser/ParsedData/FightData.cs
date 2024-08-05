@@ -71,6 +71,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.ValeGuardian:
                     Logic = new ValeGuardian(id);
                     break;
+                case ArcDPSEnums.TargetID.EtherealBarrierGadget:
+                    Logic = new SpiritRace(id);
+                    break;
                 case ArcDPSEnums.TargetID.Gorseval:
                     Logic = new Gorseval(id);
                     break;

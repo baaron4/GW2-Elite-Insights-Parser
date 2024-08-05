@@ -1152,6 +1152,7 @@ namespace GW2EIEvtcParser
             ValeGuardian = 15438,
             Gorseval = 15429,
             EtherealBarrier = ArcDPSEnums.EtherealBarrier,
+            EtherealBarrierGadget = 47188,
             Sabetha = 15375,
             Slothasor = 16123,
             Berg = 16088,
