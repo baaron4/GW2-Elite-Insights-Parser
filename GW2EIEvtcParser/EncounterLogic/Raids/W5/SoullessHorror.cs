@@ -6,6 +6,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -37,12 +38,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyCastStartMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Howling Death (Breakbar)", "Breakbar",0),
             new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Howling Death (Breakbar) broken", "CCed",0).UsingChecker((ce, log) => ce.ActualDuration <= 6800),
             new EnemyCastEndMechanic(HowlingDeath, "Howling Death", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Howling Death (Breakbar failed) ", "CC Fail",0).UsingChecker((ce,log) => ce.ActualDuration > 6800),
-            new PlayerSrcBuffApplyMechanic(Immobile, "Immobilized Golem", new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem","Immobilized Golem", "Immobilized Golem",50).UsingChecker((ce, log) => ce.To.IsSpecies(ArcDPSEnums.TrashID.TormentedDead)),
+            new PlayerSrcBuffApplyMechanic(Immobile, "Immobilized Golem", new MechanicPlotlySetting(Symbols.X,Colors.Red), "Immob.Golem","Immobilized Golem", "Immobilized Golem",50).UsingChecker((ce, log) => ce.To.IsSpecies(TrashID.TormentedDead)),
 
             });
             Extension = "sh";
             GenericFallBackMethod = FallBackMethod.ChestGadget;
-            ChestID = ArcDPSEnums.ChestID.ChestOfDesmina;
+            ChestID = ChestID.ChestOfDesmina;
             Icon = EncounterIconSoullessHorror;
             EncounterCategoryInformation.InSubCategoryOrder = 0;
             EncounterID |= 0x000001;
@@ -66,14 +67,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (19072, 15484, 20992, 16508)*/);
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<int> GetTargetsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            return new List<int>
             {
-                ArcDPSEnums.TrashID.Scythe,
-                ArcDPSEnums.TrashID.TormentedDead,
-                ArcDPSEnums.TrashID.SurgingSoul,
-                ArcDPSEnums.TrashID.FleshWurm
+                (int)TargetID.SoullessHorror,
+                (int)TrashID.TormentedDead,
+            };
+        }
+
+        protected override List<TrashID> GetTrashMobsIDs()
+        {
+            return new List<TrashID>
+            {
+                TrashID.Scythe,
+                TrashID.SurgingSoul,
+                TrashID.FleshWurm
             };
         }
 
@@ -89,11 +98,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.CheckSuccess(combatData, agentData, fightData, playerAgents);
             if (!fightData.Success)
             {
-                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+                AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
                 AbstractBuffEvent buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
                 if (buffOnDeath != null)
                 {
-                    if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
+                    if (agentData.GetNPCsByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
                     {
                         fightData.SetSuccess(true, buffOnDeath.Time);
                     }
@@ -108,11 +117,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             ComputeFightTargets(agentData, combatData, extensions);
             // discard hp update events after determined apply
-            AbstractSingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+            AbstractSingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
             CombatItem determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
             if (determined895Apply != null)
             {
-                combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time).ToList().ForEach(x => x.OverrideSrcAgent(0));
+                combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time).ToList().ForEach(x => x.OverrideSrcAgent(0));
+            }
+
+            // Add number to the spawned Tormented Deads
+            var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead)).ToList();
+            for (int i = 0; i < tormentedDeads.Count; i++)
+            {
+                tormentedDeads[i].OverrideName(tormentedDeads[i].Character + " " + (i + 1));
             }
         }
 
@@ -128,7 +144,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -144,12 +160,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                 start = c.EndTime;
                 phases.Add(phase);
             }
-            if (fightEnd - start > ParserHelper.PhaseTimeLimit)
+            if (fightEnd - start > PhaseTimeLimit)
             {
                 var lastPhase = new PhaseData(start, fightEnd, "Final");
                 lastPhase.AddTarget(mainTarget);
                 phases.Add(lastPhase);
             }
+
+            // Add Tormented Deads as secondary target to the phases
+            foreach (PhaseData phase in phases)
+            {
+                var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase).ToList();
+                phase.AddSecondaryTargets(tormentedDeads);
+            }
+
             return phases;
         }
 
@@ -160,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.SoullessHorror:
+                case (int)TargetID.SoullessHorror:
                     // arena reduction
                     var center = new Point3D(-10581, 825, -817);
                     List<(double, uint, uint)> destroyedRings;
@@ -277,17 +301,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.Scythe:
+                case (int)TrashID.Scythe:
                     replay.Decorations.Add(new CircleDecoration(80, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
-                case (int)ArcDPSEnums.TrashID.TormentedDead:
+                case (int)TrashID.TormentedDead:
                     if (replay.Positions.Count == 0)
                     {
                         break;
                     }
                     replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last())));
                     break;
-                case (int)ArcDPSEnums.TrashID.SurgingSoul:
+                case (int)TrashID.SurgingSoul:
                     List<ParametricPoint3D> positions = replay.Positions;
                     if (positions.Count < 2)
                     {
@@ -304,7 +328,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         break;
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.FleshWurm:
+                case (int)TrashID.FleshWurm:
                     break;
                 default:
                     break;

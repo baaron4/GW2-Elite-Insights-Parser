@@ -226,10 +226,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 phases[i].AddTarget(dhuum);
             }
-            // Add enforcers
+            // Add enforcers as secondary target to the phases
             foreach (PhaseData phase in phases)
             {
-                var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && Math.Min(phase.End, x.LastAware) - Math.Max(phase.Start, x.FirstAware) > 0 && phase.CanBeSubPhase).ToList();
+                var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase).ToList();
                 phase.AddSecondaryTargets(enforcers);
             }
             return phases;
