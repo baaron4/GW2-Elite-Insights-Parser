@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -173,6 +173,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return eparch;
         }
 
+        internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
+
+            // consume fixations
+            IEnumerable<Segment> consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            List<AbstractBuffEvent> consumeEvents = GetFilteredList(log.CombatData, new long[] { Consume }, player, true, true);
+            replay.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
+            replay.AddTether(consumeEvents, Colors.Red, 0.5);
+        }
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
@@ -184,9 +195,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent effect in pools)
                 {
+                    // TODO: pools are differently sized?
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 15000);
                     var position = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(100, lifespan, Colors.RedSkin, 0.3, position);
+                    var circle = new CircleDecoration(110, lifespan, Colors.RedSkin, 0.3, position);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
@@ -195,12 +207,40 @@ namespace GW2EIEvtcParser.EncounterLogic
             // rage fissures
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageFissure, out IReadOnlyList<EffectEvent> fissures))
             {
+                const uint width = 40;
+                const uint length = 220;
                 foreach (EffectEvent effect in fissures)
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 24000);
-                    GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, 100.0f), true);
+                    GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, 0.5f * length), true);
                     var rotation = new AngleConnector(effect.Rotation.Z);
-                    EnvironmentDecorations.Add(new RectangleDecoration(40, 220, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation));
+                }
+            }
+
+            // envy arrow indicators
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchEnvyIndicator, out IReadOnlyList<EffectEvent> envyArrows))
+            {
+                const uint width = 60;
+                const uint length = 800;
+                foreach (EffectEvent effect in envyArrows)
+                {
+                    (long start, long end)= effect.ComputeLifespan(log, 1500);
+                    var rotation = new AngleConnector(effect.Rotation.Z);
+                    GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, 0.5f * length), true);
+                    EnvironmentDecorations.Add(new RectangleDecoration(width, length, (start, end), Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new RectangleDecoration(width, length, (end, end + 300), Colors.Red, 0.2, position).UsingRotationConnector(rotation));
+                }
+            }
+
+            // inhale indicator
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchInhale, out IReadOnlyList<EffectEvent> inhales))
+            {
+                foreach (EffectEvent effect in inhales)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 5000);
+                    GeographicalConnector position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.2, position));
                 }
             }
         }
