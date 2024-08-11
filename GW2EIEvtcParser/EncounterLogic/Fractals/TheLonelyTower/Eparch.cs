@@ -221,7 +221,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // rage wave
-            if (log.CombatData.TryGetEffectEventsByGUID("968B7C89FEF01C4298294E86800B9BA9", out IReadOnlyList<EffectEvent> rageWaves))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageImpact, out IReadOnlyList<EffectEvent> rageWaves))
             {
                 const float velocity = 450.0f; // units per second
                 const uint maxRange = 1300;
