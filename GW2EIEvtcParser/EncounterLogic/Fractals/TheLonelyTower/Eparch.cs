@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -6,8 +6,10 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.SkillIDs;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -264,15 +266,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 const int globuleHealth = 14_940;
                 const uint globuleWidth = 16;
                 const uint globuleHeight = 160;
-                MaxHealthUpdateEvent health = log.CombatData.GetMaxHealthUpdateEvents(gadget).FirstOrDefault();
+                MaxHealthUpdateEvent health = log.CombatData.GetMaxHealthUpdateEvents(gadget).LastOrDefault(); // may have max health 0 initially
                 if (gadget.HitboxWidth == globuleWidth && gadget.HitboxHeight == globuleHeight && health?.MaxHealth == globuleHealth)
                 {
                     SpawnEvent spawn = log.CombatData.GetSpawnEvents(gadget).FirstOrDefault();
                     DespawnEvent despawn = log.CombatData.GetDespawnEvents(gadget).FirstOrDefault();
                     if (spawn != null && despawn != null)
                     {
-                        AnimatedCastEvent currentCast = eparchCasts.LastOrDefault(x => x.Time <= spawn.Time && x.EndTime > spawn.Time);
-                        if (currentCast != null && globuleColors.TryGetValue(currentCast.SkillId, out Color color))
+                        const long globuleDelay = 1000; // globules spawn at least 1s after
+                        AnimatedCastEvent lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
+                        if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out Color color))
                         {
                             Point3D position = gadget.GetCurrentPosition(log, despawn.Time); // position should not change, use despawn to make sure its set
                             (long, long) lifespan = (spawn.Time, despawn.Time);
