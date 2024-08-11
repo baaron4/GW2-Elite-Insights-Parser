@@ -4301,11 +4301,12 @@
         public const long RelicOfTheTwinGenerals = 72707;
         public const long RegretSkillEparch = 72719;
         public const long DespairEmpowerment = 72726;
+        public const long KryptisRiftIncarnationTether = 72740;
         public const long AchievementEligibilityFissureWalker = 72742;
+        public const long DevourLonelyTower = 72754;
         public const long MaliceAttunement = 72762;
         public const long RageAttunement = 72781;
         public const long MaliceEmpowerment = 72795;
-        public const long DevourLonelyTower = 72754;
         public const long AchievementEligibilityBrothersTogether = 72812;
         public const long Inhale = 72823;
         public const long WaveOfEnvy = 72841;

@@ -186,6 +186,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddTether(consumeEvents, Colors.Red, 0.5);
         }
 
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+            switch (target.ID)
+            {
+                case (int)TrashID.KryptisRift:
+                    {
+                        List<AbstractBuffEvent> events = GetFilteredList(log.CombatData, new long[] { KryptisRiftIncarnationTether }, target, true, true);
+                        replay.AddTether(events, Colors.Red, 0.5);
+                        break;
+                    }
+            }
+        }
+
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
@@ -221,7 +235,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // envy arrow indicators
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchEnvyIndicator, out IReadOnlyList<EffectEvent> envyArrows))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchArrowIndicator, out IReadOnlyList<EffectEvent> envyArrows))
             {
                 const uint width = 60;
                 const uint length = 800;

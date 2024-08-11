@@ -463,7 +463,7 @@
         public const string EparchRedCircle = "0D2192849D53B4469F56B1C74542DBE9"; // owned by eparch, 2s duration, REUSED
         public const string EparchDespairPool = "FF359460D95C96478CE2A4415EACD312"; // owned by eparch, 15s duration
         public const string EparchRageFissure = "797210B1B11C984AACBD2AFC80D02BC7"; // no owner, 24s duration
-        public const string EparchEnvyIndicator= "27563132F8532847B4DD2CA7AB5B9CE8"; // owned by eparch, 1.5s duration
+        public const string EparchArrowIndicator = "27563132F8532847B4DD2CA7AB5B9CE8"; // owned by eparch, 1.5s duration, REUSED by incarnation of judgement
         public const string EparchInhale = "FADE0B1FF0CAC146950DB6B69DBAFEDF"; // owned by eparch, 5s duration
         #endregion
         #region Raids
