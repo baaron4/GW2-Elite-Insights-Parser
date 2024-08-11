@@ -2,21 +2,21 @@
 {
     internal abstract class FormDecoration : GenericAttachedDecoration
     {
-        internal abstract class ConstantFormDecoration : ConstantGenericAttachedDecoration
+        internal abstract class FormDecorationMetadata : GenericAttachedDecorationMetadata
         {
             public string Color { get; }
 
-            protected ConstantFormDecoration(string color)
+            protected FormDecorationMetadata(string color)
             {
                 Color = color;
             }
         }
-        internal abstract class VariableFormDecoration : VariableGenericAttachedDecoration
+        internal abstract class FormDecorationRenderingData : GenericAttachedDecorationRenderingData
         {
             public bool Filled { get; private set; } = true;
             public int GrowingEnd { get; private set; }
             public bool GrowingReverse { get; private set; }
-            protected VariableFormDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            protected FormDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
 
@@ -31,27 +31,27 @@
                 GrowingReverse = reverse;
             }
         }
-        private new ConstantFormDecoration ConstantDecoration => (ConstantFormDecoration)base.ConstantDecoration;
-        private new VariableFormDecoration VariableDecoration => (VariableFormDecoration)base.VariableDecoration;
+        private new FormDecorationMetadata DecorationMetadata => (FormDecorationMetadata)base.DecorationMetadata;
+        private new FormDecorationRenderingData DecorationRenderingData => (FormDecorationRenderingData)base.DecorationRenderingData;
 
-        public bool Filled => VariableDecoration.Filled;
-        public string Color => ConstantDecoration.Color;
-        public int GrowingEnd => VariableDecoration.GrowingEnd;
-        public bool GrowingReverse => VariableDecoration.GrowingReverse;
+        public bool Filled => DecorationRenderingData.Filled;
+        public string Color => DecorationMetadata.Color;
+        public int GrowingEnd => DecorationRenderingData.GrowingEnd;
+        public bool GrowingReverse => DecorationRenderingData.GrowingReverse;
 
-        protected FormDecoration() : base()
+        internal FormDecoration(FormDecorationMetadata metadata, FormDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
         public virtual FormDecoration UsingFilled(bool filled)
         {
-            VariableDecoration.UsingFilled(filled);
+            DecorationRenderingData.UsingFilled(filled);
             return this;
         }
 
         public virtual FormDecoration UsingGrowingEnd(long growingEnd, bool reverse = false)
         {
-            VariableDecoration.UsingGrowingEnd(growingEnd, reverse);
+            DecorationRenderingData.UsingGrowingEnd(growingEnd, reverse);
             return this;
         }
 

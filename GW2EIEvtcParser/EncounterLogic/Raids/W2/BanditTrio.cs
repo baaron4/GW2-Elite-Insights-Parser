@@ -103,6 +103,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     throw new MissingKeyActorsException("Narella not found");
                 }
                 startToUse = Math.Min(narella.FirstAware, startToUse);
+                var friendlies = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VeteranTorturedWarg).ToList();
+                friendlies.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.Prisoner1));
+                friendlies.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.Prisoner2));
+                if (friendlies.Count > 0)
+                {
+                    startToUse = Math.Min(friendlies.Min(x => x.FirstAware), startToUse);
+                }
             }
             return startToUse;
         }
@@ -126,7 +133,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Reward Chest
-            FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
 
             agentData.Refresh();
             ComputeFightTargets(agentData, combatData, extensions);
@@ -138,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return FightData.EncounterStartStatus.Late;
             }
-            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Berg, out AgentItem berg))
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Berg, out AgentItem berg) && combatData.GetLogNPCUpdateEvents().Count > 0)
             {
                 var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration).ToList();
                 if (movements.Count != 0)

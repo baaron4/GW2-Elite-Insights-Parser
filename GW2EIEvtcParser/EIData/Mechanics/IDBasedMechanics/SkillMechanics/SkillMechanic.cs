@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -50,7 +51,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     if (amp != null)
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(ahde.Time, this, amp));
+                        InsertMechanic(log, mechanicLogs, ahde.Time, amp);
                     }
                 }
             }

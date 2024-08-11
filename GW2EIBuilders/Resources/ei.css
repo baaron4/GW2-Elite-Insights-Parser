@@ -791,4 +791,10 @@ td.higherOrEqual::before {
 td.approximate::before {
     content: "\2248";
 }
+
+.scrollabledropdown {
+    max-height: 500px; 
+    overflow: auto; 
+    overscroll-behavior: contain;
+}
   

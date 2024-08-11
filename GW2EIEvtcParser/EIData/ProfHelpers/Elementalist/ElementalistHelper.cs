@@ -71,13 +71,15 @@ namespace GW2EIEvtcParser.EIData
                 .UsingToNotSpecChecker(Spec.Weaver)
                 .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
                 .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            // Spear
+            new BuffGainCastFinder(EnergizeSkill, EnergizeBuff),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Fire
             new BuffOnActorDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
-                .WithBuilds(GW2Builds.July2020Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.July2020Balance),
             new BuffOnActorDamageModifier(new long[] { FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement }, "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffOnFoeDamageModifier(Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.BurningRage, DamageModifierMode.PvE)
@@ -93,16 +95,16 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
                 .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
-                .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.July2019Balance),
             new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
                 .UsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
-                .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.July2019Balance),
             new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
                 .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
-                .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.July2019Balance),
             new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
                 .UsingActorCheckerByAbsence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
-                .WithBuilds(GW2Builds.July2019Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.July2019Balance),
             new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
                 .UsingActorCheckerByPresence(new long[] { WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement })
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
@@ -110,12 +112,16 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance)
                 .UsingApproximate(true),
             new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
-                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife)
+                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance)
                 .UsingApproximate(true),
             new DamageLogDamageModifier("Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.sPvPWvW)
-                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife)
+                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance),
+            new DamageLogDamageModifier("Flow like Water (>= 50%)", "10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.June2024Balance),
+            new DamageLogDamageModifier("Flow like Water (< 50%)", "5% if hp <50%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.June2024Balance)
                 .UsingApproximate(true),
-            //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance, GW2Builds.EndOfLife),
+            //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance),
             // Arcane
             new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
             new BuffOnFoeDamageModifier(new long[] { Stun, Daze, Knockdown, Fear, Taunt }, "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, BuffImages.Stormsoul, DamageModifierMode.All)
@@ -200,7 +206,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Magnetic Wave", MagneticWave, Source.Elementalist, BuffClassification.Other, BuffImages.MagneticWave),
             new Buff("Obsidian Flesh", ObsidianFlesh, Source.Elementalist, BuffClassification.Other, BuffImages.ObsidianFlesh),
             new Buff("Persisting Flames", PersistingFlames, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.PersistingFlames)
-                .WithBuilds(GW2Builds.July2020Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.July2020Balance),
             new Buff("Fresh Air", FreshAir, Source.Elementalist, BuffClassification.Other, BuffImages.FreshAir),
             new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffClassification.Defensive, BuffImages.SoothingMist)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
@@ -235,6 +241,12 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.February2024NewWeapons),
             new Buff("Shattering Stone", ShatteringStoneBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ShatteringStone)
                 .WithBuilds(GW2Builds.February2024NewWeapons),
+            // Spear
+            new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
 
@@ -283,20 +295,6 @@ namespace GW2EIEvtcParser.EIData
         internal static bool IsKnownMinionID(int id)
         {
             return Minions.Contains(id);
-        }
-
-        public static IReadOnlyList<AnimatedCastEvent> ComputeUpdraftCastEvents(Player player, CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<AnimatedCastEvent>();
-            SkillItem skill = skillData.Get(Updraft);
-            if (combatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
-            {
-                foreach (EffectEvent effect in updrafts)
-                {
-                    res.Add(new AnimatedCastEvent(player.AgentItem, skill, effect.Time, 1000));
-                }
-            }
-            return res;
         }
 
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)

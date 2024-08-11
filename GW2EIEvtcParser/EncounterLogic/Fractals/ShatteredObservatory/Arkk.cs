@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Add anomalies as secondary target to the phases
             foreach (PhaseData phase in phases)
             {
-                var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && Math.Min(phase.End, x.LastAware) - Math.Max(phase.Start, x.FirstAware) > 0 && phase.CanBeSubPhase).ToList();
+                var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase).ToList();
                 phase.AddSecondaryTargets(anomalies);
             }
 

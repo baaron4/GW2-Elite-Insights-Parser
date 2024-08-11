@@ -37,8 +37,8 @@
         <keep-alive>
             <healing-stat-tables-component v-if="tab === 0" :key="'healing-stat-tables'"
                 :phaseindex="activePhase" :playerindex="activePlayer" :activetargets="activePlayerTargets"></healing-stat-tables-component>                    
-            <buff-tables-component v-if="tab === 1" :key="'healingbuff-tables'"
-            :phaseindex="activePhase" :playerindex="activePlayer"></buff-tables-component>          
+            <buff-tab-component v-if="tab === 1" :key="'healingbuff-tables'"
+            :phaseindex="activePhase" :playerindex="activePlayer"></buff-tab-component>          
             <mechanics-stats-component v-if="tab === 2" :key="'healingmechanics'"
                 :phaseindex="activePhase" :playerindex="activePlayer"></mechanics-stats-component> 
             <healing-graph-stats-component v-if="tab === 3" :key="'healing-graph'"

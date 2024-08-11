@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.ParsedData
                     {
                         return;
                     }
-                    metaDataEvents.BuildEvent = new BuildEvent(stateChangeEvent);
+                    metaDataEvents.GW2BuildEvent = new GW2BuildEvent(stateChangeEvent);
                     break;
                 case StateChange.ShardId:
                     metaDataEvents.ShardEvents.Add(new ShardEvent(stateChangeEvent));
@@ -246,7 +246,7 @@ namespace GW2EIEvtcParser.ParsedData
                     Add(statusEvents.MovementEvents, posEvt.Src, posEvt);
                     break;
                 case StateChange.WeaponSwap:
-                    wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData));
+                    wepSwaps.Add(new WeaponSwapEvent(stateChangeEvent, agentData, skillData, evtcVersion));
                     break;
                 case StateChange.StackActive:
                     buffEvents.Add(new BuffStackActiveEvent(stateChangeEvent, agentData, skillData));
@@ -367,6 +367,14 @@ namespace GW2EIEvtcParser.ParsedData
                     }
                     Add(statusEvents.SquadMarkerEventsByIndex, squadMarkerEvent.MarkerIndex, squadMarkerEvent);
                     break;
+                case StateChange.Glider:
+                    var gliderEvent = new GliderEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.GliderEventsBySrc, gliderEvent.Src, gliderEvent);
+                    break;
+                case StateChange.StunBreak:
+                    var stunbreakEvent = new StunBreakEvent(stateChangeEvent, agentData);
+                    Add(statusEvents.StunBreakEventsBySrc, stunbreakEvent.Src, stunbreakEvent);
+                    break;
                 default:
                     break;
             }
@@ -461,13 +469,16 @@ namespace GW2EIEvtcParser.ParsedData
             return res;
         }
 
-        public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, AgentData agentData, SkillData skillData)
+        public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
         {
             ArcDPSEnums.PhysicalResult result = GetPhysicalResult(damageEvent.Result);
             switch (result)
             {
                 case PhysicalResult.BreakbarDamage:
-                    brkBarDamage.Add(new DirectBreakbarDamageEvent(damageEvent, agentData, skillData));
+                    brkBarDamage.Add(new BreakbarDamageEvent(damageEvent, agentData, skillData));
+                    break;
+                case PhysicalResult.CrowdControl:
+                    crowdControlEvents.Add(new CrowdControlEvent(damageEvent, agentData, skillData));
                     break;
                 case PhysicalResult.Activation:
                 case PhysicalResult.Unknown:
@@ -478,14 +489,11 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        public static void AddIndirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<AbstractBreakbarDamageEvent> brkBarDamage, AgentData agentData, SkillData skillData)
+        public static void AddIndirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, AgentData agentData, SkillData skillData)
         {
             ArcDPSEnums.ConditionResult result = GetConditionResult(damageEvent.Result);
             switch (result)
             {
-                /*case ArcDPSEnums.ConditionResult.BreakbarDamage:
-                    brkBarDamage.Add(new NonDirectBreakbarDamageEvent(c, agentData, skillData));
-                    break;*/
                 case ConditionResult.Unknown:
                     break;
                 default:

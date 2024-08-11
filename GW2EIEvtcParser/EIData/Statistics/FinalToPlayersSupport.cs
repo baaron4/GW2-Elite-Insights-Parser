@@ -15,12 +15,16 @@ namespace GW2EIEvtcParser.EIData
         public double CondiCleanseTimeSelf { get; }
         public int BoonStrips { get; }
         public double BoonStripsTime { get; }
+        public int StunBreak { get; }
+        public double RemovedStunDuration { get; }
 
         internal FinalToPlayersSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
             FinalSupportAll totals = actor.GetSupportStats(log, start, end);
             Resurrects = totals.Resurrects;
-            ResurrectTime = Math.Round(totals.ResurrectTime / 1000.0, ParserHelper.TimeDigit);
+            ResurrectTime = totals.ResurrectTime;
+            StunBreak = totals.StunBreak;
+            RemovedStunDuration = totals.RemovedStunDuration;
             FinalSupport self = actor.GetSupportStats(actor, log, start, end);
             foreach (Buff boon in log.Buffs.BuffsByClassification[BuffClassification.Boon])
             {

@@ -58,6 +58,9 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), 
             // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all       
             new BuffOnActorDamageModifier(FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.FluidStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+            // Spear       
+            new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "5%", DamageSource.NoPets, 5, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.sPvPWvW),
         };
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
@@ -106,6 +109,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Lead Attacks", LeadAttacks, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, BuffImages.LeadAttacks),
             new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, BuffImages.InstantReflexes),
             new Buff("Fluid Strikes", FluidStrikes, Source.Thief, BuffClassification.Other, BuffImages.FluidStrikes).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+            // Spear
+            new Buff("Distracting Throw", DistractingThrowBuff, Source.Thief, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Shadow Veil", ShadowVeilBuff, Source.Thief, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         private static HashSet<int> Minions = new HashSet<int>()

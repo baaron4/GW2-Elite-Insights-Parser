@@ -109,14 +109,14 @@ namespace GW2EIEvtcParser.EIData
             return graph;
         }
 
-        private static double[] ComputeBreakbarDamageGraph(IReadOnlyList<AbstractBreakbarDamageEvent> dls, long start, long end)
+        private static double[] ComputeBreakbarDamageGraph(IReadOnlyList<BreakbarDamageEvent> dls, long start, long end)
         {
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;
             double[] graph = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
             // fill the graph
             int previousTime = 0;
-            foreach (AbstractBreakbarDamageEvent dl in dls)
+            foreach (BreakbarDamageEvent dl in dls)
             {
                 int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
                 if (time != previousTime)

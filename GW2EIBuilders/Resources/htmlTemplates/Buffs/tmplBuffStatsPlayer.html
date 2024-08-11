@@ -1,0 +1,90 @@
+<template>
+    <div>    
+        <div :key="'activedurationplayer'" class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
+                <li class="nav-item">
+                    <a class="nav-link" @click="activeduration = 0" :class="{active: activeduration === 0}">Phase
+                        duration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="activeduration = 1" data-original-title="Removed dead time and dc time"
+                        :class="{active: activeduration === 1 }">Phase active duration</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mt-1 mb-1">
+            <buff-table-component :condition="false" :generation="true" :id="'boon-stats-player-table-' + player.id" :buffs="boons"
+                :playerdata="boonData" :sums="boonSums" :playerindex="-1" :hidecustom="false"></buff-table-component>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("buff-stats-player-component", {
+        props: ['phaseindex', 'playerindex'],
+        mixins: [buffComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                activeduration: 0,
+                cacheBoon: new Map(),
+                cacheBoonSums: new Map(),
+            };
+        },
+        computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            player: function() {
+                return logData.players[this.playerindex];
+            },
+            boonData: function () {
+                const id = this.phaseindex + '-' + this.activeduration;
+                if (this.cacheBoon.has(id)) {
+                    return this.cacheBoon.get(id);
+                }
+                const res = [];
+                const activeTimes = this.phase.playerActiveTimes;
+                const activeduration = this.activeduration;
+                for (let i = 0; i < logData.players.length; i++) {
+                    if (activeduration && activeTimes[i] < 1e-6) {
+                        continue;
+                    }
+                    res.push({
+                        player: logData.players[i],
+                        data: activeduration ? this.buffsStatContainer.boonActiveDictionaries[this.playerindex][i] : this.buffsStatContainer.boonDictionaries[this.playerindex][i]
+                    });
+                }
+                this.cacheBoon.set(id, res);
+                return res;
+            },
+            boonSums: function () {
+                const id = this.phaseindex + '-' + this.activeduration;
+                if (this.cacheBoonSums.has(id)) {
+                    return this.cacheBoonSums.get(id);
+                }
+                const activeduration = this.activeduration;
+                const res = [];
+                const playerData = activeduration ? this.buffsStatContainer.boonActiveStats[this.playerindex] : this.buffsStatContainer.boonStats[this.playerindex];
+                const activeTimes = this.phase.playerActiveTimes;
+                if (activeduration && activeTimes[this.playerindex] < 1e-6) {
+                    res.push({
+                        icon: this.player.icon,
+                        name: this.player.name,
+                        avg: 0,
+                        data: []
+                    });
+                } else {
+                    res.push({
+                        icon: this.player.icon,
+                        name: this.player.name,
+                        avg: playerData.avg,
+                        data: playerData.data
+                    });
+                }
+                this.cacheBoonSums.set(id, res);
+                return res;
+            },
+        }
+    });
+</script>

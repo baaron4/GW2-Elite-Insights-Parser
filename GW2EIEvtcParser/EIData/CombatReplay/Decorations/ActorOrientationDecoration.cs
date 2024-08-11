@@ -1,20 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal class ActorOrientationDecoration : GenericAttachedDecoration
     {
-        internal class ConstantActorOrientationDecoration : ConstantGenericAttachedDecoration
+        internal class ActorOrientationDecorationMetadata : GenericAttachedDecorationMetadata
         {
-            public override string GetID()
+
+            public override string GetSignature()
             {
                 return "AO";
             }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new ActorOrientationDecorationMetadataDescription(this);
+            }
         }
-        internal class VariableActorOrientationDecorationn : VariableGenericAttachedDecoration
+        internal class ActorOrientationDecorationRenderingData : GenericAttachedDecorationRenderingData
         {
-            public VariableActorOrientationDecorationn((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
+            public ActorOrientationDecorationRenderingData((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
             {
                 RotationConnectedTo = new AgentFacingConnector(agent);
             }
@@ -25,19 +31,21 @@ namespace GW2EIEvtcParser.EIData
             public override void UsingSkillMode(SkillModeDescriptor skill)
             {
             }
+
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new ActorOrientationDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
         }
 
-        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base()
+        internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, ActorOrientationDecorationRenderingData renderingData) : base (metadata, renderingData)
         {
-            ConstantDecoration = new ConstantActorOrientationDecoration();
-            VariableDecoration = new VariableActorOrientationDecorationn(lifespan, agent);
+        }
+
+        public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(new ActorOrientationDecorationMetadata(), new ActorOrientationDecorationRenderingData(lifespan, agent))
+        {
         }
 
         //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new ActorOrientationDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

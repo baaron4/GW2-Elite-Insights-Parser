@@ -47,7 +47,27 @@ namespace GW2EIEvtcParser.EIData
             EXTBarrier = new EXTAbstractSingleActorBarrierHelper(this);
         }
 
-        // Status
+        internal abstract void OverrideName(string name);
+
+        public WeaponSets GetWeaponSets(ParsedEvtcLog log)
+        {
+            return _statusHelper.GetWeaponSets(log);
+        }
+
+        //
+        public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetConsumablesList(log, start, end);
+        }
+        //
+        public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
+        {
+            return _statusHelper.GetDeathRecaps(log);
+        }
+
+        public abstract string GetIcon();
+
+        #region STATUS
 
         protected int Health { get; set; } = -2;
 
@@ -79,8 +99,6 @@ namespace GW2EIEvtcParser.EIData
             return null;
         }
 
-        internal abstract void OverrideName(string name);
-
         public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) GetStatus(ParsedEvtcLog log)
         {
             return _statusHelper.GetStatus(log);
@@ -99,6 +117,10 @@ namespace GW2EIEvtcParser.EIData
         public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
         {
             return _statusHelper.GetActiveDuration(log, start, end);
+        }
+        public bool IsDownBefore90(ParsedEvtcLog log, long curTime)
+        {
+            return _statusHelper.IsDownBeforeNext90(log, curTime);
         }
         public bool IsDowned(ParsedEvtcLog log, long time)
         {
@@ -153,29 +175,6 @@ namespace GW2EIEvtcParser.EIData
             return ArcDPSEnums.BreakbarState.None;
         }
 
-        //
-
-
-        public WeaponSets GetWeaponSets(ParsedEvtcLog log)
-        {
-            return _statusHelper.GetWeaponSets(log);
-        }
-
-        //
-        public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetConsumablesList(log, start, end);
-        }
-        //
-        public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
-        {
-            return _statusHelper.GetDeathRecaps(log);
-        }
-
-        //
-
-        public abstract string GetIcon();
-
         public IReadOnlyList<Segment> GetHealthUpdates(ParsedEvtcLog log)
         {
             return _graphHelper.GetHealthUpdates(log);
@@ -185,6 +184,7 @@ namespace GW2EIEvtcParser.EIData
         {
             return _graphHelper.GetCurrentHealthPercent(log, time);
         }
+        //
 
         /// <summary>
         /// Return the health value at requested %
@@ -193,6 +193,8 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="currentHealthPercent"></param>
         /// <returns></returns>
         public abstract int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent);
+
+
 
         /// <summary>
         /// Return the health value at requested time
@@ -220,7 +222,6 @@ namespace GW2EIEvtcParser.EIData
         {
             return _graphHelper.GetCurrentBarrierPercent(log, time);
         }
-
         /// <summary>
         /// Return the barrier value at requested %
         /// </summary>
@@ -241,6 +242,9 @@ namespace GW2EIEvtcParser.EIData
             var currentBarrierPercent = GetCurrentBarrierPercent(log, time);
             return GetCurrentBarrier(log, currentBarrierPercent, time);
         }
+
+        #endregion STATUS
+
 
         // Minions
         public IReadOnlyDictionary<long, Minions> GetMinions(ParsedEvtcLog log)
@@ -304,7 +308,7 @@ namespace GW2EIEvtcParser.EIData
             return _minions;
         }
 
-        // Graph
+        #region GRAPHS
         public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType)
         {
             return _graphHelper.Get1SDamageList(log, start, end, target, damageType);
@@ -323,8 +327,9 @@ namespace GW2EIEvtcParser.EIData
         {
             return _graphHelper.Get1SBreakbarDamageTakenList(log, start, end, target);
         }
+        #endregion GRAPHS
 
-        // Damage Modifiers
+        #region DAMAGE MODIFIERS
 
         public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
@@ -345,8 +350,9 @@ namespace GW2EIEvtcParser.EIData
         {
             return _damageModifiersHelper.GetPresentIncomingDamageModifier(log);
         }
+        #endregion DAMAGE MODIFIERS
 
-        // Buffs
+        #region BUFFS
         public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
         {
             return _buffHelper.GetBuffDistribution(log, start, end);
@@ -376,6 +382,28 @@ namespace GW2EIEvtcParser.EIData
                 case BuffEnum.Self:
                 default:
                     return FinalActorBuffs.GetBuffsForSelf(log, this, start, end);
+            }
+        }
+
+        internal virtual Dictionary<long, FinalActorBuffVolumes>[] ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        {
+            Dictionary<long, FinalActorBuffVolumes>[] empty =
+            {
+                        new Dictionary<long, FinalActorBuffVolumes>(),
+                        new Dictionary<long, FinalActorBuffVolumes>()
+             };
+            switch (type)
+            {
+                case BuffEnum.Group:
+                    return empty;
+                case BuffEnum.OffGroup:
+                    return empty;
+                case BuffEnum.Squad:
+                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
+                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayers, log, AgentItem, start, end);
+                case BuffEnum.Self:
+                default:
+                    return FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end);
             }
         }
 
@@ -481,7 +509,28 @@ namespace GW2EIEvtcParser.EIData
             return _buffHelper.GetActiveBuffsDictionary(log, start, end);
         }
 
-        //
+        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetBuffVolumes(type, log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetActiveBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetActiveBuffVolumes(type, log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetBuffVolumesDictionary(log, start, end);
+        }
+
+        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
+        {
+            return _buffHelper.GetActiveBuffVolumesDictionary(log, start, end);
+        }
+        #endregion BUFFS
+
+        #region COMBAT REPLAY
         protected void SetMovements(ParsedEvtcLog log)
         {
             foreach (AbstractMovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
@@ -572,16 +621,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 InitAdditionalCombatReplayData(log);
             }
-            CombatReplay.Decorations.RemoveAll(x => x.Lifespan.end <= x.Lifespan.start);
         }
 
-        public IReadOnlyList<GenericDecoration> GetCombatReplayDecorations(ParsedEvtcLog log)
+        internal IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
+
             if (CombatReplay == null)
             {
                 InitCombatReplay(log);
             }
-            return CombatReplay.Decorations;
+            return CombatReplay.Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
         }
         protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
@@ -599,7 +648,93 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
-        // Cast logs
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <param name="forwardWindow">Position will be looked up to time + forwardWindow if given</param>
+        /// <returns></returns>
+        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
+        {
+            if (!HasCombatReplayPositions(log))
+            {
+                return null;
+            }
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
+            if (forwardWindow != 0)
+            {
+                return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
+            }
+            int foundIndex = BinarySearchRecursive(positions, time, 0, positions.Count - 1);
+            if (foundIndex < 0)
+            {
+                return null;
+            }
+            return positions[foundIndex];
+        }
+
+        public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
+        {
+            if (!HasCombatReplayPositions(log))
+            {
+                return null;
+            }
+            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
+            ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
+            ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
+            Point3D res;
+            if (prev != null && next != null)
+            {
+                long denom = next.Time - prev.Time;
+                if (denom == 0)
+                {
+                    res = prev;
+                }
+                else
+                {
+                    float ratio = (float)(time - prev.Time) / denom;
+                    res = new Point3D(prev, next, ratio);
+                }
+            }
+            else
+            {
+                res = prev ?? next;
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="time"></param>
+        /// <param name="forwardWindow">Rotation will be looked up to time + forwardWindow if given</param>
+        /// <returns></returns>
+        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
+        {
+            IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
+            if (!rotations.Any())
+            {
+                return null;
+            }
+            if (forwardWindow != 0)
+            {
+                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time);
+            }
+            int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1);
+            if (foundIndex < 0)
+            {
+                return null;
+            }
+            return rotations[foundIndex];
+        }
+
+        #endregion COMBAT REPLAY
+
+        #region CAST
         public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
         {
             if (CastEvents == null)
@@ -635,8 +770,9 @@ namespace GW2EIEvtcParser.EIData
             }
             CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => !x.Skill.IsSwap).ToList();
         }
+        #endregion CAST
 
-        // DPS Stats
+        #region STATISTICS
 
         public FinalDPS GetDPSStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
@@ -741,9 +877,9 @@ namespace GW2EIEvtcParser.EIData
             }
             return value;
         }
+        #endregion STATISTICS
 
-
-        // Damage logs
+        #region DAMAGE
         public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageEvents == null)
@@ -777,39 +913,6 @@ namespace GW2EIEvtcParser.EIData
             return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }
 
-        public IReadOnlyList<AbstractBreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
-        }
-
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (BreakbarDamageEvents == null)
-            {
-                BreakbarDamageEvents = new List<AbstractBreakbarDamageEvent>();
-                BreakbarDamageEvents.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
-                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
-                foreach (Minions mins in minionsList.Values)
-                {
-                    BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
-                }
-                BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
-                BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            }
-            if (target != null)
-            {
-                if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
-                {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
-                }
-                else
-                {
-                    return new List<AbstractBreakbarDamageEvent>();
-                }
-            }
-            return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
-        }
-
         public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenEvents == null)
@@ -835,31 +938,6 @@ namespace GW2EIEvtcParser.EIData
             return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<AbstractBreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            if (BreakbarDamageTakenEvents == null)
-            {
-                BreakbarDamageTakenEvents = new List<AbstractBreakbarDamageEvent>();
-                BreakbarDamageTakenEvents.AddRange(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
-                BreakbarDamageTakenEvents = BreakbarDamageTakenEvents.OrderBy(x => x.Time).ToList();
-                BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            }
-            if (target != null)
-            {
-                if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractBreakbarDamageEvent> list))
-                {
-                    long targetStart = target.FirstAware;
-                    long targetEnd = target.LastAware;
-                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
-                }
-                else
-                {
-                    return new List<AbstractBreakbarDamageEvent>();
-                }
-            }
-            return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
-        }
-
         /// <summary>
         /// cached method for damage modifiers
         /// </summary>
@@ -877,6 +955,132 @@ namespace GW2EIEvtcParser.EIData
             }
             return dls;
         }
+
+        #endregion DAMAGE
+
+        #region BREAKBAR DAMAGE
+
+        public IReadOnlyList<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+        }
+
+        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (BreakbarDamageEvents == null)
+            {
+                BreakbarDamageEvents = new List<BreakbarDamageEvent>();
+                BreakbarDamageEvents.AddRange(log.CombatData.GetBreakbarDamageData(AgentItem).Where(x => !x.ToFriendly));
+                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
+                foreach (Minions mins in minionsList.Values)
+                {
+                    BreakbarDamageEvents.AddRange(mins.GetBreakbarDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                }
+                BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
+                BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                }
+                else
+                {
+                    return new List<BreakbarDamageEvent>();
+                }
+            }
+            return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+
+        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (BreakbarDamageTakenEvents == null)
+            {
+                BreakbarDamageTakenEvents = new List<BreakbarDamageEvent>();
+                BreakbarDamageTakenEvents.AddRange(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
+                BreakbarDamageTakenEvents = BreakbarDamageTakenEvents.OrderBy(x => x.Time).ToList();
+                BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    return new List<BreakbarDamageEvent>();
+                }
+            }
+            return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+
+        #endregion BREAKBAR DAMAGE
+
+        #region CROWD CONTROL
+
+        public IReadOnlyList<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+        }
+
+        public override IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (OutgoingCrowdControlEvents == null)
+            {
+                OutgoingCrowdControlEvents = new List<CrowdControlEvent>();
+                OutgoingCrowdControlEvents.AddRange(log.CombatData.GetOutgoingCrowdControlData(AgentItem).Where(x => !x.ToFriendly));
+                IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log);
+                foreach (Minions mins in minionsList.Values)
+                {
+                    OutgoingCrowdControlEvents.AddRange(mins.GetOutgoingCrowdControlEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                }
+                OutgoingCrowdControlEvents = OutgoingCrowdControlEvents.OrderBy(x => x.Time).ToList();
+                OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+                {
+                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                }
+                else
+                {
+                    return new List<CrowdControlEvent>();
+                }
+            }
+            return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+
+        public override IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        {
+            if (IncomingCrowdControlEvents == null)
+            {
+                IncomingCrowdControlEvents = new List<CrowdControlEvent>();
+                IncomingCrowdControlEvents.AddRange(log.CombatData.GetIncomingCrowdControlData(AgentItem));
+                IncomingCrowdControlEvents = IncomingCrowdControlEvents.OrderBy(x => x.Time).ToList();
+                IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+            }
+            if (target != null)
+            {
+                if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+                {
+                    long targetStart = target.FirstAware;
+                    long targetEnd = target.LastAware;
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                }
+                else
+                {
+                    return new List<CrowdControlEvent>();
+                }
+            }
+            return IncomingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+
+        #endregion CROWD CONTROL
 
 
         // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
@@ -914,88 +1118,6 @@ namespace GW2EIEvtcParser.EIData
                     return BinarySearchRecursive(position, time, midIndex + 1, maxIndex);
                 }
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <param name="forwardWindow">Position will be looked up to time + forwardWindow if given</param>
-        /// <returns></returns>
-        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
-        {
-            if (!HasCombatReplayPositions(log))
-            {
-                return null;
-            }
-            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-            if (forwardWindow != 0)
-            {
-                return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
-            }
-            int foundIndex = BinarySearchRecursive(positions, time, 0, positions.Count - 1);
-            if (foundIndex < 0)
-            {
-                return null;
-            }
-            return positions[foundIndex];
-        }
-
-        public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
-        {
-            if (!HasCombatReplayPositions(log))
-            {
-                return null;
-            }
-            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-            ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
-            ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
-            Point3D res;
-            if (prev != null && next != null)
-            {
-                long denom = next.Time - prev.Time;
-                if (denom == 0)
-                {
-                    res = prev;
-                }
-                else
-                {
-                    float ratio = (float)(time - prev.Time) / denom;
-                    res = new Point3D(prev, next, ratio);
-                }
-            }
-            else
-            {
-                res = prev ?? next;
-            }
-            return res;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <param name="forwardWindow">Rotation will be looked up to time + forwardWindow if given</param>
-        /// <returns></returns>
-        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
-        {
-            IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
-            if (!rotations.Any())
-            {
-                return null;
-            }
-            if (forwardWindow != 0)
-            {
-                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time);
-            }
-            int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1);
-            if (foundIndex < 0)
-            {
-                return null;
-            }
-            return rotations[foundIndex];
         }
     }
 }

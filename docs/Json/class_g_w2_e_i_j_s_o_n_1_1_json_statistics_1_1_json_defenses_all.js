@@ -23,5 +23,7 @@ var class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all =
     [ "LifeLeechDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a7286e0def36dc69bde1daab3907e5e59", null ],
     [ "MissedCount", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a26cb2d1d97e60773db571126ddae1aa7", null ],
     [ "PowerDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a79782c46b29123916a21c10413b6d777", null ],
+    [ "ReceivedCrowdControl", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#a6845d734cd8eb77c11c3d865bd377fc2", null ],
+    [ "ReceivedCrowdControlDuration", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#aacd1c53fd8ca69668af2e220cd2d8b2d", null ],
     [ "StrikeDamageTaken", "class_g_w2_e_i_j_s_o_n_1_1_json_statistics_1_1_json_defenses_all.html#acfd2268080e7b364bcc66fb6485b1e3e", null ]
 ];

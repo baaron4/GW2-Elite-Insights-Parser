@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser
 
         internal static readonly AgentItem _unknownAgent = new AgentItem();
 
-        public const int CombatReplayPollingRate = 150;
+        public const int CombatReplayPollingRate = 300;
         internal const uint CombatReplaySkillDefaultSizeInPixel = 22;
         internal const uint CombatReplaySkillDefaultSizeInWorld = 90;
         internal const uint CombatReplayOverheadDefaultSizeInPixel = 20;
@@ -38,7 +38,7 @@ namespace GW2EIEvtcParser
 
         public const long MinimumInCombatDuration = 2200;
 
-        internal const int PhaseTimeLimit = 2000;
+        internal const int PhaseTimeLimit = 1000;
 
 
         public enum Source

@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BreakbarDamageCastFinder : CheckedCastFinder<AbstractBreakbarDamageEvent>
+    internal class BreakbarDamageCastFinder : CheckedCastFinder<BreakbarDamageEvent>
     {
         private readonly long _damageSkillID;
 
@@ -18,10 +18,10 @@ namespace GW2EIEvtcParser.EIData
         {
             var res = new List<InstantCastEvent>();
             var damages = combatData.GetBreakbarDamageData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<AbstractBreakbarDamageEvent>> pair in damages)
+            foreach (KeyValuePair<AgentItem, List<BreakbarDamageEvent>> pair in damages)
             {
                 long lastTime = int.MinValue;
-                foreach (AbstractBreakbarDamageEvent de in pair.Value)
+                foreach (BreakbarDamageEvent de in pair.Value)
                 {
                     if (CheckCondition(de, combatData, agentData, skillData))
                     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser
 {
@@ -71,6 +72,7 @@ namespace GW2EIEvtcParser
             internal const ulong March2024BalanceAndCerusLegendary = 159951;
             internal const ulong May2024LonelyTowerFractalRelease = 163141;
             internal const ulong June2024LonelyTowerCMRelease = 163807;
+            internal const ulong June2024Balance = 164824;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }
@@ -96,6 +98,9 @@ namespace GW2EIEvtcParser
             internal const int Last90BeforeDownRetired = 20240529;
             internal const int StackType0ActiveChange = 20240609;
             internal const int TeamChangeOnDespawn = 20240612;
+            internal const int WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents = 20240627;
+            internal const int MovementSkillDetection = 20240709;
+            internal const int EICanDoManualBuffAttributes = 20240716;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -109,6 +114,21 @@ namespace GW2EIEvtcParser
             public const int SecondWaterSet = 1;
             public const int TransformSet = 3;
             public const int KitSet = 2;
+
+            public static bool IsWeaponSet(int set)
+            {
+                return IsLandSet(set) || IsWaterSet(set);
+            }
+
+            public static bool IsLandSet(int set)
+            {
+                return set == FirstLandSet || set == SecondLandSet;
+            }
+
+            public static bool IsWaterSet(int set)
+            {
+                return set == FirstWaterSet || set == SecondWaterSet;
+            }
         }
 
         /// <summary>
@@ -206,6 +226,7 @@ namespace GW2EIEvtcParser
             Downed = 9,
             BreakbarDamage = 10,
             Activation = 11,
+            CrowdControl = 12,
 
             Unknown
         };
@@ -289,6 +310,8 @@ namespace GW2EIEvtcParser
             RuleSet = 52,
             SquadMarker = 53,
             ArcBuild = 54,
+            Glider = 55,
+            StunBreak = 56,
             Unknown
         };
 
@@ -416,6 +439,10 @@ namespace GW2EIEvtcParser
         }
         internal static BuffAttribute GetBuffAttribute(short bt, int evtcBuild)
         {
+            if (evtcBuild >= ArcDPSBuilds.EICanDoManualBuffAttributes)
+            {
+                return bt == 0 ? BuffAttribute.None : BuffAttribute.Unknown;
+            }
             BuffAttribute res;
             if (evtcBuild >= ArcDPSBuilds.BuffAttrFlatIncRemoved)
             {
@@ -579,6 +606,7 @@ namespace GW2EIEvtcParser
         private const int PermanentEmbodimentOfEnvy = -57;
         private const int PermanentEmbodimentOfMalice = -58;
         private const int KryptisRift = -59;
+        private const int EparchLonelyTowerDummy = -60;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -1059,6 +1087,7 @@ namespace GW2EIEvtcParser
             TheTormentedLonelyTower = 26193,
             TheCravenLonelyTower = 26193,
             KryptisRift = ArcDPSEnums.KryptisRift,
+            EparchLonelyTowerDummy = ArcDPSEnums.EparchLonelyTowerDummy,
             // Open world Soo-Won
             SooWonTail = 51756,
             VoidGiant2 = 24310,
@@ -1285,6 +1314,7 @@ namespace GW2EIEvtcParser
             IllusionaryWhaler = 9057,
             IllusionaryAvenger = 15188,
             IllusionarySharpShooter = 26152,
+            IllusionaryLancer = 26271,
             // Mesmer Clones
             // - Single Weapon
             CloneSword = 8108,

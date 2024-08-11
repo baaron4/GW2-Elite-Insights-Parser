@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class DoughnutDecoration : FormDecoration
     {
-        internal class ConstantDoughnutDecoration : ConstantFormDecoration
+        internal class DoughnutDecorationMetadata : FormDecorationMetadata
         {
             public uint OuterRadius { get; }
             public uint InnerRadius { get; }
 
-            public ConstantDoughnutDecoration(string color, uint innerRadius, uint outerRadius) : base(color)
+            public DoughnutDecorationMetadata(string color, uint innerRadius, uint outerRadius) : base(color)
             {
                 OuterRadius = Math.Max(outerRadius, 1);
                 InnerRadius = innerRadius;
@@ -21,25 +21,36 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Dough" + OuterRadius + Color + InnerRadius;
+            }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new DoughnutDecorationMetadataDescription(this);
             }
         }
-        internal class VariableDoughnutDecoration : VariableFormDecoration
+        internal class DoughnutDecorationRenderingData : FormDecorationRenderingData
         {
-            public VariableDoughnutDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public DoughnutDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
-        }
-        private new ConstantDoughnutDecoration ConstantDecoration => (ConstantDoughnutDecoration)base.ConstantDecoration;
-        public uint OuterRadius => ConstantDecoration.OuterRadius;
-        public uint InnerRadius => ConstantDecoration.InnerRadius;
 
-        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new DoughnutDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
+        }
+        private new DoughnutDecorationMetadata DecorationMetadata => (DoughnutDecorationMetadata)base.DecorationMetadata;
+        public uint OuterRadius => DecorationMetadata.OuterRadius;
+        public uint InnerRadius => DecorationMetadata.InnerRadius;
+
+        internal DoughnutDecoration(DoughnutDecorationMetadata metadata, DoughnutDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
-            base.ConstantDecoration = new ConstantDoughnutDecoration(color, innerRadius, outerRadius);
-            VariableDecoration = new VariableDoughnutDecoration(lifespan, connector);
+        }
+
+        public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new DoughnutDecorationMetadata(color, innerRadius, outerRadius), new DoughnutDecorationRenderingData(lifespan, connector))
+        {
         }
         public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {
@@ -58,11 +69,6 @@ namespace GW2EIEvtcParser.EIData
             return (DoughnutDecoration)Copy(borderColor).UsingFilled(false);
         }
         //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new DoughnutDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
 
     }
 }

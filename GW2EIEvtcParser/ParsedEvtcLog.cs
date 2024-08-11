@@ -34,7 +34,7 @@ namespace GW2EIEvtcParser
         private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
 
         internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
-                List<CombatItem> combatItems, List<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
+                IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
         {
             FightData = fightData;
             AgentData = agentData;
@@ -43,25 +43,6 @@ namespace GW2EIEvtcParser
             PlayerAgents = new HashSet<AgentItem>(PlayerList.Select(x => x.AgentItem));
             ParserSettings = parserSettings;
             _operation = operation;
-            if (parserSettings.AnonymousPlayers)
-            {
-                operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
-                for (int i = 0; i < PlayerList.Count; i++)
-                {
-                    PlayerList[i].Anonymize(i + 1);
-                }
-                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
-                int playerOffset = PlayerList.Count;
-                foreach (AgentItem playerAgent in allPlayerAgents)
-                {
-                    if (!PlayerAgents.Contains(playerAgent))
-                    {
-                        string character = "Player " + playerOffset;
-                        string account = "Account " + (playerOffset++);
-                        playerAgent.OverrideName(character + "\0:" + account + "\01");
-                    }
-                }
-            }
             //
             _operation.UpdateProgressWithCancellationCheck("Parsing: Creating GW2EI Combat Events");
             CombatData = new CombatData(combatItems, FightData, AgentData, SkillData, PlayerList, operation, extensions, evtcVersion);
@@ -82,6 +63,29 @@ namespace GW2EIEvtcParser
             FightData.ProcessEncounterStatus(CombatData, AgentData);
             operation.UpdateProgressWithCancellationCheck("Parsing: Setting Fight Name");
             FightData.CompleteFightName(CombatData, AgentData);
+            //
+            FightData.Logic.UpdatePlayersSpecAndGroup(PlayerList, CombatData, FightData);
+            PlayerList = PlayerList.OrderBy(a => a.Group).ThenBy(x => x.Character).ToList();
+            //
+            if (parserSettings.AnonymousPlayers)
+            {
+                operation.UpdateProgressWithCancellationCheck("Parsing: Anonymous players");
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    PlayerList[i].Anonymize(i + 1);
+                }
+                IReadOnlyList<AgentItem> allPlayerAgents = agentData.GetAgentByType(AgentItem.AgentType.Player);
+                int playerOffset = PlayerList.Count + 1;
+                foreach (AgentItem playerAgent in allPlayerAgents)
+                {
+                    if (!PlayerAgents.Contains(playerAgent))
+                    {
+                        string character = "Player " + playerOffset;
+                        string account = "Account " + (playerOffset++);
+                        playerAgent.OverrideName(character + "\0:" + account + "\00");
+                    }
+                }
+            }
             //
             var friendlies = new List<AbstractSingleActor>();
             friendlies.AddRange(PlayerList);
@@ -179,6 +183,52 @@ namespace GW2EIEvtcParser
                 //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
             }
             return actor;
+        }
+
+
+        public (List<AbstractSingleActorCombatReplayDescription>,List<AbstractCombatReplayRenderingDescription>, List<AbstractCombatReplayDecorationMetadataDescription>) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        {
+            var map = FightData.Logic.GetCombatReplayMap(this);
+            var actors = new List<AbstractSingleActorCombatReplayDescription>();
+            var decorationRenderings = new List<AbstractCombatReplayRenderingDescription>();
+            var decorationMetadata = new List<AbstractCombatReplayDecorationMetadataDescription>();
+            var fromNonFriendliesSet = new HashSet<AbstractSingleActor>(FightData.Logic.Hostiles);
+            foreach (AbstractSingleActor actor in Friendlies)
+            {
+                if (actor.IsFakeActor || !actor.HasCombatReplayPositions(this))
+                {
+                    continue;
+                }
+                actors.Add(actor.GetCombatReplayDescription(map, this));
+                decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+                foreach (Minions minions in actor.GetMinions(this).Values)
+                {
+                    if (minions.MinionList.Count > ParserHelper.MinionLimit)
+                    {
+                        continue;
+                    }
+                    if (ParserHelper.IsKnownMinionID(minions.ReferenceAgentItem, actor.Spec))
+                    {
+                        fromNonFriendliesSet.UnionWith(minions.MinionList);
+                    }
+                }
+            }
+            foreach (AbstractSingleActor actor in fromNonFriendliesSet.ToList())
+            {
+                if ((actor.LastAware - actor.FirstAware < 200) || !actor.HasCombatReplayPositions(this))
+                {
+                    continue;
+                }
+                actors.Add(actor.GetCombatReplayDescription(map, this));
+                decorationRenderings.AddRange(actor.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+
+            }
+            decorationRenderings.AddRange(FightData.Logic.GetCombatReplayDecorationRenderableDescriptions(map, this, usedSkills, usedBuffs));
+            foreach (var pair in FightData.Logic.DecorationCache)
+            {
+                decorationMetadata.Add(pair.Value.GetCombatReplayMetadataDescription());
+            }
+            return (actors, decorationRenderings, decorationMetadata);
         }
     }
 }

@@ -42,12 +42,15 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
         {
+            // Confirm if applied strike and condition
+            new BuffOnActorDamageModifier(ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, BuffImages.ImplacableFoe, DamageModifierMode.All),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
         {
             new Buff("Harbinger Shroud", HarbingerShroud, Source.Harbinger, BuffClassification.Other, BuffImages.HarbingerShroud),
             new Buff("Blight", Blight, Source.Harbinger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Blight),
+            new Buff("Implacable Foe", ImplacableFoe, Source.Harbinger, BuffClassification.Other, BuffImages.ImplacableFoe),
         };
 
         private static readonly HashSet<long> _harbingerShroudTransform = new HashSet<long>

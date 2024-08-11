@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(SharpenSpinesBeastmode, SharpenSpinesBuff),
             new EffectCastFinder(EternalBondSkill, EffectGUIDs.SoulbeastEternalBond)
                 .UsingSrcSpecChecker(Spec.Soulbeast)
-                .WithBuilds(GW2Builds.October2022Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.October2022Balance),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>

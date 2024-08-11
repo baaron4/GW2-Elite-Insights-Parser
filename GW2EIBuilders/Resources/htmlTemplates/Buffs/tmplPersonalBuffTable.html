@@ -1,0 +1,57 @@
+<template>
+    <div>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+            <li v-for="base in bases" class="nav-item">
+                <a class="nav-link" @click="persBuffMode = base" :class="{active: persBuffMode === base}">{{ base }}</a>
+            </li>
+        </ul>
+        <div v-for="(spec, id) in orderedSpecs" class="mt-1 mb-1">
+            <div v-show="specToBase[spec.name] === persBuffMode">
+                <h3 class="text-center">{{ spec.name }}</h3>
+                <buff-table-component :target="null" :condition="false" :generation="false" :id="'persbuffs-stats-table' + '_' + spec.name"
+                    :buffs="persBuffs[id]" :playerdata="data[id]" :sums="[]" :playerindex="playerindex" :hidecustom="false"></buff-table-component>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("personal-buff-table-component", {
+        props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                bases: [],
+                persBuffMode: "Warrior",
+                cache: new Map(),
+                specToBase: SpecToBase
+            };
+        },
+        computed: {
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            data: function () {
+				const id = this.phaseindex + '-' + this.activeduration;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }
+                const res = [];
+                for (let i = 0; i < this.orderedSpecs.length; i++) {
+                    const spec = this.orderedSpecs[i];
+                    const dataBySpec = [];
+                    for (let j = 0; j < spec.ids.length; j++) {
+                        dataBySpec.push({
+                            player: logData.players[spec.ids[j]],
+                            data: this.activeduration ? this.buffsStatContainer.persBuffActiveStats[spec.ids[j]] : this.buffsStatContainer.persBuffStats[spec.ids[j]]
+                        });
+                    }
+                    res.push(dataBySpec);
+                }
+                this.cache.set(id, res);
+                return res;
+            },
+        }
+    });
+</script>

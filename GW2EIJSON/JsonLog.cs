@@ -303,6 +303,18 @@ namespace GW2EIJSON
         /// Offset between fight start and log start
         /// </summary>
         public long LogStartOffset { get; set; }
+        /// <summary>
+        /// The time at which the instance started in "yyyy-mm-dd hh:mm:ss zzz" format \n
+        /// The value will be null if the event does not exist
+        /// </summary>
+        public string InstanceTimeStartStd { get; set; }
+
+
+        /// <summary>
+        /// XXX.XXX.XXX.XXX IP address of the instance \n
+        /// The value will be null if the event does not exist
+        /// </summary>
+        public string InstanceIP { get; set; }
 
         /// <summary>
         /// The success status of the fight

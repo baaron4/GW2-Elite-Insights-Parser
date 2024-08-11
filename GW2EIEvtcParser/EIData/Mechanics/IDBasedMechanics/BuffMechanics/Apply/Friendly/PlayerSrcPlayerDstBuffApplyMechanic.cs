@@ -20,8 +20,8 @@ namespace GW2EIEvtcParser.EIData
             AbstractSingleActor dst = MechanicHelper.FindPlayerActor(log, ba.To);
             if (dst != null)
             {
-                mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, actor));
-                mechanicLogs[this].Add(new MechanicEvent(ba.Time, this, dst));
+                InsertMechanic(log, mechanicLogs, ba.Time, actor);
+                InsertMechanic(log, mechanicLogs, ba.Time, dst);
             }
         }
     }

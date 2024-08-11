@@ -91,6 +91,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                //ParseEnum.TrashIDS.CastleFountain
             };
         }
+        protected override HashSet<int> GetUniqueNPCIDs()
+        {
+            return new HashSet<int>();
+        }
 
         internal override void ComputeNPCCombatReplayActors(NPC npc, ParsedEvtcLog log, CombatReplay replay)
         {

@@ -1,0 +1,50 @@
+<template>
+    <div>
+        <buff-table-component :key="'nourishement-buff-stats-table'" :condition="false" :generation="false"
+            :id="'nourishement-buff-stats-table'" :buffs="nourishments" :playerdata="buffData" :sums="[]" :playerindex="playerindex" :hidecustom="false">
+        </buff-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("nourishement-buff-table-component", {
+        props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            buffData: function () {
+                const id = this.phaseindex;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }
+
+                var getData = function (stats) {
+                    const uptimes = [];
+                    var i;
+                    for (i = 0; i < logData.players.length; i++) {
+                        const player = logData.players[i];
+                        if (player.isFake) {
+                            continue;
+                        }
+                        uptimes.push({
+                            player: player,
+                            data: stats[i]
+                        });
+                    }
+                    return uptimes;
+                };
+                const res = getData(this.buffsStatContainer.nourishmentStats);
+                this.cache.set(id, res);
+                return res;
+            }
+        },
+    });
+</script>

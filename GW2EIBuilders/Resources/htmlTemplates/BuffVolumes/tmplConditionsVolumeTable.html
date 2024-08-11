@@ -1,0 +1,97 @@
+<template>
+    <div>
+        <buff-volume-table-component :key="'conditions-volume-stats-table'" :outgoing="false"
+            :id="'conditions-volume-stats-table'" :buffs="conditions" :playerdata="buffData[0]" :sums="buffData[1]" :playerindex="playerindex" :hidecustom="false">
+        </buff-volume-table-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("conditions-volume-table-component", {
+        props: ['phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map()
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            buffData: function () {
+                var id = this.phaseindex + '-' + this.activeduration;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }
+                var activeduration = this.activeduration;
+                var activeTimes = this.phase.playerActiveTimes;
+
+                var getData = function (uptimesStats) {
+                    var uptimes = [];                    
+                    var avg = [],
+                        groupeAvg = [],
+                        totalAvg = [];
+                    var groupCount = [],
+                        totalCount = 0;
+                    for (var i = 0; i < logData.players.length; i++) {
+                        var player = logData.players[i];
+                        if (player.isFake) {
+                            continue;
+                        }
+                        uptimes.push({
+                            player: player,
+                            data: uptimesStats[i]
+                        });
+                        
+                        if (activeduration && activeTimes[i] < 1e-6) {
+                            continue;
+                        }
+                        if (player.notInSquad) {
+                            continue;
+                        }
+                        var playerWeight = activeduration ? activeTimes[i] : 1;
+                        if (!groupeAvg[player.group]) {
+                            groupeAvg[player.group] = [];
+                            groupCount[player.group] = 0;
+                        }
+                        totalCount += playerWeight;
+                        groupCount[player.group] += playerWeight;
+                        for (var j = 0; j < uptimesStats[i].data.length; j++) {
+                            totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                            groupeAvg[player.group][j] = (groupeAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                        }
+                    }
+                    for (var i = 0; i < groupeAvg.length; i++) {
+                        if (groupeAvg[i]) {
+                            for (var k = 0; k < groupeAvg[i].length; k++) {
+                                groupeAvg[i][k] = Math.round(1000 * groupeAvg[i][k] / groupCount[i]) / 1000;
+                            }
+                            avg.push({
+                                name: "Group " + i,
+                                data: groupeAvg[i],
+                            });
+                        }
+                    }
+                    for (var k = 0; k < totalAvg.length; k++) {
+                        totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
+                    }
+                    avg.push({
+                        name: "Total",
+                        data: totalAvg,
+                    });
+                    return [uptimes, avg];
+                };
+                var res;
+                if (this.activeduration) {
+                    res = getData(this.buffVolumesStatContainer.conditionsVolumeActiveStats);
+                } else {
+                    res = getData(this.buffVolumesStatContainer.conditionsVolumeStats);
+                }
+                this.cache.set(id, res);
+                return res;
+            }
+        },
+    });
+</script>

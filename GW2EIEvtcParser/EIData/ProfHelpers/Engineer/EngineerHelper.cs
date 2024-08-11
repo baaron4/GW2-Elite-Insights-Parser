@@ -111,6 +111,8 @@ namespace GW2EIEvtcParser.EIData
                     // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
                     return MineDetonationInstantCastChecker(effect, combatData, true, new string [] { EffectGUIDs.EngineerThrowMineInactive1 });
                 }),
+             new DamageCastFinder(FocusedDevastation, FocusedDevastation)
+                .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
@@ -196,9 +198,9 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
             new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, BuffImages.SkilledMarksman),
             new Buff("Explosive Entrance", ExplosiveEntranceBuff, Source.Engineer, BuffClassification.Other, BuffImages.ExplosiveEntrance)
-                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.February2020Balance),
             new Buff("Explosive Temper", ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ExplosiveTemper)
-                .WithBuilds(GW2Builds.February2020Balance, GW2Builds.EndOfLife),
+                .WithBuilds(GW2Builds.February2020Balance),
             new Buff("Big Boomer", BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, BuffImages.BigBoomer),
             new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.MedKit),
             new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  BuffImages.MedKit),
@@ -211,6 +213,11 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Tool Kit", POV_ToolKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.ToolKit),
             new Buff("Elite Mortar", POV_EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
             */
+            // Spear
+            new Buff("Conduit Surge", ConduitSurgeBuff, Source.Engineer, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
@@ -375,5 +382,6 @@ namespace GW2EIEvtcParser.EIData
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
             }
         }
+
     }
 }

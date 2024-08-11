@@ -30,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (Keep(ahde, log))
                     {
-                        mechanicLogs[this].Add(new MechanicEvent(ahde.Time, this, p));
+                        InsertMechanic(log, mechanicLogs, ahde.Time, p);
                     }
                 }
             }

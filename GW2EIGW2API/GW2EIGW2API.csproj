@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <Nullable>disable</Nullable>
         <RootNamespace>GW2EIGW2API</RootNamespace>
-        <Version>2.3.2</Version>
+        <Version>2.4.0</Version>
         <Configurations>Debug;Release;NoRewards</Configurations>
     </PropertyGroup>
 

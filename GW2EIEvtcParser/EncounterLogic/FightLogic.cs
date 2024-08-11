@@ -8,6 +8,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EIData.GenericDecoration;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -51,7 +52,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected List<AbstractSingleActor> _targets { get; private set; } = new List<AbstractSingleActor>();
         protected List<AbstractSingleActor> _hostiles { get; private set; } = new List<AbstractSingleActor>();
 
-        protected List<GenericDecoration> EnvironmentDecorations { get; private set; } = null;
+        internal Dictionary<string, GenericDecorationMetadata> DecorationCache { get; } = new Dictionary<string, GenericDecorationMetadata>();
+
+        internal CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
 
         protected ArcDPSEnums.ChestID ChestID { get; set; } = ChestID.None;
 
@@ -243,6 +246,28 @@ namespace GW2EIEvtcParser.EncounterLogic
             FinalizeComputeFightTargets();
         }
 
+        internal virtual void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+        {
+            foreach (Player p in players)
+            {
+                long threshold = fightData.FightStart + 5000;
+                EnterCombatEvent enterCombat = null;
+                if (p.FirstAware > threshold)
+                {
+                    enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
+                } 
+                else
+                {
+                    enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault();
+                }
+                if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown)
+                {
+                    p.AgentItem.OverrideSpec(enterCombat.Spec);
+                    p.OverrideGroup(enterCombat.Subgroup);
+                }
+            }
+        }
+
         protected void FinalizeComputeFightTargets()
         {
             //
@@ -387,15 +412,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        internal IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             if (EnvironmentDecorations == null)
             {
-                EnvironmentDecorations = new List<GenericDecoration>();
+                EnvironmentDecorations = new CombatReplayDecorationContainer(DecorationCache);
                 ComputeEnvironmentCombatReplayDecorations(log);
-                EnvironmentDecorations.RemoveAll(x => x.Lifespan.end <= x.Lifespan.start);
             }
-            return EnvironmentDecorations;
+            return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
         }
 
         internal virtual FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

@@ -799,17 +799,17 @@ namespace GW2EIBuilders
                 WriteCell(player.Character);
                 foreach (Buff boon in _statistics.PresentConditions)
                 {
-                    if (conditions.TryGetValue(boon.ID, out FinalBuffsDictionary uptime) && uptime.Generated.ContainsKey(player))
+                    if (conditions.TryGetValue(boon.ID, out FinalBuffsDictionary uptime) && uptime.GeneratedBy.ContainsKey(player))
                     {
                         if (boon.Type == Buff.BuffType.Duration)
                         {
-                            WriteCell(conditions[boon.ID].Generated[player].ToString() + "%");
-                            WriteCell(conditions[boon.ID].Overstacked[player].ToString() + "%");
+                            WriteCell(conditions[boon.ID].GeneratedBy[player].ToString() + "%");
+                            WriteCell(conditions[boon.ID].OverstackedBy[player].ToString() + "%");
                         }
                         else
                         {
-                            WriteCell(conditions[boon.ID].Generated[player].ToString());
-                            WriteCell(conditions[boon.ID].Overstacked[player].ToString());
+                            WriteCell(conditions[boon.ID].GeneratedBy[player].ToString());
+                            WriteCell(conditions[boon.ID].OverstackedBy[player].ToString());
                         }
                     }
                     else

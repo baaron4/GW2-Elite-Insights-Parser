@@ -6,22 +6,26 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class LineDecoration : FormDecoration
     {
-        internal class ConstantLineDecoration : ConstantFormDecoration
+        internal class LineDecorationMetadata : FormDecorationMetadata
         {
 
-            public ConstantLineDecoration(string color) : base(color)
+            public LineDecorationMetadata(string color) : base(color)
             {
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Line" + Color;
+            }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new LineDecorationMetadataDescription(this);
             }
         }
-        internal class VariableLineDecoration : VariableFormDecoration
+        internal class LineDecorationRenderingData : FormDecorationRenderingData
         {
             public GeographicalConnector ConnectedFrom { get; }
-            public VariableLineDecoration((long, long) lifespan, GeographicalConnector connector, GeographicalConnector targetConnector) : base(lifespan, connector)
+            public LineDecorationRenderingData((long, long) lifespan, GeographicalConnector connector, GeographicalConnector targetConnector) : base(lifespan, connector)
             {
                 ConnectedFrom = targetConnector;
             }
@@ -31,14 +35,21 @@ namespace GW2EIEvtcParser.EIData
             public override void UsingRotationConnector(RotationConnector rotationConnectedTo)
             {
             }
-        }
-        private new VariableLineDecoration VariableDecoration => (VariableLineDecoration)base.VariableDecoration;
-        public GeographicalConnector ConnectedFrom => VariableDecoration.ConnectedFrom;
 
-        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base()
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new LineDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
+        }
+        private new LineDecorationRenderingData DecorationRenderingData => (LineDecorationRenderingData)base.DecorationRenderingData;
+        public GeographicalConnector ConnectedFrom => DecorationRenderingData.ConnectedFrom;
+
+        internal LineDecoration(LineDecorationMetadata metadata, LineDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
-            base.ConstantDecoration = new ConstantLineDecoration(color);
-            base.VariableDecoration = new VariableLineDecoration(lifespan, connector, targetConnector);
+        }
+
+        public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base(new LineDecorationMetadata(color), new LineDecorationRenderingData(lifespan, connector, targetConnector))
+        {
         }
 
         public LineDecoration((long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector, GeographicalConnector targetConnector) : this(lifespan, color.WithAlpha(opacity).ToString(true), connector, targetConnector)
@@ -61,10 +72,5 @@ namespace GW2EIEvtcParser.EIData
             throw new InvalidOperationException("Lines can't have borders");
         }
         //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new LineDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

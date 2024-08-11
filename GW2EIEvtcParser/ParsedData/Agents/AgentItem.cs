@@ -24,8 +24,8 @@ namespace GW2EIEvtcParser.ParsedData
         public long FirstAware { get; protected set; }
         public long LastAware { get; protected set; } = long.MaxValue;
         public string Name { get; protected set; } = "UNKNOWN";
-        public ParserHelper.Spec Spec { get; } = ParserHelper.Spec.Unknown;
-        public ParserHelper.Spec BaseSpec { get; } = ParserHelper.Spec.Unknown;
+        public ParserHelper.Spec Spec { get; private set; } = ParserHelper.Spec.Unknown;
+        public ParserHelper.Spec BaseSpec { get; private set; } = ParserHelper.Spec.Unknown;
         public ushort Toughness { get; protected set; }
         public ushort Healing { get; }
         public ushort Condition { get; }
@@ -107,6 +107,12 @@ namespace GW2EIEvtcParser.ParsedData
         internal AgentItem()
         {
             UniqueID = ++AgentCount;
+        }
+
+        internal void OverrideSpec(ParserHelper.Spec spec)
+        {
+            Spec = spec;
+            BaseSpec = ParserHelper.SpecToBaseSpec(spec);
         }
 
         internal void OverrideIsNotInSquadFriendlyPlayer(bool status)
@@ -211,11 +217,6 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, CombatData combatData, FightData fightData)
         {
-            // State changes are not reliable
-            if (Type == AgentType.NonSquadPlayer)
-            {
-                return;
-            }
             var status = new List<AbstractStatusEvent>();
             status.AddRange(combatData.GetDownEvents(this));
             status.AddRange(combatData.GetAliveEvents(this));
@@ -223,6 +224,11 @@ namespace GW2EIEvtcParser.ParsedData
             status.AddRange(combatData.GetSpawnEvents(this));
             status.AddRange(combatData.GetDespawnEvents(this));
             dc.Add(new Segment(long.MinValue, FirstAware, 1));
+            // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
+            if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
+            {
+                return;
+            }
             if (status.Count == 0)
             {
                 dc.Add(new Segment(LastAware, long.MaxValue, 1));
@@ -253,13 +259,13 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData, FightData fightData)
         {
-            // State changes are not reliable
-            if (Type == AgentType.NonSquadPlayer)
+            var status = new List<BreakbarStateEvent>();
+            status.AddRange(combatData.GetBreakbarStateEvents(this));
+            // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
+            if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
             {
                 return;
             }
-            var status = new List<BreakbarStateEvent>();
-            status.AddRange(combatData.GetBreakbarStateEvents(this));
             if (status.Count == 0)
             {
                 nones.Add(new Segment(FirstAware, LastAware, 1));
@@ -380,6 +386,19 @@ namespace GW2EIEvtcParser.ParsedData
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetBuffStatus(log, by, buffId, start, end);
+        }
+
+
+        /// <summary>
+        /// Checks if the agent will go into downstate before the next time they go above 90% health, or the fight ends.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Current log time</param>
+        /// <returns><see langword="true"/> if the agent will down before the next time they go above 90% health, otherwise <see langword="false"/>.</returns>
+        public bool IsDownedBeforeNext90(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDownBefore90(log, time);
         }
 
         /// <summary>

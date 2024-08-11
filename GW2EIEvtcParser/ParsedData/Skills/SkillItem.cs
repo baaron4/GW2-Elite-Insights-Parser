@@ -170,6 +170,7 @@ namespace GW2EIEvtcParser.ParsedData
             { OverbearingSmashLeap, "Overbearing Smash (Leap)" },
             { UnleashedOverbearingSmashLeap, "Unleashed Overbearing Smash (Leap)" },
             { RangerPetSpawned, "Ranger Pet Spawned" },
+            { WolfsOnslaughtFollowUp, "Wolf's Onslaught (Follow Up)" },
             // Revenant
 	        { EnergyExpulsion, "Energy Expulsion" },
             { RiftSlashRiftHit, "Rift Slash (Rift Hit)" },
@@ -188,6 +189,8 @@ namespace GW2EIEvtcParser.ParsedData
             { KallaSummonsSaluteAnimationSkill, "Salute" },
             { GenerousAbundanceCentaur, "Generous Abundance (Centaur)" },
             { GenerousAbundanceOther, "Generous Abundance (Other)" },
+            { BlitzMinesDrop, "Blitz Mines (Drop)" },
+            { BlitzMines, "Blitz Mines (Detonation)" },
             // Thief
 	        { EscapistsFortitude, "Escapist's Fortitude" }, // The game maps this to the wrong skill
             { SoulStoneVenomSkill, "Soul Stone Venom" },
@@ -204,6 +207,10 @@ namespace GW2EIEvtcParser.ParsedData
             { BoundHit, "Bound (Hit)" },
             // Warrior
             { RushDamage, "Rush (Hit)" },
+            { MightyThrowScatter, "Mighty Throw (Scattered Spear)" },
+            { HarriersTossAdrenalineLevel1, "Harrier's Toss (Adrenaline Level 1)" },
+            { HarriersTossAdrenalineLevel2, "Harrier's Toss (Adrenaline Level 2)" },
+            { HarriersTossAdrenalineLevel3, "Harrier's Toss (Adrenaline Level 3)" },
             // Special Forces Training Area
             { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
             // Gorseval
@@ -1337,7 +1344,7 @@ namespace GW2EIEvtcParser.ParsedData
             return true;
         }
 
-        internal int FindFirstWeaponSet(IReadOnlyList<int> swaps)
+        internal int FindFirstWeaponSet(IReadOnlyList<(int to, int from)> swaps)
         {
             int swapped = WeaponSetIDs.NoSet;
             // we started on a proper weapon set
@@ -1350,7 +1357,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal bool EstimateWeapons(WeaponSets weaponSets, int swapped, bool validForCurrentSwap)
         {
-            bool keep = swapped == WeaponSetIDs.FirstLandSet || swapped == WeaponSetIDs.SecondLandSet || swapped == WeaponSetIDs.FirstWaterSet || swapped == WeaponSetIDs.SecondWaterSet;
+            bool keep = WeaponSetIDs.IsWeaponSet(swapped);
             if (_weaponDescriptor == null || !keep || !validForCurrentSwap)
             {
                 return false;

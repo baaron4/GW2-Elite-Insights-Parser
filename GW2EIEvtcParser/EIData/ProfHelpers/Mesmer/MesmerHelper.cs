@@ -77,6 +77,8 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
             // Rifle
             new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
+            new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction)
+                .UsingSrcBaseSpecChecker(Spec.Mesmer),
         };
 
 
@@ -171,6 +173,8 @@ namespace GW2EIEvtcParser.EIData
             // Transformations
             new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphMoa),
             new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
+            // Spear
+            new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         private static readonly HashSet<int> _cloneIDs = new HashSet<int>()
@@ -318,7 +322,7 @@ namespace GW2EIEvtcParser.EIData
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             Color color = Colors.Mesmer;
-            ulong gw2Build = log.CombatData.GetBuildEvent().Build;
+            ulong gw2Build = log.CombatData.GetGW2BuildEvent().Build;
             // Portal locations
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out IReadOnlyList<EffectEvent> portalInactives))
             {

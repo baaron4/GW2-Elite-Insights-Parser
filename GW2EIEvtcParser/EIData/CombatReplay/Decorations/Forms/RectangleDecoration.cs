@@ -6,36 +6,47 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class RectangleDecoration : FormDecoration
     {
-        internal class ConstantRectangleDecoration : ConstantFormDecoration
+        internal class RectangleDecorationMetadata : FormDecorationMetadata
         {
             public uint Height { get; }
             public uint Width { get; }
 
-            public ConstantRectangleDecoration(string color, uint width, uint height) : base(color)
+            public RectangleDecorationMetadata(string color, uint width, uint height) : base(color)
             {
                 Height = Math.Max(height, 1);
                 Width = Math.Max(width, 1);
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Rect" + Height + Color + Width;
+            }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new RectangleDecorationMetadataDescription(this);
             }
         }
-        internal class VariableRectangleDecoration : VariableFormDecoration
+        internal class RectangleDecorationRenderingData : FormDecorationRenderingData
         {
-            public VariableRectangleDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public RectangleDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
-        }
-        private new ConstantRectangleDecoration ConstantDecoration => (ConstantRectangleDecoration)base.ConstantDecoration;
-        public uint Height => ConstantDecoration.Height;
-        public uint Width => ConstantDecoration.Width;
 
-        public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new RectangleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
+        }
+        private new RectangleDecorationMetadata DecorationMetadata => (RectangleDecorationMetadata)base.DecorationMetadata;
+        public uint Height => DecorationMetadata.Height;
+        public uint Width => DecorationMetadata.Width;
+
+        internal RectangleDecoration(RectangleDecorationMetadata metadata, RectangleDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
-            base.ConstantDecoration = new ConstantRectangleDecoration(color, width, height);
-            VariableDecoration = new VariableRectangleDecoration(lifespan, connector);
+        }
+
+        public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new RectangleDecorationMetadata(color, width, height), new RectangleDecorationRenderingData(lifespan, connector))
+        {
         }
         public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(width, height, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {
@@ -55,10 +66,5 @@ namespace GW2EIEvtcParser.EIData
             return copy;
         }
         //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new RectangleDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

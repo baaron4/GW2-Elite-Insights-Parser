@@ -26,10 +26,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            const int healthCMRelease = 32_618_906;
-            const int healthThreshold = (int)(0.95 * healthCMRelease); // fractals lose hp as their scale lowers
+            ulong build = combatData.GetGW2BuildEvent().Build;
+            int healthCMRelease = build >= GW2Builds.June2024Balance ? 22_833_236 : 32_618_906;
+            int healthThreshold = (int)(0.95 * healthCMRelease); // fractals lose hp as their scale lowers
             AbstractSingleActor eparch = GetEparchActor();
-            if (combatData.GetBuildEvent().Build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
+            if (build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
             {
                 return FightData.EncounterMode.CM;
             }
@@ -46,21 +47,21 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            // remove eparch agents used in roleplay by checking for relevant casts
-            IEnumerable<AgentItem> dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
+            var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
             {
                 return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.StartCasting() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
-            });
-            agentData.RemoveAllFrom(new HashSet<AgentItem>(dummyEparchs));
-
-            var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 1100).ToList();
-            if (riftAgents.Count != 0)
+            }).ToList();
+            dummyEparchs.ForEach(x => x.OverrideID(TrashID.EparchLonelyTowerDummy));
+            //
+            var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000).ToList();
+            riftAgents.ForEach(x =>
             {
-                riftAgents.ForEach(x =>
-                {
-                    x.OverrideID(TrashID.KryptisRift);
-                    x.OverrideType(AgentItem.AgentType.NPC);
-                });
+                x.OverrideID(TrashID.KryptisRift);
+                x.OverrideType(AgentItem.AgentType.NPC);
+            });
+            //
+            if (riftAgents.Count != 0 || dummyEparchs.Count != 0)
+            {
                 agentData.Refresh();
             }
 
@@ -90,9 +91,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             AbstractSingleActor eparch = GetEparchActor();
             var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
-            if (determinedApplies.Count >= 3)
+            if (fightData.IsCM && determinedApplies.Count >= 3)
             {
                 fightData.SetSuccess(true, determinedApplies[2].Time);
+            } 
+            else if (!fightData.IsCM && determinedApplies.Count >= 1)
+            {
+                fightData.SetSuccess(true, determinedApplies[0].Time);
             }
         }
 
@@ -101,7 +106,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor eparch = GetEparchActor();
             phases[0].AddTarget(eparch);
-            if (!requirePhases)
+            if (!requirePhases || !log.FightData.IsCM)
             {
                 return phases;
             }

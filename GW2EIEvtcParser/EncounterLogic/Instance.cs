@@ -65,6 +65,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
+        internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+        {
+            // Nothing to do
+        }
+
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             if (_targetIDs.Count == 0)
@@ -103,16 +108,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             fightData.SetSuccess(true, fightData.FightEnd);
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
             InstanceStartEvent evt = combatData.GetInstanceStartEvent();
             if (evt == null)
             {
-                StartedLate = true;
+                return FightData.EncounterStartStatus.Normal;
             }
             else
             {
-                StartedLate = Math.Abs(evt.OffsetFromInstanceCreation - fightData.LogOffset) < 20000;
+                return evt.TimeOffsetFromInstanceCreation > 1000 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
             }
         }
+
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
         {
             MapIDEvent mapID = combatData.GetMapIDEvents().LastOrDefault();

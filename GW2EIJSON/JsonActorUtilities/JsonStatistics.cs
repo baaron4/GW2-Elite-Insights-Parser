@@ -123,6 +123,14 @@ namespace GW2EIJSON
             /// Total duration of conditions cleansed
             /// </summary>
             public double ConditionCleansesTime { get; set; }
+            /// <summary>
+            /// Number of time crowd controlled
+            /// </summary>
+            public int ReceivedCrowdControl { get; set; }
+            /// <summary>
+            /// Total crowd control duration received in ms
+            /// </summary>
+            public double ReceivedCrowdControlDuration { get; set; }
 
 
             public JsonDefensesAll()
@@ -322,7 +330,6 @@ namespace GW2EIJSON
             public int Downed { get; set; }
             /// <summary>
             /// Relevant for WvW, defined as the sum of damage done from 90% to down that led to a death \n
-            /// Removed since EVTC20240529
             /// </summary>
             public int DownContribution { get; set; }
 
@@ -350,6 +357,14 @@ namespace GW2EIJSON
             /// Damage done against downed target
             /// </summary>
             public int AgainstDownedDamage { get; set; }
+            /// <summary>
+            /// Number of time applied a cc.
+            /// </summary>
+            public int AppliedCrowdControl { get; set; }
+            /// <summary>
+            /// Total crowd control duration inflicted in ms
+            /// </summary>
+            public double AppliedCrowdControlDuration { get; set; }
 
 
             public JsonGameplayStats()
@@ -481,6 +496,14 @@ namespace GW2EIJSON
             /// Total duration of boons stripped from self
             /// </summary>
             public double BoonStripsTime { get; set; }
+            /// <summary>
+            /// Number of time stun was broken, by self or others
+            /// </summary>
+            public int StunBreak { get; set; }
+            /// <summary>
+            /// Removed stun duration in s.
+            /// </summary>
+            public double RemovedStunDuration { get; set; }
 
 
             public JsonPlayerSupport()

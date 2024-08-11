@@ -1,0 +1,180 @@
+<template>
+    <div>
+        <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills d-flex flex-row justify-content-center scale85">
+                <li class="nav-item">
+                    <a class="nav-link" @click="buffMode = 0" :class="{active: buffMode === 0}">Uptime</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @click="buffMode = 1" :class="{active: buffMode === 1 }">Generation Self</a>
+                </li>
+                <li v-if="!singlePlayer" class="nav-item">
+                    <a class="nav-link" @click="buffMode = 2" :class="{active: buffMode === 2 }"
+                        data-original-title="Self excluded">Generation Group</a>
+                </li>
+                <li v-if="!singleGroup" class="nav-item">
+                    <a class="nav-link" @click="buffMode = 3" :class="{active: buffMode === 3 }"
+                        data-original-title="Self excluded">Generation Off-Group</a>
+                </li>
+                <li v-if="!singleGroup" class="nav-item">
+                    <a class="nav-link" @click="buffMode = 4" :class="{active: buffMode === 4 }"
+                        data-original-title="Self excluded">Generation Squad</a>
+                </li>
+            </ul>
+        </div>
+        <keep-alive>
+            <buff-table-component v-if="type === 0" :key="'boon-stats-table'" :condition="false" :generation="buffMode > 0"
+                :id="'boon-stats-table'" :buffs="boons" :playerdata="buffData.boonsData[buffMode]"
+                :sums="buffMode === 0 ? buffData.boonsData[5] : []" :playerindex="playerindex" :hidecustom="buffMode > 1">
+            </buff-table-component>
+            <buff-table-component v-if="type === 1" :key="'offensivebuff-stats-table'" :condition="false"
+                :generation="buffMode > 0" :id="'offensivebuff-stats-table'" :buffs="offs"
+                :playerdata="buffData.offsData[buffMode]" :sums="buffMode === 0 ? buffData.offsData[5] : []"
+                :playerindex="playerindex" :hidecustom="buffMode > 1">
+            </buff-table-component>
+            <buff-table-component v-if="type === 2" :key="'supportbuff-stats-table'" :condition="false"
+                :generation="buffMode > 0" :id="'supportbuff-stats-table'" :buffs="sups"
+                :playerdata="buffData.supsData[buffMode]" :sums="buffMode === 0 ? buffData.supsData[5] : []"
+                :playerindex="playerindex" :hidecustom="buffMode > 1">
+            </buff-table-component>
+            <buff-table-component v-if="type === 3" :key="'defensivebuff-stats-table'" :condition="false"
+                :generation="buffMode > 0" :id="'defensivebuff-stats-table'" :buffs="defs"
+                :playerdata="buffData.defsData[buffMode]" :sums="buffMode === 0 ? buffData.defsData[5] : []"
+                :playerindex="playerindex" :hidecustom="buffMode > 1">
+            </buff-table-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    Vue.component("buff-stats-component", {
+        props: ['type', 'phaseindex', 'playerindex', 'activeduration'],
+        mixins: [buffComponent],
+        template: `${template}`,
+        data: function () {
+            return {
+                buffMode: 0,
+                cache: new Map()
+            };
+        },
+        methods: {
+            getData: function (name, container) {
+                const activeduration = !!this.activeduration;
+                const activeTimes = this.phase.playerActiveTimes;
+                //
+                const activeString = (activeduration ? "Active" : "");
+                const uptimesStats = container[name + activeString + "Stats"];
+                const genSelfStats = container[name + "Gen" + activeString + "SelfStats"];
+                const genGroupStats = container[name + "Gen" + activeString + "GroupStats"];
+                const genOffGroupStats = container[name + "Gen" + activeString + "OGroupStats"];
+                const genSquadStats = container[name + "Gen" + activeString + "SquadStats"];
+                //
+                let uptimes = [];
+                let genSelf = [];
+                let genGroup = [];
+                let genOffGroup = [];
+                let genSquad = [];
+                let avg = [];
+                let groupAvg = [];
+                let totalAvg = [];
+                let groupCount = [];
+                let totalCount = 0;
+                let groupBoonAvg = [];
+                let totalBoonAvg = 0;
+                for (let i = 0; i < logData.players.length; i++) {
+                    const player = logData.players[i];
+                    if (player.isFake) {
+                        continue;
+                    }
+                    uptimes.push({
+                        player: player,
+                        data: uptimesStats[i]
+                    });
+                    genSelf.push({
+                        player: player,
+                        data: genSelfStats[i]
+                    });
+                    genGroup.push({
+                        player: player,
+                        data: genGroupStats[i]
+                    });
+                    genOffGroup.push({
+                        player: player,
+                        data: genOffGroupStats[i]
+                    });
+                    genSquad.push({
+                        player: player,
+                        data: genSquadStats[i]
+                    });
+                    if (activeduration && activeTimes[i] < 1e-6) {
+                        continue;
+                    }
+                    var playerWeight = activeduration ? activeTimes[i] : 1;
+                    if (player.notInSquad) {
+                        continue;
+                    }
+                    if (!groupAvg[player.group]) {
+                        groupAvg[player.group] = [];
+                        groupCount[player.group] = 0;
+                        groupBoonAvg[player.group] = 0;
+                    }
+                    totalCount += playerWeight;
+                    totalBoonAvg += playerWeight * uptimesStats[i].avg;
+                    groupBoonAvg[player.group] += playerWeight * uptimesStats[i].avg;
+                    groupCount[player.group] += playerWeight;
+                    for (let j = 0; j < uptimesStats[i].data.length; j++) {
+                        totalAvg[j] = (totalAvg[j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                        groupAvg[player.group][j] = (groupAvg[player.group][j] || 0) + playerWeight * (uptimesStats[i].data[j][0] || 0);
+                    }
+                }
+                for (let i = 0; i < groupAvg.length; i++) {
+                    if (groupAvg[i]) {
+                        for (let k = 0; k < groupAvg[i].length; k++) {
+                            groupAvg[i][k] = Math.round(1000 * groupAvg[i][k] / groupCount[i]) / 1000;
+                        }
+                        avg.push({
+                            name: "Group " + i,
+                            data: groupAvg[i],
+                            avg: Math.round(1000 * groupBoonAvg[i] / groupCount[i]) / 1000
+                        });
+                    }
+                }
+                for (let k = 0; k < totalAvg.length; k++) {
+                    totalAvg[k] = Math.round(1000 * totalAvg[k] / totalCount) / 1000;
+                }
+                avg.push({
+                    name: "Total",
+                    data: totalAvg,
+                    avg: Math.round(1000 * totalBoonAvg / totalCount) / 1000
+                });
+                return [uptimes, genSelf, genGroup, genOffGroup, genSquad, avg];
+            }
+        },
+        computed: {
+            singleGroup: function () {
+                return logData.singleGroup;
+            },
+            singlePlayer: function () {
+                return logData.players.filter(x => !x.notInSquad).length <= 1;
+            },
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            buffData: function () {
+                const id = this.phaseindex + '-' + this.activeduration;
+                if (this.cache.has(id)) {
+                    return this.cache.get(id);
+                }  
+                let res = {
+                    boonsData: this.getData("boon", this.buffsStatContainer),
+                    offsData: this.getData("offBuff", this.buffsStatContainer),
+                    offsData: this.getData("offBuff", this.buffsStatContainer),
+                    defsData: this.getData("defBuff", this.buffsStatContainer),
+                    supsData: this.getData("supBuff", this.buffsStatContainer),
+                };
+                this.cache.set(id, res);
+                return res;
+            }
+        },
+    });
+</script>

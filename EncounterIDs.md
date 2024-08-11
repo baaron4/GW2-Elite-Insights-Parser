@@ -101,7 +101,7 @@ Icebrood Construct: 0x040201
 
 Fraenir of Jormag: 0x040202
 
-Freezie: 0x040203
+Voice&Claw: 0x040203
 
 Boneskinner: 0x040204
 

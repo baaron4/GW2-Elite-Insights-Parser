@@ -6,53 +6,56 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class IconDecoration : GenericIconDecoration
     {
-        internal class ConstantIconDecoration : ConstantGenericIconDecoration
+        internal class IconDecorationMetadata : GenericIconDecorationMetadata
         {
             public float Opacity { get; }
 
 
-            public ConstantIconDecoration(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)
+            public IconDecorationMetadata(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)
             {
-                Opacity = opacity;
+                Opacity = (float)Math.Round(opacity, 2);
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
+            }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new IconDecorationMetadataDescription(this);
             }
         }
-        internal class VariableIconDecoration : VariableGenericIconDecoration
+        internal class IconDecorationRenderingData : GenericIconDecorationRenderingData
         {
             public bool IsSquadMarker { get; private set; }
-            public VariableIconDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public IconDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
             public void UsingSquadMarker(bool isSquadMarker)
             {
                 IsSquadMarker = isSquadMarker;
             }
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new IconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
         }
-        private new ConstantIconDecoration ConstantDecoration => (ConstantIconDecoration)base.ConstantDecoration;
-        private new VariableIconDecoration VariableDecoration => (VariableIconDecoration)base.VariableDecoration;
+        private new IconDecorationMetadata DecorationMetadata => (IconDecorationMetadata)base.DecorationMetadata;
+        private new IconDecorationRenderingData DecorationRenderingData => (IconDecorationRenderingData)base.DecorationRenderingData;
 
-        public float Opacity => ConstantDecoration.Opacity;
-        public bool IsSquadMarker => VariableDecoration.IsSquadMarker;
+        public float Opacity => DecorationMetadata.Opacity;
+        public bool IsSquadMarker => DecorationRenderingData.IsSquadMarker;
 
-        protected IconDecoration()
+        internal IconDecoration(IconDecorationMetadata metadata, IconDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
-
-        }
-
-        public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
-        {
-            base.ConstantDecoration = new ConstantIconDecoration(icon, pixelSize, 0, opacity);
-            base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
         }
 
-        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base()
+        public IconDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : this(icon, pixelSize, 0, opacity, lifespan, connector)
         {
-            base.ConstantDecoration = new ConstantIconDecoration(icon, pixelSize, worldSize, opacity);
-            base.VariableDecoration = new VariableIconDecoration(lifespan, connector);
+        }
+
+        public IconDecoration(string icon, uint pixelSize, uint worldSize, float opacity, (long start, long end) lifespan, GeographicalConnector connector) : base(new IconDecorationMetadata(icon, pixelSize, worldSize, opacity), new IconDecorationRenderingData(lifespan, connector))
+        {
         }
 
         public IconDecoration(string icon, uint pixelSize, float opacity, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, opacity, (lifespan.Start, lifespan.End), connector)
@@ -65,13 +68,9 @@ namespace GW2EIEvtcParser.EIData
 
         public IconDecoration UsingSquadMarker(bool isSquadMarker)
         {
-            VariableDecoration.UsingSquadMarker(isSquadMarker);
+            DecorationRenderingData.UsingSquadMarker(isSquadMarker);
             return this;
         }
         //
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new IconDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

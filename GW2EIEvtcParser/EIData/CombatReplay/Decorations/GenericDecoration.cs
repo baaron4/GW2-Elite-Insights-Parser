@@ -6,32 +6,38 @@ namespace GW2EIEvtcParser.EIData
     public abstract class GenericDecoration
     {
 
-        public abstract class ConstantGenericDecoration
+        internal abstract class GenericDecorationMetadata
         {
 
-            public abstract string GetID();
+            public abstract string GetSignature();
+
+            public abstract GenericDecorationMetadataDescription GetCombatReplayMetadataDescription();
+
         }
-        public abstract class VariableGenericDecoration
+        internal abstract class GenericDecorationRenderingData
         {
             public (int start, int end) Lifespan { get; }
 
-            protected VariableGenericDecoration((long start, long end) lifespan)
+            protected GenericDecorationRenderingData((long start, long end) lifespan)
             {
                 Lifespan = ((int)lifespan.start, (int)lifespan.end);
             }
+            public abstract GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature);
         }
 
-        public ConstantGenericDecoration ConstantDecoration { get; protected set; }
-        public VariableGenericDecoration VariableDecoration { get; protected set; }
+        internal GenericDecorationMetadata DecorationMetadata { get; }
+        internal GenericDecorationRenderingData DecorationRenderingData { get; }
 
-        public (int start, int end) Lifespan => VariableDecoration.Lifespan;
-
+        public (int start, int end) Lifespan => DecorationRenderingData.Lifespan;
+        internal GenericDecoration(GenericDecorationMetadata metaData, GenericDecorationRenderingData renderingData)
+        {
+            DecorationMetadata = metaData;
+            DecorationRenderingData = renderingData;
+        }
         protected GenericDecoration()
         {
         }
         //
-
-        public abstract GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs);
 
     }
 }

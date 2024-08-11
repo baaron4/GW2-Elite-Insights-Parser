@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class CircleDecoration : FormDecoration
     {
-        internal class ConstantCircleDecoration : ConstantFormDecoration
+        internal class CircleDecorationMetadata : FormDecorationMetadata
         {
             public uint Radius { get; }
             public uint MinRadius { get; }
 
-            public ConstantCircleDecoration(string color, uint radius, uint minRadius) : base(color)
+            public CircleDecorationMetadata(string color, uint radius, uint minRadius) : base(color)
             {
                 Radius = Math.Max(radius, 1);
                 MinRadius = minRadius;
@@ -21,29 +21,37 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            public override string GetID()
+            public override string GetSignature()
             {
-                throw new NotImplementedException();
+                return "Cir" + Radius + Color + MinRadius;
+            }
+            public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+            {
+                return new CircleDecorationMetadataDescription(this);
             }
         }
-        internal class VariableCircleDecoration : VariableFormDecoration
+        internal class CircleDecorationRenderingData : FormDecorationRenderingData
         {
-            public VariableCircleDecoration((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
+            public CircleDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
             {
             }
-        }
-        private new ConstantCircleDecoration ConstantDecoration => (ConstantCircleDecoration)base.ConstantDecoration;
-        public uint Radius => ConstantDecoration.Radius;
-        public uint MinRadius => ConstantDecoration.MinRadius;
 
-        protected CircleDecoration()
+            public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+            {
+                return new CircleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+            }
+        }
+        private new CircleDecorationMetadata DecorationMetadata => (CircleDecorationMetadata)base.DecorationMetadata;
+        public uint Radius => DecorationMetadata.Radius;
+        public uint MinRadius => DecorationMetadata.MinRadius;
+
+
+        internal CircleDecoration(CircleDecorationMetadata metadata, CircleDecorationRenderingData renderingData) : base(metadata, renderingData)
         {
         }
 
-        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base()
+        public CircleDecoration(uint radius, uint minRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new CircleDecorationMetadata(color, radius, minRadius), new CircleDecorationRenderingData(lifespan, connector))
         {
-            base.ConstantDecoration = new ConstantCircleDecoration(color, radius, minRadius);
-            VariableDecoration = new VariableCircleDecoration(lifespan, connector);
         }
 
         public CircleDecoration(uint radius, (long start, long end) lifespan, string color, GeographicalConnector connector) : this(radius, 0, lifespan, color, connector)
@@ -85,10 +93,5 @@ namespace GW2EIEvtcParser.EIData
             return (CircleDecoration)Copy(borderColor).UsingFilled(false);
         }
         //
-
-        public override GenericDecorationCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
-        {
-            return new CircleDecorationCombatReplayDescription(log, this, map, usedSkills, usedBuffs);
-        }
     }
 }

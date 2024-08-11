@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 rightArm.OverrideType(AgentItem.AgentType.NPC);
                 rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm);
             }
-            FindChestGadget(ChestID, agentData, combatData, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            FindChestGadget(ChestID, agentData, combatData, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
             agentData.Refresh();
             AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
             ComputeFightTargets(agentData, combatData, extensions);

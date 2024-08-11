@@ -585,9 +585,9 @@ namespace GW2EIEvtcParser
                     _logEndTime = combatItem.Time;
                 }
                 _combatItems.Add(combatItem);
-                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && BuildEvent.GetBuild(combatItem) != 0)
+                if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && GW2BuildEvent.GetBuild(combatItem) != 0)
                 {
-                    _gw2Build = BuildEvent.GetBuild(combatItem);
+                    _gw2Build = GW2BuildEvent.GetBuild(combatItem);
                 }
                 if (combatItem.IsStateChange == ArcDPSEnums.StateChange.SquadCombatEnd)
                 {
@@ -741,7 +741,6 @@ namespace GW2EIEvtcParser
                     _playerList.Add(player);
                 }
             }
-            _playerList = _playerList.OrderBy(a => a.Group).ThenBy(x => x.Character).ToList();
             if (_playerList.Exists(x => x.Group == 0))
             {
                 _playerList.ForEach(x => x.MakeSquadless());
@@ -983,6 +982,10 @@ namespace GW2EIEvtcParser
                 if (c.HasTime(_enabledExtensions))
                 {
                     c.OverrideTime(c.Time - offset);
+                }
+                if (c.IsStateChange == ArcDPSEnums.StateChange.InstanceStart)
+                {
+                    c.OverrideSrcAgent((ulong)(offset - (long)c.SrcAgent));
                 }
             }
             foreach (AgentItem a in _allAgentsList)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -29,7 +30,7 @@ namespace GW2EIEvtcParser.EIData
                         AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
                         if (log.PlayerAgents.Contains(agentItem) && Keep(effectEvent, log))
                         {
-                            mechanicLogs[this].Add(new MechanicEvent(effectEvent.Time, this, log.FindActor(agentItem)));
+                            InsertMechanic(log, mechanicLogs, effectEvent.Time, log.FindActor(agentItem));
                         }
                     }
                 }
@@ -47,14 +48,14 @@ namespace GW2EIEvtcParser.EIData
                         AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
                         if (agentItem.IsSpecies(ArcDPSEnums.TrashID.Environment) && Keep(effectEvent, log))
                         {
-                            mechanicLogs[this].Add(new MechanicEvent(effectEvent.Time, this, log.FindActor(agentItem, true)));
+                            InsertMechanic(log, mechanicLogs, effectEvent.Time, log.FindActor(agentItem, true));
                         }
                         else
                         {
                             AbstractSingleActor actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
                             if (actor != null && Keep(effectEvent, log))
                             {
-                                mechanicLogs[this].Add(new MechanicEvent(effectEvent.Time, this, actor));
+                                InsertMechanic(log, mechanicLogs, effectEvent.Time, actor);
                             }
                         }
                     }

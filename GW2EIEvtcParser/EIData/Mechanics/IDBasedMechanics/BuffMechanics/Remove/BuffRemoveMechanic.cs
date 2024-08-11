@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
 
         protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, T brae, AbstractSingleActor actor)
         {
-            mechanicLogs[this].Add(new MechanicEvent(brae.Time, this, actor));
+            InsertMechanic(log, mechanicLogs, brae.Time, actor);
         }
 
         internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)

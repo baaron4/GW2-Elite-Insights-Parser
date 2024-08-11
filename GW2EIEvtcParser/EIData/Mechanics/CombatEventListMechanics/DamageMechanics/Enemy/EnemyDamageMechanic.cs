@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         AbstractSingleActor actorToUse = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
                         // no need to null check, we are already iterating over an existing actor list
-                        mechanicLogs[this].Add(new MechanicEvent(c.Time, this, actorToUse));
+                        InsertMechanic(log, mechanicLogs, c.Time, actorToUse);
                     }
                 }
             }
