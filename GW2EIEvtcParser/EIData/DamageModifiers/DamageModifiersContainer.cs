@@ -9,71 +9,142 @@ namespace GW2EIEvtcParser.EIData
     public class DamageModifiersContainer
     {
 
-        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<DamageModifier>> DamageModifiersPerSource { get; }
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<OutgoingDamageModifier>> OutgoingDamageModifiersPerSource { get; }
 
-        public IReadOnlyDictionary<string, DamageModifier> DamageModifiersByName { get; }
+        public IReadOnlyDictionary<string, OutgoingDamageModifier> OutgoingDamageModifiersByName { get; }
+        public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<IncomingDamageModifier>> IncomingDamageModifiersPerSource { get; }
 
-        internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseMode mode, EvtcParserSettings parserSettings)
+        public IReadOnlyDictionary<string, IncomingDamageModifier> IncomingDamageModifiersByName { get; }
+
+        internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
         {
-            var AllDamageModifiers = new List<List<DamageModifier>>
+            var AllOutgoingDamageModifiers = new List<List<DamageModifierDescriptor>>
             {
-                CommonDamageModifiers.ItemDamageModifiers,
-                CommonDamageModifiers.GearDamageModifiers,
-                CommonDamageModifiers.SharedDamageModifiers,
-                CommonDamageModifiers.FightSpecificDamageModifiers,
+                ItemDamageModifiers.OutgoingDamageModifiers,
+                EncounterDamageModifiers.OutgoingDamageModifiers,
+                GearDamageModifiers.OutgoingDamageModifiers,
+                SharedDamageModifiers.OutgoingDamageModifiers,
                 //
-                RevenantHelper.DamageMods,
-                HeraldHelper.DamageMods,
-                RenegadeHelper.DamageMods,
-                VindicatorHelper.DamageMods,
+                RevenantHelper.OutgoingDamageModifiers,
+                HeraldHelper.OutgoingDamageModifiers,
+                RenegadeHelper.OutgoingDamageModifiers,
+                VindicatorHelper.OutgoingDamageModifiers,
                 //
-                WarriorHelper.DamageMods,
-                BerserkerHelper.DamageMods,
-                SpellbreakerHelper.DamageMods,
-                BladeswornHelper.DamageMods,
+                WarriorHelper.OutgoingDamageModifiers,
+                BerserkerHelper.OutgoingDamageModifiers,
+                SpellbreakerHelper.OutgoingDamageModifiers,
+                BladeswornHelper.OutgoingDamageModifiers,
                 //
-                GuardianHelper.DamageMods,
-                DragonhunterHelper.DamageMods,
-                FirebrandHelper.DamageMods,
-                WillbenderHelper.DamageMods,
+                GuardianHelper.OutgoingDamageModifiers,
+                DragonhunterHelper.OutgoingDamageModifiers,
+                FirebrandHelper.OutgoingDamageModifiers,
+                WillbenderHelper.OutgoingDamageModifiers,
                 //
-                EngineerHelper.DamageMods,
-                ScrapperHelper.DamageMods,
-                HolosmithHelper.DamageMods,
-                MechanistHelper.DamageMods,
+                EngineerHelper.OutgoingDamageModifiers,
+                ScrapperHelper.OutgoingDamageModifiers,
+                HolosmithHelper.OutgoingDamageModifiers,
+                MechanistHelper.OutgoingDamageModifiers,
                 //
-                ThiefHelper.DamageMods,
-                DaredevilHelper.DamageMods,
-                DeadeyeHelper.DamageMods,
-                SpecterHelper.DamageMods,
+                ThiefHelper.OutgoingDamageModifiers,
+                DaredevilHelper.OutgoingDamageModifiers,
+                DeadeyeHelper.OutgoingDamageModifiers,
+                SpecterHelper.OutgoingDamageModifiers,
                 //
-                RangerHelper.DamageMods,
-                DruidHelper.DamageMods,
-                SoulbeastHelper.DamageMods,
-                UntamedHelper.DamageMods,
+                RangerHelper.OutgoingDamageModifiers,
+                DruidHelper.OutgoingDamageModifiers,
+                SoulbeastHelper.OutgoingDamageModifiers,
+                UntamedHelper.OutgoingDamageModifiers,
                 //
-                MesmerHelper.DamageMods,
-                ChronomancerHelper.DamageMods,
-                MirageHelper.DamageMods,
-                VirtuosoHelper.DamageMods,
+                MesmerHelper.OutgoingDamageModifiers,
+                ChronomancerHelper.OutgoingDamageModifiers,
+                MirageHelper.OutgoingDamageModifiers,
+                VirtuosoHelper.OutgoingDamageModifiers,
                 //
-                NecromancerHelper.DamageMods,
-                ReaperHelper.DamageMods,
-                ScourgeHelper.DamageMods,
-                HarbingerHelper.DamageMods,
+                NecromancerHelper.OutgoingDamageModifiers,
+                ReaperHelper.OutgoingDamageModifiers,
+                ScourgeHelper.OutgoingDamageModifiers,
+                HarbingerHelper.OutgoingDamageModifiers,
                 //
-                ElementalistHelper.DamageMods,
-                TempestHelper.DamageMods,
-                WeaverHelper.DamageMods,
-                CatalystHelper.DamageMods,
+                ElementalistHelper.OutgoingDamageModifiers,
+                TempestHelper.OutgoingDamageModifiers,
+                WeaverHelper.OutgoingDamageModifiers,
+                CatalystHelper.OutgoingDamageModifiers,
             };
-            var currentDamageMods = new List<DamageModifier>();
-            foreach (List<DamageModifier> boons in AllDamageModifiers)
+            var currentOutgoingDamageMods = new List<OutgoingDamageModifier>();
+            foreach (List<DamageModifierDescriptor> modifierDescriptor in AllOutgoingDamageModifiers)
             {
-                currentDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(mode, parserSettings)));
+                currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
             }
-            DamageModifiersPerSource = currentDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<DamageModifier>)x.ToList());
-            DamageModifiersByName = currentDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
+            OutgoingDamageModifiersPerSource = currentOutgoingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<OutgoingDamageModifier>)x.ToList());
+            OutgoingDamageModifiersByName = currentOutgoingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
+            {
+                var list = x.ToList();
+                if (list.Count > 1)
+                {
+                    throw new InvalidDataException("Same name present multiple times in damage mods - " + x.First().Name);
+                }
+                return list.First();
+            });
+            //
+            var AllIncomingDamageModifiers = new List<List<DamageModifierDescriptor>>
+            {
+                ItemDamageModifiers.IncomingDamageModifiers,
+                EncounterDamageModifiers.IncomingDamageModifiers,
+                GearDamageModifiers.IncomingDamageModifiers,
+                SharedDamageModifiers.IncomingDamageModifiers,
+                //
+                RevenantHelper.IncomingDamageModifiers,
+                HeraldHelper.IncomingDamageModifiers,
+                RenegadeHelper.IncomingDamageModifiers,
+                VindicatorHelper.IncomingDamageModifiers,
+                //
+                WarriorHelper.IncomingDamageModifiers,
+                BerserkerHelper.IncomingDamageModifiers,
+                SpellbreakerHelper.IncomingDamageModifiers,
+                BladeswornHelper.IncomingDamageModifiers,
+                //
+                GuardianHelper.IncomingDamageModifiers,
+                DragonhunterHelper.IncomingDamageModifiers,
+                FirebrandHelper.IncomingDamageModifiers,
+                WillbenderHelper.IncomingDamageModifiers,
+                //
+                EngineerHelper.IncomingDamageModifiers,
+                ScrapperHelper.IncomingDamageModifiers,
+                HolosmithHelper.IncomingDamageModifiers,
+                MechanistHelper.IncomingDamageModifiers,
+                //
+                ThiefHelper.IncomingDamageModifiers,
+                DaredevilHelper.IncomingDamageModifiers,
+                DeadeyeHelper.IncomingDamageModifiers,
+                SpecterHelper.IncomingDamageModifiers,
+                //
+                RangerHelper.IncomingDamageModifiers,
+                DruidHelper.IncomingDamageModifiers,
+                SoulbeastHelper.IncomingDamageModifiers,
+                UntamedHelper.IncomingDamageModifiers,
+                //
+                MesmerHelper.IncomingDamageModifiers,
+                ChronomancerHelper.IncomingDamageModifiers,
+                MirageHelper.IncomingDamageModifiers,
+                VirtuosoHelper.IncomingDamageModifiers,
+                //
+                NecromancerHelper.IncomingDamageModifiers,
+                ReaperHelper.IncomingDamageModifiers,
+                ScourgeHelper.IncomingDamageModifiers,
+                HarbingerHelper.IncomingDamageModifiers,
+                //
+                ElementalistHelper.IncomingDamageModifiers,
+                TempestHelper.IncomingDamageModifiers,
+                WeaverHelper.IncomingDamageModifiers,
+                CatalystHelper.IncomingDamageModifiers,
+            };
+            var currentIncomingDamageMods = new List<IncomingDamageModifier>();
+            foreach (List<DamageModifierDescriptor> boons in AllIncomingDamageModifiers)
+            {
+                currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
+            }
+            IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<IncomingDamageModifier>)x.ToList());
+            IncomingDamageModifiersByName = currentIncomingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
                 var list = x.ToList();
                 if (list.Count > 1)
@@ -84,13 +155,27 @@ namespace GW2EIEvtcParser.EIData
             });
         }
 
-        public IReadOnlyList<DamageModifier> GetModifiersPerSpec(ParserHelper.Spec spec)
+        public IReadOnlyList<OutgoingDamageModifier> GetOutgoingModifiersPerSpec(ParserHelper.Spec spec)
         {
-            var res = new List<DamageModifier>();
+            var res = new List<OutgoingDamageModifier>();
             IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
             foreach (ParserHelper.Source src in srcs)
             {
-                if (DamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<DamageModifier> list))
+                if (OutgoingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<OutgoingDamageModifier> list))
+                {
+                    res.AddRange(list);
+                }
+            }
+            return res;
+        }
+
+        public IReadOnlyList<IncomingDamageModifier> GetIncomingModifiersPerSpec(ParserHelper.Spec spec)
+        {
+            var res = new List<IncomingDamageModifier>();
+            IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
+            foreach (ParserHelper.Source src in srcs)
+            {
+                if (IncomingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<IncomingDamageModifier> list))
                 {
                     res.AddRange(list);
                 }

@@ -1,0 +1,56 @@
+<template>
+    <div>
+        <ul class="nav nav-tabs" v-if="hasIncDamageMods && hasOutDamageMods">
+            <li>
+                <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0"> Outgoing Damage
+                    Modifiers </a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1"> Incoming Damage
+                    Modifiers </a>
+            </li>
+        </ul>
+        <keep-alive>
+            <dmgmodifier-stats-component v-if="mode === 0" :key="'modifier-out'"
+                :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets" :incoming="false">
+            </dmgmodifier-stats-component>
+            <dmgmodifier-stats-component v-if="mode === 1" :key="'modifier-inc'"
+                :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets" :incoming="true">
+            </dmgmodifier-stats-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    function getDefaultDamageModifiersSubComponent() {
+        if (!validateStartPath("Statistics/DamageModifiers")) {
+            return  hasOutgoingDamageMods() ? 0 : 1;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "OutgoingDamageModifiers":
+                return hasOutgoingDamageMods() ? 0 : 1;
+            case "IncomingDamageModifiers":
+                return hasIncomingDamageMods() ? 1 : 0;
+        }
+        return hasOutgoingDamageMods() ? 0 : 1;
+    }
+    Vue.component("dmgmodifier-stats-container-component", {
+        props: ['phaseindex', 'playerindex', 'activetargets'],
+        template: `${template}`,
+        data: function () {
+            return {
+                mode: getDefaultDamageModifiersSubComponent(),
+            };
+        },
+        computed: {
+            hasOutDamageMods: function() {
+                return hasOutgoingDamageMods();
+            },
+            hasIncDamageMods: function() {
+                return hasIncomingDamageMods() ;
+            },
+        }
+    });
+</script>

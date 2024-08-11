@@ -1,0 +1,203 @@
+<template>
+    <div>
+        <div v-if="playerColPageCount > 0">
+            <table-scroll-component :min="0" :max="playerColPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="playerColStructure"></table-scroll-component>
+        </div>
+        <table v-if="playerMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tablePid">
+            <thead>
+                <tr>
+                    <th class="sub-cell" :class="getPlayerHeaderClass('Sub')" @click="sortPlayerBy('Sub')">Sub</th>
+                    <th class="prof-cell" :class="getPlayerHeaderClass('Prof')" @click="sortPlayerBy('Prof')"></th>
+                    <th class="text-left" :class="getPlayerHeaderClass('Name')" @click="sortPlayerBy('Name')">Player</th>
+                    <th class="stat-cell" v-for="(mech, index) in playerMechHeader" 
+                        v-show="isInPlayerColPage(index)"
+                        :class="getPlayerHeaderClass('Data', index)" @click="sortPlayerBy('Data', index)" :data-original-title="mech.name + ': ' + mech.description">
+                        {{ mech.shortName}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in sortPlayerData(playerMechRows)" :class="{active: row.player.id === playerindex}">
+                    <td :class="getPlayerBodyClass('Sub')">{{row.player.group}}</td>
+                    <td :class="getPlayerBodyClass('Prof')" :data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon">
+                        <span style="display:none">{{row.player.profession}}</span>
+                    </td>
+                    <td :class="getPlayerBodyClass('Name')" class="text-left">{{row.player.name}}</td>
+                    <td v-for="(mech, index) in row.mechs" :class="getPlayerBodyClass('Data', index)" 
+                        v-show="isInPlayerColPage(index)"
+                        :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
+                        {{ playerMechHeader[index].isAchievementEligibility ? (mech[0] ? 'Non Eligible' : 'Eligible') : (mech[0] ? mech[0] : '-')}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div v-if="enemyColPageCount > 0">
+            <table-scroll-component :min="0" :max="enemyColPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="enemyColStructure"></table-scroll-component>
+        </div>
+        <table v-if="enemyMechHeader.length > 0" class="table table-sm table-striped table-hover" cellspacing="0" :id="tableEid">
+            <thead>
+                <tr>
+                    <th class="text-left" style="width: 250px;":class="getEnemyHeaderClass('Name')" @click="sortEnemyBy('Name')">Enemy</th>
+                    <th class="stat-cell" v-for="(mech, index) in enemyMechHeader" 
+                        v-show="isInEnemyColPage(index)"
+                        :class="getEnemyHeaderClass('Data', index)" @click="sortEnemyBy('Data', index)" :data-original-title="mech.name + ': ' + mech.description">
+                        {{ mech.shortName}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in sortEnemyData(enemyMechRows)">
+                    <td :class="getEnemyBodyClass('Name')" class="text-left">{{row.enemy}}</td>
+                    <td v-for="(mech, index) in row.mechs" :class="getEnemyBodyClass('Data', index)"                 
+                        v-show="isInEnemyColPage(index)"
+                        :data-original-title="mech[1] !== mech[0] ? mech[1] + ' times (multi hits)' : false">
+                        {{mech[0] ? mech[0] : '-'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("mechanics-stats-component", {
+        props: ["phaseindex", "playerindex"],
+        template: `${template}`,
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(10, ["player", "enemy"])],
+        data: function () {
+            return {
+                cacheP: new Map(),
+                cacheE: new Map(),
+                sortEdata: {
+                    order: "asc",
+                    index: -1,
+                    key: "Name",
+                },
+                sortPdata: {
+                    order: "asc",
+                    index: -1,
+                    key: "Sub",
+                }
+            };
+        },
+        methods: {
+            sortPlayerBy: function(key, index) {
+                this.sortByBase(this.sortPdata, key, index);
+            },
+            getPlayerHeaderClass: function(key, index) {
+                return this.getHeaderClassBase(this.sortPdata, key, index);
+            },
+            getPlayerBodyClass: function(key, index) {
+                var classes = this.getBodyClassBase(this.sortPdata, key, index);
+                return classes;
+            },
+            sortPlayerData: function(rows) {
+                var order = this.sortPdata.order === "asc" ? 1 : -1;
+                switch (this.sortPdata.key) {
+                    case "Sub":
+                        rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
+                        break;
+                    case "Prof":
+                        rows.sort((x,y) => order * this.sortByPlayerProfession(x, y) || this.sortByPlayerName(x, y));
+                        break;
+                    case "Name":
+                        rows.sort((x,y) => order * this.sortByPlayerName(x, y));
+                        break;
+                    case "Data":
+                        var index = this.sortPdata.index;
+                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]) || this.sortByPlayerName(x, y));
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+                return rows;
+            },
+            sortEnemyBy: function(key, index) {
+                this.sortByBase(this.sortEdata, key, index);
+            },
+            getEnemyHeaderClass: function(key, index) {
+                return this.getHeaderClassBase(this.sortEdata, key, index);
+            },
+            getEnemyBodyClass: function(key, index) {
+                var classes = this.getBodyClassBase(this.sortEdata, key, index);
+                return classes;
+            },         
+            sortEnemyData: function(rows) {
+                var order = this.sortEdata.order === "asc" ? 1 : -1;
+                switch (this.sortEdata.key) {
+                    case "Name":
+                        rows.sort((x,y) => order * x.enemy.localeCompare(y.enemy));
+                        break;
+                    case "Data":
+                        var index = this.sortEdata.index;
+                        rows.sort((x,y) => order * (x.mechs[index][0] - y.mechs[index][0]) || x.enemy.localeCompare(y.enemy));
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+                return rows;
+            },
+        },
+        computed: {
+            playerColPageCount: function() {
+                return this.playerMechHeader.length - this.playerColStructure.perpage;
+            },
+            enemyColPageCount: function() {
+                return this.enemyMechHeader.length - this.enemyColStructure.perpage;
+            },
+            tablePid: function() {
+                return "playermechs";
+            },
+            tableEid: function() {
+                return "enemymechs";
+            },
+            phase: function() {
+                return logData.phases[this.phaseindex];
+            },
+            playerMechHeader: function () {
+                return playerMechanics();
+            },
+            playerMechRows: function () {
+                if (this.cacheP.has(this.phaseindex)) {
+                    return this.cacheP.get(this.phaseindex);
+                }
+                var players = logData.players;
+                var rows = [];
+                for (var i = 0; i < players.length; i++) {
+                    var player = players[i];
+                    if (player.isFake) {
+                        continue;
+                    }
+                    rows.push({
+                        player: player,
+                        mechs: this.phase.mechanicStats[i]
+                    });
+                }
+                this.cacheP.set(this.phaseindex, rows);
+                return rows;
+            },
+            enemyMechHeader: function () {
+                return enemyMechanics();
+            },
+            enemyMechRows: function () {
+                if (this.cacheE.has(this.phaseindex)) {
+                    return this.cacheE.get(this.phaseindex);
+                }
+                var enemies = logData.enemies;
+                var rows = [];
+                for (var i = 0; i < enemies.length; i++) {
+                    var enemy = enemies[i];
+                    rows.push({
+                        enemy: enemy.name,
+                        mechs: this.phase.enemyMechanicStats[i]
+                    });
+                }
+                this.cacheE.set(this.phaseindex, rows);
+                return rows;
+            }
+        }
+    });
+</script>

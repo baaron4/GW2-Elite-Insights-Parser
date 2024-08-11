@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EIData.BuffSimulators;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -26,12 +25,15 @@ namespace GW2EIEvtcParser.EIData
 
         public Segment GetBuffStatus(long time)
         {
-            foreach (Segment seg in BuffChart)
+            if (BuffChart.Count == 0)
             {
-                if (seg.ContainsPoint(time))
-                {
-                    return seg;
-                }
+                return new Segment(long.MinValue, long.MaxValue, 0);
+            }
+            int foundIndex = Segment.BinarySearchRecursive(BuffChart, time, 0, BuffChart.Count - 1);
+            Segment found = BuffChart[foundIndex];
+            if (found.ContainsPoint(time))
+            {
+                return found;
             }
             return new Segment(long.MinValue, long.MaxValue, 0);
         }
@@ -55,8 +57,13 @@ namespace GW2EIEvtcParser.EIData
         }
 
 
-        public bool IsPresent(long time)
+        public bool IsPresent(long time, long window = 0)
         {
+            if (window != 0)
+            {
+                long absWindow = Math.Abs(window);
+                return GetBuffStatus(time - absWindow, time + absWindow).Any(x => x.Value > 0);
+            }
             return GetStackCount(time) > 0;
         }
 

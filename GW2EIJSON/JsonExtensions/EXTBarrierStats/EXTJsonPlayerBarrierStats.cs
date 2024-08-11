@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 
 namespace GW2EIJSON
@@ -47,6 +46,16 @@ namespace GW2EIJSON
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
         public IReadOnlyList<IReadOnlyList<int>> Barrier1S { get; set; }
+
+        /// <summary>
+        /// Array of int representing 1S incoming barrier points \n
+        /// Length == # of phases
+        /// </summary>
+        /// <remarks>
+        /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
+        /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
+        /// </remarks>
+        public IReadOnlyList<IReadOnlyList<int>> BarrierReceived1S { get; set; }
 
         /// <summary>
         /// Total Outgoing Allied Barrier distribution array \n

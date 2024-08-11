@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
@@ -11,27 +10,36 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
     {
         public long HbWidth { get; set; }
         public long HbHeight { get; set; }
-        public double Percent { get; set; }
-        public double HpLeft { get; set; }
+        public double HpLeftPercent { get; set; }
+        public int HpLeft { get; set; }
+        public double BarrierLeftPercent { get; set; }
+        public int BarrierLeft { get; set; }
 
         public TargetDto(AbstractSingleActor target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
         {
             HbHeight = target.HitboxHeight;
             HbWidth = target.HitboxWidth;
-            HpLeft = 100.0;
+            HpLeftPercent = 100.0;
             if (log.FightData.Success)
             {
-                HpLeft = 0;
+                HpLeftPercent = 0;
+                BarrierLeftPercent = 0;
             }
             else
             {
                 IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(target.AgentItem);
                 if (hpUpdates.Count > 0)
                 {
-                    HpLeft = hpUpdates.Last().HPPercent;
+                    HpLeftPercent = hpUpdates.Last().HealthPercent;
+                }
+                IReadOnlyList<BarrierUpdateEvent> barrierUpdates = log.CombatData.GetBarrierUpdateEvents(target.AgentItem);
+                if (barrierUpdates.Count > 0)
+                {
+                    BarrierLeftPercent = barrierUpdates.Last().BarrierPercent;
                 }
             }
-            Percent = Math.Round(100.0 - HpLeft, 2);
+            HpLeft = target.GetCurrentHealth(log, HpLeftPercent);
+            BarrierLeft = target.GetCurrentBarrier(log, BarrierLeftPercent, log.FightData.FightEnd);
         }
     }
 }

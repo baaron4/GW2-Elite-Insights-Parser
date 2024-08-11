@@ -24,8 +24,13 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link" :class="{active: tabmode === 2}" @click="tabmode = 2">Healing Graph</a>
+                <a class="nav-link" :class="{active: tabmode === 2}" @click="tabmode = 2">Graph</a>
             </li>     
+            <li>
+                <a class="nav-link" :class="{active: tabmode === 8}" @click="tabmode = 8">
+                    Boon Status
+                </a>
+            </li>
             <li>
                 <a class="nav-link" :class="{active: tabmode === 3}" @click="tabmode = 3">
                     Simple
@@ -56,12 +61,40 @@
 </template>
 
 <script>
+    function getDefaultPlayerHealingTabSubComponent() {
+        if (!validateStartPath("HealingStatistics/PlayerSummary")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "OutgoingHealing":
+                return 0;
+            case "OutgoingBarrier":
+                return hasBarrierExtension() ? 6 : 0;
+            case "IncomingHealing":
+                return 1;
+            case "IncomingBarrier":
+                return hasBarrierExtension() ? 7 : 0;
+            case "Graph":
+                return 2;
+            case "BoonStatus":
+                return 8;
+            case "SimpleRotation":
+                return 3;
+            case "AdvancedRotation":
+                return 4;
+            case "Consumables":
+                return 5;
+        }
+        return 0;
+    }
     Vue.component("player-healing-stats-component", {
         props: ["phaseindex", 'activetargets', 'activeplayer', 'light'],
         template: `${template}`,
         data: function () {
             return {
-                tabmode: 0
+                tabmode: getDefaultPlayerHealingTabSubComponent()
             };
         },
         computed: {
@@ -69,7 +102,7 @@
                 return logData.players;
             },
             hasBarrier: function() {
-                return !!barrierStatsExtension;
+                return hasBarrierExtension();
             },
         }
     });

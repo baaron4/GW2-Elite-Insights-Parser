@@ -16,7 +16,7 @@
             return {
                 graphdata: {
                     dpsmode: 0,
-                    graphmode: GraphType.DPS,
+                    graphmode: logData.wvw ? GraphType.Damage : GraphType.DPS,
                     damagemode: DamageType.All,
                 }
             };

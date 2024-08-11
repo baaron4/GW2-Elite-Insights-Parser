@@ -101,7 +101,7 @@ Icebrood Construct: 0x040201
 
 Fraenir of Jormag: 0x040202
 
-Freezie: 0x040203
+Voice&Claw: 0x040203
 
 Boneskinner: 0x040204
 
@@ -131,7 +131,7 @@ Soo-Won: 0x050401
 ## Story Instance
 Mordremoth: 0x060201
 
-## World vs World
+## World vs World / PvP
 Eternal Battlegrounds: 0x070100
 
 Green Alpine Borderlands: 0x070200
@@ -145,6 +145,14 @@ Obsidian Sanctum: 0x070500
 Edge of the Mists: 0x070600
 
 Armistice Bastion: 0x070700
+
+Gilded Hollow: 0x070800
+
+Lost Precipice: 0x070900
+
+Windswept Haven: 0x070A00
+
+Isle of Reflection: 0x070B00
 
 ## Golem
 Massive Golem 10M: 0x080101

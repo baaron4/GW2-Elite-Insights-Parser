@@ -5,12 +5,11 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -51,17 +50,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.ClawOfTheFallen, fightData.FightStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.VoiceOfTheFallen, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem mainTarget = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
-                if (mainTarget == null)
-                {
-                    throw new MissingKeyActorsException("Main target not found");
-                }
+                AgentItem mainTarget = (agentData.GetNPCsByID(ArcDPSEnums.TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(ArcDPSEnums.TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
                 CombatItem firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
                 if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + TimeThresholdConstant))
                 {
@@ -71,9 +76,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             return startToUse;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             int voiceAndClawCount = 1;
             foreach (AbstractSingleActor target in Targets)
             {
@@ -95,6 +100,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases[0].AddTarget(voice);
             phases[0].AddTarget(claw);
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)));
             long fightEnd = log.FightData.FightEnd;
             if (!requirePhases)
             {
@@ -118,7 +124,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (enterCombat != null)
                 {
                     phaseStart = enterCombat.Time;
-                } else
+                }
+                else
                 {
                     phaseStart = voiceAndClaw.FirstAware;
                 }
@@ -128,7 +135,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     phaseEnd = nextUnmergedPhase.Start - 1;
                 }
-                var phase = new PhaseData(phaseStart, phaseEnd , "Voice and Claw " + ++voiceAndClawCount);
+                var phase = new PhaseData(phaseStart, phaseEnd, "Voice and Claw " + ++voiceAndClawCount);
                 phase.AddTarget(voiceAndClaw);
                 phases.Add(phase);
             }
@@ -148,7 +155,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (oldEnd != preTPPhaseEnd)
                     {
                         PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > voiceAndClaw.LastAware);
-                        if (nextUnmergedPhase != null) 
+                        if (nextUnmergedPhase != null)
                         {
                             long postMergedStart = nextUnmergedPhase.Start + 1;
                             long postMergedEnd = oldEnd;
@@ -157,7 +164,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             phase.AddTarget(voice);
                             phases.Add(phase);
                         }
-                        
+
                     }
                 }
                 if (preTPPhaseEnd - preTPPhaseStart > 2000)
@@ -169,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 preTPPhaseStart = teleport.EndTime;
             }
-            
+
             //
             AbstractBuffEvent enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
             if (enrage != null)

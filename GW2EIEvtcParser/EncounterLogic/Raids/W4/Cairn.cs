@@ -4,11 +4,10 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -22,7 +21,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(CairnDisplacement, "Displacement", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Port","Orange Teleport Field", "Orange TP",0),
             new PlayerDstHitMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Green","Green Spatial Manipulation Field (lift)", "Green (lift)",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstHitMechanic(new long[] { SpatialManipulation1, SpatialManipulation2, SpatialManipulation3, SpatialManipulation4, SpatialManipulation5, SpatialManipulation6 }, "Spatial Manipulation", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Stab.Green","Green Spatial Manipulation Field while affected by stability", "Stabilized Green",0).UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-            new PlayerDstHitMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB","Knockback Crystals (tornado like)", "KB Crystal",1000),
+            new PlayerDstHitMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "KB","Knockback Crystals", "KB Crystal",1000),
+            new PlayerSrcSkillMechanic(MeteorSwarm, "Meteor Swarm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Orange), "Refl.KB","Reflected Knockback Crystals", "Reflected KB Crystal",1000).WithMinions(true).UsingChecker((evt, log) => evt.ToFriendly),
             new PlayerDstBuffApplyMechanic(SharedAgony, "Shared Agony", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Agony","Shared Agony Debuff Application", "Shared Agony",0),//could flip
             new PlayerDstBuffApplyMechanic(SharedAgony25, "Shared Agony", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "Agony 25","Shared Agony Damage (25% Player's HP)", "SA dmg 25%",0), // Seems to be a (invisible) debuff application for 1 second from the Agony carrier to the closest(?) person in the circle.
             new PlayerDstBuffApplyMechanic(SharedAgony50, "Shared Agony", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Orange), "Agony 50","Shared Agony Damage (50% Player's HP)", "SA dmg 50%",0), //Chaining from the first person hit by 38170, applying a 1 second debuff to the next person.
@@ -65,17 +65,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cairn));
-            if (cairn == null)
-            {
-                throw new MissingKeyActorsException("Cairn not found");
-            }
+            AbstractSingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cairn)) ?? throw new MissingKeyActorsException("Cairn not found");
             phases[0].AddTarget(cairn);
             if (!requirePhases)
             {
                 return phases;
             }
-            BuffApplyEvent enrageApply = log.CombatData.GetBuffData(EnragedCairn).OfType<BuffApplyEvent>().FirstOrDefault(x => x.To == cairn.AgentItem);
+            BuffApplyEvent enrageApply = log.CombatData.GetBuffDataByIDByDst(EnragedCairn, cairn.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault();
             if (enrageApply != null)
             {
                 var normalPhase = new PhaseData(log.FightData.FightStart, enrageApply.Time)
@@ -98,12 +94,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDisplacement, out IReadOnlyList<EffectEvent> displacementEffects))
             {
                 foreach (EffectEvent displacement in displacementEffects)
                 {
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, (int)displacement.Time + 3000, 90, ((int)displacement.Time, (int)displacement.Time + 3000), "rgba(200,50,0,0.4)", new PositionConnector(displacement.Position)));
+                    var circle = new CircleDecoration(90, (displacement.Time, displacement.Time + 3000), Colors.Orange, 0.4, new PositionConnector(displacement.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(displacement.Time + 3000));
                 }
             }
         }
@@ -121,14 +120,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int preCastTime = 1400;
                         int initialHitDuration = 850;
                         int sweepDuration = 1100;
-                        int width = 1400; int height = 80;
-                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        uint width = 1400; uint height = 80;
+                        Point3D facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
-                            float initialDirection = ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, (start, start + preCastTime), "rgba(200, 0, 255, 0.1)", new AgentConnector(target)));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, (start + preCastTime, start + preCastTime + initialHitDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, initialDirection, width / 2, 360, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), "rgba(150, 0, 180, 0.5)", new AgentConnector(target)));
+                            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                            var rotationConnector = new AngleConnector(facing);
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Purple, 0.1, positionConnector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + initialHitDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
                         }
                     }
                     var wave = cls.Where(x => x.SkillId == GravityWave).ToList();
@@ -137,28 +137,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int preCastTime = 1200;
                         int duration = 600;
-                        int firstRadius = 400;
-                        int secondRadius = 700;
-                        int thirdRadius = 1000;
-                        int fourthRadius = 1300;
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), "rgba(100,0,155,0.3)", new AgentConnector(target)));
+                        uint firstRadius = 400;
+                        uint secondRadius = 700;
+                        uint thirdRadius = 1000;
+                        uint fourthRadius = 1300;
+                        replay.Decorations.Add(new DoughnutDecoration(firstRadius, secondRadius, (start + preCastTime, start + preCastTime + duration), Colors.Purple, 0.3, new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
+                        replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
                     }
                     if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out IReadOnlyList<EffectEvent> dashGreenEffects))
                     {
                         var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6).ToList();
                         foreach (EffectEvent dashGreen in dashGreenEffects)
                         {
-                            int dashGreenStart = (int)dashGreen.Time;
-                            int dashGreenEnd = (int)target.LastAware;
+                            long dashGreenStart = dashGreen.Time;
+                            long dashGreenEnd = target.LastAware;
                             AbstractCastEvent endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
                             if (endEvent != null)
                             {
-                                dashGreenEnd = (int)endEvent.Time + 3300; // from skill def
+                                dashGreenEnd = endEvent.Time + 3300; // from skill def
                             }
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 110, (dashGreenStart, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 110, (dashGreenEnd - 200, dashGreenEnd), "rgba(0,100,0,0.4)", new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenStart, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
+                            replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
                         }
                     }
                     //CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);
@@ -168,15 +168,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Cairn).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Cairn, out AgentItem cairn))
             {
                 throw new MissingKeyActorsException("Cairn not found");
             }
             // spawn protection loss -- most reliable
-            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(target) && x.SkillID == 34113);
+            CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(cairn) && x.SkillID == SpawnProtection);
             if (spawnProtectionLoss != null)
             {
                 return spawnProtectionLoss.Time;
@@ -184,9 +183,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             else
             {
                 // get first end casting
-                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(target));
+                CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(cairn));
                 // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
-                if (firstCastEnd != null && firstCastEnd.SkillID == 38102)
+                if (firstCastEnd != null && firstCastEnd.SkillID == CairnImpact)
                 {
                     // Action 4 from skill dump for 38102
                     long actionHappened = 1025;
@@ -206,15 +205,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+            res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, CelestialDashSAK, CelestialDashBuff));
+            return res;
+        }
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // shared agony
-            var agony = log.CombatData.GetBuffData(SharedAgony).Where(x => (x.To == p.AgentItem && x is BuffApplyEvent)).ToList();
+            var agony = log.CombatData.GetBuffDataByIDByDst(SharedAgony, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in agony)
             {
-                int agonyStart = (int)c.Time;
-                int agonyEnd = agonyStart + 62000;
-                replay.Decorations.Add(new CircleDecoration(false, 0, 220, (agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)", new AgentConnector(p)));
+                long agonyStart = c.Time;
+                long agonyEnd = agonyStart + 62000;
+                replay.Decorations.Add(new CircleDecoration(220, (agonyStart, agonyEnd), Colors.Red, 0.5, new AgentConnector(p)).UsingFilled(false));
             }
         }
 

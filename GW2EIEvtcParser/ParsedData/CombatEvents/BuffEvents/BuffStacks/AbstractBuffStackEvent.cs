@@ -1,20 +1,13 @@
-﻿using GW2EIEvtcParser.EIData;
-
-namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData
 {
     public abstract class AbstractBuffStackEvent : AbstractBuffEvent
     {
-        protected uint BuffInstance { get; set; }
+        public uint BuffInstance { get; protected set; }
 
         internal AbstractBuffStackEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
         {
             To = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);
             By = ParserHelper._unknownAgent;
-        }
-
-        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
-        {
-            return useBuffInstanceSimulator && BuffInstance != 0;
         }
 
         internal override void TryFindSrc(ParsedEvtcLog log)

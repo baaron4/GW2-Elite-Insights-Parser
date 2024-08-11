@@ -1,0 +1,61 @@
+<template>
+    <div>
+        <div>
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Total</a>
+                </li>
+                <li v-if="!targetless">
+                    <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Target</a>
+                </li>
+                <li v-if="!targetless">
+                    <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Cleave</a>
+                </li>
+                <li>
+                    <a class="nav-link" :class="{active: mode === 3}" @click="mode = 3">Taken</a>
+                </li>
+            </ul>
+        </div>
+        <keep-alive>
+            <dps-graph-component v-for="(phase, id) in phases" :key="id" v-if="id === phaseindex"
+                :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
+            </dps-graph-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    function getDefaultGraphSubComponent() {
+        if (!validateStartPath("Statistics/Graph")) {
+            return logData.targetless ? 0 : 1;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "Total":
+                return 0;
+            case "Target":
+                return logData.targetless ? 0 : 1;
+            case "Cleave":
+                return logData.targetless ? 0 : 2;
+            case "Taken":
+                return 3;
+        }
+        return logData.targetless ? 0 : 1;
+    }
+    Vue.component("graph-stats-component", {
+        props: ["activetargets", "phaseindex", 'playerindex', 'light'],
+        template: `${template}`,
+        data: function () {
+            return {
+                targetless: logData.targetless,
+                mode: getDefaultGraphSubComponent(),
+            };
+        },
+        computed: {
+            phases: function() {
+                return logData.phases;
+            }
+        }
+    });
+</script>

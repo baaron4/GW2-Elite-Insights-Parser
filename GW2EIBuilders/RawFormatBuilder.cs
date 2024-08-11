@@ -43,7 +43,7 @@ namespace GW2EIBuilders
             };
             var writer = new JsonTextWriter(sw)
             {
-                Formatting =  Newtonsoft.Json.Formatting.None
+                Formatting = Newtonsoft.Json.Formatting.None
             };
             serializer.Serialize(writer, _jsonLog);
             writer.Close();

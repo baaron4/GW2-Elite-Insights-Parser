@@ -1,20 +1,24 @@
-﻿using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EIData.BuffSimulators;
+﻿using GW2EIEvtcParser.EIData.BuffSimulators;
 
 namespace GW2EIEvtcParser.ParsedData
 {
     public class BuffStackResetEvent : AbstractBuffStackEvent
     {
-        private readonly int _resetToDuration;
+        public int ResetToDuration { get; }
         internal BuffStackResetEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
         {
             BuffInstance = evtcItem.Pad;
-            _resetToDuration = evtcItem.Value;
+            ResetToDuration = evtcItem.Value;
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
         {
-            simulator.Reset(BuffInstance, _resetToDuration);
+            return useBuffInstanceSimulator && BuffInstance != 0 && base.IsBuffSimulatorCompliant(useBuffInstanceSimulator);
+        }
+
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
+        {
+            simulator.Reset(BuffInstance, ResetToDuration);
         }
     }
 }

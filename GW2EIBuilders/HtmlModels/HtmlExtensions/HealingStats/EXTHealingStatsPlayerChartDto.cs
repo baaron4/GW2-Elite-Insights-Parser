@@ -18,6 +18,7 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
             Healing = new PlayerDamageChartDto<int>()
             {
                 Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.All),
+                Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
                 Targets = new List<IReadOnlyList<int>>()
             };
             //
@@ -27,15 +28,23 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
             {
                 hybridHealingPower[i] += hybrid[i];
             }
+            var hybridHealingPowerReceived = new List<int>(p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.HealingPower));
+            IReadOnlyList<int> hybridReceived = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.Hybrid);
+            for (int i = 0; i < hybridReceived.Count; i++)
+            {
+                hybridHealingPowerReceived[i] += hybridReceived[i];
+            }
             HealingPowerHealing = new PlayerDamageChartDto<int>()
             {
                 Total = hybridHealingPower,
+                Taken = hybridHealingPowerReceived,
                 Targets = new List<IReadOnlyList<int>>()
             };
             //
             ConversionBasedHealing = new PlayerDamageChartDto<int>()
             {
                 Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
+                Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
                 Targets = new List<IReadOnlyList<int>>()
             };
             //

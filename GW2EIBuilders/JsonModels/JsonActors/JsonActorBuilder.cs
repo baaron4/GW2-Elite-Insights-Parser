@@ -3,8 +3,8 @@ using System.Linq;
 using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels.JsonActors
 {
@@ -16,7 +16,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
     internal static class JsonActorBuilder
     {
 
-        public static void FillJsonActor(JsonActor jsonActor, AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        public static void FillJsonActor(JsonActor jsonActor, AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             //
@@ -30,7 +30,18 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             jsonActor.HitboxWidth = actor.HitboxWidth;
             jsonActor.InstanceID = actor.AgentItem.InstID;
             jsonActor.IsFake = actor.IsFakeActor;
-            jsonActor.TeamID = log.CombatData.GetTeamChangeEvents(actor.AgentItem).Any()? log.CombatData.GetTeamChangeEvents(actor.AgentItem).LastOrDefault().TeamID : 0;
+            TeamChangeEvent teamChange = log.CombatData.GetTeamChangeEvents(actor.AgentItem).LastOrDefault();
+            if (teamChange != null)
+            {
+                if (teamChange.TeamIDInto > 0)
+                {
+                    jsonActor.TeamID = teamChange.TeamIDInto;
+                }
+                else if (teamChange.TeamIDComingFrom > 0)
+                {
+                    jsonActor.TeamID = teamChange.TeamIDComingFrom;
+                }
+            }
             //
             jsonActor.DpsAll = phases.Select(phase => JsonStatisticsBuilder.BuildJsonDPS(actor.GetDPSStats(log, phase.Start, phase.End))).ToArray();
             jsonActor.StatsAll = phases.Select(phase => JsonStatisticsBuilder.BuildJsonGameplayStatsAll(actor.GetGameplayStats(log, phase.Start, phase.End), actor.GetOffensiveStats(null, log, phase.Start, phase.End))).ToArray();
@@ -39,13 +50,13 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             IReadOnlyDictionary<long, Minions> minionsList = actor.GetMinions(log);
             if (minionsList.Values.Any())
             {
-                jsonActor.Minions = minionsList.Values.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, settings, skillDesc, buffDesc)).ToList();
+                jsonActor.Minions = minionsList.Values.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, settings, skillMap, buffMap)).ToList();
             }
             //
             var skillByID = actor.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            if (skillByID.Any())
+            if (skillByID.Count != 0)
             {
-                jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, skillByID, skillDesc);
+                jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, skillByID, skillMap);
             }
             //
             if (settings.RawFormatTimelineArrays)
@@ -72,8 +83,8 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonActor.BreakbarDamage1S = null;
             }
             //
-            jsonActor.TotalDamageDist = BuildDamageDistData(actor, phases, log, skillDesc, buffDesc);
-            jsonActor.TotalDamageTaken = BuildDamageTakenDistData(actor, phases, log, skillDesc, buffDesc);
+            jsonActor.TotalDamageDist = BuildDamageDistData(actor, phases, log, skillMap, buffMap);
+            jsonActor.TotalDamageTaken = BuildDamageTakenDistData(actor, phases, log, skillMap, buffMap);
             //
             if (settings.RawFormatTimelineArrays)
             {
@@ -94,35 +105,35 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             }
         }
 
-        private static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
                 res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                    actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    log, 
-                    skillDesc, 
-                    buffDesc
+                    actor.GetJustActorDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    log,
+                    skillMap,
+                    buffMap
                 );
             }
             return res;
         }
 
-        private static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var res = new List<JsonDamageDist>[phases.Count];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
                 res[i] = JsonDamageDistBuilder.BuildJsonDamageDistList(
-                    actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), 
-                    log, 
-                    skillDesc, 
-                    buffDesc
+                    actor.GetDamageTakenEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    actor.GetJustActorBreakbarDamageEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()),
+                    log,
+                    skillMap,
+                    buffMap
                );
             }
             return res;

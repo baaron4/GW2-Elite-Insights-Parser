@@ -6,11 +6,9 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -42,6 +40,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             //new Mechanic(BloodFueledAbo, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,Color.Red), "Ate Reflects(good)",0),//abom
             new EnemyDstBuffApplyMechanic(new long[]{ BloodShield, BloodShieldAbo }, "Blood Shield", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Bubble","Blood Shield (protective bubble)", "Bubble",100).UsingChecker((ba, log) => !ba.To.HasBuff(log, BloodShield, ba.Time - 100) && !ba.To.HasBuff(log, BloodShieldAbo, ba.Time - 100)),
             new EnemyDstBuffRemoveMechanic(new long[]{ BloodShield, BloodShieldAbo }, "Lost Blood Shield", new MechanicPlotlySetting(Symbols.Octagon,Colors.Green), "Lost Bubble","Lost Blood Shield (protective bubble)", "Lost Bubble",100),
+            new PlayerSrcBuffRemoveSingleFromMechanic(new long[]{ BloodShield, BloodShieldAbo }, "Removed a blood shield stack", new MechanicPlotlySetting(Symbols.Octagon,Colors.Blue), "Rmv.Sh.Stck","Removed Blood Shield (protective bubble) Stack", "Removed Bubble Stack"),
             new PlayerDstBuffApplyMechanic(ZealousBenediction, "Zealous Benediction", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
             new PlayerDstBuffApplyMechanic(Slow, "Icy Patch", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0).UsingChecker((br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, Stability, br.Time - ParserHelper.ServerDelayConstant)),
             new PlayerDstHitMechanic(Surrender, "Surrender", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
@@ -100,17 +99,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new DamageCastFinder(SpontaneousCombustion, SpontaneousCombustion),
                 new DamageCastFinder(SnowstormSkill, SnowstormSkill),
                 new DamageCastFinder(DownpourSkill, DownpourSkill),
+                new BuffLossCastFinder(UnstableBloodMagic, UnstableBloodMagic),
             };
         }
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Matthias));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Matthias not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -129,7 +125,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (abo != null)
                     {
                         phases.Add(new PhaseData(downPour.Time, abo.Time));
-                        AbstractBuffEvent invulRemove = log.CombatData.GetBuffData(mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && x.BuffID == Invulnerability757 && !(x is BuffApplyEvent));
+                        AbstractBuffEvent invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
                         if (invulRemove != null)
                         {
                             phases.Add(new PhaseData(invulRemove.Time, fightEnd));
@@ -159,7 +155,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // has breakbar state into
             if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
@@ -216,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                 }
-                if (copies.Any())
+                if (copies.Count != 0)
                 {
                     combatData.AddRange(copies);
                 }
@@ -257,7 +253,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in shields)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 250, seg, "rgba(255, 0, 255, 0.5)", new AgentConnector(target)));
+                replay.Decorations.Add(new CircleDecoration(250, seg, Colors.Magenta, 0.5, new AgentConnector(target)));
             }
         }
 
@@ -276,8 +272,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, end, 300, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, end);
                     }
                     var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman).ToList();
                     foreach (AbstractCastEvent c in hadouken)
@@ -285,28 +280,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         int preCastTime = 1000;
                         int duration = 750;
-                        int width = 4000; int height = 130;
-                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time <= start + 1000);
+                        uint width = 4000; uint height = 130;
+                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
-                            float direction = ParserHelper.RadianToDegreeF(Math.Atan2(facing.Y, facing.X));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start, start + preCastTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, direction, width / 2, (start + preCastTime, start + preCastTime + duration), "rgba(255, 0, 0, 0.7)", new AgentConnector(target)));
+                            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                            var rotationConnextor = new AngleConnector(facing);
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Red, 0.1, positionConnector).UsingRotationConnector(rotationConnextor));
+                            replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), Colors.Red, 0.7, positionConnector).UsingRotationConnector(rotationConnextor));
                         }
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Storm:
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(260, (start, end), "rgba(0, 80, 255, 0.5)", new AgentConnector(target)).UsingFilled(false));
                     break;
                 case (int)ArcDPSEnums.TrashID.Spirit:
                 case (int)ArcDPSEnums.TrashID.Spirit2:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.IcePatch:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 200, (start, end), "rgba(0, 0, 255, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(200, (start, end), Colors.Blue, 0.5, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.Tornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, (start, end), "rgba(255, 0, 0, 0.5)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(90, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
                 default:
                     break;
@@ -316,18 +312,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Corruption
             IEnumerable<Segment> corruptedMatthias = p.GetBuffStatus(log, new long[] { Corruption1, Corruption2 }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             foreach (Segment seg in corruptedMatthias)
             {
                 int corruptedMatthiasEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, seg, "rgba(255, 150, 0, 0.5)", new AgentConnector(p)));
-                ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
-                ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
-                if (wellNextPosition != null || wellPrevPosition != null)
+                replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
+                Point3D position = p.GetCurrentInterpolatedPosition(log, corruptedMatthiasEnd);
+                if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
-                    replay.Decorations.Add(new CircleDecoration(true, corruptedMatthiasEnd + 100000, 180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, corruptedMatthiasEnd)));
+                    replay.AddDecorationWithGrowing(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), Colors.Black, 0.3, new PositionConnector(position)), corruptedMatthiasEnd + 100000);
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
             }
@@ -336,13 +331,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment seg in wellMatthias)
             {
                 int wellMatthiasEnd = (int)seg.End;
-                replay.Decorations.Add(new CircleDecoration(false, 0, 120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 9000, 120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)));
-                ParametricPoint3D wellNextPosition = replay.PolledPositions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
-                ParametricPoint3D wellPrevPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
-                if (wellNextPosition != null || wellPrevPosition != null)
+                replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
+                Point3D position = p.GetCurrentInterpolatedPosition(log, wellMatthiasEnd);
+                if (position != null)
                 {
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new InterpolatedPositionConnector(wellPrevPosition, wellNextPosition, wellMatthiasEnd)));
+                    replay.Decorations.Add(new CircleDecoration(300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new PositionConnector(position)));
                 }
                 replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }
@@ -353,17 +346,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
             foreach (Segment seg in sacrificeMatthias)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.Start + 10000, 120, seg, "rgba(0, 150, 250, 0.35)", new AgentConnector(p)));
+                replay.AddDecorationWithGrowing(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
             }
             // Bombs
-            var zealousBenediction = log.CombatData.GetBuffData(ZealousBenediction).Where(x => x.To == p.AgentItem && x is BuffApplyEvent).ToList();
+            var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
             foreach (AbstractBuffEvent c in zealousBenediction)
             {
                 int zealousStart = (int)c.Time;
                 int zealousEnd = zealousStart + 5000;
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, zealousEnd, 180, (zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)", new AgentConnector(p)));
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), Colors.Orange, 0.2, new AgentConnector(p)), zealousEnd);
             }
             // Unbalanced
             IEnumerable<Segment> unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);

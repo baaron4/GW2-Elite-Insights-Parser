@@ -31,6 +31,9 @@ facingIcon.onload = function () {
 function ToRadians(degrees) {
     return degrees * (Math.PI / 180);
 }
+function ToDegrees(radians) {
+    return radians / (Math.PI / 180);
+}
 
 const resolutionMultiplier = 2.0;
 
@@ -38,10 +41,21 @@ const maxOverheadAnimationFrame = 50;
 let overheadAnimationFrame = maxOverheadAnimationFrame / 2;
 let overheadAnimationIncrement = 1;
 
+const uint32 = new Uint32Array(1);
+const uint32ToUint8 = new Uint8Array(uint32.buffer);
+
+function getDefaultCombatReplayTime() {
+    var time = EIUrlParams.get("crTime");
+    if (!time) {
+        return 0;
+    }
+    return Math.max(parseFloat(time), 0.0) * 1000;
+}
+
 var animator = null;
 // reactive structures
-var reactiveAnimationData = {
-    time: 0,
+const reactiveAnimationData = {
+    time: getDefaultCombatReplayTime(),
     selectedActorID: null,
     animated: false
 };
@@ -53,6 +67,11 @@ var sliderDelimiter = {
 }
 //
 
+let InchToPixel = 10;
+let PollingRate = 150;
+
+//
+
 class Animator {
     constructor(options) {
         var _this = this;
@@ -62,8 +81,6 @@ class Animator {
         this.prevTime = 0;
         this.times = [];
         // simulation params
-        this.inchToPixel = 10;
-        this.pollingRate = 150;
         this.speed = 1;
         this.backwards = false;
         this.rangeControl = [{ enabled: false, radius: 180 }, { enabled: false, radius: 360 }, { enabled: false, radius: 720 }];
@@ -72,11 +89,13 @@ class Animator {
             displayAllMinions: false,
             displaySelectedMinions: true,
             displayMechanics: true,
+            displaySquadMarkers: true,
             displaySkillMechanics: true,
             skillMechanicsMask: DefaultSkillDecorations,
             displayTrashMobs: true,
             useActorHitboxWidth: false,
-        };     
+            followSelected: false
+        };
         this.coneControl = {
             enabled: false,
             openingAngle: 90,
@@ -87,6 +106,7 @@ class Animator {
         this.playerData = new Map();
         this.trashMobData = new Map();
         this.friendlyMobData = new Map();
+        this.decorationMetadata = new Map();
         this.overheadActorData = [];
         this.mechanicActorData = [];
         this.skillMechanicActorData = [];
@@ -99,13 +119,17 @@ class Animator {
         this.prevBGImage = null;
         this.animation = null;
         // manipulation
-        this.dragStart = null;
+        this.mouseDown = null;
         this.dragged = false;
         this.scale = 1.0;
         // options
         if (options) {
-            if (options.inchToPixel) this.inchToPixel = options.inchToPixel;
-            if (options.pollingRate) this.pollingRate = options.pollingRate;
+            if (options.inchToPixel) {
+                InchToPixel = options.inchToPixel;
+            }
+            if (options.pollingRate) {
+                PollingRate = options.pollingRate;
+            }
             if (options.maps) {
                 for (var i = 0; i < options.maps.length; i++) {
                     var mapData = options.maps[i];
@@ -122,7 +146,9 @@ class Animator {
                     });
                 }
             }
-            if (options.actors) this._initActors(options.actors);
+            if (options.actors) {
+                this._initActors(options.actors, options.decorationRenderings, options.decorationMetadata);
+            }
             downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
             dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
             deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
@@ -130,7 +156,7 @@ class Animator {
         }
     }
 
-    attachDOM(mainCanvasID, bgCanvasID, timeRangeID, timeRangeDisplayID) {
+    attachDOM(mainCanvasID, bgCanvasID, pickCanvasID, timeRangeID, timeRangeDisplayID) {
         // animation
         this.timeSlider = document.getElementById(timeRangeID);
         this.timeSliderDisplay = document.getElementById(timeRangeDisplayID);
@@ -150,100 +176,173 @@ class Animator {
         this.bgCanvas.height *= resolutionMultiplier;
         this.bgContext = this.bgCanvas.getContext('2d');
         this.bgContext.imageSmoothingEnabled = true;
+        // pick canvas
+        this.pickCanvas = document.getElementById(pickCanvasID);
+        this.pickCanvas.style.width = this.pickCanvas.width + "px";
+        this.pickCanvas.style.height = this.pickCanvas.height + "px";
+        this.pickCanvas.width *= resolutionMultiplier;
+        this.pickCanvas.height *= resolutionMultiplier;
+        this.pickContext = this.pickCanvas.getContext('2d', {
+            willReadFrequently: true,
+        });
         // manipulation
         this.lastX = this.mainCanvas.width / 2;
         this.lastY = this.mainCanvas.height / 2;
         //
         this._trackTransforms(this.mainContext);
         this._trackTransforms(this.bgContext);
+        this._trackTransforms(this.pickContext);
         this.mainContext.scale(resolutionMultiplier, resolutionMultiplier);
         this.bgContext.scale(resolutionMultiplier, resolutionMultiplier);
+        this.pickContext.scale(resolutionMultiplier, resolutionMultiplier);
         this._initMouseEvents();
         this._initTouchEvents();
     }
 
-    _initActors(actors) {
+    _initActors(actors, decorationRenderings, decorationMetadata) {
         this.playerData.clear();
         this.targetData.clear();
         this.trashMobData.clear();
         this.friendlyMobData.clear();
         this.actorOrientationData.clear();
+        this.decorationMetadata.clear();
         this.overheadActorData = [];
         this.mechanicActorData = [];
+        this.squadMarkerData = [];
+        this.overheadSquadMarkerData = [];
+        for (let i = 0; i < decorationMetadata.length; i++) {
+            const metadata = decorationMetadata[i];
+            let MetadataClass = null;
+            switch (metadata.type) {
+                case "ActorOrientation":
+                    MetadataClass = ActorOrientationDecorationMetadata;
+                    break;
+                case "Circle":
+                    MetadataClass = CircleDecorationMetadata;
+                    break;
+                case "Doughnut":
+                    MetadataClass = DoughnutDecorationMetadata;
+                    break;
+                case "Line":
+                    MetadataClass = LineDecorationMetadata;
+                    break;
+                case "Pie":
+                    MetadataClass = PieDecorationMetadata;
+                    break;
+                case "Rectangle":
+                    MetadataClass = RectangleDecorationMetadata;
+                    break;
+                case "BackgroundIconDecoration":
+                    MetadataClass = IconDecorationMetadata;
+                    break;
+                case "IconDecoration":
+                    MetadataClass = IconDecorationMetadata;
+                    break;
+                case "IconOverheadDecoration":
+                    MetadataClass = IconOverheadDecorationMetadata;
+                    break;
+                case "MovingPlatform":
+                    MetadataClass = MovingPlatformDecorationMetadata;
+                    break;
+                default:
+                    throw "Unknown decoration type " + metadata.type;
+            }
+            this.decorationMetadata.set(metadata.signature, new MetadataClass(metadata));
+        }
         for (let i = 0; i < actors.length; i++) {
             const actor = actors[i];
-            if (!actor.isMechanicOrSkill) {
-                switch (actor.type) {
-                    case "Player":
-                        this.playerData.set(actor.id, new SquadIconDrawable(actor.start, actor.end, actor.img, 22, actor.group, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, this.inchToPixel * actor.hitboxWidth));
-                        if (this.times.length === 0) {
-                            for (let j = 0; j < actor.positions.length / 2; j++) {
-                                this.times.push(j * this.pollingRate);
-                            }
+            let ActorClass;
+            let actorSize = 0;
+            let mapToFill;
+            switch (actor.type) {
+                case "Player":
+                    ActorClass = SquadIconDrawable;
+                    actorSize = 22;
+                    mapToFill = this.playerData;
+                    if (this.times.length === 0) {
+                        for (let j = 0; j < actor.positions.length / 2; j++) {
+                            this.times.push(j * PollingRate);
                         }
-                        break;
-                    case "Target":
-                    case "TargetPlayer":
-                        this.targetData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 30, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, -1, this.inchToPixel * actor.hitboxWidth));
-                        break;
-                    case "Mob":
-                        this.trashMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 25, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
-                        break;
-                    case "Friendly":
-                        this.friendlyMobData.set(actor.id, new NonSquadIconDrawable(actor.start, actor.end, actor.img, 20, actor.positions, actor.dead, actor.down, actor.dc, actor.breakbarActive, actor.masterID, this.inchToPixel * actor.hitboxWidth));
-                        break;
+                        reactiveAnimationData.time = Math.min(reactiveAnimationData.time, this.times[this.times.length - 1]);
+                    }
+                    break;
+                case "Target":
+                case "TargetPlayer":
+                    ActorClass = NonSquadIconDrawable;
+                    actorSize = 30;
+                    mapToFill = this.targetData;
+                    break;
+                case "Mob":
+                    ActorClass = NonSquadIconDrawable;
+                    actorSize = 25;
+                    mapToFill = this.trashMobData;
+                    break;
+                case "Friendly":
+                    ActorClass = NonSquadIconDrawable;
+                    actorSize = 20;
+                    mapToFill = this.friendlyMobData;
+                    break;
+                default:
+                    throw "Unknown decoration type " + actor.type;
+            }
+            mapToFill.set(actor.id, new ActorClass(actor, actorSize));
+        }
+        for (let i = 0; i < decorationRenderings.length; i++) {
+            const decorationRendering = {};
+            decorationRendering._metadataContainer = this.decorationMetadata;
+            Object.assign(decorationRendering, decorationRenderings[i]);
+            if (!decorationRendering.isMechanicOrSkill) {
+                switch (decorationRendering.type) {
                     case "ActorOrientation":
-                        this.actorOrientationData.set(actor.connectedTo, new FacingMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData));
+                        this.actorOrientationData.set(decorationRendering.connectedTo.masterId, new FacingMechanicDrawable(decorationRendering));
                         break;
                     case "MovingPlatform":
-                        this.backgroundActorData.push(new MovingPlatformDrawable(actor.start, actor.end, actor.image, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.positions));
+                        this.backgroundActorData.push(new MovingPlatformDrawable(decorationRendering));
                         break;
-                    case "IconOverheadDecoration":
-                        this.overheadActorData.push(new IconOverheadDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity));
+                    case "BackgroundIconDecoration":
+                        this.backgroundActorData.push(new BackgroundIconMechanicDrawable(decorationRendering));
                         break;
                     default:
-                        throw "Unknown decoration type";
+                        throw "Unknown decoration type " + decorationRendering.type;
                 }
             } else {
-                let decoration = null;
-                switch (actor.type) {
+                let DecorationClass;
+                switch (decorationRendering.type) {
                     case "Circle":
-                        decoration = new CircleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.radius, actor.connectedTo, this.inchToPixel * actor.minRadius);
+                        DecorationClass = CircleMechanicDrawable;
                         break;
                     case "Rectangle":
-                        decoration = new RectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.connectedTo);
-                        break;
-                    case "RotatedRectangle":
-                        decoration = new RotatedRectangleMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.width, this.inchToPixel * actor.height, actor.rotation, this.inchToPixel * actor.radialTranslation, actor.spinAngle, actor.connectedTo);
+                        DecorationClass = RectangleMechanicDrawable;
                         break;
                     case "Doughnut":
-                        decoration = new DoughnutMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, this.inchToPixel * actor.innerRadius, this.inchToPixel * actor.outerRadius, actor.connectedTo);
+                        DecorationClass = DoughnutMechanicDrawable;
                         break;
                     case "Pie":
-                        decoration = new PieMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.direction, actor.openingAngle, this.inchToPixel * actor.radius, actor.connectedTo);
+                        DecorationClass = PieMechanicDrawable;
                         break;
                     case "Line":
-                        decoration = new LineMechanicDrawable(actor.start, actor.end, actor.fill, actor.growing, actor.color, actor.connectedFrom, actor.connectedTo);
-                        break;
-                    case "FacingRectangle":
-                        decoration = new FacingRectangleMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, this.inchToPixel * actor.width, this.inchToPixel * actor.height, this.inchToPixel * actor.translation, actor.color);
-                        break;
-                    case "FacingPie":
-                        decoration = new FacingPieMechanicDrawable(actor.start, actor.end, actor.connectedTo, actor.facingData, actor.openingAngle, this.inchToPixel * actor.radius, actor.color);
+                        DecorationClass = LineMechanicDrawable;
                         break;
                     case "IconDecoration":
-                        decoration = new IconDecorationDrawable(actor.start, actor.end, actor.connectedTo, actor.image, actor.pixelSize, this.inchToPixel * actor.worldSize , actor.opacity);
+                        DecorationClass = IconMechanicDrawable;
                         break;
+                    case "IconOverheadDecoration":
+                        this.overheadActorData.push(new IconOverheadMechanicDrawable(decorationRendering));
+                        continue;
+                    case "SquadMarkerDecoration":
+                        this.squadMarkerData.push(new IconMechanicDrawable(decorationRendering));
+                        continue;
+                    case "OverheadSquadMarkerDecoration":
+                        this.overheadSquadMarkerData.push(new IconOverheadMechanicDrawable(decorationRendering));
+                        continue;
                     default:
-                        throw "Unknown decoration type";
+                        throw "Unknown decoration type " + decorationRendering.type;
                 }
-                if (decoration) {
-                    if (actor.owner) {
-                        decoration.usingSkillMode(actor.owner, actor.category);
-                        this.skillMechanicActorData.push(decoration);
-                    } else {
-                        this.mechanicActorData.push(decoration);
-                    }
+                const decoration = new DecorationClass(decorationRendering);
+                if (decorationRendering.skillMode) {
+                    this.skillMechanicActorData.push(decoration);
+                } else {
+                    this.mechanicActorData.push(decoration);
                 }
             }
         }
@@ -283,7 +382,7 @@ class Animator {
 
     startAnimate(updateReactiveStatus) {
         if (this.animation === null && this.times.length > 0) {
-            if (this.reactiveDataStatus.time >= this.times[this.times.length - 1]) {
+            if (this.reactiveDataStatus.time >= this.times[this.times.length - 1] && !this.backwards) {
                 this.reactiveDataStatus.time = 0;
             }
             this.prevTime = new Date().getTime();
@@ -315,12 +414,9 @@ class Animator {
         }
     }
 
-    selectActor(actorId) {
+    selectActor(actorId, keepIfEqual = false) {
         let actor = this.getActorData(actorId);
-        if (!actor) {
-            return;
-        }
-        if (this.selectedActor == actor) {
+        if (!actor || (!keepIfEqual && this.selectedActor === actor)) {
             this.selectedActor = null;
             this.reactiveDataStatus.selectedActorID = null;
         } else {
@@ -332,8 +428,28 @@ class Animator {
         }
     }
 
+    getSelectableActorData(actorId) {
+        return animator.targetData.get(actorId) || animator.playerData.get(actorId) || animator.friendlyMobData.get(actorId);
+    }
+
     getActorData(actorId) {
-        return  animator.targetData.get(actorId) || animator.playerData.get(actorId) || animator.friendlyMobData.get(actorId) || animator.trashMobData.get(actorId);
+        return this.getSelectableActorData(actorId) || animator.trashMobData.get(actorId);
+    }
+
+    getActiveActorMarkers(actorID) {
+        let res = [];
+        for (let i = 0; i < this.overheadSquadMarkerData.length; i++) {
+            var marker = this.overheadSquadMarkerData[i];
+            if (marker.canDraw() && marker.getPosition() && marker.master === this.getActorData(actorID)) {
+                res.push(marker);
+            }
+        }
+        return res;
+    }
+
+    toggleFollowSelected() {
+        this.displaySettings.followSelected = !this.displaySettings.followSelected;
+        animateCanvas(noUpdateTime);
     }
 
     toggleHighlightSelectedGroup() {
@@ -366,13 +482,18 @@ class Animator {
         animateCanvas(noUpdateTime);
     }
 
+    toggleSquadMarkers() {
+        this.displaySettings.displaySquadMarkers = !this.displaySettings.displaySquadMarkers;
+        animateCanvas(noUpdateTime);
+    }
+
     toggleSkills() {
         this.displaySettings.displaySkillMechanics = !this.displaySettings.displaySkillMechanics;
         animateCanvas(noUpdateTime);
     }
 
     toggleSkillCategoryMask(mask) {
-        if ( (this.displaySettings.skillMechanicsMask & mask) > 0) {           
+        if ((this.displaySettings.skillMechanicsMask & mask) > 0) {
             this.displaySettings.skillMechanicsMask &= ~mask;
         } else {
             this.displaySettings.skillMechanicsMask |= mask;
@@ -395,31 +516,39 @@ class Animator {
         animateCanvas(noUpdateTime);
     }
 
+    resetViewpoint() {
+        var canvas = this.mainCanvas;
+        var ctx = this.mainContext;
+        var bgCtx = this.bgContext;
+
+        this.lastX = canvas.width / 2;
+        this.lastY = canvas.height / 2;
+        this.mouseDown = null;
+        this.dragged = false;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(resolutionMultiplier, resolutionMultiplier);
+        bgCtx.setTransform(1, 0, 0, 1, 0, 0);
+        bgCtx.scale(resolutionMultiplier, resolutionMultiplier);
+        this.needBGUpdate = true;
+        if (this.animation === null) {
+            animateCanvas(noUpdateTime);
+        }
+    }
+
     _initMouseEvents() {
         var _this = this;
         var canvas = this.mainCanvas;
         var ctx = this.mainContext;
         var bgCtx = this.bgContext;
-
-        canvas.addEventListener('dblclick', function (evt) {
-            _this.lastX = canvas.width / 2;
-            _this.lastY = canvas.height / 2;
-            _this.dragStart = null;
-            _this.dragged = false;
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.scale(resolutionMultiplier, resolutionMultiplier);
-            bgCtx.setTransform(1, 0, 0, 1, 0, 0);
-            bgCtx.scale(resolutionMultiplier, resolutionMultiplier);
-            _this.needBGUpdate = true;
-            if (_this.animation === null) {
-                animateCanvas(noUpdateTime);
-            }
-        }, false);
+        var pickCtx = this.pickContext;
 
         canvas.addEventListener('mousedown', function (evt) {
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
-            _this.dragStart = ctx.transformedPoint(_this.lastX, _this.lastY);
+            _this.mouseDown = {
+                pt: ctx.transformedPoint(_this.lastX, _this.lastY),
+                time: Date.now()
+            }
             _this.dragged = false;
         }, false);
 
@@ -427,10 +556,11 @@ class Animator {
             _this.lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
             _this.lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
             _this.dragged = true;
-            if (_this.dragStart) {
+            if (_this.mouseDown) {
                 var pt = ctx.transformedPoint(_this.lastX, _this.lastY);
-                ctx.translate(pt.x - _this.dragStart.x, pt.y - _this.dragStart.y);
-                bgCtx.translate(pt.x - _this.dragStart.x, pt.y - _this.dragStart.y);
+                var downPt = _this.mouseDown.pt;
+                ctx.translate(pt.x - downPt.x, pt.y - downPt.y);
+                bgCtx.translate(pt.x - downPt.x, pt.y - downPt.y);
                 _this.needBGUpdate = true;
                 if (_this.animation === null) {
                     animateCanvas(noUpdateTime);
@@ -439,7 +569,21 @@ class Animator {
         }, false);
 
         document.body.addEventListener('mouseup', function (evt) {
-            _this.dragStart = null;
+            if (_this.mouseDown && Date.now() - _this.mouseDown.time < 150) {
+                _this._drawPickCanvas();
+                var downPt = {
+                    x: Math.round(_this.lastX * resolutionMultiplier),
+                    y: Math.round(_this.lastY * resolutionMultiplier)
+                };
+                var pickedColor = pickCtx.getImageData(downPt.x, downPt.y, 1, 1).data;
+                uint32ToUint8[0] = pickedColor[0];
+                uint32ToUint8[1] = pickedColor[1];
+                uint32ToUint8[2] = pickedColor[2];
+                uint32ToUint8[3] = 0;
+                var actorID = uint32[0];
+                _this.selectActor(actorID, true);
+            }
+            _this.mouseDown = null;
         }, false);
 
         var zoom = function (evt) {
@@ -583,7 +727,7 @@ class Animator {
 
     _drawBGCanvas() {
         var imgToDraw = this._getBackgroundImage();
-        if ((imgToDraw !== null && imgToDraw !== this.prevBGImage) || this.needBGUpdate) {
+        if ((imgToDraw !== null && imgToDraw !== this.prevBGImage) || this.needBGUpdate || this._mustMoveToSelected()) {
             this.needBGUpdate = false;
             this.prevBGImage = imgToDraw;
             var ctx = this.bgContext;
@@ -593,45 +737,55 @@ class Animator {
             ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 
             ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
             ctx.restore();
 
+            //ctx.save();
+            {
 
-            ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+                this._moveToSelected(ctx);
 
-            //ctx.globalCompositeOperation = "color-burn";
-            ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            // draw scale
-            ctx.lineWidth = 3 * resolutionMultiplier;
-            ctx.strokeStyle = "#CC2200";
-            var pos = resolutionMultiplier * 70;
-            var width = resolutionMultiplier * 50;
-            var height = resolutionMultiplier * 6;
-            // main line
-            ctx.beginPath();
-            ctx.moveTo(pos, pos);
-            ctx.lineTo(pos + width, pos);
-            ctx.stroke();
-            ctx.lineWidth = 2 * resolutionMultiplier;
-            // right border
-            ctx.beginPath();
-            ctx.moveTo(pos - resolutionMultiplier, pos + height);
-            ctx.lineTo(pos - resolutionMultiplier, pos - height);
-            ctx.stroke();
-            // left border
-            ctx.beginPath();
-            ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
-            ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
-            ctx.stroke();
-            // text
-            var fontSize = 13 * resolutionMultiplier;
-            ctx.font = "bold " + fontSize + "px Comic Sans MS";
-            ctx.fillStyle = "#CC2200";
-            ctx.textAlign = "center";
-            ctx.fillText((50 / (this.inchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
-            ctx.restore();
+                ctx.drawImage(imgToDraw, 0, 0, canvas.width / resolutionMultiplier, canvas.height / resolutionMultiplier);
+
+                //ctx.globalCompositeOperation = "color-burn";
+                ctx.save();
+                {
+                    ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    // draw scale
+                    ctx.lineWidth = 3 * resolutionMultiplier;
+                    ctx.strokeStyle = "#CC2200";
+                    var pos = resolutionMultiplier * 70;
+                    var width = resolutionMultiplier * 50;
+                    var height = resolutionMultiplier * 6;
+                    // main line
+                    ctx.beginPath();
+                    ctx.moveTo(pos, pos);
+                    ctx.lineTo(pos + width, pos);
+                    ctx.stroke();
+                    ctx.lineWidth = 2 * resolutionMultiplier;
+                    // right border
+                    ctx.beginPath();
+                    ctx.moveTo(pos - resolutionMultiplier, pos + height);
+                    ctx.lineTo(pos - resolutionMultiplier, pos - height);
+                    ctx.stroke();
+                    // left border
+                    ctx.beginPath();
+                    ctx.moveTo(pos + width + resolutionMultiplier, pos + height);
+                    ctx.lineTo(pos + width + resolutionMultiplier, pos - height);
+                    ctx.stroke();
+                    // text
+                    var fontSize = 13 * resolutionMultiplier;
+                    ctx.font = "bold " + fontSize + "px Comic Sans MS";
+                    ctx.fillStyle = "#CC2200";
+                    ctx.textAlign = "center";
+                    ctx.fillText((50 / (InchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
+                }
+                ctx.restore();
+            }
+            //ctx.restore();
             //ctx.globalCompositeOperation = 'normal';
         }
     }
@@ -642,6 +796,68 @@ class Animator {
         }
     }
 
+    _drawPickCanvas() {
+        var _this = this;
+        var mainCtx = this.mainContext;
+        var mainTransform = mainCtx.getTransform();
+        var ctx = this.pickContext;
+        var canvas = this.pickCanvas;
+        var p1 = ctx.transformedPoint(0, 0);
+        var p2 = ctx.transformedPoint(canvas.width, canvas.height);
+        ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+        ctx.save();
+        {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        ctx.restore();
+
+        //ctx.save();
+        {
+            ctx.setTransform(mainTransform.a, mainTransform.b, mainTransform.c, mainTransform.d, mainTransform.e, mainTransform.f);
+
+            this.friendlyMobData.forEach(function (value, key, map) {
+                if (!value.isSelected()) {
+                    value.drawPicking();
+                }
+            });
+
+            if (!this.displaySettings.useActorHitboxWidth) {
+                this.playerData.forEach(function (value, key, map) {
+                    if (!value.isSelected()) {
+                        value.drawPicking();
+                    }
+                });
+            }
+
+            if (this.displaySettings.displayTrashMobs) {
+                this.trashMobData.forEach(function (value, key, map) {
+                    if (!value.isSelected()) {
+                        value.drawPicking();
+                    }
+                });
+            }
+
+            this.targetData.forEach(function (value, key, map) {
+                if (!value.isSelected()) {
+                    value.drawPicking();
+                }
+            });
+            if (this.displaySettings.useActorHitboxWidth) {
+                this.playerData.forEach(function (value, key, map) {
+                    if (!value.isSelected()) {
+                        value.drawPicking();
+                    }
+                });
+            }
+            if (this.selectedActor !== null) {
+                this.selectedActor.drawPicking();
+            }
+        }
+
+        //ctx.restore();
+    }
+
     _drawMainCanvas() {
         var _this = this;
         var ctx = this.mainContext;
@@ -650,73 +866,106 @@ class Animator {
         var p2 = ctx.transformedPoint(canvas.width, canvas.height);
         ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
         ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
         ctx.restore();
-        // Background items commonly overlap so they need to be drawn in the correct order by height
-        // This is sorted in reverse order because the z axis is inverted
-        animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
-        for (let i = 0; i < animator.backgroundActorData.length; i++) {
-            animator.backgroundActorData[i].draw();
-        }
-        if (this.displaySettings.displayMechanics) {
-            for (let i = 0; i < this.mechanicActorData.length; i++) {
-                this.mechanicActorData[i].draw();
-            }
-        }
+        //ctx.save();
+        {
 
-        if (this.displaySettings.displaySkillMechanics) {
-            for (let i = 0; i < this.skillMechanicActorData.length; i++) {
-                this.skillMechanicActorData[i].draw();
+            this._moveToSelected(ctx);
+            // Background items commonly overlap so they need to be drawn in the correct order by height
+            // This is sorted in reverse order because the z axis is inverted
+            animator.backgroundActorData.sort((x, y) => y.getHeight() - x.getHeight());
+            for (let i = 0; i < animator.backgroundActorData.length; i++) {
+                animator.backgroundActorData[i].draw();
             }
-        }
-        
-        this.friendlyMobData.forEach(function (value, key, map) {
-            if (!value.isSelected()) {
-                value.draw();
-                _this._drawActorOrientation(key);
+            if (this.displaySettings.displayMechanics) {
+                for (let i = 0; i < this.mechanicActorData.length; i++) {
+                    this.mechanicActorData[i].draw();
+                }
             }
-        });
-        
-        if (!this.displaySettings.useActorHitboxWidth) {           
-            this.playerData.forEach(function (value, key, map) {
+
+            if (this.displaySettings.displaySkillMechanics) {
+                for (let i = 0; i < this.skillMechanicActorData.length; i++) {
+                    this.skillMechanicActorData[i].draw();
+                }
+            }
+
+            this.friendlyMobData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
                     _this._drawActorOrientation(key);
                 }
             });
-        }
-        
-        if (this.displaySettings.displayTrashMobs) {
-            this.trashMobData.forEach(function (value, key, map) {
-                if (!value.isSelected()) {
-                    value.draw();
-                    _this._drawActorOrientation(key);
-                }
-            });
-        }
-        
-        this.targetData.forEach(function (value, key, map) {
-            if (!value.isSelected()) {
-                value.draw();
-                _this._drawActorOrientation(key);
+
+            if (!this.displaySettings.useActorHitboxWidth) {
+                this.playerData.forEach(function (value, key, map) {
+                    if (!value.isSelected()) {
+                        value.draw();
+                        _this._drawActorOrientation(key);
+                    }
+                });
             }
-        });
-        if (this.displaySettings.useActorHitboxWidth) {           
-            this.playerData.forEach(function (value, key, map) {
+
+            if (this.displaySettings.displayTrashMobs) {
+                this.trashMobData.forEach(function (value, key, map) {
+                    if (!value.isSelected()) {
+                        value.draw();
+                        _this._drawActorOrientation(key);
+                    }
+                });
+            }
+
+            this.targetData.forEach(function (value, key, map) {
                 if (!value.isSelected()) {
                     value.draw();
                     _this._drawActorOrientation(key);
                 }
             });
+            if (this.displaySettings.useActorHitboxWidth) {
+                this.playerData.forEach(function (value, key, map) {
+                    if (!value.isSelected()) {
+                        value.draw();
+                        _this._drawActorOrientation(key);
+                    }
+                });
+            }
+            if (this.selectedActor !== null) {
+                this.selectedActor.draw();
+                this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
+            }
+            if (this.displaySettings.displayMechanics) {
+                for (let i = 0; i < this.overheadActorData.length; i++) {
+                    this.overheadActorData[i].draw();
+                }
+            }
+            if (this.displaySettings.displaySquadMarkers) {
+                for (let i = 0; i < this.squadMarkerData.length; i++) {
+                    this.squadMarkerData[i].draw();
+                }
+                for (let i = 0; i < this.overheadSquadMarkerData.length; i++) {
+                    this.overheadSquadMarkerData[i].draw();
+                }
+            }
         }
-        if (this.selectedActor !== null) {
-            this.selectedActor.draw();     
-            this._drawActorOrientation(this.reactiveDataStatus.selectedActorID);
-        }
-        if (this.displaySettings.displayMechanics) {
-            for (let i = 0; i < this.overheadActorData.length; i++) {
-                this.overheadActorData[i].draw();
+        //ctx.restore();  
+    }
+
+    _mustMoveToSelected() {
+        return this.displaySettings.followSelected && this.selectedActor !== null && this.selectedActor.canDraw();
+    }
+
+    _moveToSelected(ctx) {
+
+        if (this._mustMoveToSelected()) {
+            const pos = this.selectedActor.getPosition();
+            if (pos !== null) {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.scale(this.scale * resolutionMultiplier, this.scale * resolutionMultiplier);
+                const translateScale = 0.5 / resolutionMultiplier / this.scale
+                ctx.translate(-pos.x + this.mainCanvas.width * translateScale, -pos.y + this.mainCanvas.height * translateScale);
             }
         }
     }
@@ -726,6 +975,7 @@ class Animator {
             return;
         }
         //
+        //this._drawPickCanvas();
         this._drawBGCanvas();
         this._drawMainCanvas();
         if (overheadAnimationFrame === maxOverheadAnimationFrame || overheadAnimationFrame === 0) {
@@ -768,7 +1018,7 @@ function initCombatReplay(actors, options) {
         }
         lastX = (touch.pageX - canvas.offsetLeft);
         lastY = (touch.pageY - canvas.offsetTop);
-        dragStart = ctx.transformedPoint(lastX, lastY);
+        mouseDown = ctx.transformedPoint(lastX, lastY);
         dragged = false;
         return evt.preventDefault() && false;
     }, false);
@@ -781,15 +1031,15 @@ function initCombatReplay(actors, options) {
         lastX = (touch.pageX - canvas.offsetLeft);
         lastY = (touch.pageY - canvas.offsetTop);
         dragged = true;
-        if (dragStart) {
+        if (mouseDown) {
             var pt = ctx.transformedPoint(lastX, lastY);
-            ctx.translate(pt.x - dragStart.x, pt.y - dragStart.y);
+            ctx.translate(pt.x - mouseDown.x, pt.y - mouseDown.y);
             animateCanvas(noUpdateTime);
         }
         return evt.preventDefault() && false;
     }, false);
     document.body.addEventListener('touchend', function (evt) {
-        dragStart = null;
+        mouseDown = null;
     }, false);
 }
 */

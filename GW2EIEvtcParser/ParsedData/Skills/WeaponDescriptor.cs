@@ -18,6 +18,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 IsLand = false;
                 WeaponSlot = Hand.TwoHand;
+                // Use flags to know if land or water
+                if (apiSkill.WeaponType == "Spear" && apiSkill.Flags != null && apiSkill.Flags.Contains("NoUnderwater"))
+                {
+                    IsLand = true;
+                }
             }
             else
             {
@@ -42,16 +47,20 @@ namespace GW2EIEvtcParser.ParsedData
             return slot == "Weapon_1" || slot == "Weapon_2" || slot == "Weapon_3" || slot == "Weapon_4" || slot == "Weapon_5";
         }
 
-        internal int FindFirstWeaponSet(List<int> swaps)
+        internal int FindFirstWeaponSet(IReadOnlyList<(int to, int from)> swaps)
         {
+            if (swaps.Count > 0 && WeaponSetIDs.IsWeaponSet(swaps[0].from))
+            {
+                return swaps[0].from;
+            }
             int swapped = WeaponSetIDs.NoSet;
-            int firstSwap = swaps.Count > 0 ? swaps[0] : WeaponSetIDs.NoSet;
+            int firstSwap = swaps.Count > 0 ? swaps[0].to : WeaponSetIDs.NoSet;
             if (IsLand)
             {
                 // if the first swap is not a land set that means the next time we get to a land set was the first set to begin with
-                if (firstSwap != WeaponSetIDs.FirstLandSet && firstSwap != WeaponSetIDs.SecondLandSet)
+                if (!WeaponSetIDs.IsLandSet(firstSwap))
                 {
-                    swapped = swaps.Exists(x => x == WeaponSetIDs.FirstLandSet || x == WeaponSetIDs.SecondLandSet) ? swaps.First(x => x == WeaponSetIDs.FirstLandSet || x == WeaponSetIDs.SecondLandSet) : WeaponSetIDs.FirstLandSet;
+                    swapped = swaps.Any(x => WeaponSetIDs.IsLandSet(x.to)) ? swaps.First(x => WeaponSetIDs.IsLandSet(x.to)).to : WeaponSetIDs.FirstLandSet;
                 }
                 else
                 {
@@ -61,9 +70,9 @@ namespace GW2EIEvtcParser.ParsedData
             else
             {
                 // if the first swap is not a water set that means the next time we get to a water set was the first set to begin with
-                if (firstSwap != WeaponSetIDs.FirstWaterSet && firstSwap != WeaponSetIDs.SecondWaterSet)
+                if (!WeaponSetIDs.IsWaterSet(firstSwap))
                 {
-                    swapped = swaps.Exists(x => x == WeaponSetIDs.FirstWaterSet || x == WeaponSetIDs.SecondWaterSet) ? swaps.First(x => x == WeaponSetIDs.FirstWaterSet || x == WeaponSetIDs.SecondWaterSet) : WeaponSetIDs.FirstWaterSet;
+                    swapped = swaps.Any(x => WeaponSetIDs.IsWaterSet(x.to)) ? swaps.First(x => WeaponSetIDs.IsWaterSet(x.to)).to : WeaponSetIDs.FirstWaterSet;
                 }
                 else
                 {

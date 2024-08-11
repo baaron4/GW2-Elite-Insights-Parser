@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData
 {
-    public class PlayerCombatReplayDescription : AbstractSingleActorCombatReplayDescription
+    internal class PlayerCombatReplayDescription : AbstractSingleActorCombatReplayDescription
     {
         public int Group { get; }
 

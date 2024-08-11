@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData.Buffs;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -67,12 +67,13 @@ namespace GW2EIEvtcParser.EIData
         internal static readonly List<Buff> OtherConsumables = new List<Buff>
         {       
             // Reinforce Armor Canister / Anvil
-            new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor).WithBuilds(GW2Builds.June2022Balance, GW2Builds.EndOfLife),
+            new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor).WithBuilds(GW2Builds.June2022Balance),
             // Boosters
             new Buff("15% Speed Bonus", SpeedBonus15, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.SpeedBonus15),
             new Buff("5% Damage Reduction", DamageReduction5, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.DamageReduction5),
             new Buff("Healthful Rejuvenation", HealthfulRejuvenation, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.HealthfulRejuvenation),
             new Buff("5% Damage Bonus", DamageBonus5, Source.Item, BuffStackType.Queue, 9, BuffClassification.OtherConsumable, BuffImages.DamageBonus5),
+            new Buff("Guild Swiftness Banner Boost", GuildSwiftnessBannerBoost, Source.Item, BuffClassification.OtherConsumable, BuffImages.GuildSwiftnessBanner),
             // Fractals
             new Buff("Fractal Mobility", FractalMobility, Source.Item, BuffStackType.Stacking, 5, BuffClassification.OtherConsumable, BuffImages.FractalMobility),
             new Buff("Fractal Defensive", FractalDefensive, Source.Item, BuffStackType.Stacking, 5, BuffClassification.OtherConsumable, BuffImages.FractalDefensive),

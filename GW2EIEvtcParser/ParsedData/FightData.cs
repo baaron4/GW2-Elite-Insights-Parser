@@ -27,23 +27,37 @@ namespace GW2EIEvtcParser.ParsedData
         {
             get
             {
-                var duration = TimeSpan.FromMilliseconds(FightDuration);
-                string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s " + duration.Milliseconds + "ms";
-                if (duration.Hours > 0)
-                {
-                    durationString = duration.ToString("hh") + "h " + durationString;
-                }
-                return durationString;
+                return ParserHelper.ToDurationString(FightDuration);
             }
         }
         public bool Success { get; private set; }
 
-        internal enum EncounterMode { NotSet, CM, Normal, CMNoName, Story }
+        internal enum EncounterMode
+        {
+            NotSet,
+            Story,
+            Normal,
+            LegendaryCM,
+            CM,
+            CMNoName
+        }
+        private EncounterMode _encounterMode = EncounterMode.NotSet;
+        public bool IsCM => _encounterMode == EncounterMode.CMNoName || _encounterMode == EncounterMode.CM;
+        public bool IsLegendaryCM => _encounterMode == EncounterMode.LegendaryCM;
 
-        private EncounterMode _encounterStatus = EncounterMode.NotSet;
-        public bool IsCM => _encounterStatus == EncounterMode.CMNoName || _encounterStatus == EncounterMode.CM;
+        internal enum EncounterStartStatus
+        {
+            NotSet,
+            Normal,
+            Late,
+            NoPreEvent
+        }
+        private EncounterStartStatus _encounterStartStatus = EncounterStartStatus.NotSet;
+        public bool IsLateStart => _encounterStartStatus == EncounterStartStatus.Late || MissingPreEvent;
+        public bool MissingPreEvent => _encounterStartStatus == EncounterStartStatus.NoPreEvent;
+
         // Constructors
-        internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, int evtcVersion)
+        internal FightData(int id, AgentData agentData, List<CombatItem> combatData, EvtcParserSettings parserSettings, long start, long end, EvtcVersionEvent evtcVersion)
         {
             LogStart = start;
             LogEnd = end;
@@ -76,10 +90,10 @@ namespace GW2EIEvtcParser.ParsedData
                     break;
                 case ArcDPSEnums.TargetID.McLeodTheSilent:
                     // No proper escort support by arc dps before that build, redirect to unknown
-                    if (evtcVersion >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
+                    if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
                     {
                         Logic = new Escort(id);
-                    }  
+                    }
                     else
                     {
                         Logic = new UnknownFightLogic(id);
@@ -241,6 +255,13 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
                     Logic = new Kanaxai(id);
                     break;
+                case ArcDPSEnums.TargetID.CerusLonelyTower:
+                case ArcDPSEnums.TargetID.DeimosLonelyTower:
+                    Logic = new CerusAndDeimos(id);
+                    break;
+                case ArcDPSEnums.TargetID.EparchLonelyTower:
+                    Logic = new Eparch(id);
+                    break;
                 //
                 case ArcDPSEnums.TargetID.WorldVersusWorld:
                     if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())
@@ -287,7 +308,7 @@ namespace GW2EIEvtcParser.ParsedData
                             if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
                             {
                                 Logic = new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
-                            } 
+                            }
                             else
                             {
                                 Logic = new UnknownFightLogic(id);
@@ -304,24 +325,28 @@ namespace GW2EIEvtcParser.ParsedData
             TriggerID = Logic.GetTriggerID();
         }
 
-        internal void SetFightName(CombatData combatData, AgentData agentData)
+        internal void CompleteFightName(CombatData combatData, AgentData agentData)
         {
-            FightName = Logic.GetLogicName(combatData, agentData) + (_encounterStatus == EncounterMode.CM ? " CM" : "") + (_encounterStatus == EncounterMode.Story ? " Story" : "");
-        }
-
-        public IReadOnlyList<GenericDecoration> GetEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
-        {
-            return Logic.GetEnvironmentCombatReplayDecorations(log);
+            FightName = Logic.GetLogicName(combatData, agentData)
+                + (_encounterMode == EncounterMode.CM ? " CM" : "")
+                + (_encounterMode == EncounterMode.LegendaryCM ? " LCM" : "")
+                + (_encounterMode == EncounterMode.Story ? " Story" : "")
+                + (IsLateStart && !MissingPreEvent ? " (Late Start)" : "")
+                + (MissingPreEvent ? " (No Pre-Event)" : "");
         }
 
         public IReadOnlyList<PhaseData> GetPhases(ParsedEvtcLog log)
         {
 
-            if (!_phases.Any())
+            if (_phases.Count == 0)
             {
                 _phases = Logic.GetPhases(log, log.ParserSettings.ParsePhases);
                 _phases.AddRange(Logic.GetBreakbarPhases(log, log.ParserSettings.ParsePhases));
-                _phases.RemoveAll(x => x.Targets.Count == 0);
+                _phases.RemoveAll(x => x.AllTargets.Count == 0);
+                if (_phases.Any(phase => phase.AllTargets.Any(target => !Logic.Targets.Contains(target))))
+                {
+                    throw new InvalidOperationException("Phases can only have targets");
+                }
                 if (_phases.Exists(x => x.BreakbarPhase && x.Targets.Count != 1))
                 {
                     throw new InvalidOperationException("Breakbar phases can only have one target");
@@ -346,15 +371,16 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         // Setters
-        internal void SetEncounterMode(CombatData combatData, AgentData agentData)
+        internal void ProcessEncounterStatus(CombatData combatData, AgentData agentData)
         {
-            if (_encounterStatus == EncounterMode.NotSet)
+            if (_encounterMode == EncounterMode.NotSet)
             {
-                _encounterStatus = Logic.GetEncounterMode(combatData, agentData, this);
-                if (_encounterStatus == EncounterMode.Story)
+                _encounterMode = Logic.GetEncounterMode(combatData, agentData, this);
+                if (_encounterMode == EncounterMode.Story)
                 {
                     Logic.InvalidateEncounterID();
                 }
+                _encounterStartStatus = Logic.GetEncounterStartStatus(combatData, agentData, this);
             }
         }
 

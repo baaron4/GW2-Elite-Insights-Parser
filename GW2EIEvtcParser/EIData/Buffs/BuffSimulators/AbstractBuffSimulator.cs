@@ -46,24 +46,26 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             GenerationSimulation.RemoveAll(x => x.Duration <= 0);
         }
 
-        public void Simulate(List<AbstractBuffEvent> logs, long fightStart, long fightEnd)
+        protected abstract void UpdateSimulator(AbstractBuffEvent buffEvent);
+
+        public void Simulate(List<AbstractBuffEvent> buffEvents, long fightStart, long fightEnd)
         {
-            if (GenerationSimulation.Any())
+            if (GenerationSimulation.Count != 0)
             {
                 return;
             }
-            long firstTimeValue = logs.Count > 0 ? Math.Min(logs.First().Time, fightStart) : fightStart;
+            long firstTimeValue = buffEvents.Count > 0 ? Math.Min(buffEvents.First().Time, fightStart) : fightStart;
             long timeCur = firstTimeValue;
             long timePrev = firstTimeValue;
-            foreach (AbstractBuffEvent log in logs)
+            foreach (AbstractBuffEvent buffEvent in buffEvents)
             {
-                timeCur = log.Time;
+                timeCur = buffEvent.Time;
                 if (timeCur - timePrev < 0)
                 {
                     throw new InvalidOperationException("Negative passed time in boon simulation");
                 }
                 Update(timeCur - timePrev);
-                log.UpdateSimulator(this);
+                UpdateSimulator(buffEvent);
                 timePrev = timeCur;
             }
             Update(fightEnd - timePrev);

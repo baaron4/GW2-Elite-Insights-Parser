@@ -20,12 +20,6 @@
             DoubleProcHit = HasDowned || HasInterrupted || HasKilled;
         }
 
-        public override bool ConditionDamageBased(ParsedEvtcLog log)
-        {
-            return false;
-        }
-
-
         internal override void MakeIntoAbsorbed()
         {
             HasHit = false;

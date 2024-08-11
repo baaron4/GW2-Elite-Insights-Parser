@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
@@ -94,6 +93,42 @@ namespace GW2EIEvtcParser.EIData
                 (long)dc.Sum(x => x.IntersectingArea(start, end));
         }
 
+        public bool IsDownBeforeNext90(ParsedEvtcLog log, long curTime)
+        {
+            (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = GetStatus(log);
+
+            // get remaining fight segment
+            var remainingFightTime = new Segment(curTime, log.FightData.FightEnd);
+
+            // return false if actor currently above 90 or already downed
+            if (Actor.GetCurrentHealthPercent(log, curTime) > 90 || Actor.IsDowned(log, curTime))
+            {
+                return false;
+            }
+            
+            // return false if fight ends before any down events
+            Segment nextDown = down.FirstOrDefault(downSegment => downSegment.IntersectSegment(remainingFightTime));
+            if (nextDown == null)
+            {
+                return false;
+            }
+
+            IReadOnlyList<Segment> healthUpdatesBeforeEnd = Actor.GetHealthUpdates(log).Where(update => update.Start > curTime).ToList();
+            Segment next90 = healthUpdatesBeforeEnd.FirstOrDefault(update => update.Value > 90);
+           
+            // If there are no more 90 events before combat end and the actor has a down event remaining then the actor must down before next 90
+            if(next90 == null) { return true; }
+
+            // Otherwise return false if the next 90 is before the next down
+            if (next90.Start < nextDown.Start)
+            {
+                return false;
+            }
+
+            // Actor is below 90, will down before end of combat, and will not be above 90 again before end of combat
+            return true;
+        }
+
 
         public WeaponSets GetWeaponSets(ParsedEvtcLog log)
         {
@@ -114,9 +149,9 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int swapped = WeaponSetIDs.NoSet;
             long swappedTime = 0;
-            var swaps = casting.OfType<WeaponSwapEvent>().Select(x =>
+            List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
             {
-                return x.SwappedTo;
+                return (x.SwappedTo, x.SwappedFrom);
             }).ToList();
             foreach (AbstractCastEvent cl in casting)
             {
@@ -137,10 +172,10 @@ namespace GW2EIEvtcParser.EIData
                     swappedTime = swe.Time;
                 }
             }
-            int land1Swaps = swaps.Count(x => x == WeaponSetIDs.FirstLandSet);
-            int land2Swaps = swaps.Count(x => x == WeaponSetIDs.SecondLandSet);
-            int water1Swaps = swaps.Count(x => x == WeaponSetIDs.FirstWaterSet);
-            int water2Swaps = swaps.Count(x => x == WeaponSetIDs.SecondWaterSet);
+            int land1Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.FirstLandSet);
+            int land2Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.SecondLandSet);
+            int water1Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.FirstWaterSet);
+            int water2Swaps = swaps.Count(x => x.swappedTo == WeaponSetIDs.SecondWaterSet);
             _weaponSets.HasLandSwapped = land1Swaps > 0 && land2Swaps > 0;
             _weaponSets.HasWaterSwapped = water1Swaps > 0 && water2Swaps > 0;
         }

@@ -1,0 +1,112 @@
+<template>
+    <div>
+        <div class="d-flex flex-column">
+            <div v-for="group in groups" class="d-flex flex-row mb-1 align-items-center">
+                <div>
+                    <ul class="scale85 nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link" @click="selectGroup(group)">
+                                Select
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="d-flex flex-wrap " style="max-width: 900px;">
+                    <div v-for="player in group" class="player-cell d-flex flex-column align-items-center justify-content-center" :class="{active: player.targetActive}"
+                        @click="select(player.id)">
+                        <div>
+                            <img :src="player.icon" :alt="player.profession" class="icon"
+                                :data-original-title="player.profession">
+                            <img v-if="player.health > 0" src="https://wiki.guildwars2.com/images/b/be/Vitality.png" alt="Health"
+                                class="icon" :data-original-title="'Health: ' + player.health">
+                        </div>
+                        <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
+                            <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                            <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
+                            <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        </div>
+                        <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
+                            <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                            <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
+                            <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img v-if="player.isCommander"
+                                src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
+                                class="icon" :data-original-title="getCommanderTooltip(player)">
+                            <span class="player-cell-shorten" :data-original-title="player.name + ' - ' + player.acc">
+                                {{ player.name }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</template>
+
+
+<script>
+    Vue.component("player-target-component", {
+        props: ["players"],
+        template: `${template}`,
+        methods: {
+            getIcon: function (path) {
+                return urls[path];
+            },
+            select: function (id) {
+                this.players[id].targetActive = !this.players[id].targetActive;
+            },
+            getCommanderTooltip: function(player) {
+                if (!player.isCommander) {
+                    return false;
+                }
+                let res = 'Commander';
+                for (let i = 0; i < player.commanderStates.length; i++) {
+                    res = `
+                        ${res}<br>
+                        From ${player.commanderStates[i][0]} to ${player.commanderStates[i][1]}
+                    `;
+                }
+                return res;
+            },
+            selectGroup: function (group) {
+                var enable = true;
+                if (group.filter(x => x.targetActive).length === group.length) {
+                    enable = false;
+                }
+                for( var i = 0; i < group.length; i++) {
+                    this.players[group[i].id].targetActive = enable;
+                }
+            }
+        },
+        computed: {
+            groups: function () {
+                var aux = [];
+                var i = 0;
+                for (i = 0; i < logData.players.length; i++) {
+                    var playerData = logData.players[i];
+                    if (playerData.isFake) {
+                        continue;
+                    }
+                    if (!aux[playerData.group]) {
+                        aux[playerData.group] = [];
+                    }
+                    var toPush = {};
+                    Object.assign(toPush, playerData);
+                    toPush.targetActive = this.players[i].targetActive;
+                    aux[playerData.group].push(toPush);
+                }
+
+                var noUndefinedGroups = [];
+                for (i = 0; i < aux.length; i++) {
+                    if (aux[i]) {
+                        noUndefinedGroups.push(aux[i]);
+                    }
+                }
+                return noUndefinedGroups;
+            }
+        }
+    });
+</script>

@@ -4,12 +4,10 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -59,11 +57,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.FraenirOfJormag));
-            if (fraenir == null)
-            {
-                throw new MissingKeyActorsException("Fraenir of Jormag not found");
-            }
+            AbstractSingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.FraenirOfJormag)) ?? throw new MissingKeyActorsException("Fraenir of Jormag not found");
             phases[0].AddTarget(fraenir);
             AbstractSingleActor icebrood = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.IcebroodConstructFraenir));
             if (icebrood != null)
@@ -74,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            AbstractBuffEvent invulApplyFraenir = log.CombatData.GetBuffData(Determined762).Where(x => x.To == fraenir.AgentItem && x is BuffApplyEvent).FirstOrDefault();
+            AbstractBuffEvent invulApplyFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
             if (invulApplyFraenir != null)
             {
                 // split happened
@@ -86,15 +80,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     if (enterCombatIce != null)
                     {
                         // icebrood phasing
-                        AbstractBuffEvent invulApplyIce = log.CombatData.GetBuffData(Invulnerability757).Where(x => x.To == icebrood.AgentItem && x is BuffApplyEvent).FirstOrDefault();
-                        AbstractBuffEvent invulRemoveIce = log.CombatData.GetBuffData(Invulnerability757).Where(x => x.To == icebrood.AgentItem && x is BuffRemoveAllEvent).FirstOrDefault();
+                        AbstractBuffEvent invulApplyIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                        AbstractBuffEvent invulRemoveIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                         long icebroodStart = enterCombatIce.Time;
                         long icebroodEnd = log.FightData.FightEnd;
                         if (invulApplyIce != null && invulRemoveIce != null)
                         {
                             long icebrood2Start = invulRemoveIce.Time;
                             phases.Add(new PhaseData(icebroodStart + 1, invulApplyIce.Time, "Construct Intact"));
-                            AbstractBuffEvent invulRemoveFraenir = log.CombatData.GetBuffData(Determined762).Where(x => x.To == fraenir.AgentItem && x is BuffRemoveAllEvent).FirstOrDefault();
+                            AbstractBuffEvent invulRemoveFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                             if (invulRemoveFraenir != null)
                             {
                                 // fraenir came back
@@ -149,13 +143,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var boundElementals = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10).ToList();
+            var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10).ToList();
             IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(ArcDPSEnums.TrashID.IcebroodElemental);
             foreach (AgentItem boundElemental in boundElementals)
             {
-                IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.DstAgent == 0);
+                IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
                 boundElemental.OverrideType(AgentItem.AgentType.NPC);
                 boundElemental.OverrideID(ArcDPSEnums.TrashID.BoundIcebroodElemental);
 
@@ -170,14 +164,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // If the Bound Icebrood Elemental hatches, an Icebrood Elemental spawns
                     // Due to the randomness of the time to hatch, we check the Elemental spawn position to match the Bound one
                     // When they match, override the Bound's LastAware to the Elemental's FirstAware
-                    foreach(AgentItem spawnedElemental in spawnedElementals)
+                    foreach (AgentItem spawnedElemental in spawnedElementals)
                     {
                         CombatItem itemBound = combatData.FirstOrDefault(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                         CombatItem itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                         if (itemBound != null && itemElem != null)
                         {
-                            Point3D bound3D = AbstractMovementEvent.GetPoint3D(itemBound.DstAgent, 0);
-                            Point3D elem3D = AbstractMovementEvent.GetPoint3D(itemElem.DstAgent, 0);
+                            Point3D bound3D = AbstractMovementEvent.GetPoint3D(itemBound);
+                            Point3D elem3D = AbstractMovementEvent.GetPoint3D(itemElem);
                             if (bound3D.Distance2DToPoint(elem3D) < 1)
                             {
                                 long firstAwareBound = combatData.Where(x => x.SrcMatchesAgent(boundElemental)).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToList().FirstOrDefault().FirstAware;
@@ -194,18 +188,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> elementalElegy = log.CombatData.GetBuffData(AchievementEligibilityElementalElegy);
 
-            if (elementalElegy.Any() && log.FightData.Success)
+            if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityElementalElegy).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityElementalElegy, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityElementalElegy], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityElementalElegy));
             }
         }
     }

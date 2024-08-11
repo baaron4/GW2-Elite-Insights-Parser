@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
@@ -7,7 +8,10 @@ namespace GW2EIEvtcParser.EIData
     {
         //public long allHeal;
         public int Resurrects { get; }
-        public long ResurrectTime { get; }
+        public double ResurrectTime { get; }
+
+        public int StunBreak { get; }
+        public double RemovedStunDuration { get; }
 
         private static long[] GetReses(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
@@ -28,7 +32,13 @@ namespace GW2EIEvtcParser.EIData
         {
             long[] resArray = GetReses(log, actor, start, end);
             Resurrects = (int)resArray[0];
-            ResurrectTime = resArray[1];
+            ResurrectTime = Math.Round((double)resArray[1] / 1000, ParserHelper.TimeDigit);
+            foreach (StunBreakEvent sbe in log.CombatData.GetStunBreakEvents(actor.AgentItem))
+            {
+                StunBreak++;
+                RemovedStunDuration += sbe.RemainingDuration;
+            }
+            RemovedStunDuration = Math.Round(RemovedStunDuration / 1000, ParserHelper.TimeDigit);
         }
 
     }

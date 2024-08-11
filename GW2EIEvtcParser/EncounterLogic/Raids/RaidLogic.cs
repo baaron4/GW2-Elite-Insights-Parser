@@ -4,8 +4,6 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -14,15 +12,16 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected RaidLogic(int triggerID) : base(triggerID)
         {
-            Mode = ParseMode.Instanced10;
+            ParseMode = ParseModeEnum.Instanced10;
+            SkillMode = SkillModeEnum.PvE;
             EncounterCategoryInformation.Category = FightCategory.Raid;
-            EncounterID |= EncounterIDs.EncounterMasks.RaidMask; 
+            EncounterID |= EncounterIDs.EncounterMasks.RaidMask;
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
             var raidRewardsTypes = new HashSet<int>();
-            if (combatData.GetBuildEvent().Build < GW2Builds.June2019RaidRewards)
+            if (combatData.GetGW2BuildEvent().Build < GW2Builds.June2019RaidRewards)
             {
                 raidRewardsTypes = new HashSet<int> { RewardTypes.OldRaidReward1, RewardTypes.OldRaidReward2 };
             }
@@ -31,7 +30,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 raidRewardsTypes = new HashSet<int> { RewardTypes.CurrentRaidReward };
             }
             IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType));
+            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > fightData.FightStart);
             if (reward != null)
             {
                 fightData.SetSuccess(true, reward.Time);
@@ -40,6 +39,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
             }
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()

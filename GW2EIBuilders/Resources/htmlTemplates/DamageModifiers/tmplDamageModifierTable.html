@@ -1,0 +1,321 @@
+<template>
+    <div>
+        <div v-if="colPageCount > 0">
+            <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
+        </div>
+        <table class="table table-sm table-striped table-hover" cellspacing="0" width="100%" :id="tableid">
+            <thead>
+                <tr>
+                    <th class="sub-cell" :class="getHeaderClass('Sub')" @click="sortBy('Sub')">Sub</th>
+                    <th class="prof-cell" :class="getHeaderClass('Prof')" @click="sortBy('Prof')"></th>
+                    <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">Name</th>
+                    <th class="stat-cell" v-for="(modifier, index) in modifiers" :class="getHeaderClass('Data', index)" 
+                        v-show="isInColPage(index)"
+                        @click="sortBy('Data', index)":data-original-title="modifier.name + '<br>' + modifier.tooltip">
+                        <img :src="modifier.icon" :alt="modifier.name" class="icon icon-hover">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in sortData((mode ? tableDataTarget.rows : tableData.rows))"
+                    :class="{active: row.player.id === playerindex}">
+                    <td :class="getBodyClass('Sub')">{{row.player.group}}</td>
+                    <td :class="getBodyClass('Prof')":data-original-title="row.player.profession">
+                        <img :src="row.player.icon" :alt="row.player.profession" class="icon"><span
+                            style="display:none">{{row.player.profession}}</span>
+                    </td>
+                    <td :class="getBodyClass('Name')"class="text-left">{{row.player.name}}</td>
+                    <td v-for="(modifier, index) in modifiers" :class="getBodyClass('Data', index, modifier.approximate, getCellValue(row.data[index], modifier))"
+                        v-show="isInColPage(index)"
+                        :data-original-title="getTooltip(row.data[index], modifier)">
+                        {{getCellValue(row.data[index], modifier)}}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot v-if="sum">
+                <tr v-for="row in (mode ? tableDataTarget.sums : tableData.sums)">
+                    <td></td>
+                    <td></td>
+                    <td class="text-left">{{row.name}}</td>
+                    <td v-for="(modifier, index) in modifiers" :class="getSumClass(modifier.approximate,getCellValue(row.data[index], modifier))"
+                        v-show="isInColPage(index)"
+                        :data-original-title="getTooltip(row.data[index], modifier)">
+                        {{getCellValue(row.data[index], modifier)}}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</template>
+
+<script>
+    Vue.component("dmgmodifier-table-component", {
+        props: ['phaseindex', 'id', 'playerindex', 'playerindices', 'activetargets', 'modifiers', 'modifiersdata', 'mode', 'sum'],
+        mixins: [numberComponent, sortedTableComponent, colSliderComponent(20)],
+        template: `${template}`,
+        data: function () {
+            return {
+                cache: new Map(),
+                cacheTarget: new Map(),
+                sortdata: {
+                    order: "asc",
+                    index: -1,
+                    key: "Prof"
+                }
+            };
+        },
+        computed: {
+            tableid: function() {
+                return this.id;
+            },
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            colPageCount: function() {
+                return this.modifiers.length - this.colStructure.perpage;
+            },
+            indicesToUse: function () {
+                var res = [];
+                if (this.playerindices !== null) {
+                    for (var i = 0; i < this.playerindices.length; i++) {
+                        res.push(this.playerindices[i]);
+                    }
+                    return res;
+                }
+                for (var i = 0; i < logData.players.length; i++) {
+                    res.push(i);
+                }
+                return res;
+            },
+            tableData: function () {
+                if (this.cache.has(this.phaseindex)) {
+                    return this.cache.get(this.phaseindex);
+                }
+                var rows = [];
+                var sums = [];
+                var groups = [];
+                var total = {
+                    name: "Total",
+                    data: []
+                };
+                var j;
+                for (var i = 0; i < this.indicesToUse.length; i++) {
+                    var index = this.indicesToUse[i];
+                    var player = logData.players[index];
+                    if (player.isFake) {
+                        continue;
+                    }
+                    if (!player.notInSquad && !groups[player.group]) {
+                        groups[player.group] = {
+                            name: "Group" + player.group,
+                            data: []
+                        };
+                    }
+                    var dmgModifier = this.modifiersdata[index].data;
+                    var data = [];
+                    for (j = 0; j < this.modifiers.length; j++) {
+                        data[j] = dmgModifier[j];
+                        if (!player.notInSquad) {
+                            if (!groups[player.group].data[j]) {
+                                groups[player.group].data[j] = [0, 0, 0, 0];
+                            }
+                            if (!total.data[j]) {
+                                total.data[j] = [0, 0, 0, 0];
+                            }
+                            for (var k = 0; k < data[j].length; k++) {
+                                groups[player.group].data[j][k] += data[j][k];
+                                total.data[j][k] += data[j][k];
+                            }
+                        }
+                        
+                    }
+                    rows.push({
+                        player: player,
+                        data: data
+                    });
+                }
+                for (var i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push(groups[i]);
+                    }
+                }
+                sums.push(total);
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cache.set(this.phaseindex, res);
+                return res;
+            },
+            tableDataTarget: function () {
+                var cacheID = this.phaseindex + '-';
+                cacheID += getTargetCacheID(this.activetargets);
+                if (this.cacheTarget.has(cacheID)) {
+                    return this.cacheTarget.get(cacheID);
+                }
+                var rows = [];
+                var sums = [];
+                var groups = [];
+                var total = {
+                    name: "Total",
+                    data: []
+                };
+                var j;
+                for (var i = 0; i < this.indicesToUse.length; i++) {
+                    var index = this.indicesToUse[i];
+                    var player = logData.players[index];
+                    if (player.isFake) {
+                        continue;
+                    }
+                    if (!player.notInSquad && !groups[player.group]) {
+                        groups[player.group] = {
+                            name: "Group" + player.group,
+                            data: []
+                        };
+                    }
+                    var data = [];
+                    for (j = 0; j < this.modifiers.length; j++) {
+                        data[j] = [0, 0, 0, 0];
+                        if (!player.notInSquad) {
+                            if (!groups[player.group].data[j]) {
+                                groups[player.group].data[j] = [0, 0, 0, 0];
+                            }
+                            if (!total.data[j]) {
+                                total.data[j] = [0, 0, 0, 0];
+                            }
+                        }
+                    }
+                    var dmgModifier = this.modifiersdata[index].dataTarget;
+                    for (j = 0; j < this.activetargets.length; j++) {
+                        var modifier = dmgModifier[this.activetargets[j]];
+                        for (var k = 0; k < this.modifiers.length; k++) {
+                            var targetData = modifier[k];
+                            var curData = data[k];
+                            for (var l = 0; l < targetData.length; l++) {
+                                curData[l] += targetData[l];
+                            }
+                        }
+                    }
+                    if (!player.notInSquad) {
+                        for (j = 0; j < this.modifiers.length; j++) {
+                            for (var k = 0; k < data[j].length; k++) {
+                                groups[player.group].data[j][k] += data[j][k];
+                                total.data[j][k] += data[j][k];
+                            }
+                        }
+                    }
+
+                    rows.push({
+                        player: player,
+                        data: data
+                    });
+                }
+                for (var i = 0; i < groups.length; i++) {
+                    if (groups[i]) {
+                        sums.push(groups[i]);
+                    }
+                }
+                sums.push(total);
+                var res = {
+                    rows: rows,
+                    sums: sums
+                };
+                this.cacheTarget.set(cacheID, res);
+                return res;
+            }
+        },
+        methods: {
+            sortBy: function(key, index) {
+                this.sortByBase(this.sortdata, key, index);
+            },
+            getHeaderClass: function(key, index) {
+                return this.getHeaderClassBase(this.sortdata, key, index);
+            },
+            getBodyClass: function(key, index, approximate, cellValue) {
+                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                classes.approximate = cellValue !== "-" && cellValue !== "Tooltip" ? !!approximate : false;
+                return classes;
+            },
+            getSumClass: function( approximate, cellValue) {
+                var classes = {};
+                classes.approximate = cellValue !== "-" && cellValue !== "Tooltip" ? !!approximate : false;
+                return classes;
+            },
+            sortData: function(rows) {
+                var order = this.sortdata.order === "asc" ? 1 : -1;
+                switch (this.sortdata.key) {
+                    case "Sub":
+                        rows.sort((x,y) => order * (x.player.group - y.player.group) || this.sortByPlayerName(x, y));
+                        break;
+                    case "Prof":
+                        rows.sort((x,y) => order * this.sortByPlayerProfession(x, y) || this.sortByPlayerName(x, y));
+                        break;
+                    case "Name":
+                        rows.sort((x,y) => order * this.sortByPlayerName(x, y));
+                        break;
+                    case "Data":
+                        var index = this.sortdata.index;
+                        var modifier = this.modifiers[index];
+                        rows.sort((x,y) => order * (this.getNumericalCellValue(x.data[index], modifier) - this.getNumericalCellValue(y.data[index], modifier)) || this.sortByPlayerName(x, y));
+                        break;
+                    default:
+                        return null;
+                        break;
+                }
+                return rows;
+            },
+            getTooltip: function (item, mod) {
+                if (item[0] === 0) {
+                    return null;
+                }
+                var hits = item[0] + " out of " + item[1] + " hits";
+                var percent;
+                if (mod.skillBased) {
+                    percent = this.round3(1000.0 * item[1] / this.phase.duration) + " hits/s";
+                } else {
+                    percent = this.round3(100.0 * item[0] / item[1]) + " hit %";
+                }
+                var res = hits + "<br>" + percent;
+                if (item[2] === 0) {
+                    return res;
+                }
+                var gain;
+                if (mod.nonMultiplier) {
+                    gain = "Damage Done: ";
+                } else {
+                    gain = "Pure Damage: ";
+                }
+                gain += this.round(item[2]);
+                if (mod.nonMultiplier) {
+                    gain += "<br>Total Damage: " + this.round3(100.0 * item[2] / item[3]) + "%";
+                }
+                return res + "<br>" + gain;
+            },
+            getNumericalCellValue: function (item, mod) {
+                var cellValue = this.getCellValue(item, mod);
+                if (cellValue === 'Tooltip') {
+                    return Number.MAX_SAFE_INTEGER;
+                } else if (cellValue === '-') {
+                    return 0;
+                }
+                return parseFloat(cellValue);
+            },
+            getCellValue: function (item, mod) {
+                if (item[2] === 0) {
+                    if (item[0] > 0) {
+                        return 'Tooltip';
+                    }
+                    return '-';
+                }
+                if (mod.nonMultiplier) {
+                    return 'Tooltip';
+                }
+                var damageIncrease = this.round3(100 * (item[3] / (item[3] - item[2]) - 1.0));
+                if (Math.abs(damageIncrease) < 1e-6 || isNaN(damageIncrease) || !isFinite(damageIncrease)) {
+                    return "-";
+                }
+                return damageIncrease + '%';
+            }
+        },
+    });
+</script>

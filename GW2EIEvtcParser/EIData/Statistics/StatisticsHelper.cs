@@ -106,7 +106,7 @@ namespace GW2EIEvtcParser.EIData
             foreach (Player player in players)
             {
                 _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
-                foreach (AbstractBuffEvent item in combatData.GetBuffData(player.AgentItem))
+                foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
                 {
                     if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                     {
@@ -145,16 +145,16 @@ namespace GW2EIEvtcParser.EIData
         //
 
         private readonly List<Buff> _presentBoons = new List<Buff>();//Used only for Boon tables
-        private readonly List<Buff> _presentConditions  = new List<Buff>();//Used only for Condition tables
-        private readonly List<Buff> _presentOffbuffs  = new List<Buff>();//Used only for Off Buff tables
-        private readonly List<Buff> _presentSupbuffs  = new List<Buff>();//Used only for Off Buff tables
+        private readonly List<Buff> _presentConditions = new List<Buff>();//Used only for Condition tables
+        private readonly List<Buff> _presentOffbuffs = new List<Buff>();//Used only for Off Buff tables
+        private readonly List<Buff> _presentSupbuffs = new List<Buff>();//Used only for Off Buff tables
         private readonly List<Buff> _presentDefbuffs = new List<Buff>();//Used only for Def Buff tables
         private readonly List<Buff> _presentDebuffs = new List<Buff>();//Used only for Debuff tables
         private readonly List<Buff> _presentGearbuffs = new List<Buff>();//Used only for Gear Buff tables
         private readonly List<Buff> _presentNourishments = new List<Buff>();
         private readonly List<Buff> _presentEnhancements = new List<Buff>();
         private readonly List<Buff> _presentOtherConsumables = new List<Buff>();
-        private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer  = new Dictionary<Player, HashSet<Buff>>();
+        private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer = new Dictionary<Player, HashSet<Buff>>();
 
 
         //Positions for group
@@ -212,8 +212,8 @@ namespace GW2EIEvtcParser.EIData
                     }
                     if (activePlayers == 0)
                     {
-                        _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
-                    } 
+                        _stackCenterPositions.Add(null);
+                    }
                     else
                     {
                         x /= activePlayers;
@@ -227,10 +227,36 @@ namespace GW2EIEvtcParser.EIData
         private void SetStackCommanderPositions(ParsedEvtcLog log)
         {
             _stackCommanderPositions = new List<ParametricPoint3D>();
-            Player commander = log.PlayerList.FirstOrDefault(x => x.IsCommander(log));
-            if (log.CombatData.HasMovementData && commander != null)
+            if (log.CombatData.HasMovementData)
             {
-                _stackCommanderPositions = new List<ParametricPoint3D>(commander.GetCombatReplayPolledPositions(log));
+                var states = new List<(Player p, GenericSegment<string> seg)>();
+                foreach (Player p in log.PlayerList)
+                {
+                    foreach (GenericSegment<string> seg in p.GetCommanderStates(log))
+                    {
+                        states.Add((p, seg));
+                    }
+                }
+                states = states.OrderBy(x => x.seg.Start).ToList();
+                GenericSegment<string> last = null;
+                foreach ((Player p, GenericSegment<string> seg) in states)
+                {
+                    IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
+                    long start = last == null ? long.MinValue : last.End;
+                    var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList();
+                    for (int i = 0; i < toAdd.Count; i++)
+                    {
+                        if (toAdd[i].Time < seg.Start)
+                        {
+                            toAdd[i] = null;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    _stackCommanderPositions.AddRange(toAdd);
+                }
             }
         }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
 namespace GW2EIEvtcParser.Extensions
 {
@@ -13,6 +12,7 @@ namespace GW2EIEvtcParser.Extensions
         private AgentItem _agentItem => _actor.AgentItem;
 
         private CachingCollectionWithTarget<int[]> _barrier1S;
+        private CachingCollectionWithTarget<int[]> _barrierReceived1S;
 
         private CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat> _outgoinBarrierStats { get; set; }
         private CachingCollectionWithTarget<EXTFinalIncomingBarrierStat> _incomingBarrierStats { get; set; }
@@ -86,6 +86,33 @@ namespace GW2EIEvtcParser.Extensions
             return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From == _agentItem).ToList();
         }
 
+        private static int[] ComputeBarrierGraph(IReadOnlyList<EXTAbstractBarrierEvent> dls, long start, long end)
+        {
+            int durationInMS = (int)(end - start);
+            int durationInS = durationInMS / 1000;
+            var graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+            // fill the graph
+            int previousTime = 0;
+            foreach (EXTAbstractBarrierEvent dl in dls)
+            {
+                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+                if (time != previousTime)
+                {
+                    for (int i = previousTime + 1; i <= time; i++)
+                    {
+                        graph[i] = graph[previousTime];
+                    }
+                }
+                previousTime = time;
+                graph[time] += dl.BarrierGiven;
+            }
+            for (int i = previousTime + 1; i < graph.Length; i++)
+            {
+                graph[i] = graph[previousTime];
+            }
+            return graph;
+        }
+
         public IReadOnlyList<int> Get1SBarrierList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             if (_barrier1S == null)
@@ -94,30 +121,23 @@ namespace GW2EIEvtcParser.Extensions
             }
             if (!_barrier1S.TryGetValue(start, end, target, out int[] graph))
             {
-                int durationInMS = (int)(end - start);
-                int durationInS = durationInMS / 1000;
-                graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
-                // fill the graph
-                int previousTime = 0;
-                foreach (EXTAbstractBarrierEvent dl in GetOutgoingBarrierEvents(target, log, start, end))
-                {
-                    int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
-                    if (time != previousTime)
-                    {
-                        for (int i = previousTime + 1; i <= time; i++)
-                        {
-                            graph[i] = graph[previousTime];
-                        }
-                    }
-                    previousTime = time;
-                    graph[time] += dl.BarrierGiven;
-                }
-                for (int i = previousTime + 1; i < graph.Length; i++)
-                {
-                    graph[i] = graph[previousTime];
-                }
+                graph = ComputeBarrierGraph(GetOutgoingBarrierEvents(target, log, start, end), start, end);
                 //
                 _barrier1S.Set(start, end, target, graph);
+            }
+            return graph;
+        }
+        public IReadOnlyList<int> Get1SBarrierReceivedList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        {
+            if (_barrierReceived1S == null)
+            {
+                _barrierReceived1S = new CachingCollectionWithTarget<int[]>(log);
+            }
+            if (!_barrierReceived1S.TryGetValue(start, end, target, out int[] graph))
+            {
+                graph = ComputeBarrierGraph(GetIncomingBarrierEvents(target, log, start, end), start, end);
+                //
+                _barrierReceived1S.Set(start, end, target, graph);
             }
             return graph;
         }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
@@ -17,11 +15,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Activate(uint stackID)
         {
-            BuffStackItemID active = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-            if (active == null)
-            {
-                throw new EIBuffSimulatorIDException("Activate has failed");
-            }
+            BuffStackItemID active = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Activate has failed");
             active.Activate();
         }
 
@@ -32,12 +26,16 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Any() && timePassed > 0)
+            if (BuffStack.Count != 0 && timePassed > 0)
             {
                 long diff = timePassed;
                 long leftOver = 0;
-                var activeStacks = BuffStack.Where(x => x.Active && x.Duration > 0).Take(_capacity).ToList();
-                if (activeStacks.Any())
+                var activeStacks = BuffStack.Where(x => x.Active && x.Duration > 0).ToList();
+                if (activeStacks.Count > _capacity)
+                {
+                    activeStacks = activeStacks.Take(_capacity).ToList();
+                }
+                if (activeStacks.Count != 0)
                 {
                     var toAdd = new BuffSimulationItemIntensity(activeStacks);
                     GenerationSimulation.Add(toAdd);

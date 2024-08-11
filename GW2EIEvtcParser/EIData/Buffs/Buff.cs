@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.EIData.BuffSimulators;
 using GW2EIEvtcParser.EIData.BuffSourceFinders;
 using GW2EIEvtcParser.Interfaces;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -56,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
                     case BuffStackType.Force:
                         return BuffType.Duration;
                     case BuffStackType.Stacking:
-                    case BuffStackType.StackingSomething:
+                    case BuffStackType.StackingTargetUniqueSrc:
                     case BuffStackType.StackingConditionalLoss:
                         return BuffType.Intensity;
                     default:
@@ -67,6 +65,8 @@ namespace GW2EIEvtcParser.EIData
 
         private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
         private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
+        private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
+        private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
         public int Capacity { get; }
         public string Link { get; }
 
@@ -102,6 +102,13 @@ namespace GW2EIEvtcParser.EIData
             return this;
         }
 
+        internal Buff WithEvtcBuilds(int minBuild, int maxBuild = ArcDPSBuilds.EndOfLife)
+        {
+            _minEvtcBuild = minBuild;
+            _maxEvtcBuild = maxBuild;
+            return this;
+        }
+
         public Buff(string name, long id, string link)
         {
             Name = name;
@@ -126,11 +133,11 @@ namespace GW2EIEvtcParser.EIData
             }
             if (Capacity != buffInfoEvent.MaxStacks)
             {
-                operation.UpdateProgressWithCancellationCheck("Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
+                operation.UpdateProgressWithCancellationCheck("Parsing: Adjusted capacity for " + Name + " from " + Capacity + " to " + buffInfoEvent.MaxStacks);
             }
             if (buffInfoEvent.StackingType != StackType && buffInfoEvent.StackingType != BuffStackType.Unknown)
             {
-                operation.UpdateProgressWithCancellationCheck("Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
+                operation.UpdateProgressWithCancellationCheck("Parsing: Incoherent stack type for " + Name + ": is " + StackType + " but expected " + buffInfoEvent.StackingType);
             }
         }
 
@@ -170,7 +177,16 @@ namespace GW2EIEvtcParser.EIData
 
         internal static BuffSourceFinder GetBuffSourceFinder(CombatData combatData, HashSet<long> boonIds)
         {
-            ulong gw2Build = combatData.GetBuildEvent().Build;
+            ulong gw2Build = combatData.GetGW2BuildEvent().Build;
+
+            if (gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary)
+            {
+                return new BuffSourceFinder20240319(boonIds);
+            }
+            if (gw2Build >= GW2Builds.October2022BalanceHotFix)
+            {
+                return new BuffSourceFinder20221018(boonIds);
+            }
             if (gw2Build >= GW2Builds.EODBeta2)
             {
                 return new BuffSourceFinder20210921(boonIds);
@@ -192,8 +208,16 @@ namespace GW2EIEvtcParser.EIData
 
         public bool Available(CombatData combatData)
         {
-            ulong gw2Build = combatData.GetBuildEvent().Build;
-            return gw2Build < _maxBuild && gw2Build >= _minBuild;
+            ulong gw2Build = combatData.GetGW2BuildEvent().Build;
+            if (gw2Build < _maxBuild && gw2Build >= _minBuild)
+            {
+                int evtcBuild = combatData.GetEvtcVersionEvent().Build;
+                if (evtcBuild < _maxEvtcBuild && evtcBuild >= _minEvtcBuild)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

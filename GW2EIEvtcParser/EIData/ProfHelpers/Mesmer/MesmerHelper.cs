@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -20,7 +19,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
                 .UsingChecker((brae, combatData, agentData, skillData) => {
-                     return HasGainedBuff(combatData, HideInShadows, brae.To, brae.Time, 2000, brae.To);
+                     return combatData.HasGainedBuff(HideInShadows, brae.To, brae.Time, 2000, brae.To);
                 })
                 .UsingNotAccurate(true) // HideInShadows may not be applied if the Mesmer has a full stack of HideInShadows already
                 .UsingDisableWithEffectData(),
@@ -28,100 +27,40 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(PortalEntre, PortalWeaving),
             new BuffGainCastFinder(PortalExeunt, PortalUses),
             new DamageCastFinder(LesserPhantasmalDefender, LesserPhantasmalDefender).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-            /*new BuffGainCastFinder(10192, 10243, GW2Builds.October2018Balance, GW2Builds.July2019Balance, (evt, combatData) => {
-                var buffsLossToCheck = new List<long>
-                {
-                    10235, 30739, 21751, 10231, 10246, 10233
-                }; // signets
-                foreach (long buffID in buffsLossToCheck)
-                {
-                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any())
-                    {
-                        return false;
-                    }
-                }
-                return true;
-
-            }), // Distortion
-            new BuffGainCastFinder(10192, 10243, GW2Builds.July2019Balance, 104844, (evt, combatData) => {
-                if (evt.To.Prof == "Chronomancer")
-                {
-                    return false;
-                }
-                var buffsLossToCheck = new List<long>
-                {
-                    10235, 30739, 21751, 10231, 10246, 10233
-                }; // signets
-                foreach (long buffID in buffsLossToCheck)
-                {
-                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any())
-                    {
-                        return false;
-                    }
-                }
-                return true;
-
-            }), // Distortion
-            new BuffGainCastFinder(10192, 10243, 104844, GW2Builds.EndOfLife, (evt, combatData) => {
-                var buffsLossToCheck = new List<long>
-                {
-                    10235, 30739, 21751, 10231, 10246, 10233
-                }; // signets
-                foreach (long buffID in buffsLossToCheck)
-                {
-                    if (combatData.GetBuffData(buffID).Where(x => x.Time >= evt.Time - ParserHelper.ServerDelayConstant && x.Time <= evt.Time + ParserHelper.ServerDelayConstant && x is BuffRemoveAllEvent).Any()) 
-                    {
-                        return false;
-                    }
-                }
-                return true;
-                
-            }), // Distortion*/
             new EffectCastFinder(Feedback, EffectGUIDs.MesmerFeedback).UsingSrcBaseSpecChecker(Spec.Mesmer),
-
             // identify swap by buff remove
             // identify phase retreat by spawned staff clone
             // fallback to blink or phase retreat
             new EffectCastFinderByDst(Swap, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time))
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(PhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time))
-                .UsingChecker((evt, combatData, agentData, skillData) => HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => agentData.HasSpawnedMinion(MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
             new EffectCastFinderByDst(BlinkOrPhaseRetreat, EffectGUIDs.MesmerTeleport)
                 .UsingDstBaseSpecChecker(Spec.Mesmer)
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasLostBuffStack(combatData, IllusionaryLeapBuff, evt.Dst, evt.Time))
-                .UsingChecker((evt, combatData, agentData, skillData) => !HasSpawnedMinion(agentData, MinionID.CloneStaff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasLostBuffStack(IllusionaryLeapBuff, evt.Dst, evt.Time, 30))
+                .UsingChecker((evt, combatData, agentData, skillData) => !agentData.HasSpawnedMinion(MinionID.CloneStaff, evt.Dst, evt.Time, 30))
                 .UsingNotAccurate(true),
-
-            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => !combatData.GetBuffData(DistortionBuff).Any(x => x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant) && (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion).UsingChecker((evt, combatData, agentData, skillData) => (evt.Src.Spec == Spec.Mesmer || evt.Src.Spec == Spec.Mirage)),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) =>{
-                if (evt.Src.Spec != Spec.Mesmer || evt.Src.Spec != Spec.Mirage)
-                {
-                    return false;
-                }
-                if (!combatData.GetBuffData(DistortionBuff).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
-                {
-                    return false;
-                }
-                return true;
-            }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack).UsingChecker((evt, combatData, agentData, skillData) => {
-                if (evt.Src.BaseSpec != Spec.Mesmer || evt.Src.Spec == Spec.Virtuoso)
-                {
-                    return false;
-                }
-                if (!combatData.GetBuffData(DistortionBuff).Any(x => x is BuffApplyEvent && x.To == evt.Src && Math.Abs(x.Time - evt.Time) < ServerDelayConstant))
-                {
-                    return false;
-                }
-                return true;
-            }).WithBuilds(GW2Builds.October2022Balance),
+            // Shatters
+            new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+                .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time)),
+            new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer}),
+            new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer}),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+            new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack)
+                .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer, Spec.Chronomancer})
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
+                .WithBuilds(GW2Builds.October2022Balance),
             // Mantras        
             new DamageCastFinder(PowerSpike, PowerSpike).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
             new DamageCastFinder(MantraOfPain, MantraOfPain).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
@@ -129,19 +68,27 @@ namespace GW2EIEvtcParser.EIData
             new EXTHealingCastFinder(MantraOfRecovery, MantraOfRecovery).WithBuilds(GW2Builds.May2021Balance, GW2Builds.February2023Balance),
             new EffectCastFinderByDst(PowerReturn, EffectGUIDs.MesmerPowerReturn).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
             new EffectCastFinder(MantraOfResolve, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife ,GW2Builds.February2023Balance),
-            new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse).UsingSrcBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance, GW2Builds.February2024NewWeapons),
+            new EffectCastFinder(PowerCleanse, EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse)
+                .UsingSrcBaseSpecChecker(Spec.Mesmer)
+                .UsingSecondaryEffectChecker(EffectGUIDs.MesmerMantraOfResolveAndPowerCleanse2)
+                .WithBuilds(GW2Builds.February2024NewWeapons),
             new EffectCastFinderByDst(MantraOfConcentration, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
             new EffectCastFinderByDst(PowerBreak, EffectGUIDs.MesmerMantraOfConcentrationAndPowerBreak).UsingDstBaseSpecChecker(Spec.Mesmer).WithBuilds(GW2Builds.February2023Balance),
+            // Rifle
+            new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
+            new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction)
+                .UsingSrcBaseSpecChecker(Spec.Mesmer),
         };
 
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Domination
             // Empowered illusions require knowing all illusion species ID
             // We need illusion species ID to enable Vicious Expression on All
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-            new BuffDamageModifierTarget(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
+            new BuffOnFoeDamageModifier(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
+            new BuffOnFoeDamageModifier(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
             //
             new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
@@ -152,7 +99,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
+            }, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
             new DamageLogDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
@@ -162,7 +109,7 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
+            }, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
             new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
             {
                 double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
@@ -172,16 +119,25 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return selfHP > dstHP;
-            }, ByPresence, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
+            }, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
             //
-            new BuffDamageModifierTarget(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
+            new BuffOnFoeDamageModifier(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
             // Dueling
             // Superiority Complex can all the conditions be tracked?
             // Illusions
-            new BuffDamageModifier(CompoundingPower, "Compounding Power", "2% per stack (8s) after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
+            new BuffOnActorDamageModifier(CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance),
             // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
             // Chaos       
-            new BuffDamageModifier(Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.May2021Balance),
+            new BuffOnActorDamageModifier(Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
+            new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
+            new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.January2024Balance),
+            new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new CounterOnActorDamageModifier(DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
         };
 
 
@@ -204,8 +160,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Illusionary Leap", IllusionaryLeapBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
             new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
             new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
-            new Buff("Illusion of Life", IllusionOfLife, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
+            new Buff("Illusion of Life", IllusionOfLifeBuff, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
             new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+            new Buff("Dimensional Aperture", DimensionalAperturePortalBuff, Source.Mesmer, BuffClassification.Other, BuffImages.DimensionalAperture),
             // Traits
             new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FencersFinesse),
             new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.IllusionaryDefense),
@@ -216,6 +173,8 @@ namespace GW2EIEvtcParser.EIData
             // Transformations
             new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphMoa),
             new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
+            // Spear
+            new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         private static readonly HashSet<int> _cloneIDs = new HashSet<int>()
@@ -229,6 +188,7 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.CloneSpear,
             (int)MinionID.CloneDagger,
             (int)MinionID.CloneDownstate,
+            (int)MinionID.CloneRifle,
             (int)MinionID.CloneUnknown,
             (int)MinionID.CloneSwordTorch,
             (int)MinionID.CloneSwordFocus,
@@ -276,6 +236,9 @@ namespace GW2EIEvtcParser.EIData
                     break;
                 case (int)MinionID.CloneDownstate:
                     minion.OverrideName("Downstate " + minion.Name);
+                    break;
+                case (int)MinionID.CloneRifle:
+                    minion.OverrideName("Rifle " + minion.Name);
                     break;
                 case (int)MinionID.CloneSword:
                 case (int)MinionID.CloneSwordPistol:
@@ -348,47 +311,50 @@ namespace GW2EIEvtcParser.EIData
             (int)MinionID.IllusionaryMariner,
             (int)MinionID.IllusionaryWhaler,
             (int)MinionID.IllusionaryAvenger,
+            (int)MinionID.IllusionarySharpShooter,
         };
 
         internal static bool IsKnownMinionID(int id)
         {
             return NonCloneMinions.Contains(id) || IsClone(id);
         }
-        
+
         internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             Color color = Colors.Mesmer;
-
+            ulong gw2Build = log.CombatData.GetGW2BuildEvent().Build;
             // Portal locations
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out IReadOnlyList<EffectEvent> portalInactives))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalEntre);
                 foreach (EffectEvent effect in portalInactives)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 60000, player.AgentItem, PortalWeaving);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 60000, player.AgentItem, PortalWeaving);
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.3f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, PortalEntre));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, PortalEntre));
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.3, connector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
 
             if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> portalActives))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalExeunt, SkillModeCategory.Portal);
                 foreach (IReadOnlyList<EffectEvent> group in portalActives)
                 {
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
                     {
-                        (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 10000, player.AgentItem, PortalUses);
+                        (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUses);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, PortalExeunt, GenericAttachedDecoration.SkillModeCategory.Portal));
-                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, PortalExeunt, GenericAttachedDecoration.SkillModeCategory.Portal);
+                        replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
+                        GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                         if (first == null)
                         {
                             first = icon;
                         }
                         else
                         {
-                            replay.Decorations.Add(first.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, Spec.Mesmer, PortalExeunt, GenericAttachedDecoration.SkillModeCategory.Portal));
+                            replay.Decorations.Add(first.LineTo(icon, color, 0.5).UsingSkillMode(skill));
                         }
                         replay.Decorations.Add(icon);
                     }
@@ -398,34 +364,94 @@ namespace GW2EIEvtcParser.EIData
             // Feedback
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerFeedback, out IReadOnlyList<EffectEvent> feedbacks))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, Feedback, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in feedbacks)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, Feedback, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectFeedback, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, Feedback, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 6000 : 7000); // 7s with trait pre March 2024
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFeedback);
                 }
             }
             // Veil
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerVeil, out IReadOnlyList<EffectEvent> veils))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, Veil, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in veils)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 7000); // 7s with trait
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 6000 : 7000); // 7s with trait pre March 2024
                     var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, 500, 70, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, Veil, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, Veil, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z);
+                    replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
             // Null Field
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField, out IReadOnlyList<EffectEvent>  nullFields))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField, out IReadOnlyList<EffectEvent> nullFields))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, NullField, SkillModeCategory.Strip | SkillModeCategory.Cleanse);
                 foreach (EffectEvent effect in nullFields)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000); // 6s with trait
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Mesmer, NullField, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.Cleanse));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectNullField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Mesmer, NullField, GenericAttachedDecoration.SkillModeCategory.Strip | GenericAttachedDecoration.SkillModeCategory.Cleanse));
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 5000 : 6000); // 6s with trait pre March 2024
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectNullField);
+                }
+            }
+
+            // Illusion of Life
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerIllusionOfLife1, out IReadOnlyList<EffectEvent> illusionOfLife))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, IllusionOfLifeSkill, SkillModeCategory.Heal);
+                foreach (EffectEvent effect in illusionOfLife)
+                {
+                    (long, long) lifespan = (effect.Time, effect.Time + 500);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectIllusionOfLife);
+                }
+            }
+
+            // Dimensional Aperture
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out IReadOnlyList<EffectEvent> dimensionalApertures))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, DimensionalApertureSkill, SkillModeCategory.Portal);
+                var applies = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem).ToList();
+                foreach (EffectEvent effect in dimensionalApertures)
+                {
+                    // The buff can be quite delayed
+                    AbstractBuffEvent buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
+                    // Security
+                    if (buffApply != null)
+                    {
+                        AgentItem portal = buffApply.To;
+                        DespawnEvent despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
+                        // Security
+                        if (despawn != null)
+                        {
+                            uint radius = portal.HitboxWidth / 2;
+                            // Security
+                            if (radius == 0)
+                            {
+                                // 120 / 2
+                                radius = 60;
+                            }
+                            (long start, long end) lifespan = (buffApply.Time, despawn.Time);
+                            var connector = new PositionConnector(effect.Position);
+
+                            // Portal location
+                            replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingSkillMode(skill));
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+
+                            // Tether between the portal and the player
+                            replay.Decorations.Add(new LineDecoration(lifespan, color, 0.3, new AgentConnector(player.AgentItem), connector));
+                        }
+                    }
+                }
+            }
+
+            // Unstable Bladestorm
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoUnstableBladestorm, out IReadOnlyList<EffectEvent> unstableBladestorm))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, UnstableBladestorm);
+                foreach (EffectEvent effect in unstableBladestorm)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectUnstableBladestorm);
                 }
             }
         }

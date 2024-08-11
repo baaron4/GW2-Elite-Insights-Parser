@@ -1,0 +1,274 @@
+<template>
+    <div>      
+        <dps-graph-mode-selector-component :data="graphdata"
+            :phaseduration="this.phase.end - this.phase.start" :phasehassubphases="!!this.phase.subPhases" :ignorebreakbar="false" :column="false">
+        </dps-graph-mode-selector-component>
+        <h3 class="text-center mt-1 mb-1">{{graphname}}</h3>
+        <graph-component :id="graphid" :layout="layout" :data="computeData"></graph-component>
+    </div>
+</template>
+
+<script>
+    Vue.component("dps-graph-component", {
+        props: ["activetargets", 'mode', 'phaseindex', 'playerindex', 'light'],
+        template: `${template}`,       
+        mixins: [graphComponent, damageGraphComponent],
+        created: function () {
+            // layout - constant during whole lifetime
+            var textColor = this.light ? '#495057' : '#cccccc';
+            this.layout = {
+                yaxis: {
+                    title: 'DPS',
+                    fixedrange: false,
+                    rangemode: 'tozero',
+                    gridcolor: textColor,
+                    tickformat: ",d",
+                    color: textColor
+                },
+                xaxis: {
+                    title: 'Time(sec)',
+                    color: textColor,
+                    gridcolor: textColor,
+                    rangemode: 'nonnegative',
+                    tickmode: 'auto',
+                    nticks: 8,
+                    xrangeslider: {}
+                },
+                hovermode: 'x',
+                hoverdistance: 150,
+                legend: {
+                    orientation: 'h',
+                    font: {
+                        size: 15
+                    },
+                    y: -0.1
+                },
+                font: {
+                    color: textColor
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                displayModeBar: false,
+                shapes: [],
+                annotations: [],
+                autosize: true,
+                width: 1300,
+                height: 850,
+                datarevision: new Date().getTime(),
+            };
+            computePhaseMarkups(this.layout.shapes, this.layout.annotations, this.phase, textColor);
+            // constant part of data
+            // dps
+            this.data = [];
+            var data = this.data;
+            var player;
+            for (var i = 0; i < logData.players.length; i++) {
+                var pText = [];
+                player = logData.players[i];
+                for (var j = 0; j < this.phase.times.length; j++) {
+                    pText.push(player.name);
+                }
+                data.push({
+                    x: this.phase.times,
+                    y: [],
+                    mode: 'lines',
+                    line: {
+                        shape: 'spline',
+                        color: player.colTarget,
+                        width: i === this.playerindex ? 5 : 2
+                    },
+                    text: pText,
+                    hoverinfo: 'y+text+x',
+                    name: player.name,
+                });
+            }
+            data.push({
+                x: this.phase.times,
+                mode: 'lines',
+                line: {
+                    shape: 'spline'
+                },
+                hoverinfo: 'name+y+x',
+                visible: 'legendonly',
+                name: 'All Player'
+            });
+            // targets health
+            computeTargetHealthData(this.graph, logData.targets, this.phase, this.data, null);  
+            // targets barrier
+            computeTargetBarrierData(this.graph, logData.targets, this.phase, this.data, null);  
+            // targets breakbar          
+            computeTargetBreakbarData(this.graph, logData.targets, this.phase, this.data, null);
+            // mechanics
+            addMechanicsToGraph(data, this.phase, this.phaseindex);
+        },
+        watch: {
+            playerindex: {
+                handler: function () {
+                    for (var i = 0; i < logData.players.length; i++) {
+                        this.data[i].line.width = i === this.playerindex ? 5 : 2;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                },
+                deep: true
+            },
+            light: {
+                handler: function () {
+                    var textColor = this.light ? '#495057' : '#cccccc';
+                    this.layout.yaxis.gridcolor = textColor;
+                    this.layout.yaxis.color = textColor;
+                    this.layout.xaxis.gridcolor = textColor;
+                    this.layout.xaxis.color = textColor;
+                    this.layout.font.color = textColor;
+                    for (var i = 0; i < this.layout.shapes.length; i++) {
+                        this.layout.shapes[i].line.color = textColor;
+                    }
+                    this.layout.datarevision = new Date().getTime();
+                }
+            }
+        },
+        computed: {
+            graphid: function () {
+                return 'dpsgraph-' + this.phaseindex;
+            },
+            damageGraphName: function () {
+                switch (this.graphdata.damagemode) {
+                    case DamageType.All:
+                        return "damage";
+                    case DamageType.Power:
+                        return "powerDamage";
+                    case DamageType.Condition:
+                        return "conditionDamage";
+                    case DamageType.Breakbar:
+                        return "breakbarDamage";
+                    default:
+                        throw new Error("unknown enum in damage graph name");
+                }
+            },
+            graphname: function () {
+                var name = getDamageGraphName(this.graphdata.damagemode, this.graphdata.graphmode);
+                switch (this.graphdata.dpsmode) {
+                    case 0:
+                        name = "Full " + name;
+                        break;
+                    case -1:
+                        name = "Phase " + name;
+                        break;
+                    default:                       
+                        name = this.graphdata.dpsmode + "s " + name;
+                        break;
+                }
+                name = (this.mode === 0 ? "Total " : (this.mode === 1 ? "Target " : (this.mode === 2 ? "Cleave " : "Taken "))) + name;
+                return name;
+            },
+            computeData: function () {
+                this.layout.datarevision = new Date().getTime();
+                this.layout.yaxis.title = graphTypeEnumToString(this.graphdata.graphmode);
+                var points = this.computeDPSRelatedData();
+                var res = this.data;
+                for (var i = 0; i < points.length; i++) {
+                    res[i].y = points[i];
+                }
+                return res;
+            }
+        },
+        methods: {
+            computeDPS: function (lim, phasebreaks, cacheID) {
+                var maxDPS = {
+                    total: 0,
+                    cleave: 0,
+                    target: 0,
+                    taken: 0,
+                };
+                var allDPS = {
+                    total: [],
+                    cleave: [],
+                    target: [],
+                    taken: [],
+                };
+                var playerDPS = [];
+                var damageArrayToUse = this.damageGraphName;
+                for (var i = 0; i < logData.players.length; i++) {
+                    var data = computePlayerDPS(logData.players[i], this.graph.players[i][damageArrayToUse], lim, phasebreaks,
+                        this.activetargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
+                    playerDPS.push(data.dps);
+                    maxDPS.total = Math.max(maxDPS.total, data.maxDPS.total);
+                    maxDPS.cleave = Math.max(maxDPS.cleave, data.maxDPS.cleave);
+                    maxDPS.target = Math.max(maxDPS.target, data.maxDPS.target);
+                    maxDPS.taken = Math.max(maxDPS.taken, data.maxDPS.taken);
+                    for (var j = 0; j < data.dps.total.length; j++) {
+                        allDPS.total[j] = (allDPS.total[j] || 0) + data.dps.total[j];
+                        allDPS.cleave[j] = (allDPS.cleave[j] || 0) + data.dps.cleave[j];
+                        allDPS.target[j] = (allDPS.target[j] || 0) + data.dps.target[j];
+                        allDPS.taken[j] = (allDPS.taken[j] || 0) + data.dps.taken[j];
+                    }
+                }
+
+                return {
+                    allDPS: allDPS,
+                    playerDPS: playerDPS,
+                    maxDPS: maxDPS,
+                };
+            },
+            computeDPSData: function () {
+                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, null);
+                if (this.dpsCache.has(cacheID)) {
+                    return this.dpsCache.get(cacheID);
+                }
+                var res;
+                if (this.graphdata.dpsmode >= 0) {
+                    res = this.computeDPS(this.graphdata.dpsmode, null, cacheID);
+                } else {
+                    res = this.computeDPS(0, this.computePhaseBreaks, cacheID);
+                }
+                this.dpsCache.set(cacheID, res);
+                return res;
+            },
+            computeDPSRelatedData: function () {
+                var cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, this.activetargets, this.phaseindex, this.mode);
+                if (this.dataCache.has(cacheID)) {
+                    return this.dataCache.get(cacheID);
+                }
+                var res = [];
+                var dpsData = this.computeDPSData();
+                var offset = 0;
+                var attributeToUse = null;
+                switch (this.mode) {
+                    case 0:
+                        attributeToUse = "total";
+                        break;
+                    case 1:
+                        attributeToUse = "target";
+                        break;
+                    case 2:
+                        attributeToUse = "cleave";
+                        break;
+                    case 3:
+                        attributeToUse = "taken";
+                        break;
+                }
+                for (i = 0; i < logData.players.length; i++) {
+                    var pDPS = dpsData.playerDPS[i];
+                    res.push(pDPS[attributeToUse]);
+                }
+                res.push(dpsData.allDPS[attributeToUse]);
+                var maxDPS = dpsData.maxDPS[attributeToUse];
+                var hps = [];
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    var health = this.graph.targets[i].healthStates;
+                    addPointsToGraph(res, health, maxDPS);
+                }       
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    var barrier = this.graph.targets[i].barrierStates;
+                    addPointsToGraph(res, barrier, maxDPS);
+                }
+                for (var i = 0; i < this.graph.targets.length; i++) {
+                    var breakbar = this.graph.targets[i].breakbarPercentStates;
+                    addPointsToGraph(res, breakbar, maxDPS);
+                }
+                updateMechanicsYValues(res, this.phase, this.phaseindex, this.graph, maxDPS);
+                this.dataCache.set(cacheID, res);
+                return res;
+            },
+        }
+    });
+</script>

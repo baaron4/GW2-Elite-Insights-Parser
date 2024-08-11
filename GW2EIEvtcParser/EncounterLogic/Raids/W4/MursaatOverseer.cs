@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -24,9 +24,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             //new Mechanic(DispelSAK, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Dispel",0), //Buff remove only
             //new Mechanic(ProtectSAK, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.Circle,Colors.Teal), "Protect",0), //Buff remove only
             new PlayerDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Teal), "Protect","Protected by the Protect Shield","Protect Shield",0).UsingChecker((ba, log) => ba.AppliedDuration == 1000),
-            new PlayerDstBuffApplyMechanic(ProtectBuff, "Protect (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0),
-            new PlayerDstBuffApplyMechanic(DispelBuff, "Dispel (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0),
-            new PlayerDstBuffApplyMechanic(ClaimBuff, "Claim (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0),
+            new PlayerDstBuffApplyMechanic(ProtectBuff, "Protect (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Protect (SAK)","Took protect","Protect (SAK)",0)
+                .UsingTimeClamper((time, log) => Math.Max(log.FightData.FightStart, time)),
+            new PlayerDstBuffApplyMechanic(DispelBuff, "Dispel (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Dispel (SAK)","Took dispel","Dispel (SAK)",0)
+                .UsingTimeClamper((time, log) => Math.Max(log.FightData.FightStart, time)),
+            new PlayerDstBuffApplyMechanic(ClaimBuff, "Claim (SAK)", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Claim (SAK)","Took claim","Claim (SAK)",0)
+                .UsingTimeClamper((time, log) => Math.Max(log.FightData.FightStart, time)),
             new EnemyDstBuffApplyMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Shield","Jade Soldier Shield", "Soldier Shield",0),
             new EnemyDstBuffRemoveMechanic(MursaatOverseersShield, "Mursaat Overseer's Shield", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Dispel","Dispelled Jade Soldier Shield", "Dispel",0),
             //new Mechanic(EnemyTile, "Enemy Tile", ParseEnum.BossIDS.MursaatOverseer, new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Yellow), "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
@@ -58,17 +61,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<InstantCastFinder>()
             {
                 new DamageCastFinder(PunishementAura, PunishementAura),
+                new EffectCastFinder(ProtectSAK, EffectGUIDs.MursaarOverseerProtectBubble),
             };
         }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Mursaat Overseer not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -78,10 +78,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, int arcdpsVersion)
+        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, arcdpsVersion);
-            res.AddRange(GetConfusionDamageMissingMessage(arcdpsVersion));
+            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, evtcVersion);
+            res.AddRange(GetConfusionDamageMissingMessage(evtcVersion));
             return res;
         }
 
@@ -92,10 +92,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
                     var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    int shieldRadius = 100;
+                    uint shieldRadius = 100;
                     foreach (Segment seg in shields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, shieldRadius, seg, "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
                     }
                     var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
                     foreach (AbstractCastEvent c in explosion)
@@ -103,9 +103,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int precast = 1350;
                         int duration = 100;
-                        int radius = 1200;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + precast + duration), "rgba(255, 0, 0, 0.05)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + precast, start + precast + duration), "rgba(255, 0, 0, 0.25)", new AgentConnector(target)));
+                        uint radius = 1200;
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + precast + duration), Colors.Red, 0.05, new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + precast, start + precast + duration), Colors.Red, 0.25, new AgentConnector(target)));
                     }
                     break;
                 default:
@@ -115,18 +115,54 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
             IEnumerable<Segment> claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
         }
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Mursaat Overseer not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
             return (target.GetHealth(combatData) > 25e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
+        }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+
+            var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
+            var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();
+
+            SkillItem claimSkill = skillData.Get(ClaimSAK);
+            SkillItem dispelSkill = skillData.Get(DispelSAK);
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerClaimMarker, out IReadOnlyList<EffectEvent> claims))
+            {
+                skillData.NotAccurate.Add(ClaimSAK);
+                foreach (EffectEvent effect in claims)
+                {
+                    BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null)
+                    {
+                        res.Add(new InstantCastEvent(effect.Time, claimSkill, src.To));
+                    }
+                }
+            }
+
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerDispelProjectile, out IReadOnlyList<EffectEvent> dispels))
+            {
+                skillData.NotAccurate.Add(DispelSAK);
+                foreach (EffectEvent effect in dispels)
+                {
+                    BuffApplyEvent src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
+                    if (src != null)
+                    {
+                        res.Add(new InstantCastEvent(effect.Time, dispelSkill, src.To));
+                    }
+                }
+            }
+
+            return res;
         }
     }
 }

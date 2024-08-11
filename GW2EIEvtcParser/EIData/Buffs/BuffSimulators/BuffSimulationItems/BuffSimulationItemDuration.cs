@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -7,7 +6,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal class BuffSimulationItemDuration : BuffSimulationItemStack
     {
-        public BuffSimulationItemDuration(IEnumerable<BuffStackItem> stacks) : base(stacks)
+        public BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) : base(stacks)
         {
         }
 
@@ -23,20 +22,20 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         }
         public override int GetActiveStacks(AbstractSingleActor actor)
         {
-            return GetActiveSources(actor).Count;
+            if (GetSources().First() == actor.AgentItem)
+            {
+                return 1;
+            }
+            return 0;
         }
         public override IReadOnlyList<AgentItem> GetActiveSources()
         {
             return new List<AgentItem>() { GetSources().First() };
         }
 
-        public override IReadOnlyList<AgentItem> GetActiveSources(AbstractSingleActor actor)
+        public override long GetActualDuration()
         {
-            if (GetSources().First() == actor.AgentItem)
-            {
-                return new List<AgentItem>() { GetSources().First() };
-            }
-            return new List<AgentItem>();
+            return GetActualDurationPerStack().Sum();
         }
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)

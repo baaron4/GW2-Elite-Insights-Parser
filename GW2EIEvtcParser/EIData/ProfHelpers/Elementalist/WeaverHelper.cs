@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -26,9 +26,9 @@ namespace GW2EIEvtcParser.EIData
             var list = new List<AbstractBuffEvent>();
             foreach (long attunement in _weaverAtunements)
             {
-                list.AddRange(combatData.GetBuffData(attunement).Where(x => x is BuffApplyEvent && x.To == agent && x.Time <= time + ServerDelayConstant));
+                list.AddRange(combatData.GetBuffDataByIDByDst(attunement, agent).Where(x => x is BuffApplyEvent && x.Time <= time + ServerDelayConstant));
             }
-            if (list.Any())
+            if (list.Count != 0)
             {
                 return list.MaxBy(x => x.Time).BuffID;
             }
@@ -37,9 +37,10 @@ namespace GW2EIEvtcParser.EIData
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceBuff), // Primordial Stance
-            new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceBuff).UsingICD(500), // Stone Resonance
-            new BuffGainCastFinder(UnravelSkill, UnravelBuff), // Unravel
+            new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceBuff),
+            new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceBuff)
+                .UsingICD(500),
+            new BuffGainCastFinder(UnravelSkill, UnravelBuff),
             // Fire       
             new BuffGainCastFinder(DualFireAttunement, DualFireAttunement),
             new BuffGainCastFinder(FireWaterAttunement, FireWaterAttunement),
@@ -62,167 +63,193 @@ namespace GW2EIEvtcParser.EIData
             new BuffGainCastFinder(DualEarthAttunement, DualEarthAttunement),
             // Hammer 
             new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualFireAttunement)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualFireAttunement)
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndWater, FlameWheelBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == FireWaterAttunement || last == WaterFireAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == FireWaterAttunement || last == WaterFireAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndAir, FlameWheelBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == FireAirAttunement || last == AirFireAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == FireAirAttunement || last == AirFireAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndEarth, FlameWheelBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == FireEarthAttunement || last == EarthFireAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting( GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == FireEarthAttunement || last == EarthFireAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             //
             new BuffGainCastFinder(IcyCoilSkill, IcyCoilBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualWaterAttunement)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting( GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualWaterAttunement)
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndWater, IcyCoilBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == FireWaterAttunement || last == WaterFireAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
-            .UsingTimeOffset(-extraOrbHammerDelay),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == FireWaterAttunement || last == WaterFireAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
+                .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitWaterAndAir, IcyCoilBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == WaterAirAttunement || last == AirWaterAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == WaterAirAttunement || last == AirWaterAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitWaterAndEarth, IcyCoilBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == WaterEarthAttunement || last == EarthWaterAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == WaterEarthAttunement || last == EarthWaterAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             //
             new BuffGainCastFinder(CrescentWindSkill, CrescentWindBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualAirAttunement)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualAirAttunement)
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndAir, CrescentWindBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == FireAirAttunement || last == AirFireAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
-            .UsingTimeOffset(-extraOrbHammerDelay),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == FireAirAttunement || last == AirFireAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
+                .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitWaterAndAir, CrescentWindBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == WaterAirAttunement || last == AirWaterAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
-            .UsingTimeOffset(-extraOrbHammerDelay),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == WaterAirAttunement || last == AirWaterAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
+                .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitAirAndEarth, CrescentWindBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == AirEarthAttunement || last == EarthAirAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == AirEarthAttunement || last == EarthAirAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             //
             new BuffGainCastFinder(RockyLoopSkill, RockyLoopBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualEarthAttunement)
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting( GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData) == DualEarthAttunement)
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
             new BuffGainCastFinder(DualOrbitFireAndEarth, RockyLoopBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == FireEarthAttunement || last == EarthWaterAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
-            .UsingTimeOffset(-extraOrbHammerDelay),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff( FlameWheelBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == FireEarthAttunement || last == EarthWaterAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
+                .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitWaterAndEarth, RockyLoopBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == WaterEarthAttunement || last == EarthWaterAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
-            .UsingTimeOffset(-extraOrbHammerDelay),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff( IcyCoilBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == WaterEarthAttunement || last == EarthWaterAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
+                .UsingTimeOffset(-extraOrbHammerDelay),
             new BuffGainCastFinder(DualOrbitAirAndEarth, RockyLoopBuff)
-            .UsingChecker((ba, combatData, agentData, skillData) => ba.To.Spec == Spec.Weaver)
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.IsCasting(combatData, GrandFinale, ba.To, ba.Time))
-            .UsingChecker((ba, combatData, agentData, skillData) => !CastFinderHelpers.HasGainedBuff(combatData, CrescentWindBuff, ba.To, ba.Time - extraOrbHammerDelay))
-            .UsingChecker((ba, combatData, agentData, skillData) => {
-                    var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
-                    return last == AirEarthAttunement || last == EarthAirAttunement;
-                }
-            )
-            .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
-            .UsingTimeOffset(-extraOrbHammerDelay),
+                .UsingToSpecChecker(Spec.Weaver)
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
+                .UsingChecker((ba, combatData, agentData, skillData) => !combatData.HasGainedBuff(CrescentWindBuff, ba.To, ba.Time - extraOrbHammerDelay))
+                .UsingChecker((ba, combatData, agentData, skillData) => {
+                        var last = GetLastAttunement(ba.To, ba.Time - extraOrbHammerDelay, combatData);
+                        return last == AirEarthAttunement || last == EarthAirAttunement;
+                    }
+                )
+                .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM)
+                .UsingTimeOffset(-extraOrbHammerDelay),
+            // Spear
+            new BuffGainCastFinder(FrostfireWardSkill, FrostfireWardBuff),
+            new BuffGainCastFinder(GalvanizeSkill, GalvanizeBuff),
+            new BuffGainCastFinder(FieryImpactSkill, FieryImpactBuff),
+            new BuffGainCastFinder(ElutriateSkill, ElutriateBuff),
+            new BuffGainCastFinder(ShaleStormSkill, ShaleStormBuff),
         };
 
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All),
-            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2022Balance),
-            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
-            new BuffDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.November2022Balance),
-            new BuffDamageModifier(WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenFire, DamageModifierMode.All),
-            new BuffDamageModifier(WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenAir, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance),
-            new BuffDamageModifier(PerfectWeave, "Perfect Weave (Condition)", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
-            new BuffDamageModifier(PerfectWeave, "Perfect Weave (Strike)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance),
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.November2022Balance),
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "15% under swiftness/superspeed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All).WithBuilds(GW2Builds.SOTOReleaseAndBalance)
+            new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+            new BuffOnActorDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2022Balance),
+            new BuffOnActorDamageModifier(ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.September2023Balance),
+            new BuffOnActorDamageModifier(ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.sPvPWvW)
+                .WithBuilds(GW2Builds.November2022Balance),
+            new BuffOnActorDamageModifier(WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenFire, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenAir, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance),
+            new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave (Condition)", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave (Strike)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.February2023Balance),
+            new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.July2019Balance, GW2Builds.November2022Balance),
+            new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "15% under swiftness/superspeed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
+            new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.sPvPWvW)
+                .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
+            new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.SOTOReleaseAndBalance)
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new BuffOnActorDamageModifier(WovenEarth, "Woven Earth", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenEarth, DamageModifierMode.All),
+            new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
         };
 
 
@@ -257,6 +284,12 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Elements of Rage", ElementsOfRage, Source.Weaver, BuffClassification.Other, BuffImages.ElementsOfRage),
             new Buff("Stone Resonance", StoneResonanceBuff, Source.Weaver, BuffClassification.Other, BuffImages.StoneResonance),
             new Buff("Grinding Stones", GrindingStones, Source.Weaver, BuffClassification.Other, BuffImages.GrindingStones),
+            // Spear
+            new Buff("Frostfire Ward", FrostfireWardBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Galvanize", GalvanizeBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
 
@@ -393,11 +426,11 @@ namespace GW2EIEvtcParser.EIData
                     continue;
                 }
                 uint curInstanceID = applies.First().BuffInstance;
-                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), curInstanceID, true));
+                res.Add(new BuffApplyEvent(a, a, pair.Key, int.MaxValue, skillData.Get(curID), IFF.Friend, curInstanceID, true));
                 if (prevID != 0)
                 {
-                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID)));
-                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), 1, int.MaxValue));
+                    res.Add(new BuffRemoveManualEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), IFF.Friend));
+                    res.Add(new BuffRemoveAllEvent(a, a, pair.Key, int.MaxValue, skillData.Get(prevID), IFF.Friend, 1, int.MaxValue));
                 }
                 prevID = curID;
             }

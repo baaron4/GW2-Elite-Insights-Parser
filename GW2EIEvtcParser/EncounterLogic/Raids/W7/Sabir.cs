@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -20,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstSkillMechanic(DireDrafts, "Dire Drafts", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "B.Tornado", "Hit by big tornado", "Big Tornado Hit", 500).UsingChecker((de, log) => de.HasDowned || de.HasKilled),
                 new PlayerDstSkillMechanic(UnbridledTempest, "Unbridled Tempest", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Pink), "Shockwave", "Hit by Shockwave", "Shockwave Hit", 0).UsingChecker((de, log) => de.HasDowned || de.HasKilled),
                 new PlayerDstSkillMechanic(FuryOfTheStorm, "Fury of the Storm", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple), "Arena AoE", "Hit by Arena wide AoE", "Arena AoE hit", 0).UsingChecker( (de, log) => de.HasDowned || de.HasKilled ),
-                new PlayerDstHitMechanic(new long [] { DynamicDeterrentNM, DynamicDeterrentCM }, "Dynamic Deterrent", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Pushed", "Pushed by rotating breakbar", "Pushed", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+                new PlayerDstHitMechanic(new long [] { DynamicDeterrentNM, DynamicDeterrentCM }, "Dynamic Deterrent", new MechanicPlotlySetting(Symbols.YUpOpen,Colors.Pink), "Pushed", "Pushed by rotating breakbar", "Pushed", 0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ServerDelayConstant)),
                 new PlayerDstHitMechanic(new long [] { StormsEdgeLeftHand, StormsEdgeRightHand }, "Storm's Edge", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.Blue), "Storm's Edge", "Hit by Storm's Edge", "Storm's Edge", 0),
                 new PlayerDstHitMechanic(ChainLightning, "Chain Lightning", new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.White), "Chain Lightning", "Hit by Chain Lightning", "Chain Lightning Hit", 0),
                 new PlayerDstHitMechanic(Electrospark, "Electrospark", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Orange), "Electrospark", "Hit by Electrospark", "Electrospark", 0),
@@ -52,7 +54,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             // Handle potentially wrongly associated logs
             if (logStartNPCUpdate != null)
             {
@@ -68,7 +70,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<InstantCastFinder>()
             {
-                new DamageCastFinder(BoltBreakSabir, BoltBreakSabir), // Bolt Break
+                new DamageCastFinder(BoltBreakSabir, BoltBreakSabir),
+                new EffectCastFinder(FlashDischargeSAK, EffectGUIDs.SabirFlashDischarge)
+                    .UsingChecker((effect, combatData, agentData, skillData) =>
+                    {
+                        BuffRemoveAllEvent buffRemove = combatData.GetBuffRemoveAllData(ViolentCurrents)
+                            .Where(x => Math.Abs(effect.Time - x.Time) < ServerDelayConstant && x.To == effect.Src)
+                            .FirstOrDefault();
+                        return buffRemove != null;
+                    }),
             };
         }
 
@@ -81,11 +91,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Sabir not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -129,12 +135,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            int boltBreakRadius = 180;
+            uint boltBreakRadius = 180;
             foreach (Segment seg in boltBreaks)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)seg.End, boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p)));
+                var circle = new CircleDecoration(boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p));
+                replay.AddDecorationWithGrowing(circle, seg.End);
             }
         }
 
@@ -149,18 +156,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in repulsionFields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
                     }
                     var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     foreach (Segment seg in ionShields)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
                     var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
                     foreach (AbstractCastEvent c in furyOfTheStorm)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, (int)c.EndTime, 1200, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
                     }
                     //
                     var unbridledTempest = cls.Where(x => x.SkillId == UnbridledTempest).ToList();
@@ -169,21 +176,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int start = (int)c.Time;
                         int delay = 3000; // casttime 0 from skill def
                         int duration = 5000;
-                        int radius = 1200;
-                        Point3D targetPosition = replay.PolledPositions.LastOrDefault(x => x.Time <= start + 1000);
-                        if (targetPosition != null)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, start + delay), "rgba(255, 100, 0, 0.2)", new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start + delay - 10, start + delay + 100), "rgba(255, 100, 0, 0.5)", new PositionConnector(targetPosition)));
-                            replay.Decorations.Add(new CircleDecoration(false, start + duration, radius, (start + delay, start + duration), "rgba(255, 150, 0, 0.7)", new PositionConnector(targetPosition)));
-                        }
+                        uint radius = 1200;
+                        (long, long) lifespanShockwave = (start + delay, start + duration);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, connector));
+                        replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, connector));
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BigKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 480, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(480, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallKillerTornado:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 120, (crStart, crEnd), "rgba(255, 150, 0, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(120, (crStart, crEnd), Colors.LightOrange, 0.4, new AgentConnector(target)));
                     break;
                 case (int)ArcDPSEnums.TrashID.SmallJumpyTornado:
                 case (int)ArcDPSEnums.TrashID.ParalyzingWisp:
@@ -194,28 +199,27 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             }
         }
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             // Find target
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Sabir).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Sabir, out AgentItem sabir))
             {
                 throw new MissingKeyActorsException("Sabir not found");
             }
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(target));
+            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(sabir));
             if (enterCombat == null)
             {
-                CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+                CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
                 if (logStartNPCUpdate == null)
                 {
                     return GetGenericFightOffset(fightData);
                 }
                 else
                 {
-                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsDamagingDamage());
+                    CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(sabir) && x.IsDamagingDamage());
                     if (firstDamageEvent != null)
                     {
-                        return GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, target);
+                        return firstDamageEvent.Time;
                     }
                     else
                     {
@@ -228,11 +232,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Sabir not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
             return (target.GetHealth(combatData) > 32e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
         }
     }

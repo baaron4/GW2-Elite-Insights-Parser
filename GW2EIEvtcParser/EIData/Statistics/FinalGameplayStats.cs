@@ -37,15 +37,13 @@ namespace GW2EIEvtcParser.EIData
                 var distances = new List<float>();
                 for (int time = 0; time < positions.Count; time++)
                 {
-
-                    float deltaX = positions[time].X - reference[time + offset].X;
-                    float deltaY = positions[time].Y - reference[time + offset].Y;
-                    //float deltaZ = positions[time].Z - StackCenterPositions[time].Z;
-
-
-                    distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+                    if (time + offset >= reference.Count || reference[time + offset] == null)
+                    {
+                        continue;
+                    }
+                    distances.Add(positions[time].Distance2DToPoint(reference[time + offset]));
                 }
-                return distances.Sum() / distances.Count;
+                return distances.Count == 0 ? -1 : distances.Sum() / distances.Count;
             }
             else
             {
@@ -118,7 +116,7 @@ namespace GW2EIEvtcParser.EIData
             AvgConditions = Math.Round(avgCondis / duration, ParserHelper.BuffDigit);
             AvgActiveConditions = activeDuration > 0 ? Math.Round(avgCondis / activeDuration, ParserHelper.BuffDigit) : 0.0;
             //
-            if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.GetCombatReplayPolledPositions(log).Any(x => x.X > int.MinValue + 1))
+            if (log.CombatData.HasMovementData && log.FriendlyAgents.Contains(actor.AgentItem) && actor.HasCombatReplayPositions(log))
             {
                 StackDist = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCenterPositions(log));
                 DistToCom = GetDistanceToTarget(actor, log, start, end, log.StatisticsHelper.GetStackCommanderPositions(log));

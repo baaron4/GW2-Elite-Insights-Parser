@@ -126,9 +126,35 @@ function compileTemplates() {
     TEMPLATE_COMPILE
 };
 
+function getDefaultMainComponent() {
+    const setting = EIUrlParams.get("startPage");
+    if (!setting) {
+        return 0;
+    }
+    const mainCompo = setting.split('/')[0];
+    switch (mainCompo) {
+        case "Statistics":
+            return 0;
+        case "CombatReplay":
+            return !!crData ? 1 : 0;
+        case "HealingStatistics":
+            return !!healingStatsExtension ? 2 : 0;
+    }
+    return 0;
+}
+
+function getDefaultPhase() {
+    const setting = EIUrlParams.get("phase");
+    if (!setting) {
+        return 0;
+    }
+    return parseInt(setting);
+}
+
 function mainLoad() {
     // make some additional variables reactive
-    var firstActive = logData.phases[0];
+    var activePhaseIndex = getDefaultPhase();
+    var firstActive = logData.phases[activePhaseIndex] ? logData.phases[activePhaseIndex] : logData.phases[0];
     for (var i = 0; i < logData.phases.length; i++) {
         var phase = logData.phases[i];
         phase.durationS = phase.duration / 1000.0
@@ -149,11 +175,18 @@ function mainLoad() {
         });
     }
     for (var i = 0; i < logData.targets.length; i++) {
-        simpleLogData.targets.push({
-            active: true
-        });
-        logData.targets[i].id = i;
-        logData.targets[i].dpsGraphCache = new Map();
+        var target = logData.targets[i];
+        var activeArray = [];
+        simpleLogData.targets.push(activeArray);
+        for (var j = 0; j < logData.phases.length; j++) {
+            var phase = logData.phases[j];
+            var phaseTarget = phase.targets.indexOf(i);
+            activeArray.push({
+                active: phaseTarget > -1 ? !phase.secondaryTargets[phaseTarget] : false
+            });
+        }
+        target.id = i;
+        target.dpsGraphCache = new Map();
     }
     for (var i = 0; i < logData.players.length; i++) {
         var playerData = logData.players[i];
@@ -175,9 +208,9 @@ function mainLoad() {
         el: "#content",
         data: {
             light: typeof (window.theme) !== "undefined" ? (window.theme === 'yeti') : logData.lightTheme,
-            mode: 0,
+            mode: getDefaultMainComponent(),
             cr: !!crData,
-            healingExtShow: !!healingStatsExtension || logData.evtcVersion >= 20210701,
+            healingExtShow: !!healingStatsExtension || logData.evtcBuild >= 20210701,
             healingExt: !!healingStatsExtension
         },
         methods: {

@@ -6,10 +6,9 @@ namespace GW2EIEvtcParser.EIData
 {
     internal class WeaponSwapCastFinder : CheckedCastFinder<WeaponSwapEvent>
     {
-        private readonly long _swappedTo;
         public WeaponSwapCastFinder(long skillID, long swappedTo) : base(skillID)
         {
-            _swappedTo = swappedTo;
+            UsingChecker((evt, combatData, agentData, skillData) => evt.SwappedTo == swappedTo);
             BeforeWeaponSwap = true;
         }
 
@@ -27,17 +26,13 @@ namespace GW2EIEvtcParser.EIData
                 long lastTime = int.MinValue;
                 foreach (WeaponSwapEvent swap in swaps)
                 {
-                    if (swap.SwappedTo != _swappedTo)
-                    {
-                        continue;
-                    }
-                    if (swap.Time - lastTime < ICD)
-                    {
-                        lastTime = swap.Time;
-                        continue;
-                    }
                     if (CheckCondition(swap, combatData, agentData, skillData))
                     {
+                        if (swap.Time - lastTime < ICD)
+                        {
+                            lastTime = swap.Time;
+                            continue;
+                        }
                         lastTime = swap.Time;
                         res.Add(new InstantCastEvent(GetTime(swap, swap.Caster, combatData), skillData.Get(SkillID), swap.Caster));
                     }

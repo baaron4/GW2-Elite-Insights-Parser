@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using GW2EIEvtcParser.Extensions;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -32,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return participatingPlayerAgents;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             // Set manual FractalScale for old logs without the event
             AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
@@ -41,7 +38,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ( GW2Builds.September2020SunquaPeakRelease, 99),
                 ( GW2Builds.SOTOBetaAndSilentSurfNM, 98),
             });
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         }
 
         /// <summary>
@@ -64,6 +61,34 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return true;
+        }
+
+        protected void AddCorporealReassignmentDecorations(ParsedEvtcLog log)
+        {
+            // Corporeal Reassignment domes & explosions
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentDome, out IReadOnlyList<EffectEvent> domes))
+            {
+                foreach (EffectEvent effect in domes)
+                {
+                    EnvironmentDecorations.Add(new CircleDecoration(220, effect.ComputeDynamicLifespan(log, 0), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingFilled(false));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out IReadOnlyList<EffectEvent> domeExplosions))
+            {
+                foreach (EffectEvent effect in domeExplosions)
+                {
+                    (long start, long end) lifespan = (effect.Time - 500, effect.Time);
+                    EnvironmentDecorations.Add(new CircleDecoration(220, lifespan, Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))
+            {
+                foreach (EffectEvent effect in explosions)
+                {
+                    (long start, long end) lifespan = (effect.Time, effect.Time + 500);
+                    EnvironmentDecorations.Add(new CircleDecoration(2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
+                }
+            }
         }
     }
 }

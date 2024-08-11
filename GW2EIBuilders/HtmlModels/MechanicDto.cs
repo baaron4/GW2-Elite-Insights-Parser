@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -45,7 +44,7 @@ namespace GW2EIBuilders.HtmlModels
                             count++;
                         }
                     }
-                } 
+                }
                 else
                 {
                     count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;

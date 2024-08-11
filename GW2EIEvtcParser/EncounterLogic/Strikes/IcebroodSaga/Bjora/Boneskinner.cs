@@ -1,15 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -57,26 +53,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
+            return new List<TrashID>
             {
-                ArcDPSEnums.TrashID.VigilTactician,
-                ArcDPSEnums.TrashID.VigilRecruit,
-                ArcDPSEnums.TrashID.PrioryExplorer,
-                ArcDPSEnums.TrashID.PrioryScholar,
-                ArcDPSEnums.TrashID.AberrantWisp,
-                ArcDPSEnums.TrashID.Torch,
+                TrashID.VigilTactician,
+                TrashID.VigilRecruit,
+                TrashID.PrioryExplorer,
+                TrashID.PrioryScholar,
+                TrashID.AberrantWisp,
+                TrashID.Torch,
             };
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var torches = combatData.Where(x => x.DstAgent == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250).ToList();
+            var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250).ToList();
             foreach (AgentItem torch in torches)
             {
                 torch.OverrideType(AgentItem.AgentType.NPC);
-                torch.OverrideID(ArcDPSEnums.TrashID.Torch);
+                torch.OverrideID(TrashID.Torch);
                 torch.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
             }
             agentData.Refresh();
@@ -86,18 +82,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         protected override void SetInstanceBuffs(ParsedEvtcLog log)
         {
             base.SetInstanceBuffs(log);
-            IReadOnlyList<AbstractBuffEvent> holdOntoTheLight = log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight);
 
-            if (holdOntoTheLight.Any() && log.FightData.Success)
+            if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityHoldOntoTheLight).Any())
             {
-                foreach (Player p in log.PlayerList)
-                {
-                    if (p.HasBuff(log, AchievementEligibilityHoldOntoTheLight, log.FightData.FightEnd - ServerDelayConstant))
-                    {
-                        InstanceBuffs.Add((log.Buffs.BuffsByIds[AchievementEligibilityHoldOntoTheLight], 1));
-                        break;
-                    }
-                }
+                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityHoldOntoTheLight));
             }
         }
 
@@ -107,26 +95,27 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Boneskinner:
+                case (int)TargetID.Boneskinner:
                     // Death Wind
                     var deathWind = casts.Where(x => x.SkillId == DeathWind).ToList();
                     foreach (AbstractCastEvent c in deathWind)
                     {
                         int castTime = 3330;
                         int hitTime = 1179;
-                        int radius = 1500;
+                        uint radius = 1500;
                         int endHitTime = (int)c.Time + hitTime;
                         int endCastTime = (int)c.Time + castTime;
 
                         ParametricPoint3D lastDirection = replay.PolledRotations.LastOrDefault(x => x.Time > c.Time + 100 && x.Time < c.Time + 100 + castTime);
                         if (lastDirection != null)
                         {
-                            var direction = new Point3D(lastDirection.X, lastDirection.Y);
+                            var connector = new AgentConnector(target);
+                            var rotationConnector = new AngleConnector(lastDirection);
                             // Growing Decoration
-                            replay.Decorations.Add(new PieDecoration(true, endHitTime, radius, direction, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, direction, 30, ((int)c.Time, endHitTime), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                            var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
+                            replay.AddDecorationWithGrowing(pie, endHitTime);
                             // Lingering AoE to match in game display
-                            replay.Decorations.Add(new PieDecoration(true, 0, radius, direction, 30, (endHitTime, endCastTime), "rgba(250, 60, 0, 0.1)", new AgentConnector(target)));
+                            replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                     // Crushing Cruelty
@@ -134,48 +123,47 @@ namespace GW2EIEvtcParser.EncounterLogic
                     foreach (AbstractCastEvent c in crushingCruelty)
                     {
                         int hitTime = 2833;
-                        int radius = 1500;
-                        int endTime = (int)c.Time + hitTime;
+                        uint radius = 1500;
+                        long endTime = c.Time + hitTime;
 
                         // Position of the jump back
                         var jumpPosition = new Point3D((float)613.054, (float)-85.3458, (float)-7075.265);
-
-                        replay.Decorations.Add(new CircleDecoration(true, endTime, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.1)", new PositionConnector(jumpPosition)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endTime), "rgba(250, 120, 0, 0.1)", new PositionConnector(jumpPosition)));
+                        var circle = new CircleDecoration(radius, (c.Time, endTime), Colors.LightOrange, 0.1, new PositionConnector(jumpPosition));
+                        replay.AddDecorationWithGrowing(circle, endTime);
                     }
                     // Douse in Darkness
                     var douseInDarkness = casts.Where(x => x.SkillId == DouseInDarkness).ToList();
                     foreach (AbstractCastEvent c in douseInDarkness)
                     {
                         int jumpTime = 2500;
-                        int radius = 1500;
-                        int endJump = (int)c.Time + jumpTime;
-                        int pullTime = (int)c.Time + jumpTime + 1700;
-                        int finalTime = pullTime + 1500;
+                        uint radius = 1500;
+                        long endJump = c.Time + jumpTime;
                         int timings = 300;
 
                         // Jump up
-                        replay.Decorations.Add(new CircleDecoration(true, endJump, radius, ((int)c.Time, endJump), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, ((int)c.Time, endJump), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
+                        var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), Colors.LightOrange, 0.1, new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(jumpUpCircle, endJump);
                         // Pull
                         for (int i = 0; i < 4; i++)
                         {
-                            int duration = (int)c.Time + jumpTime + timings * i;
-                            int end = (int)c.Time + jumpTime + timings * (i + 1);
-                            replay.Decorations.Add(new CircleDecoration(false, -duration, radius, (endJump, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                            long duration = c.Time + jumpTime + timings * i;
+                            long end = c.Time + jumpTime + timings * (i + 1);
+                            replay.Decorations.Add(new CircleDecoration(radius, (endJump, end), Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(duration, true));
                         }
                         // Landing
-                        replay.Decorations.Add(new CircleDecoration(true, finalTime, radius, (pullTime, finalTime), "rgba(255, 0, 0, 0.1)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (pullTime, finalTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
+                        long pullTime = c.Time + jumpTime + 1700;
+                        long finalTime = pullTime + 1500;
+                        var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), Colors.LightOrange, 0.1, new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(landingCircle, finalTime);
                     }
                     // Cascade
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator3, 600, 120);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
-                    AddCascadeDecoration(log, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator2, 400, 80);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator3, 600, 120);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator4, 800, 160);
+                    AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator5, 1000, 200);
                     break;
-                case (int)ArcDPSEnums.TrashID.AberrantWisp:
+                case (int)TrashID.AberrantWisp:
                     break;
                 default:
                     break;
@@ -184,6 +172,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
             // Grasp AoE Orange Indicator
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspAoeIndicator, out IReadOnlyList<EffectEvent> indicators))
             {
@@ -192,8 +182,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 1800;
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 100, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(indicator.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(indicator.Position)));
+                    var circle = new CircleDecoration(100, (start, end), Colors.Orange, 0.2, new PositionConnector(indicator.Position));
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
+                    EnvironmentDecorations.Add(circle);
                 }
             }
             // Grasp Claws Effect / Dark Red AoE
@@ -204,13 +195,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int duration = 30000;
                     int start = (int)claw.Time;
                     int end = (int)claw.Time + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 100, (start, end), "rgba(71, 35, 32, 0.2)", new PositionConnector(claw.Position)));
-                    EnvironmentDecorations.Add(new DoughnutDecoration(true, 0, 95, 100, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(claw.Position)));
+                    var circle = new CircleDecoration(100, (start, end), Colors.RedBrownish, 0.2, new PositionConnector(claw.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
                 }
             }
         }
 
-        private static void AddCascadeDecoration(ParsedEvtcLog log, CombatReplay replay, string guid, int width, int height)
+        private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, uint width, uint height)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> rectangularIndicators))
             {
@@ -220,14 +212,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
 
-                    ParametricPoint3D point = replay.PolledRotations.Where(x => x.Time > start && x.Time < end).FirstOrDefault();
-                    if (point != null)
+                    Point3D rotation = actor.GetCurrentRotation(log, start, duration);
+                    if (rotation != null)
                     {
-                        double radian = Math.Atan2(point.X, point.Y);
-                        float degree = RadianToDegreeF(radian);
-
-                        replay.Decorations.Add(new RotatedRectangleDecoration(false, 0, width - 5, height - 5, -degree, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(indicator.Position)));
-                        replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, width, height, -degree, (start, end), "rgba(250, 120, 0, 0.2)", new PositionConnector(indicator.Position)));
+                        var connector = new PositionConnector(indicator.Position);
+                        var rotationConnector = new AngleConnector(rotation);
+                        replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector), Colors.Red, 0.2);
                     }
                 }
             }

@@ -9,6 +9,6 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             EncounterCategoryInformation.SubCategory = SubFightCategory.MythwrightGambit;
             EncounterID |= EncounterIDs.RaidWingMasks.MythwrightGambitMask;
-        }  
+        }
     }
 }

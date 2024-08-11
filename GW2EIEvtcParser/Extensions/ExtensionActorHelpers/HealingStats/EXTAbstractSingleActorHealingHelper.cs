@@ -15,6 +15,7 @@ namespace GW2EIEvtcParser.Extensions
         private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedSelfHealEvents = new Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>();
 
         private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healing1S = new Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healingReceived1S = new Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>();
 
         private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat> _outgoingHealStats { get; set; }
         private CachingCollectionWithTarget<EXTFinalIncomingHealingStat> _incomingHealStats { get; set; }
@@ -103,7 +104,34 @@ namespace GW2EIEvtcParser.Extensions
             return dls;
         }
 
-        public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, EXTHealingType healingType = EXTHealingType.All )
+        private static int[] ComputeHealingGraph(IReadOnlyList<EXTAbstractHealingEvent> dls, long start, long end)
+        {
+            int durationInMS = (int)(end - start);
+            int durationInS = durationInMS / 1000;
+            var graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+            // fill the graph
+            int previousTime = 0;
+            foreach (EXTAbstractHealingEvent dl in dls)
+            {
+                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+                if (time != previousTime)
+                {
+                    for (int i = previousTime + 1; i <= time; i++)
+                    {
+                        graph[i] = graph[previousTime];
+                    }
+                }
+                previousTime = time;
+                graph[time] += dl.HealingDone;
+            }
+            for (int i = previousTime + 1; i < graph.Length; i++)
+            {
+                graph[i] = graph[previousTime];
+            }
+            return graph;
+        }
+
+        public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, EXTHealingType healingType = EXTHealingType.All)
         {
             if (!_healing1S.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
             {
@@ -112,28 +140,23 @@ namespace GW2EIEvtcParser.Extensions
             }
             if (!graphs.TryGetValue(start, end, target, out int[] graph))
             {
-                int durationInMS = (int)(end - start);
-                int durationInS = durationInMS / 1000;
-                graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
-                // fill the graph
-                int previousTime = 0;
-                foreach (EXTAbstractHealingEvent dl in GetTypedOutgoingHealEvents(target, log, start, end, healingType))
-                {
-                    int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
-                    if (time != previousTime)
-                    {
-                        for (int i = previousTime + 1; i <= time; i++)
-                        {
-                            graph[i] = graph[previousTime];
-                        }
-                    }
-                    previousTime = time;
-                    graph[time] += dl.HealingDone;
-                }
-                for (int i = previousTime + 1; i < graph.Length; i++)
-                {
-                    graph[i] = graph[previousTime];
-                }
+                graph = ComputeHealingGraph(GetTypedOutgoingHealEvents(target, log, start, end, healingType), start, end);
+                //
+                graphs.Set(start, end, target, graph);
+            }
+            return graph;
+        }
+
+        public IReadOnlyList<int> Get1SHealingReceivedList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, EXTHealingType healingType = EXTHealingType.All)
+        {
+            if (!_healingReceived1S.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
+            {
+                graphs = new CachingCollectionWithTarget<int[]>(log);
+                _healingReceived1S[healingType] = graphs;
+            }
+            if (!graphs.TryGetValue(start, end, target, out int[] graph))
+            {
+                graph = ComputeHealingGraph(GetTypedIncomingHealEvents(target, log, start, end, healingType), start, end);
                 //
                 graphs.Set(start, end, target, graph);
             }

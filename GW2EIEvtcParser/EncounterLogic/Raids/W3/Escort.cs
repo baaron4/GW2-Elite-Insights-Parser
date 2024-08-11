@@ -28,6 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(FireMortarEscortHit, "Fire Mortar", new MechanicPlotlySetting(Symbols.Hourglass, Colors.DarkPurple), "Shrd.H", "Hit by Mortar Fire (Bloodstone Turrets)", "Mortar Fire Hit", 0),
                 new PlayerDstBuffApplyMechanic(RadiantAttunementPhantasm, "Radiant Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.White), "Rad.A", "Radiant Attunement Application", "Radiant Attunement Application", 150),
                 new PlayerDstBuffApplyMechanic(CrimsonAttunementPhantasm, "Crimson Attunement", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Crim.A", "Crimson Attunement Application", "Crimson Attunement Application", 150),
+                new PlayerSrcEffectMechanic(EffectGUIDs.EscortOverHere, "Over Here!", new MechanicPlotlySetting(Symbols.Star, Colors.White), "OverHere.C", "Used Over Here! (Special Action Key)", "Over Here! Cast", 0),
                 new EnemyDstBuffApplyMechanic(Invulnerability757, "Invulnerability", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.LightBlue), "Inv.A", "Invulnerability Applied", "Invulnerability Applied", 150),
                 new EnemyCastStartMechanic(TeleportDisplacementField, "Teleport Displacement Field", new MechanicPlotlySetting(Symbols.Square, Colors.LightPurple), "Tel.C", "Teleport Cast", "Teleport Cast", 150),
             }
@@ -92,11 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.McLeodTheSilent);
-            if (mcLeod == null)
-            {
-                throw new MissingKeyActorsException("McLeod not found");
-            }
+            AbstractSingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
             phases[0].AddTarget(mcLeod);
             if (!requirePhases)
             {
@@ -116,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             phases.AddRange(GetMcLeodPhases(mcLeod, log));
             var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware).ToList();
-            if (mcLeodWargs.Any())
+            if (mcLeodWargs.Count != 0)
             {
                 var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd)
                 {
@@ -131,16 +128,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            AgentItem mcLeod = agentData.GetNPCsByID(ArcDPSEnums.TargetID.McLeodTheSilent).FirstOrDefault();
-            if (mcLeod == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.McLeodTheSilent, out AgentItem mcLeod))
             {
                 throw new MissingKeyActorsException("McLeod not found");
             }
-            bool needsRefresh = FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100);
+            bool needsRefresh = FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
             //
-            var mineAgents = combatData.Where(x => x.DstAgent == 1494 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
+            var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
             foreach (AgentItem mine in mineAgents)
             {
                 mine.OverrideID(ArcDPSEnums.TrashID.Mine);
@@ -156,7 +152,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 agentData.Refresh();
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             int curCrimson = 1;
             int curRadiant = 1;
             int curWarg = 1;
@@ -177,27 +173,60 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem mcLeod = agentData.GetNPCsByID(ArcDPSEnums.TargetID.McLeodTheSilent).FirstOrDefault();
-            if (mcLeod == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.McLeodTheSilent, out AgentItem mcLeod))
             {
                 throw new MissingKeyActorsException("McLeod not found");
             }
             long startToUse = GetGenericFightOffset(fightData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 if (mcLeod.FirstAware - fightData.LogStart > MinimumInCombatDuration)
                 {
                     _hasPreEvent = true;
+                    // Is this reliable?
+                    /*CombatItem achievementTrackApply = combatData.Where(x => (x.SkillID == AchievementEligibilityMineControl || x.SkillID == AchievementEligibilityFastSiege) && x.IsBuffApply()).FirstOrDefault();
+                    if (achievementTrackApply != null)
+                    {
+                        startToUse = achievementTrackApply.Time;
+                    }*/
                 }
                 else
                 {
-                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time);
+                    startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)ArcDPSEnums.TargetID.McLeodTheSilent, logStartNPCUpdate.DstAgent);
                 }
             }
             return startToUse;
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (_hasPreEvent)
+            {
+                if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.Glenna, out AgentItem glenna))
+                {
+                    throw new MissingKeyActorsException("Glenna not found");
+                }
+                if (combatData.HasMovementData)
+                {
+                    var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
+                    if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100))
+                    {
+                        return FightData.EncounterStartStatus.Late;
+                    }
+                }
+                return FightData.EncounterStartStatus.Normal;
+            }
+            else if (combatData.GetLogNPCUpdateEvents().Any())
+            {
+                return FightData.EncounterStartStatus.NoPreEvent;
+            }
+            else
+            {
+                return FightData.EncounterStartStatus.Normal;
+            }
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -213,10 +242,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)ArcDPSEnums.TargetID.McLeodTheSilent,
-                (int)ArcDPSEnums.TargetID.DummyTarget,
-                (int)ArcDPSEnums.TrashID.WargBloodhound,
                 (int)ArcDPSEnums.TrashID.RadiantMcLeod,
                 (int)ArcDPSEnums.TrashID.CrimsonMcLeod,
+                (int)ArcDPSEnums.TrashID.WargBloodhound,
+                (int)ArcDPSEnums.TargetID.DummyTarget,
             };
         }
 
@@ -254,28 +283,35 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success)
             {
-                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { CheckAchievementBuff(log, AchievementEligibilityLoveIsBunny); }
-                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { CheckAchievementBuff(log, AchievementEligibilityFastSiege); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityLoveIsBunny).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityLoveIsBunny)); }
+                if (log.CombatData.GetBuffData(AchievementEligibilityFastSiege).Any()) { InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFastSiege)); }
             }
         }
 
-        private void CheckAchievementBuff(ParsedEvtcLog log, long achievement)
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            foreach (Player p in log.PlayerList)
+            switch (target.ID)
             {
-                if (p.HasBuff(log, achievement, log.FightData.FightEnd - ServerDelayConstant))
-                {
-                    InstanceBuffs.Add((log.Buffs.BuffsByIds[achievement], 1));
+                case (int)ArcDPSEnums.TargetID.McLeodTheSilent:
+                    replay.AddHideByBuff(target, log, Invulnerability757);
                     break;
-                }
             }
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Attunements Overhead
             replay.AddOverheadIcons(p.GetBuffStatus(log, CrimsonAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.CrimsonAttunementOverhead);
             replay.AddOverheadIcons(p.GetBuffStatus(log, RadiantAttunementPhantasm, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.RadiantAttunementOverhead);
+        }
+
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new EffectCastFinder(OverHere, EffectGUIDs.EscortOverHere),
+            };
         }
     }
 }

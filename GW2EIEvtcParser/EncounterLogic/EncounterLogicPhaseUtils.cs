@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             for (int i = 0; i < thresholds.Count; i++)
             {
-                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HPPercent <= thresholds[i]);
+                HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[i]);
                 if (evt == null)
                 {
                     break;
@@ -46,13 +46,12 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             var phases = new List<PhaseData>();
             long last = start;
-            var invuls = skillIDs.SelectMany(skillID => GetFilteredList(log.CombatData, skillID, mainTarget, beginWithStart, true)).ToList();
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillIDs, mainTarget, beginWithStart, true);
             invuls.RemoveAll(x => x.Time < 0);
             invuls.Sort((event1, event2) => event1.Time.CompareTo(event2.Time)); // Sort in case there were multiple skillIDs
             bool nextToAddIsSkipPhase = !beginWithStart;
-            for (int i = 0; i < invuls.Count; i++)
+            foreach (AbstractBuffEvent c in invuls)
             {
-                AbstractBuffEvent c = invuls[i];
                 if (c is BuffApplyEvent)
                 {
                     long curEnd = Math.Min(c.Time, end);
@@ -71,11 +70,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     nextToAddIsSkipPhase = false;
                 }
             }
-            if (end - last > ParserHelper.PhaseTimeLimit && (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases)))
+            if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
             {
                 phases.Add(new PhaseData(last, end));
             }
-            return phases.Where(x => x.DurationInMS > ParserHelper.PhaseTimeLimit).ToList();
+            return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
         }
 
         internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)

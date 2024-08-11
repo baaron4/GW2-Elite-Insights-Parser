@@ -23,6 +23,10 @@ namespace GW2EIDPSReport.DPSReportJsons
         [JsonProperty]
         public bool IsCm { get; internal set; }
         [JsonProperty]
+        public bool IsLegendaryCm { get; internal set; }
+        [JsonProperty]
+        public long Emboldened { get; internal set; }
+        [JsonProperty]
         public long Gw2Build { get; internal set; }
         [JsonProperty]
         public bool JsonAvailable { get; internal set; }

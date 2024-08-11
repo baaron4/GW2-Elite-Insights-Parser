@@ -96,7 +96,7 @@ namespace GW2EIBuilders
             WriteLine(new[] { "Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString() });
             IReadOnlyList<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
             double hpLeft = hpUpdates.Count > 0
-                ? hpUpdates.Last().HPPercent
+                ? hpUpdates.Last().HealthPercent
                 : 100.0;
             WriteLine(new[] { "Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
             WriteLine(new[] { "Boss Health Burned %", (100.0 - hpLeft).ToString() });
@@ -257,7 +257,7 @@ namespace GW2EIBuilders
             {
                 FinalGameplayStats stats = player.GetGameplayStats(_log, phase.Start, phase.End);
                 FinalOffensiveStats statsBoss = player.GetOffensiveStats(_legacyTarget, _log, phase.Start, phase.End);
-                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
                 if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))
@@ -304,7 +304,7 @@ namespace GW2EIBuilders
             {
                 FinalGameplayStats gameplayStats = player.GetGameplayStats(_log, phase.Start, phase.End);
                 FinalOffensiveStats offStats = player.GetOffensiveStats(null, _log, phase.Start, phase.End);
-                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
+                IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
                 var scholar = new DamageModifierStat(0, 0, 0, 0);
                 var moving = new DamageModifierStat(0, 0, 0, 0);
                 if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))
@@ -799,17 +799,17 @@ namespace GW2EIBuilders
                 WriteCell(player.Character);
                 foreach (Buff boon in _statistics.PresentConditions)
                 {
-                    if (conditions.TryGetValue(boon.ID, out FinalBuffsDictionary uptime) && uptime.Generated.ContainsKey(player))
+                    if (conditions.TryGetValue(boon.ID, out FinalBuffsDictionary uptime) && uptime.GeneratedBy.ContainsKey(player))
                     {
                         if (boon.Type == Buff.BuffType.Duration)
                         {
-                            WriteCell(conditions[boon.ID].Generated[player].ToString() + "%");
-                            WriteCell(conditions[boon.ID].Overstacked[player].ToString() + "%");
+                            WriteCell(conditions[boon.ID].GeneratedBy[player].ToString() + "%");
+                            WriteCell(conditions[boon.ID].OverstackedBy[player].ToString() + "%");
                         }
                         else
                         {
-                            WriteCell(conditions[boon.ID].Generated[player].ToString());
-                            WriteCell(conditions[boon.ID].Overstacked[player].ToString());
+                            WriteCell(conditions[boon.ID].GeneratedBy[player].ToString());
+                            WriteCell(conditions[boon.ID].OverstackedBy[player].ToString());
                         }
                     }
                     else

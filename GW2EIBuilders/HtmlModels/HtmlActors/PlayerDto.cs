@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -15,6 +16,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
         public bool IsPoV { get; set; }
 
         public bool IsCommander { get; set; }
+        public List<string[]> CommanderStates { get; set; }
         public List<string> L1Set { get; } = new List<string>();
         public List<string> L2Set { get; } = new List<string>();
         public List<string> A1Set { get; } = new List<string>();
@@ -30,8 +32,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             switch (baseSpec)
             {
 
-                case ParserHelper.Spec.Warrior: 
-                    return ("rgb(255,209,102)","rgb(190,159,84)","rgb(125,109,66)");
+                case ParserHelper.Spec.Warrior:
+                    return ("rgb(255,209,102)", "rgb(190,159,84)", "rgb(125,109,66)");
                 case ParserHelper.Spec.Guardian:
                     return ("rgb(114,193,217)", "rgb(88,147,165)", "rgb(62,101,113)");
                 case ParserHelper.Spec.Revenant:
@@ -49,7 +51,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                 case ParserHelper.Spec.Necromancer:
                     return ("rgb(82,167,111)", "rgb(64,127,85)", "rgb(46,88,60)");
                 default:
-                    return ("","","");
+                    return ("", "", "");
             }
 
         }
@@ -60,7 +62,11 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             Acc = actor.Account;
             Profession = actor.Spec.ToString();
             IsPoV = log.LogData.PoV == actor.AgentItem;
-            IsCommander = actor is Player p && p.IsCommander(log);
+            if (actor is Player p)
+            {
+                IsCommander = p.IsCommander(log);
+                CommanderStates = IsCommander ? p.GetCommanderStatesNoTagValues(log).Select(x => new string[2] { ParserHelper.ToDurationString(x.Start), ParserHelper.ToDurationString(x.End) }).ToList() : null;
+            }
             (ColTarget, ColCleave, ColTotal) = GetSpecGraphColor(actor.BaseSpec);
             IsFake = actor.IsFakeActor;
             NotInSquad = !(actor is Player);

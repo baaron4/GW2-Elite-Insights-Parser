@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
@@ -33,7 +34,14 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Iron Hide (Ram)", IronHideRam, Source.Common, BuffClassification.Defensive, BuffImages.IronHide),
             new Buff("Iron Hide (Guard)", IronHideGuards, Source.Common, BuffClassification.Other, BuffImages.IronHide),
             new Buff("Siege Decay Timer", SiegeDecayTimer, Source.Common, BuffClassification.Other, BuffImages.SiegeDecayTimer),
-            new Buff("Presence of the Keep", PresenceOfTheKeep, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep I", PresenceOfTheKeepI, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep II", PresenceOfTheKeepII, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep III", PresenceOfTheKeepIII, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep IV", PresenceOfTheKeepIV, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep V", PresenceOfTheKeepV, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep VI", PresenceOfTheKeepVI, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep VII", PresenceOfTheKeepVII, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
+            new Buff("Presence of the Keep VIII", PresenceOfTheKeepVIII, Source.Common, BuffClassification.Support, BuffImages.PresenceOfTheKeep),
             new Buff("Oil Mastery III (Increased Armor)",IncreasedArmorOilMasteryIII, Source.Common, BuffClassification.Defensive, BuffImages.BurningOilMastery),
             new Buff("Chain Attached", ChainAttached, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ChainPull),
             new Buff("Hardened Gates", HardenedGates, Source.Common, BuffClassification.Other, BuffImages.HardenedGates),
@@ -52,6 +60,9 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Dragon Banner", DragonBanner, Source.Common, BuffClassification.Support, BuffImages.DragonBanner),
             new Buff("Turtle Banner", TurtleBanner, Source.Common, BuffClassification.Support, BuffImages.TurtleBanner),
             new Buff("Centaur Banner", CentaurBanner, Source.Common, BuffClassification.Support, BuffImages.CentaurBanner),
+            new Buff("Rending Thrash", RendingThrashCentaurBannerBuff, Source.Common, BuffClassification.Other, BuffImages.RendingThrashCentaurBanner),
+            new Buff("Crippling Strike", CripplingStrikeCentaurBannerBuff, Source.Common, BuffClassification.Other, BuffImages.CripplingStrikeCentaurBanner),
+            new Buff("Kick Dust", KickDustCentaurBannerBuff, Source.Common, BuffClassification.Other, BuffImages.KickDustCentaurBanner),
             new Buff("Structural Integrity", StructuralIntegrity, Source.Common, BuffClassification.Other, BuffImages.ThoughtlessPotion),
             new Buff("No Mount Use (Warclaw)", NoMountUseWarclaw, Source.Common, BuffClassification.Debuff, BuffImages.MountsDisabled),
             new Buff("Speed of the Battlefield", SpeedOfTheBattlefield, Source.Common, BuffClassification.Support, BuffImages.AllysAidFeatherfoot),
@@ -65,7 +76,10 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Commander's Presence", CommandersPresence, Source.Common, BuffClassification.Support, BuffImages.MightyBlow),
             new Buff("Inferno Hound", InfernoHound, Source.Common, BuffClassification.Other, BuffImages.HoundsOfBalthazar),
             new Buff("Smoke Form", SmokeForm, Source.Common, BuffClassification.Other, BuffImages.InkShot),
-            new Buff("Chilling Fog", ChillingFogBuff, Source.Common, BuffClassification.Debuff, BuffImages.FreezingGust),
+            new Buff("Chilling Fog", ChillingFog_HealingMistBuff, Source.Common, BuffClassification.Debuff, BuffImages.FreezingGust).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2024LonelyTowerFractalRelease),
+            new Buff("Healing Mist", ChillingFog_HealingMistBuff, Source.Common, BuffClassification.Defensive, BuffImages.HealingMistWvW).WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
+            new Buff("Banner Drop Warning", BannerDropWarning, Source.Common, BuffClassification.Other, BuffImages.Tracked),
+            new Buff("Greater Call of the Mists (WvW)", GreaterCallOfTheMistsWvW, Source.Common, BuffClassification.Other, BuffImages.GloriousFervor),
             // Edge of the Mists
             new Buff("Marked (Mists Arena)", MarkedMistsArena, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),
             new Buff("Marked (Red Sentry Turret)", MarkedSentryTurretRed, Source.Common, BuffClassification.Debuff, BuffImages.FireTrebuchet),
@@ -75,6 +89,10 @@ namespace GW2EIEvtcParser.EIData.Buffs
             new Buff("Overgrowth Bonus Tier 2", OvergrowthBonusTier2, Source.Common, BuffClassification.Support, BuffImages.InvokeLightning),
             new Buff("Overgrowth Bonus Tier 3", OvergrowthBonusTier3, Source.Common, BuffClassification.Support, BuffImages.InvokeLightning),
             new Buff("Koda's Armor", KodasArmor, Source.Common, BuffClassification.Support, BuffImages.KodasArmor),
+            // Guild Hall
+            new Buff("Guild Hall - PvE", GuildHallPvEMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallPvEMode),
+            new Buff("Guild Hall - sPvP", GuildHallsPvPMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallsPvPMode),
+            new Buff("Guild Hall - WvW", GuildHallWvWMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallWvWMode),
         };
     }
 }

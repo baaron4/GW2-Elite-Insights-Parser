@@ -1,0 +1,109 @@
+<template>
+    <div>
+        <ul class="nav nav-tabs">
+            <li v-if="itemModifiers.length > 0">
+                <a class="nav-link" :class="{active: displaymode === 0}" @click="displaymode = 0"> Gear Based Damage
+                    Modifiers </a>
+            </li>
+            <li v-if="commonModifiers.length > 0">
+                <a class="nav-link" :class="{active: displaymode === 1}" @click="displaymode = 1"> Shared Damage
+                    Modifiers </a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: displaymode === 2}" @click="displaymode = 2"> Class Based Damage
+                    Modifiers </a>
+            </li>
+        </ul>
+        <ul v-if="!targetless" class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 1" :class="{active: mode}">Target</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" @click="mode = 0" :class="{active: !mode }">All</a>
+            </li>
+        </ul>
+        <keep-alive>
+            <dmgmodifier-table-component v-if="displaymode === 0" :key="'gear' + extraID" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
+                :id="'damage-modifier-item-table' + extraID" :playerindices="null" :modifiers="itemModifiers"
+                :modifiersdata="dmgModifiersItemStats" :sum="true"></dmgmodifier-table-component>
+            <dmgmodifier-table-component v-if="displaymode === 1" :key="'common' + extraID" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets" :mode="mode"
+                :id="'damage-modifier-common-table' + extraID" :playerindices="null" :modifiers="commonModifiers"
+                :modifiersdata="dmgModifiersCommonStats" :sum="true"></dmgmodifier-table-component>
+            <dmgmodifier-persstats-component v-if="displaymode === 2" :key="'pers' + extraID" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets" :mode="mode" :incoming="incoming">
+            </dmgmodifier-persstats-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    function getDefaultDamageModifiersSubSubComponent(incoming, dmgModifiersItem, dmgModifiersCommon) {
+        let path = "Statistics/DamageModifiers/" + (incoming ? "IncomingDamageModifiers" : "OutgoingDamageModifiers");
+        if (!validateStartPath(path)) {
+            return dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[3];
+        switch (compo) {
+            case "GearBasedDamageModifiers":
+                return dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2;
+            case "SharedDamageModifiers":
+                return dmgModifiersCommon.length > 0 ? 1 : dmgModifiersItem.length > 0 ? 0 : 2;
+            case "ClassBasedDamageModifiers":
+                return 2;
+        }
+        return dmgModifiersItem.length > 0 ? 0 : dmgModifiersCommon.length > 0 ? 1 : 2;
+    }
+    Vue.component("dmgmodifier-stats-component", {
+        props: ['phaseindex', 'playerindex', 'activetargets', 'incoming'],
+        template: `${template}`,
+        data: function () {          
+            const dmgModifiersItem = this.incoming ?  logData.dmgIncModifiersItem :  logData.dmgModifiersItem;
+            const dmgModifiersCommon = this.incoming ?  logData.dmgIncModifiersCommon :  logData.dmgModifiersCommon;
+            return {
+                mode: logData.targetless ? 0 : 1,
+                targetless: logData.targetless,
+                displaymode: getDefaultDamageModifiersSubSubComponent(this.incoming, dmgModifiersItem, dmgModifiersCommon)
+            };
+        },
+        computed: {
+            extraID: function() {
+                return this.incoming ? 'inc' : '';
+            },
+            dmgModifiersItem: function() {
+                return this.incoming ?  logData.dmgIncModifiersItem :  logData.dmgModifiersItem;
+            },
+            dmgModifiersCommon: function() {
+                return this.incoming ?  logData.dmgIncModifiersCommon :  logData.dmgModifiersCommon;
+            },
+            dmgModifiersItemStats: function() {
+                return this.incoming ?  this.phase.dmgIncModifiersItem :  this.phase.dmgModifiersItem;
+            },
+            dmgModifiersCommonStats: function() {
+                return this.incoming ?  this.phase.dmgIncModifiersCommon :  this.phase.dmgModifiersCommon;
+            },
+            damageModMap: function() {
+                return this.incoming ?  logData.damageIncModMap :  logData.damageModMap;
+            },
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            commonModifiers: function () {
+                var modifiers = [];
+                for (var i = 0; i < this.dmgModifiersCommon.length; i++) {
+                    modifiers.push(this.damageModMap['d' + this.dmgModifiersCommon[i]]);
+                }
+                return modifiers;
+            },
+            itemModifiers: function () {
+                var modifiers = [];
+                for (var i = 0; i < this.dmgModifiersItem.length; i++) {
+                    modifiers.push(this.damageModMap['d' + this.dmgModifiersItem[i]]);
+                }
+                return modifiers;
+            }
+        }
+    });
+</script>

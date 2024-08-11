@@ -52,13 +52,14 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             BuffStack.Clear();
         }
 
+        protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
+        {
+            buffEvent.UpdateSimulator(this, false);
+        }
+
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
         {
-            BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-            if (toExtend == null)
-            {
-                throw new EIBuffSimulatorIDException("Extend has failed");
-            }
+            BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Extend has failed");
             toExtend.Extend(extension, src);
         }
 
@@ -85,7 +86,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                         {
                             BuffStackItem stackItem = BuffStack[i];
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Any())
+                            if (stackItem.Extensions.Count != 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {
@@ -121,7 +122,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 if (by == ParserHelper._unknownAgent)
                 {
                     WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
-                    if (toRemove.Extensions.Any())
+                    if (toRemove.Extensions.Count != 0)
                     {
                         foreach ((AgentItem src, long value) in toRemove.Extensions)
                         {
@@ -133,7 +134,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 else
                 {
                     WasteSimulationResult.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, time));
-                    if (toRemove.Extensions.Any())
+                    if (toRemove.Extensions.Count != 0)
                     {
                         foreach ((AgentItem src, long value) in toRemove.Extensions)
                         {
@@ -146,11 +147,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Reset(uint stackID, long toDuration)
         {
-            BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-            if (toDisable == null)
-            {
-                throw new EIBuffSimulatorIDException("Reset has failed");
-            }
+            BuffStackItemID toDisable = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Reset has failed");
             toDisable.Disable();
         }
 

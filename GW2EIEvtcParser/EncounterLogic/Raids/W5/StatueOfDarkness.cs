@@ -4,11 +4,11 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -81,10 +81,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            if (TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.EyeOfJudgement, fightData.FightStart, combatData, Targets) ||
+                TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID.EyeOfFate, fightData.FightStart, combatData, Targets))
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
+            return FightData.EncounterStartStatus.Normal;
+        }
+
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(ArcDPSEnums.TrashID.LightThieves);
@@ -99,7 +109,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static List<PhaseData> GetSubPhases(AbstractSingleActor eye, ParsedEvtcLog log)
         {
             var res = new List<PhaseData>();
-            BuffRemoveAllEvent det762Loss = log.CombatData.GetBuffData(Determined762).OfType<BuffRemoveAllEvent>().Where(x => x.To == eye.AgentItem).FirstOrDefault();
+            BuffRemoveAllEvent det762Loss = log.CombatData.GetBuffDataByIDByDst(Determined762, eye.AgentItem).OfType<BuffRemoveAllEvent>().FirstOrDefault();
             if (det762Loss != null)
             {
                 int count = 0;
@@ -115,7 +125,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         };
                         phase.AddTarget(eye);
                         res.Add(phase);
-                    } else
+                    }
+                    else
                     {
                         start = Math.Min(abe.Time, log.FightData.FightEnd);
                     }

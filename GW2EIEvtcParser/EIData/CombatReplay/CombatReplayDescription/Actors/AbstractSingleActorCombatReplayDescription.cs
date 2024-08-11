@@ -5,12 +5,16 @@ namespace GW2EIEvtcParser.EIData
 {
     public abstract class AbstractSingleActorCombatReplayDescription : AbstractCombatReplayDescription
     {
+        public long Start { get; protected set; }
+        public long End { get; protected set; }
         public string Img { get; }
         public int ID { get; }
         public IReadOnlyList<float> Positions { get; }
+        public IReadOnlyList<float> Angles { get; }
         public IReadOnlyList<long> Dead { get; private set; }
         public IReadOnlyList<long> Down { get; private set; }
         public IReadOnlyList<long> Dc { get; private set; }
+        public IReadOnlyList<long> Hide { get; }
         public IReadOnlyList<long> BreakbarActive { get; private set; }
 
         public long HitboxWidth { get; }
@@ -40,6 +44,8 @@ namespace GW2EIEvtcParser.EIData
             ID = actor.UniqueID;
             var positions = new List<float>();
             Positions = positions;
+            var angles = new List<float>();
+            Angles = angles;
             Type = GetActorType(actor, log);
             HitboxWidth = actor.AgentItem.HitboxWidth;
             foreach (Point3D pos in replay.PolledPositions)
@@ -47,6 +53,20 @@ namespace GW2EIEvtcParser.EIData
                 (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
                 positions.Add(x);
                 positions.Add(y);
+            }
+            foreach (Point3D facing in replay.PolledRotations)
+            {
+                angles.Add(-Point3D.GetZRotationFromFacing(facing));
+            }
+            if (replay.Hidden.Count != 0)
+            {
+                var hide = new List<long>();
+                foreach (Segment seg in replay.Hidden)
+                {
+                    hide.Add(seg.Start);
+                    hide.Add(seg.End);
+                }
+                Hide = hide;
             }
         }
         protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)

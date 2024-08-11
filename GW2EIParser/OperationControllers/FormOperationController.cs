@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GW2EIParserCommons;
+using static GW2EIParser.MainForm;
 
 namespace GW2EIParser
 {
@@ -24,20 +26,28 @@ namespace GW2EIParser
         private Task _task;
 
         private readonly DataGridView _dgv;
+        private readonly BindingSource _bdSrc;
         /// <summary>
         /// State of the button
         /// </summary>
         public string ButtonText { get; protected set; }
         /// <summary>
+        /// State of the reparse button
+        /// </summary>
+        public string ReParseText { get; protected set; }
+        /// <summary>
         /// Operation state
         /// </summary>
         public OperationState State { get; protected set; }
 
-        public FormOperationController(string location, string status, DataGridView dgv) : base(location, status)
+        public FormOperationController(string location, string status, DataGridView dgv, BindingSource bindingSource) : base(location, status)
         {
             ButtonText = "Parse";
             State = OperationState.Ready;
             _dgv = dgv;
+            bindingSource.Add(this);
+            _bdSrc = bindingSource;
+            SetReparseButtonState(false);
         }
 
         public void SetContext(CancellationTokenSource cancelTokenSource, Task task)
@@ -75,9 +85,21 @@ namespace GW2EIParser
             }
         }
 
+        private void SetReparseButtonState(bool onOff)
+        {
+            int rowIndex = _bdSrc.IndexOf(this);
+            ReParseText = onOff ? "Re-Parse" : "N/A";
+            if (rowIndex >= 0)
+            {
+                var reparseButton = (DataGridViewDisableButtonCell)_dgv.Rows[rowIndex].Cells["ReParseButtonState"];
+                reparseButton.Enabled = onOff;
+            }
+        }
+
         public void ToRunState()
         {
             ButtonText = "Cancel";
+            SetReparseButtonState(false);
             State = OperationState.Parsing;
             Status = "Parsing";
             InvalidateDataView();
@@ -91,6 +113,7 @@ namespace GW2EIParser
             }
             State = OperationState.Cancelling;
             ButtonText = "Cancelling";
+            SetReparseButtonState(false);
             _cancelTokenSource.Cancel();
             InvalidateDataView();
         }
@@ -109,6 +132,7 @@ namespace GW2EIParser
         {
             State = OperationState.Ready;
             ButtonText = "Parse";
+            SetReparseButtonState(false);
             Status = "Ready To Parse";
             InvalidateDataView();
         }
@@ -117,6 +141,7 @@ namespace GW2EIParser
         {
             State = OperationState.Complete;
             ButtonText = "Open";
+            SetReparseButtonState(true);
             FinalizeStatus("Parsing Successful - ");
             InvalidateDataView();
         }
@@ -125,6 +150,7 @@ namespace GW2EIParser
         {
             State = OperationState.UnComplete;
             ButtonText = "Parse";
+            SetReparseButtonState(false);
             FinalizeStatus("Parsing Failure - ");
             InvalidateDataView();
         }
@@ -133,6 +159,7 @@ namespace GW2EIParser
         {
             State = OperationState.Pending;
             ButtonText = "Cancel";
+            SetReparseButtonState(false);
             Status = "Pending";
             InvalidateDataView();
         }
@@ -141,6 +168,7 @@ namespace GW2EIParser
         {
             State = OperationState.Queued;
             ButtonText = "Cancel";
+            SetReparseButtonState(false);
             Status = "Queued";
             InvalidateDataView();
         }

@@ -5,12 +5,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -60,11 +59,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
-                TrashID.TemporalAnomaly,
+                TrashID.TemporalAnomalyArtsariiv,
                 TrashID.Spark,
                 TrashID.SmallArtsariiv,
                 TrashID.MediumArtsariiv,
@@ -78,11 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv));
-            if (artsariiv == null)
-            {
-                throw new MissingKeyActorsException("Artsariiv not found");
-            }
+            AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
             phases[0].AddTarget(artsariiv);
             if (!requirePhases)
             {
@@ -122,13 +117,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("W", new Point3D(9295.668f, 1450.060f)),
         };
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
-            if (artsariivs.Any())
+            if (artsariivs.Count != 0)
             {
                 artsariivs.Remove(artsariivs.MaxBy(x => x.LastAware - x.FirstAware));
-                if (artsariivs.Any())
+                if (artsariivs.Count != 0)
                 {
                     foreach (AgentItem subartsariiv in artsariivs)
                     {
@@ -137,7 +132,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 agentData.Refresh();
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (NPC trashMob in _trashMobs)
             {
                 if (trashMob.IsSpecies(TrashID.SmallArtsariiv))
@@ -177,7 +172,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetFightOffsetByFirstInvulFilter(fightData, agentData, combatData, (int)TargetID.Artsariiv, Determined762);
         }
@@ -190,19 +185,109 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Artsariiv not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
             SetSuccessByBuffCount(combatData, fightData, GetParticipatingPlayerAgents(target, combatData, playerAgents), target, Determined762, 4);
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            // Corporeal Reassignment
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+
+            // Corporeal Reassignment (skull)
             IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+
+            IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
+            switch (target.ID)
+            {
+                case (int)TargetID.Artsariiv:
+                    foreach (AnimatedCastEvent cast in casts)
+                    {
+                        switch (cast.SkillId)
+                        {
+                            case Obliterate:
+                                {
+                                    int castStart = (int)cast.Time;
+                                    int castEnd = castStart + 3160;
+                                    replay.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), Colors.Orange, 0.2, new AgentConnector(target)), castEnd);
+                                    (float, float)[][] positions = {
+                                    // positions taken from effects
+                                   new [] { (9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f) },
+                                   new [] { (10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f) },
+                                   new [] { (10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f) },
+                                   new [] { (10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f) },
+                                };
+                                    uint[] radius = { 400, 290, 180, 70 };
+                                    long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
+                                    for (int i = 0; i < 4; i++)
+                                    {
+                                        int start = castEnd + 560 * i;
+                                        int end = start + 2450;
+                                        if (start >= nextInvul)
+                                        {
+                                            break;
+                                        }
+                                        foreach ((float x, float y) in positions[i])
+                                        {
+                                            var position = new PositionConnector(new Point3D(x, y));
+                                            replay.AddDecorationWithGrowing(new CircleDecoration(radius[i], (start, end), Colors.Orange, 0.2, position), end);
+                                        }
+                                    }
+                                    break;
+                                }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            AddCorporealReassignmentDecorations(log);
+
+            // Beaming Smile
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmileIndicator, out IReadOnlyList<EffectEvent> beamIndicators))
+            {
+                foreach (EffectEvent effect in beamIndicators)
+                {
+                    int start = (int)effect.Time;
+                    int end = start + 2640;
+                    AddBeamingSmileDecoration(effect, (start, end), Colors.Orange, 0.2);
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmile, out IReadOnlyList<EffectEvent> beams))
+            {
+                foreach (EffectEvent effect in beams)
+                {
+                    int start = (int)effect.Time;
+                    int end = start + 300;
+                    AddBeamingSmileDecoration(effect, (start, end), Colors.Red, 0.2);
+                }
+            }
+        }
+
+        private void AddBeamingSmileDecoration(EffectEvent effect, (int, int) lifespan, Color color, double opacity)
+        {
+            const int length = 2500;
+            const int hitbox = 360;
+            const int offset = 60;
+            var rotation = new AngleConnector(effect.Rotation.Z);
+            GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f + offset), true);
+            EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, opacity, position).UsingRotationConnector(rotation));
+        }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+            res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, NovaLaunchSAK, NovaLaunchBuff));
+            return res;
         }
     }
 }

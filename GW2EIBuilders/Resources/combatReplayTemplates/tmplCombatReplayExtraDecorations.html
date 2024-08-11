@@ -2,37 +2,47 @@
     <div class="d-flex flex-column justify-content-center align-items-center" style="max-width: 500px;">           
         <h4>General Settings</h4>
         <div class="d-flex flex-row justify-content-center flex-wrap">
-            <div class="form-check mb-2 mr-2">
+            <div class="form-check mb-2 mr-2" :data-original-title="'Viewpoint will follow selected actor, as long as selected actor is drawn'">
+                <input type="checkbox" class="form-check-input" id="followCheck" 
+                    :checked="getAnimator().displaySettings.followSelected" v-on:change="getAnimator().toggleFollowSelected()">
+                <label class="form-check-label" for="followCheck">Follow Selected</label>
+            </div>
+            <div class="form-check mb-2 mr-2" :data-original-title="'Selected player in green, group in blue'">
                 <input type="checkbox" class="form-check-input" id="subgroupCheck" 
                     :checked="getAnimator().displaySettings.highlightSelectedGroup" v-on:change="getAnimator().toggleHighlightSelectedGroup()">
                 <label class="form-check-label" for="subgroupCheck">Highlight Selected Group</label>
             </div>
-            <div v-if="showSecondaryNPCs" class="form-check mb-2 mr-2">
+            <div v-if="showSecondaryNPCs" class="form-check mb-2 mr-2" :data-original-title="'Display not important NPCs in the arena'">
                 <input type="checkbox" class="form-check-input" id="trashCheck" 
                     :checked="getAnimator().displaySettings.displayTrashMobs" v-on:change="getAnimator().toggleTrashMobs()">
                 <label class="form-check-label" for="trashCheck">Secondary NPCs</label>
             </div> 
-            <div v-if="showMechanics" class="form-check mb-2 mr-2">
+            <div v-if="showMechanics" class="form-check mb-2 mr-2" :data-original-title="'Encounter mechanics'">
                 <input type="checkbox" class="form-check-input" id="mechanicsCheck" 
                     :checked="getAnimator().displaySettings.displayMechanics" v-on:change="getAnimator().toggleMechanics()">
                 <label class="form-check-label" for="mechanicsCheck">Mechanics</label>
             </div>
-            <div v-if="showSkills" class="form-check mb-2 mr-2">
+            <div v-if="showSquadMarkers" class="form-check mb-2 mr-2" :data-original-title="'Squad markers, on the ground and on players'">
+                <input type="checkbox" class="form-check-input" id="markersCheck" 
+                    :checked="getAnimator().displaySettings.displaySquadMarkers" v-on:change="getAnimator().toggleSquadMarkers()">
+                <label class="form-check-label" for="markersCheck">Markers</label>
+            </div>
+            <div v-if="showSkills" class="form-check mb-2 mr-2" :data-original-title="'Player skills'">
                 <input type="checkbox" class="form-check-input" id="skillsCheck" 
                     :checked="getAnimator().displaySettings.displaySkillMechanics" v-on:change="getAnimator().toggleSkills()">
                 <label class="form-check-label" for="skillsCheck">Skills</label>
             </div>
-            <div class="form-check mb-2 mr-2">
+            <div class="form-check mb-2 mr-2" :data-original-title="'Use the in game hitbox size'">
                 <input type="checkbox" class="form-check-input" id="actorHitboxCheck" 
                     :checked="getAnimator().displaySettings.useActorHitboxWidth" v-on:change="getAnimator().toggleUseActorHitboxWidth()">
                 <label class="form-check-label" for="actorHitboxCheck">Use Hitbox Size</label>
             </div> 
-            <div class="form-check mb-2 mr-2">
+            <div class="form-check mb-2 mr-2" :data-original-title="'Display all minions'">
                 <input type="checkbox" class="form-check-input" id="allMinionsCheck" 
                     :checked="getAnimator().displaySettings.displayAllMinions" v-on:change="getAnimator().toggleDisplayAllMinions()">
                 <label class="form-check-label" for="allMinionsCheck">All Minions</label>
             </div>     
-            <div class="form-check mb-2 mr-2">
+            <div class="form-check mb-2 mr-2" :data-original-title="'Display current selection minions'">
                 <input type="checkbox" class="form-check-input" id="selectedMinionsCheck" 
                     :checked="getAnimator().displaySettings.displaySelectedMinions" v-on:change="getAnimator().toggleDisplaySelectedMinions()">
                 <label class="form-check-label" for="selectedMinionsCheck">Selected's Minions</label>
@@ -113,6 +123,7 @@
             return {
                 showSkills: animator.skillMechanicActorData.length > 0,
                 showMechanics: animator.overheadActorData.length + animator.mechanicActorData.length > 0,
+                showSquadMarkers: animator.squadMarkerData.length + animator.overheadSquadMarkerData.length > 0,
                 showSecondaryNPCs: animator.trashMobData.size > 0,
             };
         },

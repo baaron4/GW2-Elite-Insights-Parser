@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
-using static GW2EIJSON.JsonLog;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities
 {
@@ -63,17 +58,9 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                     actorCombatReplayData.Down = jsonDowns;
                 }
                 //
-                IReadOnlyList<GenericDecoration> decorations = actor.GetCombatReplayDecorations(log);
-                foreach (GenericDecoration decoration in decorations)
-                {
-                    GenericDecorationCombatReplayDescription decDescription = decoration.GetCombatReplayDescription(map, log);
-                    if (decDescription is ActorOrientationDecorationCombatReplayDescription actorOrientationDescription)
-                    {
-                        actorCombatReplayData.Orientations = actorOrientationDescription.FacingData;
-                    }
-                }
+                actorCombatReplayData.Orientations = description.Angles;
             }
-            
+
             //
             return actorCombatReplayData;
         }

@@ -1,0 +1,129 @@
+<template>
+    <div class="card fight-summary" style="min-width: 350px;">
+        <h3 class="card-header text-center">{{ encounter.name }}</h3>
+        <div class="card-body container">
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <div class="d-flex flex-column mr-3 justify-content-center">
+                    <div v-if="instanceBuffs" class="d-flex flex-row justify-content-around mb-1">
+                        <span v-for="instanceBuff in instanceBuffs">
+                            {{instanceBuff.stack > 1 ? instanceBuff.stack + ' x' : ''}}
+                            <img :data-original-title="instanceBuff.buff.name + (instanceBuff.buff.description ? '<br> ' + instanceBuff.buff.description : '')"
+                                 :src="instanceBuff.buff.icon" class="icon icon-hover" />
+                        </span>
+                    </div>
+                    <img class="encounter-icon" :src="encounter.icon" :alt="encounter.name">
+                </div>
+                <div class="ml-3 d-flex flex-column justify-content-center">
+                    <div v-if="!wvw" class="mb-2" v-for="target in encounter.targets">
+                        <div class="small" style="text-align:center;">
+                            {{target.name}}
+                        </div>
+                        <div v-if="target.health > 0" class="super-small" style="text-align:center;">
+                            {{ target.health }} Health
+                        </div>
+                        <div :data-original-title="healthRemaining(target)">
+                            <div :style="{'background': getGradient(target), 'height': '10px', 'width': '100%', 'border-radius': '5px'}">
+                            </div>
+                            <div v-if="target.hpLeftPercent > 0" class="small" style="text-align:center;">
+                                {{ target.hpLeftPercent }}% health remaining
+                            </div>
+                            <div v-if="target.barrierLeftPercent > 0" class="small" style="text-align:center;">
+                                {{ target.barrierLeftPercent }}% barrier remaining
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="!wvw" class="mb-2 text" :class="resultStatus.class">
+                        Result: {{resultStatus.text}}
+                    </div>
+                    <div class="mb-2">Duration: {{ encounter.duration }}</div>
+                    <div class="mb-2" v-if="fractalScale > 0">Fractal Scale: {{ fractalScale }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    Vue.component("encounter-component", {
+        props: [],
+        template: `${template}`,
+        data: function () {
+            return {
+                wvw: logData.wvw
+            };
+        },
+        methods: {
+            getGradient: function (target) {
+                var hpLeftPercent = target.hpLeftPercent;
+                var healthAndBarrier = hpLeftPercent + target.barrierLeftPercent;
+                if (healthAndBarrier > 100) {
+                    // So that barrier remains fully visible like in game
+                    hpLeftPercent -= healthAndBarrier - 100;
+                    healthAndBarrier = 100;
+                }
+                var red = "red " + hpLeftPercent + "%";
+                var yellow = "yellow " + hpLeftPercent + "% " + healthAndBarrier + "%";
+                var green = "green " + healthAndBarrier + "%";        
+                var template = `linear-gradient(to right, ${red}, ${yellow}, ${green})`;
+                return template;
+            },
+            healthRemaining: function (target) {
+                var hpLeft = target.hpLeft;
+                var barrierLeft = target.barrierLeft;
+                if (hpLeft > 0 && barrierLeft > 0) {
+                    return 'Health: ' + hpLeft + '<br>Barrier: ' + barrierLeft;
+                }
+                else if (hpLeft > 0 && barrierLeft == 0) {
+                    return 'Health: ' + hpLeft;
+                }
+                else if (barrierLeft > 0) {
+                    return 'Barrier: ' + barrierLeft;
+                }
+                return false;
+            },
+        },
+        computed: {
+            encounter: function () {
+                var targets = [];
+                var mainPhase = logData.phases[0];
+                if (!logData.targetless) {
+                    for (var i = 0; i < mainPhase.targets.length; i++) {
+                        if (mainPhase.secondaryTargets[i]) {
+                            continue;
+                        }
+                        if (targets.length >= 10) {
+                            break;
+                        }
+                        var targetIndex = mainPhase.targets[i];
+                        var targetData = logData.targets[targetIndex];
+                        targets.push(targetData);
+                    }
+                }
+
+                var encounter = {
+                    name: logData.fightName,
+                    icon: logData.fightIcon,
+                    duration: logData.encounterDuration,
+                    targets: targets
+                };
+                return encounter;
+            },
+            fractalScale: function () {
+                return logData.fractalScale;
+            },
+            resultStatus: function () {
+                return logData.success ? { text: 'Success', class: ["text-success"] } : { text: 'Failure', class: ["text-warning"] };
+            },
+            instanceBuffs: function () {
+                if (logData.instanceBuffs.length == 0) {
+                    return null;
+                }
+                var res = [];
+                for (var i = 0; i < logData.instanceBuffs.length; i++) {
+                    res.push({buff: findSkill(true, logData.instanceBuffs[i][0]), stack: logData.instanceBuffs[i][1]});
+                }
+                return res;
+            },
+        }
+    });
+</script>

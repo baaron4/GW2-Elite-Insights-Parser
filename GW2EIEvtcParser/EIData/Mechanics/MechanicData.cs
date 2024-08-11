@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EIData
         internal MechanicData(List<Mechanic> fightMechanics)
         {
             var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
-            var errorMechanicNaming= new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
+            var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
             foreach (Mechanic m in fightMechanics.OrderBy(x => !x.IsAchievementEligibility))
             {
                 {
@@ -127,7 +127,7 @@ namespace GW2EIEvtcParser.EIData
             return GetMechanicLogs(log, mech, start, end).Where(x => x.Actor == actor).ToList();
         }
 
-        private void ComputeMechanicData(long start, long end)
+        private void ComputeMechanicData(ParsedEvtcLog log, long start, long end)
         {
             var presentMechanics = new HashSet<Mechanic>();
             var presentOnEnemyMechanics = new HashSet<Mechanic>();
@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EIData
             var enemyHash = new HashSet<AbstractSingleActor>();
             foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
             {
-                if (pair.Value.Any(x => x.Time >= start && x.Time <= end))
+                if (pair.Key.KeepIfEmpty(log) || pair.Value.Any(x => x.Time >= start && x.Time <= end))
                 {
                     presentMechanics.Add(pair.Key);
                     if (pair.Key.ShowOnTable)
@@ -149,7 +149,7 @@ namespace GW2EIEvtcParser.EIData
                             presentOnFriendliesMechanics.Add(pair.Key);
                         }
                     }
-                    
+
                 }
             }
             // ready enemy list
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (MechanicEvent mechanicEvent in _mechanicLogs[m].Where(x => x.Time >= start && x.Time <= end))
                 {
-                   enemyHash.Add(mechanicEvent.Actor);
+                    enemyHash.Add(mechanicEvent.Actor);
                 }
             }
             _presentMechanics.Set(start, end, presentMechanics);
@@ -171,7 +171,7 @@ namespace GW2EIEvtcParser.EIData
             ProcessMechanics(log);
             if (!_presentOnEnemyMechanics.HasKeys(start, end))
             {
-                ComputeMechanicData(start, end);
+                ComputeMechanicData(log, start, end);
             }
             return _presentOnEnemyMechanics.Get(start, end);
         }
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EIData
             ProcessMechanics(log);
             if (!_presentOnFriendliesMechanics.HasKeys(start, end))
             {
-                ComputeMechanicData(start, end);
+                ComputeMechanicData(log, start, end);
             }
             return _presentOnFriendliesMechanics.Get(start, end);
         }
@@ -189,7 +189,7 @@ namespace GW2EIEvtcParser.EIData
             ProcessMechanics(log);
             if (!_presentMechanics.HasKeys(start, end))
             {
-                ComputeMechanicData(start, end);
+                ComputeMechanicData(log, start, end);
             }
             return _presentMechanics.Get(start, end);
         }
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EIData
             ProcessMechanics(log);
             if (!_enemyList.HasKeys(start, end))
             {
-                ComputeMechanicData(start, end);
+                ComputeMechanicData(log, start, end);
             }
             return _enemyList.Get(start, end);
         }

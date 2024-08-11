@@ -111,8 +111,8 @@ namespace GW2EIEvtcParser.EIData
                 {
                     if (!buffIDs.Contains(buffInfoEvent.BuffID))
                     {
-                        operation.UpdateProgressWithCancellationCheck("Creating nourishement " + buffInfoEvent.BuffID);
-                        currentBuffs.Add(CreateCustomBuff("Unknown Nourishment", buffInfoEvent.BuffID, "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png", buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
+                        operation.UpdateProgressWithCancellationCheck("Parsing: Creating nourishement " + buffInfoEvent.BuffID);
+                        currentBuffs.Add(CreateCustomBuff("Parsing: Unknown Nourishment", buffInfoEvent.BuffID, "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png", buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
                     }
                 }
             }
@@ -142,7 +142,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return x.First();
             });
-            operation.UpdateProgressWithCancellationCheck("Adjusting Buffs");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Adjusting Buffs");
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
             foreach (Buff buff in currentBuffs)
             {
@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         if (formula.Attr1 == BuffAttribute.Unknown)
                         {
-                            operation.UpdateProgressWithCancellationCheck("Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds, buff));
+                            operation.UpdateProgressWithCancellationCheck("Parsing: Unknown Formula for " + buff.Name + ": " + formula.GetDescription(true, BuffsByIds, buff));
                         }
                     }
                 }
@@ -162,6 +162,37 @@ namespace GW2EIEvtcParser.EIData
             BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
             //
             _buffSourceFinder = GetBuffSourceFinder(combatData, new HashSet<long>(BuffsByClassification[BuffClassification.Boon].Select(x => x.ID)));
+            // Band aid for the stack type 0 situation
+            if (combatData.HasStackIDs)
+            {
+                var stackType0Buffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss).ToList();
+                foreach (Buff buff in stackType0Buffs)
+                {
+                    IReadOnlyList<AbstractBuffEvent> buffData = combatData.GetBuffData(buff.ID);
+                    var buffDataByDst = buffData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+                    foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in buffDataByDst)
+                    {
+                        var appliesPerInstanceID = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                        var removeSinglesPerInstanceID = pair.Value.OfType<BuffRemoveSingleEvent>().Where(x => !x.OverstackOrNaturalEnd).GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                        foreach (KeyValuePair<uint, List<BuffRemoveSingleEvent>> removePair in removeSinglesPerInstanceID)
+                        {
+                            if (appliesPerInstanceID.TryGetValue(removePair.Key, out List<BuffApplyEvent> applyList))
+                            {
+                                foreach (BuffRemoveSingleEvent remove in removePair.Value)
+                                {
+                                    BuffApplyEvent apply = applyList.LastOrDefault(x => x.Time <= remove.Time);
+                                    if (apply != null && apply.OriginalAppliedDuration == remove.RemovedDuration)
+                                    {
+                                        int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;
+                                        int elapsedTime = (int)(remove.Time - apply.Time);
+                                        remove.OverrideRemovedDuration(remove.RemovedDuration - activeTime - elapsedTime);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public bool TryGetBuffByName(string name, out Buff buff)

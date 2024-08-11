@@ -5,12 +5,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -37,7 +36,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstBuffApplyMechanic(BendingChaos, "Bending Chaos", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Button1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
             new PlayerDstBuffApplyMechanic(ShiftingChaos, "Shifting Chaos", new MechanicPlotlySetting(Symbols.TriangleNEOpen,Colors.Yellow), "Button2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
             new PlayerDstBuffApplyMechanic(TwistingChaos, "Twisting Chaos", new MechanicPlotlySetting(Symbols.TriangleNWOpen,Colors.Yellow), "Button3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
-            new PlayerDstBuffApplyMechanic(InterventionSAK, "Intervention SAK", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield","Intervention (got Special Action Key)", "Shield",0),
+            new PlayerDstBuffApplyMechanic(InterventionSkillOwnerBuff, "Intervention SAK", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Shield","Intervention (got Special Action Key)", "Shield",0),
             new PlayerDstBuffApplyMechanic(GravityWellXera, "Gravity Well", new MechanicPlotlySetting(Symbols.CircleXOpen,Colors.Magenta), "Gravity Half","Half-platform Gravity Well", "Gravity Well",4000),
             new PlayerDstBuffApplyMechanic(HerosDeparture, "Hero's Depature", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "TP Out","Hero's Departure (Teleport to Platform)","TP",0),
             new PlayerDstBuffApplyMechanic(HerosReturn, "Hero's Return", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "TP Back","Hero's Return (Teleport back)", "TP back",0),
@@ -61,18 +60,22 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (1920, 12160, 2944, 14464)*/);
         }
 
+        internal override List<InstantCastFinder> GetInstantCastFinders()
+        {
+            return new List<InstantCastFinder>()
+            {
+                new EffectCastFinder(InterventionSAK, EffectGUIDs.XeraIntervention1),
+            };
+        }
+
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
-            AbstractSingleActor mainTarget = GetMainTarget();
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Xera not found");
-            }
+            AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
             var res = new List<AbstractBuffEvent>();
             if (_xeraSecondPhaseStartTime != 0)
             {
-                res.Add(new BuffRemoveAllEvent(mainTarget.AgentItem, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), 1, int.MaxValue));
-                res.Add(new BuffRemoveManualEvent(mainTarget.AgentItem, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762)));
+                res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), ArcDPSEnums.IFF.Unknown, 1, int.MaxValue));
+                res.Add(new BuffRemoveManualEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), ArcDPSEnums.IFF.Unknown));
             }
             return res;
         }
@@ -94,11 +97,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             long fightEnd = log.FightData.FightEnd;
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = GetMainTarget();
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Xera not found");
-            }
+            AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
             phases[0].AddTarget(mainTarget);
             if (requirePhases)
             {
@@ -142,30 +141,37 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
         {
-            AbstractBuffEvent determined = log.CombatData.GetBuffData(Determined762).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
-            if (determined == null)
-            {
-                determined = log.CombatData.GetBuffData(SpawnProtection).FirstOrDefault(x => x.To == xera.AgentItem && x is BuffApplyEvent);
-            }
+            AbstractBuffEvent determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
             return determined;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            AgentItem target = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (target == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem xera))
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
             // enter combat
-            CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(target) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+            CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
             if (enterCombat != null)
             {
-                AgentItem fakeXera = agentData.GetNPCsByID(ArcDPSEnums.TrashID.FakeXera).FirstOrDefault();
-                if (fakeXera != null)
+                if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.FakeXera, out AgentItem fakeXera))
                 {
                     _hasPreEvent = true;
                     long encounterStart = fakeXera.LastAware;
+                    CombatItem death = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ChangeDead && x.SrcMatchesAgent(fakeXera));
+                    if (death != null)
+                    {
+                        encounterStart = death.Time + 1000;
+                    } 
+                    else
+                    {
+                        CombatItem exitCombat = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(fakeXera));
+                        if (exitCombat != null)
+                        {
+                            encounterStart = exitCombat.Time + 1000;
+                        }
+                    }
                     _xeraFirstPhaseStart = enterCombat.Time - encounterStart;
                     return encounterStart;
                 }
@@ -174,21 +180,20 @@ namespace GW2EIEvtcParser.EncounterLogic
             return GetGenericFightOffset(fightData);
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool needsRefresh = false;
             bool needsDummy = true;
             // find target
-            AgentItem firstXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera).FirstOrDefault();
-            if (firstXera == null)
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem firstXera))
             {
                 throw new MissingKeyActorsException("Xera not found");
             }
             _xeraFirstPhaseEndTime = firstXera.LastAware;
             //
-            var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && x.DstAgent > 0).ToList();
+            var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).ToList();
             //
-            var bloodstoneFragments = maxHPUpdates.Where(x => x.DstAgent == 104580).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneFragments)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -196,7 +201,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsRefresh = true;
             }
             //
-            var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.DstAgent == 343620).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsMainFight)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -204,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsRefresh = true;
             }
             //
-            var bloodstoneShardsButton = maxHPUpdates.Where(x =>  x.DstAgent == 597600).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsButton)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -213,7 +218,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsDummy = false;
             }
             //
-            var bloodstoneShardsRift = maxHPUpdates.Where(x =>  x.DstAgent == 747000).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+            var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
             foreach (AgentItem gadget in bloodstoneShardsRift)
             {
                 gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -222,7 +227,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 needsDummy = false;
             }
             //
-            var chargedBloodStones = maxHPUpdates.Where(x => x.DstAgent == 74700).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
+            var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
             foreach (AgentItem gadget in chargedBloodStones)
             {
                 if (!combatData.Any(x => x.IsDamage() && x.DstMatchesAgent(gadget)))
@@ -243,8 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 agentData.Refresh();
             }
             // find split
-            AgentItem secondXera = agentData.GetNPCsByID(ArcDPSEnums.TargetID.Xera2).FirstOrDefault();
-            if (secondXera != null)
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera2, out AgentItem secondXera))
             {
                 CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
                 if (move != null)
@@ -259,15 +263,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                 RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
             }
             ComputeFightTargets(agentData, combatData, extensions);
-
-            if (_xeraSecondPhaseStartTime > 0)
+            // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
+            AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
+            mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
             {
-                AbstractSingleActor mainTarget = GetMainTarget();
-                if (mainTarget == null)
-                {
-                    throw new MissingKeyActorsException("Xera not found");
-                }
-                mainTarget.SetManualHealth(24085950);
+                (22611300, 100),
+                (25560600, 50)
+            });
+        }
+
+        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+        {
+            // We expect pre event with logs with LogStartNPCUpdate events
+            if (!_hasPreEvent && combatData.GetLogNPCUpdateEvents().Any())
+            {
+                return FightData.EncounterStartStatus.NoPreEvent;
+            }
+            else
+            {
+                return FightData.EncounterStartStatus.Normal;
             }
         }
 
@@ -308,7 +322,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var summon = cls.Where(x => x.SkillId == SummonFragments).ToList();
                     foreach (AbstractCastEvent c in summon)
                     {
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 180, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.3)", new AgentConnector(target)));
+                        replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    }
+                    if (_xeraFirstPhaseEndTime != 0)
+                    {
+                        replay.Hidden.Add(new Segment(_xeraFirstPhaseEndTime, _xeraSecondPhaseStartTime > 0 ? _xeraSecondPhaseStartTime - 500 : log.FightData.LogEnd));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.ChargedBloodstone:
@@ -324,7 +342,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.BloodstoneFragment:
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), "rgba(255, 155, 0, 0.2)", new AgentConnector(target)));
+                    replay.Decorations.Add(new CircleDecoration(760, ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), Colors.LightOrange, 0.2, new AgentConnector(target)));
                     break;
                 default:
                     break;
@@ -333,6 +351,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
             // Derangement - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red
             IEnumerable<Segment> derangements = player.GetBuffStatus(log, Derangement, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in derangements)
@@ -348,6 +367,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else if (segment.Value >= 30)
                 {
                     replay.AddOverheadIcon(segment, player, ParserIcons.DerangementSilverOverhead);
+                }
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Intervention Bubble
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out IReadOnlyList<EffectEvent> intervention))
+            {
+                foreach (EffectEvent effect in intervention)
+                {
+                    // Effect has duration of 4294967295 but the skill lasts only 6000
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
+                    var circle = new CircleDecoration(240, lifespan, Colors.Yellow, 0.3, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.LightBlue, 0.4));
                 }
             }
         }

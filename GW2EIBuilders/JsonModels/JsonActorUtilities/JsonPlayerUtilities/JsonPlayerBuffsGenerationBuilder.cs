@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData;
-using Newtonsoft.Json;
+﻿using GW2EIEvtcParser.EIData;
 using static GW2EIJSON.JsonPlayerBuffsGeneration;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
@@ -12,13 +10,15 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities
     {
         public static JsonBuffsGenerationData BuildJsonBuffsGenerationData(FinalActorBuffs stats)
         {
-            var jsonBuffsGenerationData = new JsonBuffsGenerationData();
-            jsonBuffsGenerationData.Generation = stats.Generation;
-            jsonBuffsGenerationData.Overstack = stats.Overstack;
-            jsonBuffsGenerationData.Wasted = stats.Wasted;
-            jsonBuffsGenerationData.UnknownExtended = stats.UnknownExtended;
-            jsonBuffsGenerationData.Extended = stats.Extended;
-            jsonBuffsGenerationData.ByExtension = stats.ByExtension;
+            var jsonBuffsGenerationData = new JsonBuffsGenerationData
+            {
+                Generation = stats.Generation,
+                Overstack = stats.Overstack,
+                Wasted = stats.Wasted,
+                UnknownExtended = stats.UnknownExtended,
+                Extended = stats.Extended,
+                ByExtension = stats.ByExtension
+            };
             return jsonBuffsGenerationData;
         }
 

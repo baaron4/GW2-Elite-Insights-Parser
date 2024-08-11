@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -53,7 +52,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         {
             Start += startShift;
             Duration -= durationShift;
-            if (Duration == 0 && Extensions.Any())
+            if (Duration == 0 && Extensions.Count != 0)
             {
                 (AgentItem src, long value) = Extensions.First();
                 Extensions.RemoveAt(0);

@@ -15,32 +15,42 @@
                             <th class="name-cr-cell text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">
                                 Name
                             </th>
-                            <th class="damage-dist-cell" :class="getHeaderClass('All')" @click="sortBy('All')">
+                            <th class="damage-cr-cell-small" :class="getHeaderClass('All')" @click="sortBy('All')">
                                 All
+                            </th>
+                            <th class="damage-cr-cell-small" :class="getHeaderClass('Taken')" @click="sortBy('Taken')">
+                                Taken
                             </th>
                             <th v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)"
                                 class="damage-cr-cell" :class="getHeaderClass('Target', colIndex)" @click="sortBy('Target', colIndex)">
-                                <span class="ellipsis" :title="col.name">
+                                <span class="cr-ellipsis" :data-original-title="col.name">
                                     {{col.name}}
                                 </span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(row, rowIndex) in sortData(tableData.rows)" :class="{active: row.player.uniqueID === playerid}" v-show="isInRowPage(rowIndex)">
-                            <td :class="getBodyClass('Prof')" :data-original-title="row.player.profession">
+                        <tr v-for="(row, rowIndex) in sortData(tableData.rows)" 
+                            :class="{active: row.player.uniqueID === playerid}" 
+                            v-show="isInRowPage(rowIndex)" @click="select(row.player)"
+                            @mousedown="startSelect"
+                            style="cursor: pointer;">
+                            <td :class="getBodyClass('Prof')" :title="row.player.profession">
                                 <img :src="row.player.icon" :alt="row.player.profession" class="icon">
                                 <span style="display:none">
                                     {{row.player.profession}}
                                 </span>
                             </td>
                             <td class="text-left" :class="getBodyClass('Name')">
-                                <span class="ellipsis" :title="row.player.acc">
+                                <span class="cr-ellipsis" :title="row.player.name + ' - ' + row.player.acc">
                                     {{row.player.name}}
                                 </span>
                             </td>
                             <td :class="getBodyClass('All')">
                                 {{tableRound(row.dps[row.dps.length - 1])}}
+                            </td>
+                            <td :class="getBodyClass('Taken')">
+                                {{tableRound(row.dps[row.dps.length - 2])}}
                             </td>
                             <td v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)"
                                 :class="getBodyClass('Target', colIndex)">
@@ -56,6 +66,9 @@
                             </td>
                             <td>
                                 {{tableRound(sum.dps[sum.dps.length - 1])}}
+                            </td>
+                            <td>
+                                {{tableRound(sum.dps[sum.dps.length - 2])}}
                             </td>
                             <td v-if="!targetless" v-for="(col, colIndex) in tableData.cols" v-show="isInColPage(colIndex)">
                                 {{tableRound(sum.dps[colIndex])}}
@@ -81,6 +94,7 @@
                     index: -1,
                     key: "All"
                 },
+                mouseDownStart: 0,
             };
         },
         methods: {
@@ -94,24 +108,27 @@
                 return this.getHeaderClassBase(this.sortdata, key, index);
             },
             getBodyClass: function (key, index) {
-                var classes = this.getBodyClassBase(this.sortdata, key, index);
+                const classes = this.getBodyClassBase(this.sortdata, key, index);
                 return classes;
             },
             sortData: function (rows) {
-                var order = this.sortdata.order === "asc" ? 1 : -1;
+                const order = this.sortdata.order === "asc" ? 1 : -1;
                 switch (this.sortdata.key) {
                     case "Prof":
-                        rows.sort((x, y) => order * x.player.profession.localeCompare(y.player.profession));
+                        rows.sort((x, y) => order * this.sortByPlayerProfession(x, y) || this.sortByPlayerName(x, y));
                         break;
                     case "Name":
-                        rows.sort((x, y) => order * x.player.name.localeCompare(y.player.name));
+                        rows.sort((x, y) => order * this.sortByPlayerName(x, y));
                         break;
                     case "All":
-                        rows.sort((x, y) => order * (x.dps[x.dps.length - 1] - y.dps[y.dps.length - 1]));
+                        rows.sort((x, y) => order * (x.dps[x.dps.length - 1] - y.dps[y.dps.length - 1]) || this.sortByPlayerName(x, y));
+                        break;
+                    case "Taken":
+                        rows.sort((x, y) => order * (x.dps[x.dps.length - 2] - y.dps[y.dps.length - 2])) || this.sortByPlayerName(x, y);
                         break;
                     case "Target":
-                        var index = this.sortdata.index;
-                        rows.sort((x, y) => order * (x.dps[index] - y.dps[index]));
+                        const index = this.sortdata.index;
+                        rows.sort((x, y) => order * (x.dps[index] - y.dps[index]) || this.sortByPlayerName(x, y));
                         break;
                     default:
                         return null;
@@ -119,22 +136,30 @@
                 }
                 return rows;
             },
+            startSelect() {
+                this.mouseDownStart = Date.now();
+            },
+            select(player) {
+                const mouseUp = Date.now();
+                if (mouseUp - this.mouseDownStart < 150) {
+                    animator.selectActor(player.uniqueID);
+                }
+            }
         },
         created() {
-            var i, cacheID;
-            var allTargets = [];
-            for (var j = 0; j < this.targets.length; j++) {
-                var activeTargets = [j];
+            const allTargets = [];
+            for (let j = 0; j < this.targets.length; j++) {
+                const activeTargets = [j];
                 allTargets.push(j);
-                cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, activeTargets, 0, null);
+                const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, activeTargets, 0, null);
                 // compute dps for all players
-                for (i = 0; i < logData.players.length; i++) {
+                for (let i = 0; i < logData.players.length; i++) {
                     computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
                 }
             }
-            cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
+            const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
             // compute dps for all players
-            for (i = 0; i < logData.players.length; i++) {
+            for (let i = 0; i < logData.players.length; i++) {
                 computePlayerDPS(logData.players[i], this.graph[i].damage, this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode);
             }
         },
@@ -178,65 +203,62 @@
                 }
             },
             tableData: function () {
-                var rows = [];
-                var cols = [];
-                var sums = [];
-                var total = [];
-                var tS = this.timeToUse / 1000.0;
-                var curTime = Math.floor(tS);
-                var nextTime = curTime + 1;
-                var dur = Math.floor(this.phase.end - this.phase.start);
+                const rows = [];
+                const cols = [];
+                const sums = [];
+                const total = [];
+                const tS = this.timeToUse / 1000.0;
+                const curTime = Math.floor(tS);
+                let nextTime = curTime + 1;
+                const dur = Math.floor(this.phase.end - this.phase.start);
                 if (nextTime == dur + 1 && this.phase.needsLastPoint) {
                     nextTime = this.phase.end - this.phase.start;
                 }
-                var i, j;
-                var allTargets = [];
-                for (j = 0; j < this.targets.length; j++) {
-                    var target = logData.targets[this.targets[j]];
+                const allTargets = [];
+                for (let j = 0; j < this.targets.length; j++) {
+                    const target = logData.targets[this.targets[j]];
                     allTargets.push(j);
                     cols.push(target);
                 }
-                var damageArrayToUse = this.damageGraphName;
-                for (i = 0; i < this.graph.length; i++) {
-                    var cacheID, data, cur, next;
-                    var player = logData.players[i];
-                    var graphData = this.graph[i];
-                    var dps = [];
-                    // targets
-                    for (j = 0; j < this.targets.length; j++) {
-                        var activeTargets = [j];
-                        cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, activeTargets, 0, null);
-                        data = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps.target;
-                        cur = data[curTime];
-                        next = data[curTime + 1];
+                const damageArrayToUse = this.damageGraphName;
+                for (let i = 0; i < this.graph.length; i++) {
+                    const player = logData.players[i];
+                    const graphData = this.graph[i];
+                    const dps = [];
+                    function doCell(data, index) {
+                        const cur = data[curTime];
+                        const next = data[curTime + 1];
                         if (typeof next !== "undefined") {
-                            dps[j] = cur + (tS - curTime) * (next - cur) / (nextTime - curTime);
+                            dps[index] = cur + (tS - curTime) * (next - cur) / (nextTime - curTime);
                         } else {
-                            dps[j] = cur;
+                            dps[index] = cur;
                         }
                     }
-                    cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
-                    data = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps.total;
-                    cur = data[curTime];
-                    next = data[curTime + 1];
-                    if (typeof next !== "undefined") {
-                        dps[j] = cur + (tS - curTime) * (next - cur) / (nextTime - curTime);
-                    } else {
-                        dps[j] = cur;
+                    // targets
+                    for (let j = 0; j < this.targets.length; j++) {
+                        const activeTargets = [j];
+                        const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, activeTargets, 0, null);
+                        const targetData = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, activeTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps.target;
+                        doCell(targetData, j);
                     }
-                    for (j = 0; j < dps.length; j++) {
+                    const cacheID = getDPSGraphCacheID(this.graphdata.dpsmode, this.graphdata.damagemode, this.graphdata.graphmode, allTargets, 0, null);
+                    const allData = computePlayerDPS(player, graphData[damageArrayToUse], this.graphdata.dpsmode, null, allTargets, cacheID, this.phase.times, this.graphdata.graphmode, this.graphdata.damagemode).dps;
+                    doCell(allData.taken, this.targets.length);
+                    doCell(allData.total, this.targets.length + 1);
+                    for (let j = 0; j < dps.length; j++) {
                         total[j] = (total[j] || 0) + dps[j];
                     }
                     rows.push({
                         player: player,
                         dps: dps
                     });
+                    
                 }
                 sums.push({
                     name: "Total",
                     dps: total
                 });
-                var res = {
+                const res = {
                     cols: cols,
                     rows: rows,
                     sums: sums

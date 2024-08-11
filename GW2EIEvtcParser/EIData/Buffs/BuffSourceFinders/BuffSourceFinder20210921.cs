@@ -10,11 +10,12 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
         private List<AbstractCastEvent> _vindicatorDodges = null;
         public BuffSourceFinder20210921(HashSet<long> boonIds) : base(boonIds)
         {
+            ImperialImpactExtension = 2000;
         }
 
-        protected override List<AgentItem> CouldBeImperialImpact(long extension, long time, ParsedEvtcLog log)
+        protected override List<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
         {
-            if (extension > 2000)
+            if (extension > ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant)
             {
                 return new List<AgentItem>();
             }
@@ -29,6 +30,14 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders
                     }
                 }
                 _vindicatorDodges = new List<AbstractCastEvent>(_vindicatorDodges.OrderBy(x => x.Time));
+            }
+            BuffInfoEvent buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
+            if (buffDescription != null && buffDescription.DurationCap == 0)
+            {
+                if (Math.Abs(extension - ImperialImpactExtension) > ParserHelper.BuffSimulatorStackActiveDelayConstant)
+                {
+                    return new List<AgentItem>();
+                }
             }
             var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
             return candidates.Select(x => x.Caster).ToList();

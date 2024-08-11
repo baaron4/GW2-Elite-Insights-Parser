@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -17,15 +16,31 @@ namespace GW2EIEvtcParser.EncounterLogic
     {
         private readonly string _defaultName;
         private readonly bool _detailed;
+        private bool _foundSkillMode { get; set; }
+        private bool _isGuildHall { get; set; }
         public WvWFight(int triggerID, bool detailed) : base(triggerID)
         {
-            Mode = ParseMode.WvW;
+            ParseMode = ParseModeEnum.WvW;
+            SkillMode = SkillModeEnum.WvW;
             Icon = EncounterIconWvW;
             _detailed = detailed;
             Extension = _detailed ? "detailed_wvw" : "wvw";
             _defaultName = _detailed ? "Detailed WvW" : "World vs World";
             EncounterCategoryInformation.Category = FightCategory.WvW;
             EncounterID |= EncounterIDs.EncounterMasks.WvWMask;
+            MechanicList.AddRange(new List<Mechanic>
+            {
+                new PlayerDamageMechanic("Killing Blows to enemy Players", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "Kllng.Blw.Player", "Killing Blows inflicted by Squad Players to enemy Players", "Killing Blows to enemy Players", 0, (log, a) => {
+                    if (a.Type != AgentItem.AgentType.Player)
+                    {
+                        return new List<AbstractHealthDamageEvent>();
+                    }
+                    return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
+                }).UsingChecker((x, log) => x.HasKilled && (x.To.Type == AgentItem.AgentType.NonSquadPlayer || x.To.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))),
+                new EnemyDamageMechanic("Killing Blows received by enemies", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Kllng.Blw.Enemy", "Killing Blows inflicted enemy Players by Squad Players", "Killing Blows received by enemies", 0, (log, a) => {
+                    return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
+                }).UsingChecker((x, log) => x.HasKilled && x.CreditedFrom.Type == AgentItem.AgentType.Player),
+            });
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
@@ -36,11 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld));
-            if (mainTarget == null)
-            {
-                throw new MissingKeyActorsException("Main target of the fight not found");
-            }
+            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
             phases[0].AddTarget(mainTarget);
             if (!requirePhases)
             {
@@ -66,7 +77,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)
+        {
+            foreach (Player p in players)
+            {
+                // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
+                var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
+                if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
+                {
+                    p.AgentItem.OverrideSpec(enterCombat.Spec);
+                    p.OverrideGroup(enterCombat.Subgroup);
+                }
+            }
+        }
+
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             return GetGenericFightOffset(fightData);
         }
@@ -82,18 +107,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 // EB
                 case 38:
-                    return new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (8958, 12798, 12030, 15870)*/);
+                    return new CombatReplayMap(CombatReplayEternalBattlegrounds, (954, 1000), (-36864, -36864, 36864, 36864));
                 // Green Alpine
                 case 95:
-                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)/*, (-30720, -43008, 30720, 43008), (5630, 11518, 8190, 15102)*/);
+                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008));
                 // Blue Alpine
                 case 96:
-                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008)/*, (-30720, -43008, 30720, 43008), (12798, 10878, 15358, 14462)*/);
+                    return new CombatReplayMap(CombatReplayAlpineBorderlands, (697, 1000), (-30720, -43008, 30720, 43008));
                 // Red Desert
                 case 1099:
-                    return new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030)*/);
+                    return new CombatReplayMap(CombatReplayDesertBorderlands, (1000, 1000), (-36864, -36864, 36864, 36864));
                 case 968:
-                    return new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864)/*, (-36864, -36864, 36864, 36864), (9214, 8958, 12286, 12030)*/);
+                    return new CombatReplayMap(CombatReplayEdgeOfTheMists, (3556, 3646), (-36864, -36864, 36864, 36864));
             }
             return base.GetCombatMapInternal(log);
         }
@@ -140,8 +165,89 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EncounterID |= EncounterIDs.WvWMasks.ArmisticeBastionMask;
                     Icon = InstanceIconEternalBattlegrounds;
                     return _defaultName + " - Armistice Bastion";
+                case 1068:
+                case 1101:
+                case 1107:
+                case 1108:
+                case 1121:
+                    _isGuildHall = true;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.GildedHollowMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Gilded Hollow";
+                case 1069:
+                case 1071:
+                case 1076:
+                case 1104:
+                case 1124:
+                    _isGuildHall = true;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.LostPrecipiceMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Lost Precipice";
+                case 1214:
+                case 1215:
+                case 1224:
+                case 1232:
+                case 1243:
+                    _isGuildHall = true;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.WindsweptHavenMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Windswept Haven";
+                case 1419:
+                case 1426:
+                case 1435:
+                case 1444:
+                case 1462:
+                    _isGuildHall = true;
+                    EncounterCategoryInformation.SubCategory = SubFightCategory.GuildHall;
+                    EncounterID |= EncounterIDs.WvWMasks.IsleOfReflectionMask;
+                    Extension = _detailed ? "detailed_gh" : "gh";
+                    if (!_foundSkillMode)
+                    {
+                        SkillMode = SkillModeEnum.PvE;
+                    }
+                    //Icon = InstanceIconEternalBattlegrounds;
+                    return (_detailed ? "Detailed " : "") + "Isle of Reflection";
             }
             return _defaultName;
+        }
+
+        protected override void SetInstanceBuffs(ParsedEvtcLog log)
+        {
+            base.SetInstanceBuffs(log);
+            if (_isGuildHall)
+            {
+                var modes = new List<AbstractBuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
+                modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
+                modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
+                var usedModes = modes.OrderBy(x => x.Time).Select(x => x.BuffID).Distinct().ToList();
+                foreach (long buffID in usedModes)
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));
+                }
+                // When buff is missing on a player, they are in PvE mode
+                if (!usedModes.Contains(GuildHallPvEMode) && log.PlayerList.Any(x => !modes.Any(y => y.To == x.AgentItem)))
+                {
+                    InstanceBuffs.Add((log.Buffs.BuffsByIds[GuildHallPvEMode], 1));
+                }
+            }
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -149,89 +255,27 @@ namespace GW2EIEvtcParser.EncounterLogic
             fightData.SetSuccess(true, fightData.FightEnd);
         }
 
-        private void SolveWvWPlayers(AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
+            AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
+            // Handle non squad players
             IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
-            var set = new HashSet<string>();
-            var toRemove = new HashSet<AgentItem>();
+            //
             var garbageList = new List<AbstractSingleActor>();
-            var teamChangeDict = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.TeamChange).GroupBy(x => x.SrcAgent).ToDictionary(x => x.Key, x => x.ToList());
-            //
-            IReadOnlyList<AgentItem> squadPlayers = agentData.GetAgentByType(AgentItem.AgentType.Player);
-            ulong greenTeam = ulong.MaxValue;
-            var greenTeams = new List<ulong>();
-            foreach (AgentItem a in squadPlayers)
-            {
-                if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
-                {
-                    greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent));
-                }
-            }
-            if (greenTeams.Any())
-            {
-                greenTeam = greenTeams.GroupBy(x => x).OrderByDescending(x => x.Count()).Select(x => x.Key).First();
-            }
-            var playersToMerge = new Dictionary<PlayerNonSquad, AbstractSingleActor>();
-            var agentsToPlayersToMerge = new Dictionary<ulong, PlayerNonSquad>();
-            //
+            var auxTargets = new List<AbstractSingleActor>();
+            var auxFriendlies = new List<AbstractSingleActor>();
             foreach (AgentItem a in aList)
             {
-                if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
-                {
-                    a.OverrideIsNotInSquadFriendlyPlayer(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => x.DstAgent).Any(x => x == greenTeam));
-                }
-                List<AbstractSingleActor> actorListToFill = a.IsNotInSquadFriendlyPlayer ? _nonPlayerFriendlies : _detailed ? _targets : garbageList;
                 var nonSquadPlayer = new PlayerNonSquad(a);
-                if (!set.Contains(nonSquadPlayer.Character))
-                {
-                    actorListToFill.Add(nonSquadPlayer);
-                    set.Add(nonSquadPlayer.Character);
-                }
-                else
-                {
-                    // we merge
-                    AbstractSingleActor mainPlayer = actorListToFill.FirstOrDefault(x => x.Character == nonSquadPlayer.Character);
-                    playersToMerge[nonSquadPlayer] = mainPlayer;
-                    agentsToPlayersToMerge[nonSquadPlayer.AgentItem.Agent] = nonSquadPlayer;
-                }
+                List<AbstractSingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : _detailed ? auxTargets : garbageList;
+                actorListToFill.Add(nonSquadPlayer);
             }
-            if (playersToMerge.Any())
-            {
-                foreach (CombatItem c in combatData)
-                {
-                    if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out PlayerNonSquad nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer.AgentItem, extensions))
-                    {
-                        AbstractSingleActor mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideSrcAgent(mainPlayer.AgentItem.Agent);
-                    }
-                    if (agentsToPlayersToMerge.TryGetValue(c.DstAgent, out nonSquadPlayer) && c.DstMatchesAgent(nonSquadPlayer.AgentItem, extensions))
-                    {
-                        AbstractSingleActor mainPlayer = playersToMerge[nonSquadPlayer];
-                        c.OverrideDstAgent(mainPlayer.AgentItem.Agent);
-                    }
-                }
-                foreach (KeyValuePair<PlayerNonSquad, AbstractSingleActor> pair in playersToMerge)
-                {
-                    PlayerNonSquad nonSquadPlayer = pair.Key;
-                    AbstractSingleActor mainPlayer = pair.Value;
-                    agentData.SwapMasters(nonSquadPlayer.AgentItem, mainPlayer.AgentItem);
-                    mainPlayer.AgentItem.OverrideAwareTimes(Math.Min(nonSquadPlayer.FirstAware, mainPlayer.FirstAware), Math.Max(nonSquadPlayer.LastAware, mainPlayer.LastAware));
-                    toRemove.Add(nonSquadPlayer.AgentItem);
-                }
-            }
-            agentData.RemoveAllFrom(toRemove);
-        }
-
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
-        {
-            AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy WvW Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
-
-            SolveWvWPlayers(agentData, combatData, extensions);
+            //
             if (!_detailed)
             {
                 var friendlyAgents = new HashSet<AgentItem>(NonPlayerFriendlies.Select(x => x.AgentItem));
-                var aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer).Where(x => !friendlyAgents.Contains(x)).ToList();
-                var enemyPlayerDicts = aList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
+                var enemyPlayerList = aList.Where(x => !friendlyAgents.Contains(x)).ToList();
+                var enemyPlayerDicts = enemyPlayerList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (CombatItem c in combatData)
                 {
                     if (c.IsDamage(extensions))
@@ -261,7 +305,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                 }
             }
+            CombatItem modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
+            if (modeEvent != null)
+            {
+                _foundSkillMode = true;
+                switch ((long)modeEvent.SkillID)
+                {
+                    case GuildHallPvEMode:
+                        SkillMode = SkillModeEnum.PvE;
+                        break;
+                    case GuildHallsPvPMode:
+                        SkillMode = SkillModeEnum.sPvP;
+                        break;
+                    case GuildHallWvWMode:
+                        SkillMode = SkillModeEnum.WvW;
+                        break;
+                }
+            }
             ComputeFightTargets(agentData, combatData, extensions);
+            auxFriendlies = auxFriendlies.OrderBy(x => x.Character).ToList();
+            _nonPlayerFriendlies.AddRange(auxFriendlies);
+            auxTargets = auxTargets.OrderBy(x => x.Character).ToList();
+            _targets.AddRange(auxTargets);
         }
     }
 }

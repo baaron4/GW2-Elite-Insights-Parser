@@ -2,7 +2,6 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.InstantCastFinder;
 
 namespace GW2EIEvtcParser.EIData
 {
@@ -58,6 +57,8 @@ namespace GW2EIEvtcParser.EIData
         private List<Keeper> _enableConditions { get; }
         private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
         private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
+        private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
+        private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
 
         /// <summary>
         /// Full constructor without special checks
@@ -104,7 +105,7 @@ namespace GW2EIEvtcParser.EIData
             if (isAchievementEligibility)
             {
                 _enableConditions.Add(EligibilityKeeper);
-            } 
+            }
             else
             {
                 _enableConditions.Remove(EligibilityKeeper);
@@ -129,6 +130,12 @@ namespace GW2EIEvtcParser.EIData
             _minBuild = minBuild;
             return this;
         }
+        internal Mechanic WithEvtcBuilds(int minBuild, int maxBuild = ArcDPSBuilds.EndOfLife)
+        {
+            _minEvtcBuild = minBuild;
+            _maxEvtcBuild = maxBuild;
+            return this;
+        }
 
         internal bool Available(ParsedEvtcLog log)
         {
@@ -136,8 +143,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return false;
             }
-            ulong gw2Build = log.CombatData.GetBuildEvent().Build;
-            return gw2Build < _maxBuild && gw2Build >= _minBuild;
+            ulong gw2Build = log.CombatData.GetGW2BuildEvent().Build;
+            if (gw2Build < _maxBuild && gw2Build >= _minBuild)
+            {
+                int evtcBuild = log.CombatData.GetEvtcVersionEvent().Build;
+                if (evtcBuild < _maxEvtcBuild && evtcBuild >= _minEvtcBuild)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         internal bool KeepIfEmpty(ParsedEvtcLog log)

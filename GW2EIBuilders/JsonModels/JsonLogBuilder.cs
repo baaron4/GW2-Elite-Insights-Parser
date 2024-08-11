@@ -8,7 +8,6 @@ using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonLog;
 
 namespace GW2EIBuilders.JsonModels
@@ -18,7 +17,7 @@ namespace GW2EIBuilders.JsonModels
     /// </summary>
     internal static class JsonLogBuilder
     {
-        internal static SkillDesc BuildSkillDesc(SkillItem skill, ParsedEvtcLog log)
+        private static SkillDesc BuildSkillDesc(SkillItem skill, ParsedEvtcLog log)
         {
             var skillDesc = new SkillDesc
             {
@@ -37,7 +36,7 @@ namespace GW2EIBuilders.JsonModels
             return skillDesc;
         }
 
-        internal static BuffDesc BuildBuffDesc(Buff buff, ParsedEvtcLog log)
+        private static BuffDesc BuildBuffDesc(Buff buff, ParsedEvtcLog log)
         {
             var buffDesc = new BuffDesc
             {
@@ -74,7 +73,7 @@ namespace GW2EIBuilders.JsonModels
             return buffDesc;
         }
 
-        internal static DamageModDesc BuildDamageModDesc(DamageModifier damageModifier)
+        private static DamageModDesc BuildDamageModDesc(DamageModifier damageModifier)
         {
             var damageModDesc = new DamageModDesc
             {
@@ -83,7 +82,8 @@ namespace GW2EIBuilders.JsonModels
                 Description = damageModifier.Tooltip,
                 NonMultiplier = !damageModifier.Multiplier,
                 SkillBased = damageModifier.SkillBased,
-                Approximate = damageModifier.Approximate
+                Approximate = damageModifier.Approximate,
+                Incoming = damageModifier.Incoming,
             };
             return damageModDesc;
         }
@@ -98,7 +98,8 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.FightName = log.FightData.FightName;
             jsonLog.FightIcon = log.FightData.Logic.Icon;
             jsonLog.EliteInsightsVersion = parserVersion.ToString();
-            jsonLog.ArcVersion = log.LogData.ArcVersion;
+            jsonLog.ArcVersion = log.LogData.ArcVersionBuild;
+            jsonLog.ArcRevision = log.LogData.EvtcRevision;
             jsonLog.RecordedBy = log.LogData.PoVName;
             jsonLog.RecordedAccountBy = log.LogData.PoVAccount;
             jsonLog.TimeStart = log.LogData.LogStart;
@@ -108,19 +109,36 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.Duration = log.FightData.DurationString;
             jsonLog.DurationMS = log.FightData.FightDuration;
             jsonLog.LogStartOffset = log.FightData.FightStartOffset;
+            if (log.LogData.LogInstanceStartStd != null )
+            {
+                jsonLog.InstanceTimeStartStd = log.LogData.LogInstanceStartStd;
+                jsonLog.InstanceIP = log.LogData.LogInstanceIP;
+            } 
+            else
+            {
+                jsonLog.InstanceTimeStartStd = null;
+                jsonLog.InstanceIP = null;
+            }
             jsonLog.Success = log.FightData.Success;
             jsonLog.GW2Build = log.LogData.GW2Build;
             jsonLog.UploadLinks = uploadLinks;
             jsonLog.Language = log.LogData.Language;
             jsonLog.LanguageID = (byte)log.LogData.LanguageID;
             jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
-            jsonLog.IsCM = log.FightData.IsCM;
+            jsonLog.IsCM = log.FightData.IsCM || log.FightData.IsLegendaryCM;
+            jsonLog.IsLegendaryCM = log.FightData.IsLegendaryCM;
+            jsonLog.IsLateStart = log.FightData.IsLateStart;
+            jsonLog.MissingPreEvent = log.FightData.MissingPreEvent;
             jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
-            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.Mode == FightLogic.ParseMode.WvW;
+            jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
             var personalBuffs = new Dictionary<string, HashSet<long>>();
-            var skillMap = new Dictionary<string, SkillDesc>();
-            var buffMap = new Dictionary<string, BuffDesc>();
-            var damageModMap = new Dictionary<string, DamageModDesc>();
+            var personalDamageMods = new Dictionary<string, HashSet<long>>();
+            var skillMap = new Dictionary<long, SkillItem>();
+            var skillDescs = new Dictionary<string, SkillDesc>();
+            var buffMap = new Dictionary<long, Buff>();
+            var buffDescs = new Dictionary<string, BuffDesc>();
+            var damageModMap = new Dictionary<long, DamageModifier>();
+            var damageModDesc = new Dictionary<string, DamageModDesc>();
 
             if (log.FightData.Logic.GetInstanceBuffs(log).Any())
             {
@@ -128,9 +146,9 @@ namespace GW2EIBuilders.JsonModels
                 var presentInstanceBuffs = new List<long[]>();
                 foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
                 {
-                    if (!buffMap.ContainsKey("b" + instanceBuff.ID))
+                    if (!buffMap.ContainsKey(instanceBuff.ID))
                     {
-                        buffMap["b" + instanceBuff.ID] = BuildBuffDesc(instanceBuff, log);
+                        buffMap[instanceBuff.ID] = instanceBuff;
                     }
                     if (instanceBuff.Source == ParserHelper.Source.FractalInstability)
                     {
@@ -145,7 +163,7 @@ namespace GW2EIBuilders.JsonModels
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Mechanics");
             MechanicData mechanicData = log.MechanicData;
             IReadOnlyCollection<Mechanic> presentMechanics = log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd);
-            if (presentMechanics.Any())
+            if (presentMechanics.Count != 0)
             {
                 jsonLog.Mechanics = JsonMechanicsBuilder.GetJsonMechanicsList(log, mechanicData, presentMechanics);
             }
@@ -157,7 +175,7 @@ namespace GW2EIBuilders.JsonModels
             jsonLog.Targets = log.FightData.Logic.Targets.Select(x => JsonNPCBuilder.BuildJsonNPC(x, log, settings, skillMap, buffMap)).ToList();
             //
             log.UpdateProgressWithCancellationCheck("Raw Format: Building Players");
-            jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs)).ToList();
+            jsonLog.Players = log.Friendlies.Select(x => JsonPlayerBuilder.BuildJsonPlayer(x, log, settings, skillMap, buffMap, damageModMap, personalBuffs, personalDamageMods)).ToList();
             //
             if (log.LogData.LogErrors.Any())
             {
@@ -189,10 +207,23 @@ namespace GW2EIBuilders.JsonModels
                 jsonLog.UsedExtensions = usedExtensions;
             }
             //
-            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>) x.Value);
-            jsonLog.SkillMap = skillMap;
-            jsonLog.BuffMap = buffMap;
-            jsonLog.DamageModMap = damageModMap;
+            jsonLog.PersonalBuffs = personalBuffs.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
+            jsonLog.PersonalDamageMods = personalDamageMods.ToDictionary(x => x.Key, x => (IReadOnlyCollection<long>)x.Value);
+            foreach (KeyValuePair<long, SkillItem> pair in skillMap)
+            {
+                skillDescs["s" + pair.Key] = BuildSkillDesc(pair.Value, log);
+            }
+            jsonLog.SkillMap = skillDescs;
+            foreach (KeyValuePair<long, Buff> pair in buffMap)
+            {
+                buffDescs["b" + pair.Key] = BuildBuffDesc(pair.Value, log);
+            }
+            jsonLog.BuffMap = buffDescs;
+            foreach (KeyValuePair<long, DamageModifier> pair in damageModMap)
+            {
+                damageModDesc["d" + pair.Key] = BuildDamageModDesc(pair.Value);
+            }
+            jsonLog.DamageModMap = damageModDesc;
             //
             if (log.CanCombatReplay)
             {

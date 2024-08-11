@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
@@ -37,7 +35,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     _logic = _forceOverrideLogic;
                     break;
                 case BuffStackType.Stacking:
-                case BuffStackType.StackingSomething:
+                case BuffStackType.StackingTargetUniqueSrc:
                 case BuffStackType.StackingConditionalLoss:
                     _logic = _overrideLogic;
                     break;
@@ -74,6 +72,10 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                 _logic.Activate(BuffStack, toAdd);
             }
         }
+        protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
+        {
+            buffEvent.UpdateSimulator(this, true);
+        }
 
         public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
         {
@@ -95,7 +97,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     foreach (BuffStackItem stackItem in BuffStack)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                        if (stackItem.Extensions.Any())
+                        if (stackItem.Extensions.Count != 0)
                         {
                             foreach ((AgentItem src, long value) in stackItem.Extensions)
                             {
@@ -112,7 +114,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                         if (Math.Abs(removedDuration - stackItem.TotalDuration) < ParserHelper.BuffSimulatorDelayConstant)
                         {
                             WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Any())
+                            if (stackItem.Extensions.Count != 0)
                             {
                                 foreach ((AgentItem src, long value) in stackItem.Extensions)
                                 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -19,13 +20,21 @@ namespace GW2EIEvtcParser.ParsedData
 #if DEBUG
         private Dictionary<string, List<AgentItem>> _allAgentsByName;
 #endif
-        public HashSet<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
-        public HashSet<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
+        public IReadOnlyCollection<ulong> AgentValues => new HashSet<ulong>(_allAgentsList.Select(x => x.Agent));
+        public IReadOnlyCollection<ushort> InstIDValues => new HashSet<ushort>(_allAgentsList.Select(x => x.InstID));
 
-        internal AgentData(List<AgentItem> allAgentsList)
+
+        private readonly GW2EIGW2API.GW2APIController _apiController;
+
+        internal AgentData(GW2EIGW2API.GW2APIController apiController, List<AgentItem> allAgentsList)
         {
+            _apiController = apiController;
             _allAgentsList = allAgentsList;
             Refresh();
+        }
+        internal string GetSpec(uint prof, uint elite)
+        {
+            return _apiController.GetSpec(prof, elite);
         }
 
         internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, int ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
@@ -83,19 +92,40 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return new List<AgentItem>();
         }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(int id, ulong agent)
+        {
+            if (agent == 0)
+            {
+                return GetNPCsByID(id);
+            }
+            return GetNPCsByID(id).Where(x => x.Agent == agent).ToList();
+        }
+
         public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.TrashID id)
         {
             return GetNPCsByID((int)id);
+        }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.TrashID id, ulong agent)
+        {
+            return GetNPCsByIDAndAgent((int)id, agent);
         }
 
         public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.TargetID id)
         {
             return GetNPCsByID((int)id);
         }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.TargetID id, ulong agent)
+        {
+            return GetNPCsByIDAndAgent((int)id, agent);
+        }
 
         public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.MinionID id)
         {
             return GetNPCsByID((int)id);
+        }
+        public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.MinionID id, ulong agent)
+        {
+            return GetNPCsByIDAndAgent((int)id, agent);
         }
 
 
@@ -145,6 +175,12 @@ namespace GW2EIEvtcParser.ParsedData
             return ParserHelper._unknownAgent;
         }
 
+        public bool HasSpawnedMinion(MinionID minion, AgentItem master, long time, long epsilon = ParserHelper.ServerDelayConstant)
+        {
+            return GetNPCsByID(minion)
+                .Any(agent => agent.GetFinalMaster() == master && Math.Abs(agent.FirstAware - time) < epsilon);
+        }
+
         internal void ReplaceAgentsFromID(AgentItem agentItem)
         {
             if (agentItem.ID == 0)
@@ -158,12 +194,12 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void RemoveAllFrom(HashSet<AgentItem> agents)
         {
-            if (!agents.Any())
+            if (agents.Count == 0)
             {
                 return;
             }
             _allAgentsList.RemoveAll(x => agents.Contains(x));
-            
+
             Refresh();
         }
 
@@ -212,6 +248,66 @@ namespace GW2EIEvtcParser.ParsedData
         internal void SwapMasters(AgentItem from, AgentItem to)
         {
             SwapMasters(new HashSet<AgentItem> { from }, to);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="TargetID"/>.
+        /// </summary>
+        /// <param name="targetID">The ID of the target to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given  <see cref="TargetID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(TargetID targetID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)targetID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="TrashID"/>.
+        /// </summary>
+        /// <param name="trashID">The ID of the trash to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="TrashID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(TrashID trashID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)trashID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="MinionID"/>.
+        /// </summary>
+        /// <param name="minionID">The ID of the minion to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="MinionID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(MinionID minionID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)minionID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <see cref="ChestID"/>.
+        /// </summary>
+        /// <param name="chestID">The ID of the chest to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="ChestID"/>; otherwise,  <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(ChestID chestID, out AgentItem agentItem)
+        {
+            return TryGetFirstAgentItem((int)chestID, out agentItem);
+        }
+
+        /// <summary>
+        /// Tries to retrieve the first <see cref="AgentItem"/> corresponding to the provided <paramref name="agentId"/>.<br></br>
+        /// </summary>
+        /// <param name="agentId">The ID of the agent to search for.</param>
+        /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
+        /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <paramref name="agentId"/>; otherwise, <see langword="false"/>.</returns>
+        public bool TryGetFirstAgentItem(int agentId, out AgentItem agentItem)
+        {
+            agentItem = GetNPCsByID(agentId).FirstOrDefault();
+            if (agentItem != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

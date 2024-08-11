@@ -6,12 +6,11 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -46,9 +45,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11804, 4414, 12444, 5054)*/);
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
                 TrashID.VolatileHallucinationSiax,
                 TrashID.NightmareHallucinationSiax
@@ -73,11 +72,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax));
-            if (siax == null)
-            {
-                throw new MissingKeyActorsException("Siax not found");
-            }
+            AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax)) ?? throw new MissingKeyActorsException("Siax not found");
             phases[0].AddTarget(siax);
             if (!requirePhases)
             {
@@ -104,7 +99,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return phases;
         }
-        
+
         static readonly List<(string, Point3D)> EchoLocations = new List<(string, Point3D)> {
             ("N", new Point3D(1870.630f, -2205.379f)),
             ("E", new Point3D(2500.260f, -3288.280f)),
@@ -116,9 +111,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             ("SW", new Point3D(891.370f, -3722.450f)),
         };
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             foreach (AbstractSingleActor target in Targets)
             {
                 if (target.IsSpecies(TargetID.Siax))
@@ -143,115 +138,59 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var causticExplosionBreakbar = casts.Where(x => x.SkillId == CausticExplosionSiaxBreakbar).ToList();
                     foreach (AbstractCastEvent c in causticExplosionBreakbar)
                     {
-                        int duration = 15000;
-                        int start = (int)c.Time;
-                        int expectedHitTime = (int)c.Time + duration;
-                        int attackEnd = (int)c.Time + duration;
-
-                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (stunSegment != null)
-                        {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of stun
-                        }
-                        Segment detSegment = target.GetBuffStatus(log, Determined762, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (detSegment != null)
-                        {
-                            attackEnd = Math.Min((int)detSegment.Start, attackEnd); // Start of determinated
-                        }
-
-                        replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitTime, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+                        int castDuration = 15000;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                        var doughnut = new DoughnutDecoration(0, 1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(doughnut, expectedEndCast, true);
                     }
                     // Tail Swipe
                     var tailLash = casts.Where(x => x.SkillId == TailLashSiax).ToList();
                     foreach (AbstractCastEvent c in tailLash)
                     {
-                        int duration = 1500;
-                        int openingAngle = 144;
-                        int radius = 600;
-                        if (replay.Rotations.Any())
+                        int castDuration = 1550;
+                        (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                        Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
+                        if (facing != null)
                         {
-                            replay.Decorations.Add(new FacingPieDecoration(((int)c.Time, (int)c.Time + duration), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                            var rotation = new AngleConnector(facing);
+                            replay.Decorations.Add(new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation));
                         }
                     }
                     // 66% and 33% phases
                     var causticExplosionPhases = casts.Where(x => x.SkillId == CausticExplosionSiaxPhase66 || x.SkillId == CausticExplosionSiaxPhase33).ToList();
                     foreach (AbstractCastEvent c in causticExplosionPhases)
                     {
-                        int duration = 20000;
-                        int start = (int)c.Time;
-                        int expectedHitTime = (int)c.Time + duration;
-                        int attackEnd = (int)c.Time + duration;
+                        int castDuration = 20000;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                        var circle = new CircleDecoration(1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(circle, expectedEndCast);
+                    }
 
-                        Segment detSegment = target.GetBuffStatus(log, Determined762, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (detSegment != null)
-                        {
-                            attackEnd = Math.Min((int)detSegment.End, attackEnd); // End of determinated
-                        }
-
-                        replay.Decorations.Add(new CircleDecoration(true, expectedHitTime, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 1500, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                    }
-                    // Poison AoE
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VileSpitSiax, out IReadOnlyList<EffectEvent> poisonEffects))
-                    {
-                        int duration = 16000;
-                        foreach (EffectEvent effect in poisonEffects)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(0, 255, 0, 0.2)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Nightmare Hallucinations Spawn Event
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareHallucinationsSpawn, out IReadOnlyList<EffectEvent> spawnEffects))
-                    {
-                        int duration = 3000;
-                        foreach (EffectEvent effect in spawnEffects)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 360, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Caustic Barrage
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CausticBarrageIndicator, out IReadOnlyList<EffectEvent> barrageEffects))
-                    {
-                        int duration = 500;
-                        foreach (EffectEvent effect in barrageEffects)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 100, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Volatile Hallucinations Explosions
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.VolatileExpulsionIndicator, out IReadOnlyList<EffectEvent> expulsionEffects))
-                    {
-                        int duration = 200;
-                        foreach (EffectEvent effect in expulsionEffects)
-                        {
-                            replay.Decorations.Add(new CircleDecoration(true, (int)effect.Time + duration, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 240, ((int)effect.Time, (int)effect.Time + duration), "rgba(250, 120, 0, 0.2)", new PositionConnector(effect.Position)));
-                        }
-                    }
-                    // Cascade Of Torment
-                    int cotDuration = 1000;
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing0, cotDuration, 0, 150);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing1, cotDuration, 150, 250);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing2, cotDuration, 250, 350);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing3, cotDuration, 350, 450);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing4, cotDuration, 450, 550);
-                    AddCascadeOfTormentDecoration(log, replay, EffectGUIDs.CascadeOfTormentRing5, cotDuration, 550, 650);
                     break;
                 case (int)TrashID.EchoOfTheUnclean:
                     var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();
                     foreach (AbstractCastEvent c in causticExplosionEcho)
                     {
                         // Duration is the same as Siax's explosion but starts 2 seconds later
-                        int duration = 20000;
-                        int start = (int)c.Time + 18000;
-                        int attackEnd = (int)c.Time + duration;
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 3000, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        // Display the explosion for a brief time
+                        (long start, long end) lifespan = (c.Time + 18000, c.Time + 20000);
+                        replay.Decorations.Add(new CircleDecoration(3000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)));
                     }
                     break;
                 case (int)TrashID.VolatileHallucinationSiax:
+                    // Volatile Hallucinations Explosions
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.VolatileExpulsionIndicator, out IReadOnlyList<EffectEvent> expulsionEffects))
+                    {
+                        foreach (EffectEvent effect in expulsionEffects)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 300);
+                            var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
+                            replay.AddDecorationWithGrowing(circle, lifespan.end);
+                        }
+                    }
                     break;
                 case (int)TrashID.NightmareHallucinationSiax:
                     break;
@@ -261,9 +200,61 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedNightmare, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+            replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Vile Spit - Indicators
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxVileSpitIndicator, out IReadOnlyList<EffectEvent> vileSpitIndicators))
+            {
+                foreach (EffectEvent effect in vileSpitIndicators)
+                {
+                    // Indicator effect has variable duration
+                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    EnvironmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                }
+            }
+
+            // Vile Spit - Poison
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxVileSpitPoison, out IReadOnlyList<EffectEvent> vileSpitPoisons))
+            {
+                foreach (EffectEvent effect in vileSpitPoisons)
+                {
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 15600);
+                    EnvironmentDecorations.Add(new CircleDecoration(240, lifespan, Colors.GreenishYellow, 0.2, new PositionConnector(effect.Position)));
+                }
+            }
+
+            // Nightmare Hallucinations Spawn Event
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxNightmareHallucinationsSpawnIndicator, out IReadOnlyList<EffectEvent> spawnEffects))
+            {
+                int duration = 3000;
+                foreach (EffectEvent effect in spawnEffects)
+                {
+                    var circle = new CircleDecoration(360, (effect.Time, effect.Time + duration), Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(effect.Time + duration));
+                }
+            }
+
+            // Caustic Barrage
+            AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Siax, 210, 1000, 966);
+
+            // Cascade Of Torment
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing0, 0, 150);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing1, 150, 250);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing2, 250, 350);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing3, 350, 450);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing4, 450, 550);
+            AddCascadeOfTormentDecoration(log, EnvironmentDecorations, EffectGUIDs.CascadeOfTormentRing5, 550, 650);
         }
     }
 }

@@ -32,6 +32,7 @@
             ShatteredObservatory,
             SunquaPeak,
             SilentSurf,
+            LonelyTower,
             // 
             Grothmar,
             Bjora,
@@ -46,6 +47,7 @@
             EdgeOfTheMists,
             ObsidianSanctum,
             ArmisticeBastion,
+            GuildHall,
             //
             Golem,
             //
@@ -78,7 +80,7 @@
 
         public string GetCategoryName()
         {
-            switch(Category)
+            switch (Category)
             {
                 case FightCategory.Strike:
                     return "Strike Mission";
@@ -118,6 +120,8 @@
                     return "Sunqua Peak";
                 case SubFightCategory.SilentSurf:
                     return "Silent Surf";
+                case SubFightCategory.LonelyTower:
+                    return "Lonely Tower";
                 // 
                 case SubFightCategory.UnknownEncounter:
                     return "Unknown Encounter";

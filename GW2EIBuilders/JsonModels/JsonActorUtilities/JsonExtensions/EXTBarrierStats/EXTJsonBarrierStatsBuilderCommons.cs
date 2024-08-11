@@ -6,7 +6,6 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
 {
@@ -32,32 +31,32 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
             };
         }
 
-        private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTAbstractBarrierEvent> list, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTAbstractBarrierEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonBarrierDist = new EXTJsonBarrierDist();
             jsonBarrierDist.IndirectBarrier = list.Exists(x => x is EXTNonDirectBarrierEvent);
             if (jsonBarrierDist.IndirectBarrier)
             {
-                if (!buffDesc.ContainsKey("b" + id))
+                if (!buffMap.ContainsKey(id))
                 {
                     if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
                     {
-                        buffDesc["b" + id] = JsonLogBuilder.BuildBuffDesc(buff, log);
+                        buffMap[id] = buff;
                     }
                     else
                     {
                         SkillItem skill = list.First().Skill;
-                        var auxBoon = new Buff(skill.Name, id, skill.Icon);
-                        buffDesc["b" + id] = JsonLogBuilder.BuildBuffDesc(auxBoon, log);
+                        var auxBuff = new Buff(skill.Name, id, skill.Icon);
+                        buffMap[id] = auxBuff;
                     }
                 }
             }
             else
             {
-                if (!skillDesc.ContainsKey("s" + id))
+                if (!skillMap.ContainsKey(id))
                 {
                     SkillItem skill = list.First().Skill;
-                    skillDesc["s" + id] = JsonLogBuilder.BuildSkillDesc(skill, log);
+                    skillMap[id] = skill;
                 }
             }
             jsonBarrierDist.Id = id;
@@ -75,12 +74,12 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
             return jsonBarrierDist;
         }
 
-        internal static List<EXTJsonBarrierDist> BuildBarrierDistList(Dictionary<long, List<EXTAbstractBarrierEvent>> dlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        internal static List<EXTJsonBarrierDist> BuildBarrierDistList(Dictionary<long, List<EXTAbstractBarrierEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var res = new List<EXTJsonBarrierDist>();
             foreach (KeyValuePair<long, List<EXTAbstractBarrierEvent>> pair in dlsByID)
             {
-                res.Add(BuildBarrierDist(pair.Key, pair.Value, log, skillDesc, buffDesc));
+                res.Add(BuildBarrierDist(pair.Key, pair.Value, log, skillMap, buffMap));
             }
             return res;
         }

@@ -27,9 +27,9 @@
         props: ["buffarray"],    
         template: `
         <div v-if="buffarray.length > 0" class="d-flex buff-display" :style="{'height': height}">
-            <div v-for="buff in buffarray" class="buff-container">
-                <img :src="buff.buff.icon" :title="buff.buff.name" :alt="buff.buff.name" class="icon-s" />
-                <div v-if="buff.state > 1" class="buff-number">{{buff.state}}</div>
+            <div v-for="buffData in buffarray" class="buff-container">
+                <img :src="buffData.buff.icon" :title="buffData.buff.name + ' - ' + buffData.buff.id" :alt="buffData.buff.name + ' - ' + buffData.buff.id" class="icon-s" />
+                <div v-if="buffData.state > 1" class="buff-number">{{buffData.state}}</div>
             </div>
         </div>
         `,      

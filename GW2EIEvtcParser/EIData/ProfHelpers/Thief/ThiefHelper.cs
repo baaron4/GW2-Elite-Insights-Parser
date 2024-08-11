@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
-using static GW2EIEvtcParser.EIData.CastFinderHelpers;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -29,8 +29,8 @@ namespace GW2EIEvtcParser.EIData
             new BuffGiveCastFinder(SpiderVenomSkill,SpiderVenomBuff).UsingChecker((evt, combatData, agentData, skillData) => evt.To != evt.By || Math.Abs(evt.AppliedDuration - 24000) < ServerDelayConstant).UsingNotAccurate(true), // same id as leeching venom trait?
             new EffectCastFinder(Pitfall, EffectGUIDs.ThiefPitfallAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new BuffLossCastFinder(ThousandNeedles, ThousandNeedlesArmedBuff)
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
-                .UsingChecker((evt, combatData, agentData, skillData) => HasRelatedEffect(combatData, EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280))
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffect(EffectGUIDs.ThiefThousandNeedlesAoE1, evt.To, evt.Time + 280))
+                .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasRelatedEffect(EffectGUIDs.ThiefThousandNeedlesAoE2, evt.To, evt.Time + 280))
                 .UsingNotAccurate(true),
             new EffectCastFinder(SealArea, EffectGUIDs.ThiefSealAreaAoE).UsingSrcBaseSpecChecker(Spec.Thief),
             new BuffGainCastFinder(ShadowPortal, ShadowPortalOpenedBuff),
@@ -41,17 +41,40 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             // Deadly arts
-            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, BuffImages.ExposedWeakness, DamageModifierMode.All).WithBuilds(GW2Builds.July2018Balance),
-            new BuffDamageModifierTarget(NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.ExposedWeakness, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
-            new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.Executioner, (x, log) => x.AgainstUnderFifty, ByPresence, DamageModifierMode.All),
+            new BuffOnFoeDamageModifier(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, BuffImages.ExposedWeakness, DamageModifierMode.All).WithBuilds(GW2Builds.July2018Balance),
+            new BuffOnFoeDamageModifier(NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.ExposedWeakness, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
+            new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.Executioner, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
             // Critical Strikes
-            new DamageLogDamageModifier("Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, ByPresence, DamageModifierMode.All),
-            new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, ByPresence, DamageModifierMode.All),
+            new DamageLogDamageModifier("Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
+            new DamageLogDamageModifier("Twin Fangs","7% if hp >=50%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0 && x.HasCrit, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
+                .UsingApproximate(true),
+            new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, DamageModifierMode.All),
             // Trickery
-            new BuffDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all
+            new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), 
+            // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all       
+            new BuffOnActorDamageModifier(FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.FluidStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+            // Spear       
+            new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.PvE),
+            new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "5%", DamageSource.NoPets, 5, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.sPvPWvW),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new DamageLogDamageModifier("Marauder's Resilience", "-10% from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.MaraudersResilience, (x,log) =>
+            {
+                Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
+                Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
+                if (currentPosition == null || currentTargetPosition == null)
+                {
+                    return false;
+                }
+                return currentPosition.DistanceToPoint(currentTargetPosition) <= 360.0;
+            }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.April2019Balance)
         };
 
 
@@ -85,6 +108,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Hidden Killer", HiddenKiller, Source.Thief, BuffClassification.Other, BuffImages.Hiddenkiller),
             new Buff("Lead Attacks", LeadAttacks, Source.Thief, BuffStackType.Stacking, 15, BuffClassification.Other, BuffImages.LeadAttacks),
             new Buff("Instant Reflexes", InstantReflexes, Source.Thief, BuffClassification.Other, BuffImages.InstantReflexes),
+            new Buff("Fluid Strikes", FluidStrikes, Source.Thief, BuffClassification.Other, BuffImages.FluidStrikes).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+            // Spear
+            new Buff("Distracting Throw", DistractingThrowBuff, Source.Thief, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Shadow Veil", ShadowVeilBuff, Source.Thief, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 
         private static HashSet<int> Minions = new HashSet<int>()
@@ -126,12 +153,13 @@ namespace GW2EIEvtcParser.EIData
             var entranceDecorations = new List<GenericAttachedDecoration>();
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance, out IReadOnlyList<EffectEvent> shadowPortalActiveEntrance))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Thief, PrepareShadowPortal, SkillModeCategory.Portal);
                 foreach (EffectEvent enter in shadowPortalActiveEntrance)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, enter, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                    (long, long) lifespan = enter.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                     var connector = new PositionConnector(enter.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, PrepareShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal));
-                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, Spec.Thief, PrepareShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal);
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     replay.Decorations.Add(icon);
                     entranceDecorations.Add(icon);
                 }
@@ -140,14 +168,15 @@ namespace GW2EIEvtcParser.EIData
             {
                 foreach (EffectEvent exit in shadowPortalActiveExit)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, exit, 8000, player.AgentItem, ShadowPortalOpenedBuff);
+                    var skill = new SkillModeDescriptor(player, Spec.Thief, ShadowPortal, SkillModeCategory.Portal);
+                    (long, long) lifespan = exit.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                     var connector = new PositionConnector(exit.Position);
-                    replay.Decorations.Add(new CircleDecoration(true, 0, 90, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, ShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal));
-                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(player, Spec.Thief, ShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal);
+                    replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
+                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     GenericAttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
                     if (entranceDecoration != null)
                     {
-                        replay.Decorations.Add(entranceDecoration.LineTo(icon, 0, color.WithAlpha(0.5f).ToString()).UsingSkillMode(player, Spec.Thief, ShadowPortal, GenericAttachedDecoration.SkillModeCategory.Portal));
+                        replay.Decorations.Add(entranceDecoration.LineTo(icon, color, 0.5).UsingSkillMode(skill));
                     }
                     replay.Decorations.Add(icon);
                 }
@@ -156,23 +185,21 @@ namespace GW2EIEvtcParser.EIData
             // Seal Area
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE, out IReadOnlyList<EffectEvent> sealAreaAoEs))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Thief, SealArea, SkillModeCategory.ProjectileManagement | SkillModeCategory.CC);
                 foreach (EffectEvent effect in sealAreaAoEs)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 8000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, SealArea, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSealArea, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Thief, SealArea, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement));
+                    (long, long) lifespan = effect.ComputeLifespan(log, 8000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectSealArea);
                 }
             }
             // Shadow Refuge
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge, out IReadOnlyList<EffectEvent> shadowRefuges))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Thief, ShadowRefuge, SkillModeCategory.ImportantBuffs | SkillModeCategory.Heal);
                 foreach (EffectEvent effect in shadowRefuges)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 4000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Thief, ShadowRefuge, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs | GenericAttachedDecoration.SkillModeCategory.Heal));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectShadowRefuge, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Thief, ShadowRefuge, GenericAttachedDecoration.SkillModeCategory.ImportantBuffs | GenericAttachedDecoration.SkillModeCategory.Heal));
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectShadowRefuge);
                 }
             }
         }

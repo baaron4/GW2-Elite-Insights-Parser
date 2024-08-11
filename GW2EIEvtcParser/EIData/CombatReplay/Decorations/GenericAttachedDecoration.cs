@@ -1,86 +1,77 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GW2EIEvtcParser.EIData
 {
     internal abstract class GenericAttachedDecoration : GenericDecoration
     {
-        [Flags]
-        public enum SkillModeCategory : uint
+        internal abstract class GenericAttachedDecorationMetadata : GenericDecorationMetadata
         {
-            NotApplicable = 0,
-            ShowOnSelect = 1 << 0,
-            ImportantBuffs = 1 << 1,
-            ProjectileManagement = 1 << 2,
-            Heal = 1 << 3,
-            Cleanse = 1 << 4,
-            Strip = 1 << 5,
-            Portal = 1 << 6,
         }
-
-
-        public Connector ConnectedTo { get; }
-
-        public AgentConnector Owner { get; private set; }
-        public SkillModeCategory SkillCategory { get; private set; }
-
-        public ParserHelper.Spec Spec { get; private set; }
-
-        public long SkillID { get; private set; }
-
-        protected GenericAttachedDecoration((int start, int end) lifespan, Connector connector) : base(lifespan)
+        internal abstract class GenericAttachedDecorationRenderingData : GenericDecorationRenderingData
         {
-            ConnectedTo = connector;
+            public GeographicalConnector ConnectedTo { get; }
+            public RotationConnector RotationConnectedTo { get; protected set; }
+            public SkillModeDescriptor SkillMode { get; protected set; }
+            protected GenericAttachedDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan)
+            {
+                ConnectedTo = connector;
+            }
+
+            public virtual void UsingRotationConnector(RotationConnector rotationConnectedTo)
+            {
+                RotationConnectedTo = rotationConnectedTo;
+            }
+
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="skill">Skill information</param>
+            /// <returns></returns>
+            public virtual void UsingSkillMode(SkillModeDescriptor skill)
+            {
+                SkillMode = skill;
+            }
+        }
+        private new GenericAttachedDecorationRenderingData DecorationRenderingData => (GenericAttachedDecorationRenderingData)base.DecorationRenderingData;
+
+        public GeographicalConnector ConnectedTo => DecorationRenderingData.ConnectedTo;
+        public RotationConnector RotationConnectedTo => DecorationRenderingData.RotationConnectedTo;
+        public SkillModeDescriptor SkillMode => DecorationRenderingData.SkillMode;
+
+        internal GenericAttachedDecoration(GenericAttachedDecorationMetadata metadata, GenericAttachedDecorationRenderingData renderingData) : base(metadata, renderingData)
+        {
         }
 
         /// <summary>Creates a new line towards the other decoration</summary>
-        public LineDecoration LineTo(GenericAttachedDecoration other, int growing, string color)
+        public LineDecoration LineTo(GenericAttachedDecoration other, string color)
         {
-            int start = Math.Max(this.Lifespan.start, other.Lifespan.start);
-            int end = Math.Min(this.Lifespan.end, other.Lifespan.end);
-            return new LineDecoration(growing, (start, end), color, this.ConnectedTo, other.ConnectedTo);
+            int start = Math.Max(Lifespan.start, other.Lifespan.start);
+            int end = Math.Min(Lifespan.end, other.Lifespan.end);
+            return new LineDecoration((start, end), color, ConnectedTo, other.ConnectedTo);
+        }
+
+        public LineDecoration LineTo(GenericAttachedDecoration other, Color color, double opacity)
+        {
+            return LineTo(other, color.WithAlpha(opacity).ToString(true));
+        }
+
+        public GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
+        {
+            DecorationRenderingData.UsingRotationConnector(rotationConnectedTo);
+            return this;
         }
 
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
-        /// <param name="spec">Spec of the skill, put Unknown for skills not specific to a certain spec</param>
-        /// <param name="skillID">ID of the skill</param>
-        /// <param name="category">Category of the skill</param>
+        /// <param name="skill">Skill information</param>
         /// <returns></returns>
-        public virtual GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, ParserHelper.Spec spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
+        public GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
         {
-            if (owner == null)
-            {
-                Owner = null;
-                SkillCategory = SkillModeCategory.NotApplicable;
-                Spec = ParserHelper.Spec.Unknown;
-                SkillID = 0;
-            } 
-            else
-            {
-                Owner = new AgentConnector(owner.AgentItem.GetFinalMaster());
-                SkillCategory = category;
-                SkillCategory |= SkillModeCategory.ShowOnSelect;
-                Spec = spec;
-                SkillID = skillID;
-            }
+            DecorationRenderingData.UsingSkillMode(skill);
             return this;
         }
-
-        /// <summary>
-        /// No Spec version of UsingSkillMode
-        /// </summary>
-        /// <param name="owner">Owner of the skill, will use master if current is a minion</param>
-        /// <param name="skillID">ID of the skill</param>
-        /// <param name="category">Category of the skill</param>
-        /// <returns></returns>
-        public GenericAttachedDecoration UsingSkillMode(AbstractSingleActor owner, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
-        {
-            return UsingSkillMode(owner, ParserHelper.Spec.Unknown, skillID, category);
-        }
-
     }
 }

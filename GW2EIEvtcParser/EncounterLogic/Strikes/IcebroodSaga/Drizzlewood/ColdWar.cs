@@ -2,11 +2,9 @@
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -43,11 +41,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor varinia = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VariniaStormsounder));
-            if (varinia == null)
-            {
-                throw new MissingKeyActorsException("Varinia Stormsounder not found");
-            }
+            AbstractSingleActor varinia = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VariniaStormsounder)) ?? throw new MissingKeyActorsException("Varinia Stormsounder not found");
             phases[0].AddTarget(varinia);
             //
             // TODO - add phases if applicable

@@ -1,0 +1,68 @@
+<template>
+    <div>
+        <ul class="nav nav-tabs">
+            <li>
+                <a class="nav-link" :class="{active: tab === 0}" @click="tab = 0">Damage Stats</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 1}" @click="tab = 1">Gameplay Stats</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 4}" @click="tab = 4">Offensive Stats</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 2}" @click="tab = 2">Defensive Stats</a>
+            </li>
+            <li>
+                <a class="nav-link" :class="{active: tab === 3}" @click="tab = 3">Support Stats</a>
+            </li>
+        </ul>
+        <keep-alive>
+            <damage-stats-component v-if="tab === 0" :key="'damage'" :phaseindex="phaseindex"
+                :playerindex="playerindex" :activetargets="activetargets"></damage-stats-component>
+            <gameplay-stats-component v-if="tab === 1" :key="'gameplay'"
+                :phaseindex="phaseindex" :playerindex="playerindex">
+            </gameplay-stats-component>
+            <offensive-stats-component v-if="tab === 4" :key="'offensive'" 
+                :phaseindex="phaseindex" :playerindex="playerindex" :activetargets="activetargets">
+            </offensive-stats-component>
+            <defense-stats-component v-if="tab === 2" :key="'defense'" :phaseindex="phaseindex"
+                :playerindex="playerindex"></defense-stats-component>
+            <support-stats-component v-if="tab === 3" :key="'support'" :phaseindex="phaseindex"
+                :playerindex="playerindex"></support-stats-component>
+        </keep-alive>
+    </div>
+
+</template>
+
+<script>
+    function getDefaultStatsSubComponent() {
+        if (!validateStartPath("Statistics/GeneralStats")) {
+            return 0;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "DamageStats":
+                return 0;
+            case "GameplayStats":
+                return 1;
+            case "OffensiveStats":
+                return 4;
+            case "DefensiveStats":
+                return 2;
+            case "SupportStats":
+                return 3;
+        }
+        return 0;
+    }
+    Vue.component("stat-tables-component", {
+        props: ["phaseindex", "playerindex", "activetargets"],
+        template: `${template}`,
+        data: function () {
+            return {
+                tab: getDefaultStatsSubComponent(),
+            };
+        },
+    });
+</script>

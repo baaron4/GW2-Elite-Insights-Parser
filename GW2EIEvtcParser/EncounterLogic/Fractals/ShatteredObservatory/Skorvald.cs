@@ -7,12 +7,12 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(FocusedAnger, "Focused Anger", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
             new PlayerDstHitMechanic(new long[] { HorizonStrikeSkorvald1, HorizonStrikeSkorvald2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
             new PlayerDstHitMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
-            new PlayerDstHitMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
+            new PlayerDstHitMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new PlayerDstBuffApplyMechanic(FixatedBloom1, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerDstHitMechanic(BloomExplode, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Expl","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
@@ -56,11 +56,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             // generic method for fractals
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (skorvald == null)
-            {
-                throw new MissingKeyActorsException("Skorvald not found");
-            }
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             phases[0].AddTarget(skorvald);
             if (!requirePhases)
             {
@@ -95,31 +91,57 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var manualFractalScaleSet = false;
             if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
             {
                 manualFractalScaleSet = true;
             }
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (skorvald == null)
+            var fluxAnomalies = new List<AgentItem>();
+            var fluxIds = new List<int>
+                    {
+                        (int)TrashID.FluxAnomaly1,
+                        (int)TrashID.FluxAnomaly2,
+                        (int)TrashID.FluxAnomaly3,
+                        (int)TrashID.FluxAnomaly4,
+                        (int)TrashID.FluxAnomalyCM1,
+                        (int)TrashID.FluxAnomalyCM2,
+                        (int)TrashID.FluxAnomalyCM3,
+                        (int)TrashID.FluxAnomalyCM4,
+                    };
+            for (int i = 0; i < fluxIds.Count; i++)
             {
-                throw new MissingKeyActorsException("Skorvald not found");
+                fluxAnomalies.AddRange(agentData.GetNPCsByID(fluxIds[i]));
             }
+            var refresh = false;
+            foreach (AgentItem fluxAnomaly in fluxAnomalies)
+            {
+                if (combatData.Any(x => x.SkillID == Determined762 && x.IsBuffApply() && x.DstMatchesAgent(fluxAnomaly)))
+                {
+                    refresh = true;
+                    fluxAnomaly.OverrideID(TrashID.UnknownAnomaly);
+                }
+            }
+            if (refresh)
+            {
+                agentData.Refresh();
+            }
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             skorvald.OverrideName("Skorvald");
-            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && x.DstAgent < 5e6 && x.DstAgent > 0))
+            if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
             {
                 // Remove manual scale from T1 to T3 for now
                 combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale).OverrideSrcAgent(0);
                 // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
             }
-            
-            int[] nameCount = new [] { 0, 0, 0, 0 };
+
+            int[] nameCount = new[] { 0, 0, 0, 0 };
             foreach (NPC target in _targets)
             {
-                switch (target.ID) {
+                switch (target.ID)
+                {
                     case (int)TrashID.FluxAnomaly1:
                     case (int)TrashID.FluxAnomalyCM1:
                         target.OverrideName(target.Character + " " + (1 + 4 * nameCount[0]++));
@@ -140,19 +162,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault();
-                if (skorvald == null)
-                {
-                    throw new MissingKeyActorsException("Skorvald not found");
-                }
+                AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault() ?? throw new MissingKeyActorsException("Skorvald not found");
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
                 // Skorvald may spawns with 0% hp
-                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && x.DstAgent > 0);
+                CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && HealthUpdateEvent.GetHealthPercent(x) > 0);
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ServerDelayConstant);
                 return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
             }
@@ -161,12 +179,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Skorvald not found");
-            }
-            if (combatData.GetBuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
+            if (combatData.GetGW2BuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
             {
                 // Agent check not reliable, produces false positives and regular false negatives
                 /*if (agentData.GetNPCsByID(16725).Any() && agentData.GetNPCsByID(11245).Any())
@@ -185,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     SolarBoltCM,
                     //SupernovaCM,
                 };
-                if (combatData.GetSkills().Intersect(cmSkills).Any() || 
+                if (combatData.GetSkills().Intersect(cmSkills).Any() ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM1).Any(x => x.FirstAware >= target.FirstAware) ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM2).Any(x => x.FirstAware >= target.FirstAware) ||
                     agentData.GetNPCsByID(TrashID.FluxAnomalyCM3).Any(x => x.FirstAware >= target.FirstAware) ||
@@ -225,15 +239,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald));
-            if (skorvald == null)
-            {
-                throw new MissingKeyActorsException("Skorvald not found");
-            }
+            AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken != null)
             {
-                BuffApplyEvent invul895Apply = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To == skorvald.AgentItem && x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+                BuffApplyEvent invul895Apply = combatData.GetBuffDataByIDByDst(Determined895, skorvald.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
                 if (invul895Apply != null)
                 {
                     fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
@@ -241,9 +251,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
                 TrashID.SolarBloom
             };
@@ -262,44 +272,39 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var horizonStrike = casts.Where(x => x.SkillId == HorizonStrikeSkorvald2 || x.SkillId == HorizonStrikeSkorvald4).ToList();
                     foreach (AbstractCastEvent c in horizonStrike)
                     {
-                        int start = (int)c.Time + 100;
-                        int duration = 3900;
-                        int radius = 1200;
-                        int angle = 70;
+                        int castDuration = 3900;
                         int shiftingAngle = 45;
                         int sliceSpawnInterval = 750;
-                        int attackEnd = start + duration;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+                        (long start, long end) lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
 
-                        Point3D facingDirection = GetFacingPoint3D(replay, c, duration);
-                        if (facingDirection == null)
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        if (facingDirection != null)
                         {
-                            continue;
-                        }
-                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                            float degree = Point3D.GetZRotationFromFacing(facingDirection);
 
-                        // Horizon Strike starting at Skorvald's facing point
-                        if (c.SkillId == HorizonStrikeSkorvald4)
-                        {
-                            for (int i = 0; i < 4; i++)
+                            // Horizon Strike starting at Skorvald's facing point
+                            if (c.SkillId == HorizonStrikeSkorvald4)
                             {
-                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, degree, radius, angle);
-                                start += sliceSpawnInterval;
-                                attackEnd += sliceSpawnInterval;
-                                degree -= shiftingAngle;
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    AddHorizonStrikeDecoration(replay, target, lifespan, degree);
+                                    lifespan.start += sliceSpawnInterval;
+                                    lifespan.end += sliceSpawnInterval;
+                                    degree -= shiftingAngle;
+                                }
                             }
-                        }
-                        // Starting at Skorvald's 90° of facing point
-                        if (c.SkillId == HorizonStrikeSkorvald2)
-                        {
-                            degree -= 90;
-                            for (int i = 0; i < 4; i++)
+                            // Starting at Skorvald's 90° of facing point
+                            if (c.SkillId == HorizonStrikeSkorvald2)
                             {
-                                AddHorizonStrikeDecoration(replay, target, start, attackEnd, degree, radius, angle);
-                                start += sliceSpawnInterval;
-                                attackEnd += sliceSpawnInterval;
-                                degree += shiftingAngle;
+                                degree -= 90;
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    AddHorizonStrikeDecoration(replay, target, lifespan, degree);
+                                    lifespan.start += sliceSpawnInterval;
+                                    lifespan.end += sliceSpawnInterval;
+                                    degree += shiftingAngle;
+                                }
                             }
                         }
                     }
@@ -309,66 +314,47 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var crimsonDawn = casts.Where(x => skillIds.Contains(x.SkillId)).ToList();
                     foreach (AbstractCastEvent c in crimsonDawn)
                     {
-                        int radius = 1200;
+                        uint radius = 1200;
                         int angle = 295;
-                        int start = (int)c.Time;
-                        int duration = 3000;
-                        int attackEnd = start + duration;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+                        int castDuration = 3000;
+                        (long start, long end) lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
 
-                        Point3D facingDirection = GetFacingPoint3D(replay, c, duration);
-                        if (facingDirection == null)
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        if (facingDirection != null)
                         {
-                            continue;
-                        }
-                        float degree = RadianToDegreeF(Math.Atan2(facingDirection.Y, facingDirection.X));
+                            float degree = Point3D.GetZRotationFromFacing(facingDirection);
 
-                        if (c.SkillId == CrimsonDawnSkorvaldCM2)
-                        {
-                            degree += 90;
+                            if (c.SkillId == CrimsonDawnSkorvaldCM2)
+                            {
+                                degree += 90;
+                            }
+                            if (c.SkillId == CrimsonDawnSkorvaldCM1)
+                            {
+                                degree += 270;
+                            }
+                            var connector = new AgentConnector(target);
+                            var rotationConnector = new AngleConnector(degree);
+                            replay.Decorations.Add(new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.Add(new PieDecoration(radius, angle, (lifespan.end, lifespan.end + 500), Colors.Red, 0.2, connector).UsingRotationConnector(rotationConnector));
                         }
-                        if (c.SkillId == CrimsonDawnSkorvaldCM1)
-                        {
-                            degree += 270;
-                        }
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new PieDecoration(true, 0, radius, degree, angle, (attackEnd, attackEnd + 500), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
                     }
 
                     // Punishing Kick
                     var punishingKick = casts.Where(x => x.SkillId == PunishingKickSkorvald).ToList();
                     foreach (AbstractCastEvent c in punishingKick)
                     {
-                        int start = (int)c.Time;
-                        int duration = 1850;
-                        int translation = 150;
-                        int cascadeCount = 4;
-                        int attackEnd = start + duration;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+                        int castDuration = 1850;
+                        (long start, long end) lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+                        long expectedEndCast = c.Time + castDuration;
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
-                        if (frontalPoint == null)
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        if (frontalPoint != null)
                         {
-                            continue;
-                        }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
-
-                        // Frontal
-                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
-                    }
-
-                    // Solar Bolt
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SolarBolt, out IReadOnlyList<EffectEvent> solarBoltEffects))
-                    {
-                        foreach (EffectEvent solarBoltEffect in solarBoltEffects)
-                        {
-                            int aoeRadius = 100;
-                            int aoeTimeout = 12000;
-                            int start = (int)solarBoltEffect.Time;
-                            int attackEnd = start + aoeTimeout;
-                            replay.Decorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(solarBoltEffect.Position)));
+                            float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
+                            // Frontal
+                            AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation);
                         }
                     }
 
@@ -376,72 +362,52 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var radiantFury = casts.Where(x => x.SkillId == RadiantFurySkorvald).ToList();
                     foreach (AbstractCastEvent c in radiantFury)
                     {
-                        int start = (int)c.Time;
                         int duration = 2700;
-                        int expectedHitTime = start + duration;
-                        int attackEnd = start + duration;
-                        int endWave = attackEnd + 900;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+                        long expectedEndCast = c.Time + duration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, duration));
+                        lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, duration));
+                        (long start, long end) lifespanWave = (lifespan.end, lifespan.end + 900);
 
-                        if (expectedHitTime <= attackEnd)
+                        if (expectedEndCast <= lifespan.end)
                         {
-                            // Shockwave
-                            AddSolarDischargeDecoration(replay, target, attackEnd, endWave, 1200);
+                            GeographicalConnector connector = new AgentConnector(target);
+                            replay.AddShockwave(connector, lifespanWave, Colors.Red, 0.6, 1200);
                         }
                     }
 
                     // Supernova - Phase Oneshot
-                    var supernova = casts.Where(x => x.SkillId == SupernovaCM).ToList();
+                    var supernova = casts.Where(x => x.SkillId == SupernovaSkorvaldCM).ToList();
                     foreach (AbstractCastEvent c in supernova)
                     {
-                        int start = (int)c.Time;
                         int duration = 75000;
-                        int expectedHitTime = start + duration;
-                        int attackEnd = start + duration;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-
-                        replay.Decorations.Add(new CircleDecoration(true, expectedHitTime, 1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 1200, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                    }
-
-                    // Solar Cyclone
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KickGroundEffect, out IReadOnlyList<EffectEvent> kickEffects))
-                    {
-                        foreach (EffectEvent kickEffect in kickEffects)
-                        {
-                            int start = (int)kickEffect.Time;
-                            int end = start + 300;
-                            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, kickEffect.Rotation.Z - 90, 0, (start, end), "rgba(255, 0, 0, 0.2)", new PositionConnector(kickEffect.Position)));
-                        }
+                        long expectedEndCast = c.Time + duration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, duration));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(1200, lifespan, Colors.Red, 0.2, new AgentConnector(target)), expectedEndCast);
                     }
 
                     // Cranial Cascade
                     var cranialCascadeSkorvald = casts.Where(x => x.SkillId == CranialCascadeSkorvald).ToList();
                     foreach (AbstractCastEvent c in cranialCascadeSkorvald)
                     {
-                        int start = (int)c.Time;
-                        int duration = 1750;
+                        int castDuration = 1750;
                         int angle = 35;
-                        int cascadeCount = 4;
-                        int translation = 150;
-                        int attackEnd = start + duration;
-                        attackEnd = GetAttackEndByStunTime(log, target, c, duration, attackEnd);
-                        attackEnd = GetAttackEndByDeterminedTime(log, target, c, duration, attackEnd);
+                        long expectedEndCast = c.Time + castDuration;
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
-                        if (frontalPoint == null)
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
+
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        if (frontalPoint != null)
                         {
-                            continue;
-                        }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                            float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
-                        // Frontal
-                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
-                        // Left
-                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation - angle, translation, cascadeCount);
-                        // Right
-                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation + angle, translation, cascadeCount);
+                            // Frontal
+                            AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation);
+                            // Left
+                            AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation - angle);
+                            // Right
+                            AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation + angle);
+                        }
                     }
                     break;
                 case (int)TrashID.FluxAnomalyCM1:
@@ -452,103 +418,88 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var solarStomp = casts.Where(x => x.SkillId == SolarStomp).ToList();
                     foreach (AbstractCastEvent c in solarStomp)
                     {
-                        int radius = 280;
-                        int castTime = 2250;
-                        int start = (int)c.Time;
-                        int attackEnd = start + castTime;
-                        int endWave = attackEnd + castTime;
+                        uint radius = 280;
+                        int castDuration = 2250;
+                        (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                        (long start, long end) lifespanShockwave = (lifespan.end, lifespan.end + castDuration);
 
                         // Stomp
-                        replay.Decorations.Add(new CircleDecoration(true, attackEnd, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        // Shockwave
-                        AddSolarDischargeDecoration(replay, target, attackEnd, endWave, 1200);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, connector), lifespan.end);
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Red, 0.6, 1200);
                     }
 
                     // Punishing Kick
                     var punishingKickAnomaly = casts.Where(x => x.SkillId == PunishingKickAnomaly).ToList();
                     foreach (AbstractCastEvent c in punishingKickAnomaly)
                     {
-                        int start = (int)c.Time;
-                        int duration = 1850;
-                        int translation = 150;
-                        int cascadeCount = 4;
-                        int attackEnd = start + duration;
+                        int castDuration = 1850;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
-                        if (frontalPoint == null)
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        if (frontalPoint != null)
                         {
-                            continue;
+                            float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
+                            // Frontal
+                            AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation);
                         }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
-
-                        // Frontal
-                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation, translation, cascadeCount);
                     }
 
                     // Cranial Cascade
                     var cranialCascadeAnomaly = casts.Where(x => x.SkillId == CranialCascadeAnomaly).ToList();
                     foreach (AbstractCastEvent c in cranialCascadeAnomaly)
                     {
-                        int start = (int)c.Time;
-                        int duration = 1750;
+                        int castDuration = 1750;
                         int angle = 35;
-                        int cascadeCount = 4;
-                        int translation = 150;
-                        int attackEnd = start + duration;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
-                        if (frontalPoint == null)
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        if (frontalPoint != null)
                         {
-                            continue;
-                        }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                            float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
-                        // Left
-                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation - angle, translation, cascadeCount);
-                        // Right
-                        AddKickIndicatorDecoration(replay, target, start, attackEnd, rotation + angle, translation, cascadeCount);
+                            // Left
+                            AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation - angle);
+                            // Right
+                            AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation + angle);
+                        }
                     }
 
                     // Mist Smash
                     var mistSmash = casts.Where(x => x.SkillId == MistSmash).ToList();
                     foreach (AbstractCastEvent c in mistSmash)
                     {
-                        int start = (int)c.Time;
-                        int duration = 1933;
-                        int radius = 160;
-                        int attackEnd = start + duration;
-                        int waveEnd = attackEnd + 2250;
-
-                        replay.Decorations.Add(new CircleDecoration(true, attackEnd, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, radius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        int castDuration = 1933;
+                        (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                        (long start, long end) lifespanShockwave = (lifespan.end, lifespan.end + 2250);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(160, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
                         // Nightmare Discharge Shockwave
-                        replay.Decorations.Add(new CircleDecoration(false, waveEnd, 1200, (attackEnd, waveEnd), "rgba(255, 200, 0, 0.3)", new AgentConnector(target)));
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, 1200);
                     }
 
                     // Wave of Mutilation
                     var waveOfMutilation = casts.Where(x => x.SkillId == WaveOfMutilation).ToList();
                     foreach (AbstractCastEvent c in waveOfMutilation)
                     {
-                        int start = (int)c.Time;
-                        int duration = 1850;
+                        int castDuration = 1850;
                         int angle = 18;
-                        int translation = 150;
-                        int cascadeCount = 4;
-                        int attackEnd = start + duration;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                        Point3D frontalPoint = GetFacingPoint3D(replay, c, duration);
-                        if (frontalPoint == null)
+                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        if (frontalPoint != null)
                         {
-                            continue;
-                        }
-                        float rotation = Point3D.GetRotationFromFacing(frontalPoint);
+                            float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
 
-                        float startingDegree = rotation - angle * 2;
-                        for (int i = 0; i < 5; i++)
-                        {
-                            AddKickIndicatorDecoration(replay, target, start, attackEnd, startingDegree, translation, cascadeCount);
-                            startingDegree += angle;
+                            float startingDegree = rotation - angle * 2;
+                            for (int i = 0; i < 5; i++)
+                            {
+                                AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, startingDegree);
+                                startingDegree += angle;
+                            }
                         }
                     }
                     break;
@@ -564,82 +515,90 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Mist Bomb - Both for Skorvald and Flux Anomalies
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out IReadOnlyList<EffectEvent> mistBombEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out IReadOnlyList<EffectEvent> mistBombs))
             {
-                foreach (EffectEvent mistBombEffect in mistBombEffects)
+                foreach (EffectEvent effect in mistBombs)
                 {
-                    int aoeRadius = 130;
-                    int aoeTimeout = 300;
-                    int start = (int)mistBombEffect.Time;
-                    int attackEnd = start + aoeTimeout;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, aoeRadius, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(mistBombEffect.Position)));
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
+                    EnvironmentDecorations.Add(new CircleDecoration(130, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)));
+                }
+            }
+
+            // Solar Bolt - Indicator
+            AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
+
+            // Solar Bolt - Damage
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SkorvaldSolarBoltDamage, out IReadOnlyList<EffectEvent> solarBolts))
+            {
+                foreach (EffectEvent effect in solarBolts)
+                {
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 12000);
+                    EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)));
+                }
+            }
+
+            // Solar Cyclone
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KickGroundEffect, out IReadOnlyList<EffectEvent> kickEffects))
+            {
+                foreach (EffectEvent effect in kickEffects)
+                {
+                    (long start, long end) lifespan = (effect.Time, effect.Time + 300);
+                    EnvironmentDecorations.Add(new RectangleDecoration(300, 180, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z - 90)));
                 }
             }
         }
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, SkorvaldsIre }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         }
 
-        private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float degree, int radius, int angle)
+        /// <summary>
+        /// Add Horizon Strike decoration.
+        /// </summary>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="target">Actor.</param>
+        /// <param name="lifespan">Start and End of cast.</param>
+        /// <param name="degree">Degree of the strike.</param>
+        private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, float degree)
         {
-            float front = degree;
-            float flip = degree + 180;
-
+            var connector = new AgentConnector(target);
+            var frontRotationConnector = new AngleConnector(degree);
+            var flipRotationConnector = new AngleConnector(degree + 180);
             // Indicator
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, front, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new PieDecoration(true, 0, radius, flip, angle, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+            var pieIndicator = new PieDecoration(1200, 70, lifespan, Colors.Orange, 0.2, connector);
+            replay.Decorations.Add(pieIndicator.UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(pieIndicator.Copy().UsingRotationConnector(flipRotationConnector));
             // Attack hit
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, front, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new PieDecoration(true, attackEnd + 300, radius, flip, angle, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+            (long start, long end) lifespanHit = (lifespan.end, lifespan.end + 300);
+            var pieHit = (PieDecoration)new PieDecoration(1200, 70, lifespanHit, Colors.Red, 0.2, connector).UsingGrowingEnd(lifespanHit.end);
+            replay.Decorations.Add(pieHit.UsingRotationConnector(frontRotationConnector));
+            replay.Decorations.Add(pieHit.Copy().UsingRotationConnector(flipRotationConnector));
         }
 
-        private static void AddSolarDischargeDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, int radius)
+        /// <summary>
+        /// Add Kick decoration.
+        /// </summary>
+        /// <param name="replay">Combat Replay.</param>
+        /// <param name="target">Actor.</param>
+        /// <param name="lifespan">Start and End of cast.</param>
+        /// <param name="expectedEndCast">Expected end of the cast.</param>
+        /// <param name="rotation">Rotation degree.</param>
+        private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, long expectedEndCast, float rotation)
         {
-            replay.Decorations.Add(new CircleDecoration(false, attackEnd, radius, (start, attackEnd), "rgba(120, 0, 0, 0.6)", new AgentConnector(target)));
-        }
+            int translation = 150;
+            var rotationConnector = new AngleConnector(rotation);
+            var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(translation, 0), true);
+            replay.AddDecorationWithGrowing((RectangleDecoration)new RectangleDecoration(300, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnector), expectedEndCast);
 
-        private static int GetAttackEndByStunTime(ParsedEvtcLog log, AbstractSingleActor target, AbstractCastEvent c, int duration, int attackEnd)
-        {
-            Segment stun = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-            return stun != null ? (int)Math.Min(stun.Start, attackEnd) : attackEnd;
-        }
-
-        private static int GetAttackEndByDeterminedTime(ParsedEvtcLog log, AbstractSingleActor target, AbstractCastEvent c, int duration, int attackEnd)
-        {
-            Segment det = target.GetBuffStatus(log, Determined762, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-            return det != null ? (int)Math.Min(det.Start, attackEnd) : attackEnd;
-        }
-
-        private static Point3D GetFacingPoint3D(CombatReplay replay, AbstractCastEvent c, int duration)
-        {
-            IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
-            ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time + 100 && x.Time < c.Time + 100 + duration); // 200 for turning delay event
-            if (facingDirection != null)
+            // Cascade count => 4
+            for (int i = 0; i < 4; i++)
             {
-                return new Point3D(facingDirection.X, facingDirection.Y);
-            }
-            // Last facing direction polled
-            ParametricPoint3D lastDirection = list.LastOrDefault(x => x.Time < c.Time);
-            if (lastDirection != null)
-            {
-                return new Point3D(lastDirection.X, lastDirection.Y);
-            }
-            return null;
-        }
-
-        private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, float rotation, int translation, int cascadeCount)
-        {
-            replay.Decorations.Add(new RotatedRectangleDecoration(true, attackEnd, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-
-            for (int i = 0; i < cascadeCount; i++)
-            {
-                replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 300, (int)target.HitboxWidth, rotation, translation, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                attackEnd += 300;
+                replay.Decorations.Add(new RectangleDecoration(300, target.HitboxWidth, (lifespan.end, lifespan.end + 300), Colors.Red, 0.2, positionConnector).UsingRotationConnector(rotationConnector));
+                lifespan.end += 300;
                 translation += 300;
             }
         }

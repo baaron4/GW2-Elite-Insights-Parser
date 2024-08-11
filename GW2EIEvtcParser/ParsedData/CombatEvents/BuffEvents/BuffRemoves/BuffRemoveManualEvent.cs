@@ -1,6 +1,5 @@
-﻿using System;
-using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.EIData.BuffSimulators;
+﻿using GW2EIEvtcParser.EIData.BuffSimulators;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -10,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
         }
 
-        internal BuffRemoveManualEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill) : base(by, to, time, removedDuration, buffSkill)
+        internal BuffRemoveManualEvent(AgentItem by, AgentItem to, long time, int removedDuration, SkillItem buffSkill, IFF iff) : base(by, to, time, removedDuration, buffSkill, iff)
         {
         }
 
@@ -19,7 +18,7 @@ namespace GW2EIEvtcParser.ParsedData
             return false; // don't consider manual remove events
         }
 
-        internal override void UpdateSimulator(AbstractBuffSimulator simulator)
+        internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
         {
         }
         /*internal override int CompareTo(AbstractBuffEvent abe)

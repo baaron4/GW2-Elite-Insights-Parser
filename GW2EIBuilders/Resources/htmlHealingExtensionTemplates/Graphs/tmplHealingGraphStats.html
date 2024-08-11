@@ -1,0 +1,60 @@
+<template>
+    <div>
+        <div>
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="nav-link" :class="{active: mode === 0}" @click="mode = 0">Total</a>
+                </li>
+                <li>
+                    <a class="nav-link" :class="{active: mode === 1}" @click="mode = 1">Target</a>
+                </li>
+                <li>
+                    <a class="nav-link" :class="{active: mode === 2}" @click="mode = 2">Cleave</a>
+                </li>
+                <li>
+                    <a class="nav-link" :class="{active: mode === 3}" @click="mode = 3">Incoming</a>
+                </li>
+            </ul>
+        </div>
+        <keep-alive>
+            <hps-graph-component v-for="(phase, id) in phases" :key="id" v-if="id === phaseindex"
+                :activetargets="activetargets" :mode="mode" :phaseindex="id" :playerindex="playerindex" :light="light">
+            </hps-graph-component>
+        </keep-alive>
+    </div>
+</template>
+
+<script>
+    function getDefaultHealingGraphSubComponent() {
+        if (!validateStartPath("HealingStatistics/Graph")) {
+            return 1;
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[2];
+        switch (compo) {
+            case "Total":
+                return 0;
+            case "Target":
+                return 1;
+            case "Cleave":
+                return 2;
+            case "Incoming":
+                return 3;
+        }
+        return 1;
+    }
+    Vue.component("healing-graph-stats-component", {
+        props: ["activetargets", "phaseindex", 'playerindex', 'light'],
+        template: `${template}`,
+        data: function () {
+            return {
+                mode: getDefaultHealingGraphSubComponent(),
+            };
+        },
+        computed: {
+            phases: function() {
+                return logData.phases;
+            }
+        }
+    });
+</script>

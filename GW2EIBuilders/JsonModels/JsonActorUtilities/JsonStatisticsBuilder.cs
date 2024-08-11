@@ -1,5 +1,4 @@
 ﻿using GW2EIEvtcParser.EIData;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonStatistics;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities
@@ -11,26 +10,35 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
     {
         public static JsonDefensesAll BuildJsonDefensesAll(FinalDefensesAll defStats)
         {
-            var jsonDefensesAll = new JsonDefensesAll();
-            jsonDefensesAll.DamageTaken = defStats.DamageTaken;
-            jsonDefensesAll.BreakbarDamageTaken = defStats.BreakbarDamageTaken;
-            jsonDefensesAll.BlockedCount = defStats.BlockedCount;
-            jsonDefensesAll.DodgeCount = defStats.DodgeCount;
-            jsonDefensesAll.MissedCount = defStats.MissedCount;
-            jsonDefensesAll.EvadedCount = defStats.EvadedCount;
-            jsonDefensesAll.InvulnedCount = defStats.InvulnedCount;
-            jsonDefensesAll.DamageBarrier = defStats.DamageBarrier;
-            jsonDefensesAll.InterruptedCount = defStats.InterruptedCount;
-            jsonDefensesAll.DownCount = defStats.DownCount;
-            jsonDefensesAll.DownDuration = defStats.DownDuration;
-            jsonDefensesAll.DeadCount = defStats.DeadCount;
-            jsonDefensesAll.DeadDuration = defStats.DeadDuration;
-            jsonDefensesAll.DcCount = defStats.DcCount;
-            jsonDefensesAll.DcDuration = defStats.DcDuration;
-            jsonDefensesAll.BoonStrips = defStats.BoonStrips;
-            jsonDefensesAll.BoonStripsTime = defStats.BoonStripsTime;
-            jsonDefensesAll.ConditionCleanses = defStats.ConditionCleanses;
-            jsonDefensesAll.ConditionCleansesTime = defStats.ConditionCleansesTime;
+            var jsonDefensesAll = new JsonDefensesAll
+            {
+                DamageTaken = defStats.DamageTaken,
+                ConditionDamageTaken = defStats.ConditionDamageTaken,
+                StrikeDamageTaken = defStats.StrikeDamageTaken,
+                LifeLeechDamageTaken = defStats.LifeLeechDamageTaken,
+                PowerDamageTaken = defStats.PowerDamageTaken,
+                DownedDamageTaken = defStats.DownedDamageTaken,
+                BreakbarDamageTaken = defStats.BreakbarDamageTaken,
+                BlockedCount = defStats.BlockedCount,
+                DodgeCount = defStats.DodgeCount,
+                MissedCount = defStats.MissedCount,
+                EvadedCount = defStats.EvadedCount,
+                InvulnedCount = defStats.InvulnedCount,
+                DamageBarrier = defStats.DamageBarrier,
+                InterruptedCount = defStats.InterruptedCount,
+                DownCount = defStats.DownCount,
+                DownDuration = defStats.DownDuration,
+                DeadCount = defStats.DeadCount,
+                DeadDuration = defStats.DeadDuration,
+                DcCount = defStats.DcCount,
+                DcDuration = defStats.DcDuration,
+                BoonStrips = defStats.BoonStrips,
+                BoonStripsTime = defStats.BoonStripsTime,
+                ConditionCleanses = defStats.ConditionCleanses,
+                ConditionCleansesTime = defStats.ConditionCleansesTime,
+                ReceivedCrowdControl = defStats.ReceivedCrowdControl,
+                ReceivedCrowdControlDuration = defStats.ReceivedCrowdControlDuration
+            };
             return jsonDefensesAll;
         }
 
@@ -83,6 +91,14 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             jsonGameplayStats.Killed = offStats.Killed;
             jsonGameplayStats.Downed = offStats.Downed;
             jsonGameplayStats.DownContribution = offStats.DownContribution;
+            jsonGameplayStats.ConnectedConditionCount = offStats.ConnectedConditionCount;
+            jsonGameplayStats.ConnectedConditionAbove90HPCount = offStats.ConnectedConditionAbove90HPCount;
+            jsonGameplayStats.ConnectedPowerAbove90HPCount = offStats.ConnectedPowerAbove90HPCount;
+            jsonGameplayStats.ConnectedPowerCount = offStats.ConnectedPowerCount;
+            jsonGameplayStats.AgainstDownedCount = offStats.AgainstDownedCount;
+            jsonGameplayStats.AgainstDownedDamage = offStats.AgainstDownedDamage;
+            jsonGameplayStats.AppliedCrowdControl = offStats.AppliedCrowdControl;
+            jsonGameplayStats.AppliedCrowdControlDuration = offStats.AppliedCrowdControlDuration;
         }
 
         public static JsonGameplayStats BuildJsonGameplayStats(FinalOffensiveStats offStats)
@@ -126,7 +142,9 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
                 CondiCleanseSelf = playerToPlayerStats.CondiCleanseSelf,
                 CondiCleanseTimeSelf = playerToPlayerStats.CondiCleanseTimeSelf,
                 BoonStrips = playerToPlayerStats.BoonStrips,
-                BoonStripsTime = playerToPlayerStats.BoonStripsTime
+                BoonStripsTime = playerToPlayerStats.BoonStripsTime,
+                StunBreak = playerToPlayerStats.StunBreak,
+                RemovedStunDuration = playerToPlayerStats.RemovedStunDuration
             };
             return jsonPlayerSupport;
         }

@@ -1,45 +1,49 @@
 <template>
     <div class="d-flex align-items-center actor-rotation">
         <div v-if="rotation.current">
-            <img class="icon-ll" :class="getIconClass(rotation.current)" :src="rotation.current.skill.icon" :data-original-title="getTooltip(rotation.current)"/>
+            <img class="icon-ll" :class="getIconClass(rotation.current)" :src="rotation.current.skill.icon" :title="getTooltip(rotation.current)"/>
         </div>
         <div v-else class="empty-icon-ll">
 
         </div>
         <div v-for="next in rotation.nexts">
-            <img class="icon-l" :class="getIconClass(next)" :src="next.skill.icon" :data-original-title="getTooltip(next)"/>
+            <img class="icon-l" :class="getIconClass(next)" :src="next.skill.icon" :title="getTooltip(next)"/>
         </div>
     </div>
 </template>
 
 <script>
+    
     Vue.component("combat-replay-actor-rotation-component", {
         mixins: [timeRefreshComponent],
         props: ["actorindex", "enemy"],
         template: `${template}`,
         methods: {
+            getSkillDuration: function(item) {
+                return Math.max(item[2], 1) * 1e-3;
+            },
             findRotationIndex: function (rotation, timeS, start, end) {
                 if (end === 0) {
                     return 0;
                 }
-                if (timeS < rotation[start].item[0]) {
+                if (timeS < rotation[start][0]) {
                     return start;
-                } else if (timeS > rotation[end].item[0] + rotation[end].item[2] / 1000.0) {
+                } else if (timeS > rotation[end][0] + this.getSkillDuration(rotation[end])) {
                     return end;
                 }
                 var id = Math.floor((end + start) / 2);
                 if (id === start || id === end) {
-                    var item = rotation[start].item;
+                    var item = rotation[start];
                     var x = item[0];
-                    var duration = item[2] / 1000.0;
+                    var duration = this.getSkillDuration(item);
                     if (timeS >= x && x + duration >= timeS) {
                         return start;
                     }
                     return end;
                 }
-                var item = rotation[id].item;
+                var item = rotation[id];
                 var x = item[0];
-                var duration = item[2] / 1000.0;
+                var duration = this.getSkillDuration(item);
                 if (timeS < x) {
                     return this.findRotationIndex(rotation, timeS, start, id);
                 } else if (timeS > x + duration) {
@@ -72,15 +76,17 @@
             actorRotation: function () {
                 return this.actor.details.rotation[0];
             },
-            actorRotationNoInstants: function () {
-                var res = [];
+            actorNoInstantRotation: function () {
+                var actorNoInstantRotation = [];
+                var actorNoInstantRotationIndex = [];
                 for (var i = 0; i < this.actorRotation.length; i++) {
-                    var item = this.actorRotation[i];
-                    if (item[3] !== 4) {
-                        res.push({ item: item, index: i });
+                    var rot = this.actorRotation[i];
+                    if (rot[3] !== RotationStatus.INSTANT) {
+                        actorNoInstantRotation.push(rot);
+                        actorNoInstantRotationIndex.push(i);
                     }
                 }
-                return res;
+                return [actorNoInstantRotation, actorNoInstantRotationIndex];
             },
             rotation: function () {
                 var res = {
@@ -91,12 +97,27 @@
                     return res;
                 }
                 var time = this.timeToUse / 1000.0;
-                var id = this.findRotationIndex(this.actorRotationNoInstants, time, 0, this.actorRotationNoInstants.length - 1);
-                id = this.actorRotationNoInstants[id].index;
+                var id = this.findRotationIndex(this.actorRotation, time, 0, this.actorRotation.length - 1);
                 var item = this.actorRotation[id];
                 var x = item[0];
-                var duration = item[2] / 1000.0;
+                var duration = this.getSkillDuration(item);
+                var drawItem = false;
+                var [actorNoInstantRotation, actorNoInstantRotationIndex] = this.actorNoInstantRotation;
                 if (x <= time && time <= x + duration) {
+                    drawItem = true;
+                } else if (item[3] === RotationStatus.INSTANT && actorNoInstantRotation.length) {
+                    var idNoInstant =  this.findRotationIndex(actorNoInstantRotation, time, 0, actorNoInstantRotation.length - 1);
+                    id = Math.min(id, actorNoInstantRotationIndex[idNoInstant]);
+                    if (id !== idNoInstant) {
+                        item = this.actorRotation[id];
+                        x = item[0];
+                        duration = this.getSkillDuration(item);
+                        if (x <= time && time <= x + duration) {
+                            drawItem = true;
+                        }
+                    }
+                }
+                if (drawItem) {
                     res.current = {
                         time: item[0],
                         skill: findSkill(false, item[1]),

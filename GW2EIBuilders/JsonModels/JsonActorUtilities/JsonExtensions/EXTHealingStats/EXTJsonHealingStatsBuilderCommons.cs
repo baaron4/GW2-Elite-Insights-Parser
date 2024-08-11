@@ -6,7 +6,6 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
 {
@@ -52,32 +51,32 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
             };
         }
 
-        private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTAbstractHealingEvent> list, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTAbstractHealingEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonHealingDist = new EXTJsonHealingDist();
             jsonHealingDist.IndirectHealing = list.Exists(x => x is EXTNonDirectHealingEvent);
             if (jsonHealingDist.IndirectHealing)
             {
-                if (!buffDesc.ContainsKey("b" + id))
+                if (!buffMap.ContainsKey(id))
                 {
                     if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
                     {
-                        buffDesc["b" + id] = JsonLogBuilder.BuildBuffDesc(buff, log);
+                        buffMap[id] = buff;
                     }
                     else
                     {
                         SkillItem skill = list.First().Skill;
-                        var auxBoon = new Buff(skill.Name, id, skill.Icon);
-                        buffDesc["b" + id] = JsonLogBuilder.BuildBuffDesc(auxBoon, log);
+                        var auxBuff = new Buff(skill.Name, id, skill.Icon);
+                        buffMap[id] = auxBuff;
                     }
                 }
             }
             else
             {
-                if (!skillDesc.ContainsKey("s" + id))
+                if (!skillMap.ContainsKey(id))
                 {
                     SkillItem skill = list.First().Skill;
-                    skillDesc["s" + id] = JsonLogBuilder.BuildSkillDesc(skill, log);
+                    skillMap[id] = skill;
                 }
             }
             jsonHealingDist.Id = id;
@@ -99,12 +98,12 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
             return jsonHealingDist;
         }
 
-        internal static List<EXTJsonHealingDist> BuildHealingDistList(Dictionary<long, List<EXTAbstractHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<string, JsonLog.SkillDesc> skillDesc, Dictionary<string, JsonLog.BuffDesc> buffDesc)
+        internal static List<EXTJsonHealingDist> BuildHealingDistList(Dictionary<long, List<EXTAbstractHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var res = new List<EXTJsonHealingDist>();
             foreach (KeyValuePair<long, List<EXTAbstractHealingEvent>> pair in dlsByID)
             {
-                res.Add(BuildHealingDist(pair.Key, pair.Value, log, skillDesc, buffDesc));
+                res.Add(BuildHealingDist(pair.Key, pair.Value, log, skillMap, buffMap));
             }
             return res;
         }

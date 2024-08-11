@@ -6,13 +6,12 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -35,9 +34,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 5s extreme vulnerability from dread visage
                         const int duration = 5000;
                         // find last apply
-                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
                             .OfType<BuffApplyEvent>()
-                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .Where(e => e.Time <= remove.Time)
                             .MaxBy(e => e.Time);
                         // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
@@ -54,9 +53,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // 60s extreme vulnerability from frightening speed
                         const int duration = 60000;
                         // find last apply
-                        BuffApplyEvent apply = log.CombatData.GetBuffData(ExtremeVulnerability)
+                        BuffApplyEvent apply = log.CombatData.GetBuffDataByIDByDst(ExtremeVulnerability, remove.To)
                             .OfType<BuffApplyEvent>()
-                            .Where(e => e.Time <= remove.Time && e.To == remove.To)
+                            .Where(e => e.Time <= remove.Time)
                             .MaxBy(e => e.Time);
                         // check for removed duration, applied duration & death within 1s after
                         return remove.RemovedDuration > ServerDelayConstant
@@ -85,7 +84,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new HashSet<int>
             {
-                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM,
+                (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
             };
         }
 
@@ -93,12 +92,25 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             return new List<int>
             {
-                (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM,
-                (int)ArcDPSEnums.TrashID.AspectOfTorment,
-                (int)ArcDPSEnums.TrashID.AspectOfLethargy,
-                (int)ArcDPSEnums.TrashID.AspectOfExposure,
-                (int)ArcDPSEnums.TrashID.AspectOfDeath,
-                (int)ArcDPSEnums.TrashID.AspectOfFear,
+                (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
+                (int)TrashID.AspectOfTorment,
+                (int)TrashID.AspectOfLethargy,
+                (int)TrashID.AspectOfExposure,
+                (int)TrashID.AspectOfDeath,
+                (int)TrashID.AspectOfFear,
+            };
+        }
+
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)TargetID.KanaxaiScytheOfHouseAurkusCM, 0 },
+                {(int)TrashID.AspectOfTorment, 1 },
+                {(int)TrashID.AspectOfLethargy, 1 },
+                {(int)TrashID.AspectOfExposure, 1 },
+                {(int)TrashID.AspectOfDeath, 1 },
+                {(int)TrashID.AspectOfFear, 1 },
             };
         }
 
@@ -107,19 +119,19 @@ namespace GW2EIEvtcParser.EncounterLogic
             return FightData.EncounterMode.CMNoName;
         }
 
-        internal override void EIEvtcParse(ulong gw2Build, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            base.EIEvtcParse(gw2Build, fightData, agentData, combatData, extensions);
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
             var aspectCounts = new Dictionary<int, int>();
             foreach (AbstractSingleActor actor in Targets)
             {
                 switch (actor.ID)
                 {
-                    case (int)ArcDPSEnums.TrashID.AspectOfTorment:
-                    case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
-                    case (int)ArcDPSEnums.TrashID.AspectOfExposure:
-                    case (int)ArcDPSEnums.TrashID.AspectOfDeath:
-                    case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                    case (int)TrashID.AspectOfTorment:
+                    case (int)TrashID.AspectOfLethargy:
+                    case (int)TrashID.AspectOfExposure:
+                    case (int)TrashID.AspectOfDeath:
+                    case (int)TrashID.AspectOfFear:
                         if (aspectCounts.TryGetValue(actor.ID, out int count))
                         {
                             actor.OverrideName(actor.Character + " " + count);
@@ -138,11 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
-            if (kanaxai == null)
-            {
-                throw new MissingKeyActorsException("Kanaxai not found");
-            }
+            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
             phases[0].AddTarget(kanaxai);
             if (!requirePhases)
             {
@@ -151,8 +159,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Phases
             List<PhaseData> encounterPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
 
-            var worldCleaverPhaseStarts = log.CombatData.GetBuffData(DeterminedToDestroy).OfType<BuffApplyEvent
-                >().Where(x => x.To == kanaxai.AgentItem).Select(x => x.Time).ToList();
+            var worldCleaverPhaseStarts = log.CombatData.GetBuffDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent
+                >().Select(x => x.Time).ToList();
             int worldCleaverCount = 0;
             int repeatedCount = 0;
             var isRepeatedWorldCleaverPhase = new List<bool>();
@@ -204,11 +212,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         switch (aspect.ID)
                         {
-                            case (int)ArcDPSEnums.TrashID.AspectOfTorment:
-                            case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
-                            case (int)ArcDPSEnums.TrashID.AspectOfExposure:
-                            case (int)ArcDPSEnums.TrashID.AspectOfDeath:
-                            case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                            case (int)TrashID.AspectOfTorment:
+                            case (int)TrashID.AspectOfLethargy:
+                            case (int)TrashID.AspectOfExposure:
+                            case (int)TrashID.AspectOfDeath:
+                            case (int)TrashID.AspectOfFear:
                                 if (log.CombatData.GetBuffRemoveAllData(Determined762).Any(x => x.To == aspect.AgentItem && x.Time >= curPhase.Start && x.Time <= curPhase.End))
                                 {
                                     curPhase.AddTarget(aspect);
@@ -257,12 +265,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
         {
-            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
-            if (kanaxai == null)
-            {
-                throw new MissingKeyActorsException("Kanaxai not found");
-            }
-            BuffApplyEvent invul762Gain = combatData.GetBuffData(Determined762).OfType<BuffApplyEvent>().Where(x => x.To == kanaxai.AgentItem).FirstOrDefault();
+            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
+            BuffApplyEvent invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
             if (invul762Gain != null)
             {
                 fightData.SetSuccess(true, invul762Gain.Time);
@@ -271,10 +275,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
+            base.ComputePlayerCombatReplayActors(player, log, replay);
             long maxEnd = log.FightData.FightEnd;
 
             // Orange Tether from Aspect to player
-            IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffData(AspectTetherBuff).Where(x => x.To == player.AgentItem);
+            IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
             IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
             IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
             AgentItem tetherAspect = _unknownAgent;
@@ -285,34 +290,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                 BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
                 BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
                 long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
-                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(255, 200, 0, 0.5)", new AgentConnector(tetherAspect), new AgentConnector(player)));
+                replay.Decorations.Add(new LineDecoration((start, (int)end), Colors.Yellow, 0.5, new AgentConnector(tetherAspect), new AgentConnector(player)));
             }
 
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
-            IEnumerable<AbstractBuffEvent> phantasmagoria = log.CombatData.GetBuffData(Phantasmagoria).Where(x => x.To == player.AgentItem);
-            IEnumerable<BuffRemoveAllEvent> phantasmagoriaRemoves = phantasmagoria.OfType<BuffRemoveAllEvent>();
-            foreach (BuffApplyEvent apply in phantasmagoria.OfType<BuffApplyEvent>())
-            {
-                int start = (int)apply.Time;
-                BuffRemoveAllEvent remove = phantasmagoriaRemoves.FirstOrDefault(x => x.Time >= apply.Time);
-                long end = remove?.Time ?? maxEnd;
-                replay.Decorations.Add(new LineDecoration(0, (start, (int)end), "rgba(0, 100, 255, 0.5)", new AgentConnector(apply.By), new AgentConnector(player)));
-            }
+            List<AbstractBuffEvent> phantasmagorias = GetFilteredList(log.CombatData, Phantasmagoria, player, true, true);
+            replay.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
             IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment segment in axes)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
-                replay.Decorations.Add(new CircleDecoration(true, (int)segment.End, 180, segment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
             }
 
             // Frightening Speed - Numbers spread AoEs
             IEnumerable<Segment> spreads = player.GetBuffStatus(log, KanaxaiSpreadOrangeAoEBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             foreach (Segment spreadSegment in spreads)
             {
-                replay.Decorations.Add(new CircleDecoration(true, 0, 380, spreadSegment, "rgba(200, 120, 0, 0.2)", new AgentConnector(player)));
+                replay.Decorations.Add(new CircleDecoration(380, spreadSegment, Colors.Orange, 0.2, new AgentConnector(player)));
             }
 
             // Target Order Overhead
@@ -329,21 +326,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
+                case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
                     // World Cleaver
                     var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver).ToList();
                     foreach (AbstractCastEvent c in worldCleaver)
                     {
-                        int duration = 26320;
-                        int start = (int)c.Time;
-                        IEnumerable<AbstractHealthDamageEvent> hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time);
-                        if (hits.Any())
+                        int castDuration = 26320;
+                        var hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time).ToList();
+                        (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                        if (hits.Count != 0)
                         {
-                            AddWorldCleaverDecoration(target, replay, start, (int)hits.FirstOrDefault(x => x.Time > c.Time).Time, start + duration);
+                            (long start, long end) lifespanHit = (c.Time, hits.FirstOrDefault(x => x.Time > c.Time).Time);
+                            AddWorldCleaverDecoration(target, replay, lifespanHit, lifespan.end);
                         }
                         else
                         {
-                            AddWorldCleaverDecoration(target, replay, start, start + duration, start + duration);
+                            AddWorldCleaverDecoration(target, replay, lifespan, lifespan.end);
                         }
                     }
                     // Dread Visage
@@ -352,31 +350,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castDuration = 5400;
                         int expectedEndCastTime = (int)c.Time + castDuration;
-                        Segment quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrDefault();
-                        if (quickness != null)
+                        double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
+                        if (actualDuration > 0)
                         {
-                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
-                            double actualDuration = castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                            replay.AddOverheadIcon(new Segment(c.Time, c.Time + (long)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
                         }
                         else
                         {
-                            replay.AddOverheadIcon(new Segment((int)c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                            replay.AddOverheadIcon(new Segment(c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
                         }
                     }
                     break;
-                case (int)ArcDPSEnums.TrashID.AspectOfTorment:
-                case (int)ArcDPSEnums.TrashID.AspectOfLethargy:
-                case (int)ArcDPSEnums.TrashID.AspectOfExposure:
-                case (int)ArcDPSEnums.TrashID.AspectOfDeath:
-                case (int)ArcDPSEnums.TrashID.AspectOfFear:
+                case (int)TrashID.AspectOfTorment:
+                case (int)TrashID.AspectOfLethargy:
+                case (int)TrashID.AspectOfExposure:
+                case (int)TrashID.AspectOfDeath:
+                case (int)TrashID.AspectOfFear:
                     // Tether casts performed by Aspects
                     IEnumerable<AnimatedCastEvent> tetherCasts = log.CombatData.GetAnimatedCastData(target.AgentItem).Where(x => x.SkillId == AspectTetherSkill);
                     foreach (AnimatedCastEvent cast in tetherCasts)
                     {
                         int start = (int)cast.Time;
                         int end = (int)cast.ExpectedEndTime; // actual end is often much later, just use expected end for short highlight
-                        replay.Decorations.Add(new CircleDecoration(false, 0, 180, (start, end), "rgba(0, 100, 255, 0.5)", new AgentConnector(target), 20));
+                        replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
                     }
                     // Dread Visage
                     var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();
@@ -387,30 +383,31 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int castDuration = 5400;
                         int expectedEndCastTime = (int)c.Time + castDuration;
-                        
+
                         Segment quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrDefault();
 
                         // If the aspect has Sugar Rush AND Quickness
                         if (hasSugarRush && quickness != null)
                         {
-                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
-                            double castTimeWithSugarRush = castDuration * 0.8;
-                            double actualFinalDuration = castTimeWithSugarRush - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66 / 0.8);
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualFinalDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                            double actualDuration = ComputeCastTimeWithQuicknessAndSugarRush(log, target, c.Time, castDuration);
+                            var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
+                            replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
 
                         // If the aspect has Sugar rush AND NOT Quickness
                         if (hasSugarRush && quickness == null)
                         {
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)Math.Ceiling((int)c.Time + castDuration * 0.8), 1), target, ParserIcons.EyeOverhead, 30);
+                            var actualDuration = ComputeCastTimeWithSugarRush(castDuration);
+                            var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
+                            replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
 
                         // If the aspect DOESN'T have Sugar rush but HAS Quickness
                         if (!hasSugarRush && quickness != null)
                         {
-                            long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max((int)c.Time, quickness.Start);
-                            double actualDuration = castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
-                            replay.AddOverheadIcon(new Segment((int)c.Time, (int)c.Time + (int)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                            double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
+                            var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
+                            replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                         }
 
                         // If the aspect DOESN'T have Sugar Rush and Quickness
@@ -434,11 +431,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent aoe in frighteningSpeedRedAoEs)
                 {
-                    int duration = 1500;
-                    int start = (int)aoe.Time;
-                    int effectEnd = start + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(false, 0, 380, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+                    (long start, long end) lifespan = (aoe.Time, aoe.Time + 1500);
+                    var circle = new CircleDecoration(380, lifespan, Colors.Red, 0.2, new PositionConnector(aoe.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
                 }
             }
 
@@ -446,9 +442,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out IReadOnlyList<EffectEvent> axeAoEs))
             {
                 // Get World Cleaver casts
-                AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM));
+                AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
                 IReadOnlyList<AbstractCastEvent> casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                
+
                 // Get Axe AoE Buffs
                 var axes = new List<AbstractBuffEvent>();
                 axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1));
@@ -481,11 +477,10 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (EffectEvent harrowshot in harrowshots)
                 {
-                    int duration = 3000;
-                    int start = (int)harrowshot.Time;
-                    int end = (int)harrowshot.Time + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(true, 0, 280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position)));
-                    EnvironmentDecorations.Add(new CircleDecoration(true, end, 280, (start, end), "rgba(255, 120, 0, 0.2)", new PositionConnector(harrowshot.Position)));
+                    (long start, long end) lifespan = harrowshot.ComputeLifespan(log, 3000);
+                    var circle = new CircleDecoration(280, lifespan, Colors.Orange, 0.2, new PositionConnector(harrowshot.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.end));
                 }
             }
         }
@@ -511,8 +506,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             int start = (int)aoe.Time;
             int effectEnd = start + duration;
-            EnvironmentDecorations.Add(new CircleDecoration(true, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position)));
-            EnvironmentDecorations.Add(new CircleDecoration(false, 0, 180, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(aoe.Position), 10));
+            var circle = new CircleDecoration(180, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(aoe.Position));
+            EnvironmentDecorations.Add(circle);
+            EnvironmentDecorations.Add(circle.Copy().UsingFilled(false));
         }
 
         /// <summary>
@@ -520,13 +516,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// </summary>
         /// <param name="target">Kanaxai.</param>
         /// <param name="replay">Combat Replay.</param>
-        /// <param name="start">Start of the cast.</param>
-        /// <param name="end">End of the cast.</param>
+        /// <param name="lifespan">Start and End of the cast.</param>
         /// <param name="growing">Duration of the channel.</param>
-        private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, int start, int end, int growing)
+        private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, (long start, long end) lifespan, long growing)
         {
-            replay.Decorations.Add(new CircleDecoration(true, 0, 1100, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-            replay.Decorations.Add(new CircleDecoration(true, growing, 1100, (start, end), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
+            replay.AddDecorationWithGrowing(new CircleDecoration(1100, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing);
         }
     }
 }

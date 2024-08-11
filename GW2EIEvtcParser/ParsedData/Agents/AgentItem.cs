@@ -9,14 +9,14 @@ namespace GW2EIEvtcParser.ParsedData
     {
 
         private static int AgentCount = 0;
-        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer}
+        public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
 
         public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
         public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
 
         // Fields
         public ulong Agent { get; }
-        public int ID { get; protected set; }
+        public int ID { get; protected set; } = ArcDPSEnums.NonIdentifiedSpecies;
         public int UniqueID { get; }
         public AgentItem Master { get; protected set; }
         public ushort InstID { get; protected set; }
@@ -24,8 +24,8 @@ namespace GW2EIEvtcParser.ParsedData
         public long FirstAware { get; protected set; }
         public long LastAware { get; protected set; } = long.MaxValue;
         public string Name { get; protected set; } = "UNKNOWN";
-        public ParserHelper.Spec Spec { get; } = ParserHelper.Spec.Unknown;
-        public ParserHelper.Spec BaseSpec { get; } = ParserHelper.Spec.Unknown;
+        public ParserHelper.Spec Spec { get; private set; } = ParserHelper.Spec.Unknown;
+        public ParserHelper.Spec BaseSpec { get; private set; } = ParserHelper.Spec.Unknown;
         public ushort Toughness { get; protected set; }
         public ushort Healing { get; }
         public ushort Condition { get; }
@@ -33,13 +33,15 @@ namespace GW2EIEvtcParser.ParsedData
         public uint HitboxWidth { get; }
         public uint HitboxHeight { get; }
 
+        private bool Unamed { get; }
+
         public bool IsFake { get; }
         public bool IsNotInSquadFriendlyPlayer { get; private set; }
 
         // Constructors
         internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, AgentType type, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight)
         {
-            UniqueID = AgentCount++;
+            UniqueID = ++AgentCount;
             Agent = agent;
             Name = name;
             Spec = spec;
@@ -57,17 +59,11 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 if (type == AgentType.Player)
                 {
+                    HitboxWidth = 48;
+                    HitboxHeight = 240;
                     string[] splitStr = Name.Split('\0');
                     if (splitStr.Length < 2 || (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-")))
                     {
-                        if (!splitStr[0].Any(char.IsDigit))
-                        {
-                            IsNotInSquadFriendlyPlayer = true;
-                        } 
-                        else
-                        {
-                            Name = Spec.ToString() + " " + Name;
-                        }
                         Type = AgentType.NonSquadPlayer;
                     }
                 }
@@ -76,6 +72,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
 
             }
+            Unamed = Name.Contains("ch"+ID+"-");
         }
 
         internal AgentItem(ulong agent, string name, ParserHelper.Spec spec, int id, ushort instid, ushort toughness, ushort healing, ushort condition, ushort concentration, uint hbWidth, uint hbHeight, long firstAware, long lastAware, bool isFake) : this(agent, name, spec, id, AgentType.NPC, toughness, healing, condition, concentration, hbWidth, hbHeight)
@@ -88,7 +85,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal AgentItem(AgentItem other)
         {
-            UniqueID = AgentCount++;
+            UniqueID = ++AgentCount;
             Agent = other.Agent;
             Name = other.Name;
             Spec = other.Spec;
@@ -104,11 +101,18 @@ namespace GW2EIEvtcParser.ParsedData
             InstID = other.InstID;
             Master = other.Master;
             IsFake = other.IsFake;
+            Unamed = other.Unamed;
         }
 
         internal AgentItem()
         {
-            UniqueID = AgentCount++;
+            UniqueID = ++AgentCount;
+        }
+
+        internal void OverrideSpec(ParserHelper.Spec spec)
+        {
+            Spec = spec;
+            BaseSpec = ParserHelper.SpecToBaseSpec(spec);
         }
 
         internal void OverrideIsNotInSquadFriendlyPlayer(bool status)
@@ -169,7 +173,7 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void SetMaster(AgentItem master)
         {
-            if (IsPlayer)
+            if (IsPlayer || master == this)
             {
                 return;
             }
@@ -189,9 +193,10 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, int index)
+        private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, long minTime, int index)
         {
             long cTime = cur.Time;
+
             if (cur is DownEvent)
             {
                 down.Add(new Segment(cTime, nextTime, 1));
@@ -204,26 +209,14 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 dc.Add(new Segment(cTime, nextTime, 1));
             }
-            else if (index == 0)
+            else if (index == 0 && cTime - minTime > 50)
             {
-                if (cur is SpawnEvent)
-                {
-                    dc.Add(new Segment(long.MinValue, cTime, 1));
-                }
-                else if (cur is AliveEvent)
-                {
-                    dead.Add(new Segment(long.MinValue, cTime, 1));
-                }
+                dc.Add(new Segment(minTime, cTime, 1));
             }
         }
 
         internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, CombatData combatData, FightData fightData)
         {
-            // State changes are not reliable
-            if (Type == AgentType.NonSquadPlayer)
-            {
-                return;
-            }
             var status = new List<AbstractStatusEvent>();
             status.AddRange(combatData.GetDownEvents(this));
             status.AddRange(combatData.GetAliveEvents(this));
@@ -231,7 +224,12 @@ namespace GW2EIEvtcParser.ParsedData
             status.AddRange(combatData.GetSpawnEvents(this));
             status.AddRange(combatData.GetDespawnEvents(this));
             dc.Add(new Segment(long.MinValue, FirstAware, 1));
-            if (!status.Any())
+            // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
+            if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
+            {
+                return;
+            }
+            if (status.Count == 0)
             {
                 dc.Add(new Segment(LastAware, long.MaxValue, 1));
                 return;
@@ -241,17 +239,17 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
-                AddValueToStatusList(dead, down, dc, cur, next.Time, i);
+                AddValueToStatusList(dead, down, dc, cur, next.Time, FirstAware, i);
             }
             // check last value
             if (status.Count > 0)
             {
                 AbstractStatusEvent cur = status.Last();
-                AddValueToStatusList(dead, down, dc, cur, LastAware, status.Count - 1);
+                AddValueToStatusList(dead, down, dc, cur, LastAware, FirstAware, status.Count - 1);
                 if (cur is DeadEvent)
                 {
                     dead.Add(new Segment(LastAware, long.MaxValue, 1));
-                } 
+                }
                 else
                 {
                     dc.Add(new Segment(LastAware, long.MaxValue, 1));
@@ -261,23 +259,26 @@ namespace GW2EIEvtcParser.ParsedData
 
         internal void GetAgentBreakbarStatus(List<Segment> nones, List<Segment> actives, List<Segment> immunes, List<Segment> recovering, CombatData combatData, FightData fightData)
         {
-            // State changes are not reliable
-            if (Type == AgentType.NonSquadPlayer)
+            var status = new List<BreakbarStateEvent>();
+            status.AddRange(combatData.GetBreakbarStateEvents(this));
+            // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
+            if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
             {
                 return;
             }
-            var status = new List<BreakbarStateEvent>();
-            status.AddRange(combatData.GetBreakbarStateEvents(this));
-            nones.Add(new Segment(long.MinValue, FirstAware, 1));
-            if (!status.Any())
+            if (status.Count == 0)
             {
-                nones.Add(new Segment(FirstAware, long.MaxValue, 1));
+                nones.Add(new Segment(FirstAware, LastAware, 1));
                 return;
             }
             status = status.OrderBy(x => x.Time).ToList();
             for (int i = 0; i < status.Count - 1; i++)
             {
                 BreakbarStateEvent cur = status[i];
+                if (i == 0 && cur.Time > FirstAware)
+                {
+                    nones.Add(new Segment(FirstAware, cur.Time, 1));
+                }
                 BreakbarStateEvent next = status[i + 1];
                 switch (cur.State)
                 {
@@ -299,25 +300,25 @@ namespace GW2EIEvtcParser.ParsedData
             if (status.Count > 0)
             {
                 BreakbarStateEvent cur = status.Last();
-                switch(cur.State)
+                if (LastAware - cur.Time >= ParserHelper.ServerDelayConstant)
                 {
-                    case ArcDPSEnums.BreakbarState.Active:
-                        actives.Add(new Segment(cur.Time, LastAware, 1));
-                        actives.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
-                    case ArcDPSEnums.BreakbarState.Immune:
-                        immunes.Add(new Segment(cur.Time, LastAware, 1));
-                        immunes.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
-                    case ArcDPSEnums.BreakbarState.None:
-                        nones.Add(new Segment(cur.Time, LastAware, 1));
-                        nones.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
-                    case ArcDPSEnums.BreakbarState.Recover:
-                        recovering.Add(new Segment(cur.Time, LastAware, 1));
-                        recovering.Add(new Segment(LastAware, long.MaxValue, 1));
-                        break;
+                    switch (cur.State)
+                    {
+                        case ArcDPSEnums.BreakbarState.Active:
+                            actives.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                        case ArcDPSEnums.BreakbarState.Immune:
+                            immunes.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                        case ArcDPSEnums.BreakbarState.None:
+                            nones.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                        case ArcDPSEnums.BreakbarState.Recover:
+                            recovering.Add(new Segment(cur.Time, LastAware, 1));
+                            break;
+                    }
                 }
+
             }
         }
 
@@ -343,10 +344,10 @@ namespace GW2EIEvtcParser.ParsedData
         /// <param name="buffId"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public bool HasBuff(ParsedEvtcLog log, long buffId, long time)
+        public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
         {
             AbstractSingleActor actor = log.FindActor(this);
-            return actor.HasBuff(log, buffId, time);
+            return actor.HasBuff(log, buffId, time, window);
         }
 
         /// <summary>
@@ -387,12 +388,25 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.GetBuffStatus(log, by, buffId, start, end);
         }
 
+
         /// <summary>
-        /// Checks if agent is downed at given time
+        /// Checks if the agent will go into downstate before the next time they go above 90% health, or the fight ends.
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Current log time</param>
+        /// <returns><see langword="true"/> if the agent will down before the next time they go above 90% health, otherwise <see langword="false"/>.</returns>
+        public bool IsDownedBeforeNext90(ParsedEvtcLog log, long time)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDownBefore90(log, time);
+        }
+
+        /// <summary>
+        /// Checks if the agent is downed at given time.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Downed time.</param>
+        /// <returns><see langword="true"/> if the agent is downed, otherwise <see langword="false"/>.</returns>
         public bool IsDowned(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
@@ -400,11 +414,24 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if agent is dead at given time
+        /// Checks if the agent is downed during a segment of time.
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="log">The log.</param>
+        /// <param name="start">Start time.</param>
+        /// <param name="end">End Time.</param>
+        /// <returns><see langword="true"/> if the agent is downed, otherwise <see langword="false"/>.</returns>
+        public bool IsDowned(ParsedEvtcLog log, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDowned(log, start, end);
+        }
+
+        /// <summary>
+        /// Checks if the agent is dead at given time
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Death time.</param>
+        /// <returns><see langword="true"/> if the agent is dead, otherwise <see langword="false"/>.</returns>
         public bool IsDead(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
@@ -412,15 +439,41 @@ namespace GW2EIEvtcParser.ParsedData
         }
 
         /// <summary>
-        /// Checks if agent is dc/not spawned at given time
+        /// Checks if the agent is dead during a segment of time.
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <param name="log">The log.</param>
+        /// <param name="start">Start time.</param>
+        /// <param name="end">End Time.</param>
+        /// <returns><see langword="true"/> if the agent is dead, otherwise <see langword="false"/>.</returns>
+        public bool IsDead(ParsedEvtcLog log, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDead(log, start, end);
+        }
+
+        /// <summary>
+        /// Checks if the agent is dc/not spawned at given time
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="time">Presence time.</param>
+        /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
         public bool IsDC(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.IsDC(log, time);
+        }
+
+        /// <summary>
+        /// Checks if the agent is dc/not spawned during a segment of time.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="start">Start time.</param>
+        /// <param name="end">End Time.</param>
+        /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
+        public bool IsDC(ParsedEvtcLog log, long start, long end)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.IsDC(log, start, end);
         }
 
         public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
@@ -435,16 +488,36 @@ namespace GW2EIEvtcParser.ParsedData
             return actor.GetCurrentBarrierPercent(log, time);
         }
 
-        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time)
+        public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             AbstractSingleActor actor = log.FindActor(this);
-            return actor.GetCurrentPosition(log, time);
+            return actor.GetCurrentPosition(log, time, forwardWindow);
+        }
+
+        public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
+        {
+            AbstractSingleActor actor = log.FindActor(this);
+            return actor.GetCurrentRotation(log, time, forwardWindow);
         }
 
         public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
         {
             AbstractSingleActor actor = log.FindActor(this);
             return actor.GetCurrentBreakbarState(log, time);
+        }
+
+        public bool IsUnamedSpecies()
+        {
+            if (IsPlayer)
+            {
+                return false;
+            }
+            return IsNonIdentifiedSpecies() || Unamed;
+        }
+
+        public bool IsNonIdentifiedSpecies()
+        {
+            return IsSpecies(ArcDPSEnums.NonIdentifiedSpecies);
         }
 
         public bool IsSpecies(int id)
@@ -470,6 +543,26 @@ namespace GW2EIEvtcParser.ParsedData
         public bool IsSpecies(ArcDPSEnums.ChestID id)
         {
             return IsSpecies((int)id);
+        }
+
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TrashID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TargetID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.MinionID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
+        public bool IsAnySpecies(IEnumerable<ArcDPSEnums.ChestID> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
         }
     }
 }

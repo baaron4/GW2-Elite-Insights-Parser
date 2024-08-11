@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
+using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -14,15 +15,25 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
-            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro).UsingSrcSpecChecker(Spec.Scrapper),
-            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro).UsingSrcSpecChecker(Spec.Scrapper),
-            new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField).UsingSrcSpecChecker(Spec.Scrapper),
-            new EffectCastFinder(BypassCoating, EffectGUIDs.ScrapperBypassCoating).UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro)
+                .UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro)
+                .UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(DefenseField, EffectGUIDs.ScrapperDefenseField)
+                .UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(BypassCoating, EffectGUIDs.ScrapperBypassCoating)
+                .UsingSrcSpecChecker(Spec.Scrapper),
         };
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
-            new BuffDamageModifier(new long[] { Swiftness, Superspeed, Stability }, "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance)
+            new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed, Stability }, "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.July2019Balance)
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
+            new DamageLogDamageModifier("Adaptive Armor", "-20%", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, BuffImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -51,15 +62,24 @@ namespace GW2EIEvtcParser.EIData
         {
             Color color = Colors.Engineer;
 
+            // Function Gyro
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperFunctionGyro, out IReadOnlyList<EffectEvent> functionGyros))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Scrapper, FunctionGyro, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in functionGyros)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFunctionGyro);
+                }
+            }
             // Defense Field
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperDefenseField, out IReadOnlyList<EffectEvent> defenseFields))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Scrapper, DefenseField, SkillModeCategory.ProjectileManagement | SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in defenseFields)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 240, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Scrapper, DefenseField, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement | GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectDefenseField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Scrapper, DefenseField, GenericAttachedDecoration.SkillModeCategory.ProjectileManagement | GenericAttachedDecoration.SkillModeCategory.ImportantBuffs));
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectDefenseField);
                 }
             }
         }

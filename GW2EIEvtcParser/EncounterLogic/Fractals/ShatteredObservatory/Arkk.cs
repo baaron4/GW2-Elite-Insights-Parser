@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Extensions;
-using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -63,14 +63,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (11204, 4414, 13252, 6462)*/);
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
-                TrashID.TemporalAnomaly2,
-                TrashID.BLIGHT,
-                TrashID.Fanatic,
+                TrashID.FanaticDagger2,
+                TrashID.FanaticDagger1,
+                TrashID.FanaticBow,
                 TrashID.SolarBloom,
+                TrashID.BLIGHT,
                 TrashID.PLINK,
                 TrashID.DOC,
                 TrashID.CHOP,
@@ -91,8 +92,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 (int)TargetID.Arkk,
                 (int)TrashID.Archdiviner,
-                (int)TrashID.EliteBrazenGladiator
+                (int)TrashID.EliteBrazenGladiator,
+                (int)TrashID.TemporalAnomalyArkk,
             };
+        }
+
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+
+            // Add number to the spawned anomalies
+            var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk)).ToList();
+            for (int i = 0; i < anomalies.Count; i++)
+            {
+                anomalies[i].OverrideName(anomalies[i].Character + " " + (i + 1));
+            }
         }
 
         private void GetMiniBossPhase(int targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
@@ -110,11 +124,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
-            if (arkk == null)
-            {
-                throw new MissingKeyActorsException("Arkk not found");
-            }
+            AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
             phases[0].AddTarget(arkk);
             if (!requirePhases)
             {
@@ -126,24 +136,60 @@ namespace GW2EIEvtcParser.EncounterLogic
                 phases[i].Name = "Phase " + i;
                 phases[i].AddTarget(arkk);
             }
+
             GetMiniBossPhase((int)TrashID.Archdiviner, log, "Archdiviner", phases);
             GetMiniBossPhase((int)TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
+
+            var bloomPhases = new List<PhaseData>();
+            foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TrashID.SolarBloom)).OrderBy(x => x.FirstAware))
+            {
+                long start = bloom.FirstAware;
+                long end = bloom.LastAware;
+                PhaseData phase = bloomPhases.FirstOrDefault(x => Math.Abs(x.Start - start) < 100); // some blooms can be delayed
+                if (phase != null)
+                {
+                    phase.OverrideStart(Math.Min(phase.Start, start));
+                    phase.OverrideEnd(Math.Max(phase.End, end));
+                }
+                else
+                {
+                    bloomPhases.Add(new PhaseData(start, end));
+                }
+            }
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true);
+            for (int i = 0; i < bloomPhases.Count; i++)
+            {
+                PhaseData phase = bloomPhases[i];
+                phase.Name = $"Blooms {i + 1}";
+                phase.AddTarget(arkk);
+                AbstractBuffEvent invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
+                phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Time ?? log.FightData.FightEnd));
+            }
+            phases.AddRange(bloomPhases);
+
+            // Add anomalies as secondary target to the phases
+            foreach (PhaseData phase in phases)
+            {
+                var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase).ToList();
+                phase.AddSecondaryTargets(anomalies);
+            }
+
             return phases;
         }
-        internal override long GetFightOffset(int evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
+
+        internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogStartNPCUpdate);
+            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
-                AgentItem arkk = agentData.GetNPCsByID(TargetID.Arkk).FirstOrDefault();
-                if (arkk == null)
+                if (!agentData.TryGetFirstAgentItem(TargetID.Arkk, out AgentItem arkk))
                 {
                     throw new MissingKeyActorsException("Arkk not found");
                 }
                 long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, arkk);
                 CombatItem firstBuffApply = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SrcMatchesAgent(arkk) && x.SkillID == ArkkStartBuff && x.Time <= upperLimit + TimeThresholdConstant);
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(arkk) && x.Time <= upperLimit + TimeThresholdConstant);
-                return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue): GetGenericFightOffset(fightData);
+                return firstBuffApply != null ? Math.Min(firstBuffApply.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
             }
             return GetGenericFightOffset(fightData);
         }
@@ -156,17 +202,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk));
-            if (target == null)
-            {
-                throw new MissingKeyActorsException("Arkk not found");
-            }
+            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
             HashSet<AgentItem> adjustedPlayers = GetParticipatingPlayerAgents(target, combatData, playerAgents);
             // missing buff apply events fallback, some phases will be missing
             // removes should be present
             if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, Determined762, 10))
             {
-                var invulsRemoveTarget = combatData.GetBuffData(Determined762).OfType<BuffRemoveAllEvent>().Where(x => x.To == target.AgentItem).ToList();
+                var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>().ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
                     SetSuccessByCombatExit(new List<AbstractSingleActor> { target }, combatData, fightData, adjustedPlayers);
@@ -199,12 +241,143 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
-            // Corporeal Reassignment
+            base.ComputePlayerCombatReplayActors(p, log, replay);
+
+            // Corporeal Reassignment (skull)
             IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
-            // Fixations
+
+            // Bloom Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+            replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
+
+            // Cosmic Meteor (green)
+            IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            foreach (Segment cosmicMeteor in cosmicMeteors)
+            {
+                int start = (int)cosmicMeteor.Start;
+                int end = (int)cosmicMeteor.End;
+                replay.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new AgentConnector(p)), end);
+            }
+        }
+
+        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+        {
+            base.ComputeNPCCombatReplayActors(target, log, replay);
+
+            IReadOnlyList<AnimatedCastEvent> casts = log.CombatData.GetAnimatedCastData(target.AgentItem);
+            switch (target.ID)
+            {
+                case (int)TargetID.Arkk:
+                    foreach (AbstractCastEvent cast in casts)
+                    {
+                        switch (cast.SkillId)
+                        {
+                            case SolarBlastArkk1:
+                                replay.AddOverheadIcon(new Segment((int)cast.Time, cast.EndTime, 1), target, ParserIcons.EyeOverhead, 30);
+                                break;
+                            case SupernovaArkk:
+                                // TODO: add growing square
+                                break;
+                            case HorizonStrikeArkk1:
+                            case HorizonStrikeArkk2:
+                                if (!log.CombatData.HasEffectData)
+                                {
+                                    int offset = 520; // ~520ms at the start and between
+                                    int castDuration = 2600;
+                                    var connector = new AgentConnector(target);
+                                    ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
+                                    if (rotation != null)
+                                    {
+                                        var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time).ToList();
+                                        BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
+                                        BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
+                                        long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
+                                        long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration);
+                                        float facing = Point3D.GetZRotationFromFacing(rotation);
+                                        for (int i = 0; i < 5; i++)
+                                        {
+                                            long start = cast.Time + offset * (i + 1);
+                                            long end = start + castDuration;
+                                            if (cast.SkillId == HorizonStrikeArkk1)
+                                            {
+                                                float angle = facing + 180 / 5 * i;
+                                                if (start >= cap)
+                                                {
+                                                    break;
+                                                }
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                            }
+                                            else if (cast.SkillId == HorizonStrikeArkk2)
+                                            {
+                                                float angle = facing + 90 - 180 / 5 * i;
+                                                if (start >= cap)
+                                                {
+                                                    break;
+                                                }
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                                replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                    // case (int)TrashID.TemporalAnomalyArkk:
+                    //     if (!log.CombatData.HasEffectData)
+                    //     {
+                    //         foreach (ExitCombatEvent exitCombat in log.CombatData.GetExitCombatEvents(target.AgentItem))
+                    //         {
+                    //             int start = (int)exitCombat.Time;
+                    //             BuffRemoveAllEvent skullRemove = log.CombatData.GetBuffRemoveAllData(CorporealReassignmentBuff).FirstOrDefault(x => x.Time >= exitCombat.Time + ServerDelayConstant);
+                    //             int end = Math.Min((int?)skullRemove?.Time ?? int.MaxValue, start + 11000); // cap at 11s spawn to explosion
+                    //             ParametricPoint3D anomalyPos = replay.PolledPositions.LastOrDefault(x => x.Time <= exitCombat.Time + ServerDelayConstant);
+                    //             if (anomalyPos != null)
+                    //             {
+                    //                 replay.Decorations.Add(new CircleDecoration(false, 0, 220, (start, end), Colors.LightBlue, 0.4, new PositionConnector(anomalyPos)));
+                    //             }
+                    //         }
+                    //     }
+                    //     break;
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            AddCorporealReassignmentDecorations(log);
+
+            // Horizon Strike
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HorizonStrikeArkk, out IReadOnlyList<EffectEvent> strikes))
+            {
+                foreach (EffectEvent effect in strikes)
+                {
+                    int start = (int)effect.Time;
+                    int end = start + 2600; // effect has 3833ms duration for some reason
+                    var rotation = new AngleConnector(effect.Rotation.Z + 90);
+                    EnvironmentDecorations.Add(new PieDecoration(1400, 30, (start, end), Colors.Orange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                    EnvironmentDecorations.Add(new PieDecoration(1400, 30, (end, end + 300), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation));
+                }
+            }
+        }
+
+        internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+        {
+            List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+            res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, HypernovaLaunchSAK, HypernovaLaunchBuff));
+            return res;
         }
     }
 }

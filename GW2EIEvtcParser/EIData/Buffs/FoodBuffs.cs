@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData.Buffs;
-using static GW2EIEvtcParser.ArcDPSEnums;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
@@ -378,6 +377,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Bloodstone Pot Pie", BloodstonePotPie, Source.Item, BuffClassification.Nourishment, BuffImages.BloodstonePotPie),
             new Buff("Poor Nourishment", PoorNourishment, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentFood),
             new Buff("Nourishment (Guild Banquet Table)", NourishmentGuildBanquetTable, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentBirthdayBlaster),
+            new Buff("Weight of the World", WeightOfTheWorld, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentFood),
         };
 
         internal static readonly List<Buff> AscendedFood = new List<Buff>

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
     public class AbstractPlayer : AbstractSingleActor
     {
+        public bool IsFriendlyPlayer => AgentItem.Type == AgentItem.AgentType.Player || AgentItem.IsNotInSquadFriendlyPlayer;
 
         // Constructors
         internal AbstractPlayer(AgentItem agent) : base(agent)
@@ -28,24 +26,35 @@ namespace GW2EIEvtcParser.EIData
         {
             throw new InvalidOperationException("Players' name can't be overriden");
         }
-        internal override void SetManualHealth(int health)
+        internal override void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null)
         {
             throw new InvalidOperationException("Players' health can't be overriden");
         }
 
+        public override int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent)
+        {
+            return -1;
+        }
+
+        public override int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time)
+        {
+            return -1;
+        }
+
         public override string GetIcon()
         {
-            return AgentItem.Type == AgentItem.AgentType.NonSquadPlayer && !AgentItem.IsNotInSquadFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
+            return !IsFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
         }
 
         protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
         {
+            base.InitAdditionalCombatReplayData(log);
             // Fight related stuff
             log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
             ProfHelper.ComputeProfessionCombatReplayActors(this, log, CombatReplay);
-            if (CombatReplay.Rotations.Any())
+            if (CombatReplay.Rotations.Count != 0)
             {
-                CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), new AgentConnector(this), CombatReplay.PolledRotations));
+                CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), AgentItem));
             }
         }
 

@@ -38,6 +38,8 @@ namespace GW2EIEvtcParser.EIData
 
         private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
         private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
+        private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
+        private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
 
         protected InstantCastFinder(long skillID)
         {
@@ -49,6 +51,13 @@ namespace GW2EIEvtcParser.EIData
         {
             _maxBuild = maxBuild;
             _minBuild = minBuild;
+            return this;
+        }
+
+        internal InstantCastFinder WithEvtcBuilds(int minBuild, int maxBuild = ArcDPSBuilds.EndOfLife)
+        {
+            _maxEvtcBuild = maxBuild;
+            _minEvtcBuild = minBuild;
             return this;
         }
 
@@ -103,11 +112,11 @@ namespace GW2EIEvtcParser.EIData
 
         protected long GetTime(AbstractTimeCombatEvent evt, AgentItem caster, CombatData combatData)
         {
-            long time = evt.Time +  TimeOffset;
+            long time = evt.Time + TimeOffset;
             if (BeforeWeaponSwap || AfterWeaponSwap)
             {
                 var wepSwaps = combatData.GetWeaponSwapData(caster).Where(x => Math.Abs(x.Time - time) < ServerDelayConstant / 2).ToList();
-                if (wepSwaps.Any())
+                if (wepSwaps.Count != 0)
                 {
                     return BeforeWeaponSwap ? Math.Min(wepSwaps[0].Time - 1, time) : Math.Max(wepSwaps[0].Time + 1, time);
                 }
@@ -122,8 +131,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return false;
             }
-            ulong gw2Build = combatData.GetBuildEvent().Build;
-            return gw2Build < _maxBuild && gw2Build >= _minBuild;
+            ulong gw2Build = combatData.GetGW2BuildEvent().Build;
+            if (gw2Build < _maxBuild && gw2Build >= _minBuild)
+            {
+                int evtcBuild = combatData.GetEvtcVersionEvent().Build;
+                if (evtcBuild < _maxEvtcBuild && evtcBuild >= _minEvtcBuild)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public abstract List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData);

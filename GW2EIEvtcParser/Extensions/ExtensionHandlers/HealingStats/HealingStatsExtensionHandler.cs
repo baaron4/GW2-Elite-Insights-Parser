@@ -15,62 +15,65 @@ namespace GW2EIEvtcParser.Extensions
         // from https://github.com/Krappa322/arcdps_healing_stats/blob/master/src/Skills.cpp
         internal readonly HashSet<long> HybridHealIDs = new HashSet<long>()
         {
-            CrashingWaves, 
-            WaterBlast, 
-            WaterTrident, 
+            CrashingWaves,
+            WaterBlast,
+            WaterTrident,
             SignetOfWaterHeal,
-            WaterArrow, 
-            LeapOfFaith, 
+            WaterArrow,
+            LeapOfFaith,
             SymbolOfPunishment,
-            SymbolOfJudgement,  
-            SymbolOfBlades, 
-            HolyStrike,  
+            SymbolOfJudgement,
+            SymbolOfBlades,
+            HolyStrike,
             SymbolOfFaith,
-            FaithfulStrike, 
-            SymbolOfSwiftness, 
-            SymbolOfWrath, 
-            SymbolOfProtection, 
+            FaithfulStrike,
+            SymbolOfSwiftness,
+            SymbolOfWrath_SymbolOfResolution,
+            SymbolOfProtection,
             SymbolOfSpears,
             SymbolOfLight,
             BlueberryPieAndSliceOfRainbowCake,
-            StrawberryPieAndCupcake, 
-            CherryPie, 
+            StrawberryPieAndCupcake,
+            CherryPie,
             BlackberryPie,
             MixedBerryPie,
             OmnomberryPieAndSliceOfCandiedDragonRoll,
             CryOfFrustration,
             MindWrack,
             MindWrackAmmo,
-            LifeLeech, 
+            LifeLeech,
+            LifeSiphonOld,
             LifeSiphon,
             DeadlyFeast,
             LifeLeechUW,
             BloodFrenzy,
             LesserSymbolOfProtection,
-            OmnomberryGhost, 
+            OmnomberryGhost,
             ArcaneBrilliance,
             PricklyPearPie,
             VengefulHammersSkill,
             BattleScars,
             MendersRebuke,
             SymbolOfEnergy,
-            WellOfRecall, 
-            GravityWell, 
+            WellOfRecall_Senility,
+            GravityWell,
             VampiricAura,
-            YourSoulIsMine, 
+            VampiricStrikes,
+            VampiricStrikes2,
+            YourSoulIsMine,
             WellOfCalamity,
-            WellOfAction, 
-            TidalSurge, 
+            WellOfAction,
+            TidalSurge,
             SliceOfAllspiceCake,
-            ScoopOfMintberrySwirlIceCream, 
-            WinterberryPie, 
-            SymbolOfVengeance, 
+            ScoopOfMintberrySwirlIceCream,
+            WinterberryPie,
+            SymbolOfVengeance,
             Sieche,
-            BreakingWave, 
+            BreakingWave,
             Riptide,
             SoulcleavesSummitBuff,
             Claptosis,
-            TransmuteFrost, 
+            TransmuteFrost,
             FacetOfNatureAssassin,
             Rewinder,
             SplitSecond,
@@ -78,14 +81,14 @@ namespace GW2EIEvtcParser.Extensions
             StrawberryCilantroCheesecake,
             CilantroLimeSousVideSteak,
             PlateOfCoqAuVinWithSalsa,
-            MangoCilantroCremeBrulee, 
-            SalsaToppedVeggieFlatbread, 
+            MangoCilantroCremeBrulee,
+            SalsaToppedVeggieFlatbread,
             PlateOfClearTruffleAndCilantroRavioli,
             PlateOfPoultryAspicWithSalsaGarnish,
             SpherifiedCilantroOysterSoup,
             BowlOfFruitSaladWithCilantroGarnish,
             CilantroAndCuredMeatFlatbread,
-            LifeTransfer, 
+            LifeTransfer,
             GatheringPlague,
             SoulSpiral,
             GarishPillarSkill,
@@ -95,7 +98,26 @@ namespace GW2EIEvtcParser.Extensions
             GraspingShadows,
             DawnsRepose,
             EternalNight,
-            MindShock
+            MindShock,
+            Flourish,
+            EchoingErosion,
+            FrigidFlurry,
+            SoothingSplash,
+            Journey,
+            FriendlyFire,
+            FriendlyFireIllu,
+            InspiringImagery,
+            Effervescence,
+            RampartSplitter,
+            PathToVictory,
+            ValiantLeap,
+            Gorge,
+            PathOfGluttony,
+            HungeringMaelstrom,
+            EnervationBlade,
+            EnervationEcho,
+            DeathlyEnervation,
+            EssenceOfLivingShadows,
         };
 
         private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
@@ -272,7 +294,7 @@ namespace GW2EIEvtcParser.Extensions
                 if (isHealing)
                 {
                     _healingEvents.Add(new EXTDirectHealingEvent(c, agentData, skillData));
-                } 
+                }
                 else if (isBarrier)
                 {
                     _barrierEvents.Add(new EXTDirectBarrierEvent(c, agentData, skillData));
@@ -306,7 +328,7 @@ namespace GW2EIEvtcParser.Extensions
 
         internal override void AttachToCombatData(CombatData combatData, ParserController operation, ulong gw2Build)
         {
-            operation.UpdateProgressWithCancellationCheck("Attaching healing extension revision " + Revision + " combat events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Attaching healing extension revision " + Revision + " combat events");
             //
             {
                 var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
@@ -327,10 +349,10 @@ namespace GW2EIEvtcParser.Extensions
                 }
                 var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
                 combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
-                operation.UpdateProgressWithCancellationCheck("Attached " + _healingEvents.Count + " heal events to CombatData");
-            }          
+                operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _healingEvents.Count + " heal events to CombatData");
+            }
             //
-            if (_barrierEvents.Any())
+            if (_barrierEvents.Count != 0)
             {
                 var barrierData = _barrierEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in barrierData)
@@ -350,12 +372,12 @@ namespace GW2EIEvtcParser.Extensions
                 }
                 var barrierDataById = _barrierEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
                 combatData.EXTBarrierCombatData = new EXTBarrierCombatData(barrierData, barrierReceivedData, barrierDataById);
-                operation.UpdateProgressWithCancellationCheck("Attached " + _barrierEvents.Count + " barrier events to CombatData");
+                operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _barrierEvents.Count + " barrier events to CombatData");
             }
             int running = Math.Max(RunningExtensionInternal.Count, 1);
-            operation.UpdateProgressWithCancellationCheck(running != 1 ? running + " players have the extension running" : running + " player has the extension running");
+            operation.UpdateProgressWithCancellationCheck("Parsing: " + (running != 1 ? running + " players have the extension running" : running + " player has the extension running"));
             //
-            operation.UpdateProgressWithCancellationCheck("Attached healing extension combat events");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Attached healing extension combat events");
         }
 
     }

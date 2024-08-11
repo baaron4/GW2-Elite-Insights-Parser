@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators
@@ -43,13 +43,13 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             if (overridenStackID > 0)
             {
                 toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);
-            } 
+            }
             if (toRemove == null)
             {
                 toRemove = stacks.MinBy(x => Math.Abs(x.TotalDuration - overridenDuration));
             }
             wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
-            if (toRemove.Extensions.Any())
+            if (toRemove.Extensions.Count != 0)
             {
                 foreach ((AgentItem src, long value) in toRemove.Extensions)
                 {

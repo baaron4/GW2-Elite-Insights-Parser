@@ -1,0 +1,159 @@
+<template>
+    <div class="d-flex flex-row">
+        <img class="icon mr-1" src="https://i.imgur.com/nSYuby8.png" :data-original-title="scoreExpl" />
+        <div class="d-flex flex-column" style="max-width: 900px;">
+            <div v-for="group in groups" class="d-flex flex-wrap mb-1">
+                <div v-for="player in group"
+                    class="player-cell d-flex flex-column align-items-center justify-content-center"
+                    :class="{active: player.active}" @click="select(player.id)">
+                    <div>
+                        <img :src="player.icon" :alt="player.profession" class="icon"
+                            :data-original-title="player.profession">
+                        <img v-if="player.health > 0" src="https://wiki.guildwars2.com/images/b/be/Vitality.png"
+                            alt="Health" class="icon" :data-original-title="'Health: ' + player.health">
+                        <img v-if="player.condi > 0" src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png"
+                            alt="Condition Damage" class="icon"
+                            :data-original-title="scoreV2 ? 'Condition Damage' : 'Condition Damage: ' + player.condi">
+                        <img v-if="player.conc > 0" src="https://wiki.guildwars2.com/images/4/44/Boon_Duration.png"
+                            alt="Concentration" class="icon" :data-original-title="scoreV2 ? 'Concentration' : 'Concentration: ' + player.conc">
+                        <img v-if="player.heal > 0" src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png"
+                            alt="Healing Power" class="icon" :data-original-title="scoreV2 ? 'Healing Power' : 'Healing Power: ' + player.heal">
+                        <img v-if="player.tough > 0" src="https://wiki.guildwars2.com/images/1/12/Toughness.png"
+                            alt="Toughness" class="icon" :data-original-title="scoreV2 ? 'Toughness' : 'Toughness: ' + player.tough">
+                    </div>
+                    <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
+                        <img v-for="wep in player.l1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        <span v-if="player.l1Set.length > 0 && player.l2Set.length > 0">/</span>
+                        <img v-for="wep in player.l2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                    </div>
+                    <div v-if="player.a1Set.length > 0 || player.a2Set.length > 0">
+                        <img v-for="wep in player.a1Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                        <span v-if="player.a1Set.length > 0 && player.a2Set.length > 0">/</span>
+                        <img v-for="wep in player.a2Set" :src="getIcon(wep)" :data-original-title="wep" class="icon">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img v-if="runningExtensions && runningExtensions[player.id]"
+                            src="https://wiki.guildwars2.com/images/f/f0/Event_flag_green.png" alt="Extensions"
+                            class="icon" :data-original-title="computeExtensionTooltip(runningExtensions[player.id])">
+                        <img v-if="player.isCommander"
+                            src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
+                            class="icon" :data-original-title="getCommanderTooltip(player)">
+                        <span class="player-cell-shorten" :data-original-title="player.name + ' - ' + player.acc">
+                            {{ player.name }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<script>
+
+    Vue.component("player-component", {
+        props: ["players"],
+        template: `${template}`,
+        methods: {
+            getIcon: function (path) {
+                return urls[path];
+            },
+            select: function (id) {
+                for (var i = 0; i < this.players.length; i++) {
+                    this.players[i].active = false;
+                }
+                this.players[id].active = true;
+            },
+            getCommanderTooltip: function(player) {
+                if (!player.isCommander) {
+                    return false;
+                }
+                let res = 'Commander';
+                for (let i = 0; i < player.commanderStates.length; i++) {
+                    res = `
+                        ${res}<br>
+                        From ${player.commanderStates[i][0]} to ${player.commanderStates[i][1]}
+                    `;
+                }
+                return res;
+            },
+            computeExtensionTooltip: function(data) {
+                var str = "Player is running: <br>";
+                for (var i = 0; i < data.length; i++) {
+                    str += "- " + data[i] + " Extension";
+                    if (i !== data.length - 1) {
+                        str += "<br>";
+                    }
+                }
+                return str;
+            }
+        },
+        computed: {
+            scoreV2: function() {
+                return logData.evtcBuild > 20210800;
+            },
+            scoreExpl: function () {
+                if (this.scoreV2) {
+                    return `
+                        <span style='text-align:left;display: block;'>
+                        A player has a stat score if they are above 60% of the maximum stat present in the squad. For example if the maximum healing power stat inside the squad is 1000, anybody with a healing power stat above 600 will be flagged as with healing power. 
+                        </span>
+                    `;
+                }
+                return `
+                <span style='text-align:left;display: block;'>
+                Scores are relative to the squad. 10 means that that player had the highest stat in the squad. 8 means that that player had between 80% and 89% of the highest scored player's stat.
+                </span>
+                `
+            },
+            groups: function () {
+                var aux = [];
+                for (var i = 0; i < logData.players.length; i++) {
+                    var playerData = logData.players[i];
+                    if (playerData.isFake) {
+                        continue;
+                    }
+                    if (!aux[playerData.group]) {
+                        aux[playerData.group] = [];
+                    }
+                    var toPush = {};
+                    Object.assign(toPush, playerData);
+                    toPush.active = this.players[i].active;
+                    aux[playerData.group].push(toPush);
+                }
+
+                var noUndefinedGroups = [];
+                for (var i = 0; i < aux.length; i++) {
+                    if (aux[i]) {
+                        noUndefinedGroups.push(aux[i]);
+                    }
+                }
+                return noUndefinedGroups;
+            },
+            runningExtensions: function () {
+                if (logData.usedExtensions) {
+                    var res = [];
+                    for (var i = 0; i < logData.players.length; i++) {
+                        var playerData = logData.players[i];
+                        var subRes = [];
+                        for (var j = 0; j < logData.usedExtensions.length; j++) {
+                            var usedExtension = logData.usedExtensions[j];
+                            var playersRunning = logData.playersRunningExtensions[j];
+                            if (playersRunning.includes(playerData.name)) {
+                                subRes.push(usedExtension.split(" - ")[0]);
+                            }
+                        }
+                        if (subRes.length > 0) {
+                            res.push(subRes);
+                        } else {
+                            res.push(null);
+                        }
+                    }
+                    return res;
+                } else {
+                    return null;
+                }
+            },
+        }
+    });
+</script>

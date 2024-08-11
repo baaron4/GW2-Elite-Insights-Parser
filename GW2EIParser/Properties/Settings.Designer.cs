@@ -74,12 +74,12 @@ namespace GW2EIParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool MultiThreaded {
+        public bool SingleThreaded {
             get {
-                return ((bool)(this["MultiThreaded"]));
+                return ((bool)(this["SingleThreaded"]));
             }
             set {
-                this["MultiThreaded"] = value;
+                this["SingleThreaded"] = value;
             }
         }
         
@@ -128,6 +128,22 @@ namespace GW2EIParser.Properties {
             }
             set {
                 this["UploadToDPSReports"] = value;
+            }
+        }
+
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadToWingman
+        {
+            get
+            {
+                return ((bool)(this["UploadToWingman"]));
+            }
+            set
+            {
+                this["UploadToWingman"] = value;
             }
         }
 
@@ -548,6 +564,20 @@ namespace GW2EIParser.Properties {
             set
             {
                 this["DetailledWvW"] = value;
+            }
+        }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MemoryLimit
+        {
+            get
+            {
+                return ((int)(this["MemoryLimit"]));
+            }
+            set
+            {
+                this["MemoryLimit"] = value;
             }
         }
     }

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 
 namespace GW2EIBuilders.JsonModels
 {
@@ -20,12 +18,18 @@ namespace GW2EIBuilders.JsonModels
             jsPhase.End = phase.End;
             jsPhase.Name = phase.Name;
             var targets = new List<int>();
+            var secondaryTargets = new List<int>();
             jsPhase.BreakbarPhase = phase.BreakbarPhase;
             foreach (AbstractSingleActor tar in phase.Targets)
             {
                 targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
             }
+            foreach (AbstractSingleActor tar in phase.SecondaryTargets)
+            {
+                secondaryTargets.Add(log.FightData.Logic.Targets.IndexOf(tar));
+            }
             jsPhase.Targets = targets;
+            jsPhase.SecondaryTargets = secondaryTargets;
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             if (!jsPhase.BreakbarPhase)
             {
@@ -40,7 +44,7 @@ namespace GW2EIBuilders.JsonModels
                     }
                     subPhases.Add(j);
                 }
-                if (subPhases.Any())
+                if (subPhases.Count != 0)
                 {
                     jsPhase.SubPhases = subPhases;
                 }

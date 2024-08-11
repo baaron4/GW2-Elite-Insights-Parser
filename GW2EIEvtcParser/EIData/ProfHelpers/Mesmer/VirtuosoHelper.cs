@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
-using static GW2EIEvtcParser.EIData.DamageModifier;
+using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
+using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -21,7 +21,7 @@ namespace GW2EIEvtcParser.EIData
                 if(evt.Src.Spec != Spec.Virtuoso) {
                     return false;
                 }
-                if (!combatData.GetBuffData(DistortionBuff).Any(buffEvt => buffEvt is BuffApplyEvent && buffEvt.To == evt.Src && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
+                if (!combatData.GetBuffDataByIDByDst(DistortionBuff, evt.Src).Any(buffEvt => buffEvt is BuffApplyEvent && Math.Abs(buffEvt.Time - evt.Time) < ServerDelayConstant))
                 {
                     return false;
                 }
@@ -35,7 +35,7 @@ namespace GW2EIEvtcParser.EIData
         };
 
 
-        internal static readonly List<DamageModifier> DamageMods = new List<DamageModifier>
+        internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
         {
             new DamageLogDamageModifier("Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, BuffImages.MentalFocus, (x,log) =>
             {
@@ -46,8 +46,12 @@ namespace GW2EIEvtcParser.EIData
                     return false;
                 }
                 return currentPosition.DistanceToPoint(currentTargetPosition) <= 600;
-            }, ByPresence, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
-            new BuffDamageModifier(DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+            }, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
+            new BuffOnActorDamageModifier(DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+        };
+
+        internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+        {
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>
@@ -57,7 +61,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Virtuoso Blade", VirtuosoBlades, Source.Virtuoso, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.PowerAttribute),
         };
 
-        public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData)
+        public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData, EvtcVersionEvent evtcVersion)
         {
             var res = new List<AbstractBuffEvent>();
             var bladeIDs = new HashSet<long>
@@ -70,25 +74,33 @@ namespace GW2EIEvtcParser.EIData
             };
             var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID)).ToList();
             SkillItem skill = skillData.Get(VirtuosoBlades);
-            var lastAddedBuffInstance = new Dictionary<long, uint>();
+            var lastAddedBuffInstance = new Dictionary<long, BuffApplyEvent>();
             foreach (AbstractBuffEvent blade in blades)
             {
                 if (blade is BuffApplyEvent bae)
                 {
-                    res.Add(new BuffApplyEvent(a, a, bae.Time, bae.AppliedDuration, skill, bae.BuffInstance, true));
-                    lastAddedBuffInstance[blade.BuffID] = bae.BuffInstance;
+                    res.Add(new BuffApplyEvent(bae.By, a, bae.Time, bae.AppliedDuration, skill, bae.IFF, bae.BuffInstance, true));
+                    lastAddedBuffInstance[blade.BuffID] = bae;
                 }
                 else if (blade is BuffRemoveAllEvent brae)
                 {
-                    if (!lastAddedBuffInstance.TryGetValue(blade.BuffID, out uint remmovedInstance))
+                    uint removedInstance = 0;
+                    long elapsedTime = 0;
+                    if (lastAddedBuffInstance.TryGetValue(blade.BuffID, out BuffApplyEvent apply))
                     {
-                        remmovedInstance = 0;
+                        removedInstance = apply.BuffInstance;
+                        elapsedTime = brae.Time - apply.Time;
                     }
-                    res.Add(new BuffRemoveSingleEvent(a, a, brae.Time, brae.RemovedDuration, skill, true, remmovedInstance));
+                    int removedDuration = brae.RemovedDuration;
+                    if (evtcVersion.Build >= ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged)
+                    {
+                        removedDuration -= (int)elapsedTime;
+                    }
+                    res.Add(new BuffRemoveSingleEvent(brae.By, a, brae.Time, removedDuration, skill, brae.IFF, removedInstance));
                 }
                 else if (blade is BuffRemoveSingleEvent brse)
                 {
-                    res.Add(new BuffRemoveSingleEvent(a, a, brse.Time, brse.RemovedDuration, skill, true, brse.BuffInstance));
+                    res.Add(new BuffRemoveSingleEvent(brse.By, a, brse.Time, brse.RemovedDuration, skill, brse.IFF, brse.BuffInstance));
                 }
             }
             return res;
@@ -107,24 +119,29 @@ namespace GW2EIEvtcParser.EIData
             // Rain of Swords
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoRainOfSwords, out IReadOnlyList<EffectEvent> rainOfSwords))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Virtuoso, RainOfSwords);
                 foreach (EffectEvent effect in rainOfSwords)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 6000);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new CircleDecoration(false, 0, 280, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Virtuoso, RainOfSwords));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectRainOfSwords, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Virtuoso, RainOfSwords));
+                    (long, long) lifespan = effect.ComputeLifespan(log, 6000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 280, ParserIcons.EffectRainOfSwords);
                 }
             }
             // Thousand Cuts
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoThousandCuts, out IReadOnlyList<EffectEvent> thousandCuts))
             {
+                var skill = new SkillModeDescriptor(player, Spec.Virtuoso, ThousandCuts);
                 foreach (EffectEvent effect in thousandCuts)
                 {
-                    (int, int) lifespan = ProfHelper.ComputeEffectLifespan(log, effect, 5000);
-                    PositionConnector connector = new PositionConnector(effect.Position).WithOffset(effect.Orientation.Z, -600.0f);
+                    (long, long) lifespan = effect.ComputeLifespan(log, 5000);
+                    var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 600.0f), true);
+                    var rotationConnector = new AngleConnector(effect.Rotation.Z);
                     // 30 units width is a guess
-                    replay.Decorations.Add(new RotatedRectangleDecoration(true, 0, 30, 1200, effect.Rotation.Z, lifespan, color.WithAlpha(0.5f).ToString(), connector).UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(player, Spec.Virtuoso, ThousandCuts));
+                    replay.Decorations.Add(new RectangleDecoration(30, 1200, lifespan, color, 0.5, connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                        .UsingRotationConnector(rotationConnector)
+                        .UsingSkillMode(skill));
                 }
             }
         }

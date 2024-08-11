@@ -8,6 +8,8 @@
             <player-healing-graph-tab-component v-for="(ph, id) in phases" v-if="tabmode === 2 && id === phaseindex" :key="id + 'healing-graph' + playerindex"
                 :playerindex="playerindex" :phaseindex="id" :activetargets="activetargets" :light="light">
             </player-healing-graph-tab-component>
+            <player-buff-tab-component v-if="tabmode === 8" :key="'healbuffs' + playerindex" :playerindex="playerindex"
+                :phaseindex="phaseindex"></player-buff-tab-component>
             <simplerotation-component v-if="tabmode === 3" :key="'healingrot' + playerindex" :actorindex="playerindex"
                 :phaseindex="phaseindex" :target="false"></simplerotation-component>            
             <advancedrotation-component v-for="(ph, id) in phases" v-if="tabmode === 4 && id === phaseindex" :key="id + 'healingadvrot' + playerindex" :actorindex="playerindex"

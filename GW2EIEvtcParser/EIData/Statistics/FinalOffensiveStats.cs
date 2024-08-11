@@ -28,7 +28,18 @@ namespace GW2EIEvtcParser.EIData
         public int Killed { get; }
         public int Downed { get; }
 
+        public int AgainstDownedCount { get; }
+        public int AgainstDownedDamage { get; }
+
+        public int ConnectedPowerCount { get; }
+        public int ConnectedPowerAbove90HPCount { get; }
+        public int ConnectedConditionCount { get; }
+        public int ConnectedConditionAbove90HPCount { get; }
+
         public int DownContribution { get; }
+
+        public int AppliedCrowdControl { get; }
+        public double AppliedCrowdControlDuration { get; }
 
 
         internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
@@ -96,14 +107,46 @@ namespace GW2EIEvtcParser.EIData
                     {
                         ConnectedDamageCount++;
                         ConnectedDmg += dl.HealthDamage;
-                        IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
-                        if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))
+                        // Derive down contribution from health updates as they are available after this build
+                        if (log.LogData.EvtcBuild < ArcDPSEnums.ArcDPSBuilds.Last90BeforeDownRetired)
                         {
-                            DownContribution += dl.HealthDamage;
+                            IReadOnlyList<Last90BeforeDownEvent> last90BeforeDownEvents = log.CombatData.GetLast90BeforeDownEvents(dl.To);
+                            if (last90BeforeDownEvents.Any(x => dl.Time <= x.Time && dl.Time >= x.Time - x.TimeSinceLast90))
+                            {
+                                DownContribution += dl.HealthDamage;
+                            }
+                        }
+                        else
+                        {
+                            if (dl.To.IsDownedBeforeNext90(log, dl.Time))
+                            {
+                                DownContribution += dl.HealthDamage;
+                            }
                         }
                         if (dl.AgainstMoving)
                         {
                             AgainstMovingCount++;
+                        }
+                        if (dl.ConditionDamageBased(log))
+                        {
+                            ConnectedConditionCount++;
+                            if (dl.IsOverNinety)
+                            {
+                                ConnectedConditionAbove90HPCount++;
+                            }
+                        }
+                        else
+                        {
+                            ConnectedPowerCount++;
+                            if (dl.IsOverNinety)
+                            {
+                                ConnectedPowerAbove90HPCount++;
+                            }
+                        }
+                        if (dl.AgainstDowned)
+                        {
+                            AgainstDownedCount++;
+                            AgainstDownedDamage += dl.HealthDamage;
                         }
                     }
                 }
@@ -123,6 +166,12 @@ namespace GW2EIEvtcParser.EIData
                 {
                     Downed++;
                 }
+            }
+            IReadOnlyList<CrowdControlEvent> ccs = actor.GetOutgoingCrowdControlEvents(target, log, start, end);
+            foreach (CrowdControlEvent cc in ccs)
+            {
+                AppliedCrowdControl++;
+                AppliedCrowdControlDuration += cc.Duration;
             }
         }
     }

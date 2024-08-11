@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.ParsedData;
-
-namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData
 {
     internal class Symbol
     {
@@ -17,8 +12,9 @@ namespace GW2EIEvtcParser.EIData
 
     internal static class Symbols
     {
-        public static Symbol Asterisk = new Symbol("asterisk");
-        public static Symbol AsteriskOpen = new Symbol("asterisk-open");
+        // Don't work
+        //public static Symbol Asterisk = new Symbol("asterisk");
+        //public static Symbol AsteriskOpen = new Symbol("asterisk-open");
         public static Symbol Bowtie = new Symbol("bowtie");
         public static Symbol BowtieOpen = new Symbol("bowtie-open");
         public static Symbol X = new Symbol("x");

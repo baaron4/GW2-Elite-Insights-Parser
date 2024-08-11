@@ -4,15 +4,11 @@ using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
-using GW2EIEvtcParser.Extensions;
-using System.Collections;
 using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -32,7 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new PlayerDstHitMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Yellow), "CC KB","Knockback hourglass during CC", "CC KB", 0),
             new EnemyCastStartMechanic(new long[] { NightmareDevastation1, NightmareDevastation2 }, "Nightmare Devastation", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble","Nightmare Devastation (bubble attack)", "Bubble",0),
             new PlayerDstHitMechanic(TailLashEnsolyss, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
-            new PlayerDstHitMechanic(RampageEnsolyss, "Rampage", new MechanicPlotlySetting(Symbols.AsteriskOpen,Colors.Red), "Rampage","Rampage (asterisk shaped Arrow attack)", "Rampage",150),
+            new PlayerDstHitMechanic(RampageEnsolyss, "Rampage", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Rampage","Rampage (asterisk shaped Arrow attack)", "Rampage",150),
             new PlayerDstHitMechanic(CausticGrasp, "Caustic Grasp", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull","Caustic Grasp (Arena Wide Pull)", "Pull",0),
             new PlayerDstHitMechanic(TormentingBlast, "Tormenting Blast", new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter","Tormenting Blast (Two Quarter Circle attacks)", "Quarter circle",0),
             });
@@ -61,17 +57,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<int>
             {
                 (int)TargetID.Ensolyss,
-                //(int)ArcDPSEnums.TrashID.NightmareAltar,
+                //(int)TrashID.NightmareAltar,
             };
         }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+        protected override List<TrashID> GetTrashMobsIDs()
         {
-            var trashIDs = new List<ArcDPSEnums.TrashID>
+            var trashIDs = new List<TrashID>
             {
                 TrashID.NightmareHallucination1,
                 TrashID.NightmareHallucination2,
-                //ArcDPSEnums.TrashID.NightmareAltar,
+                //TrashID.NightmareAltar,
             };
             trashIDs.AddRange(base.GetTrashMobsIDs());
             return trashIDs;
@@ -104,40 +100,39 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        private static void AddTormentingBlastDecoration(CombatReplay replay, AbstractSingleActor target, int start, int attackEnd, Point3D point, int quarterAoE, int quarterHit)
+        private static void AddTormentingBlastDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, Point3D point, int quarterAoE, int quarterHit)
         {
-            int startQuarter = start + quarterAoE;
-            int endQuarter = start + quarterHit;
-            int growingQuarter = start + quarterHit;
-            if (attackEnd >= endQuarter) // If the attack started
+            long startQuarter = lifespan.start + quarterAoE;
+            long endQuarter = lifespan.start + quarterHit;
+            long growingQuarter = lifespan.start + quarterHit;
+            if (lifespan.end >= endQuarter) // If the attack started
             {
-                replay.Decorations.Add(new PieDecoration(true, growingQuarter, 700, point, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                replay.Decorations.Add(new PieDecoration(true, 0, 700, point, 90, (startQuarter, endQuarter), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
+                var connector = new AgentConnector(target);
+                var rotationConnector = new AngleConnector(point);
+                replay.AddDecorationWithGrowing((PieDecoration)new PieDecoration(700, 90, (startQuarter, endQuarter), Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growingQuarter);
                 if (endQuarter == growingQuarter) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 700, point, 90, (endQuarter, endQuarter + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                    replay.Decorations.Add(new PieDecoration(700, 90, (endQuarter, endQuarter + 1000), Colors.LightPink, 0.2, connector).UsingRotationConnector(rotationConnector)); // Lingering
                 }
             }
         }
 
-        private static void AddCausticExplosionDecoration(CombatReplay replay, AbstractSingleActor target, Point3D point, int attackEnd, int start, int end, int growing)
+        private static void AddCausticExplosionDecoration(CombatReplay replay, AbstractSingleActor target, Point3D point, long attackEnd, (long start, long end) lifespan, long growing)
         {
-            if (attackEnd >= end) // If the attack started
+            if (attackEnd >= lifespan.end) // If the attack started
             {
                 Point3D flipPoint = -1 * point;
-                // Frontal
-                replay.Decorations.Add(new PieDecoration(true, growing, 1200, point, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                replay.Decorations.Add(new PieDecoration(true, 0, 1200, point, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                if (end == growing) // If the attack went off
+                var connector = new AgentConnector(target);
+                var rotationConnector = new AngleConnector(point);
+                var flippedRotationConnector = new AngleConnector(flipPoint);
+                (long start, long end) lifespanLingering = (lifespan.end, lifespan.end + 1000);
+
+                replay.AddDecorationWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growing); // Frontal
+                replay.AddDecorationWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(flippedRotationConnector), growing); // Retro
+                if (lifespan.end == growing) // If the attack went off
                 {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, point, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
-                }
-                // Retro
-                replay.Decorations.Add(new PieDecoration(true, growing, 1200, flipPoint, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Growing
-                replay.Decorations.Add(new PieDecoration(true, 0, 1200, flipPoint, 90, (start, end), "rgba(250, 120, 0, 0.2)", new AgentConnector(target))); // Standard
-                if (end == growing) // If the attack went off
-                {
-                    replay.Decorations.Add(new PieDecoration(true, 0, 1200, flipPoint, 90, (end, end + 1000), "rgba(238, 130, 238, 0.2)", new AgentConnector(target))); // Lingering
+                    replay.Decorations.Add(new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector).UsingRotationConnector(rotationConnector)); // Frontal Lingering
+                    replay.Decorations.Add(new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector).UsingRotationConnector(flippedRotationConnector)); // Retro Lingering
                 }
             }
         }
@@ -166,7 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 if (!shield15_0Added && percent15treshhold != null && shieldEffect.Position.X < 1574 && shieldEffect.Position.X > 1572)
                                 {
                                     int effectEnd = (int)target.LastAware;
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, 280, ((int)shieldEffect.Time, effectEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new CircleDecoration(280, ((int)shieldEffect.Time, effectEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
                                     shield15_0Added = true;
                                 }
                                 else if (!shield15_0Added)
@@ -184,9 +179,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     {
                                         attackEnd = (int)percent15treshhold.Start;
                                     }
-                                    replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, attackEnd), "rgba(0, 0, 255, 0.4)", new PositionConnector(shieldEffect.Position)));
-                                    replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
-                                    replay.Decorations.Add(new DoughnutDecoration(true, 0, 300, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(shieldEffect.Position)));
+                                    replay.Decorations.Add(new CircleDecoration(300, (start, attackEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
+                                    replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, (start, attackEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), expectedHitEnd, true);
                                 }
                             }
                         }
@@ -202,13 +196,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)percent66treshhold.Start;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(850, 1150, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(miasmaEffect.Position)));
                             }
                             else // Wipe before 66%
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 850, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(850, 1150, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
@@ -223,13 +217,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)percent15treshhold.Start;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(595, 1150, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(miasmaEffect.Position)));
                             }
                             else // Wipe before 15%
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 595, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(595, 1150, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
@@ -244,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             {
                                 int start = (int)miasmaEffect.Time;
                                 int effectEnd = (int)target.LastAware;
-                                replay.Decorations.Add(new DoughnutDecoration(true, 0, 280, 1150, (start, effectEnd), "rgba(255, 0, 0, 0.2)", new PositionConnector(miasmaEffect.Position)));
+                                replay.Decorations.Add(new DoughnutDecoration(280, 1150, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(miasmaEffect.Position)));
                             }
                         }
                     }
@@ -253,19 +247,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var tailLash = casts.Where(x => x.SkillId == TailLashEnsolyss).ToList();
                     foreach (AbstractCastEvent c in tailLash)
                     {
-                        int duration = 1550;
-                        int openingAngle = 144;
-                        int radius = 600;
-                        int start = (int)c.Time;
-                        int attackEnd = (int)c.Time + duration;
-                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (stunSegment != null)
+                        int castDuration = 1550;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
+                        if (facing != null)
                         {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
-                        }
-                        if (replay.Rotations.Any())
-                        {
-                            replay.Decorations.Add(new FacingPieDecoration((start, attackEnd), new AgentConnector(target), replay.PolledRotations, radius, openingAngle, "rgba(250, 120, 0, 0.2)"));
+                            var rotation = new AngleConnector(facing);
+                            var cone = (PieDecoration)new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation);
+                            replay.AddDecorationWithGrowing(cone, expectedEndCast);
                         }
                     }
 
@@ -277,27 +267,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int secondQuarterAoe = 900;
                         int firstQuarterHit = 1635;
                         int secondQuarterHit = 1900;
-                        int duration = 1900;
-                        int start = (int)c.Time;
-                        int attackEnd = start + duration;
-
-                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (stunSegment != null)
-                        {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
-                        }
+                        int castDuration = 1900;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
 
                         // Facing point
-                        IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
-                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time, castDuration);
                         if (facingDirection != null)
                         {
                             // Calculated points
                             var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
                             var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
 
-                            AddTormentingBlastDecoration(replay, target, start, attackEnd, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
-                            AddTormentingBlastDecoration(replay, target, start, attackEnd, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
+                            AddTormentingBlastDecoration(replay, target, lifespan, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
+                            AddTormentingBlastDecoration(replay, target, lifespan, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
                         }
                     }
 
@@ -305,89 +287,69 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var causticGrasp = casts.Where(x => x.SkillId == CausticGrasp).ToList();
                     foreach (AbstractCastEvent c in causticGrasp)
                     {
-                        int duration = 1500;
-                        int start = (int)c.Time;
-                        int expectedHitEnd = start + duration;
-                        int attackEnd = start + duration;
-                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (stunSegment != null)
-                        {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
-                        }
-                        replay.Decorations.Add(new CircleDecoration(true, expectedHitEnd, 1300, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 1300, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        int castDuration = 1500;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(1300, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), expectedEndCast);
                     }
 
                     // Upswing
                     var upswingEnso = casts.Where(x => x.SkillId == UpswingEnsolyss).ToList();
                     foreach (AbstractCastEvent c in upswingEnso)
                     {
-                        int duration = 1333;
-                        int start = (int)c.Time;
-                        int expectedHitEnd = start + duration;
-                        int attackEnd = start + duration;
-                        int endTimeWave = start + 3100;
-                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (stunSegment != null)
-                        {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
-                        }
-                        replay.Decorations.Add(new CircleDecoration(true, expectedHitEnd, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 600, (start, attackEnd), "rgba(250, 120, 0, 0.2)", new AgentConnector(target)));
+                        int castDuration = 1333;
+                        long expectedEndCast = c.Time + castDuration;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
+                        (long start, long end) lifespanShockwave = (lifespan.end, c.Time + 3100);
+                        GeographicalConnector connector = new AgentConnector(target);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, connector), expectedEndCast);
                         // Shockwave
-                        replay.Decorations.Add(new CircleDecoration(false, endTimeWave, 1500, (attackEnd, endTimeWave), "rgba(255, 200, 0, 0.4)", new AgentConnector(target)));
+                        replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.4, 1500);
                     }
 
                     // 66% & 33% Breakbars
                     var causticExplosion = casts.Where(x => x.SkillId == CausticExplosionEnsolyss).ToList();
                     foreach (AbstractCastEvent c in causticExplosion)
                     {
-                        int duration = 15000;
-                        int start = (int)c.Time;
-                        int expectedHitEnd = start + duration;
-                        int attackEnd = start + duration;
+                        int castDuration = 15000;
+                        long expectedEndCast = c.Time + castDuration;
                         int durationQuarter = 3000;
+                        (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
 
-                        Segment stunSegment = target.GetBuffStatus(log, Stun, c.Time, c.Time + duration).FirstOrDefault(x => x.Value > 0);
-                        if (stunSegment != null)
-                        {
-                            attackEnd = Math.Min((int)stunSegment.Start, attackEnd); // Start of Stun
-                        }
                         // Circle going in
-                        replay.Decorations.Add(new DoughnutDecoration(true, -expectedHitEnd, 0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        replay.Decorations.Add(new DoughnutDecoration(true, 0, 0, 2000, (start, attackEnd), "rgba(255, 0, 0, 0.2)", new AgentConnector(target)));
-                        if (attackEnd == expectedHitEnd)
+                        replay.AddDecorationWithGrowing(new DoughnutDecoration(0, 2000, lifespan, Colors.Red, 0.2, new AgentConnector(target)), expectedEndCast, true);
+
+                        if (lifespan.end == expectedEndCast)
                         {
-                            replay.Decorations.Add(new CircleDecoration(true, 0, 2000, (attackEnd, attackEnd + 300), "rgba(255, 0, 0, 0.4)", new AgentConnector(target)));
+                            // Explosion
+                            replay.Decorations.Add(new CircleDecoration(2000, (lifespan.end, lifespan.end + 300), Colors.Red, 0.4, new AgentConnector(target)));
                         }
+
                         // Initial facing point
-                        IReadOnlyList<ParametricPoint3D> list = replay.PolledRotations;
-                        ParametricPoint3D facingDirection = list.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + duration);
+                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time, castDuration);
                         if (facingDirection != null)
                         {
                             // Calculated other quarters from initial point
                             var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
                             var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
+                            int initialDelay = 1500;
+
                             // First quarters
-                            int startFirstQuarter = start + 1500;
-                            int endFirstQuarter = Math.Min(startFirstQuarter + durationQuarter, attackEnd);
-                            int growingFirstQuarter = startFirstQuarter + durationQuarter;
-                            AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startFirstQuarter, endFirstQuarter, growingFirstQuarter);
+                            (long start, long end) lifespanFirst = (c.Time + initialDelay, Math.Min(c.Time + initialDelay + durationQuarter, lifespan.end));
+                            long growingFirst = lifespanFirst.start + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, frontalPoint, lifespan.end, lifespanFirst, growingFirst);
                             // Second quarters
-                            int startSecondQuarter = endFirstQuarter;
-                            int endSecondQuarter = Math.Min(startSecondQuarter + durationQuarter, attackEnd);
-                            int growingSecondQuarter = startSecondQuarter + durationQuarter;
-                            AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startSecondQuarter, endSecondQuarter, growingSecondQuarter);
+                            (long start, long end) lifespanSecond = (lifespanFirst.end, Math.Min(lifespanFirst.end + durationQuarter, lifespan.end));
+                            long growingSecond = lifespanSecond.start + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, leftPoint, lifespan.end, lifespanSecond, growingSecond);
                             // Third quarters
-                            int startThirdQuarter = endSecondQuarter;
-                            int endThirdQuarter = Math.Min(startThirdQuarter + durationQuarter, attackEnd);
-                            int growingThirdQuarter = startThirdQuarter + durationQuarter;
-                            AddCausticExplosionDecoration(replay, target, frontalPoint, attackEnd, startThirdQuarter, endThirdQuarter, growingThirdQuarter);
+                            (long start, long end) lifespanThird = (lifespanSecond.end, Math.Min(lifespanSecond.end + durationQuarter, lifespan.end));
+                            long growingThird = lifespanThird.start + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, frontalPoint, lifespan.end, lifespanThird, growingThird);
                             // Fourth quarters
-                            int startFourthQuarter = endThirdQuarter;
-                            int endFourthQuarter = Math.Min(startFourthQuarter + durationQuarter, attackEnd);
-                            int growingFourthQuarter = startFourthQuarter + durationQuarter;
-                            AddCausticExplosionDecoration(replay, target, leftPoint, attackEnd, startFourthQuarter, endFourthQuarter, growingFourthQuarter);
+                            (long start, long end) lifespanFourth = (lifespanThird.end, Math.Min(lifespanThird.end + durationQuarter, lifespan.end));
+                            long growingFourth = lifespanFourth.start + durationQuarter;
+                            AddCausticExplosionDecoration(replay, target, leftPoint, lifespan.end, lifespanFourth, growingFourth);
                         }
                     }
 
@@ -395,25 +357,64 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var lungeEnso = casts.Where(x => x.SkillId == LungeEnsolyss).ToList();
                     foreach (AbstractCastEvent c in lungeEnso)
                     {
-                        int startLine = (int)c.Time;
-                        int lineEffectEnd = (int)c.Time + 1000;
-                        if (replay.Rotations.Any())
+                        int castDuration = 1000;
+                        Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
+                        if (facing != null)
                         {
-                            replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                            var rotation = new AngleConnector(facing);
+                            (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                            replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(rotation));
                         }
                     }
 
+                    // Rampage - 8 Arrows attack
+                    var rampage = casts.Where(x => x.SkillId == RampageEnsolyss).ToList();
+                    foreach (AbstractCastEvent c in rampage)
+                    {
+                        // Cast duration is 4050 but visually fits better 4450
+                        int castDuration = 4050;
+                        int visualDuration = 4450;
+                        int warningDuration = 1800;
+                        (long start, long end) lifespan = (c.Time, c.Time + visualDuration);
+                        (long start, long end) lifespanWarning = (c.Time, c.Time + warningDuration);
+                        (long start, long end) lifespanShockwave = (c.Time, c.Time + castDuration);
+                        // Red outline
+                        var outline = (CircleDecoration)new CircleDecoration(380, lifespan, Colors.Red, 0.4, new AgentConnector(target)).UsingFilled(false);
+                        replay.Decorations.Add(outline);
+                        // Orange warning circle
+                        var warning = new CircleDecoration(380, lifespanWarning, Colors.LightOrange, 0.2, new AgentConnector(target));
+                        replay.AddDecorationWithGrowing(warning, lifespanWarning.end);
+                        // Growing inwards shockwave
+                        var shockwave = (CircleDecoration)new CircleDecoration(1200, lifespanShockwave, Colors.Yellow, 0.4, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespanShockwave.end, true);
+                        replay.Decorations.Add(shockwave);
+                        // 8 Arrows
+                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EnsolyssArrow, out IReadOnlyList<EffectEvent> arrows))
+                        {
+                            foreach (EffectEvent effect in arrows.Where(x => x.Time >= c.Time && x.Time < c.Time + visualDuration))
+                            {
+                                if (effect is EffectEventCBTS51)
+                                {
+                                    (long start, long end) lifespanArrow = (effect.Time, effect.Time + effect.Duration);
+                                    var rotation = new AngleConnector(effect.Rotation.Z);
+                                    var arrow = (RectangleDecoration)new RectangleDecoration(30, 600, lifespanArrow, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(new Point3D(0, 300), true)).UsingRotationConnector(rotation);
+                                    replay.Decorations.Add(arrow);
+                                }
+                            }
+                        }
+                    }
                     break;
                 case (int)TrashID.NightmareHallucination1:
                     // Lunge (Dash)
                     var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination).ToList();
                     foreach (AbstractCastEvent c in lungeHallu)
                     {
-                        int startLine = (int)c.Time;
-                        int lineEffectEnd = (int)c.Time + 1000;
-                        if (replay.Rotations.Any())
+                        int castDuration = 1000;
+                        Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
+                        if (facing != null)
                         {
-                            replay.Decorations.Add(new FacingRectangleDecoration((startLine, lineEffectEnd), new AgentConnector(target), replay.PolledRotations, 1700, (int)target.HitboxWidth, 850, "rgba(250, 120, 0, 0.2)"));
+                            var rotation = new AngleConnector(facing);
+                            (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                            replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(rotation));
                         }
                     }
 
@@ -421,10 +422,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var upswingHallu = casts.Where(x => x.SkillId == UpswingHallucination).ToList();
                     foreach (AbstractCastEvent c in upswingHallu)
                     {
-                        int start = (int)c.Time;
-                        int endTime = (int)c.Time + 1333;
-                        replay.Decorations.Add(new CircleDecoration(true, endTime, 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
-                        replay.Decorations.Add(new CircleDecoration(true, 0, 300, (start, endTime), "rgba(250, 120, 0, 0.1)", new AgentConnector(target)));
+                        int castDuration = 1333;
+                        (long start, long end) lifespan = (c.Time, c.Time + castDuration);
+                        replay.AddDecorationWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.1, new AgentConnector(target)), lifespan.end);
                     }
                     break;
                 case (int)TrashID.NightmareHallucination2:
@@ -438,31 +438,38 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
-            // Caustic Barrage
-            //EffectGUIDEvent causticBarrage = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.CausticBarrageHitEffect);
-            //if (causticBarrage != null)
-            //{
-            //    var barrageEffects = log.CombatData.GetEffectEventsByEffectID(causticBarrage.ContentID).ToList();
-            //    foreach (EffectEvent barrageEffect in barrageEffects)
-            //    {
-            //        int duration = 500;
-            //        int start = (int)barrageEffect.Time;
-            //        int effectEnd = start + duration;
-            //        EnvironmentDecorations.Add(new CircleDecoration(true, 0, 100, (start, effectEnd), "rgba(250, 120, 0, 0.2)", new PositionConnector(barrageEffect.Position)));
-            //    }
-            //}
+            // Nightmare Altar Orb AoE 1
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarOrangeAoE, out IReadOnlyList<EffectEvent> indicators1))
+            {
+                foreach (EffectEvent effect in indicators1)
+                {
+                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    EnvironmentDecorations.Add(new CircleDecoration(120, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
+                }
+            }
+
+            // Nightmare Altar Orb AoE 2
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarLightOrangeAoE, out IReadOnlyList<EffectEvent> indicators2))
+            {
+                foreach (EffectEvent effect in indicators2)
+                {
+                    (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                    EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)));
+                }
+            }
 
             // Altar Shockwave
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarShockwave, out IReadOnlyList<EffectEvent> waveEffects))
             {
-                foreach (EffectEvent waveEffect in waveEffects)
+                foreach (EffectEvent effect in waveEffects)
                 {
-                    int duration = 2000;
-                    int start = (int)waveEffect.Time;
-                    int effectEnd = start + duration;
-                    EnvironmentDecorations.Add(new CircleDecoration(false, effectEnd, 1150, (start, effectEnd), "rgba(255, 200, 0, 0.4)", new PositionConnector(waveEffect.Position)));
+                    (long start, long end) lifespan = (effect.Time, effect.Time + 2000);
+                    EnvironmentDecorations.Add(new CircleDecoration(1200, lifespan, Colors.Yellow, 0.4, new PositionConnector(effect.Position)).UsingFilled(false).UsingGrowingEnd(lifespan.end));
                 }
             }
+
+            // Caustic Barrage
+            AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.CausticBarrageIndicator, TargetID.Ensolyss, 210, 1000, 1300);
         }
     }
 }

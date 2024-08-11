@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal class BuffSimulationItemIntensity : BuffSimulationItemStack
     {
-        public BuffSimulationItemIntensity(IEnumerable<BuffStackItem> stacks) : base(stacks)
+        public BuffSimulationItemIntensity(IReadOnlyList<BuffStackItem> stacks) : base(stacks)
         {
             Duration = Stacks.Max(x => x.Duration);
         }
@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override int GetActiveStacks()
         {
-            return Stacks.Count;
+            return Stacks.Length;
         }
 
         public override IReadOnlyList<AgentItem> GetActiveSources()
@@ -32,12 +32,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override int GetActiveStacks(AbstractSingleActor actor)
         {
-            return GetActiveSources(actor).Count;
+            return GetStacks(actor);
         }
-
-        public override IReadOnlyList<AgentItem> GetActiveSources(AbstractSingleActor actor)
+        public override long GetActualDuration()
         {
-            return GetSources(actor);
+            return GetActualDurationPerStack().Max();
         }
 
         public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)

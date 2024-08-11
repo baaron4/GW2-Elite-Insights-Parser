@@ -1,0 +1,102 @@
+<template>
+    <div>
+        <ul class="nav nav-pills d-flex flex-row justify-content-center mt-1 mb-1 scale85">
+            <li v-for="base in bases" class="nav-item">
+                <a class="nav-link" @click="specmode = base" :class="{active: specmode === base}">{{ base }}</a>
+            </li>
+        </ul>
+        <div>
+            <div v-for="(spec, index) in orderedSpecs" class="mt-1 mb-1">
+                <div v-show="specToBase[spec.name] === specmode">
+                    <h3 class="text-center">{{ spec.name }}</h3>
+                    <dmgmodifier-table-component :phaseindex="phaseindex" :playerindex="playerindex"
+                        :activetargets="activetargets" :mode="mode" :id="'damage-modifier-pers-table-'+spec.name + (incoming ? 'inc' : '')"
+                        :modifiers="personalModifiers[index]" :playerindices="spec.ids"
+                        :modifiersdata="dmgModifiersPersStats" :sum="false"></dmgmodifier-table-component>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    function getDefaultDamageModifiersClassSubComponent(incoming) {
+        let path = "Statistics/DamageModifiers/" + (incoming ? "IncomingDamageModifiers" : "OutgoingDamageModifiers") + "/ClassBasedDamageModifiers";
+        if (!validateStartPath(path)) {
+            return "None";
+        }
+        const setting = EIUrlParams.get("startPage");
+        const compo = setting.split('/')[4];
+        return compo ? compo : "None";
+    }
+    Vue.component("dmgmodifier-persstats-component", {
+        props: ['phaseindex', 'playerindex', 'activetargets', 'mode', 'incoming'],
+        template: `${template}`,
+        data: function () {
+            return {
+                bases: [],
+                specmode: getDefaultDamageModifiersClassSubComponent(this.incoming),
+                specToBase: SpecToBase
+            };
+        },
+        computed: {
+            phase: function () {
+                return logData.phases[this.phaseindex];
+            },
+            damageModMap: function() {
+                return this.incoming ? logData.damageIncModMap : logData.damageModMap;
+            },
+            dmgModifiersPers: function() {           
+                return this.incoming ? logData.dmgIncModifiersPers : logData.dmgModifiersPers;
+            },
+            dmgModifiersPersStats: function() {
+                return this.incoming ? this.phase.dmgIncModifiersPers : this.phase.dmgModifiersPers;
+            },
+            dmgModifiersPersStats0: function() {
+                let phase0 = logData.phases[0];
+                return this.incoming ? phase0.dmgIncModifiersPers : phase0.dmgModifiersPers;
+            },
+            orderedSpecs: function () {
+                var res = [];
+                var aux = new Set();
+                for (var i = 0; i < specs.length; i++) {
+                    var spec = specs[i];
+                    var pBySpec = [];
+                    for (var j = 0; j < logData.players.length; j++) {
+                        if (logData.players[j].profession === spec && this.dmgModifiersPersStats0[j].data.length > 0) {
+                            pBySpec.push(j);
+                        }
+                    }
+                    if (pBySpec.length) {
+                        aux.add(SpecToBase[spec]);
+                        res.push({
+                            ids: pBySpec,
+                            name: spec
+                        });
+                    }
+                }
+                this.bases = [];
+                var _this = this;
+                aux.forEach(function (value, value2, set) {
+                    _this.bases.push(value);
+                });
+                if (this.specmode === "None" || !this.bases.includes(this.specmode)) {
+                    this.specmode = this.bases[0];
+                }
+                return res;
+            },
+            personalModifiers: function () {
+                var res = [];
+                for (var i = 0; i < this.orderedSpecs.length; i++) {
+                    var spec = this.orderedSpecs[i];
+                    var data = [];
+                    for (var j = 0; j < this.dmgModifiersPers[spec.name].length; j++) {
+                        data.push(this.damageModMap['d' + this.dmgModifiersPers[spec.name][j]]);
+                    }
+                    res.push(data);
+                }
+                return res;
+            }
+        }
+    });
+</script>

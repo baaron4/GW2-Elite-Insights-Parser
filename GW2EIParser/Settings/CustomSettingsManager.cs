@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using GW2EIParserCommons;
 
 namespace GW2EIParser
 {
@@ -115,6 +116,52 @@ namespace GW2EIParser
             {
                 Console.WriteLine("Warning: Setting \"" + name + "\" of type \"" + type.Name + "\" cannot be processed.");
             }
+        }
+
+        /// <summary>
+        /// Returns current program settings
+        /// </summary>
+        /// <returns></returns>
+        public static ProgramSettings GetProgramSettings()
+        {
+            var settings = new ProgramSettings()
+            {
+                SendEmbedToWebhook = Properties.Settings.Default.SendEmbedToWebhook,
+                SendSimpleMessageToWebhook = Properties.Settings.Default.SendSimpleMessageToWebhook,
+                WebhookURL = Properties.Settings.Default.WebhookURL,
+                UploadToDPSReports = Properties.Settings.Default.UploadToDPSReports,
+                DPSReportUserToken = Properties.Settings.Default.DPSReportUserToken,
+                UploadToWingman = Properties.Settings.Default.UploadToWingman,
+                SaveOutCSV = Properties.Settings.Default.SaveOutCSV,
+                SaveOutHTML = Properties.Settings.Default.SaveOutHTML,
+                SaveOutXML = Properties.Settings.Default.SaveOutXML,
+                SaveOutJSON = Properties.Settings.Default.SaveOutJSON,
+                SaveOutTrace = Properties.Settings.Default.SaveOutTrace,
+                ParseMultipleLogs = Properties.Settings.Default.ParseMultipleLogs,
+                SingleThreaded = Properties.Settings.Default.SingleThreaded,
+                Anonymous = Properties.Settings.Default.Anonymous,
+                SkipFailedTries = Properties.Settings.Default.SkipFailedTries,
+                CustomTooShort = Properties.Settings.Default.CustomTooShort,
+                DetailledWvW = Properties.Settings.Default.DetailledWvW,
+                ParsePhases = Properties.Settings.Default.ParsePhases,
+                ParseCombatReplay = Properties.Settings.Default.ParseCombatReplay,
+                ComputeDamageModifiers = Properties.Settings.Default.ComputeDamageModifiers,
+                SaveAtOut = Properties.Settings.Default.SaveAtOut,
+                OutLocation = Properties.Settings.Default.OutLocation,
+                AddDuration = Properties.Settings.Default.AddDuration,
+                AddPoVProf = Properties.Settings.Default.AddPoVProf,
+                LightTheme = Properties.Settings.Default.LightTheme,
+                HtmlExternalScripts = Properties.Settings.Default.HtmlExternalScripts,
+                HtmlExternalScriptsPath = Properties.Settings.Default.HtmlExternalScriptsPath,
+                HtmlExternalScriptsCdn = Properties.Settings.Default.HtmlExternalScriptsCdn,
+                HtmlCompressJson = Properties.Settings.Default.HtmlCompressJson,
+                RawTimelineArrays = Properties.Settings.Default.RawTimelineArrays,
+                CompressRaw = Properties.Settings.Default.CompressRaw,
+                IndentJSON = Properties.Settings.Default.IndentJSON,
+                IndentXML = Properties.Settings.Default.IndentXML,
+                MemoryLimit = Properties.Settings.Default.MemoryLimit,
+            };
+            return settings;
         }
     }
 }

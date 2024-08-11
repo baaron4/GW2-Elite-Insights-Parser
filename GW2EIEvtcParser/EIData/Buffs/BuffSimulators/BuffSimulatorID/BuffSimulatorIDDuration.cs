@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
@@ -44,7 +43,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         protected override void Update(long timePassed)
         {
-            if (BuffStack.Any() && timePassed > 0)
+            if (BuffStack.Count != 0 && timePassed > 0)
             {
                 long diff = timePassed;
                 long leftOver = 0;

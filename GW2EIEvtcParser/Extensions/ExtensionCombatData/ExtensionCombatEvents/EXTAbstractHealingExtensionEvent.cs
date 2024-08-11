@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
 namespace GW2EIEvtcParser.Extensions
 {
@@ -29,11 +27,6 @@ namespace GW2EIEvtcParser.Extensions
             {
                 SrcIsPeer = true;
             }
-        }
-
-        public override bool ConditionDamageBased(ParsedEvtcLog log)
-        {
-            return false;
         }
 
     }

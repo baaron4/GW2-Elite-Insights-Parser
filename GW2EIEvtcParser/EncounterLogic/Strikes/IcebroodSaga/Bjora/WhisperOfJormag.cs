@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.ParserHelper;
-using static GW2EIEvtcParser.SkillIDs;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
-using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -65,19 +60,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WhisperOfJormag));
-            if (woj == null)
-            {
-                throw new MissingKeyActorsException("Whisper of Jormag not found");
-            }
+            AbstractSingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WhisperOfJormag)) ?? throw new MissingKeyActorsException("Whisper of Jormag not found");
             phases[0].AddTarget(woj);
             if (!requirePhases)
             {
                 return phases;
             }
             long start, end;
-            var tpOutEvents = log.CombatData.GetBuffData(WhisperTeleportOut).Where(x => x is BuffRemoveAllEvent).ToList();
-            var tpBackEvents = log.CombatData.GetBuffData(WhisperTeleportBack).Where(x => x is BuffRemoveAllEvent).ToList();
+            var tpOutEvents = log.CombatData.GetBuffRemoveAllData(WhisperTeleportOut).ToList();
+            var tpBackEvents = log.CombatData.GetBuffRemoveAllData(WhisperTeleportBack).ToList();
             // 75% tp happened
             if (tpOutEvents.Count > 0)
             {
