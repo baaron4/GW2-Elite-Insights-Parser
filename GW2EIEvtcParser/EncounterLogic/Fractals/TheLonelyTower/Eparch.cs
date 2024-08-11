@@ -214,9 +214,24 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // TODO: pools are differently sized?
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 15000);
                     var position = new PositionConnector(effect.Position);
-                    var circle = new CircleDecoration(110, lifespan, Colors.RedSkin, 0.3, position);
+                    var circle = new CircleDecoration(110, lifespan, Colors.RedSkin, 0.2, position);
                     EnvironmentDecorations.Add(circle);
                     EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                }
+            }
+
+            // rage wave
+            if (log.CombatData.TryGetEffectEventsByGUID("968B7C89FEF01C4298294E86800B9BA9", out IReadOnlyList<EffectEvent> rageWaves))
+            {
+                const float velocity = 450.0f; // units per second
+                const uint maxRange = 1300;
+                const long duration = (long)(1000.0f * maxRange / velocity);
+                foreach (EffectEvent effect in rageWaves)
+                {
+                    var start = effect.Time;
+                    var end = start + duration;
+                    var position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(maxRange, (start, end), Colors.Orange, 0.3, position).UsingFilled(false).UsingGrowingEnd(end));
                 }
             }
 
@@ -259,6 +274,30 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(400, lifespan, Colors.Red, 0.2, position));
                 }
             }
+
+            // spike of malice
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchCircleIndicator, out IReadOnlyList<EffectEvent> spikeIndicators))
+            {
+                foreach (EffectEvent effect in spikeIndicators)
+                {
+                    (long start, long end) = effect.ComputeDynamicLifespan(log, 1000);
+                    GeographicalConnector position = new PositionConnector(effect.Position);
+                    var circle = new CircleDecoration(100, (start, end), Colors.Orange, 0.2, position);
+                    FormDecoration circleBorder = circle.Copy().UsingFilled(false);
+                    FormDecoration circleFiller = circle.UsingGrowingEnd(end);
+                    EnvironmentDecorations.Add(circleBorder);
+                    EnvironmentDecorations.Add(circleFiller);
+                }
+            }
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchSpikeOfMalice, out IReadOnlyList<EffectEvent> spikes))
+            {
+                foreach (EffectEvent effect in spikes)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 300);
+                    GeographicalConnector position = new PositionConnector(effect.Position);
+                    EnvironmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Red, 0.2, position));
+                }
+            }
         }
 
         private void AddGlobuleDecorations(ParsedEvtcLog log)
@@ -287,7 +326,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     DespawnEvent despawn = log.CombatData.GetDespawnEvents(gadget).FirstOrDefault();
                     if (spawn != null && despawn != null)
                     {
-                        const long globuleDelay = 1000; // globules spawn at least 1s after
+                        const long globuleDelay = 700;
                         AnimatedCastEvent lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
                         if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out Color color))
                         {
