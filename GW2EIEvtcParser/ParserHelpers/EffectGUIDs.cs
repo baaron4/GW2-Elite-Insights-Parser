@@ -459,6 +459,10 @@
         public const string AxeGroundAoE = "234949DB5ECD52409F6EDD601BBC0C19";
         public const string AxeGroundAoE2 = "CE91D2D4CD6C4141B3977FA70FFE05BB";
         public const string HarrowshotAoE = "3AE17719B3D7374BAC4899DA0A3E7DF9";
+        // Lonely Tower Fractal
+        public const string EparchRedCircle = "0D2192849D53B4469F56B1C74542DBE9"; // owned by eparch, 2s duration, REUSED
+        public const string EparchDespairPool = "FF359460D95C96478CE2A4415EACD312"; // owned by eparch, 15s duration
+        public const string EparchRageFissure = "797210B1B11C984AACBD2AFC80D02BC7"; // no owner, 24s duration
         #endregion
         #region Raids
         // Vale Guardian

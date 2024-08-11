@@ -177,6 +177,36 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
+            AddGlobuleDecorations(log);
+
+            // rain of despair pools
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchDespairPool, out IReadOnlyList<EffectEvent> pools))
+            {
+                foreach (EffectEvent effect in pools)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 15000);
+                    var position = new PositionConnector(effect.Position);
+                    var circle = new CircleDecoration(100, lifespan, Colors.RedSkin, 0.3, position);
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.GetBorderDecoration(Colors.Red, 0.2));
+                }
+            }
+
+            // rage fissures
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageFissure, out IReadOnlyList<EffectEvent> fissures))
+            {
+                foreach (EffectEvent effect in fissures)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 24000);
+                    GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, 100.0f), true);
+                    var rotation = new AngleConnector(effect.Rotation.Z);
+                    EnvironmentDecorations.Add(new RectangleDecoration(40, 220, lifespan, Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
+                }
+            }
+        }
+
+        private void AddGlobuleDecorations(ParsedEvtcLog log)
+        {
             AbstractSingleActor eparch = GetEparchActor();
             IReadOnlyList<AnimatedCastEvent> eparchCasts = log.CombatData.GetAnimatedCastData(eparch.AgentItem);
 
