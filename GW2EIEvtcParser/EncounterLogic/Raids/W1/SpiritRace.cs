@@ -127,18 +127,37 @@ namespace GW2EIEvtcParser.EncounterLogic
                 Targetless = true;
             }
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int etherealBarriers = 0;
+            var position1 = new Point3D(-7607.929f, -12493.7051f, -1112.468f);
+            var position2 = new Point3D(-8423.886f, -9858.193f, -1335.1134f);
+            var position3 = new Point3D(-9104.786f, -6910.657f, -2405.52222f);
+            var position4 = new Point3D(-8552.994f, -863.6334f, -1416.31714f);
             foreach (AbstractSingleActor target in Targets)
             {
                 switch (target.ID)
                 {
                     case (int)ArcDPSEnums.TargetID.EtherealBarrier:
-                        target.OverrideName(target.Character + " " + (++etherealBarriers));
+                        var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(x => AbstractMovementEvent.GetPoint3D(x)).ToList();
+                        if (posititions.Any(x => x.Distance2DToPoint(position1) < 10)) {
+                            target.OverrideName(target.Character + " 1" );
+                        } 
+                        else if (posititions.Any(x => x.Distance2DToPoint(position2) < 10))
+                        {
+                            target.OverrideName(target.Character + " 2");
+                        } 
+                        else if (posititions.Any(x => x.Distance2DToPoint(position3) < 10))
+                        {
+                            target.OverrideName(target.Character + " 3");
+                        } 
+                        else if (posititions.Any(x => x.Distance2DToPoint(position4) < 10))
+                        {
+                            target.OverrideName(target.Character + " 4");
+                        }
                         break;
                     default:
                         break;
                 }
             }
+            _targets.Sort((x,y) => x.Character.CompareTo(y.Character));
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
