@@ -29,7 +29,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "gors";
             Icon = EncounterIconGorseval;
-            EncounterCategoryInformation.InSubCategoryOrder = 1;
+            EncounterCategoryInformation.InSubCategoryOrder = 2;
             EncounterID |= 0x000002;
         }
 

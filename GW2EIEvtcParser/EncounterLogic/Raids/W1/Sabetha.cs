@@ -53,7 +53,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             Extension = "sab";
             Icon = EncounterIconSabetha;
-            EncounterCategoryInformation.InSubCategoryOrder = 2;
+            EncounterCategoryInformation.InSubCategoryOrder = 3;
             EncounterID |= 0x000003;
         }
 

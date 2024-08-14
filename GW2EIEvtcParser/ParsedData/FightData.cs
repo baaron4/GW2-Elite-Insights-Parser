@@ -71,6 +71,9 @@ namespace GW2EIEvtcParser.ParsedData
                 case ArcDPSEnums.TargetID.ValeGuardian:
                     Logic = new ValeGuardian(id);
                     break;
+                case ArcDPSEnums.TargetID.EtherealBarrierGadget:
+                    Logic = new SpiritRace(id);
+                    break;
                 case ArcDPSEnums.TargetID.Gorseval:
                     Logic = new Gorseval(id);
                     break;
@@ -295,6 +298,9 @@ namespace GW2EIEvtcParser.ParsedData
                 default:
                     switch (ArcDPSEnums.GetTrashID(id))
                     {
+                        case ArcDPSEnums.TrashID.WallOfGhosts:
+                            Logic = new SpiritRace(id);
+                            break;
                         case ArcDPSEnums.TrashID.HauntingStatue:
                             Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
                             break;

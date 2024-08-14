@@ -15,6 +15,8 @@ Gorseval: 0x020102
 
 Sabetha: 0x020103
 
+SpiritRace: 0x020104
+
 ### Wing 2
 Slothasor: 0x020201
 

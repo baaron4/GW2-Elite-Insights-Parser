@@ -607,6 +607,7 @@ namespace GW2EIEvtcParser
         private const int PermanentEmbodimentOfMalice = -58;
         private const int KryptisRift = -59;
         private const int EparchLonelyTowerDummy = -60;
+        private const int EtherealBarrier = -61;
         public const int NonIdentifiedSpecies = 0;
 
         //
@@ -635,6 +636,8 @@ namespace GW2EIEvtcParser
             RedGuardian = 15433,
             BlueGuardian = 15431,
             GreenGuardian = 15420,
+            // Spirit Race
+            WallOfGhosts = 15415,
             // Gorse
             ChargedSoul = 15434,
             EnragedSpirit = 16024,
@@ -1148,6 +1151,8 @@ namespace GW2EIEvtcParser
             // Raid
             ValeGuardian = 15438,
             Gorseval = 15429,
+            EtherealBarrier = ArcDPSEnums.EtherealBarrier,
+            EtherealBarrierGadget = 47188,
             Sabetha = 15375,
             Slothasor = 16123,
             Berg = 16088,
