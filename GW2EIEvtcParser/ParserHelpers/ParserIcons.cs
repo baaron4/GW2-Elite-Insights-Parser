@@ -124,6 +124,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TargetWorldVersusWorld = "https://wiki.guildwars2.com/images/d/db/PvP_Server_Browser_%28map_icon%29.png";
         private const string TargetMordremoth = "https://i.imgur.com/xcQ3AFW.png";
         private const string TargetValeGuardian = "https://i.imgur.com/MIpP5pK.png";
+        private const string TargetEtherealBarrier = "https://i.imgur.com/4TGXJEU.png";
         private const string TargetGorseval = "https://i.imgur.com/5hmMq12.png";
         private const string TargetSabetha = "https://i.imgur.com/UqbFp9S.png";
         private const string TargetSlothasor = "https://i.imgur.com/h1xH3ER.png";
@@ -393,6 +394,10 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashAvatarOfSpite = "https://i.imgur.com/FwIaQi8.png";
         private const string TrashIncarnationOfJudgment = "https://i.imgur.com/XgR5rrk.png";
         private const string TrashIncarnationOfCruelty = "https://i.imgur.com/QVXWHny.png";
+        private const string TrashWallOfGhosts = "https://i.imgur.com/OMErejF.png";
+        private const string TrashAngeredSpirit = "https://i.imgur.com/5cjAJN8.png";
+        private const string TrashEnragedSpirit = "https://i.imgur.com/6gbEvy3.png";
+        private const string TrashDerangedSpirit = "https://i.imgur.com/lLx4SGw.png";
         #endregion
 
         #region Minion
@@ -806,13 +811,14 @@ namespace GW2EIEvtcParser.ParserHelpers
         };
 
         /// <summary>
-        /// Dictionary matching a <see cref="ArcDPSEnums.TargetID"/> to their icon.
+        /// Dictionary matching a <see cref="TargetID"/> to their icon.
         /// </summary>
-        internal static IReadOnlyDictionary<ArcDPSEnums.TargetID, string> TargetNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TargetID, string>()
+        internal static IReadOnlyDictionary<TargetID, string> TargetNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TargetID, string>()
         {
             { TargetID.WorldVersusWorld, TargetWorldVersusWorld },
             { TargetID.Mordremoth, TargetMordremoth },
             { TargetID.ValeGuardian, TargetValeGuardian },
+            { TargetID.EtherealBarrier, TargetEtherealBarrier },
             { TargetID.Gorseval, TargetGorseval },
             { TargetID.Sabetha, TargetSabetha },
             { TargetID.Slothasor, TargetSlothasor },
@@ -900,9 +906,9 @@ namespace GW2EIEvtcParser.ParserHelpers
         };
 
         /// <summary>
-        /// Dictionary matching a <see cref="ArcDPSEnums.TrashID"/> to their icon.
+        /// Dictionary matching a <see cref="TrashID"/> to their icon.
         /// </summary>
-        internal static IReadOnlyDictionary<ArcDPSEnums.TrashID, string> TrashNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TrashID, string>()
+        internal static IReadOnlyDictionary<TrashID, string> TrashNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.TrashID, string>()
         {
             { TrashID.Canach, TrashCanach },
             { TrashID.Braham, TrashBraham },
@@ -1232,12 +1238,20 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TrashID.IncarnationOfJudgement, TrashIncarnationOfJudgment },
             { TrashID.IncarnationOfCruelty, TrashIncarnationOfCruelty },
             { TrashID.KryptisRift, TrashGenericRedEnemySkull },
+            { TrashID.WallOfGhosts, TrashWallOfGhosts },
+            { TrashID.AngeredSpirit, TrashAngeredSpirit },
+            { TrashID.AngeredSpiritSR, TrashAngeredSpirit },
+            { TrashID.AngeredSpiritSR2, TrashAngeredSpirit },
+            { TrashID.EnragedSpirit, TrashEnragedSpirit },
+            { TrashID.EnragedSpiritSR, TrashEnragedSpirit },
+            { TrashID.DerangedSpiritSR, TrashDerangedSpirit },
+            { TrashID.DerangedSpiritSR2, TrashDerangedSpirit },
         };
 
         /// <summary>
-        /// Dictionary matching a <see cref="ArcDPSEnums.MinionID"/> to their icon.
+        /// Dictionary matching a <see cref="MinionID"/> to their icon.
         /// </summary>
-        internal static IReadOnlyDictionary<ArcDPSEnums.MinionID, string> MinionNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.MinionID, string>()
+        internal static IReadOnlyDictionary<MinionID, string> MinionNPCIcons { get; private set; } = new Dictionary<ArcDPSEnums.MinionID, string>()
         {
             { MinionID.HoundOfBalthazar, MinionHoundOfBalthazar },
             { MinionID.SnowWurm, MinionCallWurm },
