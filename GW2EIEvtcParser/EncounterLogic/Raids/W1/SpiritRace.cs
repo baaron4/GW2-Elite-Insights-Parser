@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstBuffApplyMechanic(Crippled, "I Can Outrun A...Ghost", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(true),
             });
             Extension = "sprtrace";
-            Icon = EncounterIconGeneric;
+            Icon = EncounterIconSpiritRace;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000004;
         }
@@ -189,6 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = (target.FirstAware, target.LastAware);
                     uint innerRadius = 400;
                     uint outerRadius = 500;
+                    //replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                     replay.Decorations.Add(new CircleDecoration(innerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                     replay.Decorations.Add(new CircleDecoration(outerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                     break;
