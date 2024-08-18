@@ -505,6 +505,7 @@ class CircleMechanicDrawable extends FormMechanicDrawable {
         this.moveContext(ctx, pos, rot);
         ctx.beginPath();
         ctx.arc(0, 0, this.getPercent() * (this.radius - this.minRadius) + this.minRadius, 0, 2 * Math.PI);
+        ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();
@@ -530,6 +531,24 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
         return this.metadata.innerRadius;
     }
 
+    drawOuterCircle(percent) {      
+        var ctx = animator.mainContext; 
+        if (this.growingReverse) {    
+            ctx.arc(0, 0, this.outerRadius , 2 * Math.PI, 0, false);
+        }  else {
+            ctx.arc(0, 0, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
+        }
+    }
+
+    drawInnerCircle(percent) {      
+        var ctx = animator.mainContext; 
+        if (this.growingReverse) {    
+            ctx.arc(0, 0, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 0, 2 * Math.PI, true);
+        }  else {
+            ctx.arc(0, 0, this.innerRadius, 0, 2 * Math.PI, true);
+        }
+    }
+
     draw() {
         if (!this.canDraw()) {
             return;
@@ -543,21 +562,26 @@ class DoughnutMechanicDrawable extends FormMechanicDrawable {
         var ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
-        ctx.beginPath();
-        if (this.growingReverse) {    
-            ctx.arc(0, 0, this.outerRadius , 2 * Math.PI, 0, false);
-            ctx.arc(0, 0, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 0, 2 * Math.PI, true);
-        }  else {
-            ctx.arc(0, 0, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
-            ctx.arc(0, 0, this.innerRadius, 0, 2 * Math.PI, true);
-        }
-        ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;
+            
+            ctx.beginPath();
+            this.drawOuterCircle(percent);
+            this.drawInnerCircle(percent);
+            ctx.closePath();
             ctx.fill();
-        } else {
+        } else {  
             ctx.lineWidth = (2 / animator.scale).toString();
             ctx.strokeStyle = this.color;
+
+            ctx.beginPath();
+            this.drawOuterCircle(percent);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.beginPath();     
+            this.drawInnerCircle(percent);
+            ctx.closePath();
             ctx.stroke();
         }
         ctx.restore();
@@ -592,6 +616,7 @@ class RectangleMechanicDrawable extends FormMechanicDrawable {
         this.moveContext(ctx, pos, rot);
         ctx.beginPath();
         ctx.rect( - 0.5 * percent * this.width, - 0.5 * percent * this.height, percent * this.width, percent * this.height);
+        ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();
@@ -716,11 +741,13 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.lineTo(( 1 - percent) * (pos.x - target.x), percent * (pos.y - target.y));
+            ctx.closePath();
         } else {
             this.moveContext(ctx, pos, 0);
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.lineTo(percent * (target.x - pos.x), percent * (target.y - pos.y));
+            ctx.closePath();
         }
         
         ctx.lineWidth = (2 / animator.scale).toString();

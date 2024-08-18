@@ -189,9 +189,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     (long, long) lifespan = (target.FirstAware, target.LastAware);
                     uint innerRadius = 400;
                     uint outerRadius = 500;
-                    //replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
-                    replay.Decorations.Add(new CircleDecoration(innerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
-                    replay.Decorations.Add(new CircleDecoration(outerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                     break;
                 default:
                     break;
