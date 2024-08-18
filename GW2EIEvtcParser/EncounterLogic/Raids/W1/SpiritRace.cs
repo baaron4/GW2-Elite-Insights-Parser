@@ -8,6 +8,7 @@ using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
@@ -17,9 +18,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
+                new PlayerDstHitMechanic(SpiritFog, "Spirit Fog", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "SpiritFog.H", "Hit by Spirit Fog", "Spirit Fog Hit", 0),
+                new PlayerDstBuffApplyMechanic(Crippled, "I Can Outrun A...Ghost", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Outrun.Achiv", "Achievement Eligibility: I Can Outrun A...Ghost", "I Can Outrun A...Ghost", 0).UsingAchievementEligibility(true),
             });
             Extension = "sprtrace";
-            Icon = EncounterIconGeneric;
+            Icon = EncounterIconSpiritRace;
             EncounterCategoryInformation.InSubCategoryOrder = 1;
             EncounterID |= 0x000004;
         }
@@ -38,6 +41,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return new List<ArcDPSEnums.TrashID>
             {
                 ArcDPSEnums.TrashID.WallOfGhosts,
+                ArcDPSEnums.TrashID.AngeredSpiritSR,
+                ArcDPSEnums.TrashID.AngeredSpiritSR2,
+                ArcDPSEnums.TrashID.EnragedSpiritSR,
+                ArcDPSEnums.TrashID.DerangedSpiritSR,
+                ArcDPSEnums.TrashID.DerangedSpiritSR2,
             };
         }
 
@@ -176,6 +184,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.Trim(replay.TimeOffsets.start, hpZeroUpdate.Time);
                     }
+                    break;
+                case (int)ArcDPSEnums.TrashID.WallOfGhosts:
+                    (long, long) lifespan = (target.FirstAware, target.LastAware);
+                    uint innerRadius = 400;
+                    uint outerRadius = 500;
+                    //replay.Decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(innerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
+                    replay.Decorations.Add(new CircleDecoration(outerRadius, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                     break;
                 default:
                     break;

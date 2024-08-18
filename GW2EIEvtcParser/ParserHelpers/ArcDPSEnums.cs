@@ -638,6 +638,11 @@ namespace GW2EIEvtcParser
             GreenGuardian = 15420,
             // Spirit Race
             WallOfGhosts = 15415,
+            AngeredSpiritSR = 15389,
+            AngeredSpiritSR2 = 15409,
+            DerangedSpiritSR = 15390,
+            DerangedSpiritSR2 = 15425,
+            EnragedSpiritSR = 15414,
             // Gorse
             ChargedSoul = 15434,
             EnragedSpirit = 16024,

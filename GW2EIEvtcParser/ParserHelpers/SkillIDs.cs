@@ -1634,6 +1634,7 @@
         public const long TailLashWyvern = 31613;
         public const long GorsevalBloom = 31616;
         public const long GhastlyPrison = 31623;
+        public const long YouWillJoinUs = 31624;
         public const long CultivatedSynergyPet = 31629;
         public const long GlyphOfUnitySomething = 31640;
         public const long CannonBarrage = 31643;
@@ -1648,6 +1649,7 @@
         public const long SpiritKick = 31720;
         public const long BulletHail = 31721;
         public const long SpiritedFusion = 31722;
+        public const long SpiritFog = 31742;
         public const long DistributedMagicGreen = 31750;
         public const long FlameBlast = 31761;
         public const long PlatformQuake = 31763;

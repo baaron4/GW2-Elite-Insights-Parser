@@ -47,6 +47,7 @@
 
         // Encounters Icons
         internal const string EncounterIconValeGuardian = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+        internal const string EncounterIconSpiritRace = "https://wiki.guildwars2.com/images/e/e5/Spirit_Thread.png";
         internal const string EncounterIconGorseval = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
         internal const string EncounterIconSabetha = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
         internal const string EncounterIconSlothasor = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
