@@ -85,6 +85,7 @@
 
         // Combat Replay Maps
         internal const string CombatReplayValeGuardian = "https://i.imgur.com/W7MocGz.png";
+        internal const string CombatReplaySpiritRun = "https://i.imgur.com/RyA0XH3.png";
         internal const string CombatReplayGorseval = "https://i.imgur.com/U9pH5dG.png";
         internal const string CombatReplaySabetha = "https://i.imgur.com/HXjxqlu.png";
         internal const string CombatReplaySlothasor = "https://i.imgur.com/pChxnuf.png";
