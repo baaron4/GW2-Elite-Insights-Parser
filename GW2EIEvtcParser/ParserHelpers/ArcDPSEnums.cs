@@ -73,6 +73,7 @@ namespace GW2EIEvtcParser
             internal const ulong May2024LonelyTowerFractalRelease = 163141;
             internal const ulong June2024LonelyTowerCMRelease = 163807;
             internal const ulong June2024Balance = 164824;
+            internal const ulong August2024JWRelease = 167136;
             //
             internal const ulong EndOfLife = ulong.MaxValue;
         }

@@ -171,7 +171,12 @@ namespace GW2EIEvtcParser.EIData
                 .WithBuilds(GW2Builds.August2018Balance),
             new BuffOnActorDamageModifier(ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.PvE)
                 .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
-            new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All),
+            new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All)
+                .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2024JWRelease),
+            new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.WvW)
+                .WithBuilds(GW2Builds.August2024JWRelease),
+            new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
+                .WithBuilds(GW2Builds.August2024JWRelease),
             // Tools
             new BuffOnActorDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
         };
