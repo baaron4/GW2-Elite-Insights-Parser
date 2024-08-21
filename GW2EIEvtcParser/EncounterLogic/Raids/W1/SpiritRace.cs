@@ -27,6 +27,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             EncounterID |= 0x000004;
         }
 
+        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+        {
+            return new CombatReplayMap(CombatReplaySpiritRun,
+                            (581, 1193),
+                            (-11188, -13757, -4700, -436)
+                            /*,
+                            (-15360, -36864, 15360, 39936),
+                            (3456, 11012, 4736, 14212)*/);
+        }
         protected override List<int> GetTargetsIDs()
         {
             return new List<int>
