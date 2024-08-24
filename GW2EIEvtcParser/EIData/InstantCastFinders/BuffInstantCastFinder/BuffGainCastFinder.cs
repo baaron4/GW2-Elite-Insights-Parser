@@ -21,5 +21,11 @@ namespace GW2EIEvtcParser.EIData
             UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.AppliedDuration - duration) < epsilon);
             return this;
         }
+
+        internal BuffGainCastFinder UsingOverridenDurationChecker(int duration, long epsilon = ServerDelayConstant)
+        {
+            UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.OverridenDuration - duration) < epsilon);
+            return this;
+        }
     }
 }

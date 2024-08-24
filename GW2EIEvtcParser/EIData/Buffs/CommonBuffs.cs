@@ -204,6 +204,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Nourys's Hunger (Active)", NouryssHungerStartGainingStacksBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.RelicOfNourys),
             new Buff("Nourys's Hunger (Stacks)", NouryssHungerStacksBuff, Source.Gear,  BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, BuffImages.RelicOfNourys),
             new Buff("Nourys's Hunger (Damage Buff)", NouryssHungerDamageBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfNourys),
+            new Buff("Relic of the Stormsinger", RelicOfTheStormsingerBuff, Source.Gear, BuffClassification.Other, BuffImages.RelicOfTheStormsinger),
+            new Buff("Relic of Sorrow", RelicOfSorrowBuff, Source.Gear, BuffClassification.Defensive, BuffImages.RelicOfTheSorrow),
+            new Buff("Greer's Virulence", GreersVirulence, Source.Gear,  BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, BuffImages.RelicOfTheBlightbringer),
+            new Buff("Relic of the Claw", RelicOfTheClaw, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheClaw),
         };
 
     }

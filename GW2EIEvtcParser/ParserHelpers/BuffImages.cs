@@ -203,6 +203,10 @@
         public const string RelicOfTheAstralWard = "https://wiki.guildwars2.com/images/0/04/Relic_of_the_Astral_Ward.png";
         public const string RelicOfVass = "https://wiki.guildwars2.com/images/f/f2/Relic_of_Vass.png";
         public const string RelicOfNourys = "https://wiki.guildwars2.com/images/3/3f/Relic_of_Nourys.png";
+        public const string RelicOfTheStormsinger = "https://wiki.guildwars2.com/images/f/f2/Relic_of_the_Stormsinger.png";
+        public const string RelicOfTheSorrow = "https://wiki.guildwars2.com/images/4/4b/Relic_of_Sorrow.png";
+        public const string RelicOfTheBlightbringer = "https://wiki.guildwars2.com/images/3/3f/Relic_of_Nourys.png";
+        public const string RelicOfTheClaw = "https://wiki.guildwars2.com/images/7/7f/Relic_of_the_Claw.png";
         #endregion Gear
 
         #region Fractal

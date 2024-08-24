@@ -116,12 +116,17 @@ namespace GW2EIEvtcParser.EIData
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new BuffLossCastFinder(RelicOfFireworksBuffLoss, RelicOfFireworks)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffLossCastFinder(RelicOfTheClawBuffLoss, RelicOfTheClaw)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfCerusHit, EffectGUIDs.RelicOfCerusEye)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheIce, EffectGUIDs.RelicOfIce)
                 .UsingICD(1000)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfFireworks, EffectGUIDs.RelicOfFireworks)
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            new BuffGainCastFinder(RelicOfTheClaw, RelicOfTheClaw)
+                .UsingOverridenDurationChecker(0)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfPeithaBlade, EffectGUIDs.RelicOfPeitha)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),

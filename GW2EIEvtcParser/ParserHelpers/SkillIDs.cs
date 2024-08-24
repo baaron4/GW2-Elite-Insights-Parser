@@ -56,6 +56,7 @@
         public const long DetonateThrowMineOrMineField = -37;
         public const long SuperiorSigilOfLeeching = -38;
         public const long BlitzMinesDrop = -39;
+        public const long RelicOfTheClawBuffLoss = -40;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
@@ -4458,6 +4459,10 @@
         public const long PredatorsAmbush = 73150;
         public const long ImaginaryInversion = 73152;
         public const long Psycut = 73154;
+        public const long GreersVirulence = 73181;
+        public const long RelicOfTheStormsingerBuff = 73455;
+        public const long RelicOfTheClaw = 73955;
+        public const long RelicOfSorrowBuff = long.MaxValue; // To be added
         #endregion
     }
 

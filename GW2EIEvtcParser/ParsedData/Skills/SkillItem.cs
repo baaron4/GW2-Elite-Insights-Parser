@@ -99,6 +99,7 @@ namespace GW2EIEvtcParser.ParsedData
             { MabonsStrength, "Relic of Mabon" },
             { NouryssHungerDamageBuff, "Relic of Nourys" },
             { RelicOfTheFoundingBarrier, "Relic of the Founding (Barrier)" },
+            { RelicOfTheClawBuffLoss, "Relic of the Claw (Buff Loss)" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -486,6 +487,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheDefenderHealing, BuffImages.RelicOfTheDefender },
             { RelicOfTheFoundingBarrier, "https://wiki.guildwars2.com/images/8/81/Relic_of_the_Founding.png" },
             { RelicOfTheTwinGenerals, "https://wiki.guildwars2.com/images/0/0e/Relic_of_the_Twin_Generals.png" },
+            { RelicOfTheClawBuffLoss, "https://i.imgur.com/x6AU9B4.png" },
 #endregion RelicIcons
             #region ElementalistIcons
             { DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
