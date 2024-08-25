@@ -329,7 +329,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Tapped Out", TappedOut, Source.Ranger, BuffClassification.Other, BuffImages.TappedOut)
                 .WithBuilds(GW2Builds.February2024NewWeapons),
             // Spear
-            new Buff("Hunter's Prowess", HuntersProwess, Source.Ranger, BuffClassification.Other, BuffImages.HuntersProwess),
+            new Buff("Hunter's Prowess", HuntersProwess, Source.Ranger, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.HuntersProwess),
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
