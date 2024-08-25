@@ -219,10 +219,10 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Elite Mortar", POV_EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
             */
             // Spear
-            new Buff("Conduit Surge", ConduitSurgeBuff, Source.Engineer, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Conduit Surge", ConduitSurgeBuff, Source.Engineer, BuffClassification.Other, BuffImages.ConduitSurge),
+            new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, BuffImages.ElectricArtillery),
+            new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Focused),
+            new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, BuffImages.LightningRod),
         };
 
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)

@@ -206,6 +206,8 @@ namespace GW2EIEvtcParser.ParsedData
             { ImpairingDaggersDaredevilMinionHit2, "Impairing Daggers (Dagger Hit 2)" },
             { ImpairingDaggersDaredevilMinionHit3, "Impairing Daggers (Dagger Hit 3)" },
             { BoundHit, "Bound (Hit)" },
+            { BarbedSpearMelee, "Barbed Spear (Melee)" },
+            { BarbedSpearRanged, "Barbed Spear (Ranged)" },
             // Warrior
             { RushDamage, "Rush (Hit)" },
             { MightyThrowScatter, "Mighty Throw (Scattered Spear)" },
@@ -488,6 +490,9 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheFoundingBarrier, "https://wiki.guildwars2.com/images/8/81/Relic_of_the_Founding.png" },
             { RelicOfTheTwinGenerals, "https://wiki.guildwars2.com/images/0/0e/Relic_of_the_Twin_Generals.png" },
             { RelicOfTheClawBuffLoss, "https://i.imgur.com/x6AU9B4.png" },
+            { RelicOfTheClaw, BuffImages.RelicOfTheClaw },
+            { RelicOfSorrowBuff, BuffImages.RelicOfTheSorrow },
+            { RelicOfTheStormsingerDamage, BuffImages.RelicOfTheStormsinger },
 #endregion RelicIcons
             #region ElementalistIcons
             { DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
@@ -554,6 +559,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RifleBurstGrenadeDamage, "https://wiki.guildwars2.com/images/e/ed/Grenade_Barrage.png" },
             { GyroExplosion, "https://wiki.guildwars2.com/images/4/4e/Function_Gyro_%28tool_belt_skill%29.png" },
             { DetonateThrowMineOrMineField, "https://wiki.guildwars2.com/images/d/d1/Detonate_Mine_Field.png" },
+            { ConduitSurge, "https://wiki.guildwars2.com/images/6/6b/Conduit_Surge.png" },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
@@ -597,6 +603,8 @@ namespace GW2EIEvtcParser.ParsedData
             { FireJurisdictionLevel1, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
             { FireJurisdictionLevel2, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
             { FireJurisdictionLevel3, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
+            { DaybreakingSlash1, "https://wiki.guildwars2.com/images/1/1f/Daybreaking_Slash.png" },
+            { BindingBladeSelf, BuffImages.BindingBlade },
 #endregion GuardianIcons
             #region MesmerIcons
             { HealingPrism, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
@@ -777,6 +785,7 @@ namespace GW2EIEvtcParser.ParsedData
             { PhotosynthesizeJacaranda, "https://wiki.guildwars2.com/images/2/2f/Photosynthesize.png" },
             { EvilEye, "https://wiki.guildwars2.com/images/2/27/Evil_Eye.png" },
             { TormentingVisionSpinegazer, "https://wiki.guildwars2.com/images/0/0b/Tormenting_Visions.png" },
+            { WolfsOnslaughtFollowUp, "https://wiki.guildwars2.com/images/6/61/Wolf%27s_Onslaught.png" },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
@@ -823,6 +832,10 @@ namespace GW2EIEvtcParser.ParsedData
             { EchoingEruptionExtra, "https://wiki.guildwars2.com/images/b/ba/Echoing_Eruption.png" },
             { PhaseTraversal2, "https://wiki.guildwars2.com/images/f/f2/Phase_Traversal.png" },
             { CoalescenceOfRuinExtra, "https://wiki.guildwars2.com/images/1/10/Coalescence_of_Ruin.png" },
+            { AbyssalRaze2, "https://wiki.guildwars2.com/images/5/52/Abyssal_Raze.png" },
+            { AbyssalStrike_SecondHit, "https://wiki.guildwars2.com/images/9/98/Abyssal_Fire.png" },
+            { BlitzMinesDrop, "https://wiki.guildwars2.com/images/8/86/Abyssal_Blitz.png" },
+            { BlitzMines, "https://wiki.guildwars2.com/images/8/86/Abyssal_Blitz.png" },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
@@ -873,6 +886,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ShadowShot, "https://wiki.guildwars2.com/images/4/46/Shadow_Strike.png" },
             { ShadowStrike, "https://wiki.guildwars2.com/images/6/66/Shadow_Assault.png" },
             { InfiltratorsStrikeSomething, "https://wiki.guildwars2.com/images/2/2c/Infiltrator%27s_Strike.png" },
+            { BarbedSpearRanged, "https://wiki.guildwars2.com/images/a/a4/Barbed_Spear.png" },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, "https://wiki.guildwars2.com/images/e/e7/Mending_Might.png" },
@@ -915,6 +929,8 @@ namespace GW2EIEvtcParser.ParsedData
             { EnchantmentCollapse, "https://wiki.guildwars2.com/images/7/7f/Enchantment_Collapse.png" },
             { LineBreakerHeal, "https://wiki.guildwars2.com/images/0/0e/Line_Breaker.png" },
             { VigorousShouts, "https://wiki.guildwars2.com/images/d/de/Vigorous_Shouts.png" },
+            { MightyThrowScatter, "https://wiki.guildwars2.com/images/9/97/Mighty_Throw.png" },
+            { SpearmarshalsSupport, "https://wiki.guildwars2.com/images/f/ff/Spearmarshal%27s_Support.png" },
             #endregion WarriorIcons
             #region EncounterIcons
             // Silent Surf Fractal

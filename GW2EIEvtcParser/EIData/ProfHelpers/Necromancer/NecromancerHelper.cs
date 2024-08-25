@@ -112,9 +112,9 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Last Rites", LastRites, Source.Necromancer, BuffClassification.Defensive, BuffImages.LastRites),
             new Buff("Soul Barbs", SoulBarbs, Source.Necromancer, BuffClassification.Other, BuffImages.SoulBarbs),
             // Spear
-            new Buff("Extirpation", Extirpation, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Soul Shards", SoulShards, Source.Necromancer, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Distress", DistressBuff, Source.Necromancer, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Extirpation", Extirpation, Source.Necromancer, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.Extirpate),
+            new Buff("Soul Shards", SoulShards, Source.Necromancer, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Other, BuffImages.SoulShards),
+            new Buff("Distress", DistressBuff, Source.Necromancer, BuffClassification.Other, BuffImages.Distress),
             new Buff("Dark Stalker", DarkStalker, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MonsterSkill),
         };
 

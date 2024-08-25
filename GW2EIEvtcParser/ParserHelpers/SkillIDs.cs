@@ -4341,7 +4341,7 @@
         public const long DaybreakingSlash1 = 72923;
         public const long DistractingThrowSkill = 72927;
         public const long FalconsStoop = 72928;
-        public const long AbyssalStrike1 = 72931;
+        public const long AbyssalFire = 72931; // Renamed from Abyssal Strike during beta
         public const long RavagersAbandon = 72932;
         public const long Psycut_Clone = 72934;
         public const long LesserHaboob = 72935;
@@ -4387,13 +4387,14 @@
         public const long SeetheBuff = 73011;
         public const long DarkSlash = 73012;
         public const long Addle = 73013;
-        public const long AbyssalStrike2 = 73015;
+        public const long AbyssalStrike_FirstHit = 73015;
         public const long Haboob = 73017;
         public const long HardenSkill = 73019;
         public const long WarclawsEngage = 73020;
         public const long FieryImpactBuff = 73023;
         public const long SymbolOfLuminanceBuff = 73025;
         public const long WolfsOnslaught = 73030;
+        public const long ShadowVeilBuffStacks = 73034;
         public const long EnergizeSkill = 73037;
         public const long DarkStalker = 73039; // Necromancer Spear - Buff applied from player to target
         public const long DeadlySlice = 73040;
@@ -4419,6 +4420,7 @@
         public const long ImaginedImpairment = 73069;
         public const long EnergizeBuff = 73071;
         public const long GalvanizeBuff = 73073;
+        public const long AbyssalRaze2 = 73077;
         public const long BlazingBarrage = 73080;
         public const long BarbedSpearRanged = 73082;
         public const long CheetahsStrike = 73087;
@@ -4450,7 +4452,7 @@
         public const long SymbolOfLuminanceSkill = 73132;
         public const long ShadowVeilBuff = 73134;
         public const long SeetheSkill = 73137;
-        public const long AbyssalStrike3 = 73139;
+        public const long AbyssalStrike_SecondHit = 73139;
         public const long Jokulhlaup = 73140;
         public const long ElectricArtillery = 73143;
         public const long BarbedSpearMelee = 73145;
@@ -4461,8 +4463,11 @@
         public const long Psycut = 73154;
         public const long GreersVirulence = 73181;
         public const long RelicOfTheStormsingerBuff = 73455;
+        public const long HuntersProwess = 73541;
+        public const long RelicOfTheStormsingerDamage = 73851;
         public const long RelicOfTheClaw = 73955;
-        public const long RelicOfSorrowBuff = long.MaxValue; // To be added
+        public const long SprearmarshalsSupport = 74290;
+        public const long RelicOfSorrowBuff = 74410;
         #endregion
     }
 

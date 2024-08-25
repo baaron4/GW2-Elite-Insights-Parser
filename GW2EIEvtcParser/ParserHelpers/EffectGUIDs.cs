@@ -43,6 +43,10 @@
         public const string RelicOfPeitha = "0CBFB70434661647B68003ECD77207E6"; // Projectile
         public const string RelicOfAkeem = "8181E21A43EAFB42BC8FFB001F02CF44"; // Target Src
         public const string RelicOfTheTwinGenerals = "40ECD58F39B30041B3E6C7CEDB7C4D8C";
+        public const string RelicOfSorrow1 = "DB02EB39ABBEE241859DC9662AD49FA5"; // Duration 0, No Src
+        public const string RelicOfSorrow2 = "FEEA4632BAF0B1438D83F6C8B71AEA15"; // Duration 0, No Src
+        public const string RelicOfSorrow3 = "3D981397D9C6A44B888212CE4E3F6F9A"; // Duration 4000
+        public const string RelicOfTheStormsinger = "E8EB2CDF97F34C42A8AAC0D3BA6551D0"; // Effect appears twice
         #endregion
         #region Mesmer
         public const string MesmerThePrestigeDisappear1 = "48B69FBC3090E144BFC067D6C0208878";
