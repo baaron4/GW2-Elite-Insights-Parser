@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.EIData
             // Scepter
             new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffClassification.Other, BuffImages.BlossomingAura),
             // Spear
-            new Buff("Crushing Abyss", CrushingAbyss, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Crushing Abyss", CrushingAbyss, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.CrushingAbyss),
         };
 
         private static readonly HashSet<long> _legendSwaps = new HashSet<long>

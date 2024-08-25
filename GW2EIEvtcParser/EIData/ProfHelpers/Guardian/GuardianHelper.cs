@@ -186,8 +186,8 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Inspiring Virtue", InspiringVirtue, Source.Guardian, BuffClassification.Other, BuffImages.VirtuousSolace).WithBuilds(GW2Builds.February2020Balance2),
             new Buff("Force of Will", ForceOfWill, Source.Guardian, BuffClassification.Other, BuffImages.ForceOfWill),
             // Spear
-            new Buff("Symbol of Luminance", SymbolOfLuminanceBuff, Source.Guardian, BuffClassification.Other, BuffImages.MonsterSkill),
-            new Buff("Illuminated", Illuminated, Source.Guardian, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Symbol of Luminance", SymbolOfLuminanceBuff, Source.Guardian, BuffClassification.Other, BuffImages.SymbolOfLuminance),
+            new Buff("Illuminated", Illuminated, Source.Guardian, BuffClassification.Other, BuffImages.Illuminated),
         };
 
         private static HashSet<int> Minions = new HashSet<int>()

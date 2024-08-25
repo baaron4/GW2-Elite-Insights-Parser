@@ -1632,6 +1632,25 @@
         public const string NaturesStrength = "https://wiki.guildwars2.com/images/8/84/Nature%27s_Strength.png";
         public const string DimensionalAperture = "https://wiki.guildwars2.com/images/8/80/Dimensional_Aperture.png";
         public const string BlossomingAura = "https://wiki.guildwars2.com/images/6/62/Blossoming_Aura.png";
+        public const string Extirpate = "https://wiki.guildwars2.com/images/1/15/Extirpate.png";
+        public const string SoulShards = "https://wiki.guildwars2.com/images/e/e3/Soul_Shards.png";
+        public const string Distress = "https://wiki.guildwars2.com/images/b/b6/Distress.png";
+        public const string Clarity = "https://wiki.guildwars2.com/images/d/d7/Clarity.png";
+        public const string Seethe = "https://wiki.guildwars2.com/images/8/88/Seethe.png";
+        public const string Energize = "https://wiki.guildwars2.com/images/4/45/Energize.png";
+        public const string Ripple = "https://wiki.guildwars2.com/images/2/23/Ripple.png";
+        public const string Harden = "https://wiki.guildwars2.com/images/0/02/Harden.png";
+        public const string Fulgor = "https://wiki.guildwars2.com/images/5/53/Fulgor.png";
+        public const string Illuminated = "https://wiki.guildwars2.com/images/7/7d/Illuminated.png";
+        public const string SymbolOfLuminance = "https://wiki.guildwars2.com/images/c/c5/Symbol_of_Luminance_%28effect%29.png";
+        public const string HuntersProwess = "https://wiki.guildwars2.com/images/b/b9/Panther%27s_Prowl.png";
+        public const string CrushingAbyss = "https://wiki.guildwars2.com/images/5/52/Abyssal_Raze.png";
+        public const string ConduitSurge = "https://wiki.guildwars2.com/images/6/6b/Conduit_Surge.png";
+        public const string ElectricArtillery = "https://wiki.guildwars2.com/images/1/13/Electric_Artillery.png";
+        public const string Focused = "https://wiki.guildwars2.com/images/5/51/Focused.png";
+        public const string LightningRod = "https://wiki.guildwars2.com/images/f/f9/Lightning_Rod_%28engineer_spear_skill%29.png";
+        public const string DistractingThrow = "https://wiki.guildwars2.com/images/d/d8/Distracting_Throw.png";
+        public const string ShadowVeil = "https://wiki.guildwars2.com/images/d/dd/Shadow_Veil.png";
         #endregion Cast
 
         #region Traits
