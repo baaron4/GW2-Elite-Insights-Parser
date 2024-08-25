@@ -4338,7 +4338,7 @@
         public const long BeesSting = 72920;
         public const long Psystrike_Clone = 72921;
         public const long DrakesSwipe = 72922;
-        public const long DaybreakingSlash1 = 72923;
+        public const long DaybreakingSlashWave = 72923;
         public const long DistractingThrowSkill = 72927;
         public const long FalconsStoop = 72928;
         public const long AbyssalFire = 72931; // Renamed from Abyssal Strike during beta
@@ -4360,7 +4360,6 @@
         public const long CrushingAbyss = 72962;
         public const long HardenBuff = 72963;
         public const long RestorativeSpear = 72966;
-        public const long EtchingJokulhlaup = 72966;
         public const long RippleSkill = 72967;
         public const long AbyssalForce = 72972;
         public const long Devastator = 72974;
@@ -4368,6 +4367,7 @@
         public const long DistressBuff = 72976; // Necromancer Spear - Buff applied from target to player
         public const long GleamingDisc = 72978;
         public const long ElutriateBuff = 72979;
+        public const long EtchingJokulhlaup = 72982;
         public const long UnsuspectingStrike = 72986;
         public const long Meteor = 72988;
         public const long ShadowVeilSkill = 72991;
@@ -4432,7 +4432,7 @@
         public const long SolarStorm = 73094;
         public const long MindPierce = 73095;
         public const long Illuminated = 73101;
-        public const long WildThrow1 = 73103;
+        public const long WildThrow = 73103;
         public const long GalvanizeSkill = 73104;
         public const long LesserJokulhlaup = 73105;
         public const long Isolate = 73107;
@@ -4448,7 +4448,7 @@
         public const long LightningJavelin = 73124;
         public const long FulgorBuff = 73125;
         public const long LightningRodCharges = 73129;
-        public const long WildThrow2 = 73131;
+        public const long WildThrowExtra = 73131;
         public const long SymbolOfLuminanceSkill = 73132;
         public const long ShadowVeilBuff = 73134;
         public const long SeetheSkill = 73137;
@@ -4466,7 +4466,7 @@
         public const long HuntersProwess = 73541;
         public const long RelicOfTheStormsingerDamage = 73851;
         public const long RelicOfTheClaw = 73955;
-        public const long SprearmarshalsSupport = 74290;
+        public const long SpearmarshalsSupportBombard = 74290;
         public const long RelicOfSorrowBuff = 74410;
         #endregion
     }

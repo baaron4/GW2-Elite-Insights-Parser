@@ -603,7 +603,7 @@ namespace GW2EIEvtcParser.ParsedData
             { FireJurisdictionLevel1, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
             { FireJurisdictionLevel2, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
             { FireJurisdictionLevel3, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
-            { DaybreakingSlash1, "https://wiki.guildwars2.com/images/1/1f/Daybreaking_Slash.png" },
+            { DaybreakingSlashWave, "https://wiki.guildwars2.com/images/1/1f/Daybreaking_Slash.png" },
             { BindingBladeSelf, BuffImages.BindingBlade },
 #endregion GuardianIcons
             #region MesmerIcons
@@ -929,7 +929,8 @@ namespace GW2EIEvtcParser.ParsedData
             { LineBreakerHeal, "https://wiki.guildwars2.com/images/0/0e/Line_Breaker.png" },
             { VigorousShouts, "https://wiki.guildwars2.com/images/d/de/Vigorous_Shouts.png" },
             { MightyThrowScatter, "https://wiki.guildwars2.com/images/9/97/Mighty_Throw.png" },
-            { SpearmarshalsSupport, "https://wiki.guildwars2.com/images/f/ff/Spearmarshal%27s_Support.png" },
+            { WildThrowExtra, "https://wiki.guildwars2.com/images/a/a6/Wild_Throw.png" },
+            { SpearmarshalsSupportBombard, "https://wiki.guildwars2.com/images/f/ff/Spearmarshal%27s_Support.png" },
             #endregion WarriorIcons
             #region EncounterIcons
             // Silent Surf Fractal
