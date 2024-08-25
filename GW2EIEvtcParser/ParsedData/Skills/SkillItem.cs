@@ -835,7 +835,6 @@ namespace GW2EIEvtcParser.ParsedData
             { AbyssalRaze2, "https://wiki.guildwars2.com/images/5/52/Abyssal_Raze.png" },
             { AbyssalStrike_SecondHit, "https://wiki.guildwars2.com/images/9/98/Abyssal_Fire.png" },
             { BlitzMinesDrop, "https://wiki.guildwars2.com/images/8/86/Abyssal_Blitz.png" },
-            { BlitzMines, "https://wiki.guildwars2.com/images/8/86/Abyssal_Blitz.png" },
             #endregion RevenantIcons
             #region ThiefIcons
             { ThrowMagneticBomb, "https://wiki.guildwars2.com/images/e/e7/Throw_Magnetic_Bomb.png" },
