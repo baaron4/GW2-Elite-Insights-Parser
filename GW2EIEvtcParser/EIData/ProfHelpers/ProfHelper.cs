@@ -152,8 +152,8 @@ namespace GW2EIEvtcParser.EIData
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfSorrowBuff, EffectGUIDs.RelicOfSorrow3)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            new EffectCastFinder(RelicOfTheStormsingerDamage, EffectGUIDs.RelicOfTheStormsinger)
-                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            //new EffectCastFinder(RelicOfTheStormsingerTrigger, EffectGUIDs.RelicOfTheStormsinger)
+            //    .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)

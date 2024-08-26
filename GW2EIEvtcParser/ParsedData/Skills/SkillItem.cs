@@ -100,6 +100,7 @@ namespace GW2EIEvtcParser.ParsedData
             { NouryssHungerDamageBuff, "Relic of Nourys" },
             { RelicOfTheFoundingBarrier, "Relic of the Founding (Barrier)" },
             { RelicOfTheClawBuffLoss, "Relic of the Claw (Buff Loss)" },
+            { RelicOfTheStormsingerTrigger, "Relic of the Stormsinger (Trigger)" },
             // Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
@@ -492,7 +493,7 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheClawBuffLoss, "https://i.imgur.com/x6AU9B4.png" },
             { RelicOfTheClaw, BuffImages.RelicOfTheClaw },
             { RelicOfSorrowBuff, BuffImages.RelicOfTheSorrow },
-            { RelicOfTheStormsingerDamage, BuffImages.RelicOfTheStormsinger },
+            { RelicOfTheStormsingerTrigger, BuffImages.RelicOfTheStormsinger },
 #endregion RelicIcons
             #region ElementalistIcons
             { DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
