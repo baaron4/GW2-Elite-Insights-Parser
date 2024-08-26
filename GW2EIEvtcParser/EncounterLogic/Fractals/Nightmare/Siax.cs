@@ -74,6 +74,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax)) ?? throw new MissingKeyActorsException("Siax not found");
             phases[0].AddTarget(siax);
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.EchoOfTheUnclean)));
             if (!requirePhases)
             {
                 return phases;

@@ -108,6 +108,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor eparch = GetEparchActor();
             phases[0].AddTarget(eparch);
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.IncarnationOfCruelty) || x.IsSpecies(TrashID.IncarnationOfJudgement)));
             if (!requirePhases || !log.FightData.IsCM)
             {
                 return phases;

@@ -85,6 +85,11 @@ namespace GW2EIEvtcParser.EIData
             return AgentItem.IsSpecies(id);
         }
 
+        public bool IsAnySpecies(IEnumerable<int> ids)
+        {
+            return AgentItem.IsAnySpecies(ids);
+        }
+
         public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TrashID> ids)
         {
             return AgentItem.IsAnySpecies(ids);

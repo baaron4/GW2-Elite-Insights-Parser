@@ -77,6 +77,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
             phases[0].AddTarget(mainTarget);
+            var splitGuardianIds = new List<int>
+            {
+                (int) ArcDPSEnums.TrashID.BlueGuardian,
+                (int) ArcDPSEnums.TrashID.GreenGuardian,
+                (int) ArcDPSEnums.TrashID.RedGuardian
+            };
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)));
             if (!requirePhases)
             {
                 return phases;
@@ -89,13 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i % 2 == 0)
                 {
                     phase.Name = "Split " + (i) / 2;
-                    var ids = new List<int>
-                    {
-                       (int) ArcDPSEnums.TrashID.BlueGuardian,
-                       (int) ArcDPSEnums.TrashID.GreenGuardian,
-                       (int) ArcDPSEnums.TrashID.RedGuardian
-                    };
-                    AddTargetsToPhaseAndFit(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, splitGuardianIds, log);
                 }
                 else
                 {

@@ -79,6 +79,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
             phases[0].AddTarget(mama);
+            var knightIds = new List<int>
+            {
+                (int) TrashID.GreenKnight,
+                (int) TrashID.RedKnight,
+                (int) TrashID.BlueKnight,
+            };
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(knightIds)));
             if (!requirePhases)
             {
                 return phases;
@@ -89,13 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 PhaseData phase = phases[i];
                 if (i % 2 == 0)
                 {
-                    var ids = new List<int>
-                    {
-                       (int) TrashID.GreenKnight,
-                       (int) TrashID.RedKnight,
-                       (int) TrashID.BlueKnight,
-                    };
-                    AddTargetsToPhaseAndFit(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, knightIds, log);
                     if (phase.Targets.Count > 0)
                     {
                         AbstractSingleActor phaseTar = phase.Targets[0];

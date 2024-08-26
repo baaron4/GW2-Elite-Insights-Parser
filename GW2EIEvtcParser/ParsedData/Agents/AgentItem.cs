@@ -545,6 +545,11 @@ namespace GW2EIEvtcParser.ParsedData
             return IsSpecies((int)id);
         }
 
+        public bool IsAnySpecies(IEnumerable<int> ids)
+        {
+            return ids.Any(x => IsSpecies(x));
+        }
+
         public bool IsAnySpecies(IEnumerable<ArcDPSEnums.TrashID> ids)
         {
             return ids.Any(x => IsSpecies(x));

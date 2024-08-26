@@ -126,6 +126,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
             phases[0].AddTarget(arkk);
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.Archdiviner) || x.IsSpecies(TrashID.EliteBrazenGladiator)));
             if (!requirePhases)
             {
                 return phases;
