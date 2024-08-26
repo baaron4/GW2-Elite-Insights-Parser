@@ -1651,6 +1651,7 @@
         public const long BulletHail = 31721;
         public const long SpiritedFusion = 31722;
         public const long SpiritFog = 31742;
+        public const long BloodMoonDaze = 31749;
         public const long DistributedMagicGreen = 31750;
         public const long FlameBlast = 31761;
         public const long PlatformQuake = 31763;
@@ -1702,6 +1703,7 @@
         public const long WritOfLearnedAccuracy = 32374;
         public const long MarkedSentryBlue = 32395;
         public const long WritOfCalculatedStrength = 32401;
+        public const long HuntersVerdictPull = 32410;
         public const long WritOfStudiedAccuracy = 32429;
         public const long MordremWolfFinisher = 32433;
         public const long DeployShieldGenerator = 32443;

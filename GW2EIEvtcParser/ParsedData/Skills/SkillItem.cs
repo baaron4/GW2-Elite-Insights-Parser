@@ -131,6 +131,7 @@ namespace GW2EIEvtcParser.ParsedData
             // Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
+            { HuntersVerdictPull, "Hunter's Verdict (Pull)" },
             { MantraOfSolace, "Mantra of Solace" },
             { RestoringReprieveOrRejunevatingRespite, "Restoring Reprieve or Rejunevating Respite" },
             { OpeningPassageOrClarifiedConclusion, "Opening Passage or Clarified Conclusion" },
@@ -164,6 +165,7 @@ namespace GW2EIEvtcParser.ParsedData
             { EntangleDamage, "Entangle (Hit)" },
             { AstralWispAttachment, "Astral Wisp Attachment" },
             { GlyphOfUnityCA, "Glyph of Unity (CA)" },
+            { BloodMoonDaze, "Blood Moon (Daze)" },
             { ChargeGazelleMergeSkill, "Charge (Travel)" },
             { ChargeGazelleMergeImpact, "Charge (Impact)" },
             { SmokeAssaultMergeHit, "Smoke Assault (Multi Hit)" },
@@ -568,6 +570,7 @@ namespace GW2EIEvtcParser.ParsedData
             { GlacialHeartHeal, "https://wiki.guildwars2.com/images/4/4f/Glacial_Heart.png" },
             { ShatteredAegis, "https://wiki.guildwars2.com/images/d/d0/Shattered_Aegis.png" },
             { SelflessDaring, "https://wiki.guildwars2.com/images/9/9c/Selfless_Daring.png" },
+            { HuntersVerdictPull, "https://wiki.guildwars2.com/images/8/86/Judgment_%28skill%29.png" },
             { Chapter1SearingSpell, "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png" },
             { Chapter2IgnitingBurst, "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png" },
             { Chapter3HeatedRebuke,  "https://wiki.guildwars2.com/images/e/e7/Chapter_3-_Heated_Rebuke.png" },
@@ -719,6 +722,7 @@ namespace GW2EIEvtcParser.ParsedData
             { AstralWispAttachment, "https://wiki.guildwars2.com/images/f/ff/Astral_Wisp.png" },
             { CultivatedSynergyPlayer, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
             { CultivatedSynergyPet, "https://wiki.guildwars2.com/images/a/a2/Cultivated_Synergy.png" },
+            { BloodMoonDaze, "https://wiki.guildwars2.com/images/b/b1/Blood_Moon.png" },
             { LiveVicariously, "https://wiki.guildwars2.com/images/6/64/Live_Vicariously.png" },
             { NaturalHealing, "https://wiki.guildwars2.com/images/c/c1/Natural_Healing_%28ranger_trait%29.png" },
             { GlyphOfUnityCA, "https://wiki.guildwars2.com/images/4/4c/Glyph_of_Unity_%28Celestial_Avatar%29.png" },
