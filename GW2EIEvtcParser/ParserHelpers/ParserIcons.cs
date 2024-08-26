@@ -221,6 +221,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashOil = "https://i.imgur.com/R26VgEr.png";
         private const string TrashTear = "https://i.imgur.com/N9seps0.png";
         private const string TrashFluxAnomaly = "https://i.imgur.com/JZUYCHt.png";
+        private const string TrashSolarBloom = "https://i.imgur.com/2b09Qgn.png";
         private const string TrashGamblerDrunkarThief = "https://i.imgur.com/vINeVU6.png";
         private const string TrashTormentedDeadMessenger = "https://i.imgur.com/1J2BTFg.png";
         private const string TrashEnforcer = "https://i.imgur.com/elHjamF.png";
@@ -1201,6 +1202,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TrashID.FluxAnomalyCM2, TrashFluxAnomaly },
             { TrashID.FluxAnomalyCM3, TrashFluxAnomaly },
             { TrashID.FluxAnomalyCM4, TrashFluxAnomaly },
+            { TrashID.SolarBloom, TrashSolarBloom },
             { TrashID.Torch, TrashTorch },
             { TrashID.AberrantWisp, TrashAberrantWisp },
             { TrashID.BoundIcebroodElemental, TrashBoundIcebroodElemental },
