@@ -255,6 +255,7 @@ namespace GW2EIEvtcParser.EIData
                             break;
                         }
                     }
+                    last = seg;
                     _stackCommanderPositions.AddRange(toAdd);
                 }
             }
