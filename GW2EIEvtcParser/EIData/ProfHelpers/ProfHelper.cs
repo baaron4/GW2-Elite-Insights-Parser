@@ -152,8 +152,10 @@ namespace GW2EIEvtcParser.EIData
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfSorrowBuff, EffectGUIDs.RelicOfSorrow3)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-            //new EffectCastFinder(RelicOfTheStormsingerTrigger, EffectGUIDs.RelicOfTheStormsinger)
-            //    .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+            // If this collides with something else we could check via buff remove with the condition dst == src
+            new EffectCastFinder(RelicOfTheStormsingerChain, EffectGUIDs.RelicOfTheStormsinger)
+                .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheStormsinger) // Effect triggers at least twice
+                .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
