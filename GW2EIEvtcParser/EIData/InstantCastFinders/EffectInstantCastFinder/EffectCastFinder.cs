@@ -99,7 +99,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 if (combatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
                 {
-                    return effectEvents.Any(other => GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
+                    return effectEvents.Any(other => other != evt && GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
                 }
                 return false;
             });
@@ -136,6 +136,10 @@ namespace GW2EIEvtcParser.EIData
                 var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(x => GetAgent(x)).ToDictionary(x => x.Key, x => x.ToList());
                 foreach (KeyValuePair<AgentItem, List<EffectEvent>> pair in effects)
                 {
+                    if (pair.Key == ParserHelper._unknownAgent)
+                    {
+                        continue;
+                    }
                     long lastTime = int.MinValue;
                     foreach (EffectEvent effectEvent in pair.Value)
                     {
