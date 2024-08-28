@@ -55,6 +55,14 @@ namespace GW2EIEvtcParser.EncounterLogic
             return base.AdjustLogic(agentData, combatData);
         }
 
+        // note: these are the attack target not gadget locations
+        static readonly List<(string, Point3D)> HandLocations = new List<(string, Point3D)> {
+            ("NW", new Point3D(14359.6f, -789.288f)), // erosion
+            ("NE", new Point3D(15502.5f, -841.978f)), // eruption
+            ("SW", new Point3D(14316.6f, -2080.17f)), // eruption
+            ("SE", new Point3D(15478.0f, -2156.67f)), // erosion
+        };
+
         internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
@@ -69,7 +77,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return true;
             });
             long final = fightData.FightEnd;
-            var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) };
+            var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) }; // gadget locations
             var processedAttackTargets = new HashSet<AgentItem>();
             foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
             {
@@ -107,6 +115,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             ComputeFightTargets(agentData, combatData, extensions);
+
+            var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 2 }, { "SE", 2 } }; // 2nd split hands start at 2
+            foreach (AbstractSingleActor target in _targets)
+            {
+                if (target.IsAnySpecies(new [] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption }))
+                {
+                    string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, HandLocations);
+                    if (suffix != null && nameCount.ContainsKey(suffix))
+                    {
+                        // deduplicate name
+                        target.OverrideName(target.Character + " " + (nameCount[suffix]++));
+                    }
+                }
+            }
         }
 
         protected override List<int> GetTargetsIDs()
@@ -216,14 +238,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
-            phases[0].AddTarget(mainTarget);
+            AbstractSingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
+            phases[0].AddTarget(adina);
+            var handIds = new ArcDPSEnums.TrashID[] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption };
+            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true);
+            var phase4Start = invuls.OfType<BuffRemoveAllEvent>().ElementAtOrDefault(2)?.Time ?? log.FightData.LogEnd; // 3x determined remove until phase 4
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < phase4Start));
             if (!requirePhases)
             {
                 return phases;
             }
             // Split phases
-            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, Determined762, mainTarget, true, true);
             long start = 0;
             var splitPhases = new List<PhaseData>();
             var splitPhaseEnds = new List<long>();
@@ -253,7 +278,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Main phases
             var mainPhases = new List<PhaseData>();
-            var pillarApplies = log.CombatData.GetBuffDataByIDByDst(PillarPandemonium, mainTarget.AgentItem).OfType<BuffApplyEvent>().ToList();
+            var pillarApplies = log.CombatData.GetBuffDataByIDByDst(PillarPandemonium, adina.AgentItem).OfType<BuffApplyEvent>().ToList();
             Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = GroupByTime(pillarApplies);
             var mainPhaseEnds = new List<long>();
             foreach (KeyValuePair<long, List<BuffApplyEvent>> pair in pillarAppliesGroupByTime)
@@ -263,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     mainPhaseEnds.Add(pair.Key);
                 }
             }
-            AbstractCastEvent boulderBarrage = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
+            AbstractCastEvent boulderBarrage = adina.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
             start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
             if (mainPhaseEnds.Count != 0)
             {
@@ -296,7 +321,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             foreach (PhaseData phase in mainPhases)
             {
-                phase.AddTarget(mainTarget);
+                phase.AddTarget(adina);
+                phase.AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && phase.InInterval(x.FirstAware)));
             }
             phases.AddRange(mainPhases);
             phases.AddRange(splitPhases);
