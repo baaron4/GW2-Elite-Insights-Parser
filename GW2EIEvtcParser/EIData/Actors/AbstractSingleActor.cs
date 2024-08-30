@@ -673,6 +673,11 @@ namespace GW2EIEvtcParser.EIData
             {
                 return null;
             }
+            ParametricPoint3D position = positions[foundIndex];
+            if (position.Time > time)
+            {
+                return null;
+            }
             return positions[foundIndex];
         }
 
@@ -726,6 +731,11 @@ namespace GW2EIEvtcParser.EIData
             }
             int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1);
             if (foundIndex < 0)
+            {
+                return null;
+            }
+            ParametricPoint3D rotation = rotations[foundIndex];
+            if (rotation.Time > time)
             {
                 return null;
             }
