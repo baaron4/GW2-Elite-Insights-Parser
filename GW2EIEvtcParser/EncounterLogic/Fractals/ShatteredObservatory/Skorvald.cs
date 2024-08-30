@@ -58,6 +58,18 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
             phases[0].AddTarget(skorvald);
+            var anomalyIds = new List<int>
+            {
+                (int)TrashID.FluxAnomaly1,
+                (int)TrashID.FluxAnomaly2,
+                (int)TrashID.FluxAnomaly3,
+                (int)TrashID.FluxAnomaly4,
+                (int)TrashID.FluxAnomalyCM1,
+                (int)TrashID.FluxAnomalyCM2,
+                (int)TrashID.FluxAnomalyCM3,
+                (int)TrashID.FluxAnomalyCM4,
+            };
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(anomalyIds)));
             if (!requirePhases)
             {
                 return phases;
@@ -69,18 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 if (i % 2 == 0)
                 {
                     phase.Name = "Split " + (i) / 2;
-                    var ids = new List<int>
-                    {
-                        (int)TrashID.FluxAnomaly1,
-                        (int)TrashID.FluxAnomaly2,
-                        (int)TrashID.FluxAnomaly3,
-                        (int)TrashID.FluxAnomaly4,
-                        (int)TrashID.FluxAnomalyCM1,
-                        (int)TrashID.FluxAnomalyCM2,
-                        (int)TrashID.FluxAnomalyCM3,
-                        (int)TrashID.FluxAnomalyCM4,
-                    };
-                    AddTargetsToPhaseAndFit(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, anomalyIds, log);
                 }
                 else
                 {

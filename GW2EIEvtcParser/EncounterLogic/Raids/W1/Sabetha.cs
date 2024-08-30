@@ -71,25 +71,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
             phases[0].AddTarget(mainTarget);
+            var miniBossIds = new List<int>
+            {
+                (int) ArcDPSEnums.TrashID.Kernan,
+                (int) ArcDPSEnums.TrashID.Knuckles,
+                (int) ArcDPSEnums.TrashID.Karde,
+            };
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)));
             if (!requirePhases)
             {
                 return phases;
             }
             // Invul check
             phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, true, true));
-            var ids = new List<int>
-                    {
-                       (int) ArcDPSEnums.TrashID.Kernan,
-                       (int) ArcDPSEnums.TrashID.Knuckles,
-                       (int) ArcDPSEnums.TrashID.Karde,
-                    };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
                 if (i % 2 == 0)
                 {
                     int phaseID = i / 2;
-                    AddTargetsToPhaseAndFit(phase, ids, log);
+                    AddTargetsToPhaseAndFit(phase, miniBossIds, log);
                     if (phase.Targets.Count > 0)
                     {
                         AbstractSingleActor phaseTar = phase.Targets[0];

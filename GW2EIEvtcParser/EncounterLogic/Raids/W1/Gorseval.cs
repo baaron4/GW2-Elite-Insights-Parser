@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.SkillIDs;
 
@@ -53,6 +55,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
             phases[0].AddTarget(mainTarget);
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul)));
             if (!requirePhases)
             {
                 return phases;
@@ -77,6 +80,33 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             return phases;
+        }
+
+        // note: 2nd split spawn locations are further out
+        static readonly List<(string, Point3D)> SoulLocations = new List<(string, Point3D)> {
+            ("NE", new Point3D(2523.4495f, -3665.1294f)),
+            ("NW", new Point3D(842.77686f, -3657.2395f)),
+            ("SW", new Point3D(866.719f, -5306.719f)),
+            ("SE", new Point3D(2470.5596f, -5194.389f)),
+        };
+
+        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        {
+            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+            var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
+            foreach (AbstractSingleActor target in _targets)
+            {
+                if (target.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul))
+                {
+                    // 2nd split souls spawn further out, check in larger radius
+                    string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, SoulLocations, 300);
+                    if (suffix != null && nameCount.ContainsKey(suffix))
+                    {
+                        // deduplicate name
+                        target.OverrideName(target.Character + " " + (nameCount[suffix]++));
+                    }
+                }
+            }
         }
 
         protected override List<int> GetTargetsIDs()

@@ -101,6 +101,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             List<PhaseData> phases = GetInitialPhase(log);
             AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
             phases[0].AddTarget(mainTarget);
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem)));
             if (!requirePhases)
             {
                 return phases;
