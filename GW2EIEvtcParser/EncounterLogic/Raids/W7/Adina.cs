@@ -242,8 +242,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             phases[0].AddTarget(adina);
             var handIds = new ArcDPSEnums.TrashID[] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption };
             List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true);
-            var phase4Start = invuls.OfType<BuffRemoveAllEvent>().ElementAtOrDefault(2)?.Time ?? log.FightData.LogEnd; // 3x determined remove until phase 4
-            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < phase4Start));
+            AbstractBuffEvent lastInvuln = invuls.LastOrDefault();
+            long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
+            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart));
             if (!requirePhases)
             {
                 return phases;
