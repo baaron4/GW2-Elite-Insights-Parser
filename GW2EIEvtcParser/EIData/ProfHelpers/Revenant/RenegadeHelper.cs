@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -18,10 +17,7 @@ namespace GW2EIEvtcParser.EIData
             public BandTogetherCastFinder(long baseSkillID, long enhancedSkill, string effect) : base(enhancedSkill, effect)
             {
                 UsingSrcSpecChecker(Spec.Renegade);
-                UsingChecker((evt, combatData, agentData, skillData) =>
-                {
-                    return !combatData.IsCasting(baseSkillID, evt.Src, evt.Time);
-                });
+                UsingChecker((evt, combatData, agentData, skillData) => !combatData.IsCasting(baseSkillID, evt.Src, evt.Time));
             }
         }
 
