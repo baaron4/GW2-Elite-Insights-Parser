@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         AnimatedCastEvent lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
                         if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out Color color))
                         {
-                            ParametricPoint3D position = log.FindActor(gadget).GetCombatReplayNonPolledPositions(log).LastOrDefault();
+                            Point3D position = gadget.GetCurrentPosition(log, gadget.LastAware);
                             if (position != null)
                             {
                                 (long, long) lifespan = (spawn.Time, despawn.Time);

@@ -539,9 +539,25 @@ namespace GW2EIEvtcParser.EIData
             }
         }
 
+        public bool HasPositions(ParsedEvtcLog log)
+        {
+            return GetCombatReplayNonPolledPositions(log).Count > 0;
+        }
+
         public bool HasCombatReplayPositions(ParsedEvtcLog log)
         {
-            return GetCombatReplayNonPolledPositions(log).Count > 0 && GetCombatReplayPolledPositions(log).Count > 0;
+            return HasPositions(log) && GetCombatReplayPolledPositions(log).Count > 0;
+        }
+
+
+        public bool HasRotations(ParsedEvtcLog log)
+        {
+            return GetCombatReplayNonPolledRotations(log).Count > 0;
+        }
+
+        public bool HasCombatReplayRotations(ParsedEvtcLog log)
+        {
+            return HasRotations(log) && GetCombatReplayPolledRotations(log).Count > 0;
         }
 
         public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledPositions(ParsedEvtcLog log)
@@ -648,7 +664,24 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
-
+        private Point3D GetCurrentPoint(IReadOnlyList<ParametricPoint3D> points, ParsedEvtcLog log, long time, long forwardWindow = 0)
+        {
+            if (forwardWindow != 0)
+            {
+                return points.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? points.LastOrDefault(x => x.Time <= time);
+            }
+            int foundIndex = BinarySearchRecursive(points, time, 0, points.Count - 1);
+            if (foundIndex < 0)
+            {
+                return null;
+            }
+            ParametricPoint3D position = points[foundIndex];
+            if (position.Time > time)
+            {
+                return null;
+            }
+            return points[foundIndex];
+        }
 
         /// <summary>
         /// 
@@ -661,24 +694,13 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!HasCombatReplayPositions(log))
             {
+                if (HasPositions(log))
+                {
+                    return GetCurrentPoint(GetCombatReplayNonPolledPositions(log), log, time, forwardWindow);
+                }
                 return null;
             }
-            IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-            if (forwardWindow != 0)
-            {
-                return positions.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? positions.LastOrDefault(x => x.Time <= time);
-            }
-            int foundIndex = BinarySearchRecursive(positions, time, 0, positions.Count - 1);
-            if (foundIndex < 0)
-            {
-                return null;
-            }
-            ParametricPoint3D position = positions[foundIndex];
-            if (position.Time > time)
-            {
-                return null;
-            }
-            return positions[foundIndex];
+            return GetCurrentPoint(GetCombatReplayPolledPositions(log), log, time, forwardWindow);
         }
 
         public Point3D GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
@@ -720,26 +742,15 @@ namespace GW2EIEvtcParser.EIData
         /// <returns></returns>
         public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
-            IReadOnlyList<ParametricPoint3D> rotations = GetCombatReplayPolledRotations(log);
-            if (!rotations.Any())
+            if (!HasCombatReplayRotations(log))
             {
+                if (HasRotations(log))
+                {
+                    return GetCurrentPoint(GetCombatReplayNonPolledRotations(log), log, time, forwardWindow);
+                }
                 return null;
             }
-            if (forwardWindow != 0)
-            {
-                return rotations.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? rotations.LastOrDefault(x => x.Time <= time);
-            }
-            int foundIndex = BinarySearchRecursive(rotations, time, 0, rotations.Count - 1);
-            if (foundIndex < 0)
-            {
-                return null;
-            }
-            ParametricPoint3D rotation = rotations[foundIndex];
-            if (rotation.Time > time)
-            {
-                return null;
-            }
-            return rotations[foundIndex];
+            return GetCurrentPoint(GetCombatReplayPolledRotations(log), log, time, forwardWindow);
         }
 
         #endregion COMBAT REPLAY
