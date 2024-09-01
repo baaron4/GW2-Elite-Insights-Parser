@@ -4277,7 +4277,7 @@
         public const long InsatiableHunger17 = 72351;
         public const long InsatiableHunger19 = 72352;
         public const long IcerazorsIreSkillMinionReworked = 72353;
-        public const long BandTogetherBuff = 72354;
+        public const long POV_BandTogetherBuff = 72354;
         public const long IcerazorsIreSkillEnhanced = 72359;
         public const long DarkrazorsDaringSkillMinionReworked = 72360;
         public const long RazorclawsRageSkillEnhanced = 72363;

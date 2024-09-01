@@ -13,15 +13,14 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class RenegadeHelper
     {
-        private class BandTogetherCastFinder : BuffLossCastFinder
+        private class BandTogetherCastFinder : EffectCastFinder
         {
-            public BandTogetherCastFinder(long skillID, MinionID minionID) : base(skillID, BandTogetherBuff)
+            public BandTogetherCastFinder(long baseSkillID, long enhancedSkill, string effect) : base(enhancedSkill, effect)
             {
+                UsingSrcSpecChecker(Spec.Renegade);
                 UsingChecker((evt, combatData, agentData, skillData) =>
                 {
-                    // check for no expire and minion spawning ~200ms after
-                    const long minionDelay = 200;
-                    return evt.RemovedDuration > 0 && agentData.GetNPCsByID(minionID).Any(x => Math.Abs(x.FirstAware - minionDelay - evt.Time) < ServerDelayConstant);
+                    return !combatData.IsCasting(baseSkillID, evt.Src, evt.Time);
                 });
             }
         }
@@ -34,10 +33,10 @@ namespace GW2EIEvtcParser.EIData
                 .UsingSrcSpecChecker(Spec.Renegade),
             new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAbove)
                 .UsingSrcSpecChecker(Spec.Renegade),
-            new BandTogetherCastFinder(BreakrazorsBastionSkillEnhanced, MinionID.EraBreakrazor),
-            new BandTogetherCastFinder(RazorclawsRageSkillEnhanced, MinionID.JasRazorclaw),
-            new BandTogetherCastFinder(DarkrazorsDaringSkillEnhanced, MinionID.KusDarkrazor),
-            new BandTogetherCastFinder(IcerazorsIreSkillEnhanced, MinionID.ViskIcerazor),
+            new BandTogetherCastFinder(BreakrazorsBastionSkill, BreakrazorsBastionSkillEnhanced, EffectGUIDs.RenegadeBreakrazorsBastion),
+            new BandTogetherCastFinder(RazorclawsRageSkill, RazorclawsRageSkillEnhanced, EffectGUIDs.RenegadeRazorclawsRage),
+            new BandTogetherCastFinder(DarkrazorsDaringSkill, DarkrazorsDaringSkillEnhanced, EffectGUIDs.RenegadeDarkrazorsDaring),
+            new BandTogetherCastFinder(IcerazorsIreSkill, IcerazorsIreSkillEnhanced, EffectGUIDs.RenegadeIcerazorsIre),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
