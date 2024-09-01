@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -12,6 +13,18 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class RenegadeHelper
     {
+        private class BandTogetherCastFinder : BuffLossCastFinder
+        {
+            public BandTogetherCastFinder(long skillID, MinionID minionID) : base(skillID, BandTogetherBuff)
+            {
+                UsingChecker((evt, combatData, agentData, skillData) =>
+                {
+                    // check for no expire and minion spawning ~200ms after
+                    const long minionDelay = 200;
+                    return evt.RemovedDuration > 0 && agentData.GetNPCsByID(minionID).Any(x => Math.Abs(x.FirstAware - minionDelay - evt.Time) < ServerDelayConstant);
+                });
+            }
+        }
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
@@ -20,7 +33,11 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAboveRighteousRebel)
                 .UsingSrcSpecChecker(Spec.Renegade),
             new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAbove)
-                .UsingSrcSpecChecker(Spec.Renegade)
+                .UsingSrcSpecChecker(Spec.Renegade),
+            new BandTogetherCastFinder(BreakrazorsBastionSkillEnhanced, MinionID.EraBreakrazor),
+            new BandTogetherCastFinder(RazorclawsRageSkillEnhanced, MinionID.JasRazorclaw),
+            new BandTogetherCastFinder(DarkrazorsDaringSkillEnhanced, MinionID.KusDarkrazor),
+            new BandTogetherCastFinder(IcerazorsIreSkillEnhanced, MinionID.ViskIcerazor),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>

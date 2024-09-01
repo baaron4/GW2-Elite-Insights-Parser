@@ -4277,11 +4277,16 @@
         public const long InsatiableHunger17 = 72351;
         public const long InsatiableHunger19 = 72352;
         public const long IcerazorsIreSkillMinionReworked = 72353;
+        public const long BandTogetherBuff = 72354;
+        public const long IcerazorsIreSkillEnhanced = 72359;
         public const long DarkrazorsDaringSkillMinionReworked = 72360;
+        public const long RazorclawsRageSkillEnhanced = 72363;
         public const long BreakrazorsBastionSkillMinionReworked = 72365;
+        public const long DarkrazorsDaringSkillEnhanced = 72366;
         public const long RazorclawsRageSkillMinionReworked = 72370;
         public const long SoulcleavesSummitHitReworked = 72376;
         public const long RazorclawsRageHitReworked = 72388;
+        public const long BreakrazorsBastionSkillEnhanced = 72389;
         public const long RageEmpowerment = 72399;
         public const long EnvyAttunement = 72403;
         public const long EnragedSmashEparch = 72437;
