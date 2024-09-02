@@ -210,6 +210,10 @@
         public const string RenegadeCitadelBombardmentPortal = "145B288ECA42CF43A40DFD759419C904";
         public const string RenegadeCitadelBombardment1 = "5BBF59761E6B9D49A91E79D5474CC61C";
         public const string RenegadeCitadelBombardment2 = "6C8201B551CF274C9C1AF51C33AA062A"; // duration 0
+        public const string RenegadeBreakrazorsBastion = "72FC15613B4B2C44A1906617998859F9";
+        public const string RenegadeRazorclawsRage = "71B04F91F9B3DF4A8954059FCFAD630E";
+        public const string RenegadeDarkrazorsDaring = "C8FDB04E59C1034CABEFBECE470AA1BC";
+        public const string RenegadeIcerazorsIre = "E725FC2FD486A84EBEAC403DB4DA30DE";
         #endregion
         #region Guardian
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment

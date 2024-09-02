@@ -12,6 +12,14 @@ namespace GW2EIEvtcParser.EIData
 {
     internal static class RenegadeHelper
     {
+        private class BandTogetherCastFinder : EffectCastFinder
+        {
+            public BandTogetherCastFinder(long baseSkillID, long enhancedSkill, string effect) : base(enhancedSkill, effect)
+            {
+                UsingSrcSpecChecker(Spec.Renegade);
+                UsingChecker((evt, combatData, agentData, skillData) => !combatData.IsCasting(baseSkillID, evt.Src, evt.Time));
+            }
+        }
 
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
@@ -20,7 +28,11 @@ namespace GW2EIEvtcParser.EIData
             new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAboveRighteousRebel)
                 .UsingSrcSpecChecker(Spec.Renegade),
             new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAbove)
-                .UsingSrcSpecChecker(Spec.Renegade)
+                .UsingSrcSpecChecker(Spec.Renegade),
+            new BandTogetherCastFinder(BreakrazorsBastionSkill, BreakrazorsBastionSkillEnhanced, EffectGUIDs.RenegadeBreakrazorsBastion),
+            new BandTogetherCastFinder(RazorclawsRageSkill, RazorclawsRageSkillEnhanced, EffectGUIDs.RenegadeRazorclawsRage),
+            new BandTogetherCastFinder(DarkrazorsDaringSkill, DarkrazorsDaringSkillEnhanced, EffectGUIDs.RenegadeDarkrazorsDaring),
+            new BandTogetherCastFinder(IcerazorsIreSkill, IcerazorsIreSkillEnhanced, EffectGUIDs.RenegadeIcerazorsIre),
         };
 
         internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
