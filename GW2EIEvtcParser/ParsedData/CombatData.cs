@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
@@ -892,6 +893,10 @@ namespace GW2EIEvtcParser.ParsedData
 
         public GW2BuildEvent GetGW2BuildEvent()
         {
+            if (_metaDataEvents.GW2BuildEvent == null)
+            {
+                throw new InvalidDataException("Corrupted log: Missing Build Event");
+            }
             return _metaDataEvents.GW2BuildEvent;
         }
 
