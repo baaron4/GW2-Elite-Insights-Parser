@@ -71,6 +71,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.GreenGuardian
             };
         }
+        protected override Dictionary<int, int> GetTargetsSortIDs()
+        {
+            return new Dictionary<int, int>()
+            {
+                {(int)ArcDPSEnums.TargetID.ValeGuardian, 0 },
+                {(int)ArcDPSEnums.TrashID.RedGuardian, 1 },
+                {(int)ArcDPSEnums.TrashID.BlueGuardian, 1 },
+                {(int)ArcDPSEnums.TrashID.GreenGuardian, 1 },
+            };
+        }
 
         internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
         {

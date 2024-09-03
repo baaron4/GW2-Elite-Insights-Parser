@@ -182,7 +182,8 @@ function mainLoad() {
             var phase = logData.phases[j];
             var phaseTarget = phase.targets.indexOf(i);
             activeArray.push({
-                active: phaseTarget > -1 ? !phase.secondaryTargets[phaseTarget] : false
+                active: phaseTarget > -1 ? !phase.secondaryTargets[phaseTarget] : false,
+                secondary: !!phase.secondaryTargets[phaseTarget]
             });
         }
         target.id = i;
