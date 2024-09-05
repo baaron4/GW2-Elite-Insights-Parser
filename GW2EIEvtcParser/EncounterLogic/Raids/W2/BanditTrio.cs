@@ -105,14 +105,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 startToUse = Math.Min(narella.FirstAware, startToUse);
                 // Thrash mob start check
-                var boxStart = new Point3D(-2000, -10500 , 0);
-                var boxEnd = new Point3D(1000, -7000, 0);
+                var boxStart = new Point2D(-2200, -11300);
+                var boxEnd = new Point2D(1000, -7200);
                 var trashMobsToCheck = new HashSet<TrashID>()
                 {
+                    TrashID.BanditAssassin,
+                    TrashID.BanditAssassin2,
+                    TrashID.BanditSapperTrio,
+                    TrashID.BanditDeathsayer,
+                    TrashID.BanditDeathsayer2,
+                    TrashID.BanditBrawler,
+                    TrashID.BanditBrawler2,
+                    TrashID.BanditBattlemage,
+                    TrashID.BanditBattlemage2,
+                    TrashID.BanditCleric,
+                    TrashID.BanditCleric2,
+                    TrashID.BanditBombardier,
                     TrashID.BanditSniper,
                 };
                 var banditSniperPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck)).Select(x => new PositionEvent(x, agentData)).ToList();
-                var banditsInBox = new HashSet<AgentItem>(banditSniperPositions.Where(x => Point3D.IsInBox2D(x.GetPoint3D(), boxStart, boxEnd)).Select(x => x.Src));
+                var banditsInBox = new HashSet<AgentItem>(banditSniperPositions.Where(x => x.Time < startToUse + 10000 && Point3D.IsInBox2D(x.GetPoint3D(), boxStart, boxEnd)).Select(x => x.Src));
                 if (banditsInBox.Count > 0)
                 {
                     startToUse = Math.Min(banditsInBox.Min(x => x.FirstAware), startToUse);

@@ -199,6 +199,10 @@ namespace GW2EIEvtcParser.EIData
         {
             return Point2D.IsInBox(new Point2D(p), new Point2D(p0), new Point2D(p1));
         }
+        public static bool IsInBox2D(Point3D p, Point2D p0, Point2D p1)
+        {
+            return Point2D.IsInBox(new Point2D(p), p0, p1);
+        }
 
 
         /// <summary>
