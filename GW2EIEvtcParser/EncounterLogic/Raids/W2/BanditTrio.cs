@@ -111,8 +111,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     TrashID.BanditSniper,
                 };
-                var tst = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck)).Select(x => new PositionEvent(x, agentData)).ToList();
-                var banditsInBox = new HashSet<AgentItem>(tst.Where(x => Point3D.IsInBox2D(x.GetPoint3D(), boxStart, boxEnd)).Select(x => x.Src));
+                var banditSniperPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck)).Select(x => new PositionEvent(x, agentData)).ToList();
+                var banditsInBox = new HashSet<AgentItem>(banditSniperPositions.Where(x => Point3D.IsInBox2D(x.GetPoint3D(), boxStart, boxEnd)).Select(x => x.Src));
                 if (banditsInBox.Count > 0)
                 {
                     startToUse = Math.Min(banditsInBox.Min(x => x.FirstAware), startToUse);
