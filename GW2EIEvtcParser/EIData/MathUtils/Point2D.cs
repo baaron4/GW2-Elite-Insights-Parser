@@ -13,6 +13,25 @@ namespace GW2EIEvtcParser.EIData
             return (1.0f - c) * a + c * b;
         }
 
+        public static bool operator >(Point2D a, Point2D b)
+        {
+            return a.X > b.X && a.Y > b.Y;
+        }
+
+        public static bool operator <(Point2D a, Point2D b)
+        {
+            return a.X < b.X && a.Y < b.Y ;
+        }
+
+        public static bool operator >=(Point2D a, Point2D b)
+        {
+            return a.X >= b.X && a.Y >= b.Y ;
+        }
+
+        public static bool operator <=(Point2D a, Point2D b)
+        {
+            return a.X <= b.X && a.Y <= b.Y ;
+        }
         public static Point2D operator +(Point2D a, Point2D b)
         {
             var newPt = new Point2D(a);
@@ -146,6 +165,11 @@ namespace GW2EIEvtcParser.EIData
         public static bool IsInTriangle2D(Point2D p, IReadOnlyList<Point2D> points)
         {
             return points.Count == 3 && IsInTriangle(p, points[0], points[1], points[2]);
+        }
+
+        public static bool IsInBox(Point2D p, Point2D p0, Point2D p1)
+        {
+            return p >= p0 && p <= p1;
         }
     }
 }
