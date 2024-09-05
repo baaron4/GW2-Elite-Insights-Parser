@@ -109,18 +109,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var boxEnd = new Point3D(1000, -7000, 0);
                 var trashMobsToCheck = new HashSet<TrashID>()
                 {
-                    TrashID.BanditAssassin,
-                    TrashID.BanditAssassin2,
-                    TrashID.BanditSapperTrio,
-                    TrashID.BanditDeathsayer,
-                    TrashID.BanditDeathsayer2,
-                    TrashID.BanditBrawler,
-                    TrashID.BanditBrawler2,
-                    TrashID.BanditBattlemage,
-                    TrashID.BanditBattlemage2,
-                    TrashID.BanditCleric,
-                    TrashID.BanditCleric2,
-                    TrashID.BanditBombardier,
                     TrashID.BanditSniper,
                 };
                 var tst = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck)).Select(x => new PositionEvent(x, agentData)).ToList();
