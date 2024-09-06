@@ -192,7 +192,9 @@ namespace GW2EIEvtcParser.EIData
 
         public static bool IsInBox(Point3D p, Point3D p0, Point3D p1)
         {
-            return p >= p0 && p <= p1 ;
+            var minBB = new Point3D(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y), Math.Min(p0.Z, p1.Z));
+            var maxBB = new Point3D(Math.Max(p0.X, p1.X), Math.Max(p0.Y, p1.Y), Math.Max(p0.Z, p1.Z));
+            return p >= minBB && p <= maxBB;
         }
 
         public static bool IsInBox2D(Point3D p, Point3D p0, Point3D p1)

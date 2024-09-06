@@ -169,7 +169,9 @@ namespace GW2EIEvtcParser.EIData
 
         public static bool IsInBox(Point2D p, Point2D p0, Point2D p1)
         {
-            return p >= p0 && p <= p1;
+            var minBB = new Point2D(Math.Min(p0.X, p1.X), Math.Min(p0.Y, p1.Y));
+            var maxBB = new Point2D(Math.Max(p0.X, p1.X), Math.Max(p0.Y, p1.Y));
+            return p >= minBB && p <= maxBB;
         }
     }
 }
