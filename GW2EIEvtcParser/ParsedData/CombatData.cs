@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
@@ -895,7 +896,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_metaDataEvents.GW2BuildEvent == null)
             {
-                throw new InvalidDataException("Corrupted log: Missing Build Event");
+                throw new EvtcCombatEventException("Missing Build Event");
             }
             return _metaDataEvents.GW2BuildEvent;
         }
