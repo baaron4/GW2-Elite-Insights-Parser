@@ -4471,6 +4471,8 @@
         public const long GreersVirulence = 73181;
         public const long RelicOfTheStormsingerBuff = 73455;
         public const long HuntersProwess = 73541;
+        public const long RelicOfSorrowHeal = 73714;
+        public const long RelicOfTheBlightbringer = 73794;
         public const long RelicOfTheStormsingerChain = 73851;
         public const long RelicOfTheClaw = 73955;
         public const long SpearmarshalsSupportBombard = 74290;

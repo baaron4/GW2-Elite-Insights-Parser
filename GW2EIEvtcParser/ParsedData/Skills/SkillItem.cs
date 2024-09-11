@@ -494,7 +494,9 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheTwinGenerals, "https://wiki.guildwars2.com/images/0/0e/Relic_of_the_Twin_Generals.png" },
             { RelicOfTheClawBuffLoss, "https://i.imgur.com/x6AU9B4.png" },
             { RelicOfTheClaw, BuffImages.RelicOfTheClaw },
+            { RelicOfTheBlightbringer, BuffImages.RelicOfTheBlightbringer },
             { RelicOfSorrowBuff, BuffImages.RelicOfTheSorrow },
+            { RelicOfSorrowHeal, BuffImages.RelicOfTheSorrow },
             { RelicOfTheStormsingerChain, BuffImages.RelicOfTheStormsinger },
 #endregion RelicIcons
             #region ElementalistIcons
