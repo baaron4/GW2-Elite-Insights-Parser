@@ -39,6 +39,7 @@ namespace GW2EIEvtcParser.ParsedData
             { LightningLeapCombo, "Lightning Leap Combo" },
             { MendingMight, "Mending Might" },
             { InvigoratingBond, "Invigorating Bond" },
+            #region Sigils
             { WaveOfHealing_MinorSigilOfWater, "Wave of Healing (Minor Sigil of Water)" },
             { WaveOfHealing_MajorSigilOfWater, "Wave of Healing (Major Sigil of Water)" },
             { WaveOfHealing_SuperiorSigilOfWater, "Wave of Healing (Superior Sigil of Water)" },
@@ -65,11 +66,14 @@ namespace GW2EIEvtcParser.ParsedData
             { SuperiorSigilOfLeeching, "Superior Sigil of Leeching" },
             { SuperiorSigilOfVision, "Superior Sigil of Vision" },
             { SuperiorSigilOfConcentration, "Superior Sigil of Concentration" },
+            #endregion Sigils
+            #region Runes
             { RuneOfNightmare, "Rune of the Nightmare" },
             { FrozenBurstRuneOfIce, "Frozen Burst (Rune of the Ice)" },
             { HuntersCallRuneOfMadKing, "Hunter's Call (Rune of the Mad King)" },
             { ArtilleryBarrageRuneofCitadel, "Artillery Barrage (Rune of the Citadel)" },
             { HandOfGrenthRuneOfGrenth, "Hand of Grenth (Rune of Grenth)" },
+            #endregion Runes
             { PortalEntranceWhiteMantleWatchwork, "Portal Entrance" },
             { PortalExitWhiteMantleWatchwork, "Portal Exit" },
             { PlateOfSpicyMoaWingsGastricDistress, "Plate of Spicy Moa Wings (Gastric Distress)" },
@@ -78,6 +82,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ThrowBottle, "Throw (Bottle)" },
             { ThrowNetUnderwaterNet, "Throw Net (Underwater Net)" },
             // Mounts
+            #region Mounts
             { BondOfLifeSkill, "Bond of Life" },
             { BondOfVigorSkill, "Bond of Vigor" },
             { BondOfFaithSkill, "Bond of Faith" },
@@ -87,7 +92,8 @@ namespace GW2EIEvtcParser.ParsedData
             { SkyscaleFireballSkill, "Fireball" },
             { SkyscaleBlastSkill, "Blast" },
             { SkyscaleBlastDamage, "Blast (Damage)" },
-            // Relics
+            #endregion Mounts
+            #region Relics
             { RelicOfTheWizardsTower, "Relic of the Wizard's Tower" },
             { RelicOfIsgarrenTargetBuff, "Relic of Isgarren" },
             { RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter" },
@@ -101,7 +107,8 @@ namespace GW2EIEvtcParser.ParsedData
             { RelicOfTheFoundingBarrier, "Relic of the Founding (Barrier)" },
             { RelicOfTheClawBuffLoss, "Relic of the Claw (Buff Loss)" },
             { RelicOfTheStormsingerChain, "Relic of the Stormsinger (Chain)" },
-            // Elementalist
+            #endregion Relics
+            #region Elementalist
             { DualFireAttunement, "Dual Fire Attunement" },
             { FireWaterAttunement, "Fire Water Attunement" },
             { FireAirAttunement, "Fire Air Attunement" },
@@ -121,7 +128,8 @@ namespace GW2EIEvtcParser.ParsedData
             { ShatteringIceDamage, "Shattering Ice (Hit)" },
             { ArcaneShieldDamage, "Arcane Shield (Explosion)" },
             { FirestormGlyphOfStormsOrFieryGreatsword, "Firestorm (Glyph of Storms / Fiery Greatsword)" },
-            // Engineer
+            #endregion Elementalist
+            #region Engineer
             { HealingMistOrSoothingDetonation, "Healing Mist or Soothing Detonation" },
             { MechCoreBarrierEngine, "Mech Core: Barrier Engine" },
             { MedBlasterHeal, "Med Blaster (Heal)" },
@@ -129,7 +137,8 @@ namespace GW2EIEvtcParser.ParsedData
             { HealingTurretHeal, "Healing Turret (Heal)" },
             { BladeBurstOrParticleAccelerator, "Blade Burst or Particle Accelerator" },
             { DetonateThrowMineOrMineField, "Detonate (Throw Mine / Mine Field)" },
-            // Guardian
+            #endregion Engineer
+            #region Guardian
             { SelflessDaring, "Selfless Daring" }, // The game maps this name incorrectly to "Selflessness Daring"
             { ProtectorsStrikeCounterHit, "Protector's Strike (Counter Hit)" },
             { HuntersVerdictPull, "Hunter's Verdict (Pull)" },
@@ -143,7 +152,8 @@ namespace GW2EIEvtcParser.ParsedData
             { FireJurisdictionLevel1, "Fire Jurisdiction (Level 1)" },
             { FireJurisdictionLevel2, "Fire Jurisdiction (Level 2)" },
             { FireJurisdictionLevel3, "Fire Jurisdiction (Level 3)" },
-            // Mesmer
+            #endregion Guardian
+            #region Mesmer
             { PowerReturn, "Power Return" },
             { PowerCleanse, "Power Cleanse" },
             { PowerBreak, "Power Break" },
@@ -153,13 +163,15 @@ namespace GW2EIEvtcParser.ParsedData
             { UnstableBladestormProjectiles, "Unstable Bladestorm (Projectile Hit)" },
             { PhantasmalBerserkerProjectileDamage, "Phantasmal Berserker (Greatsword Projectile Hit)" },
             { HealingPrism, "Healing Prism" },
-            // Necromancer
+            #endregion Mesmer
+            #region Necromancer
             { DesertEmpowerment, "Desert Empowerment" },
             { SandCascadeBarrier, "Sand Cascade (Barrier)" },
             { SandFlare, "Sand Cascade" },
             { SadisticSearingActivation, "Sadistic Searing (Activation)" },
             { MarkOfBloodOrChillblains, "Mark of Blood / Chillblains" },
-            // Ranger
+            #endregion Necromancer
+            #region Ranger
             { WindborneNotes, "Windborne Notes" },
             { NaturalHealing, "Natural Healing" }, // The game does not map this one at all
             { LiveVicariously, "Live Vicariously" }, // The game maps this name incorrectly to "Vigorous Recovery"
@@ -175,8 +187,9 @@ namespace GW2EIEvtcParser.ParsedData
             { UnleashedOverbearingSmashLeap, "Unleashed Overbearing Smash (Leap)" },
             { RangerPetSpawned, "Ranger Pet Spawned" },
             { WolfsOnslaughtFollowUp, "Wolf's Onslaught (Follow Up)" },
-            // Revenant
-	        { EnergyExpulsion, "Energy Expulsion" },
+            #endregion Ranger
+            #region Revenant
+            { EnergyExpulsion, "Energy Expulsion" },
             { RiftSlashRiftHit, "Rift Slash (Rift Hit)" },
             { UnrelentingAssaultMultihit, "Unrelenting Assault (Multi Hit)" },
             { ImpossibleOddsHit, "Impossible Odds (Hit)" },
@@ -195,8 +208,9 @@ namespace GW2EIEvtcParser.ParsedData
             { GenerousAbundanceOther, "Generous Abundance (Other)" },
             { BlitzMinesDrop, "Blitz Mines (Drop)" },
             { BlitzMines, "Blitz Mines (Detonation)" },
-            // Thief
-	        { EscapistsFortitude, "Escapist's Fortitude" }, // The game maps this to the wrong skill
+            #endregion Revenant
+            #region Thief
+            { EscapistsFortitude, "Escapist's Fortitude" }, // The game maps this to the wrong skill
             { SoulStoneVenomSkill, "Soul Stone Venom" },
             { SoulStoneVenomStrike, "Soul Stone Venom (Hit)" },
             { BasiliskVenomStunBreakbarDamage, "Basilisk Venom (Stun)" },
@@ -211,14 +225,17 @@ namespace GW2EIEvtcParser.ParsedData
             { BoundHit, "Bound (Hit)" },
             { BarbedSpearMelee, "Barbed Spear (Melee)" },
             { BarbedSpearRanged, "Barbed Spear (Ranged)" },
-            // Warrior
+            #endregion Thief
+            #region Warrior
             { RushDamage, "Rush (Hit)" },
             { MightyThrowScatter, "Mighty Throw (Scattered Spear)" },
             { HarriersTossAdrenalineLevel1, "Harrier's Toss (Adrenaline Level 1)" },
             { HarriersTossAdrenalineLevel2, "Harrier's Toss (Adrenaline Level 2)" },
             { HarriersTossAdrenalineLevel3, "Harrier's Toss (Adrenaline Level 3)" },
+            #endregion Warrior
             // Special Forces Training Area
             { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
+            #region Raids
             // Gorseval
             { GhastlyRampage,"Ghastly Rampage" },
             { ProtectiveShadow,"Protective Shadow" },
@@ -276,22 +293,12 @@ namespace GW2EIEvtcParser.ParsedData
             { PeerlessQadimTPCenter, "Teleport Center" },
             { EatPylon, "Eat Pylon" },
             { BigMagmaDrop, "Big Magma Drop" },
+            #endregion Raids
+            #region Strikes
             // Voice and Claw
             { KodanTeleport, "Kodan Teleport" },
             // Mai Trin (Aetherblade Hideout)
             { ReverseThePolaritySAK, "Reverse the Polarity!" },
-            // Artsariiv
-            { NovaLaunchSAK, "Nova Launch" },
-            // Arkk
-            { HypernovaLaunchSAK, "Hypernova Launch" },
-            // Kanaxai
-            { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
-            { FrighteningSpeedReturn, "Frightening Speed (Return)" },
-            { DreadVisageKanaxaiSkill, "Dread Visage (Kanaxai)" },
-            { DreadVisageKanaxaiSkillIsland, "Dread Visage (Kanaxai Island)" },
-            { DreadVisageAspectSkill, "Dread Visage (Aspect)" },
-            { RendingStormSkill, "Rending Storm (Axe)" },
-            { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
             // Cerus
             // - Normal Mode
             { CrushingRegretNM, "Crushing Regret (NM)" },
@@ -325,6 +332,22 @@ namespace GW2EIEvtcParser.ParsedData
             { PetrifySkill, "Petrify" },
             { EnragedSmashNM, "Enraged Smash (NM)" },
             { EnragedSmashCM, "Enraged Smash (CM)" },
+            #endregion Strikes
+            #region Fractals
+            // Artsariiv
+            { NovaLaunchSAK, "Nova Launch" },
+            // Arkk
+            { HypernovaLaunchSAK, "Hypernova Launch" },
+            // Kanaxai
+            { FrighteningSpeedWindup, "Frightening Speed (Windup)" },
+            { FrighteningSpeedReturn, "Frightening Speed (Return)" },
+            { DreadVisageKanaxaiSkill, "Dread Visage (Kanaxai)" },
+            { DreadVisageKanaxaiSkillIsland, "Dread Visage (Kanaxai Island)" },
+            { DreadVisageAspectSkill, "Dread Visage (Aspect)" },
+            { RendingStormSkill, "Rending Storm (Axe)" },
+            { GatheringShadowsSkill, "Gathering Shadows (Breakbar)" },
+            #endregion Fractals
+            #region WvW
             // World vs World
             { WvWSpendingSupplies, "Spending Supply (Building / Repairing)" },
             { WvWPickingUpSupplies, "Picking Up Supplies" },
@@ -356,6 +379,7 @@ namespace GW2EIEvtcParser.ParsedData
             { DeployTrebuchet, "Deploy Trebuchet" },
             { DeploySuperiorTrebuchet, "Deploy Superior Trebuchet" },
             { DeployGuildTrebuchet, "Deploy Guild Trebuchet" },
+            #endregion WvW
         };
 
         private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
