@@ -565,6 +565,8 @@ namespace GW2EIEvtcParser.ParsedData
             { GyroExplosion, "https://wiki.guildwars2.com/images/4/4e/Function_Gyro_%28tool_belt_skill%29.png" },
             { DetonateThrowMineOrMineField, "https://wiki.guildwars2.com/images/d/d1/Detonate_Mine_Field.png" },
             { ConduitSurge, "https://wiki.guildwars2.com/images/6/6b/Conduit_Surge.png" },
+            { CrashDown2, "https://wiki.guildwars2.com/images/4/4a/Crash_Down.png" },
+            { SystemShockerBarrier, "https://wiki.guildwars2.com/images/3/3f/System_Shocker.png" },
 #endregion EngineerIcons
             #region GuardianIcons
             { ProtectorsStrikeCounterHit, "https://wiki.guildwars2.com/images/e/e0/Protector%27s_Strike.png" },
@@ -652,6 +654,7 @@ namespace GW2EIEvtcParser.ParsedData
             { SplitSurgeSecondaryBeams, "https://wiki.guildwars2.com/images/f/fd/Split_Surge.png" },
             { PersistenceOfMemory, "https://wiki.guildwars2.com/images/c/ce/Persistence_of_Memory.png" },
             { FriendlyFireIllu, "https://wiki.guildwars2.com/images/c/c0/Friendly_Fire.png" },
+            { PhantasmalSharpshooterAttack, "https://wiki.guildwars2.com/images/3/3b/Phantasmal_Sharpshooter.png" },
             #endregion  MesmerIcons
             #region NecromancerIcons
             { LifeFromDeath, "https://wiki.guildwars2.com/images/5/5e/Life_from_Death.png" },
@@ -793,6 +796,7 @@ namespace GW2EIEvtcParser.ParsedData
             { EvilEye, "https://wiki.guildwars2.com/images/2/27/Evil_Eye.png" },
             { TormentingVisionSpinegazer, "https://wiki.guildwars2.com/images/0/0b/Tormenting_Visions.png" },
             { WolfsOnslaughtFollowUp, "https://wiki.guildwars2.com/images/6/61/Wolf%27s_Onslaught.png" },
+            { EletroctuteJuvenileSkyChak, "https://wiki.guildwars2.com/images/9/9f/Electrocute_%28chak%29.png" },
             #endregion RangerIcons
             #region RevenantIcons
             { RiftSlashRiftHit, "https://wiki.guildwars2.com/images/a/a8/Rift_Slash.png" },
@@ -938,6 +942,7 @@ namespace GW2EIEvtcParser.ParsedData
             { MightyThrowScatter, "https://wiki.guildwars2.com/images/9/97/Mighty_Throw.png" },
             { WildThrowExtra, "https://wiki.guildwars2.com/images/a/a6/Wild_Throw.png" },
             { SpearmarshalsSupportBombard, "https://wiki.guildwars2.com/images/f/ff/Spearmarshal%27s_Support.png" },
+            { ShrugItOffHeal, "https://wiki.guildwars2.com/images/c/c8/Shrug_It_Off.png" },
             #endregion WarriorIcons
             #region EncounterIcons
             // Silent Surf Fractal
