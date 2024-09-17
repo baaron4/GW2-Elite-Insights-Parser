@@ -146,9 +146,9 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
-            IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            IReadOnlyList<AbstractCastEvent> casting = Actor.GetCastEvents(log, log.FightData.LogStart, log.FightData.LogEnd);
             int swapped = WeaponSetIDs.NoSet;
-            long swappedTime = 0;
+            long swappedTime = log.FightData.FightStart;
             List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
             {
                 return (x.SwappedTo, x.SwappedFrom);
