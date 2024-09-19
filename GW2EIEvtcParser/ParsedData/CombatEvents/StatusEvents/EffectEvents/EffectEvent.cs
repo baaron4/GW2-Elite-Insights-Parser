@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.ParsedData
             long end = start + Duration;
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
             {
-                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !IsAroundDst);
+                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
                 if (firstEffect != null)
                 {
                     end = firstEffect.Time;
@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.ParsedData
             long end = start + Duration;
             if (log.CombatData.TryGetEffectEventsByGUID(secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
             {
-                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !IsAroundDst);
+                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
                 if (firstEffect != null)
                 {
                     end = firstEffect.Time;
