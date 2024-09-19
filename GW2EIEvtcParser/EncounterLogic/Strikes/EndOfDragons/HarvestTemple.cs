@@ -1028,7 +1028,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             EffectEvent lastEffect = poolEffects.Last();
                             (long start, long end) lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
                             (long start, long end) lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
-                            lifespan.end = Math.Min(lifespan.end, lifespanPuriOrb.end);
+                            AbstractSingleActor nextPurificationOrb = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)).FirstOrDefault(x => x.FirstAware > lastEffect.Time - ServerDelayConstant);
+                            long nextPurifcationOrbStart = long.MaxValue;
+                            if (nextPurificationOrb != null)
+                            {
+                                nextPurifcationOrbStart = nextPurificationOrb.FirstAware;
+                            }
+                            lifespan.end = Math.Min(nextPurifcationOrbStart, Math.Min(lifespan.end, lifespanPuriOrb.end));
                             // In case log ended before the event happens and we are on pre Effect51 events, we use the expected duration of the effect instead
                             if (lifespan.start == lifespan.end)
                             {
