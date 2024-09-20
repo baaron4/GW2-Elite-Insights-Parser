@@ -387,6 +387,30 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectBonfire);
                 }
             }
+            // Healing Spring - Inactive
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerHealingSpringInactive2, out IReadOnlyList<EffectEvent> healingSpringsInactive))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in healingSpringsInactive)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
+                    var connector = new PositionConnector(effect.Position);
+                    // Halved the saturation of the circle and icon to distinguish between inactive and active.
+                    replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.25, connector).UsingFilled(false).UsingSkillMode(skill));
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHealingSpring, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.25f, lifespan, connector).UsingSkillMode(skill));
+                }
+            }
+            // Healing Spring - Active
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerHealingSpringActive, out IReadOnlyList<EffectEvent> healingSpringsActive))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring, SkillModeCategory.Cleanse | SkillModeCategory.Heal);
+                foreach (EffectEvent effect in healingSpringsActive)
+                {
+                    long duration = log.LogData.GW2Build < GW2Builds.March2024BalanceAndCerusLegendary ? 10000 : 5000;
+                    (long, long) lifespan = effect.ComputeLifespan(log, duration);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectHealingSpring);
+                }
+            }
             // Frost Trap
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFrostTrap, out IReadOnlyList<EffectEvent> frostTraps))
             {
