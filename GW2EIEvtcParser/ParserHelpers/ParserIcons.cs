@@ -554,6 +554,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectDefenseField = "https://i.imgur.com/AwZ1O8O.png";
         internal const string EffectFeedback = "https://i.imgur.com/S5mXVxy.png";
         internal const string EffectBarrage = "https://i.imgur.com/8XZHYwx.png";
+        internal const string EffectHealingSpring = "https://i.imgur.com/kMERryp.png";
         internal const string EffectBonfire = "https://i.imgur.com/khgHSD5.png";
         internal const string EffectFlameTrap = "https://i.imgur.com/Z0hDXFW.png";
         internal const string EffectFrostTrap = "https://i.imgur.com/gW8yg4G.png";

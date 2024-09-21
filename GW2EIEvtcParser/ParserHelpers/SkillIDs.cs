@@ -809,6 +809,7 @@
         public const long TakeRootBufft = 12459;
         public const long Barrage = 12469;
         public const long SpikeTrap = 12476;
+        public const long HealingSpring = 12489;
         public const long FrostTrap = 12492;
         public const long StormSpirit = 12493;
         public const long LightningReflexes = 12494;
