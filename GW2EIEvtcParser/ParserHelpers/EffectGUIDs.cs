@@ -317,6 +317,9 @@
         public const string RangerVipersNest = "1964816830EF7B47827298789EF7227B"; // has owner
         public const string RangerSpikeTrap = "E0223550EAC46A4C8CEC277CFC2B7927"; // has owner
         public const string RangerPoisonousCloud = "FDD0241186BAFE4AA451767D082D0BA9"; // has owner
+        public const string RangerHealingSpringInactive1 = "D9F9B146BC2B914B874EA980B2FF0C00"; // has owner, duration 1000
+        public const string RangerHealingSpringInactive2 = "A531836FD73C5B44B48AC22A928EAED9"; // has owner, infinite duration
+        public const string RangerHealingSpringActive = "4B67AD5794D7824EABB0C6BDBB90FFB5"; // has owner, duration 5000
         public const string DruidGlyphOfEquality = "9B8A1BE554450B4899B64F7579DF0A8C";
         public const string DruidGlyphOfEqualityCA = "74870558C43E4747955C573CAAC630A7";
         public const string DruidSeedOfLife = "19C4FA17A38E7E4780722799B48BF2BE"; // has owner
