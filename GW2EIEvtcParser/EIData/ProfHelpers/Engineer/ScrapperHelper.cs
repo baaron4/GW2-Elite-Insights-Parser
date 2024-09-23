@@ -15,7 +15,11 @@ namespace GW2EIEvtcParser.EIData
     {
         internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
         {
+            new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyroTraited)
+                .UsingSrcSpecChecker(Spec.Scrapper),
             new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro)
+                .UsingSrcSpecChecker(Spec.Scrapper),
+            new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyroTraited)
                 .UsingSrcSpecChecker(Spec.Scrapper),
             new EffectCastFinder(PurgeGyro, EffectGUIDs.ScrapperPurgeGyro)
                 .UsingSrcSpecChecker(Spec.Scrapper),
