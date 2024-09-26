@@ -11,6 +11,8 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         public long EffectID { get; }
 
+        public EffectGUIDEvent GUIDEvent { get; private set; }
+
         /// <summary>
         /// End of the effect, provided by an <see cref="EffectEndEvent"/>
         /// </summary>
@@ -171,6 +173,11 @@ namespace GW2EIEvtcParser.ParsedData
                 }
             }
             return (start, end);
+        }
+
+        internal void SetGUIDEvent(CombatData combatData)
+        {
+            GUIDEvent = combatData.GetEffectGUIDEvent(EffectID);
         }
     }
 }

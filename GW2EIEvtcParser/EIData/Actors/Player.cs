@@ -121,7 +121,7 @@ namespace GW2EIEvtcParser.EIData
                     IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player.AgentItem);
                     foreach (MarkerEvent markerEvent in markerEvents)
                     {
-                        MarkerGUIDEvent marker = log.CombatData.GetMarkerGUIDEvent(markerEvent.MarkerID);
+                        MarkerGUIDEvent marker = markerEvent.GUIDEvent;
                         if (marker != null)
                         {
                             if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))

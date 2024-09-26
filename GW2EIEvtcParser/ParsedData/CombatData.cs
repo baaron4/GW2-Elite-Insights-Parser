@@ -419,7 +419,7 @@ namespace GW2EIEvtcParser.ParsedData
             WarriorHelper.ProcessGadgets(players, this);
             operation.UpdateProgressWithCancellationCheck("Parsing: Processing Engineer Gadgets");
             EngineerHelper.ProcessGadgets(players, this);
-            operation.UpdateProgressWithCancellationCheck("Parsing: Attaching Ranger Gadgets");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Processing Ranger Gadgets");
             RangerHelper.ProcessGadgets(players, this);
             operation.UpdateProgressWithCancellationCheck("Parsing: Processing Revenant Gadgets");
             RevenantHelper.ProcessGadgets(players, this, agentData);
@@ -561,6 +561,8 @@ namespace GW2EIEvtcParser.ParsedData
                     _skillIds.Add(combatItem.SkillID);
                 }
             }
+            _statusEvents.EffectEvents.ForEach(x => x.SetGUIDEvent(this));
+            _statusEvents.MarkerEvents.ForEach(x => x.SetGUIDEvent(this));
             HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
             UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
@@ -593,12 +595,17 @@ namespace GW2EIEvtcParser.ParsedData
             _crowControlData = crowdControlData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _crowControlDataById = crowdControlData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _crowControlTakenData = crowdControlData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            // buff depend events
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Dependent Events");
             BuildBuffDependentContainers();
             //
+            operation.UpdateProgressWithCancellationCheck("Parsing: Attaching Extension Events");
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
                 handler.AttachToCombatData(this, operation, GetGW2BuildEvent().Build);
             }
+            //
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Events");
             EIExtraEventProcess(players, skillData, agentData, fightData, operation, evtcVersion);
         }
 
@@ -811,7 +818,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// <returns></returns>
         public IReadOnlyList<MarkerEvent> GetMarkerEvents(AgentItem agent)
         {
-            if (_statusEvents.MarkerEvents.TryGetValue(agent, out List<MarkerEvent> list))
+            if (_statusEvents.MarkerEventsBySrc.TryGetValue(agent, out List<MarkerEvent> list))
             {
                 return list;
             }
@@ -1571,7 +1578,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="effectID">ID of the effect</param>
         /// <returns></returns>
-        public EffectGUIDEvent GetEffectGUIDEvent(long effectID)
+        internal EffectGUIDEvent GetEffectGUIDEvent(long effectID)
         {
             if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out EffectGUIDEvent evt))
             {
@@ -1605,18 +1612,12 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="markerID">ID of the marker</param>
         /// <returns></returns>
-        public MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
+        internal MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
         {
             if (_metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt))
             {
                 return evt;
             }
-#if DEBUG
-            if (GetMarkerEventsByMarkerID(markerID).Count > 0)
-            {
-                throw new EvtcCombatEventException("Missing GUID event for marker " + markerID);
-            }
-#endif
             return null;
         }
 

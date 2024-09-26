@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EIData
         internal static void DebugEffects(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
             IReadOnlyList<EffectEvent> effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList();
-            var effectGUIDsOnAgent = effectEventsOnAgent.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).HexContentGUID).ToList();
+            var effectGUIDsOnAgent = effectEventsOnAgent.Select(x => x.GUIDEvent.HexContentGUID).ToList();
             var effectGUIDsOnAgentDistinct = effectGUIDsOnAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in effectEventsOnAgent)
             {
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             IReadOnlyList<EffectEvent> effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem).Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end).ToList(); ;
-            var effectGUIDsByAgent = effectEventsByAgent.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).HexContentGUID).ToList();
+            var effectGUIDsByAgent = effectEventsByAgent.Select(x => x.GUIDEvent.HexContentGUID).ToList();
             var effectGUIDsByAgentDistinct = effectGUIDsByAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in effectEventsByAgent)
             {
@@ -226,7 +226,7 @@ namespace GW2EIEvtcParser.EIData
         internal static void DebugUnknownEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
             IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
-            var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).HexContentGUID).ToList();
+            var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent.HexContentGUID).ToList();
             var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in allEffectEvents)
             {
@@ -251,7 +251,7 @@ namespace GW2EIEvtcParser.EIData
         internal static void DebugAllNPCEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
             IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
-            var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).HexContentGUID).ToList();
+            var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent.HexContentGUID).ToList();
             var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in allEffectEvents)
             {
@@ -275,7 +275,7 @@ namespace GW2EIEvtcParser.EIData
         internal static void DebugAllEffects(ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
         {
             IReadOnlyList<EffectEvent> allEffectEvents = log.CombatData.GetEffectEvents().Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end && x.EffectID > 0).ToList(); ;
-            var effectGUIDs = allEffectEvents.Select(x => log.CombatData.GetEffectGUIDEvent(x.EffectID).HexContentGUID).ToList();
+            var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent.HexContentGUID).ToList();
             var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
             foreach (EffectEvent effectEvt in allEffectEvents)
             {

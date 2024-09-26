@@ -3,6 +3,7 @@
     public class MarkerEvent : AbstractStatusEvent
     {
         public int MarkerID { get; }
+        public MarkerGUIDEvent GUIDEvent { get; private set; }
         public long EndTime { get; protected set; } = int.MaxValue;
 
         internal bool IsEnd => MarkerID == 0;
@@ -22,6 +23,11 @@
                 return;
             }
             EndTime = endTime;
+        }
+
+        internal void SetGUIDEvent(CombatData combatData)
+        {
+            GUIDEvent = combatData.GetMarkerGUIDEvent(MarkerID);
         }
 
     }
