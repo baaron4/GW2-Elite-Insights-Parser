@@ -822,7 +822,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="markerID">marker ID</param>
         /// <returns></returns>
-        public IReadOnlyList<MarkerEvent> GetMarkerEvents(long markerID)
+        public IReadOnlyList<MarkerEvent> GetMarkerEventsByMarkerID(long markerID)
         {
             if (_statusEvents.MarkerEventsByID.TryGetValue(markerID, out List<MarkerEvent> list))
             {
@@ -842,7 +842,7 @@ namespace GW2EIEvtcParser.ParsedData
             markerEvents = null;
             if (markerGUIDEvent != null)
             {
-                markerEvents = GetMarkerEvents(markerGUIDEvent.ContentID);
+                markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID);
                 return true;
             }
             return false;
@@ -1577,6 +1577,12 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return evt;
             }
+#if DEBUG
+            if (GetEffectEventsByEffectID(effectID).Count > 0)
+            {
+                throw new EvtcCombatEventException("Missing GUID event for effect " + effectID);
+            }
+#endif
             return null;
         }
 
@@ -1605,6 +1611,12 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return evt;
             }
+#if DEBUG
+            if (GetMarkerEventsByMarkerID(markerID).Count > 0)
+            {
+                throw new EvtcCombatEventException("Missing GUID event for marker " + markerID);
+            }
+#endif
             return null;
         }
 
