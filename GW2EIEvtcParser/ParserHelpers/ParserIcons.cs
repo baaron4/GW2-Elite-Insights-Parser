@@ -635,9 +635,32 @@ namespace GW2EIEvtcParser.ParserHelpers
         internal const string EffectSymbolOfResolution = "https://i.imgur.com/Vy3948S.png";
         internal const string EffectSymbolOfPunishment = "https://i.imgur.com/cSoxJvd.png";
         internal const string EffectSymbolOfBlades = "https://i.imgur.com/4vyfoTs.png";
+        internal const string EffectSymbolOfLuminance = "https://i.imgur.com/opBLfAA.png";
+        internal const string EffectSolarStorm = "https://i.imgur.com/iDvjMxE.png";
         internal const string EffectStalwartStand = "https://i.imgur.com/uBAyxRu.png";
         internal const string EffectShiningRiver = "https://i.imgur.com/5ahjMoe.png";
         internal const string EffectScorchedAftermath = "https://i.imgur.com/XvxyVC7.png";
+        internal const string EffectEtchingVolcano = "https://i.imgur.com/Wl23phr.png";
+        internal const string EffectLesserVolcano = "https://i.imgur.com/ZwllhhW.png";
+        internal const string EffectVolcano = "https://i.imgur.com/mWy5Yls.png";
+        internal const string EffectEtchingJokulhlaup = "https://i.imgur.com/AgSbRmq.png";
+        internal const string EffectLesserJokulhlaup = "https://i.imgur.com/rusElmr.png";
+        internal const string EffectJokulhlaup = "https://i.imgur.com/KG1aYG7.png";
+        internal const string EffectEtchingDerecho = "https://i.imgur.com/h7tdnCG.png";
+        internal const string EffectLesserDerecho = "https://i.imgur.com/tP0FJhU.png";
+        internal const string EffectDerecho = "https://i.imgur.com/iH6ItcL.png";
+        internal const string EffectEtchingHaboob = "https://i.imgur.com/hxvtXFi.png";
+        internal const string EffectLesserHaboob = "https://i.imgur.com/CUicQWd.png";
+        internal const string EffectHaboob = "https://i.imgur.com/wytSqAD.png";
+        internal const string EffectMeteor = "https://i.imgur.com/uGuorS3.png";
+        internal const string EffectFulgor = "https://i.imgur.com/iXpf75F.png";
+        internal const string EffectTwister = "https://i.imgur.com/yhM3VJ9.png";
+        internal const string EffectUndertow = "https://i.imgur.com/pzAJhaq.png";
+        internal const string EffectFissure = "https://i.imgur.com/8AH4rsS.png";
+        internal const string EffectAbyssalBlitzMines = "https://i.imgur.com/7drJMXN.png";
+        internal const string EffectAbyssalBlot = "https://i.imgur.com/1TiOF5C.png";
+        internal const string EffectAbyssalRaze = "https://i.imgur.com/QWNGDvW.png";
+        internal const string EffectMentalCollapse = "https://i.imgur.com/dHEim8Z.png";
         #endregion
 
         #region Marker
