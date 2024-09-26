@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
@@ -418,7 +419,7 @@ namespace GW2EIEvtcParser.ParsedData
             WarriorHelper.ProcessGadgets(players, this);
             operation.UpdateProgressWithCancellationCheck("Parsing: Processing Engineer Gadgets");
             EngineerHelper.ProcessGadgets(players, this);
-            operation.UpdateProgressWithCancellationCheck("Parsing: Attaching Ranger Gadgets");
+            operation.UpdateProgressWithCancellationCheck("Parsing: Processing Ranger Gadgets");
             RangerHelper.ProcessGadgets(players, this);
             operation.UpdateProgressWithCancellationCheck("Parsing: Processing Revenant Gadgets");
             RevenantHelper.ProcessGadgets(players, this, agentData);
@@ -560,6 +561,8 @@ namespace GW2EIEvtcParser.ParsedData
                     _skillIds.Add(combatItem.SkillID);
                 }
             }
+            _statusEvents.EffectEvents.ForEach(x => x.SetGUIDEvent(this));
+            _statusEvents.MarkerEvents.ForEach(x => x.SetGUIDEvent(this));
             HasStackIDs = evtcVersion.Build > ArcDPSBuilds.ProperConfusionDamageSimulation && buffEvents.Any(x => x is BuffStackActiveEvent || x is BuffStackResetEvent);
             UseBuffInstanceSimulator = false;// evtcVersion.Build > ArcDPSBuilds.RemovedDurationForInfiniteDurationStacksChanged && HasStackIDs && (fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced10 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Instanced5 || fightData.Logic.ParseMode == EncounterLogic.FightLogic.ParseModeEnum.Benchmark);
             HasMovementData = _statusEvents.MovementEvents.Count > 1;
@@ -592,12 +595,17 @@ namespace GW2EIEvtcParser.ParsedData
             _crowControlData = crowdControlData.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             _crowControlDataById = crowdControlData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             _crowControlTakenData = crowdControlData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            // buff depend events
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Dependent Events");
             BuildBuffDependentContainers();
             //
+            operation.UpdateProgressWithCancellationCheck("Parsing: Attaching Extension Events");
             foreach (AbstractExtensionHandler handler in extensions.Values)
             {
                 handler.AttachToCombatData(this, operation, GetGW2BuildEvent().Build);
             }
+            //
+            operation.UpdateProgressWithCancellationCheck("Parsing: Creating Custom Events");
             EIExtraEventProcess(players, skillData, agentData, fightData, operation, evtcVersion);
         }
 
@@ -810,7 +818,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// <returns></returns>
         public IReadOnlyList<MarkerEvent> GetMarkerEvents(AgentItem agent)
         {
-            if (_statusEvents.MarkerEvents.TryGetValue(agent, out List<MarkerEvent> list))
+            if (_statusEvents.MarkerEventsBySrc.TryGetValue(agent, out List<MarkerEvent> list))
             {
                 return list;
             }
@@ -821,7 +829,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="markerID">marker ID</param>
         /// <returns></returns>
-        public IReadOnlyList<MarkerEvent> GetMarkerEvents(long markerID)
+        public IReadOnlyList<MarkerEvent> GetMarkerEventsByMarkerID(long markerID)
         {
             if (_statusEvents.MarkerEventsByID.TryGetValue(markerID, out List<MarkerEvent> list))
             {
@@ -841,7 +849,7 @@ namespace GW2EIEvtcParser.ParsedData
             markerEvents = null;
             if (markerGUIDEvent != null)
             {
-                markerEvents = GetMarkerEvents(markerGUIDEvent.ContentID);
+                markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID);
                 return true;
             }
             return false;
@@ -895,7 +903,7 @@ namespace GW2EIEvtcParser.ParsedData
         {
             if (_metaDataEvents.GW2BuildEvent == null)
             {
-                throw new InvalidDataException("Corrupted log: Missing Build Event");
+                throw new EvtcCombatEventException("Missing Build Event");
             }
             return _metaDataEvents.GW2BuildEvent;
         }
@@ -1570,12 +1578,18 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="effectID">ID of the effect</param>
         /// <returns></returns>
-        public EffectGUIDEvent GetEffectGUIDEvent(long effectID)
+        internal EffectGUIDEvent GetEffectGUIDEvent(long effectID)
         {
             if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out EffectGUIDEvent evt))
             {
                 return evt;
             }
+#if DEBUG
+            if (GetEffectEventsByEffectID(effectID).Count > 0)
+            {
+                throw new EvtcCombatEventException("Missing GUID event for effect " + effectID);
+            }
+#endif
             return null;
         }
 
@@ -1598,7 +1612,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// </summary>
         /// <param name="markerID">ID of the marker</param>
         /// <returns></returns>
-        public MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
+        internal MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
         {
             if (_metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt))
             {

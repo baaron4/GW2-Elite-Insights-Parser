@@ -109,9 +109,9 @@ namespace GW2EIEvtcParser.EIData
         protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
         {
             var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
-            var testGUIDs = test.Select(x => combatData.GetEffectGUIDEvent(x.EffectID)).Select(x => x.HexContentGUID).ToList();
+            var testGUIDs = test.Select(x => x.GUIDEvent.HexContentGUID).ToList();
             var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
-            var test2GUIDs = test2.Select(x => combatData.GetEffectGUIDEvent(evt.EffectID)).Select(x => x.HexContentGUID).ToList();
+            var test2GUIDs = test2.Select(x => x.GUIDEvent.HexContentGUID).ToList();
             return true;
         }
 

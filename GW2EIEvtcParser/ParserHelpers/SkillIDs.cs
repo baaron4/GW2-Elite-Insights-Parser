@@ -960,6 +960,7 @@
         public const long EmpowerAllies = 14222;
         public const long RecklessImpact = 14268;
         public const long MendingMight = 14282;
+        public const long ShrugItOffHeal = 14336;
         public const long EndurePainSkill = 14392;
         public const long SignetOfMightSkill = 14404;
         public const long BannerOfStrengthSkill = 14405;
@@ -3552,6 +3553,7 @@
         public const long CrisisZone = 63293;
         public const long WellOfTears = 63294;
         public const long RendingVinesPet = 63296;
+        public const long CrashDown2 = 63297;
         public const long HardStrikeJadeMech = 63298;
         public const long RecallMech_MechSkill = 63300;
         public const long RectifierSignet = 63305;
@@ -4218,6 +4220,7 @@
         public const long PlanetaryWeight = 71373;
         public const long RelicOfNayosHealing = 71382;
         public const long NouryssHungerDamageBuff = 71431;
+        public const long EletroctuteJuvenileSkyChak = 71501;
         public const long NouryssHungerStacksBuff = 71711;
         public const long NouryssHungerStartGainingStacksBuff = 71723;
         public const long DimensionalApertureSkill = 71792;
@@ -4241,8 +4244,10 @@
         public const long PathOfGluttonyFlipBuff = 71947;
         public const long PathToVictory = 71950;
         public const long FireJurisdictionLevel1 = 71818;
+        public const long PhantasmalSharpshooterAttack = 71953;
         public const long FireJurisdictionLevel2 = 71954;
         public const long FriendlyFireIllu = 71970;
+        public const long SystemShockerBarrier = 71972;
         public const long NaturesStrength = 71976;
         public const long TappedOut = 71979;
         public const long EnervationBlade = 71986;
@@ -4472,6 +4477,8 @@
         public const long GreersVirulence = 73181;
         public const long RelicOfTheStormsingerBuff = 73455;
         public const long HuntersProwess = 73541;
+        public const long RelicOfSorrowHeal = 73714;
+        public const long RelicOfTheBlightbringer = 73794;
         public const long RelicOfTheStormsingerChain = 73851;
         public const long RelicOfTheClaw = 73955;
         public const long SpearmarshalsSupportBombard = 74290;

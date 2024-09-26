@@ -172,7 +172,7 @@ namespace GW2EIEvtcParser.ParsedData
                         if (markerEvent.IsEnd)
                         {
                             // An end event ends all previous markers
-                            if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                            if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
                             {
                                 for (int i = markers.Count - 1; i >= 0; i--)
                                 {
@@ -186,7 +186,7 @@ namespace GW2EIEvtcParser.ParsedData
                             }
                             break;
                         }
-                        else if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        else if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
                         {
                             for (int i = markers.Count - 1; i >= 0; i--)
                             {
@@ -209,13 +209,13 @@ namespace GW2EIEvtcParser.ParsedData
                         if (markerEvent.IsEnd)
                         {
                             // Find last marker on agent and set an end time on it
-                            if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                            if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
                             {
                                 markers.LastOrDefault()?.SetEndTime(markerEvent.Time);
                             }
                             break;
                         }
-                        else if (statusEvents.MarkerEvents.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        else if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
                         {
                             MarkerEvent lastMarker = markers.LastOrDefault();
                             if (lastMarker != null)
@@ -230,7 +230,8 @@ namespace GW2EIEvtcParser.ParsedData
                             }
                         }
                     }
-                    Add(statusEvents.MarkerEvents, markerEvent.Src, markerEvent);
+                    statusEvents.MarkerEvents.Add(markerEvent);
+                    Add(statusEvents.MarkerEventsBySrc, markerEvent.Src, markerEvent);
                     Add(statusEvents.MarkerEventsByID, markerEvent.MarkerID, markerEvent);
                     break;
                 case StateChange.Velocity:

@@ -329,8 +329,10 @@
         public const string ScrapperThunderclapSpawn = "039F8B46E5595C4E9C2D52AA58FDD8B0"; // has owner, 1s duration
         public const string ScrapperFunctionGyro = "B4CA602E8A849F47BFC105C740005162"; // has owner, 5s duration
         public const string ScrapperFunctionGyroSpawn = "AC9C3749A245D741BC012CCAB224E37C"; // has owner, 1s duration
-        public const string ScrapperBulwarkGyro = "611D90C69ECF8142BEEE84139F333388";
-        public const string ScrapperPurgeGyro = "0DBE4F7115EADC4889F1E00232B2398B";
+        public const string ScrapperBulwarkGyroTraited = "611D90C69ECF8142BEEE84139F333388";
+        public const string ScrapperBulwarkGyro = "C6A40B12F9E6E046A98223F30E717633";
+        public const string ScrapperPurgeGyroTraited = "0DBE4F7115EADC4889F1E00232B2398B";
+        public const string ScrapperPurgeGyro = "86DC533FBB84BC43BBA03EC3B3E13034";
         public const string ScrapperDefenseField = "9E2D190A92E2B5498A88722910A9DECD";
         public const string ScrapperBypassCoating = "D2307A69B227BE4B831C2AA1DAAE646A"; // player is owner
         public const string HolosmithFlashSpark = "418A090D719AB44AAF1C4AD1473068C4";

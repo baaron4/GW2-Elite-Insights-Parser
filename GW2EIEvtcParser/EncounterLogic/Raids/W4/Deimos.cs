@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     throw new MissingKeyActorsException("Saul not found");
                 }
-                if (combatData.GetDeadEvents(saul).Any())
+                if (combatData.GetDeadEvents(saul).Count > 0)
                 {
                     return;
                 }
@@ -200,6 +200,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > attackableEvent.Time);
                 if (notAttackableEvent == null)
+                {
+                    return;
+                }
+                // Saul stays around post encounter
+                if (saul.LastAware <= notAttackableEvent.Time || combatData.GetDespawnEvents(saul).Any(x => x.Time <= notAttackableEvent.Time && x.Time >= _deimos10PercentTime))
                 {
                     return;
                 }
