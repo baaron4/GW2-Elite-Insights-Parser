@@ -432,27 +432,6 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            // Volcano
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcano, out IReadOnlyList<EffectEvent> volcano))
-            {
-                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Volcano, SkillModeCategory.ShowOnSelect);
-                foreach (EffectEvent effect in volcano)
-                {
-                    (long, long) lifespan = effect.ComputeLifespan(log, 4500);
-                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectVolcano);
-                    // Hits landing from the volcano
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcanoHits, out IReadOnlyList<EffectEvent> volcanoHits))
-                    {
-                        foreach (EffectEvent hitEffect in volcanoHits.Where(x => x.Time > effect.Time && x.Time < effect.Time + effect.Duration))
-                        {
-                            (long, long) lifespanHit = hitEffect.ComputeLifespan(log, 500); // Logged duration of 0, setting 500 as a visual display
-                            var connector = new PositionConnector(hitEffect.Position);
-                            replay.Decorations.Add(new CircleDecoration(200, lifespanHit, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                        }
-                    }
-                }
-            }
-
             // Lesser Volcano
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistLesserVolcano, out IReadOnlyList<EffectEvent> lesserVolcano))
             {
@@ -462,15 +441,20 @@ namespace GW2EIEvtcParser.EIData
                     (long, long) lifespan = effect.ComputeLifespan(log, 4400);
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectLesserVolcano);
                     // Hits landing from the volcano
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcanoHits, out IReadOnlyList<EffectEvent> volcanoHits))
-                    {
-                        foreach (EffectEvent hitEffect in volcanoHits.Where(x => x.Time > effect.Time && x.Time < effect.Time + effect.Duration))
-                        {
-                            (long, long) lifespanHit = hitEffect.ComputeLifespan(log, 500); // Logged duration of 0, setting 500 as a visual display
-                            var connector = new PositionConnector(hitEffect.Position);
-                            replay.Decorations.Add(new CircleDecoration(200, lifespanHit, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                        }
-                    }
+                    VolcanoProjectileHits(log, player, replay, skill, color, effect.Time, effect.Duration);
+                }
+            }
+
+            // Volcano
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcano, out IReadOnlyList<EffectEvent> volcano))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Volcano, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in volcano)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4500);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectVolcano);
+                    // Hits landing from the volcano
+                    VolcanoProjectileHits(log, player, replay, skill, color, effect.Time, effect.Duration);
                 }
             }
 
@@ -572,6 +556,19 @@ namespace GW2EIEvtcParser.EIData
                 {
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000);
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectEtchingHaboob);
+                }
+            }
+        }
+
+        private static void VolcanoProjectileHits(ParsedEvtcLog log, AbstractPlayer player, CombatReplay replay, SkillModeDescriptor skill, Color color, long volcanoStartTime, long volcanoDuraiton)
+        {
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcanoHits, out IReadOnlyList<EffectEvent> volcanoHits))
+            {
+                foreach (EffectEvent hitEffect in volcanoHits.Where(x => x.Time > volcanoStartTime && x.Time < volcanoStartTime + volcanoDuraiton))
+                {
+                    (long, long) lifespanHit = hitEffect.ComputeLifespan(log, 500); // Logged duration of 0, setting 500 as a visual display
+                    var connector = new PositionConnector(hitEffect.Position);
+                    replay.Decorations.Add(new CircleDecoration(200, lifespanHit, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                 }
             }
         }
