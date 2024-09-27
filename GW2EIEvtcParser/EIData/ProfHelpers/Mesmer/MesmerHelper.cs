@@ -462,16 +462,26 @@ namespace GW2EIEvtcParser.EIData
                 EffectGUIDs.MesmerMentalCollapse240Radius,
                 EffectGUIDs.MesmerMentalCollapse360Radius,
             };
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out IReadOnlyList<EffectEvent> mentalCollapse))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out IReadOnlyList<EffectEvent> mentalCollapses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, MentalCollapse, SkillModeCategory.ShowOnSelect);
-                var effectEvents = mentalCollapse.OrderBy(x => x.Time).ToList();
-                foreach (EffectEvent effect in mentalCollapse)
+                foreach (EffectEvent effect in mentalCollapses)
                 {
-                    long id1 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.MesmerMentalCollapse120Radius).ContentID;
-                    long id2 = log.CombatData.GetEffectGUIDEvent(EffectGUIDs.MesmerMentalCollapse240Radius).ContentID;
-                    long duration = effect.EffectID == id1 || effect.EffectID == id2 ? 280 : 1280;
-                    uint radius = (uint)(effect.EffectID == id1 ? 120 : effect.EffectID == id2 ? 240 : 360);
+                    long duration = 0; // Overriding logged duration of 0
+                    uint radius = 0;
+                    var mapping = new Dictionary<string, (long duration, uint radius)>
+                    {
+                        { EffectGUIDs.MesmerMentalCollapse120Radius, (280, 120) },
+                        { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },
+                        { EffectGUIDs.MesmerMentalCollapse360Radius, (1280, 360) }
+                    };
+
+                    if (mapping.TryGetValue(effect.GUIDEvent.HexContentGUID, out (long duration, uint radius) values))
+                    {
+                        duration = values.duration;
+                        radius = values.radius;
+                    }
+
                     (long, long) lifespan = (effect.Time, effect.Time + duration);
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, ParserIcons.EffectMentalCollapse);
                 }
