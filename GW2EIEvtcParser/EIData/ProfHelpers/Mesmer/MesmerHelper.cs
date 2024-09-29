@@ -464,17 +464,17 @@ namespace GW2EIEvtcParser.EIData
             };
             if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out IReadOnlyList<EffectEvent> mentalCollapses))
             {
+                var mapping = new Dictionary<string, (long duration, uint radius)>
+                {
+                    { EffectGUIDs.MesmerMentalCollapse120Radius, (280, 120) },
+                    { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },
+                    { EffectGUIDs.MesmerMentalCollapse360Radius, (1280, 360) }
+                };
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, MentalCollapse, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in mentalCollapses)
                 {
                     long duration = 0; // Overriding logged duration of 0
                     uint radius = 0;
-                    var mapping = new Dictionary<string, (long duration, uint radius)>
-                    {
-                        { EffectGUIDs.MesmerMentalCollapse120Radius, (280, 120) },
-                        { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },
-                        { EffectGUIDs.MesmerMentalCollapse360Radius, (1280, 360) }
-                    };
 
                     if (mapping.TryGetValue(effect.GUIDEvent.HexContentGUID, out (long duration, uint radius) values))
                     {
