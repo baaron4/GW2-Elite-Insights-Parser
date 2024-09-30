@@ -375,10 +375,8 @@ namespace GW2EIEvtcParser.EIData
                     long warningDuration = 800; // Overriding logged effect duration of 5100
                     var connector = new PositionConnector(effect.Position);
                     (long start, long end) lifespanWarning = (effect.Time, effect.Time + warningDuration);
-                    var circle = (CircleDecoration)new CircleDecoration(radius, lifespanWarning, color, 0.5, connector).UsingSkillMode(skill);
-                    replay.AddDecorationWithFilledWithGrowing(circle, false, lifespanWarning.end);
-                    //replay.Decorations.Add(new CircleDecoration(radius, lifespanWarning, color, 0.5, connector).UsingFilled(false).UsingGrowingEnd(lifespanWarning.end).UsingSkillMode(skill));
-                    //replay.Decorations.Add(new CircleDecoration(radius, lifespanWarning, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    var circle = (CircleDecoration)new CircleDecoration(radius, lifespanWarning, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill);
+                    replay.AddDecorationWithGrowing(circle, lifespanWarning.end);
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanWarning, connector).UsingSkillMode(skill));
                     // Hit indicator
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRazeHit, out IReadOnlyList<EffectEvent> abyssalRazeHits))
