@@ -454,6 +454,38 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectUnstableBladestorm);
                 }
             }
+
+            // Mental Collapse
+            var mentalCollapseEffects = new[]
+            {
+                EffectGUIDs.MesmerMentalCollapse120Radius,
+                EffectGUIDs.MesmerMentalCollapse240Radius,
+                EffectGUIDs.MesmerMentalCollapse360Radius,
+            };
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out IReadOnlyList<EffectEvent> mentalCollapses))
+            {
+                var mapping = new Dictionary<string, (long duration, uint radius)>
+                {
+                    { EffectGUIDs.MesmerMentalCollapse120Radius, (280, 120) },
+                    { EffectGUIDs.MesmerMentalCollapse240Radius, (280, 240) },
+                    { EffectGUIDs.MesmerMentalCollapse360Radius, (1280, 360) }
+                };
+                var skill = new SkillModeDescriptor(player, Spec.Mesmer, MentalCollapse, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in mentalCollapses)
+                {
+                    long duration = 0; // Overriding logged duration of 0
+                    uint radius = 0;
+
+                    if (mapping.TryGetValue(effect.GUIDEvent.HexContentGUID, out (long duration, uint radius) values))
+                    {
+                        duration = values.duration;
+                        radius = values.radius;
+                    }
+
+                    (long, long) lifespan = (effect.Time, effect.Time + duration);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, ParserIcons.EffectMentalCollapse);
+                }
+            }
         }
     }
 }

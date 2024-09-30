@@ -340,6 +340,39 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfResolution);
                 }
             }
+
+            // Solar Storm
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormAerealEffect, out IReadOnlyList<EffectEvent> solarStorms))
+            {
+                // Skill definition has radius of 360, each hit has a radius of 180.
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SolarStorm, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in solarStorms)
+                {
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 2000); // 2000 apromixated duration
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectSolarStorm);
+                }
+                // Spear Impact
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormSpearImpact, out IReadOnlyList<EffectEvent> spearImpacts))
+                {
+                    foreach (EffectEvent effect in spearImpacts)
+                    {
+                        (long start, long end) lifespan = effect.ComputeLifespan(log, 500); // 500 as a visual display
+                        var connector = new PositionConnector(effect.Position);
+                        replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                    }
+                }
+            }
+
+            // Symbol of Luminance
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfLuminance3, out IReadOnlyList<EffectEvent> symbolsOfLuminance))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfLuminanceSkill, SkillModeCategory.CC);
+                foreach (EffectEvent effect in symbolsOfLuminance)
+                {
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfLuminance);
+                }
+            }
         }
     }
 }

@@ -337,9 +337,7 @@ namespace GW2EIEvtcParser.EIData
                 {
                     long duration = log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.WvW ? 5000 : 8000;
                     (long, long) lifespan = effect.ComputeDynamicLifespan(log, duration);
-                    var connector = new PositionConnector(effect.Position);
-                    replay.Decorations.Add(new DoughnutDecoration(180, 200, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSpectralRing, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                    AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 180, 200, ParserIcons.EffectSpectralRing);
                 }
             }
         }

@@ -342,6 +342,55 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectDropTheHammer);
                 }
             }
+
+            // Abyssal Blitz (Mines)
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearBlitzMines2, out IReadOnlyList<EffectEvent> abyssalBlitzMines))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Revenant, BlitzMines, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in abyssalBlitzMines)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 120, ParserIcons.EffectAbyssalBlitzMines);
+                }
+            }
+
+            // Abyssal Blot
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalBlot, out IReadOnlyList<EffectEvent> abyssalBlots))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot, SkillModeCategory.CC);
+                foreach (EffectEvent effect in abyssalBlots)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 3000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectAbyssalBlot);
+                }
+            }
+
+            // Abyssal Raze
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRaze, out IReadOnlyList<EffectEvent> abyssalRazes))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Revenant, AbyssalRaze, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in abyssalRazes)
+                {
+                    uint radius = 180;
+                    long warningDuration = 800; // Overriding logged effect duration of 5100
+                    var connector = new PositionConnector(effect.Position);
+                    (long start, long end) lifespanWarning = (effect.Time, effect.Time + warningDuration);
+                    var circle = (CircleDecoration)new CircleDecoration(radius, lifespanWarning, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill);
+                    replay.AddDecorationWithGrowing(circle, lifespanWarning.end);
+                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanWarning, connector).UsingSkillMode(skill));
+                    // Hit indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRazeHit, out IReadOnlyList<EffectEvent> abyssalRazeHits))
+                    {
+                        EffectEvent hit = abyssalRazeHits.FirstOrDefault(x => x.Time > effect.Time && x.Time < effect.Time + 1000);
+                        if (hit != null)
+                        {
+                            (long start, long end) lifespanHit = (lifespanWarning.end, lifespanWarning.end + 500);
+                            replay.Decorations.Add(new CircleDecoration(radius, lifespanHit, color, 0.5, connector).UsingSkillMode(skill));
+                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanHit, connector).UsingSkillMode(skill));
+                        }
+                    }
+                }
+            }
         }
     }
 }

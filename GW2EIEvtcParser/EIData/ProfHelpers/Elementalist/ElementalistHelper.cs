@@ -400,7 +400,186 @@ namespace GW2EIEvtcParser.EIData
                         AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGeyser);
                     }
                 }
+            }
 
+            // Meteor
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteor, out IReadOnlyList<EffectEvent> meteors))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Meteor, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in meteors)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1000);
+                    AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectMeteor);
+                }
+            }
+
+            // Etching: Volcano
+            var etchingVolcanoEffects = new []
+            {
+                EffectGUIDs.ElementalistEtchingVolcanoTier0,
+                EffectGUIDs.ElementalistEtchingVolcanoTier1,
+                EffectGUIDs.ElementalistEtchingVolcanoTier2,
+                EffectGUIDs.ElementalistEtchingVolcanoTier3,
+                EffectGUIDs.ElementalistEtchingVolcanoPerfect,
+            };
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingVolcanoEffects, out IReadOnlyList<EffectEvent> etchingVolcano))
+            {
+                AddEtchingDecorations(log, player, replay, color, etchingVolcano, EtchingVolcano, ParserIcons.EffectEtchingVolcano);
+            }
+
+            // Lesser Volcano
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistLesserVolcano, out IReadOnlyList<EffectEvent> lesserVolcano))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, LesserVolcano, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in lesserVolcano)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4400);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectLesserVolcano);
+                    // Hits landing from the volcano
+                    AddVolcanoProjectileHitDecorations(log, player, replay, skill, color, effect.Time, effect.Duration);
+                }
+            }
+
+            // Volcano
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcano, out IReadOnlyList<EffectEvent> volcano))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Volcano, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in volcano)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4500);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectVolcano);
+                    // Hits landing from the volcano
+                    AddVolcanoProjectileHitDecorations(log, player, replay, skill, color, effect.Time, effect.Duration);
+                }
+            }
+
+            // Undertow
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUndertow, out IReadOnlyList<EffectEvent> undertows))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Undertow, SkillModeCategory.CC);
+                foreach (EffectEvent effect in undertows)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 1000); // logged duration of 0 - overriding it to 1000 like the others
+                    AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectUndertow);
+                }
+            }
+
+            // Etching: Jökulhlaup
+            var etchingJokulhlaupEffects = new[]
+            {
+                EffectGUIDs.ElementalistEtchingJokulhlaupTier0,
+                EffectGUIDs.ElementalistEtchingJokulhlaupTier1,
+                EffectGUIDs.ElementalistEtchingJokulhlaupTier2,
+                EffectGUIDs.ElementalistEtchingJokulhlaupTier3,
+                EffectGUIDs.ElementalistEtchingJokulhlaupPerfect,
+            };
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingJokulhlaupEffects, out IReadOnlyList<EffectEvent> etchingJokulhlaup))
+            {
+                AddEtchingDecorations(log, player, replay, color, etchingJokulhlaup, EtchingJokulhlaup, ParserIcons.EffectEtchingJokulhlaup);
+            }
+
+            // Fulgor
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFulgor, out IReadOnlyList<EffectEvent> fulgors))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, FulgorSkill, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in fulgors)
+                {
+                    (long, long) lifespan = effect.ComputeLifespan(log, 4000);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectFulgor);
+                }
+            }
+
+            // Twister
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistTwister, out IReadOnlyList<EffectEvent> twisters))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Twister, SkillModeCategory.CC);
+                foreach (EffectEvent effect in twisters)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 1000);
+                    AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectTwister);
+                }
+            }
+
+            // Etching: Derecho
+            var etchingDerechoEffects = new[]
+            {
+                EffectGUIDs.ElementalistEtchingDerechoTier0,
+                EffectGUIDs.ElementalistEtchingDerechoTier1,
+                EffectGUIDs.ElementalistEtchingDerechoTier2,
+                EffectGUIDs.ElementalistEtchingDerechoTier3,
+                EffectGUIDs.ElementalistEtchingDerechoPerfect,
+            };
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingDerechoEffects, out IReadOnlyList<EffectEvent> etchingDerecho))
+            {
+                AddEtchingDecorations(log, player, replay, color, etchingDerecho, EtchingDerecho, ParserIcons.EffectEtchingDerecho);
+            }
+
+            // Fissure
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFissure, out IReadOnlyList<EffectEvent> fissures))
+            {
+                var skill = new SkillModeDescriptor(player, Spec.Elementalist, Fissure, SkillModeCategory.ShowOnSelect);
+                foreach (EffectEvent effect in fissures)
+                {
+                    (long, long) lifespan = effect.ComputeDynamicLifespan(log, 1000); // logged duration of 0 - overriding it to 1000 like the others
+                    AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectFissure);
+                }
+            }
+
+            // Etching: Haboob
+            var etchingHaboobEffects = new[]
+            {
+                EffectGUIDs.ElementalistEtchingHaboobTier0,
+                EffectGUIDs.ElementalistEtchingHaboobTier1,
+                EffectGUIDs.ElementalistEtchingHaboobTier2,
+                EffectGUIDs.ElementalistEtchingHaboobTier3,
+                EffectGUIDs.ElementalistEtchingHaboobPerfect,
+            };
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingHaboobEffects, out IReadOnlyList<EffectEvent> etchingHaboob))
+            {
+                AddEtchingDecorations(log, player, replay, color, etchingHaboob, EtchingHaboob, ParserIcons.EffectEtchingHaboob);
+            }
+        }
+
+        /// <summary>
+        /// Adds AoEs displaying the projectile hits for <see cref="LesserVolcano"/> and <see cref="Volcano"/>.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="player">The player casting.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="skill">The casted skill.</param>
+        /// <param name="color">The specialization color.</param>
+        /// <param name="volcanoStartTime">The Volcano effect start time.</param>
+        /// <param name="volcanoDuraiton">The Volcano effect duration.</param>
+        private static void AddVolcanoProjectileHitDecorations(ParsedEvtcLog log, AbstractPlayer player, CombatReplay replay, SkillModeDescriptor skill, Color color, long volcanoStartTime, long volcanoDuraiton)
+        {
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcanoHits, out IReadOnlyList<EffectEvent> volcanoHits))
+            {
+                foreach (EffectEvent hitEffect in volcanoHits.Where(x => x.Time > volcanoStartTime && x.Time < volcanoStartTime + volcanoDuraiton))
+                {
+                    (long, long) lifespanHit = hitEffect.ComputeLifespan(log, 500); // Logged duration of 0, setting 500 as a visual display
+                    var connector = new PositionConnector(hitEffect.Position);
+                    replay.Decorations.Add(new CircleDecoration(200, lifespanHit, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds AoEs for the 4 Etchings.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="player">The player casting.</param>
+        /// <param name="replay">The Combat Replay.</param>
+        /// <param name="color">The specialization color.</param>
+        /// <param name="effects">The etching effects.</param>
+        /// <param name="skillId">The etching skill ID.</param>
+        /// <param name="icon">The etching icon.</param>
+        private static void AddEtchingDecorations(ParsedEvtcLog log, AbstractPlayer player, CombatReplay replay, Color color, IReadOnlyList<EffectEvent> effects, long skillId, string icon)
+        {
+            var skill = new SkillModeDescriptor(player, Spec.Elementalist, skillId, SkillModeCategory.ShowOnSelect);
+            foreach (EffectEvent effect in effects)
+            {
+                (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, icon);
             }
         }
     }
