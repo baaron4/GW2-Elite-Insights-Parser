@@ -386,7 +386,7 @@ namespace GW2EIParserCommons
             {
                 var fInfo = new FileInfo(operation.InputFile);
 
-                string fName = fInfo.Name.Split('.')[0];
+                string fName = Path.GetFileNameWithoutExtension(fInfo.FullName);
                 if (!fInfo.Exists)
                 {
                     fInfo = new FileInfo(AppDomain.CurrentDomain.BaseDirectory);
@@ -417,7 +417,7 @@ namespace GW2EIParserCommons
             string result = log.FightData.Success ? "kill" : "fail";
             string encounterLengthTerm = Settings.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
             string PoVClassTerm = Settings.AddPoVProf ? "_" + log.LogData.PoV.Spec.ToString().ToLower() : "";
-            string fName = fInfo.Name.Split('.')[0];
+            string fName = Path.GetFileNameWithoutExtension(fInfo.FullName);
             fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
             var uploadResults = new UploadResults(uploadStrings[0], uploadStrings[1]);
