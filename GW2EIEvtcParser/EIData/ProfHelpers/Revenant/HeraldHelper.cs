@@ -14,7 +14,7 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffGainCastFinder(LegendaryDragonStanceSkill, LegendaryDragonStanceBuff), // Legendary Dragon Stance
             new BuffGainCastFinder(FacetOfNatureSkill, FacetOfNatureBuff), // Facet of Nature
-            new BuffGainCastFinder(FacetOfDarknessSkill, FacetOfDarknessUW), // Facet of Darkness
+            new BuffGainCastFinder(FacetOfDarknessSkill, FacetOfDarknessBuff), // Facet of Darkness
             new BuffGainCastFinder(FacetOfElementsSkill, FacetOfElementsBuff), // Facet of Elements
             new BuffGainCastFinder(FacetOfStrengthSkill, FacetOfStrengthBuff), // Facet of Strength
             new BuffGainCastFinder(FacetOfChaosSkill, FacetOfChaosBuff), // Facet of Chaos
@@ -36,10 +36,11 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(BurstOfStrength, "Burst of Strength", "7%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Herald, ByPresence, BuffImages.BurstOfStrength, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance, GW2Builds.November2022Balance),
             new BuffOnActorDamageModifier(BurstOfStrength, "Burst of Strength", "7%", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Herald, ByPresence, BuffImages.BurstOfStrength, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.November2022Balance),
             // 
-            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessUW, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLight }, "Forceful Persistence (Facets)", "4% per active Facet", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2018Balance, GW2Builds.June2022Balance),
-            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessUW, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLight }, "Forceful Persistence (Facets)", "3% per active Facet", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2018Balance),
-            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessUW, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLight }, "Forceful Persistence (Facets)", "5% per active Facet", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.November2023Balance),
-            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessUW, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLight }, "Forceful Persistence (Facets)", "7% per active Facet", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2023Balance),
+            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff }, "Forceful Persistence (Facets)", "4% per active Facet", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2018Balance, GW2Builds.June2022Balance),
+            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff }, "Forceful Persistence (Facets)", "3% per active Facet", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2018Balance, GW2Builds.October2024Balance),
+            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff }, "Forceful Persistence (Facets)", "4% per active Facet", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2024Balance),
+            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff }, "Forceful Persistence (Facets)", "5% per active Facet", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.November2023Balance),
+            new BuffOnActorDamageModifier(new long[] { FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff }, "Forceful Persistence (Facets)", "7% per active Facet", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2023Balance),
             //new BuffDamageModifier(new long[] { 27273, 27581, 28001}, "Forceful Persistence", "13% if active upkeep", DamageSource.NoPets, 13.0, DamageType.Power, DamageType.All, Source.Herald, ByPresence, BuffImages.ForcefulPersistence, GW2Builds.August2018Balance, DamageModifierMode.All), // Hammers, Embrace, Impossible Odds but how to track Protective Solace?
         };
 
@@ -55,11 +56,11 @@ namespace GW2EIEvtcParser.EIData
             // Skills
             new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
             // Facets
-            new Buff("Facet of Light", FacetOfLight, Source.Herald, BuffClassification.Other, BuffImages.FacetOfLight),
+            new Buff("Facet of Light", FacetOfLightBuff, Source.Herald, BuffClassification.Other, BuffImages.FacetOfLight),
             new Buff("Facet of Light (Traited)", FacetOfLightTraited, Source.Herald, BuffClassification.Other, BuffImages.FacetOfLight), //Lingering buff with Draconic Echo trait
             new Buff("Infuse Light", InfuseLight, Source.Herald, BuffClassification.Defensive, BuffImages.InfuseLight),
-            new Buff("Facet of Darkness", FacetOfDarknessUW, Source.Herald, BuffClassification.Other, BuffImages.FacetOfDarkness),
-            new Buff("Facet of Darkness (Traited)", FacetOfDarknessTraited, Source.Herald, BuffClassification.Other, BuffImages.FacetOfDarkness), //Lingering buff with Draconic Echo trait
+            new Buff("Facet of Darkness", FacetOfDarknessBuff, Source.Herald, BuffClassification.Other, BuffImages.FacetOfDarkness),
+            new Buff("Facet of Darkness (Traited)", FacetOfDarknessBuffTraited, Source.Herald, BuffClassification.Other, BuffImages.FacetOfDarkness), //Lingering buff with Draconic Echo trait
             new Buff("Facet of Elements", FacetOfElementsBuff, Source.Herald, BuffClassification.Other, BuffImages.FacetOfElements),
             new Buff("Facet of Elements (Traited)", FacetOfElementsTraited, Source.Herald, BuffClassification.Other, BuffImages.FacetOfElements), //Lingering buff with Draconic Echo trait
             new Buff("Facet of Strength", FacetOfStrengthBuff, Source.Herald, BuffClassification.Other, BuffImages.FacetOfStrength),

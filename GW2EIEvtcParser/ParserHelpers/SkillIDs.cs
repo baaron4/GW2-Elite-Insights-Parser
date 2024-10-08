@@ -1419,7 +1419,7 @@
         public const long Kick = 27266;
         public const long VengefulHammersBuff = 27273;
         public const long ProtectiveSolaceTabletBuff = 27334;
-        public const long FacetOfLight = 27336;
+        public const long FacetOfLightBuff = 27336;
         public const long FacetOfStrengthBuff = 27376;
         public const long ImpossibleOddsBuff = 27581;
         public const long Taunt = 27705;
@@ -1432,7 +1432,7 @@
         public const long LegendaryCentaurStanceBuff = 27972;
         public const long FacetOfChaosBuff = 27983;
         public const long EmbraceTheDarkness = 28001;
-        public const long FacetOfDarknessUW = 28036;
+        public const long FacetOfDarknessBuff = 28036;
         public const long LegendaryDragonStanceSkill = 28085;
         public const long DropTheHammer = 28110;
         public const long LegendaryAssassinStanceSkill = 28134;
@@ -2766,7 +2766,7 @@
         public const long FacetOfChaosTraited = 51685;
         public const long FacetOfLightTraited = 51690;
         public const long FacetOfNatureAssassin = 51692;
-        public const long FacetOfDarknessTraited = 51695;
+        public const long FacetOfDarknessBuffTraited = 51695;
         public const long TrueNatureDragon = 51696;
         public const long FacetOfNatureCentaur = 51699;
         public const long FacetOfStrengthTraited = 51700;

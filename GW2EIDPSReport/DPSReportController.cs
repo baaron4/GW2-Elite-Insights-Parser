@@ -52,7 +52,7 @@ namespace GW2EIDPSReport
         ///////////////// URL Utilities
 
         private static readonly string MainEntryPoint = "https://dps.report";
-        private static readonly string SecondaryEntryPoint = "https://a.dps.report";
+        private static readonly string SecondaryEntryPoint = "http://a.dps.report";
         private static readonly string TertiaryEntryPoint = "https://b.dps.report";
 
         private static readonly string UploadContentURL = "/uploadContent";
@@ -102,7 +102,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 GetURL(MainEntryPoint + url, userToken),
-                //GetURL(SecondaryEntryPoint + url, userToken),
+                GetURL(SecondaryEntryPoint + url, userToken),
                 GetURL(TertiaryEntryPoint + url, userToken)
             };
             return Shuffle(urls);
@@ -129,7 +129,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 GetURL(MainEntryPoint + url, userToken),
-                //GetURL(SecondaryEntryPoint + url, userToken),
+                GetURL(SecondaryEntryPoint + url, userToken),
                 GetURL(TertiaryEntryPoint + url, userToken)
             };
             return Shuffle(urls);
@@ -140,7 +140,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 MainEntryPoint + url,
-                //SecondaryEntryPoint + url,
+                SecondaryEntryPoint + url,
                 TertiaryEntryPoint + url
             };
             return Shuffle(urls);
@@ -159,7 +159,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 MainEntryPoint + url,
-                //SecondaryEntryPoint + url,
+                SecondaryEntryPoint + url,
                 TertiaryEntryPoint + url
             };
             return Shuffle(urls);
@@ -178,7 +178,7 @@ namespace GW2EIDPSReport
             var urls = new List<string>()
             {
                 MainEntryPoint + url,
-                //SecondaryEntryPoint + url,
+                SecondaryEntryPoint + url,
                 TertiaryEntryPoint + url
             };
             return Shuffle(urls);

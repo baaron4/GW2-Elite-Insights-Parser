@@ -63,7 +63,8 @@ namespace GW2EIEvtcParser.EIData
         {
             new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.July2019Balance),
-            new BuffOnActorDamageModifier(Protection, "Second Skin", "-20% under protection", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(Protection, "Second Skin", "-20% under protection", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2024Balance),
+            new BuffOnActorDamageModifier(Protection, "Second Skin", "-25% under protection", DamageSource.NoPets, -25.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.October2024Balance),
             new BuffOnActorDamageModifier(DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.DolyakStance, DamageModifierMode.All),
         };
 
