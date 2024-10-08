@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GW2EIParserCommons;
-using System.Windows.Forms;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIParser
@@ -59,18 +59,14 @@ namespace GW2EIParser
             }
 
             var logFiles = new List<string>();
-            Application.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+            CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
                 int parserArgOffset = 0;
 
                 if (args.Contains("-h"))
                 {
-                    Console.WriteLine($"{args[0]} [arguments] [logs...]");
-                    Console.WriteLine("");
-                    Console.WriteLine("-c [config path] : use another config file");
-                    Console.WriteLine("-p : disable windows specific functions");
-                    Console.WriteLine("-h : help");
+                    PrintHelp();
                     return 0;
                 }
 
@@ -130,11 +126,27 @@ namespace GW2EIParser
             var thisAssembly = Assembly.GetExecutingAssembly();
             var settings = CustomSettingsManager.GetProgramSettings();
             var programHelper = new ProgramHelper(thisAssembly.GetName().Version, settings);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            using var form = new MainForm(logFiles, programHelper);
-            Application.Run(form);
-            return 0;
+            if (logFiles.Count > 0)
+            {
+                // Use the application through console 
+                _ = new ConsoleProgram(logFiles, programHelper);
+                return 0;
+            }
+            else
+            {
+                PrintHelp();
+                return 1;
+            }
+        }
+
+        static void PrintHelp()
+        {
+            Console.WriteLine($"{Path.GetFileName(Environment.ProcessPath)} [arguments] [logs...]");
+            Console.WriteLine("");
+            Console.WriteLine("-c [config path] : use another config file");
+            Console.WriteLine("-p : disable windows specific functions");
+            Console.WriteLine("-h : help");
         }
     }
+
 }
