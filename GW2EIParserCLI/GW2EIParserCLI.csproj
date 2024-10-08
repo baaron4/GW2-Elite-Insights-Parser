@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>10</LangVersion>
+        <Nullable>disable</Nullable>
+        <RootNamespace>GW2EIParser</RootNamespace>
+        
+        <Deterministic>false</Deterministic>
+
+        <AssemblyTitle>EliteInsights-CLI</AssemblyTitle>
+        <Product>EliteInsights-CLI</Product>
+        <Copyright>Copyright ©  2024</Copyright>
+        <Configurations>Debug;Release;NoRewards</Configurations>
+
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+
+        <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
+        <AssemblyName>GuildWars2EliteInsights-CLI</AssemblyName>
+        <OutputPath>..\GW2EI.bin\$(Configuration)\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="Content\ArenaNet\LI.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\GW2EIDiscord\GW2EIDiscord.csproj" />
+        <ProjectReference Include="..\GW2EIParserCommons\GW2EIParserCommons.csproj" />
+    </ItemGroup>
+
+</Project>

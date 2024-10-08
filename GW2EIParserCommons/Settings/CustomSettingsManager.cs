@@ -5,7 +5,7 @@ using GW2EIParserCommons;
 
 namespace GW2EIParser
 {
-    internal static class CustomSettingsManager
+    public static class CustomSettingsManager
     {
         public static void ReadConfig(string filename)
         {
