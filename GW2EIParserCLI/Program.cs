@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using GW2EIParserCommons;
 
 [assembly: System.CLSCompliant(false)]
@@ -12,42 +11,6 @@ namespace GW2EIParser
 {
     internal static class Program
     {
-        [DllImport("kernel32.dll")]
-        private static extern bool AllocConsole();
-        [DllImport("kernel32.dll")]
-        private static extern bool AttachConsole(int dwProcessId);
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr GetStdHandle(StandardHandle nStdHandle);
-        [DllImport("kernel32.dll")]
-        private static extern FileType GetFileType(IntPtr handle);
-
-        private const int AttachParentProcess = -1;
-
-        private enum StandardHandle
-        {
-            Input = -10,
-            Output = -11,
-            Error = -12
-        }
-
-        private enum FileType : uint
-        {
-            Unknown = 0x0000,
-            Disk = 0x0001,
-            Char = 0x0002,
-            Pipe = 0x0003
-        }
-
-        private static bool IsRedirected(IntPtr handle)
-        {
-            FileType fileType = GetFileType(handle);
-
-            return (fileType == FileType.Disk) || (fileType == FileType.Pipe);
-        }
-
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         private static int Main(string[] args)
         {
@@ -68,34 +31,6 @@ namespace GW2EIParser
                 {
                     PrintHelp();
                     return 0;
-                }
-
-                if (args.Contains("-p"))
-                {
-                    parserArgOffset += 1;
-                }
-                else
-                {
-                    /*
-                     * Magic for windows:
-                     * - opens a console window if used from a non-console with command line options
-                     * - fixes output on windows cmd (other consoles tested behaved better)(otherwise no console output or piped file output)
-                     *
-                     * We need to do this, because the console output is lazy initialized
-                     * and if we are redirecting to a file or pipe we want to make sure Console.out points to the correct handle
-                     * and doesn't init with the console ignoring existing stdout
-                     */
-                    if (IsRedirected(GetStdHandle(StandardHandle.Output)))
-                    {
-                        _ = Console.Out;
-                    }
-
-                    if (!AttachConsole(AttachParentProcess))
-                    {
-                        AllocConsole();
-                    }
-
-                    AttachConsole(AttachParentProcess);
                 }
 
                 if (args.Contains("-c"))
@@ -144,7 +79,6 @@ namespace GW2EIParser
             Console.WriteLine($"{Path.GetFileName(Environment.ProcessPath)} [arguments] [logs...]");
             Console.WriteLine("");
             Console.WriteLine("-c [config path] : use another config file");
-            Console.WriteLine("-p : disable windows specific functions");
             Console.WriteLine("-h : help");
         }
     }
