@@ -63,9 +63,7 @@ namespace GW2EIParser
             var programHelper = new ProgramHelper(thisAssembly.GetName().Version, settings);
             if (logFiles.Count > 0)
             {
-                // Use the application through console 
-                _ = new ConsoleProgram(logFiles, programHelper);
-                return 0;
+                return ConsoleProgram.ParseAll(logFiles, programHelper);
             }
             else
             {

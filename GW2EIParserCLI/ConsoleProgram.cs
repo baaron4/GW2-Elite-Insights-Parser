@@ -1,58 +1,87 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
 
 namespace GW2EIParser
 {
-    internal class ConsoleProgram
+    static class ConsoleProgram
     {
 
-        public ConsoleProgram(IEnumerable<string> logFiles, ProgramHelper programHelper)
+        /// <returns>0 on success, other value on error</returns>
+        public static int ParseAll(List<string> logFiles, ProgramHelper programHelper)
         {
             if (programHelper.ParseMultipleLogs())
             {
-                var splitLogFiles = new List<List<string>>();
-                var sizeSortedLogFiles = new List<string>(logFiles);
-                for (int i = 0; i < programHelper.GetMaxParallelRunning(); i++)
+                Console.WriteLine("Multithreaded Mode.");
+                var state = new ThreadingState()
                 {
-                    splitLogFiles.Add(new List<string>());
+                    ProgramHelper = programHelper,
+                    NoMoreFiles = false,
+                    FileQueue = new(),
+                };
+
+                var parallelism = programHelper.GetMaxParallelRunning();
+                for(int i = 0; i < parallelism - 1; i++)
+                {
+                    var t = new Thread(EnterParsetThread);
+                    t.Start(state);
                 }
-                sizeSortedLogFiles.Sort((x, y) =>
+
+                foreach(var file in logFiles)
                 {
-                    var fInfoX = new FileInfo(x);
-                    long xValue = fInfoX.Exists ? fInfoX.Length : 0;
-                    var fInfoY = new FileInfo(y);
-                    long yValue = fInfoY.Exists ? fInfoY.Length : 0;
-                    return xValue.CompareTo(yValue);
-                });
-                int index = 0;
-                foreach (string file in sizeSortedLogFiles)
-                {
-                    splitLogFiles[index].Add(file);
-                    index = (index + 1) % programHelper.GetMaxParallelRunning();
+                    state.FileQueue.Enqueue(file);
                 }
-                Parallel.ForEach(splitLogFiles, files =>
-                {
-                    foreach (string file in files)
-                    {
-                        ParseLog(file, programHelper);
-                    }
-                });
+
+                state.NoMoreFiles = true;
+                using var _t = new AutoTrace("Parse One");
+                EnterParsetThread(state); // we take the last thread
             }
             else
             {
                 foreach (string file in logFiles)
                 {
+                    using var _t = new AutoTrace("Parse One");
                     ParseLog(file, programHelper);
                 }
+            }
+
+            return 0;
+        }
+
+        public class ThreadingState
+        {
+            public ProgramHelper ProgramHelper;
+            public volatile bool NoMoreFiles;
+            public ConcurrentQueue<string> FileQueue;
+        }
+
+        static void EnterParsetThread(object state_)
+        {
+            var state = (ThreadingState)state_;
+            while (true)
+            {
+                string logFile;
+                while(!state.FileQueue.TryDequeue(out logFile)) {
+                    if(state.NoMoreFiles && state.FileQueue.IsEmpty) { return; }
+                    //NOTE(Rennorb): Don't even bother with synchronizing. Just wait a bit.
+                    Thread.Sleep(10);
+                }
+
+                if(string.IsNullOrWhiteSpace(logFile)) { Debugger.Break(); }
+
+                ParseLog(logFile, state.ProgramHelper);
             }
         }
 
         private static void ParseLog(string logFile, ProgramHelper programHelper)
         {
+            using var _t = new AutoTrace("Parse One");
             programHelper.ExecuteMemoryCheckTask();
             var operation = new ConsoleOperationController(logFile);
             try
