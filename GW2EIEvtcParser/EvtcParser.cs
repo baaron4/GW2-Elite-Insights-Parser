@@ -239,8 +239,8 @@ namespace GW2EIEvtcParser
         private void ParseFightData(BinaryReader reader, ParserController operation)
         {
             // 12 bytes: arc build version
-            string evtcVersion = GetString(reader, 12);
-            if (!evtcVersion.StartsWith("EVTC") || !int.TryParse(new string(evtcVersion.Where(char.IsDigit).ToArray()), out int headerVersion))
+            using var evtcVersion = GetCharArrayPooled(reader, 12, false);
+            if (!MemoryExtensions.StartsWith(evtcVersion, "EVTC".AsSpan()) || !int.TryParse(evtcVersion[4..], out int headerVersion))
             {
                 throw new EvtcFileException("Not EVTC");
             }
@@ -269,7 +269,7 @@ namespace GW2EIEvtcParser
         private string GetAgentProfString(uint prof, uint elite, ParserController operation)
         {
             string spec = _apiController.GetSpec(prof, elite);
-            if (spec == "Unknow")
+            if (spec == GW2APIController.UNKNOWN_SPEC)
             {
                 operation.UpdateProgressWithCancellationCheck("Parsing: Missing or outdated GW2 API Cache or unknown player spec");
             }
@@ -314,32 +314,26 @@ namespace GW2EIEvtcParser
                 // 68 bytes: name
                 string name = GetString(reader, 68, false);
                 //Save
-                Spec agentProf = ProfToSpec(GetAgentProfString(prof, isElite, operation));
+                Spec agentProf = ProfToSpec(GetAgentProfString(prof, isElite, operation)); //TODO(Rennorb) @perf: Drop the 3 wrappers around what we are actually doing here.
                 AgentItem.AgentType type;
                 ushort ID = 0;
                 switch (agentProf)
                 {
                     case Spec.NPC:
-                        // NPC
-                        if (!ushort.TryParse(prof.ToString().PadLeft(5, '0'), out ID))
-                        {
-                            ID = 0;
-                        }
+                        ID = (ushort)(prof > ushort.MaxValue ? 0 : prof);
                         type = AgentItem.AgentType.NPC;
                         break;
+
                     case Spec.Gadget:
-                        // Gadget
-                        if (!ushort.TryParse((prof & 0x0000ffff).ToString().PadLeft(5, '0'), out ID))
-                        {
-                            ID = 0;
-                        }
+                        ID = (ushort)(prof & 0x0000ffff);
                         type = AgentItem.AgentType.Gadget;
                         break;
+
                     // Filter unknowns out
                     case Spec.Unknown:
                         continue;
+
                     default:
-                        // Player
                         type = AgentItem.AgentType.Player;
                         break;
                 }
@@ -410,7 +404,9 @@ namespace GW2EIEvtcParser
             ushort srcMasterInstid = reader.ReadUInt16();
 
             // 9 bytes: garbage
-            _ = reader.ReadBytes(9);
+            //NOTE(Rennorb): Avoid allocating array by splitting up the reads.
+            _ = reader.ReadInt64();
+            _ = reader.ReadByte();
 
             // 1 byte: iff
             byte iff = reader.ReadByte();
@@ -1065,23 +1061,62 @@ namespace GW2EIEvtcParser
         /// </summary>
         /// <param name="reader">Reads binary values from the evtc.</param>
         /// <param name="length">Length of bytes to read.</param>
-        /// <param name="nullTerminated"></param>
+        /// <param name="nullTerminated">if set the string will become truncated at the first null byte</param>
         /// <returns><see cref="string"/> in <see cref="Encoding.UTF8"/>.</returns>
         private static string GetString(BinaryReader reader, int length, bool nullTerminated = true)
         {
-            byte[] bytes = reader.ReadBytes(length);
-            if (nullTerminated)
+            using var buffer = GetByteArrayPooled(reader, length, nullTerminated);
+            return Encoding.UTF8.GetString(buffer);
+        }
+
+        /// <summary>
+        /// Read bytes from the <paramref name="reader"/>.
+        /// The returned value should be disposed at some point to return it to the pool.
+        /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <param name="length">Length of bytes to read.</param>
+        /// <param name="nullTerminated">if set the array will become truncated at the first null byte</param>
+        private static ArrayPoolReturner<byte> GetByteArrayPooled(BinaryReader reader, int length, bool nullTerminated = true)
+        {
+            var buffer = new ArrayPoolReturner<byte>(length); // TODO use own reader for direct access 
+            buffer.Length = 0; // reuse the length, don't need to remember the original
+            while(length-- > 0)
             {
-                for (int i = 0; i < length; ++i)
-                {
-                    if (bytes[i] == 0)
-                    {
-                        length = i;
-                        break;
-                    }
-                }
+                var b = buffer.Array[buffer.Length] = reader.ReadByte();
+                if(nullTerminated && b == 0) { break; }
+                buffer.Length++;
             }
-            return Encoding.UTF8.GetString(bytes, 0, length);
+            // consume remaining length
+            for(; length > sizeof(UInt64); length -= sizeof(UInt64))
+            {
+                reader.ReadUInt64();
+            }
+            while(length-- > 0)
+            {
+                reader.ReadByte();
+            }
+            return buffer;
+        }
+
+        /// <summary>
+        /// Read bytes from the <paramref name="reader"/> and individually cast them to chars.
+        /// The returned value should be disposed at some point to return it to the pool.
+        /// </summary>
+        /// <param name="reader">Reads binary values from the evtc.</param>
+        /// <param name="length">Length of bytes to read.</param>
+        /// <param name="nullTerminated">if set the array will become truncated at the first null byte</param>
+        private static ArrayPoolReturner<char> GetCharArrayPooled(BinaryReader reader, int length, bool nullTerminated = true)
+        {
+            var buffer = new ArrayPoolReturner<char>(length); // TODO use own reader for direct access 
+            buffer.Length = 0; // reuse the length, don't need to remember the original
+            while(length-- > 0)
+            {
+                var b = reader.ReadByte();
+                buffer.Array[buffer.Length] = (char)b;
+                if(nullTerminated && b == 0) { break; }
+                buffer.Length++;
+            }
+            return buffer;
         }
 
         /// <summary>

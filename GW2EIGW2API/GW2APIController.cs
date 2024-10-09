@@ -90,7 +90,6 @@ namespace GW2EIGW2API
             traitAPIController.WriteAPITraitsToFile(filePath);
         }
 
-        ///
         public string GetSpec(uint prof, uint elite)
         {
             // Non player agents - Gadgets = GDG
@@ -112,7 +111,7 @@ namespace GW2EIGW2API
                     case 7: return "Mesmer";
                     case 8: return "Necromancer";
                     case 9: return "Revenant";
-                    default: return "Unknown";
+                    default: return UNKNOWN_SPEC;
                 }
             }
             // Old way - Elite Specialization (HoT)
@@ -129,7 +128,7 @@ namespace GW2EIGW2API
                     case 7: return "Chronomancer";
                     case 8: return "Reaper";
                     case 9: return "Herald";
-                    default: return "Unknown";
+                    default: return UNKNOWN_SPEC;
                 }
             }
             // Current way
@@ -138,12 +137,14 @@ namespace GW2EIGW2API
                 GW2APISpec spec = GetAPISpec((int)elite);
                 if (spec == null)
                 {
-                    return "Unknown";
+                    return UNKNOWN_SPEC;
                 }
                 return spec.Elite ? spec.Name : spec.Profession;
             }
             throw new InvalidOperationException("Unexpected profession pattern in GetSpec");
         }
+
+        public static readonly string UNKNOWN_SPEC = "Unknown";
 
     }
 }

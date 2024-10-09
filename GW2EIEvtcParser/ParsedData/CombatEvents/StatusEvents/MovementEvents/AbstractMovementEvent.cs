@@ -14,15 +14,9 @@ namespace GW2EIEvtcParser.ParsedData
             _value = evtcItem.Value;
         }
 
-        private static (float x, float y, float z) UnpackMovementData(ulong packedXY, int intZ)
+        private static unsafe (float x, float y, float z) UnpackMovementData(ulong packedXY, int intZ)
         {
-            byte[] xyBytes = BitConverter.GetBytes(packedXY);
-            byte[] zBytes = BitConverter.GetBytes(intZ);
-            float x = BitConverter.ToSingle(xyBytes, 0);
-            float y = BitConverter.ToSingle(xyBytes, 4);
-            float z = BitConverter.ToSingle(zBytes, 0);
-
-            return (x, y, z);
+            return (*(float*)&packedXY, *((float*)&packedXY + 1), *(float*)&intZ);
         }
 
         public ParametricPoint3D GetParametricPoint3D()

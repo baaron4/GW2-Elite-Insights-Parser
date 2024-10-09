@@ -5,7 +5,7 @@ namespace GW2EIParser;
 
 readonly struct AutoTrace : IDisposable
 {
-#if DEBUG
+#if true
     readonly string name;
     readonly Stopwatch stopwatch;
 

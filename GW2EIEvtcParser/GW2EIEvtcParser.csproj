@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>10.0</LangVersion>
         <Nullable>disable</Nullable>
         <Version>0.58.2</Version>
         <Configurations>Debug;Release;NoRewards</Configurations>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,6 +19,7 @@
         <Product>GW2 Elite Insights</Product>
         <Authors>EliphasNUIT, Baaron</Authors>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">

@@ -80,11 +80,13 @@ namespace GW2EIEvtcParser
             IsOffcycle = isOffcycle;
             Pad = pad;
             // break pad
-            byte[] pads = BitConverter.GetBytes(Pad);
-            Pad1 = pads[0];
-            Pad2 = pads[1];
-            Pad3 = pads[2];
-            Pad4 = pads[3];
+            unsafe
+            {
+                Pad1 = *(byte*)&pad;
+                Pad2 = *((byte*)&pad + 1);
+                Pad3 = *((byte*)&pad + 2);
+                Pad4 = *((byte*)&pad + 3);
+            }
         }
 
         internal CombatItem(CombatItem c)

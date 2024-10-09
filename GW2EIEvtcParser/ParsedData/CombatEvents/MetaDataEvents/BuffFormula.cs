@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums.BuffAttribute;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -79,81 +80,50 @@ namespace GW2EIEvtcParser.ParsedData
 
         private int Level(Buff buff) => buff.Classification == Buff.BuffClassification.Enhancement || buff.Classification == Buff.BuffClassification.Nourishment || buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);
 
-        internal BuffFormula(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
+        internal unsafe BuffFormula(CombatItem evtcItem, EvtcVersionEvent evtcVersion)
         {
             Npc = evtcItem.IsFlanking == 0;
             Player = evtcItem.IsShields == 0;
             Break = evtcItem.IsOffcycle > 0;
-            int size = 11;
-            byte[] formulaBytes = new byte[size * sizeof(float)];
-            int offset = 0;
+            var formulaBytes = new ByteBuffer(stackalloc byte[11 * sizeof(float)]);
             // 2 
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Time))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.Time);
             // 2
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcAgent))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.SrcAgent);
             // 2
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstAgent))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.DstAgent);
             // 1
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Value))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.Value);
             // 1
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.BuffDmg))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.BuffDmg);
             // 1
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.OverstackValue))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.OverstackValue);
             // 0.5
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcInstid))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.SrcInstid);
             // 0.5
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstInstid))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.DstInstid);
             // 0.5
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcMasterInstid))
-            {
-                formulaBytes[offset++] = bt;
-            }
+            formulaBytes.PushNative(evtcItem.SrcMasterInstid);
             // 0.5
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstMasterInstid))
-            {
-                formulaBytes[offset++] = bt;
+            formulaBytes.PushNative(evtcItem.DstMasterInstid);
+
+            fixed(byte* ptr = formulaBytes.Span) {
+                var formulaFloats = (float*)ptr;
+
+                Type = (int)formulaFloats[0];
+                ByteAttr1 = (byte)formulaFloats[1];
+                ByteAttr2 = (byte)formulaFloats[2];
+                Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1, evtcVersion.Build);
+                Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2, evtcVersion.Build);
+                ConstantOffset = formulaFloats[3];
+                LevelOffset = formulaFloats[4];
+                Variable = formulaFloats[5];
+                TraitSrc = (int)formulaFloats[6];
+                TraitSelf = (int)formulaFloats[7];
+                ContentReference = formulaFloats[8];
+                BuffSrc = (int)formulaFloats[9];
+                BuffSelf = (int)formulaFloats[10];
             }
-            //
-            float[] formulaFloats = new float[size];
-            Buffer.BlockCopy(formulaBytes, 0, formulaFloats, 0, formulaBytes.Length);
-            //
-            Type = (int)formulaFloats[0];
-            ByteAttr1 = (byte)formulaFloats[1];
-            ByteAttr2 = (byte)formulaFloats[2];
-            Attr1 = ArcDPSEnums.GetBuffAttribute(ByteAttr1, evtcVersion.Build);
-            Attr2 = ArcDPSEnums.GetBuffAttribute(ByteAttr2, evtcVersion.Build);
-            ConstantOffset = formulaFloats[3];
-            LevelOffset = formulaFloats[4];
-            Variable = formulaFloats[5];
-            TraitSrc = (int)formulaFloats[6];
-            TraitSelf = (int)formulaFloats[7];
-            ContentReference = formulaFloats[8];
-            BuffSrc = (int)formulaFloats[9];
-            BuffSelf = (int)formulaFloats[10];
             ExtraNumber = evtcItem.OverstackValue;
             ExtraNumberState = evtcItem.Pad1;
         }

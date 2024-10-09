@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -210,14 +211,21 @@ namespace GW2EIEvtcParser
                 .Aggregate((max, next) => next.eval.CompareTo(max.eval) < 0 ? next : max).value;
         }
 
-        internal static string ToHexString(byte[] bytes, int start, int end)
+        internal static string ToHexString(ReadOnlySpan<byte> bytes)
         {
-            string res = "";
-            for (int i = start; i < end; i++)
+            using var buffer = new ArrayPoolReturner<char>(bytes.Length * 2);
+            AppendHexString(buffer, bytes);
+            return new String(buffer);
+        }
+        internal static void AppendHexString(Span<char> destination, ReadOnlySpan<byte> bytes)
+        {
+            const string CHARSET = "0123456789ABCDEF";
+            int offset = 0;
+            foreach(var c in bytes)
             {
-                res += bytes[i].ToString("X2");
+                destination[offset++] = CHARSET[(c & 0xf0) >> 4];
+                destination[offset++] = CHARSET[c & 0x0f];
             }
-            return res;
         }
 
         internal static bool IsSupportedStateChange(StateChange state)

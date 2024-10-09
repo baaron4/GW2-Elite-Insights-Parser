@@ -1,4 +1,4 @@
-﻿using System;
+﻿using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -7,33 +7,17 @@ namespace GW2EIEvtcParser.ParsedData
         public string Message { get; }
         internal ErrorEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            byte[] bytes = new byte[32 * 1]; // 32 * sizeof(char), char as in C not C#
-            int offset = 0;
+            var bytes = new ByteBuffer(stackalloc byte[32]); // 32 * sizeof(char), char as in C not C#
             // 8 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Time))
-            {
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(evtcItem.Time);
             // 8 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcAgent))
-            {
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(evtcItem.SrcAgent);
             // 8 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstAgent))
-            {
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(evtcItem.DstAgent);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Value))
-            {
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(evtcItem.Value);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.BuffDmg))
-            {
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(evtcItem.BuffDmg);
             Message = System.Text.Encoding.UTF8.GetString(bytes);
         }
 
@@ -41,6 +25,5 @@ namespace GW2EIEvtcParser.ParsedData
         {
             Message = message;
         }
-
     }
 }

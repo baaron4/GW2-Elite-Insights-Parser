@@ -15,19 +15,22 @@ namespace GW2EIEvtcParser.ParsedData
             (HexContentGUID, Base64ContentGUID) = UnpackGUID(evtcItem.SrcAgent, evtcItem.DstAgent);
             ContentID = evtcItem.SkillID;
         }
+
         internal IDToGUIDEvent() : base()
         {
             (HexContentGUID, Base64ContentGUID) = ("", "");
             ContentID = -1;
         }
-        internal static (string hex, string base64) UnpackGUID(ulong first8, ulong last8)
+        
+        internal static unsafe (string hex, string base64) UnpackGUID(ulong first8, ulong last8)
         {
-            byte[] guid = new byte[16];
-            byte[] first8Bytes = BitConverter.GetBytes(first8);
-            byte[] last8Bytes = BitConverter.GetBytes(last8);
-            first8Bytes.CopyTo(guid, 0);
-            last8Bytes.CopyTo(guid, first8Bytes.Length);
-            return (ParserHelper.ToHexString(guid, 0, 16), Convert.ToBase64String(guid));
+            Span<byte> guid = stackalloc byte[16];
+            fixed(byte* ptr = guid)
+            {
+                *(UInt64*)ptr = first8;
+                *(((UInt64*)ptr) + 1) = last8;
+            }
+            return (ParserHelper.ToHexString(guid), Convert.ToBase64String(guid));
         }
 
     }

@@ -47,9 +47,9 @@ namespace GW2EIEvtcParser.ParsedData
             else
             {
                 Position = new Point3D(
-                    BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Value), 0),
-                    BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.BuffDmg), 0),
-                    BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.OverstackValue), 0)
+                    BitConverter.Int32BitsToSingle(evtcItem.Value),
+                    BitConverter.Int32BitsToSingle(evtcItem.BuffDmg),
+                    BitConverter.Int32BitsToSingle(unchecked((int)evtcItem.OverstackValue))
                );
             }
         }

@@ -14,14 +14,14 @@ namespace GW2EIEvtcParser.Extensions
 
         private readonly Dictionary<long, EXTHealingType> EncounteredIDs = new Dictionary<long, EXTHealingType>();
 
-        private readonly HashSet<long> HybridHealIDs;
+        private readonly ReadonlyHashSet<long> _hybridHealIDs;
 
-        internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healData, Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healReceivedData, Dictionary<long, List<EXTAbstractHealingEvent>> healDataById, HashSet<long> hybridHealIDs)
+        internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healData, Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healReceivedData, Dictionary<long, List<EXTAbstractHealingEvent>> healDataById, ReadonlyHashSet<long> hybridHealIDs)
         {
             _healData = healData;
             _healReceivedData = healReceivedData;
             _healDataById = healDataById;
-            HybridHealIDs = hybridHealIDs;
+            _hybridHealIDs = hybridHealIDs;
         }
 
         public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(AgentItem key)
@@ -52,7 +52,7 @@ namespace GW2EIEvtcParser.Extensions
 
         public EXTHealingType GetHealingType(long id, ParsedEvtcLog log)
         {
-            if (HybridHealIDs.Contains(id))
+            if (_hybridHealIDs.Contains(id))
             {
                 return EXTHealingType.Hybrid;
             }

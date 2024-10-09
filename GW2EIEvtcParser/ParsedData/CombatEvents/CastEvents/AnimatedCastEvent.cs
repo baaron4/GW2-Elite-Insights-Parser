@@ -20,12 +20,15 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 Acceleration = 1;
             }
-            if (startItem.DstAgent != 0 || startItem.OverstackValue != 0)
+            if (startItem.DstAgent != 0 || startItem.OverstackValue != 0) { unsafe 
             {
-                byte[] xyBytes = BitConverter.GetBytes(startItem.DstAgent);
-                byte[] zBytes = BitConverter.GetBytes(startItem.OverstackValue);
-                EffectPosition = new Point3D(BitConverter.ToSingle(xyBytes, 0), BitConverter.ToSingle(xyBytes, 4), BitConverter.ToSingle(zBytes, 0));
-            }
+                //NOTE(Rennorb): Cannot directly take the address of the field, because its a property.
+                var xyBits = startItem.DstAgent;
+                var x = *(float*)&xyBits;
+                var y = *((float*)&xyBits + 1);
+                var z = BitConverter.Int32BitsToSingle(unchecked((int)startItem.OverstackValue));
+                EffectPosition = new Point3D(x, y, z);
+            }}
             //_effectHappenedDuration = startItem.Value;
         }
 

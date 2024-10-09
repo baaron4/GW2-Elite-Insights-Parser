@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.Extensions
@@ -129,91 +130,27 @@ namespace GW2EIEvtcParser.Extensions
         }
         private void SetVersion(CombatItem c)
         {
-            ulong size = (c.SrcAgent & 0xFF00000000000000) >> 56;
-            byte[] bytes = new byte[size * 1]; // 32 * sizeof(char), char as in C not C#
-            uint offset = 0;
+            //int size = (int)(c.SrcAgent & 0xFF00000000000000) >> 56;
+            //NOTE(Rennorb): size * 1 was used before, but the number of bytes required is predetermined 
+            var bytes = new ByteBuffer(stackalloc byte[32]); // 32 * sizeof(char), char as in C not C#
             // 8 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.DstAgent))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.DstAgent);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.Value))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.Value);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.BuffDmg))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.BuffDmg);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.OverstackValue))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.OverstackValue);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.SkillID))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.SkillID);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.SrcInstid))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
-
+            bytes.PushNative(c.SrcInstid);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.DstInstid))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.DstInstid);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.SrcMasterInstid))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.SrcMasterInstid);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(c.DstMasterInstid))
-            {
-                if (offset == size)
-                {
-                    break;
-                }
-                bytes[offset++] = bt;
-            }
+            bytes.PushNative(c.DstMasterInstid);
             Version = System.Text.Encoding.UTF8.GetString(bytes);
         }
         public static bool SanitizeForSrc<T>(List<T> events) where T : EXTAbstractHealingExtensionEvent
@@ -247,9 +184,9 @@ namespace GW2EIEvtcParser.Extensions
             return c.IsShields > 0 && ((c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0));
         }
 
-        private HashSet<long> GetHybridIDs(ulong gw2Build)
+        private ReadonlyHashSet<long> GetHybridIDs()
         {
-            return new HashSet<long>(HybridHealIDs);
+            return new ReadonlyHashSet<long>(HybridHealIDs);
         }
 
         internal override bool HasTime(CombatItem c)
@@ -332,23 +269,23 @@ namespace GW2EIEvtcParser.Extensions
             //
             {
                 var healData = _healingEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healData)
+                foreach (var (agent, events) in healData)
                 {
-                    if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
+                    if (SanitizeForSrc(events) && agent.IsPlayer)
                     {
-                        RunningExtensionInternal.Add(pair.Key);
+                        RunningExtensionInternal.Add(agent);
                     }
                 }
                 var healReceivedData = _healingEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (KeyValuePair<AgentItem, List<EXTAbstractHealingEvent>> pair in healReceivedData)
+                foreach (var (agent, events) in healReceivedData)
                 {
-                    if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
+                    if (SanitizeForDst(events) && agent.IsPlayer)
                     {
-                        RunningExtensionInternal.Add(pair.Key);
+                        RunningExtensionInternal.Add(agent);
                     }
                 }
                 var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-                combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs(gw2Build));
+                combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs());
                 operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _healingEvents.Count + " heal events to CombatData");
             }
             //

@@ -44,27 +44,17 @@ namespace GW2EIEvtcParser.ParsedData
             }
         }
 
-        private void BuildFromSkillInfo(CombatItem evtcItem)
+        private unsafe void BuildFromSkillInfo(CombatItem evtcItem)
         {
-            byte[] skillInfoBytes = new byte[4 * sizeof(float)];
-            int offset = 0;
             // 2 
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Time))
-            {
-                skillInfoBytes[offset++] = bt;
-            }
+            var time = evtcItem.Time;
             // 2
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcAgent))
-            {
-                skillInfoBytes[offset++] = bt;
-            }
-            //
-            float[] skillInfoFloats = new float[4];
-            Buffer.BlockCopy(skillInfoBytes, 0, skillInfoFloats, 0, skillInfoBytes.Length);
-            Recharge = skillInfoFloats[0];
-            Range0 = skillInfoFloats[1];
-            Range1 = skillInfoFloats[2];
-            TooltipTime = skillInfoFloats[3];
+            var srcAgent = evtcItem.SrcAgent;
+
+            Recharge    = *(float*)&time;
+            Range0      = *((float*)&time + 1);
+            Range1      = *(float*)&srcAgent;
+            TooltipTime = *((float*)&srcAgent + 1);
         }
 
         private void BuildFromSkillTiming(CombatItem evtcItem)

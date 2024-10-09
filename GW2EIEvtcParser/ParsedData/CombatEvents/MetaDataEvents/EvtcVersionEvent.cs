@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -9,102 +9,49 @@ namespace GW2EIEvtcParser.ParsedData
         public int Revision { get; } = -1;
         internal EvtcVersionEvent(CombatItem evtcItem) : base(evtcItem)
         {
-            var bytes = new List<byte>();
+            var bytes = new ByteBuffer(stackalloc byte[48]);
             // 8 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcAgent))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.SrcAgent);
             // 8 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstAgent))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.DstAgent);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Value))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.Value);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.BuffDmg))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.BuffDmg);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.OverstackValue))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.OverstackValue);
             // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SkillID))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.SkillID);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcInstid))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.SrcInstid);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstInstid))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.DstInstid);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcMasterInstid))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.SrcMasterInstid);
             // 2 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstMasterInstid))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.DstMasterInstid);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IFFByte))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.IFFByte);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsBuff))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.IsBuff);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Result))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.Result);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsActivationByte))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.IsActivationByte);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsBuffRemoveByte))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.IsBuffRemoveByte);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsNinety))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.IsNinety);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsFifty))
-            {
-                bytes.Add(bt);
-            }
+            bytes.PushNative(evtcItem.IsFifty);
             // 1 byte
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.IsMoving))
-            {
-                bytes.Add(bt);
-            }
-            string evtcVersion = System.Text.Encoding.UTF8.GetString(bytes.ToArray()).TrimEnd('\0');
-            var majorSplit = evtcVersion.Split('.');
-            Build = int.Parse(majorSplit[0]);
-            var minorSplit = majorSplit[1].Split('-');
-            Revision = int.Parse(minorSplit[0]);
+            bytes.PushNative(evtcItem.IsMoving);
+
+            string evtcVersion = System.Text.Encoding.UTF8.GetString(bytes).TrimEnd('\0');
+            var majorSplit = StringExt.SplitOnce(evtcVersion, '.');
+            Build = int.Parse(majorSplit.Tail);
+            var minorSplit = majorSplit.Head.SplitOnce('-');
+            Revision = int.Parse(minorSplit.Tail);
         }
         internal EvtcVersionEvent(int version)
         {

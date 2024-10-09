@@ -15,24 +15,13 @@ namespace GW2EIEvtcParser.ParsedData
 
         private readonly uint _markerIndex;
         internal bool EndNotSet => EndTime == int.MaxValue;
-        internal static Point3D ReadPosition(CombatItem evtcItem)
+        internal static unsafe Point3D ReadPosition(CombatItem evtcItem)
         {
-            var positionBytes = new byte[4 * sizeof(float)];
-            int offset = 0;
             // 8 
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.SrcAgent))
-            {
-                positionBytes[offset++] = bt;
-            }
+            var srcAgent = evtcItem.SrcAgent;
             // 8 
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.DstAgent))
-            {
-                positionBytes[offset++] = bt;
-            }
-            var positionFloat = new float[4];
-            Buffer.BlockCopy(positionBytes, 0, positionFloat, 0, positionBytes.Length);
-
-            return new Point3D(positionFloat[0], positionFloat[1], positionFloat[2]);
+            var dstAgent = evtcItem.DstAgent;
+            return new Point3D(*(float*)&srcAgent, *((float*)&srcAgent + 1), *(float*)&dstAgent);
         }
 
         internal SquadMarkerEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)

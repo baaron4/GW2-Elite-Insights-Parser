@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: NeutralResourcesLanguage("en")]
 
+[assembly: System.Runtime.Versioning.SupportedOSPlatform("windows")]
+
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 #if !DEBUG
 [assembly: AssemblyVersion("2.73.3.2")]
