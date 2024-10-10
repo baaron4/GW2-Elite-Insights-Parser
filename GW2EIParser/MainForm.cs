@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -392,6 +394,14 @@ namespace GW2EIParser
             }
         }
 
+
+        // This might not work on unix, but it also might. I also don't know how proton handles these, it would likely work.
+        [SupportedOSPlatform("windows")]
+        static void OpenFileWithDefaultApp(string path)
+        {
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        }
+
         private void DgvFilesCellContentClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -454,12 +464,12 @@ namespace GW2EIParser
                                 {
                                     if (File.Exists(path))
                                     {
-                                        System.Diagnostics.Process.Start(path);
+                                        OpenFileWithDefaultApp(path);
                                     }
                                 }
                                 if (operation.OpenableFiles.Count < operation.GeneratedFiles.Count && operation.OutLocation != null && Directory.Exists(operation.OutLocation))
                                 {
-                                    System.Diagnostics.Process.Start(operation.OutLocation);
+                                    OpenFileWithDefaultApp(operation.OutLocation);
                                 }
                                 break;
                         }
@@ -473,7 +483,7 @@ namespace GW2EIParser
                                 AddTraceMessage("UI: Opening folder where outputs have been generated");
                                 if (operation.OutLocation != null && Directory.Exists(operation.OutLocation))
                                 {
-                                    System.Diagnostics.Process.Start(operation.OutLocation);
+                                    OpenFileWithDefaultApp(operation.OutLocation);
                                 }
                                 break;
                         }
@@ -513,7 +523,7 @@ namespace GW2EIParser
                     {
                         if (File.Exists(operation.InputFile))
                         {
-                            System.Diagnostics.Process.Start(new FileInfo(operation.InputFile).DirectoryName);
+                            OpenFileWithDefaultApp(new FileInfo(operation.InputFile).DirectoryName);
                         }
                     }
                     break;
