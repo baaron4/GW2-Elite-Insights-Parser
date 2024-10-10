@@ -22,7 +22,7 @@ namespace GW2EIEvtcParser.Extensions
             _actor = actor;
         }
 
-        public override IReadOnlyList<EXTAbstractBarrierEvent> GetOutgoingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<EXTAbstractBarrierEvent> GetOutgoingBarrierEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.CombatData.HasEXTBarrier)
             {
@@ -30,14 +30,13 @@ namespace GW2EIEvtcParser.Extensions
             }
             if (BarrierEvents == null)
             {
-                BarrierEvents = new List<EXTAbstractBarrierEvent>();
-                BarrierEvents.AddRange(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
-                IReadOnlyDictionary<long, Minions> minionsList = _actor.GetMinions(log);
-                foreach (Minions mins in minionsList.Values)
+                BarrierEvents = new List<EXTAbstractBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
+                IReadOnlyDictionary<long, Minions> minions = _actor.GetMinions(log); //TODO(Rennorb) @perf: Find average complexity for reserving elements in barrier events
+                foreach (Minions minion in minions.Values)
                 {
-                    BarrierEvents.AddRange(mins.EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                    BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                BarrierEvents = BarrierEvents.OrderBy(x => x.Time).ToList();
+                BarrierEvents.SortByTime();
                 BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -54,7 +53,7 @@ namespace GW2EIEvtcParser.Extensions
             return BarrierEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<EXTAbstractBarrierEvent> GetIncomingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<EXTAbstractBarrierEvent> GetIncomingBarrierEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.CombatData.HasEXTBarrier)
             {
@@ -62,9 +61,8 @@ namespace GW2EIEvtcParser.Extensions
             }
             if (BarrierReceivedEvents == null)
             {
-                BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>();
-                BarrierReceivedEvents.AddRange(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
-                BarrierReceivedEvents = BarrierReceivedEvents.OrderBy(x => x.Time).ToList();
+                BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
+                BarrierReceivedEvents.SortByTime();
                 BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -119,7 +117,7 @@ namespace GW2EIEvtcParser.Extensions
             {
                 _barrier1S = new CachingCollectionWithTarget<int[]>(log);
             }
-            if (!_barrier1S.TryGetValue(start, end, target, out int[] graph))
+            if (!_barrier1S.TryGetValue(start, end, target, out int[]? graph))
             {
                 graph = ComputeBarrierGraph(GetOutgoingBarrierEvents(target, log, start, end), start, end);
                 //
@@ -133,7 +131,7 @@ namespace GW2EIEvtcParser.Extensions
             {
                 _barrierReceived1S = new CachingCollectionWithTarget<int[]>(log);
             }
-            if (!_barrierReceived1S.TryGetValue(start, end, target, out int[] graph))
+            if (!_barrierReceived1S.TryGetValue(start, end, target, out int[]? graph))
             {
                 graph = ComputeBarrierGraph(GetIncomingBarrierEvents(target, log, start, end), start, end);
                 //
@@ -148,7 +146,7 @@ namespace GW2EIEvtcParser.Extensions
             {
                 _outgoinBarrierStats = new CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat>(log);
             }
-            if (!_outgoinBarrierStats.TryGetValue(start, end, target, out EXTFinalOutgoingBarrierStat value))
+            if (!_outgoinBarrierStats.TryGetValue(start, end, target, out EXTFinalOutgoingBarrierStat? value))
             {
                 value = new EXTFinalOutgoingBarrierStat(log, start, end, _actor, target);
                 _outgoinBarrierStats.Set(start, end, target, value);
@@ -162,7 +160,7 @@ namespace GW2EIEvtcParser.Extensions
             {
                 _incomingBarrierStats = new CachingCollectionWithTarget<EXTFinalIncomingBarrierStat>(log);
             }
-            if (!_incomingBarrierStats.TryGetValue(start, end, target, out EXTFinalIncomingBarrierStat value))
+            if (!_incomingBarrierStats.TryGetValue(start, end, target, out EXTFinalIncomingBarrierStat? value))
             {
                 value = new EXTFinalIncomingBarrierStat(log, start, end, _actor, target);
                 _incomingBarrierStats.Set(start, end, target, value);

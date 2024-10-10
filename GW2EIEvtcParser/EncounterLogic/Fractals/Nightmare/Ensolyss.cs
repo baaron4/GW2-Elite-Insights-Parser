@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
 
                     // Arkk's Shield
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out var shieldEffects))
                     {
                         foreach (EffectEvent shieldEffect in shieldEffects)
                         {
@@ -187,7 +187,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // 100% to 66% Doughnut
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut100_66, out IReadOnlyList<EffectEvent> miasmaEffects))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut100_66, out var miasmaEffects))
                     {
                         EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
                         if (miasmaEffect != null)
@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var shockwave = (CircleDecoration)new CircleDecoration(1200, lifespanShockwave, Colors.Yellow, 0.4, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespanShockwave.end, true);
                         replay.Decorations.Add(shockwave);
                         // 8 Arrows
-                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EnsolyssArrow, out IReadOnlyList<EffectEvent> arrows))
+                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.EnsolyssArrow, out var arrows))
                         {
                             foreach (EffectEvent effect in arrows.Where(x => x.Time >= c.Time && x.Time < c.Time + visualDuration))
                             {
@@ -439,7 +439,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Nightmare Altar Orb AoE 1
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarOrangeAoE, out IReadOnlyList<EffectEvent> indicators1))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarOrangeAoE, out var indicators1))
             {
                 foreach (EffectEvent effect in indicators1)
                 {
@@ -449,7 +449,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Nightmare Altar Orb AoE 2
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarLightOrangeAoE, out IReadOnlyList<EffectEvent> indicators2))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarLightOrangeAoE, out var indicators2))
             {
                 foreach (EffectEvent effect in indicators2)
                 {
@@ -459,7 +459,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Altar Shockwave
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarShockwave, out IReadOnlyList<EffectEvent> waveEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssNightmareAltarShockwave, out var waveEffects))
             {
                 foreach (EffectEvent effect in waveEffects)
                 {

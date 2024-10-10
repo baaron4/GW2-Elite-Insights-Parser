@@ -427,7 +427,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(p, log, replay);
 
             // Crushing Regret (Green)
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.TempleOfFebeCerusGreen, out IReadOnlyList<EffectEvent> crushingRegrets))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.TempleOfFebeCerusGreen, out var crushingRegrets))
             {
                 foreach (EffectEvent effect in crushingRegrets)
                 {
@@ -447,7 +447,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Wail of Despair - Spread AoE on player
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.TempleOfFebeWailOfDespair, out IReadOnlyList<EffectEvent> wailsOfDespair))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.TempleOfFebeWailOfDespair, out var wailsOfDespair))
             {
                 foreach (EffectEvent effect in wailsOfDespair)
                 {
@@ -460,7 +460,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Wail of Despair - Empowered - Spread AoE on player
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.TempleOfFebeWailOfDespairEmpowered, out IReadOnlyList<EffectEvent> wailsOfDespairEmpowered))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.TempleOfFebeWailOfDespairEmpowered, out var wailsOfDespairEmpowered))
             {
                 foreach (EffectEvent effect in wailsOfDespairEmpowered)
                 {
@@ -485,7 +485,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
             foreach ((string GUID, Color Color) in crushingRegretEnds)
             {
-                if (log.CombatData.TryGetEffectEventsByGUID(GUID, out IReadOnlyList<EffectEvent> crushingRegrets))
+                if (log.CombatData.TryGetEffectEventsByGUID(GUID, out var crushingRegrets))
                 {
                     foreach (EffectEvent effect in crushingRegrets)
                     {
@@ -505,7 +505,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Pool of Despair - Spread AoE on ground
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebePoolOfDespair, out IReadOnlyList<EffectEvent> poolOfDespair))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebePoolOfDespair, out var poolOfDespair))
             {
                 foreach (EffectEvent effect in poolOfDespair)
                 {
@@ -518,7 +518,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Pool of Despair - Empowered - Spread AoE on ground
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebePoolOfDespairEmpowered, out IReadOnlyList<EffectEvent> poolOfDespairEmpowered))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebePoolOfDespairEmpowered, out var poolOfDespairEmpowered))
             {
                 foreach (EffectEvent effect in poolOfDespairEmpowered)
                 {
@@ -606,7 +606,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var maliciousIntent = casts.Where(x => x.SkillId == MaliciousIntentNM || x.SkillId == MaliciousIntentEmpoweredNM || x.SkillId == MaliciousIntentCM || x.SkillId == MaliciousIntentEmpoweredCM).ToList();
             foreach (AbstractCastEvent cast in maliciousIntent)
             {
-                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebeMaliciousIntentTether, out IReadOnlyList<EffectEvent> maliciousIntentTethers))
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebeMaliciousIntentTether, out var maliciousIntentTethers))
                 {
                     // This will only conflict if the embodiment and cerus cast the skill at the same time
                     foreach (EffectEvent effect in maliciousIntentTethers.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 2000))

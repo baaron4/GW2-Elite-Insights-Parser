@@ -19,6 +19,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
 using GW2EIParserCommons.Exceptions;
 using GW2EIWingman;
+using Tracing;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons
@@ -411,6 +412,7 @@ namespace GW2EIParserCommons
 
         private void GenerateFiles(ParsedEvtcLog log, OperationController operation, string[] uploadStrings, FileInfo fInfo)
         {
+            using var _t = new AutoTrace("Generate files");
             operation.UpdateProgressWithCancellationCheck("Program: Creating File(s)");
 
             DirectoryInfo saveDirectory = GetSaveDirectory(fInfo);
@@ -425,11 +427,9 @@ namespace GW2EIParserCommons
             operation.OutLocation = saveDirectory.FullName;
             if (Settings.SaveOutHTML)
             {
+                using var _t1 = new AutoTrace("Generate HTML");
                 operation.UpdateProgressWithCancellationCheck("Program: Creating HTML");
-                string outputFile = Path.Combine(
-                saveDirectory.FullName,
-                $"{fName}.html"
-                );
+                string outputFile = Path.Combine(saveDirectory.FullName, $"{fName}.html");
                 operation.AddOpenableFile(outputFile);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs))
@@ -448,6 +448,7 @@ namespace GW2EIParserCommons
             }
             if (Settings.SaveOutCSV)
             {
+                using var _t1 = new AutoTrace("Generate CSV");
                 operation.UpdateProgressWithCancellationCheck("Program: Creating CSV");
                 string outputFile = Path.Combine(
                     saveDirectory.FullName,
@@ -467,6 +468,7 @@ namespace GW2EIParserCommons
                 var builder = new RawFormatBuilder(log, new RawFormatSettings(Settings.RawTimelineArrays), ParserVersion, uploadResults);
                 if (Settings.SaveOutJSON)
                 {
+                    using var _t1 = new AutoTrace("Generate JSON");
                     operation.UpdateProgressWithCancellationCheck("Program: Creating JSON");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,
@@ -498,6 +500,7 @@ namespace GW2EIParserCommons
                 }
                 if (Settings.SaveOutXML)
                 {
+                    using var _t1 = new AutoTrace("Generate XML");
                     operation.UpdateProgressWithCancellationCheck("Program: Creating XML");
                     string outputFile = Path.Combine(
                         saveDirectory.FullName,

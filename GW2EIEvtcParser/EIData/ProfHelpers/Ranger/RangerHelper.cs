@@ -358,7 +358,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Ranger;
 
             // Siege Turtle Hunker Down
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerHunkerDown, out IReadOnlyList<EffectEvent> hunkerDowns))
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.RangerHunkerDown, out var hunkerDowns))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, HunkerDownPetTurtle, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in hunkerDowns)
@@ -368,7 +368,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Barrage
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBarrage1, out IReadOnlyList<EffectEvent> barrages))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBarrage1, out var barrages))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Barrage, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in barrages)
@@ -378,7 +378,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Bonfire
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBonfire, out IReadOnlyList<EffectEvent> bonfires))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerBonfire, out var bonfires))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, Bonfire, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in bonfires)
@@ -388,7 +388,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Healing Spring - Inactive
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerHealingSpringInactive2, out IReadOnlyList<EffectEvent> healingSpringsInactive))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerHealingSpringInactive2, out var healingSpringsInactive))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in healingSpringsInactive)
@@ -401,7 +401,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Healing Spring - Active
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerHealingSpringActive, out IReadOnlyList<EffectEvent> healingSpringsActive))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerHealingSpringActive, out var healingSpringsActive))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring, SkillModeCategory.Cleanse | SkillModeCategory.Heal);
                 foreach (EffectEvent effect in healingSpringsActive)
@@ -412,7 +412,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Frost Trap
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFrostTrap, out IReadOnlyList<EffectEvent> frostTraps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFrostTrap, out var frostTraps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FrostTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in frostTraps)
@@ -422,7 +422,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Flame Trap
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFlameTrap, out IReadOnlyList<EffectEvent> flameTraps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerFlameTrap, out var flameTraps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, FlameTrap, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in flameTraps)
@@ -432,7 +432,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Viper's Nest
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerVipersNest, out IReadOnlyList<EffectEvent> vipersNests))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerVipersNest, out var vipersNests))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, VipersNest, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in vipersNests)
@@ -442,7 +442,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Spike Trap
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerSpikeTrap, out IReadOnlyList<EffectEvent> spikeTraps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RangerSpikeTrap, out var spikeTraps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, SpikeTrap, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC);
                 foreach (EffectEvent effect in spikeTraps)
@@ -452,10 +452,10 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Sublime Conversion
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion2, out IReadOnlyList<EffectEvent> sublimeConversions2))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion2, out var sublimeConversions2))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Ranger, SublimeConversion, SkillModeCategory.ProjectileManagement);
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion1, out IReadOnlyList<EffectEvent> sublimeConversions1))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DruidSublimeConversion1, out var sublimeConversions1))
                 {
                     foreach (EffectEvent effect in sublimeConversions1)
                     {

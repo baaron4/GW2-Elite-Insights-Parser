@@ -218,15 +218,15 @@ namespace GW2EIEvtcParser.EIData
         public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData, AgentData agentData)
         {
             var allTablets = new HashSet<AgentItem>();
-            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletAutoHeal, out IReadOnlyList<EffectEvent> tabletHealEffectEvents))
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletAutoHeal, out var tabletHealEffectEvents))
             {
                 allTablets.UnionWith(tabletHealEffectEvents.Select(x => x.Src));
             }
-            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletVentarisWill, out IReadOnlyList<EffectEvent> ventarisWillEffectEvents))
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantTabletVentarisWill, out var ventarisWillEffectEvents))
             {
                 allTablets.UnionWith(ventarisWillEffectEvents.Where(x => x.IsAroundDst).Select(x => x.Dst));
             }
-            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))
+            if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.RevenantProtectiveSolace, out var protectiveSolaceEffectEvents))
             {
                 allTablets.UnionWith(protectiveSolaceEffectEvents.Where(x => x.IsAroundDst).Select(x => x.Dst));
             }
@@ -248,7 +248,7 @@ namespace GW2EIEvtcParser.EIData
 
             // Inspiring Reinforcement
             var inspiringReinforcementSkill = new SkillModeDescriptor(player, Spec.Revenant, InspiringReinforcement, SkillModeCategory.ImportantBuffs);
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart, out IReadOnlyList<EffectEvent> inspiringReinforcementParts))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcementPart, out var inspiringReinforcementParts))
             {
 
                 foreach (EffectEvent effect in inspiringReinforcementParts)
@@ -259,7 +259,7 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new RectangleDecoration(240, 360, lifespan, Colors.DarkTeal.WithAlpha(0.1f).ToString(), connector).UsingRotationConnector(rotationConnector).UsingSkillMode(inspiringReinforcementSkill));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement, out IReadOnlyList<EffectEvent> inspiringReinforcements))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantInspiringReinforcement, out var inspiringReinforcements))
             {
                 foreach (EffectEvent effect in inspiringReinforcements)
                 {
@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Protective Solace
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantProtectiveSolace, out IReadOnlyList<EffectEvent> protectiveSolaceEffectEvents))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantProtectiveSolace, out var protectiveSolaceEffectEvents))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, ProtectiveSolaceSkill, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in protectiveSolaceEffectEvents.Where(x => x.IsAroundDst))
@@ -292,10 +292,10 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Eternity's Requiem
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantEternitysRequiemOnPlayer, out IReadOnlyList<EffectEvent> eternitysRequiem))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantEternitysRequiemOnPlayer, out var eternitysRequiem))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, EternitysRequiem);
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantEternitysRequiemHit, out IReadOnlyList<EffectEvent> eternitysRequiemHits))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantEternitysRequiemHit, out var eternitysRequiemHits))
                 {
                     foreach (EffectEvent effect in eternitysRequiem)
                     {
@@ -319,7 +319,7 @@ namespace GW2EIEvtcParser.EIData
 
             // Coalescence of Ruin
             if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem,
-                new string[] { EffectGUIDs.RevenantCoalescenceOfRuin, EffectGUIDs.RevenantCoalescenceOfRuinLast }, out IReadOnlyList<EffectEvent> coalescenceOfRuin))
+                new string[] { EffectGUIDs.RevenantCoalescenceOfRuin, EffectGUIDs.RevenantCoalescenceOfRuinLast }, out var coalescenceOfRuin))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, CoalescenceOfRuin);
                 foreach (EffectEvent effect in coalescenceOfRuin)
@@ -333,7 +333,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Drop the Hammer
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantDropTheHammer, out IReadOnlyList<EffectEvent> dropTheHammer))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantDropTheHammer, out var dropTheHammer))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, DropTheHammer, SkillModeCategory.CC);
                 foreach (EffectEvent effect in dropTheHammer)
@@ -344,7 +344,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Abyssal Blitz (Mines)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearBlitzMines2, out IReadOnlyList<EffectEvent> abyssalBlitzMines))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearBlitzMines2, out var abyssalBlitzMines))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, BlitzMines, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in abyssalBlitzMines)
@@ -355,7 +355,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Abyssal Blot
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalBlot, out IReadOnlyList<EffectEvent> abyssalBlots))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalBlot, out var abyssalBlots))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, AbyssalBlot, SkillModeCategory.CC);
                 foreach (EffectEvent effect in abyssalBlots)
@@ -366,7 +366,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Abyssal Raze
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRaze, out IReadOnlyList<EffectEvent> abyssalRazes))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRaze, out var abyssalRazes))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, AbyssalRaze, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in abyssalRazes)
@@ -379,7 +379,7 @@ namespace GW2EIEvtcParser.EIData
                     replay.AddDecorationWithGrowing(circle, lifespanWarning.end);
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanWarning, connector).UsingSkillMode(skill));
                     // Hit indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRazeHit, out IReadOnlyList<EffectEvent> abyssalRazeHits))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRazeHit, out var abyssalRazeHits))
                     {
                         EffectEvent hit = abyssalRazeHits.FirstOrDefault(x => x.Time > effect.Time && x.Time < effect.Time + 1000);
                         if (hit != null)

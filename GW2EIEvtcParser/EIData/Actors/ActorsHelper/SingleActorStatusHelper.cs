@@ -37,7 +37,7 @@ namespace GW2EIEvtcParser.EIData
                 _deads = new List<Segment>();
                 _downs = new List<Segment>();
                 _dcs = new List<Segment>();
-                AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData, log.FightData);
+                AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData);
             }
             return (_deads, _downs, _dcs);
         }
@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.EIData
                 _breakbarActives = new List<Segment>();
                 _breakbarImmunes = new List<Segment>();
                 _breakbarRecoverings = new List<Segment>();
-                AgentItem.GetAgentBreakbarStatus(_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings, log.CombatData, log.FightData);
+                AgentItem.GetAgentBreakbarStatus(_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings, log.CombatData);
             }
             return (_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings);
         }
@@ -189,10 +189,10 @@ namespace GW2EIEvtcParser.EIData
         }
         private void SetDeathRecaps(ParsedEvtcLog log)
         {
-            _deathRecaps = new List<DeathRecap>();
             IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
             IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
             IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
+            _deathRecaps = new List<DeathRecap>(deads.Count);
             long lastDeathTime = 0;
             IReadOnlyList<AbstractHealthDamageEvent> damageLogs = Actor.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (DeadEvent dead in deads)

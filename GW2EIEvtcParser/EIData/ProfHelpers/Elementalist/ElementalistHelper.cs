@@ -302,7 +302,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Elementalist;
 
             // Meteor Shower - Outer circle
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerCircle, out IReadOnlyList<EffectEvent> meteorShowerCircles))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerCircle, out var meteorShowerCircles))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, MeteorShower);
                 foreach (EffectEvent effect in meteorShowerCircles)
@@ -311,7 +311,7 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectMeteorShower);
                 }
                 // The meteors
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerMeteor, out IReadOnlyList<EffectEvent> meteorShowersMeteors))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerMeteor, out var meteorShowersMeteors))
                 {
                     foreach (EffectEvent effect in meteorShowersMeteors)
                     {
@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Static Field (Staff)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldStaff, out IReadOnlyList<EffectEvent> staticFieldsStaff))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldStaff, out var staticFieldsStaff))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldStaff, SkillModeCategory.CC);
                 foreach (EffectEvent effect in staticFieldsStaff)
@@ -336,7 +336,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Static Field (Lightning Hammer)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldLightningHammer, out IReadOnlyList<EffectEvent> staticFieldsHammer))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistStaticFieldLightningHammer, out var staticFieldsHammer))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, StaticFieldLightingHammer, SkillModeCategory.CC);
                 foreach (EffectEvent effect in staticFieldsHammer)
@@ -347,7 +347,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Updraft
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out IReadOnlyList<EffectEvent> updrafts))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUpdraft2, out var updrafts))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, Updraft, SkillModeCategory.CC);
                 foreach (EffectEvent effect in updrafts)
@@ -361,7 +361,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Firestorm
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFirestorm, out IReadOnlyList<EffectEvent> firestorms))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFirestorm, out var firestorms))
             {
                 var firestormCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == FirestormGlyphOfStorms || x.SkillId == FirestormFieryGreatsword).ToList();
                 foreach (EffectEvent effect in firestorms)
@@ -385,9 +385,9 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Geyser
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyser, out IReadOnlyList<EffectEvent> geysers))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyser, out var geysers))
             {
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyserSplash, out IReadOnlyList<EffectEvent> geyserSplash))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistGeyserSplash, out var geyserSplash))
                 {
                     var skill = new SkillModeDescriptor(player, Spec.Elementalist, GeyserStaffElementalist, SkillModeCategory.Heal);
                     foreach (EffectEvent effect in geysers)
@@ -403,7 +403,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Meteor
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteor, out IReadOnlyList<EffectEvent> meteors))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteor, out var meteors))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, Meteor, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in meteors)
@@ -422,13 +422,13 @@ namespace GW2EIEvtcParser.EIData
                 EffectGUIDs.ElementalistEtchingVolcanoTier3,
                 EffectGUIDs.ElementalistEtchingVolcanoPerfect,
             };
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingVolcanoEffects, out IReadOnlyList<EffectEvent> etchingVolcano))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingVolcanoEffects, out var etchingVolcano))
             {
                 AddEtchingDecorations(log, player, replay, color, etchingVolcano, EtchingVolcano, ParserIcons.EffectEtchingVolcano);
             }
 
             // Lesser Volcano
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistLesserVolcano, out IReadOnlyList<EffectEvent> lesserVolcano))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistLesserVolcano, out var lesserVolcano))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, LesserVolcano, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in lesserVolcano)
@@ -441,7 +441,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Volcano
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcano, out IReadOnlyList<EffectEvent> volcano))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcano, out var volcano))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, Volcano, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in volcano)
@@ -454,7 +454,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Undertow
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUndertow, out IReadOnlyList<EffectEvent> undertows))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistUndertow, out var undertows))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, Undertow, SkillModeCategory.CC);
                 foreach (EffectEvent effect in undertows)
@@ -473,13 +473,13 @@ namespace GW2EIEvtcParser.EIData
                 EffectGUIDs.ElementalistEtchingJokulhlaupTier3,
                 EffectGUIDs.ElementalistEtchingJokulhlaupPerfect,
             };
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingJokulhlaupEffects, out IReadOnlyList<EffectEvent> etchingJokulhlaup))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingJokulhlaupEffects, out var etchingJokulhlaup))
             {
                 AddEtchingDecorations(log, player, replay, color, etchingJokulhlaup, EtchingJokulhlaup, ParserIcons.EffectEtchingJokulhlaup);
             }
 
             // Fulgor
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFulgor, out IReadOnlyList<EffectEvent> fulgors))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFulgor, out var fulgors))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, FulgorSkill, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in fulgors)
@@ -490,7 +490,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Twister
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistTwister, out IReadOnlyList<EffectEvent> twisters))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistTwister, out var twisters))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, Twister, SkillModeCategory.CC);
                 foreach (EffectEvent effect in twisters)
@@ -509,13 +509,13 @@ namespace GW2EIEvtcParser.EIData
                 EffectGUIDs.ElementalistEtchingDerechoTier3,
                 EffectGUIDs.ElementalistEtchingDerechoPerfect,
             };
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingDerechoEffects, out IReadOnlyList<EffectEvent> etchingDerecho))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingDerechoEffects, out var etchingDerecho))
             {
                 AddEtchingDecorations(log, player, replay, color, etchingDerecho, EtchingDerecho, ParserIcons.EffectEtchingDerecho);
             }
 
             // Fissure
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFissure, out IReadOnlyList<EffectEvent> fissures))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFissure, out var fissures))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Elementalist, Fissure, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in fissures)
@@ -534,7 +534,7 @@ namespace GW2EIEvtcParser.EIData
                 EffectGUIDs.ElementalistEtchingHaboobTier3,
                 EffectGUIDs.ElementalistEtchingHaboobPerfect,
             };
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingHaboobEffects, out IReadOnlyList<EffectEvent> etchingHaboob))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingHaboobEffects, out var etchingHaboob))
             {
                 AddEtchingDecorations(log, player, replay, color, etchingHaboob, EtchingHaboob, ParserIcons.EffectEtchingHaboob);
             }
@@ -552,7 +552,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="volcanoDuraiton">The Volcano effect duration.</param>
         private static void AddVolcanoProjectileHitDecorations(ParsedEvtcLog log, AbstractPlayer player, CombatReplay replay, SkillModeDescriptor skill, Color color, long volcanoStartTime, long volcanoDuraiton)
         {
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcanoHits, out IReadOnlyList<EffectEvent> volcanoHits))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcanoHits, out var volcanoHits))
             {
                 foreach (EffectEvent hitEffect in volcanoHits.Where(x => x.Time > volcanoStartTime && x.Time < volcanoStartTime + volcanoDuraiton))
                 {

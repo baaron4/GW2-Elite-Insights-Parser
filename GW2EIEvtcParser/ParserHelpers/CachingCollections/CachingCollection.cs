@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GW2EIEvtcParser
 {
     public class CachingCollection<T> : AbstractCachingCollection<T>
     {
 
-        private readonly Dictionary<long, Dictionary<long, T>> _cache = new Dictionary<long, Dictionary<long, T>>();
+        private readonly Dictionary<long, Dictionary<long, T>> _cache = new();
         public CachingCollection(ParsedEvtcLog log) : base(log)
         {
         }
 
-        public bool TryGetValue(long start, long end, out T value)
+        public bool TryGetValue(long start, long end, [NotNullWhen(true)] out T? value)
         {
             (start, end) = SanitizeTimes(start, end);
             if (_cache.TryGetValue(start, out Dictionary<long, T> subCache))
             {
-                if (subCache.TryGetValue(end, out value))
+                if (subCache.TryGetValue(end, out value!))
                 {
                     return true;
                 }
@@ -41,9 +42,9 @@ namespace GW2EIEvtcParser
             return TryGetValue(start, end, out _);
         }
 
-        public T Get(long start, long end)
+        public T? Get(long start, long end)
         {
-            if (TryGetValue(start, end, out T value))
+            if (TryGetValue(start, end, out T? value))
             {
                 return value;
             }

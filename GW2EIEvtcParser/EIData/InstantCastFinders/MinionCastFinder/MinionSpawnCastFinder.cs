@@ -20,19 +20,23 @@ namespace GW2EIEvtcParser.EIData
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
-            var result = new List<InstantCastEvent>();
-            var minions = new List<AgentItem>();
+            //TODO(Rennorb) @perf <ComputeInstanceCast result>
+            var result = new List<InstantCastEvent>(10);
+            //TODO(Rennorb) @perf <ComputeInstanceCast minions>
+            var minions = new List<AgentItem>(10);
             foreach (int id in SpeciesIDs)
             {
-                minions.AddRange(agentData.GetNPCsByID(id));
+                minions.AddRange(agentData.GetNPCsByID(id).Where(m => m.Master != null));
             }
-            minions = minions.Where(x => x.Master != null).OrderBy(x => x.FirstAware).ToList();
-            foreach (KeyValuePair<AgentItem, List<AgentItem>> pair in minions.GroupBy(x => x.GetFinalMaster()).ToDictionary(x => x.Key, x => x.ToList()))
+            Tracing.Trace.TrackAverageStat("minions", minions.Count);
+            minions.Sort((a, b) => (int)(a.FirstAware - b.FirstAware));
+
+            foreach (var minionsByMaster in minions.GroupBy(x => x.GetFinalMaster()))
             {
                 long lastTime = int.MinValue;
-                foreach (AgentItem agent in pair.Value)
+                foreach (AgentItem minion in minionsByMaster)
                 {
-                    foreach (SpawnEvent spawn in combatData.GetSpawnEvents(agent))
+                    foreach (SpawnEvent spawn in combatData.GetSpawnEvents(minion))
                     {
                         if (CheckCondition(spawn, combatData, agentData, skillData))
                         {
@@ -42,12 +46,13 @@ namespace GW2EIEvtcParser.EIData
                                 continue;
                             }
                             lastTime = spawn.Time;
-                            result.Add(new InstantCastEvent(spawn.Time, skillData.Get(SkillID), pair.Key));
+                            result.Add(new InstantCastEvent(spawn.Time, skillData.Get(SkillID), minionsByMaster.Key));
                         }
                     }
                 }
             }
 
+            Tracing.Trace.TrackAverageStat("result", result.Count);
             return result;
         }
     }

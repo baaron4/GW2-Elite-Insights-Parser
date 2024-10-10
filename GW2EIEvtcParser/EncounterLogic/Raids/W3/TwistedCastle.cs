@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityMildlyInsane).Any())
                 {
-                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
+                    InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityMildlyInsane));
                 }
                 else if (CustomCheckMildlyInsaneEligibility(log))
                 {

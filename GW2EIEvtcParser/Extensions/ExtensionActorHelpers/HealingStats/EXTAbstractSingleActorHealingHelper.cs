@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -12,10 +13,10 @@ namespace GW2EIEvtcParser.Extensions
         private AbstractSingleActor _actor { get; }
         private AgentItem _agentItem => _actor.AgentItem;
 
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedSelfHealEvents = new Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedSelfHealEvents = new();
 
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healing1S = new Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>();
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healingReceived1S = new Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healing1S = new();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healingReceived1S = new();
 
         private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat> _outgoingHealStats { get; set; }
         private CachingCollectionWithTarget<EXTFinalIncomingHealingStat> _incomingHealStats { get; set; }
@@ -25,64 +26,139 @@ namespace GW2EIEvtcParser.Extensions
             _actor = actor;
         }
 
-        public override IReadOnlyList<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override List<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.CombatData.HasEXTHealing)
             {
                 throw new InvalidOperationException("Healing Stats extension not present");
             }
+
             if (HealEvents == null)
             {
-                HealEvents = new List<EXTAbstractHealingEvent>();
-                HealEvents.AddRange(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
-                IReadOnlyDictionary<long, Minions> minionsList = _actor.GetMinions(log);
-                foreach (Minions mins in minionsList.Values)
+                HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
+                foreach (var minion in _actor.GetMinions(log).Values)
                 {
-                    HealEvents.AddRange(mins.EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
+                    HealEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                HealEvents = HealEvents.OrderBy(x => x.Time).ToList();
+                HealEvents.SortByTime();
                 HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
-                if (HealEventsByDst.TryGetValue(target.AgentItem, out List<EXTAbstractHealingEvent> list))
+                if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
                 else
                 {
-                    return new List<EXTAbstractHealingEvent>();
+                    return [ ];
                 }
             }
+
             return HealEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public override IReadOnlyList<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        /// <param name="healEventsList">Append to this list</param>
+        /// <exception cref="InvalidOperationException">Heal Stats ext missing</exception>
+        public void AppendOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, List<EXTAbstractHealingEvent> healEventsList)
         {
             if (!log.CombatData.HasEXTHealing)
             {
                 throw new InvalidOperationException("Healing Stats extension not present");
             }
-            if (HealReceivedEvents == null)
+
+            if (this.HealEvents == null)
             {
-                HealReceivedEvents = new List<EXTAbstractHealingEvent>();
-                HealReceivedEvents.AddRange(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_agentItem).Where(x => x.ToFriendly));
-                HealReceivedEvents = HealReceivedEvents.OrderBy(x => x.Time).ToList();
-                HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+                this.HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
+                foreach (var minion in _actor.GetMinions(log).Values)
+                {
+                    minion.EXTHealing.AppendOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd, this.HealEvents);
+                }
+                this.HealEvents.SortByTime();
+                this.HealEventsByDst = this.HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
-                if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out List<EXTAbstractHealingEvent> list))
+                if (this.HealEventsByDst.TryGetValue(target.AgentItem, out var list))
+                {
+                    healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
+                }
+
+                return;
+            }
+
+            healEventsList.AddRange(this.HealEvents.Where(x => x.Time >= start && x.Time <= end));
+
+            return;
+        }
+
+        public override List<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        {
+            if (!log.CombatData.HasEXTHealing)
+            {
+                throw new InvalidOperationException("Healing Stats extension not present");
+            }
+            
+            if (HealReceivedEvents == null)
+            {
+                InitIncomingHealEvents(log);
+            }
+
+            if (target != null)
+            {
+                if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
                     return list.Where(x => x.Time >= start && x.Time <= end).ToList();
                 }
                 else
                 {
-                    return new List<EXTAbstractHealingEvent>();
+                    return [ ];
                 }
             }
             return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
+
+        /// <param name="healEventsList">Append to this list</param>
+        /// <exception cref="InvalidOperationException">Heal Stats ext missing</exception>
+        public void AppendIncomingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, List<EXTAbstractHealingEvent> healEventsList)
+        {
+            if (!log.CombatData.HasEXTHealing)
+            {
+                throw new InvalidOperationException("Healing Stats extension not present");
+            }
+            
+            if (HealReceivedEvents == null)
+            {
+                InitIncomingHealEvents(log);
+            }
+
+            if (target != null)
+            {
+                if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
+                {
+                    healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
+                }
+
+                return;
+            }
+
+            healEventsList.AddRange(HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end));
+
+            return;
+        }
+
+
+        [MemberNotNull(nameof(HealReceivedEvents))]
+        [MemberNotNull(nameof(HealReceivedEventsBySrc))]
+        public void InitIncomingHealEvents(ParsedEvtcLog log)
+        {
+            HealReceivedEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_agentItem).Where(x => x.ToFriendly));
+            HealReceivedEvents.SortByTime();
+            HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+        }
+
 
         public IReadOnlyList<EXTAbstractHealingEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {

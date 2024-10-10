@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -12,6 +13,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using GW2EIGW2API;
+using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
 
 [assembly: CLSCompliant(false)]
@@ -61,7 +63,7 @@ namespace GW2EIEvtcParser
         /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading.</param>
         /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
         /// <exception cref="EvtcFileException"></exception>
-        public ParsedEvtcLog ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
+        public ParsedEvtcLog? ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
             try
@@ -74,32 +76,25 @@ namespace GW2EIEvtcParser
                 {
                     throw new EvtcFileException("Not EVTC");
                 }
-                ParsedEvtcLog evtcLog;
-                using (var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                ParsedEvtcLog? evtcLog;
+                using var fs = new FileStream(evtc.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                if (SupportedFileFormats.IsCompressedFormat(evtc.Name))
                 {
-                    if (SupportedFileFormats.IsCompressedFormat(evtc.Name))
+                    using var arch = new ZipArchive(fs, ZipArchiveMode.Read);
+                    if (arch.Entries.Count != 1)
                     {
-                        using (var arch = new ZipArchive(fs, ZipArchiveMode.Read))
-                        {
-                            if (arch.Entries.Count != 1)
-                            {
-                                throw new EvtcFileException("Invalid Archive");
-                            }
-                            using (Stream data = arch.Entries[0].Open())
-                            {
-                                using (var ms = new MemoryStream())
-                                {
-                                    data.CopyTo(ms);
-                                    ms.Position = 0;
-                                    evtcLog = ParseLog(operation, ms, out parsingFailureReason, multiThreadAccelerationForBuffs);
-                                };
-                            }
-                        }
+                        throw new EvtcFileException("Invalid Archive");
                     }
-                    else
-                    {
-                        evtcLog = ParseLog(operation, fs, out parsingFailureReason, multiThreadAccelerationForBuffs);
-                    }
+
+                    using Stream data = arch.Entries[0].Open();
+                    using var ms = new MemoryStream();
+                    data.CopyTo(ms);
+                    ms.Position = 0;
+                    evtcLog = ParseLog(operation, ms, out parsingFailureReason, multiThreadAccelerationForBuffs);
+                }
+                else
+                {
+                    evtcLog = ParseLog(operation, fs, out parsingFailureReason, multiThreadAccelerationForBuffs);
                 }
                 return evtcLog;
             }
@@ -119,7 +114,7 @@ namespace GW2EIEvtcParser
         /// <param name="parsingFailureReason">The reason why the parsing failed, if applicable.</param>
         /// <param name="multiThreadAccelerationForBuffs">Will preprocess buff simulation using multi threading.</param>
         /// <returns>The <see cref="ParsedEvtcLog"/> log.</returns>
-        public ParsedEvtcLog ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
+        public ParsedEvtcLog? ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
             try
@@ -144,25 +139,35 @@ namespace GW2EIEvtcParser
                     //
                     if (multiThreadAccelerationForBuffs)
                     {
+                        using var _t = new AutoTrace("Buffs?");
+
                         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                         operation.UpdateProgressWithCancellationCheck("Parsing: Multi threading");
-                        var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies);
+                        
+                        var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies.Count + log.FightData.Logic.Targets.Count);
+                        friendliesAndTargets.AddRange(log.Friendlies);
                         friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
+
                         var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
                         friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
+                        
+                        _t.Log("Paralell phases");
                         foreach (AbstractSingleActor actor in friendliesAndTargetsAndMobs)
                         {
                             // that part can't be // due to buff extensions
                             actor.GetTrackedBuffs(log);
                             actor.GetMinions(log);
                         }
+                        _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
                         Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
+                        _t.Log("friendliesAndTargets GetStatus");
                         /*if (log.CombatData.HasMovementData)
                         {
                             // init all positions
                             Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
                         }*/
                         Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
+                        _t.Log("friendliesAndTargetsAndMobs GetBuffGraphs");
                         Parallel.ForEach(friendliesAndTargets, actor =>
                         {
                             foreach (PhaseData phase in phases)
@@ -170,6 +175,7 @@ namespace GW2EIEvtcParser
                                 actor.GetBuffDistribution(log, phase.Start, phase.End);
                             }
                         });
+                        _t.Log("friendliesAndTargets GetBuffDistribution");
                         Parallel.ForEach(friendliesAndTargets, actor =>
                         {
                             foreach (PhaseData phase in phases)
@@ -177,6 +183,7 @@ namespace GW2EIEvtcParser
                                 actor.GetBuffPresence(log, phase.Start, phase.End);
                             }
                         });
+                        _t.Log("friendliesAndTargets GetBuffPresence");
                         //
                         //Parallel.ForEach(log.PlayerList, player => player.GetDamageModifierStats(log, null));
                         Parallel.ForEach(log.Friendlies, actor =>
@@ -186,6 +193,7 @@ namespace GW2EIEvtcParser
                                 actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                             }
                         });
+                        _t.Log("Friendlies GetBuffs Self");
                         Parallel.ForEach(log.PlayerList, actor =>
                         {
                             foreach (PhaseData phase in phases)
@@ -193,6 +201,7 @@ namespace GW2EIEvtcParser
                                 actor.GetBuffs(BuffEnum.Group, log, phase.Start, phase.End);
                             }
                         });
+                        _t.Log("PlayerList GetBuffs Group");
                         Parallel.ForEach(log.PlayerList, actor =>
                         {
                             foreach (PhaseData phase in phases)
@@ -200,6 +209,7 @@ namespace GW2EIEvtcParser
                                 actor.GetBuffs(BuffEnum.OffGroup, log, phase.Start, phase.End);
                             }
                         });
+                        _t.Log("PlayerList GetBuffs OffGroup");
                         Parallel.ForEach(log.PlayerList, actor =>
                         {
                             foreach (PhaseData phase in phases)
@@ -207,6 +217,7 @@ namespace GW2EIEvtcParser
                                 actor.GetBuffs(BuffEnum.Squad, log, phase.Start, phase.End);
                             }
                         });
+                        _t.Log("PlayerList GetBuffs Squad");
                         Parallel.ForEach(log.FightData.Logic.Targets, actor =>
                         {
                             foreach (PhaseData phase in phases)
@@ -214,6 +225,7 @@ namespace GW2EIEvtcParser
                                 actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                             }
                         });
+                        _t.Log("FightData.Logic.Targets GetBuffs Self");
                     }
                     //
                     return log;
@@ -238,6 +250,7 @@ namespace GW2EIEvtcParser
         /// <exception cref="EvtcFileException"></exception>
         private void ParseFightData(BinaryReader reader, ParserController operation)
         {
+            using var _t = new AutoTrace("Fight Data");
             // 12 bytes: arc build version
             using var evtcVersion = GetCharArrayPooled(reader, 12, false);
             if (!MemoryExtensions.StartsWith(evtcVersion, "EVTC".AsSpan()) || !int.TryParse(evtcVersion[4..], out int headerVersion))
@@ -283,6 +296,7 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI.</param>
         private void ParseAgentData(BinaryReader reader, ParserController operation)
         {
+            using var _t = new AutoTrace("Agent Data");
             // 4 bytes: player count
             uint agentCount = reader.ReadUInt32();
 
@@ -348,6 +362,7 @@ namespace GW2EIEvtcParser
         /// <param name="operation">Operation object bound to the UI.</param>
         private void ParseSkillData(BinaryReader reader, ParserController operation)
         {
+            using var _t = new AutoTrace("Skill Data");
             _skillData = new SkillData(_apiController, _evtcVersion);
             // 4 bytes: player count
             uint skillCount = reader.ReadUInt32();
@@ -546,6 +561,7 @@ namespace GW2EIEvtcParser
         /// <exception cref="TooLongException"></exception>
         private void ParseCombatList(BinaryReader reader, ParserController operation)
         {
+            using var _t = new AutoTrace("Combat List");
             // 64 bytes: each combat
             long cbtItemCount = (reader.BaseStream.Length - reader.BaseStream.Position) / 64;
             operation.UpdateProgressWithCancellationCheck("Parsing: Combat Event Count " + cbtItemCount);
@@ -847,6 +863,7 @@ namespace GW2EIEvtcParser
         /// <exception cref="EvtcAgentException"></exception>
         private void CompleteAgents(ParserController operation)
         {
+            using var _t = new AutoTrace("Linking Agents to list");
             var allAgentValues = new HashSet<ulong>(_combatItems.Where(x => x.SrcIsAgent()).Select(x => x.SrcAgent));
             allAgentValues.UnionWith(_combatItems.Where(x => x.DstIsAgent()).Select(x => x.DstAgent));
             allAgentValues.ExceptWith(_allAgentsList.Select(x => x.Agent));
@@ -1000,6 +1017,7 @@ namespace GW2EIEvtcParser
         /// <exception cref="MissingKeyActorsException"></exception>
         private void PreProcessEvtcData(ParserController operation)
         {
+            using var _t = new AutoTrace("Prepare Data for output");
             operation.UpdateProgressWithCancellationCheck("Parsing: Offseting time");
             OffsetEvtcData();
             operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.FightStartOffset) + " ms added");

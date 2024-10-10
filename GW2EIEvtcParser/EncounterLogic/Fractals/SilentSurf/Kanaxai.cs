@@ -446,34 +446,35 @@ namespace GW2EIEvtcParser.EncounterLogic
                 IReadOnlyList<AbstractCastEvent> casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
                 // Get Axe AoE Buffs
-                var axes = new List<AbstractBuffEvent>();
-                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1));
-                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2));
-                var orderedAxes = axes.OfType<BuffRemoveAllEvent>().OrderBy(x => x.Time).ToList();
+                //TODO(Rennorb) @perf: find average complexity
+                var axes = new List<AbstractBuffEvent>(50);
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1).OfType<BuffRemoveAllEvent>());
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2).OfType<BuffRemoveAllEvent>());
+                axes.SortByTime();
 
                 foreach (EffectEvent aoe in axeAoEs)
                 {
                     // Find the first cast time event present after the AoE effect time
-                    AbstractCastEvent cast = casts.Where(x => x.SkillId == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
-                    long worldCleaverTime = cast != null ? cast.Time : 0;
+                    var cast = casts.Where(x => x.SkillId == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
+                    long worldCleaverTime = cast?.Time ?? 0;
 
                     // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
                     // World Cleaver is the time-limit of when the AoEs reset, in third phase we use FightEnd
                     if (worldCleaverTime != 0)
                     {
-                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
+                        var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
                         AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime);
                     }
                     else
                     {
-                        AbstractBuffEvent axeBuffRemoval = orderedAxes.FirstOrDefault(buff => buff.Time > aoe.Time);
+                        var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time);
                         AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd);
                     }
                 }
             }
 
             // Harrowshot - Boonstrip AoE
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarrowshotAoE, out IReadOnlyList<EffectEvent> harrowshots))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarrowshotAoE, out var harrowshots))
             {
                 foreach (EffectEvent harrowshot in harrowshots)
                 {
@@ -493,7 +494,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="aoe">Effect of the AoE.</param>
         /// <param name="axeBuffRemoval">Buff removal of the orange AoE.</param>
         /// <param name="time">Last time possible.</param>
-        private void AddAxeAoeDecoration(EffectEvent aoe, AbstractBuffEvent axeBuffRemoval, long time)
+        private void AddAxeAoeDecoration(EffectEvent aoe, AbstractBuffEvent? axeBuffRemoval, long time)
         {
             int duration;
             if (axeBuffRemoval != null)

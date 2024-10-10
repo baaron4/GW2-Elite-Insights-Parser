@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Guardian;
 
             // Valiant Bulwark
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandValiantBulwark, out IReadOnlyList<EffectEvent> valiantBulwarks))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandValiantBulwark, out var valiantBulwarks))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter3ValiantBulwark, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in valiantBulwarks)
@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Stalwart Stand
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandStalwartStand1, out IReadOnlyList<EffectEvent> stalwartStands))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandStalwartStand1, out var stalwartStands))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4StalwartStand, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in stalwartStands)
@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Shining River
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandShiningRiver1, out IReadOnlyList<EffectEvent> shiningRiver))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandShiningRiver1, out var shiningRiver))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4ShiningRiver, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in shiningRiver)
@@ -168,7 +168,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Scorched Aftermath
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandScorchedAftermath1, out IReadOnlyList<EffectEvent> scorchedAftermath))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandScorchedAftermath1, out var scorchedAftermath))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Firebrand, Chapter4ScorchedAftermath, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in scorchedAftermath)

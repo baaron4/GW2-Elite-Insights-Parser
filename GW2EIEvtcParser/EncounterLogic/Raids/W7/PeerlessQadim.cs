@@ -350,8 +350,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.GiantQadimThePeerless:
                     // Trim the first giant Qadim, it exists since log start.
-                    AgentItem firstGiantQadim = log.AgentData.GetNPCsByID(ArcDPSEnums.TrashID.GiantQadimThePeerless).OrderBy(x => x.FirstAware).FirstOrDefault();
-                    AnimatedCastEvent firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).Where(x => x.Time > 0).OrderBy(x => x.Time).FirstOrDefault();
+                    var firstGiantQadim = log.AgentData.GetNPCsByID(ArcDPSEnums.TrashID.GiantQadimThePeerless).FirstByAware();
+                    var firstLiftUp = log.CombatData.GetAnimatedCastData(PlayerLiftUpQadimThePeerless).FirstByNonZeroTime();
                     if (firstGiantQadim != null && firstLiftUp != null && target.AgentItem == firstGiantQadim)
                     {
                         replay.Trim(firstLiftUp.Time, firstGiantQadim.LastAware);
@@ -363,17 +363,20 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         }
 
+         const string MagmaColor1 = "rgba(255, 215,  0, ";
+         const string MagmaColor2 = "rgba(255, 130, 50, ";
+
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixated
-            var fixated = p.GetBuffStatus(log, FixatedQadimThePeerless, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            var fixated = p.GetBuffStatus(log, FixatedQadimThePeerless, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             foreach (Segment seg in fixated)
             {
                 replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
             // Chaos Corrosion
-            var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             foreach (Segment seg in chaosCorrosion)
             {
                 replay.Decorations.Add(new CircleDecoration(100, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
@@ -389,8 +392,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             uint magmaRadius = 420;
             int magmaOffset = 4000;
             int magmaDuration = 600000;
-            string[] magmaColors = { "255, 215, 0", "255, 130, 50" };
-            int magmaColor = 0;
+           
+            int magmaCounter = 0;
             foreach (Segment seg in magmaDrop)
             {
                 // If a player has gone into downstate while in air, the magma field will not spawn
@@ -399,14 +402,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
                 if (!log.CombatData.HasEffectData)
                 {
-                    Point3D position = p.GetCurrentInterpolatedPosition(log, magmaDropEnd);
+                    var position = p.GetCurrentInterpolatedPosition(log, magmaDropEnd);
                     if (position != null && !hasPlayerDownedInAir)
                     {
-                        string colorToUse = magmaColors[magmaColor];
-                        magmaColor = (magmaColor + 1) % 2;
+                        string magmaColor = magmaCounter == 0 ? MagmaColor1 : MagmaColor2;
+                        magmaCounter = (magmaCounter + 1) & 1;
+
                         long magmaWarningEnd = magmaDropEnd + magmaOffset;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaWarningEnd), "rgba(" + colorToUse + ", 0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
-                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaWarningEnd, magmaWarningEnd + magmaDuration), "rgba(" + colorToUse + ", 0.5)", new PositionConnector(position)));
+                        replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaWarningEnd), magmaColor + "0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
+                        replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaWarningEnd, magmaWarningEnd + magmaDuration), magmaColor + "0.5)", new PositionConnector(position)));
                     }
                 }
             }
@@ -417,24 +421,26 @@ namespace GW2EIEvtcParser.EncounterLogic
             AddTetherDecorations(log, p, replay, KineticAbundance, Colors.Green, 0.4);
 
             // Add custom arrow overhead for the player lifted up
-            var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PlayerLiftUpQadimThePeerless).ToList();
             var castsUnleash = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == UnleashSAK).ToList();
+            castsUnleash.SortByTime();
             var deadEvents = log.CombatData.GetDeadEvents(p.AgentItem).ToList();
+            deadEvents.SortByTime();
+
+            var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PlayerLiftUpQadimThePeerless);
             foreach (AbstractCastEvent cast in castsLiftUp)
             {
                 long liftUpEnd = log.FightData.LogEnd;
-                AbstractCastEvent unleashCast = castsUnleash.Where(x => x.Time > cast.Time).FirstOrDefault();
+                var unleashCast = castsUnleash.FirstOrDefault(x => x.Time > cast.Time);
                 if (unleashCast != null)
                 {
                     liftUpEnd = Math.Min(liftUpEnd, unleashCast.Time);
                 }
-                DeadEvent deadEvent = deadEvents.Where(x => x.Time > cast.Time).FirstOrDefault();
+                var deadEvent = deadEvents.FirstOrDefault(x => x.Time > cast.Time);
                 if (deadEvent != null)
                 {
                     liftUpEnd = Math.Min(liftUpEnd, deadEvent.Time);
                 }
-                var segment = new Segment(cast.Time, liftUpEnd, 1);
-                replay.AddOverheadIcon(segment, p, ParserIcons.GenericBlueArrowUp);
+                replay.AddOverheadIcon(new Segment(cast.Time, liftUpEnd, 1), p, ParserIcons.GenericBlueArrowUp);
             }
         }
 
@@ -548,32 +554,33 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            string[] magmaColors = { "255, 215, 0", "255, 130, 50" };
             // Magma Drop warning
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMagmaWarningAoE, out IReadOnlyList<EffectEvent> magmaWarnings))
             {
-                var dict = new Dictionary<long, List<EffectEvent>>();
+                var dict = new Dictionary<long, List<EffectEvent>>(magmaWarnings.Count);
                 long previousTime = int.MinValue;
                 foreach (EffectEvent effect in magmaWarnings)
                 {
                     if (effect.Time - previousTime > 1000)
                     {
                         previousTime = effect.Time;
+                        //TODO(Rennorb) @perf
                         dict[previousTime] = new List<EffectEvent>();
                     }
                     dict[previousTime].Add(effect);
                 }
-                int magmaColor = 0;
-                foreach (KeyValuePair<long, List<EffectEvent>> pair in dict)
+
+                int magmaCounter = 0;
+                foreach (var effects in dict.Values)
                 {
                     // Yellow for first, orange for second
-                    string colorToUse = magmaColors[magmaColor];
-                    magmaColor = (magmaColor + 1) % 2;
-                    foreach (EffectEvent effect in pair.Value)
+                    string magmaColor = magmaCounter == 0 ? MagmaColor1 : MagmaColor2;
+                    magmaCounter = (magmaCounter + 1) & 1;
+                    foreach (EffectEvent effect in effects)
                     {
                         var connector = new PositionConnector(effect.Position);
                         (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                        var circle = new CircleDecoration(420, lifespan, "rgba(" + colorToUse + ", 0.2)", connector);
+                        var circle = new CircleDecoration(420, lifespan, magmaColor + "0.2)", connector);
                         EnvironmentDecorations.Add(circle);
                         EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(lifespan.Item2));
                     }
@@ -594,17 +601,18 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     dict[previousTime].Add(effect);
                 }
-                int magmaColor = 0;
+
+                int magmaCounter = 0;
                 foreach (KeyValuePair<long, List<EffectEvent>> pair in dict)
                 {
                     // Yellow for first, orange for second
-                    string colorToUse = magmaColors[magmaColor];
-                    magmaColor = (magmaColor + 1) % 2;
+                    string magmaColor = magmaCounter == 0 ? MagmaColor1 : MagmaColor2;
+                    magmaCounter = (magmaCounter + 1) & 1;
                     foreach (EffectEvent effect in pair.Value)
                     {
                         var connector = new PositionConnector(effect.Position);
                         (long, long) lifespan = effect.ComputeLifespan(log, 600000);
-                        var circle = new CircleDecoration(420, lifespan, "rgba(" + colorToUse + ", 0.5)", connector);
+                        var circle = new CircleDecoration(420, lifespan, magmaColor + "0.5)", connector);
                         EnvironmentDecorations.Add(circle);
                     }
                 }
@@ -613,16 +621,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
         {
-            var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x => !(x is BuffRemoveManualEvent)).ToList();
-            var tethersApplies = tethers.OfType<BuffApplyEvent>().ToList();
+            var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent).ToList();
             var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
-            foreach (BuffApplyEvent bae in tethersApplies)
+            foreach (var appliedTether in tethers.OfType<BuffApplyEvent>())
             {
-                AbstractSingleActor src = log.FindActor(bae.By);
+                var src = log.FindActor(appliedTether.By);
                 if (src != null)
                 {
-                    int tetherStart = (int)bae.Time;
-                    AbstractBuffRemoveEvent abre = tethersRemoves.FirstOrDefault(x => x.Time >= tetherStart);
+                    int tetherStart = (int)appliedTether.Time;
+                    var abre = tethersRemoves.FirstOrDefault(x => x.Time >= tetherStart);
                     int tetherEnd;
                     if (abre != null)
                     {

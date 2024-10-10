@@ -183,7 +183,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)TrashID.VolatileHallucinationSiax:
                     // Volatile Hallucinations Explosions
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.VolatileExpulsionIndicator, out IReadOnlyList<EffectEvent> expulsionEffects))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.VolatileExpulsionIndicator, out var expulsionEffects))
                     {
                         foreach (EffectEvent effect in expulsionEffects)
                         {
@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Vile Spit - Indicators
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxVileSpitIndicator, out IReadOnlyList<EffectEvent> vileSpitIndicators))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxVileSpitIndicator, out var vileSpitIndicators))
             {
                 foreach (EffectEvent effect in vileSpitIndicators)
                 {
@@ -225,7 +225,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Vile Spit - Poison
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxVileSpitPoison, out IReadOnlyList<EffectEvent> vileSpitPoisons))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxVileSpitPoison, out var vileSpitPoisons))
             {
                 foreach (EffectEvent effect in vileSpitPoisons)
                 {
@@ -235,7 +235,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Nightmare Hallucinations Spawn Event
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxNightmareHallucinationsSpawnIndicator, out IReadOnlyList<EffectEvent> spawnEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SiaxNightmareHallucinationsSpawnIndicator, out var spawnEffects))
             {
                 int duration = 3000;
                 foreach (EffectEvent effect in spawnEffects)

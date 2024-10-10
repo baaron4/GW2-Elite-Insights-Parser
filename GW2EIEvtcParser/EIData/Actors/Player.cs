@@ -114,11 +114,12 @@ namespace GW2EIEvtcParser.EIData
         {
             if (CommanderStates == null)
             {
-                var statesByPlayer = new Dictionary<Player, IReadOnlyList<GenericSegment<string>>>();
+                var statesByPlayer = new Dictionary<Player, IReadOnlyList<GenericSegment<string>>>(log.PlayerList.Count);
                 foreach (Player player in log.PlayerList)
                 {
-                    var commanderMarkerStates = new List<GenericSegment<string>>();
                     IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player.AgentItem);
+                    //TODO(Rennorb) @perf: find average complexity
+                    var commanderMarkerStates = new List<GenericSegment<string>>(markerEvents.Count);
                     foreach (MarkerEvent markerEvent in markerEvents)
                     {
                         MarkerGUIDEvent marker = markerEvent.GUIDEvent;
@@ -126,7 +127,7 @@ namespace GW2EIEvtcParser.EIData
                         {
                             if (marker.IsCommanderTag)
                             {
-                                commanderMarkerStates.Add(new GenericSegment<string>(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
+                                commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
                                 if (markerEvent.EndNotSet)
                                 {
                                     break;
@@ -136,7 +137,7 @@ namespace GW2EIEvtcParser.EIData
                         else if (markerEvent.MarkerID != 0)
                         {
                             commanderMarkerStates.Clear();
-                            commanderMarkerStates.Add(new GenericSegment<string>(player.FirstAware, log.FightData.LogEnd, MarkerGUIDs.BlueCommanderTag));
+                            commanderMarkerStates.Add(new(player.FirstAware, log.FightData.LogEnd, MarkerGUIDs.BlueCommanderTag));
                             break;
                         }
                     }
@@ -145,23 +146,28 @@ namespace GW2EIEvtcParser.EIData
                         statesByPlayer[player] = commanderMarkerStates;
                     }
                 }
+
                 if (!statesByPlayer.ContainsKey(this))
                 {
-                    CommanderStates = new List<GenericSegment<string>>();
+                    CommanderStates = new();
                     return CommanderStates;
                 }
-                var states = new List<(Player p, GenericSegment<string> seg)>();
-                foreach (KeyValuePair<Player, IReadOnlyList<GenericSegment<string>>> item in statesByPlayer)
+
+                //TODO(Rennorb) @perf: find average complexity
+                var states = new List<(Player p, GenericSegment<string> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
+                foreach (var (player, state) in statesByPlayer)
                 {
-                    foreach (GenericSegment<string> value in item.Value)
+                    foreach (var segment in state)
                     {
-                        states.Add((item.Key, value));
+                        states.Add((player, segment));
                     }
                 }
-                states = states.OrderBy(x => x.seg.Start).ToList();
-                var cleanStates = new List<(Player p, GenericSegment<string> seg)>();
-                GenericSegment<string> lastAdded = null;
-                Player lastPlayer = null;
+                states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
+
+                CommanderStates = new List<GenericSegment<string>>(states.Count);
+
+                GenericSegment<string>? lastAdded = null;
+                Player? lastPlayer = null;
                 foreach ((Player p, GenericSegment<string> seg) in states)
                 {
                     if (lastPlayer == p && lastAdded.Value == seg.Value)
@@ -172,10 +178,12 @@ namespace GW2EIEvtcParser.EIData
                     {
                         lastAdded = seg;
                         lastPlayer = p;
-                        cleanStates.Add((p, seg));
+                        if(p == this) { CommanderStates.Add(seg); }
                     }
                 }
-                CommanderStates = cleanStates.Where(x => x.p == this).Select(x => x.seg).ToList();
+
+                //TODO(Rennorb) @perf @mem: find average complexity, maybe this is not required
+                if(CommanderStates.Count < (int)(CommanderStates.Capacity * 0.25f)) { CommanderStates.TrimExcess(); }
             }
             return CommanderStates;
         }

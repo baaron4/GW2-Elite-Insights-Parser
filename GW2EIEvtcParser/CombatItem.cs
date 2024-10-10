@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 
@@ -352,6 +353,15 @@ namespace GW2EIEvtcParser
         internal void OverrideValue(int value)
         {
             Value = value;
+        }
+    }
+
+    public static partial class ListExt
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void SortByTime<T>(this List<T> list)  where T : CombatItem
+        {
+            list.Sort((a, b) => (int)(a.Time - b.Time));
         }
     }
 }

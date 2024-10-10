@@ -150,7 +150,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Necromancer;
 
             // Well of Blood
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood, out IReadOnlyList<EffectEvent> wellOfBloods))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfBlood, out var wellOfBloods))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, WellOfBlood, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in wellOfBloods)
@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Suffering
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering, out IReadOnlyList<EffectEvent> wellOfSufferings))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfSuffering, out var wellOfSufferings))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, WellOfSuffering);
                 foreach (EffectEvent effect in wellOfSufferings)
@@ -170,7 +170,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Darkness
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness, out IReadOnlyList<EffectEvent> wellOfDarknesses))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfDarkness, out var wellOfDarknesses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, WellOfDarkness);
                 foreach (EffectEvent effect in wellOfDarknesses)
@@ -180,7 +180,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Corruption
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption, out IReadOnlyList<EffectEvent> wellOfCorruptions))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerWellOfCorruption, out var wellOfCorruptions))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, WellOfCorruption);
                 foreach (EffectEvent effect in wellOfCorruptions)
@@ -190,7 +190,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Corrosive Poison Cloud
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud, out IReadOnlyList<EffectEvent> poisonClouds))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerCorrosivePoisonCloud, out var poisonClouds))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, CorrosivePoisonCloud, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in poisonClouds)
@@ -203,7 +203,7 @@ namespace GW2EIEvtcParser.EIData
             if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] {
                             EffectGUIDs.NecromancerPlaguelandsPulse1,
                             EffectGUIDs.NecromancerPlaguelandsPulse2,EffectGUIDs.NecromancerPlaguelandsPulse3
-                            }, out IReadOnlyList<EffectEvent> plaguelandPulses))
+                            }, out var plaguelandPulses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, Plaguelands);
                 foreach (EffectEvent effect in plaguelandPulses)
@@ -214,7 +214,7 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new CircleDecoration(240, (start, end), color, 0.5, connector).UsingGrowingEnd(end).UsingSkillMode(skill));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelands, out IReadOnlyList<EffectEvent> plaguelands))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPlaguelands, out var plaguelands))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, Plaguelands);
                 foreach (EffectEvent effect in plaguelands)
@@ -227,7 +227,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Mark of Blood or Chillblains (Staff 2/3)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodOrChillblains, out IReadOnlyList<EffectEvent> markOfBloodOrChillblains))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodOrChillblains, out var markOfBloodOrChillblains))
             {
                 var markCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == MarkOfBlood || x.SkillId == Chillblains || x.Skill.IsDodge(log.SkillData)).ToList();
                 foreach (EffectEvent effect in markOfBloodOrChillblains)
@@ -256,7 +256,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Mark of Blood Activated (Staff 2)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodActivated1, out IReadOnlyList<EffectEvent> marksOfBloodActivated))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodActivated1, out var marksOfBloodActivated))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBlood);
                 foreach (EffectEvent effect in marksOfBloodActivated)
@@ -266,7 +266,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Chillblains Activated (Staff 3)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerChillblainsActivated, out IReadOnlyList<EffectEvent> chillblainsActivated))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerChillblainsActivated, out var chillblainsActivated))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, Chillblains);
                 foreach (EffectEvent effect in chillblainsActivated)
@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Putrid Mark (Staff 4)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPutridMark, out IReadOnlyList<EffectEvent> putridMarks))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPutridMark, out var putridMarks))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, PutridMark);
                 foreach (EffectEvent effect in putridMarks)
@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Putrid Mark (Staff 4) Activated
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPutridMarkActivated1, out IReadOnlyList<EffectEvent> putridMarksActivated))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerPutridMarkActivated1, out var putridMarksActivated))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, PutridMark);
                 foreach (EffectEvent effect in putridMarksActivated)
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Reaper's Mark (Staff 5)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMark, out IReadOnlyList<EffectEvent> reapersMarks))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMark, out var reapersMarks))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark);
                 foreach (EffectEvent effect in reapersMarks)
@@ -308,7 +308,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Reaper's Mark (Staff 5) Activated
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMarkActivated, out IReadOnlyList<EffectEvent> reapersMarksActivated))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerReapersMarkActivated, out var reapersMarksActivated))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, ReapersMark, SkillModeCategory.CC);
                 foreach (EffectEvent effect in reapersMarksActivated)
@@ -319,7 +319,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Signet of Undeath
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerSignetOfUndeathGroundMark, out IReadOnlyList<EffectEvent> signetOfUndeath))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerSignetOfUndeathGroundMark, out var signetOfUndeath))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, SignetOfUndeathSkill, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in signetOfUndeath)
@@ -330,7 +330,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Spectral Ring
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerSpectralRing, out IReadOnlyList<EffectEvent> spectralRings))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerSpectralRing, out var spectralRings))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Necromancer, SpectralRing, SkillModeCategory.CC);
                 foreach (EffectEvent effect in spectralRings)

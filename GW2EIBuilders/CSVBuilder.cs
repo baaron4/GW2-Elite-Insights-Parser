@@ -663,12 +663,13 @@ namespace GW2EIBuilders
         private void CreateMechList()
         {
             MechanicData mData = _log.MechanicData;
-            var mLogs = new List<MechanicEvent>();
-            foreach (List<MechanicEvent> mLs in mData.GetAllMechanicEvents(_log))
+            var mechEvents = mData.GetAllMechanicEvents(_log);
+            var mLogs = new List<MechanicEvent>(mechEvents.Count); //tODO(Rennorb) @perf: find average complexity
+            foreach (List<MechanicEvent> mLs in mechEvents)
             {
                 mLogs.AddRange(mLs);
             }
-            mLogs = mLogs.OrderBy(x => x.Time).ToList();
+            mLogs.SortByTime();
             int count = 0;
             WriteCell("Time");
             foreach (MechanicEvent m in mLogs)

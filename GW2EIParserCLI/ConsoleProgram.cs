@@ -2,11 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
+using Tracing;
 
 namespace GW2EIParser
 {
@@ -18,7 +17,6 @@ namespace GW2EIParser
         {
             if (programHelper.ParseMultipleLogs())
             {
-                Console.WriteLine("Multithreaded Mode.");
                 var state = new ThreadingState()
                 {
                     ProgramHelper = programHelper,
@@ -39,14 +37,12 @@ namespace GW2EIParser
                 }
 
                 state.NoMoreFiles = true;
-                using var _t = new AutoTrace("Parse One");
                 EnterParsetThread(state); // we take the last thread
             }
             else
             {
                 foreach (string file in logFiles)
                 {
-                    using var _t = new AutoTrace("Parse One");
                     ParseLog(file, programHelper);
                 }
             }

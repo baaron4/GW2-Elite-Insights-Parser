@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
@@ -103,10 +104,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             return _map;
         }
 
+        [MemberNotNull(nameof(InstanceBuffs))]
         protected virtual void SetInstanceBuffs(ParsedEvtcLog log)
         {
             InstanceBuffs = new List<(Buff buff, int stack)>();
-            foreach (Buff fractalInstability in log.Buffs.BuffsBySource[ParserHelper.Source.FractalInstability])
+            foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])
             {
                 if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer))
                 {
@@ -147,30 +149,28 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected virtual List<int> GetTargetsIDs()
         {
-            return new List<int>
-            {
-                GenericTriggerID
-            };
+            return [ GenericTriggerID ];
         }
 
         protected virtual Dictionary<int, int> GetTargetsSortIDs()
         {
-            var res = new Dictionary<int, int>();
-            for (int i = 0; i < GetTargetsIDs().Count; i++)
+            var targetsIds = GetTargetsIDs();
+            var res = new Dictionary<int, int>(targetsIds.Count);
+            for (int i = 0; i < targetsIds.Count; i++)
             {
-                res.Add(GetTargetsIDs()[i], i);
+                res.Add(targetsIds[i], i);
             }
             return res;
         }
 
         protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>();
+            return [ ];
         }
 
         protected virtual List<int> GetFriendlyNPCIDs()
         {
-            return new List<int>();
+            return [ ];
         }
 
         internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
@@ -201,8 +201,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     _targets.Add(new NPC(agentItem));
                 }
             }
-            _targets = _targets.OrderBy(x => x.FirstAware).ToList();
-            Dictionary<int, int> targetSortIDs = GetTargetsSortIDs();
+            //TODO(Rennorb) @perf @cleanup: is this required?
+            _targets.SortByFirstAware();
+
+            var targetSortIDs = GetTargetsSortIDs();
+            //TODO(Rennorb) @perf
             _targets = _targets.OrderBy(x =>
             {
                 if (targetSortIDs.TryGetValue(x.ID, out int sortKey))
@@ -211,18 +214,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 return int.MaxValue;
             }).ToList();
-            //
+            
             var trashIDs = new HashSet<TrashID>(GetTrashMobsIDs());
             if (trashIDs.Any(x => targetIDs.Contains((int)x)))
             {
                 throw new InvalidDataException("ID collision between trash and targets");
             }
-            var aList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).ToList();
+
+            _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).Select(a => new NPC(a)));
             //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
-            foreach (AgentItem a in aList)
-            {
-                _trashMobs.Add(new NPC(a));
-            }
 #if DEBUG2
             var unknownAList = agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.InstID != 0 && x.LastAware - x.FirstAware > 1000 && !trashIDs.Contains(GetTrashID(x.ID)) && !targetIDs.Contains(x.ID) && !x.GetFinalMaster().IsPlayer).ToList();
             unknownAList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.LastAware - x.FirstAware > 1000 && !x.GetFinalMaster().IsPlayer));
@@ -231,18 +231,15 @@ namespace GW2EIEvtcParser.EncounterLogic
                 _trashMobs.Add(new NPC(a));
             }
 #endif
-            _trashMobs = _trashMobs.OrderBy(x => x.FirstAware).ToList();
-            //
+            _trashMobs.SortByFirstAware();
+
+            //TODO(Rennorb) @perf: Enforce deduplication by the caller.
             var friendlyNPCIDs = new HashSet<int>(GetFriendlyNPCIDs());
             foreach (int id in friendlyNPCIDs)
             {
-                IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
-                foreach (AgentItem agentItem in agents)
-                {
-                    _nonPlayerFriendlies.Add(new NPC(agentItem));
-                }
+                _nonPlayerFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
             }
-            _nonPlayerFriendlies = _nonPlayerFriendlies.OrderBy(x => x.FirstAware).ToList();
+            _nonPlayerFriendlies.SortByFirstAware();
             FinalizeComputeFightTargets();
         }
 
@@ -251,7 +248,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Player p in players)
             {
                 long threshold = fightData.FightStart + 5000;
-                EnterCombatEvent enterCombat = null;
+                EnterCombatEvent? enterCombat = null;
                 if (p.FirstAware > threshold)
                 {
                     enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
@@ -260,7 +257,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault();
                 }
-                if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown)
+                if (enterCombat != null && enterCombat.Spec != Spec.Unknown)
                 {
                     p.AgentItem.OverrideSpec(enterCombat.Spec);
                     p.OverrideGroup(enterCombat.Subgroup);
@@ -270,7 +267,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected void FinalizeComputeFightTargets()
         {
-            //
             TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
             NonPlayerFriendlyAgents = new HashSet<AgentItem>(_nonPlayerFriendlies.Select(x => x.AgentItem));
             TrashMobAgents = new HashSet<AgentItem>(_trashMobs.Select(x => x.AgentItem));
@@ -280,7 +276,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual List<InstantCastFinder> GetInstantCastFinders()
         {
-            return new List<InstantCastFinder>();
+            return [ ];
         }
 
         internal void InvalidateEncounterID()
@@ -292,19 +288,22 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             if (!requirePhases)
             {
-                return new List<PhaseData>();
+                return [ ];
             }
-            var breakbarPhases = new List<PhaseData>();
+
+            //TODO(Rennorb) @perf: find average complexity
+            var breakbarPhases = new List<PhaseData>(Targets.Count);
             foreach (AbstractSingleActor target in Targets)
             {
                 int i = 0;
-                (_, IReadOnlyList<Segment> actives, _, _) = target.GetBreakbarStatus(log);
+                var (_, actives, _, _) = target.GetBreakbarStatus(log);
                 foreach (Segment active in actives)
                 {
-                    if (Math.Abs(active.End - active.Start) < ParserHelper.ServerDelayConstant)
+                    if (Math.Abs(active.End - active.Start) < ServerDelayConstant)
                     {
                         continue;
                     }
+
                     long start = Math.Max(active.Start - 2000, log.FightData.FightStart);
                     long end = Math.Min(active.End, log.FightData.FightEnd);
                     var phase = new PhaseData(start, end, target.Character + " Breakbar " + ++i)
@@ -331,12 +330,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             if (evtcVersion.Build >= ArcDPSBuilds.DirectX11Update)
             {
-                return new List<ErrorEvent>
-                {
-                    new ErrorEvent("As of arcdps 20210923, animated cast events' durations are broken, as such, any feature having a dependency on it are to be taken with a grain of salt. Impacted features are: <br>- Rotations <br>- Time spent in animation statistics <br>- Mechanics <br>- Phases <br>- Combat Replay Decorations")
-                };
+                return [
+                    new("As of arcdps 20210923, animated cast events' durations are broken, as such, any feature having a dependency on it are to be taken with a grain of salt. Impacted features are: <br>- Rotations <br>- Time spent in animation statistics <br>- Mechanics <br>- Phases <br>- Combat Replay Decorations")
+                ];
             }
-            return new List<ErrorEvent>();
+            return [  ];
         }
 
         protected void AddTargetsToPhase(PhaseData phase, List<int> ids)
@@ -369,17 +367,17 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
-            return new List<AbstractBuffEvent>();
+            return [ ];
         }
 
         internal virtual List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
         {
-            return new List<AbstractCastEvent>();
+            return [ ];
         }
 
         internal virtual List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
         {
-            return new List<AbstractHealthDamageEvent>();
+            return [ ];
         }
 
         internal virtual void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
@@ -392,7 +390,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal virtual void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
-            var squadMarkers = new List<ArcDPSEnums.SquadMarkerIndex>() {
+            IEnumerable<SquadMarkerIndex> squadMarkers = [
                 SquadMarkerIndex.Arrow,
                 SquadMarkerIndex.Circle,
                 SquadMarkerIndex.Heart,
@@ -401,11 +399,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 SquadMarkerIndex.Swirl,
                 SquadMarkerIndex.Triangle,
                 SquadMarkerIndex.X,
-            };
-            foreach (SquadMarkerIndex squadMarker in squadMarkers)
+            ];
+            foreach (var squadMarker in squadMarkers)
             {
-                IReadOnlyList<SquadMarkerEvent> squadMarkerEvents = log.CombatData.GetSquadMarkerEvents(squadMarker);
-                foreach (SquadMarkerEvent squadMarkerEvent in squadMarkerEvents)
+                foreach (var squadMarkerEvent in log.CombatData.GetSquadMarkerEvents(squadMarker))
                 {
                     if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out string icon))
                     {
@@ -419,7 +416,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             if (EnvironmentDecorations == null)
             {
-                EnvironmentDecorations = new CombatReplayDecorationContainer(DecorationCache);
+                //TODO(Rennorb) @perf: capacity
+                EnvironmentDecorations = new(DecorationCache);
                 ComputeEnvironmentCombatReplayDecorations(log);
             }
             return EnvironmentDecorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
@@ -437,10 +435,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected virtual List<int> GetSuccessCheckIDs()
         {
-            return new List<int>
-            {
-                GenericTriggerID
-            };
+            return [ GenericTriggerID ];
         }
 
         internal virtual void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -472,7 +467,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal virtual long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
         {
             long startToUse = GetGenericFightOffset(fightData);
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+            CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 startToUse = GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, GenericTriggerID, logStartNPCUpdate.DstAgent);
@@ -491,28 +486,23 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
 
         /// <summary>
-        /// Create a <see cref="List{}"/> containing a <paramref name="buff"/> and its <paramref name="stack"/>.<br></br>
         /// The buff must be present on any player at the end of the encounter.<br></br>
         /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="buff">The buff ID to add.</param>
         /// <param name="stack">Amount of buff stacks (0-99).</param>
         /// <returns>
-        /// A <see cref="IReadOnlyList{T}"/> containing a <paramref name="buff"/> and its <paramref name="stack"/> if present, otherwise empty.<br></br>
-        /// To be used to add as range to <see cref="InstanceBuffs"/>.
+        /// A pari of (<paramref name="buff"/> and its <paramref name="stack"/>) if present, otherwise null.<br></br>
+        /// To be used to add to <see cref="InstanceBuffs"/>. Use <see cref="ListExt.MaybeAdd"/>.
         /// </returns>
-        protected static IReadOnlyList<(Buff, int)> GetOnPlayerCustomInstanceBuff(ParsedEvtcLog log, long buff, int stack = 1)
+        protected static (Buff, int)? GetOnPlayerCustomInstanceBuff(ParsedEvtcLog log, long buff, int stack = 1)
         {
-            var buffs = new List<(Buff, int)>();
             foreach (Player p in log.PlayerList)
             {
                 if (p.HasBuff(log, buff, log.FightData.FightEnd - ServerDelayConstant))
                 {
-                    buffs.Add((log.Buffs.BuffsByIds[buff], stack));
-                    break;
+                    return (log.Buffs.BuffsByIds[buff], stack);
                 }
             }
-            return buffs;
+            return null;
         }
     }
 }

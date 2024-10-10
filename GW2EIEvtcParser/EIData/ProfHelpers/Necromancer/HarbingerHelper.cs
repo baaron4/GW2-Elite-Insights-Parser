@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Necromancer;
 
             // Vital Draw
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.HarbingerVitalDrawAoE, out IReadOnlyList<EffectEvent> vitalDraws))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.HarbingerVitalDrawAoE, out var vitalDraws))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Harbinger, VitalDraw, SkillModeCategory.CC);
                 foreach (EffectEvent effect in vitalDraws)

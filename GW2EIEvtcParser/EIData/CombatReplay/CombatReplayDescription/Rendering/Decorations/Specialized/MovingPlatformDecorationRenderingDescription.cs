@@ -51,10 +51,7 @@ namespace GW2EIEvtcParser.EIData
             Type = "MovingPlatform";
             Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
             {
-                (float mapX, float mapY) = map.GetMapCoord((float)pos.x, (float)pos.y);
-                pos.x = mapX;
-                pos.y = mapY;
-
+                (pos.x, pos.y) = map.GetMapCoord(pos.x, pos.y);
                 return pos;
             }).ToArray();
         }

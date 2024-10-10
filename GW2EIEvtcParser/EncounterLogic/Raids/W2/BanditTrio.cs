@@ -346,7 +346,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(EnvironmentallyFriendly).Any())
             {
-                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
+                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, EnvironmentallyFriendly));
             }
         }
     }

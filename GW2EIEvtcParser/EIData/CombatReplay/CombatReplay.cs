@@ -7,12 +7,13 @@ namespace GW2EIEvtcParser.EIData
 {
     public class CombatReplay
     {
-        internal List<ParametricPoint3D> Positions { get; } = new List<ParametricPoint3D>();
-        internal List<ParametricPoint3D> PolledPositions { get; private set; } = new List<ParametricPoint3D>();
-        internal List<ParametricPoint3D> Velocities { get; private set; } = new List<ParametricPoint3D>();
-        internal List<ParametricPoint3D> Rotations { get; } = new List<ParametricPoint3D>();
-        internal List<ParametricPoint3D> PolledRotations { get; private set; } = new List<ParametricPoint3D>();
-        internal List<Segment> Hidden { get; private set; } = new List<Segment>();
+        //TODO(Rennorb) @perf: capacity
+        internal List<ParametricPoint3D> Positions { get; } = new();
+        internal List<ParametricPoint3D> PolledPositions { get; private set; } = new();
+        internal List<ParametricPoint3D> Velocities { get; private set; } = new();
+        internal List<ParametricPoint3D> Rotations { get; } = new();
+        internal List<ParametricPoint3D> PolledRotations { get; private set; } = new();
+        internal List<Segment> Hidden { get; private set; } = new();
         private long _start = -1;
         private long _end = -1;
         internal (long start, long end) TimeOffsets => (_start, _end);
@@ -23,7 +24,8 @@ namespace GW2EIEvtcParser.EIData
         {
             _start = log.FightData.FightStart;
             _end = log.FightData.FightEnd;
-            Decorations = new CombatReplayDecorationContainer(log.FightData.Logic.DecorationCache);
+            //TODO(Rennorb) @perf: capacity
+            Decorations = new(log.FightData.Logic.DecorationCache);
         }
 
         internal void Trim(long start, long end)

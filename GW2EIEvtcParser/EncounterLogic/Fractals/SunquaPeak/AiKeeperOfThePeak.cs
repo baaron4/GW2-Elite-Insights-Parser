@@ -393,7 +393,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
                 if (log.CombatData.GetBuffData(AchievementEligibilityEnergyDispersal).Any())
                 {
-                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
+                    InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityEnergyDispersal));
                 }
             }
         }
@@ -474,7 +474,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TrashID.GuiltDemon:
                     {
                         // tether between guilt and player/boss, buff applied TO guilt
-                        List<AbstractBuffEvent> fixationBuffs = GetFilteredList(log.CombatData, new long[] { FixatedGuilt }, target, true, true);
+                        List<AbstractBuffEvent> fixationBuffs = GetFilteredList(log.CombatData, [ FixatedGuilt ], target, true, true);
                         replay.AddTether(fixationBuffs, Colors.DarkPurple, 0.5);
                         break;
                     }
@@ -484,7 +484,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
         {
             // arrow indicators
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiArrowAttackIndicator, out IReadOnlyList<EffectEvent> arrows))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiArrowAttackIndicator, out var arrows))
             {
                 const uint width = 80;
                 const uint length = 360;
@@ -498,7 +498,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // orbs
-            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirOrbFloat, EffectGUIDs.AiFireOrbFloat, EffectGUIDs.AiWaterOrbFloat }, out IReadOnlyList<EffectEvent> orbs))
+            if (log.CombatData.TryGetEffectEventsByGUIDs([ EffectGUIDs.AiAirOrbFloat, EffectGUIDs.AiFireOrbFloat, EffectGUIDs.AiWaterOrbFloat ], out var orbs))
             {
                 foreach (EffectEvent effect in orbs)
                 {
@@ -508,7 +508,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Red, 0.3, position).UsingFilled(false));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiDarkOrbFloat, out IReadOnlyList<EffectEvent> darkOrbs))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiDarkOrbFloat, out var darkOrbs))
             {
                 foreach (EffectEvent effect in darkOrbs)
                 {
@@ -520,13 +520,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // spreads
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiSpreadCircle, out IReadOnlyList<EffectEvent> spreadIndicators))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiSpreadCircle, out var spreadIndicators))
             {
                 var spreadDetonateGUIDs = new string[] { EffectGUIDs.AiAirDetonate, EffectGUIDs.AiFireDetonate, EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkDetonate };
                 const float maxDist = 40f;
                 const long duration = 5000;
 
-                bool hasDetonates = log.CombatData.TryGetEffectEventsByGUIDs(spreadDetonateGUIDs, out IReadOnlyList<EffectEvent> detonates);
+                bool hasDetonates = log.CombatData.TryGetEffectEventsByGUIDs(spreadDetonateGUIDs, out var detonates);
                 foreach (EffectEvent effect in spreadIndicators)
                 {
                     long start = effect.Time;
@@ -547,7 +547,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // frontals
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiConeIndicator, out IReadOnlyList<EffectEvent> frontal))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiConeIndicator, out var frontal))
             {
                 foreach (EffectEvent effect in frontal)
                 {
@@ -559,7 +559,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new PieDecoration(240, 170f, (end, end + 300), Colors.Red, 0.15, position).UsingRotationConnector(rotation));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAoEAroundIndicator, out IReadOnlyList<EffectEvent> around))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAoEAroundIndicator, out var around))
             {
                 foreach (EffectEvent effect in around)
                 {
@@ -570,7 +570,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(300, (end, end + 300), Colors.Red, 0.15, position));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiRedPointblankIndicator, out IReadOnlyList<EffectEvent> aroundRed))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiRedPointblankIndicator, out var aroundRed))
             {
                 foreach (EffectEvent effect in aroundRed)
                 {
@@ -582,15 +582,15 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // scaled circles
-            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCircleDetonate, EffectGUIDs.AiFireCircleDetonate }, out IReadOnlyList<EffectEvent> circleDetonate))
+            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCircleDetonate, EffectGUIDs.AiFireCircleDetonate }, out var circleDetonate))
             {
                 AddScalingCircleDecorations(log, circleDetonate, 300);
             }
             // we need to filter water & dark detonates due to reuse
             var detonateReusedGUIDs = new string[] { EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkCircleDetonate };
-            if (log.CombatData.TryGetEffectEventsByGUIDs(detonateReusedGUIDs, out IReadOnlyList<EffectEvent> circleDetonateReused))
+            if (log.CombatData.TryGetEffectEventsByGUIDs(detonateReusedGUIDs, out var circleDetonateReused))
             {
-                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiCircleAoEIndicator, out IReadOnlyList<EffectEvent> indicators))
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiCircleAoEIndicator, out var indicators))
                 {
                     IEnumerable<EffectEvent> filteredCircles = circleDetonateReused.Where(detonate =>
                     {
@@ -603,13 +603,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AddScalingCircleDecorations(log, filteredCircles, 300);
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUIDs(new string[] { EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing, EffectGUIDs.AiDarkCirclePulsing }, out IReadOnlyList<EffectEvent> circlePulsing))
+            if (log.CombatData.TryGetEffectEventsByGUIDs([ EffectGUIDs.AiAirCirclePulsing, EffectGUIDs.AiFireCirclePulsing, EffectGUIDs.AiDarkCirclePulsing ], out var circlePulsing))
             {
                 AddScalingCircleDecorations(log, circlePulsing, 8000);
             }
 
             // air intermission lightning strikes
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirIntermissionRedCircleIndicator, out IReadOnlyList<EffectEvent> intermissionReds))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirIntermissionRedCircleIndicator, out var intermissionReds))
             {
                 foreach (EffectEvent effect in intermissionReds)
                 {
@@ -619,7 +619,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(300, (start, end), Colors.Orange, 0.15, position));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirLightningStrike, out IReadOnlyList<EffectEvent> lightningStrikes))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiAirLightningStrike, out var lightningStrikes))
             {
                 foreach (EffectEvent effect in lightningStrikes)
                 {
@@ -634,7 +634,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AddMeteorDecorations(log);
 
             // water intermission greens
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiGreenCircleIndicator, out IReadOnlyList<EffectEvent> greens))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiGreenCircleIndicator, out var greens))
             {
                 foreach (EffectEvent effect in greens)
                 {
@@ -647,7 +647,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // water tornados
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiWaterTornadoIndicator2, out IReadOnlyList<EffectEvent> tornados))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiWaterTornadoIndicator2, out var tornados))
             {
                 const uint directionLength = 360;
                 foreach (EffectEvent effect in tornados)

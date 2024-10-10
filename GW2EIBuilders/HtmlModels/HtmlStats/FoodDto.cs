@@ -23,13 +23,13 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
 
         public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, AbstractSingleActor actor, Dictionary<long, Buff> usedBuffs)
         {
-            var list = new List<FoodDto>();
-            IReadOnlyList<Consumable> consume = actor.GetConsumablesList(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var consumables = actor.GetConsumablesList(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var list = new List<FoodDto>(consumables.Count);
 
-            foreach (Consumable entry in consume)
+            foreach (var consumable in consumables)
             {
-                usedBuffs[entry.Buff.ID] = entry.Buff;
-                list.Add(new FoodDto(entry));
+                usedBuffs[consumable.Buff.ID] = consumable.Buff;
+                list.Add(new FoodDto(consumable));
             }
 
             return list;

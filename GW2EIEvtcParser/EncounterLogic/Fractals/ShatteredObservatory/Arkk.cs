@@ -141,12 +141,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             GetMiniBossPhase((int)TrashID.Archdiviner, log, "Archdiviner", phases);
             GetMiniBossPhase((int)TrashID.EliteBrazenGladiator, log, "Brazen Gladiator", phases);
 
-            var bloomPhases = new List<PhaseData>();
+            var bloomPhases = new List<PhaseData>(10);
             foreach (NPC bloom in TrashMobs.Where(x => x.IsSpecies(TrashID.SolarBloom)).OrderBy(x => x.FirstAware))
             {
                 long start = bloom.FirstAware;
                 long end = bloom.LastAware;
-                PhaseData phase = bloomPhases.FirstOrDefault(x => Math.Abs(x.Start - start) < 100); // some blooms can be delayed
+                var phase = bloomPhases.FirstOrDefault(x => Math.Abs(x.Start - start) < 100); // some blooms can be delayed
                 if (phase != null)
                 {
                     phase.OverrideStart(Math.Min(phase.Start, start));

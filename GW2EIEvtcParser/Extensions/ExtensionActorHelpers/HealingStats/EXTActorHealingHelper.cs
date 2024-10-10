@@ -9,10 +9,10 @@ namespace GW2EIEvtcParser.Extensions
 {
     public abstract class EXTActorHealingHelper
     {
-        protected List<EXTAbstractHealingEvent> HealEvents { get; set; }
+        protected List<EXTAbstractHealingEvent>? HealEvents { get; set; }
         protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>> HealEventsByDst { get; set; }
-        protected List<EXTAbstractHealingEvent> HealReceivedEvents { get; set; }
-        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>> HealReceivedEventsBySrc { get; set; }
+        protected List<EXTAbstractHealingEvent>? HealReceivedEvents { get; set; }
+        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>>? HealReceivedEventsBySrc { get; set; }
 
 
         private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedHealEvents = new Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>();
@@ -22,9 +22,9 @@ namespace GW2EIEvtcParser.Extensions
         {
         }
 
-        public abstract IReadOnlyList<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract List<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
-        public abstract IReadOnlyList<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract List<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         private static void FilterHealEvents(ParsedEvtcLog log, List<EXTAbstractHealingEvent> dls, EXTHealingType healingType)
         {

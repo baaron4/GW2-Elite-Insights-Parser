@@ -74,7 +74,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Thief;
 
             // Well of Gloom
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfGloom4, out IReadOnlyList<EffectEvent> wellsOfGloom))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfGloom4, out var wellsOfGloom))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfGloom, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in wellsOfGloom)
@@ -84,7 +84,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Bounty
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfBounty2, out IReadOnlyList<EffectEvent> wellsOfBounty))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfBounty2, out var wellsOfBounty))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfBounty, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in wellsOfBounty)
@@ -94,7 +94,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Tears
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfTears2, out IReadOnlyList<EffectEvent> wellsOfTears))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfTears2, out var wellsOfTears))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfTears);
                 foreach (EffectEvent effect in wellsOfTears)
@@ -104,7 +104,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Silence
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfSilence2, out IReadOnlyList<EffectEvent> wellsOfSilence))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfSilence2, out var wellsOfSilence))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfSilence, SkillModeCategory.CC);
                 foreach (EffectEvent effect in wellsOfSilence)
@@ -114,7 +114,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Sorrow
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfSorrow2, out IReadOnlyList<EffectEvent> wellsOfSorrow))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterWellOfSorrow2, out var wellsOfSorrow))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Specter, WellOfSorrow);
                 foreach (EffectEvent effect in wellsOfSorrow)
@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Shadowfall
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterShadowfall2, out IReadOnlyList<EffectEvent> shadowfalls))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpecterShadowfall2, out var shadowfalls))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Specter, Shadowfall);
                 foreach (EffectEvent effect in shadowfalls)

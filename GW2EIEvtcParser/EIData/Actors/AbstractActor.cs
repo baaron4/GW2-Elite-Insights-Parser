@@ -41,7 +41,7 @@ namespace GW2EIEvtcParser.EIData
         protected List<CrowdControlEvent> IncomingCrowdControlEvents { get; set; }
         protected Dictionary<AgentItem, List<CrowdControlEvent>> IncomingCrowdControlEventsBySrc { get; set; }
         // Cast
-        protected List<AbstractCastEvent> CastEvents { get; set; }
+        protected List<AbstractCastEvent>? CastEvents { get; set; }
 
         protected AbstractActor(AgentItem agent)
         {
@@ -192,6 +192,14 @@ namespace GW2EIEvtcParser.EIData
             return (evt.Time >= start && evt.Time <= end) || // start inside
                 (evt.EndTime >= start && evt.EndTime <= end) || // end inside
                 (evt.Time <= start && evt.EndTime >= end); // start before, end after
+        }
+    }
+
+    public static partial class ListExt
+    {
+        public static void SortByFirstAware<T>(this List<T> list)  where T : AbstractActor
+        {
+            list.Sort((a, b) => (int)(a.FirstAware - b.FirstAware));
         }
     }
 }

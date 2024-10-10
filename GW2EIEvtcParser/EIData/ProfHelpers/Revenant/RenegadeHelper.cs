@@ -83,10 +83,10 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Revenant;
 
             // Citadel Bombardment
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RenegadeCitadelBombardmentPortal, out IReadOnlyList<EffectEvent> citadelBombardment))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RenegadeCitadelBombardmentPortal, out var citadelBombardment))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Revenant, CitadelBombardment);
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RenegadeCitadelBombardment1, out IReadOnlyList<EffectEvent> citadelBombardmentHits))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RenegadeCitadelBombardment1, out var citadelBombardmentHits))
                 {
                     foreach (EffectEvent effect in citadelBombardment)
                     {

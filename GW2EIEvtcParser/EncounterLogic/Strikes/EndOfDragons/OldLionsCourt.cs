@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             if (log.FightData.Success && log.CombatData.GetBuffData(AchievementEligibilityFearNotThisKnight).Any())
             {
-                InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFearNotThisKnight));
+                InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityFearNotThisKnight));
             }
         }
 
@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddTether(noxiousBlade, Colors.Green, 0.5);
 
             // Tri-Bolt
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.OldLionsCourtTriBoltSpread, out IReadOnlyList<EffectEvent> tribolt))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.OldLionsCourtTriBoltSpread, out var tribolt))
             {
                 foreach (EffectEvent effect in tribolt)
                 {
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TargetID.PrototypeVermilion:
                 case (int)TargetID.PrototypeVermilionCM:
                     // Spaghettification Start
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart , EffectGUIDs.OldLionsCourtSpaghettificationCircleFlipped }, out IReadOnlyList<EffectEvent> spaghettificationStart))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart , EffectGUIDs.OldLionsCourtSpaghettificationCircleFlipped }, out var spaghettificationStart))
                     {
 
                         foreach (EffectEvent effect in spaghettificationStart)
@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(decoration);
                         }
                     }
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation, EffectGUIDs.OldLionsCourtSpaghettificationCircleDetonation }, out IReadOnlyList<EffectEvent> spaghettificationDetonation))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation, EffectGUIDs.OldLionsCourtSpaghettificationCircleDetonation }, out var spaghettificationDetonation))
                     {
                         foreach (EffectEvent effect in spaghettificationDetonation)
                         {
@@ -379,7 +379,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Safe Zone - Semi Circle
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationSafeZoneSemiCircle, out IReadOnlyList<EffectEvent> safeZoneSemiCircle))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationSafeZoneSemiCircle, out var safeZoneSemiCircle))
                     {
                         foreach (EffectEvent effect in safeZoneSemiCircle)
                         {
@@ -391,7 +391,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Safe Zone - Full Circle
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationSafeZoneFullCircle, out IReadOnlyList<EffectEvent> safeZoneFullCircle))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationSafeZoneFullCircle, out var safeZoneFullCircle))
                     {
                         foreach (EffectEvent effect in safeZoneFullCircle)
                         {
@@ -402,7 +402,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Dual Horizon - Orange Doughnut
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDualHorizonOrange, out IReadOnlyList<EffectEvent> dualHorizons))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDualHorizonOrange, out var dualHorizons))
                     {
                         foreach (EffectEvent effect in dualHorizons)
                         {
@@ -410,7 +410,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var orangeDoughnut = new DoughnutDecoration(340, 440, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(orangeDoughnut);
                         }
-                        if (log.CombatData.TryGetEffectEventsByGUIDs(new[] { EffectGUIDs.OldLionsCourtDualHorizonWhiteInner, EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter }, out IReadOnlyList<EffectEvent> horizonWhite  ))
+                        if (log.CombatData.TryGetEffectEventsByGUIDs(new[] { EffectGUIDs.OldLionsCourtDualHorizonWhiteInner, EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter }, out var horizonWhite  ))
                         {
                             foreach (EffectEvent effect in horizonWhite)
                             {
@@ -430,7 +430,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Gravity Hammer
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtGravityHammer, out IReadOnlyList<EffectEvent> gravityHammer))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtGravityHammer, out var gravityHammer))
                     {
                         foreach (EffectEvent effect in gravityHammer)
                         {
@@ -441,7 +441,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Gravitational Wave
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtGravitationalWave, out IReadOnlyList<EffectEvent> gravitationalWaves))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtGravitationalWave, out var gravitationalWaves))
                     {
                         foreach (EffectEvent effect in gravitationalWaves)
                         {
@@ -453,7 +453,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Boiling Aether Spawn Indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtBoilingAetherSpawnIndicator, out IReadOnlyList<EffectEvent> boilingAetherIndicators))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtBoilingAetherSpawnIndicator, out var boilingAetherIndicators))
                     {
                         foreach (EffectEvent effect in boilingAetherIndicators)
                         {
@@ -470,7 +470,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TargetID.PrototypeArsenite:
                 case (int)TargetID.PrototypeArseniteCM:
                     // Dysapoptosis Indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDysapoptosisIndicator, out IReadOnlyList<EffectEvent> leftSemiCircle))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDysapoptosisIndicator, out var leftSemiCircle))
                     {
                         foreach (EffectEvent effect in leftSemiCircle)
                         {
@@ -486,7 +486,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Dysapoptosis Detonation
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDysapoptosisDetonation, out IReadOnlyList<EffectEvent> detonation))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDysapoptosisDetonation, out var detonation))
                     {
                         foreach (EffectEvent effect in detonation)
                         {
@@ -498,7 +498,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Pernicious Vortex - First Indicator - Orange Doughnuts
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning1, out IReadOnlyList<EffectEvent> vortexWarnings1))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning1, out var vortexWarnings1))
                     {
                         foreach (EffectEvent effect in vortexWarnings1)
                         {
@@ -508,7 +508,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     
                     // Pernicious Vortex - Second Indicator - Red Ring
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning2, out IReadOnlyList<EffectEvent> vortexWarnings2))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning2, out var vortexWarnings2))
                     {
                         foreach (EffectEvent effect in vortexWarnings2)
                         {
@@ -519,7 +519,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Pernicious Vortex - Damage Indicator
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexActive, out IReadOnlyList<EffectEvent> vortexDamage))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexActive, out var vortexDamage))
                     {
                         foreach (EffectEvent effect in vortexDamage)
                         {
@@ -530,7 +530,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Rupture
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtRuptureIndicator, out IReadOnlyList<EffectEvent> ruptures))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtRuptureIndicator, out var ruptures))
                     {
                         foreach (EffectEvent effect in ruptures)
                         {
@@ -547,7 +547,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TargetID.PrototypeIndigoCM:
                     // Thundering Ultimatum - Indicators
                     bool hasUltimatumIndicators = false;
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone }, out IReadOnlyList<EffectEvent> ultimatumIndicators))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone }, out var ultimatumIndicators))
                     {
                         hasUltimatumIndicators = true;
                         foreach (EffectEvent effect in ultimatumIndicators)
@@ -563,7 +563,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     // Thundering Ultimatum - Detonation
                     // The effect can play twice with different rotation
-                    if (hasUltimatumIndicators && log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumDetonation, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedUltimatumDetonation))
+                    if (hasUltimatumIndicators && log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumDetonation, out var groupedUltimatumDetonation))
                     {
                         foreach (IReadOnlyList<EffectEvent> ultimatumDetonation in groupedUltimatumDetonation)
                         {
@@ -585,7 +585,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Safe Zone - 120°
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumSafeZone, out IReadOnlyList<EffectEvent> safeZone))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumSafeZone, out var safeZone))
                     {
                         foreach (EffectEvent effect in safeZone)
                         {
@@ -597,7 +597,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Crackling Wind
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtCracklingWindIndicator, out IReadOnlyList<EffectEvent> crackingWind))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtCracklingWindIndicator, out var crackingWind))
                     {
                         foreach (EffectEvent effect in crackingWind)
                         {
@@ -614,7 +614,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)TrashID.Tribocharge:
                     // Tribocharge AoE on Player
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtTribocharge, out IReadOnlyList<EffectEvent> tribocharge))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtTribocharge, out var tribocharge))
                     {
                         foreach (EffectEvent effect in tribocharge)
                         {
@@ -636,7 +636,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Exhaust Plume - Knight Fall AoE
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtExhaustPlumeAoE, out IReadOnlyList<EffectEvent> exhaustPlume))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtExhaustPlumeAoE, out var exhaustPlume))
             {
                 foreach (EffectEvent effect in exhaustPlume)
                 {
@@ -648,7 +648,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Boiling Aether - Expanding AoE
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherExpanding, out IReadOnlyList<EffectEvent> boilingAetherExpanding))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherExpanding, out var boilingAetherExpanding))
             {
                 // Minimum Radius: 100 (Knight's Half Hitbox)
                 // Maximum Radius: 320 (Normal Mode)
@@ -679,7 +679,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Boiling Aether - Fully Expanded
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherFullyExpanded1, out IReadOnlyList<EffectEvent> boilingAetherExpanded))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherFullyExpanded1, out var boilingAetherExpanded))
             {
                 // Maximum Radius: 320 (Normal Mode)
                 // Maximum Radius: 400 (Challenge Mode)

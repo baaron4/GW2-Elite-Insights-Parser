@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>10.0</LangVersion>
-        <Nullable>disable</Nullable>
+        <Nullable>enable</Nullable>
         <Version>0.54.1</Version>
         <Configurations>Debug;Release;NoRewards</Configurations>
     </PropertyGroup>
@@ -17,80 +17,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="Resources\ei.css" />
-        <None Include="Resources\ei.js" />
-        <None Include="Resources\JS\CR-JS\animator.js" />
-        <None Include="Resources\JS\CR-JS\actors.js" />
-        <None Include="Resources\JS\CR-JS\decorations.js" />
-        <None Include="Resources\JS\HealingExt-JS\healingExtFunctions.js" />
-        <None Include="Resources\JS\HealingExt-JS\healingExtGlobals.js" />
-        <None Include="Resources\JS\global.js" />
-        <None Include="Resources\JS\functions.js" />
-        <None Include="Resources\JS\mixins.js" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingExtensionView.html"  />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplTargetPlayers.html" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplIncomingHealingTable.html" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplOutgoingHealingTable.html" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraphModeSelector.html" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingGraphStats.html" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplHPSGraph.html" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingStatTables.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayUI.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageData.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayDamageTable.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayActorRotation.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayExtraDecorations.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetsStats.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayersStats.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStatus.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetStats.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStatus.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayActorBuffStats.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerStats.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayStatusData.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayMechanicsList.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayPlayerSelect.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayTargetSelect.html" />
-        <None Include="Resources\combatReplayTemplates\tmplCombatReplayAnimationControl.html" />
-        <None Include="Resources\htmlTemplates\tmplBuffTable.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageDistTable.html" />
-        <None Include="Resources\htmlTemplates\tmplEncounter.html" />
-        <None Include="Resources\htmlTemplates\tmplPhase.html" />
-        <None Include="Resources\htmlTemplates\tmplGameplayTable.html" />
-        <None Include="Resources\htmlTemplates\tmplOffensiveTable.html" />
-        <None Include="Resources\htmlTemplates\tmplMechanicsTable.html" />
-        <None Include="Resources\htmlTemplates\tmplDefenseTable.html" />
-        <None Include="Resources\htmlTemplates\tmplSupportTable.html" />
-        <None Include="Resources\htmlTemplates\tmplBuffStats.html" />
-        <None Include="Resources\htmlTemplates\tmplPersonalBuffTable.html" />
-        <None Include="Resources\htmlTemplates\tmplBuffStatsTarget.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageDistTarget.html" />
-        <None Include="Resources\htmlTemplates\tmplTargetTab.html" />
-        <None Include="Resources\htmlTemplates\tmplTargetStats.html" />
-        <None Include="Resources\htmlTemplates\tmplDeathRecap.html" />
-        <None Include="Resources\htmlTemplates\tmplSimpleRotation.html" />
-        <None Include="Resources\htmlTemplates\tmplAdvancedRotation.html" />
-        <None Include="Resources\htmlTemplates\tmplFood.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageDistPlayer.html" />
-        <None Include="Resources\htmlTemplates\tmplPlayerTab.html" />
-        <None Include="Resources\htmlTemplates\tmplPlayerStats.html" />
-        <None Include="Resources\htmlTemplates\tmplGraphStats.html" />
-        <None Include="Resources\htmlTemplates\tmplDPSGraph.html" />
-        <None Include="Resources\htmlTemplates\tmplTargets.html" />
-        <None Include="Resources\htmlTemplates\tmplPlayers.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageModifierTable.html" />
-        <None Include="Resources\htmlTemplates\tmplPlayerTabGraph.html" />
-        <None Include="Resources\htmlTemplates\tmplRotationLegend.html" />
-        <None Include="Resources\htmlTemplates\tmplTargetTabGraph.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageTable.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageModifierStats.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageModifierStatsContainer.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageModifierPersStats.html" />
-        <None Include="Resources\htmlTemplates\tmplMainView.html" />
-        <None Include="Resources\htmlTemplates\tmplDamageTaken.html" />
-        <None Include="Resources\htmlTemplates\tmplTargetData.html" />
-        <None Include="Resources\template.html" />
-        <None Include="Resources\compressionUtils.html" />
+        <None Include="Resources\**\*.css" />
+        <None Include="Resources\**\*.js" />
+        <None Include="Resources\**\*.html" />
     </ItemGroup>
 
     <PropertyGroup>

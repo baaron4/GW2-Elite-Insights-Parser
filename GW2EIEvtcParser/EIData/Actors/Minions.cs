@@ -34,16 +34,16 @@ namespace GW2EIEvtcParser.EIData
         }
 
         #region DAMAGE
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageEvents == null)
             {
-                DamageEvents = new List<AbstractHealthDamageEvent>();
+                DamageEvents = new List<AbstractHealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     DamageEvents.AddRange(minion.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                DamageEvents = DamageEvents.OrderBy(x => x.Time).ToList();
+                DamageEvents.SortByTime();
                 DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -63,12 +63,12 @@ namespace GW2EIEvtcParser.EIData
         {
             if (DamageTakenEvents == null)
             {
-                DamageTakenEvents = new List<AbstractHealthDamageEvent>();
+                DamageTakenEvents = new List<AbstractHealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                DamageTakenEvents = DamageTakenEvents.OrderBy(x => x.Time).ToList();
+                DamageTakenEvents.SortByTime();
                 DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -88,16 +88,16 @@ namespace GW2EIEvtcParser.EIData
 
         #region BREAKBAR DAMAGE
 
-        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageEvents == null)
             {
-                BreakbarDamageEvents = new List<BreakbarDamageEvent>();
+                BreakbarDamageEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     BreakbarDamageEvents.AddRange(minion.GetBreakbarDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                BreakbarDamageEvents = BreakbarDamageEvents.OrderBy(x => x.Time).ToList();
+                BreakbarDamageEvents.SortByTime();
                 BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -119,12 +119,12 @@ namespace GW2EIEvtcParser.EIData
         {
             if (BreakbarDamageTakenEvents == null)
             {
-                BreakbarDamageTakenEvents = new List<BreakbarDamageEvent>();
+                BreakbarDamageTakenEvents = new List<BreakbarDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     BreakbarDamageTakenEvents.AddRange(minion.GetBreakbarDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                BreakbarDamageTakenEvents = BreakbarDamageTakenEvents.OrderBy(x => x.Time).ToList();
+                BreakbarDamageTakenEvents.SortByTime();
                 BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -145,16 +145,16 @@ namespace GW2EIEvtcParser.EIData
 
         #region CROWD CONTROL
 
-        public override IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (OutgoingCrowdControlEvents == null)
             {
-                OutgoingCrowdControlEvents = new List<CrowdControlEvent>();
+                OutgoingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     OutgoingCrowdControlEvents.AddRange(minion.GetOutgoingCrowdControlEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                OutgoingCrowdControlEvents = OutgoingCrowdControlEvents.OrderBy(x => x.Time).ToList();
+                OutgoingCrowdControlEvents.SortByTime();
                 OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -176,12 +176,12 @@ namespace GW2EIEvtcParser.EIData
         {
             if (IncomingCrowdControlEvents == null)
             {
-                IncomingCrowdControlEvents = new List<CrowdControlEvent>();
+                IncomingCrowdControlEvents = new List<CrowdControlEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     IncomingCrowdControlEvents.AddRange(minion.GetIncomingCrowdControlEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                IncomingCrowdControlEvents = IncomingCrowdControlEvents.OrderBy(x => x.Time).ToList();
+                IncomingCrowdControlEvents.SortByTime();
                 IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -202,12 +202,12 @@ namespace GW2EIEvtcParser.EIData
         #region CAST
         private void InitCastEvents(ParsedEvtcLog log)
         {
-            CastEvents = new List<AbstractCastEvent>();
+            CastEvents = new List<AbstractCastEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
                 CastEvents.AddRange(minion.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd));
             }
-            CastEvents = CastEvents.OrderBy(x => x.Time).ThenBy(x => x.Skill.IsSwap).ToList();
+            CastEvents.SortByTimeThenSwap();
         }
 
         public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)

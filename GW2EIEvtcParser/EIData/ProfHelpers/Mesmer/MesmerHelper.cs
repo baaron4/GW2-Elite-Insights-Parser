@@ -324,7 +324,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Mesmer;
             ulong gw2Build = log.CombatData.GetGW2BuildEvent().Build;
             // Portal locations
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out IReadOnlyList<EffectEvent> portalInactives))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalInactive, out var portalInactives))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalEntre);
                 foreach (EffectEvent effect in portalInactives)
@@ -336,10 +336,10 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> portalActives))
+            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerPortalActive, out var portalActives))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalExeunt, SkillModeCategory.Portal);
-                foreach (IReadOnlyList<EffectEvent> group in portalActives)
+                foreach (var group in portalActives)
                 {
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
@@ -362,7 +362,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Feedback
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerFeedback, out IReadOnlyList<EffectEvent> feedbacks))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerFeedback, out var feedbacks))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, Feedback, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in feedbacks)
@@ -372,7 +372,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Veil
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerVeil, out IReadOnlyList<EffectEvent> veils))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerVeil, out var veils))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, Veil, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in veils)
@@ -385,7 +385,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Null Field
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField, out IReadOnlyList<EffectEvent> nullFields))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerNullField, out var nullFields))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, NullField, SkillModeCategory.Strip | SkillModeCategory.Cleanse);
                 foreach (EffectEvent effect in nullFields)
@@ -396,7 +396,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Illusion of Life
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerIllusionOfLife1, out IReadOnlyList<EffectEvent> illusionOfLife))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerIllusionOfLife1, out var illusionOfLife))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, IllusionOfLifeSkill, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in illusionOfLife)
@@ -407,7 +407,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Dimensional Aperture
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out IReadOnlyList<EffectEvent> dimensionalApertures))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out var dimensionalApertures))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, DimensionalApertureSkill, SkillModeCategory.Portal);
                 var applies = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem).ToList();
@@ -445,7 +445,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Unstable Bladestorm
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoUnstableBladestorm, out IReadOnlyList<EffectEvent> unstableBladestorm))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoUnstableBladestorm, out var unstableBladestorm))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Mesmer, UnstableBladestorm);
                 foreach (EffectEvent effect in unstableBladestorm)
@@ -462,7 +462,7 @@ namespace GW2EIEvtcParser.EIData
                 EffectGUIDs.MesmerMentalCollapse240Radius,
                 EffectGUIDs.MesmerMentalCollapse360Radius,
             };
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out IReadOnlyList<EffectEvent> mentalCollapses))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, mentalCollapseEffects, out var mentalCollapses))
             {
                 var mapping = new Dictionary<string, (long duration, uint radius)>
                 {

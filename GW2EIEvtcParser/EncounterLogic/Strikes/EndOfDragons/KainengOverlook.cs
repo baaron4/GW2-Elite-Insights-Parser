@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             int greenDuration = 6250;
             if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(p.AgentItem,
                 new string[] { EffectGUIDs.KainengOverlookSharedDestructionGreenSuccess, EffectGUIDs.KainengOverlookSharedDestructionGreenFailure },
-                out IReadOnlyList<EffectEvent> greenEndEffectEvents))
+                out var greenEndEffectEvents))
             {
                 foreach (EffectEvent effect in greenEndEffectEvents)
                 {
@@ -242,7 +242,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 greenEndEffectEvents = new List<EffectEvent>();
             }
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSharedDestructionGreen, out IReadOnlyList<EffectEvent> greenApplyEffectEvents))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSharedDestructionGreen, out var greenApplyEffectEvents))
             {
                 foreach (EffectEvent effect in greenApplyEffectEvents)
                 {
@@ -257,7 +257,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Sniper Ricochet Tether & AoE - CM
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSniperRicochetBeamCM, out IReadOnlyList<EffectEvent> sniperBeamsCM))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSniperRicochetBeamCM, out var sniperBeamsCM))
             {
                 foreach (EffectEvent effect in sniperBeamsCM)
                 {
@@ -277,7 +277,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Targeted Expulsion - Orange spread AoEs CM
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookTargetedExpulsion, out IReadOnlyList<EffectEvent> spreads))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookTargetedExpulsion, out var spreads))
             {
                 foreach (EffectEvent effect in spreads)
                 {
@@ -288,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rain Of Blades - Mindblade AoE on players - Orange circle (first)
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookMindbladeRainOfBladesFirstOrangeAoEOnPlayer, out var mindbladeAoEOnPlayers))
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers)
                 {
@@ -299,7 +299,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rain Of Blades - Mindblade AoE on players - Orange circle (consecutives)
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer, out IReadOnlyList<EffectEvent> mindbladeAoEOnPlayers4))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookMindbladeRainOfBladesConsecutiveOrangeAoEOnPlayer, out var mindbladeAoEOnPlayers4))
             {
                 foreach (EffectEvent effect in mindbladeAoEOnPlayers4)
                 {
@@ -310,7 +310,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Heaven's Palm - AoE on players
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookEnforcerHeavensPalmAoE, out IReadOnlyList<EffectEvent> heavensPalm))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookEnforcerHeavensPalmAoE, out var heavensPalm))
             {
                 foreach (EffectEvent effect in heavensPalm)
                 {
@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TargetID.MinisterLiCM:
                     // Dragon Slash-Wave
                     // The effect is only usable in normal mode
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookDragonSlashWaveIndicator, out IReadOnlyList<EffectEvent> waveEffect))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookDragonSlashWaveIndicator, out var waveEffect))
                     {
                         foreach (EffectEvent effect in waveEffect)
                         {
@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int warningDuration = 2800;
                     var offset = new Point3D(0, -1400);
                     // Warning decoration
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeBusterCannonWarning, out IReadOnlyList<EffectEvent> warningRectangle))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeBusterCannonWarning, out var warningRectangle))
                     {
                         foreach (EffectEvent effect in warningRectangle)
                         {
@@ -416,7 +416,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.SpiritOfPain:
                     // Volatile Expulsion - Orange AoE around the spirit
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileExpulsionAoE, out IReadOnlyList<EffectEvent> volatileExpulsion))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileExpulsionAoE, out var volatileExpulsion))
                     {
                         foreach (EffectEvent effect in volatileExpulsion)
                         {
@@ -429,7 +429,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.SpiritOfDestruction:
                     // Volatile Burst - Orange AoE around the spirit with safe zone in the center
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileBurstAoE, out IReadOnlyList<EffectEvent> volatileBurst))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.KainengOverlookVolatileBurstAoE, out var volatileBurst))
                     {
                         foreach (EffectEvent effect in volatileBurst)
                         {
@@ -450,7 +450,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Dragon Slash Burst - Red AoE Puddles - CM
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookDragonSlashBurstRedAoE1, out IReadOnlyList<EffectEvent> smolReds))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookDragonSlashBurstRedAoE1, out var smolReds))
             {
                 foreach (EffectEvent effect in smolReds)
                 {
@@ -466,7 +466,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Jade Mines
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeMine1, out IReadOnlyList<EffectEvent> mines))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeMine1, out var mines))
             {
                 foreach (EffectEvent effect in mines)
                 {
@@ -479,7 +479,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Electric Rain - 5 AoEs in sequence up to 5
             // Jade Lob - Small deathly AoE
             // Small Orange AoEs
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookSmallOrangeAoE, out IReadOnlyList<EffectEvent> electricRain))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookSmallOrangeAoE, out var electricRain))
             {
                 foreach (EffectEvent effect in electricRain)
                 {
@@ -493,7 +493,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             // Jade Lob - Small deathly AoE
             // Pulsing Green Effect
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeLobPulsingGreen, out IReadOnlyList<EffectEvent> jadeLob))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeLobPulsingGreen, out var jadeLob))
             {
                 foreach (EffectEvent effect in jadeLob)
                 {
@@ -506,7 +506,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Enforcer Orbs AoE
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerOrbsAoE, out IReadOnlyList<EffectEvent> enforcerOrbsAoEs))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerOrbsAoE, out var enforcerOrbsAoEs))
             {
                 foreach (EffectEvent effect in enforcerOrbsAoEs)
                 {
@@ -519,7 +519,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rain Of Blades - Mindblade Red AoEs dropped by players
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesRedAoECM, out IReadOnlyList<EffectEvent> mindbladeReds))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookMindbladeRainOfBladesRedAoECM, out var mindbladeReds))
             {
                 foreach (EffectEvent effect in mindbladeReds)
                 {
@@ -536,7 +536,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rushing Justice - Enforcer Flames
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerRushingJusticeFlames, out IReadOnlyList<EffectEvent> rushingJustice))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookEnforcerRushingJusticeFlames, out var rushingJustice))
             {
                 foreach (EffectEvent effect in rushingJustice)
                 {
@@ -548,7 +548,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Spiritual Lightning AoEs - Ritualist
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookRitualistSpiritualLightningAoE, out IReadOnlyList<EffectEvent> spiritualLightning))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookRitualistSpiritualLightningAoE, out var spiritualLightning))
             {
                 foreach (EffectEvent effect in spiritualLightning)
                 {
@@ -561,7 +561,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Storm of Swords - Indicator
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookStormOfSwordsIndicator, out IReadOnlyList<EffectEvent> stormOfSwords))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookStormOfSwordsIndicator, out var stormOfSwords))
             {
                 foreach (EffectEvent effect in stormOfSwords)
                 {

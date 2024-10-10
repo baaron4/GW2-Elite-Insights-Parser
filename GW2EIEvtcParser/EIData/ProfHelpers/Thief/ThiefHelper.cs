@@ -152,7 +152,7 @@ namespace GW2EIEvtcParser.EIData
 
             // Shadow Portal locations
             var entranceDecorations = new List<GenericAttachedDecoration>();
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance, out IReadOnlyList<EffectEvent> shadowPortalActiveEntrance))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance, out var shadowPortalActiveEntrance))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Thief, PrepareShadowPortal, SkillModeCategory.Portal);
                 foreach (EffectEvent enter in shadowPortalActiveEntrance)
@@ -165,7 +165,7 @@ namespace GW2EIEvtcParser.EIData
                     entranceDecorations.Add(icon);
                 }
             }
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit, out IReadOnlyList<EffectEvent> shadowPortalActiveExit))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveExit, out var shadowPortalActiveExit))
             {
                 foreach (EffectEvent exit in shadowPortalActiveExit)
                 {
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Seal Area
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE, out IReadOnlyList<EffectEvent> sealAreaAoEs))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefSealAreaAoE, out var sealAreaAoEs))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Thief, SealArea, SkillModeCategory.ProjectileManagement | SkillModeCategory.CC);
                 foreach (EffectEvent effect in sealAreaAoEs)
@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Shadow Refuge
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge, out IReadOnlyList<EffectEvent> shadowRefuges))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowRefuge, out var shadowRefuges))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Thief, ShadowRefuge, SkillModeCategory.ImportantBuffs | SkillModeCategory.Heal);
                 foreach (EffectEvent effect in shadowRefuges)

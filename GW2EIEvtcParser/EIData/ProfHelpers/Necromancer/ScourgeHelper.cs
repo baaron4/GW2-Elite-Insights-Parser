@@ -57,10 +57,10 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Necromancer;
 
             // Sand Swell portal locations
-            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal, out IReadOnlyList<IReadOnlyList<EffectEvent>> sandswellPortals))
+            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeSandSwellPortal, out var sandswellPortals))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Scourge, SandSwell, SkillModeCategory.Portal);
-                foreach (IReadOnlyList<EffectEvent> group in sandswellPortals)
+                foreach (var group in sandswellPortals)
                 {
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
@@ -83,7 +83,7 @@ namespace GW2EIEvtcParser.EIData
 
             }
             // Shade
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade, out IReadOnlyList<EffectEvent> scourgeShades))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScourgeShade, out var scourgeShades))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Scourge, ManifestSandShadeSkill);
                 foreach (EffectEvent effect in scourgeShades)

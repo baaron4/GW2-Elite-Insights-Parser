@@ -297,7 +297,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         }
 
 
-        public static DmgDistributionDto BuildFriendlyDMGDistData(ParsedEvtcLog log, AbstractSingleActor actor, AbstractSingleActor target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+        public static DmgDistributionDto BuildFriendlyDMGDistData(ParsedEvtcLog log, AbstractSingleActor actor, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             FinalDPS dps = actor.GetDPSStats(target, log, phase.Start, phase.End);
             return BuildDMGDistDataInternal(log, dps, actor, target, phase, usedSkills, usedBuffs);

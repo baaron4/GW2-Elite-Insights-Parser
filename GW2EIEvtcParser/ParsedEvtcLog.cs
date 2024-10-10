@@ -157,7 +157,7 @@ namespace GW2EIEvtcParser
         /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="AbstractSingleActor"/> for</param>
         /// <param name="excludePlayers">returns null if true and agentItem is a player or has a player master</param>
         /// <returns></returns>
-        public AbstractSingleActor FindActor(AgentItem agentItem, bool excludePlayers = false)
+        public AbstractSingleActor? FindActor(AgentItem agentItem, bool excludePlayers = false)
         {
             if (agentItem == null || (excludePlayers && agentItem.GetFinalMaster().Type == AgentItem.AgentType.Player))
             {

@@ -118,7 +118,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Mesmer;
 
             // Rain of Swords
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoRainOfSwords, out IReadOnlyList<EffectEvent> rainOfSwords))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoRainOfSwords, out var rainOfSwords))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Virtuoso, RainOfSwords);
                 foreach (EffectEvent effect in rainOfSwords)
@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Thousand Cuts
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoThousandCuts, out IReadOnlyList<EffectEvent> thousandCuts))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.VirtuosoThousandCuts, out var thousandCuts))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Virtuoso, ThousandCuts);
                 foreach (EffectEvent effect in thousandCuts)

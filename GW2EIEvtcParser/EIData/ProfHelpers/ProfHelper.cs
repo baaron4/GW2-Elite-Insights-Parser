@@ -132,17 +132,17 @@ namespace GW2EIEvtcParser.EIData
                 .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             //new EffectCastFinder(RelicOfTheCitadel, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             //{
-            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheCitadelExplosion, out IReadOnlyList<EffectEvent> effects);
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheCitadelExplosion, out var effects);
             //    return effects != null && effects.Any(x => x.Time > evt.Time);
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             //new EffectCastFinder(RelicOfTheNightmare, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             //{
-            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheNightmare, out IReadOnlyList<EffectEvent> effects);
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheNightmare, out var effects);
             //    return effects != null && effects.Any(x => x.Time > evt.Time);
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             //new EffectCastFinder(RelicOfTheKrait, EffectGUIDs.RelicWhiteCircle).UsingChecker((evt, combatData, agentData, skillData) =>
             //{
-            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheKrait, out IReadOnlyList<EffectEvent> effects);
+            //    combatData.TryGetEffectEventsByGUID(EffectGUIDs.RelicOfTheKrait, out var effects);
             //    return effects != null && effects.Any(x => x.Time > evt.Time);
             //}).UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
             new EffectCastFinder(RelicOfTheWizardsTower, EffectGUIDs.RelicWhiteCircle)
@@ -417,7 +417,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Blue;
 
             // White Mantle Portal Device portal locations
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive, out IReadOnlyList<EffectEvent> whiteMantlePortalInactive))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalInactive, out var whiteMantlePortalInactive))
             {
                 var skill = new SkillModeDescriptor(player, PortalEntranceWhiteMantleWatchwork);
                 foreach (EffectEvent effect in whiteMantlePortalInactive)
@@ -428,10 +428,10 @@ namespace GW2EIEvtcParser.EIData
                     replay.Decorations.Add(new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                 }
             }
-            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive, out IReadOnlyList<IReadOnlyList<EffectEvent>> whiteMantlePortalActive))
+            if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.WhiteMantlePortalActive, out var whiteMantlePortalActive))
             {
                 var skill = new SkillModeDescriptor(player, PortalExitWhiteMantleWatchwork, SkillModeCategory.Portal);
-                foreach (IReadOnlyList<EffectEvent> group in whiteMantlePortalActive)
+                foreach (var group in whiteMantlePortalActive)
                 {
                     GenericAttachedDecoration first = null;
                     foreach (EffectEvent effect in group)
@@ -682,7 +682,7 @@ namespace GW2EIEvtcParser.EIData
                 return res;
             }
             SkillItem skill = skillData.Get(skillID);
-            if (combatData.TryGetEffectEventsBySrcWithGUID(actor.AgentItem, effectGUID, out IReadOnlyList<EffectEvent> effects))
+            if (combatData.TryGetEffectEventsBySrcWithGUID(actor.AgentItem, effectGUID, out var effects))
             {
                 skillData.NotAccurate.Add(skillID);
                 foreach (EffectEvent effect in effects)

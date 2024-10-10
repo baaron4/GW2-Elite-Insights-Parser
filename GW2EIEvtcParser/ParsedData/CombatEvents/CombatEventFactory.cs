@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Tracing;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 
@@ -411,16 +412,17 @@ namespace GW2EIEvtcParser.ParsedData
 
         public static List<AnimatedCastEvent> CreateCastEvents(Dictionary<ulong, List<CombatItem>> castEventsBySrcAgent, AgentData agentData, SkillData skillData, FightData fightData)
         {
+            using var _t = new AutoTrace("CreateCastEvents");
+            //TODO(Rennorb) @perf
             var res = new List<AnimatedCastEvent>();
-            foreach (KeyValuePair<ulong, List<CombatItem>> pairBySrcAgent in castEventsBySrcAgent)
+            foreach (var castEvents in castEventsBySrcAgent.Values)
             {
                 var resBySrcAgent = new List<AnimatedCastEvent>();
-                var castEventsBySrcAgentBySkillID = pairBySrcAgent.Value.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (KeyValuePair<uint, List<CombatItem>> pairBySrcAgentBySkillID in castEventsBySrcAgentBySkillID)
+                foreach (var castEventsBySkillId in castEvents.GroupBy(x => x.SkillID))
                 {
                     var resBySrcAgentBySkillID = new List<AnimatedCastEvent>();
-                    CombatItem startItem = null;
-                    foreach (CombatItem c in pairBySrcAgentBySkillID.Value)
+                    CombatItem? startItem = null;
+                    foreach (CombatItem c in castEventsBySkillId)
                     {
                         if (c.StartCasting())
                         {
@@ -450,6 +452,7 @@ namespace GW2EIEvtcParser.ParsedData
                             }
                         }
                     }
+
                     // missing end
                     if (startItem != null)
                     {
@@ -458,15 +461,16 @@ namespace GW2EIEvtcParser.ParsedData
                     resBySrcAgentBySkillID.RemoveAll(x => x.Caster.IsPlayer && x.ActualDuration <= 1);
                     resBySrcAgent.AddRange(resBySrcAgentBySkillID);
                 }
-                resBySrcAgent = resBySrcAgent.OrderBy(x => x.Time).ToList();
+                resBySrcAgent.SortByTime();
+
                 // sanitize 
                 for (int i = 0; i < resBySrcAgent.Count - 1; i++)
                 {
-                    resBySrcAgent[i].CutAt(resBySrcAgent[i + 1].Time + ParserHelper.ServerDelayConstant);
+                    resBySrcAgent[i].CutAt(resBySrcAgent[i + 1].Time + ServerDelayConstant);
                 }
                 res.AddRange(resBySrcAgent);
             }
-            res = res.OrderBy(x => x.Time).ToList();
+            res.SortByTime();
             return res;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions
 {
@@ -15,16 +16,16 @@ namespace GW2EIEvtcParser.Extensions
         }
 
 
-        public override IReadOnlyList<EXTAbstractBarrierEvent> GetOutgoingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IReadOnlyList<EXTAbstractBarrierEvent> GetOutgoingBarrierEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (BarrierEvents == null)
             {
-                BarrierEvents = new List<EXTAbstractBarrierEvent>();
+                BarrierEvents = new List<EXTAbstractBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                BarrierEvents = BarrierEvents.OrderBy(x => x.Time).ToList();
+                BarrierEvents.SortByTime();
                 BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)
@@ -45,12 +46,12 @@ namespace GW2EIEvtcParser.Extensions
         {
             if (BarrierReceivedEvents == null)
             {
-                BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>();
+                BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
                 foreach (NPC minion in _minionList)
                 {
                     BarrierReceivedEvents.AddRange(minion.EXTBarrier.GetIncomingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
                 }
-                BarrierReceivedEvents = BarrierReceivedEvents.OrderBy(x => x.Time).ToList();
+                BarrierReceivedEvents.SortByTime();
                 BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
             if (target != null)

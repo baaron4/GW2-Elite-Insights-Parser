@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var toxicSicknessGUIDs = new List<string>() { EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator };
             foreach (string guid in toxicSicknessGUIDs)
             {
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, guid, out IReadOnlyList<EffectEvent> toxicSickenss))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, guid, out var toxicSickenss))
                 {
                     foreach (EffectEvent effect in toxicSickenss)
                     {
@@ -199,7 +199,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Flux bomb on the ground
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out IReadOnlyList<EffectEvent> fluxBombs))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SmallFluxBomb, out var fluxBombs))
             {
                 foreach (EffectEvent effect in fluxBombs)
                 {
@@ -238,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return;
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effects))
+            if (log.CombatData.TryGetEffectEventsByGUID(effectGUID, out var effects))
             {
                 foreach (EffectEvent effect in effects)
                 {

@@ -54,7 +54,7 @@ namespace GW2EIEvtcParser.EIData
         private static bool MineDetonationInstantCastChecker(EffectEvent effect, CombatData combatData, bool ifFound, string[] effectGUIDs)
         {
             // Find the DynamicEffectEnd of mine at the time of the explosion effects.
-            if (combatData.TryGetEffectEventsBySrcWithGUIDs(effect.Src, effectGUIDs, out IReadOnlyList<EffectEvent> mineFields))
+            if (combatData.TryGetEffectEventsBySrcWithGUIDs(effect.Src, effectGUIDs, out var mineFields))
             {
                 foreach (EffectEvent e in mineFields)
                 {
@@ -284,7 +284,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Engineer;
 
             // Thunderclap
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperThunderclap, out IReadOnlyList<EffectEvent> thunderclaps))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ScrapperThunderclap, out var thunderclaps))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Engineer, Thunderclap, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC);
                 foreach (EffectEvent effect in thunderclaps)
@@ -297,7 +297,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Throw Mine / Mine Field
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerMineExplosion1, out IReadOnlyList<EffectEvent> mineDetonations))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerMineExplosion1, out var mineDetonations))
             {
                 var throwMine = new SkillModeDescriptor(player, Spec.Engineer, ThrowMine, SkillModeCategory.Strip | SkillModeCategory.CC);
                 var mineField = new SkillModeDescriptor(player, Spec.Engineer, MineField);
@@ -311,7 +311,7 @@ namespace GW2EIEvtcParser.EIData
                     bool isMineField = false;
 
                     // Check if the detonation is sourced by Throw Mine
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerThrowMineInactive1, out IReadOnlyList<EffectEvent> throwMines))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerThrowMineInactive1, out var throwMines))
                     {
                         foreach (EffectEvent mine in throwMines)
                         {
@@ -325,7 +325,7 @@ namespace GW2EIEvtcParser.EIData
                     }
 
                     // Check if the detonation is sourced by Mine Field
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerMineField, out IReadOnlyList<EffectEvent> mineFields))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.EngineerMineField, out var mineFields))
                     {
                         // The mine field has 10 events, all using the same GUID, 5 with 0 duration and 5 with infinite duration, filter out half of them.
                         foreach (EffectEvent mine in mineFields.Where(x => x.Duration > 0))

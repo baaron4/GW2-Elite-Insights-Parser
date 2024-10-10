@@ -70,9 +70,9 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Elementalist;
 
             // Overload Fire
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadFire2, out IReadOnlyList<EffectEvent> overloadsFire))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadFire2, out var overloadsFire))
             {
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadFire1, out IReadOnlyList<EffectEvent> overloadsFireAux))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadFire1, out var overloadsFireAux))
                 {
                     var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadFire);
                     foreach (EffectEvent effect in overloadsFire)
@@ -88,9 +88,9 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Overload Air
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadAir2, out IReadOnlyList<EffectEvent> overloadsAir))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadAir2, out var overloadsAir))
             {
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadAir1, out IReadOnlyList<EffectEvent> overloadsAirAux))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.TempestOverloadAir1, out var overloadsAirAux))
                 {
                     var skill = new SkillModeDescriptor(player, Spec.Tempest, OverloadAir);
                     foreach (EffectEvent effect in overloadsAir)

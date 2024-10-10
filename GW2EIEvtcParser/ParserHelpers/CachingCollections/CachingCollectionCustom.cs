@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GW2EIEvtcParser
 {
@@ -6,14 +7,14 @@ namespace GW2EIEvtcParser
     {
         private readonly Q _nullValue;
 
-        private readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new Dictionary<long, Dictionary<long, Dictionary<Q, T>>>();
+        private readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new();
 
         public CachingCollectionCustom(ParsedEvtcLog log, Q nullValue) : base(log)
         {
             _nullValue = nullValue;
         }
 
-        public bool TryGetValue(long start, long end, Q q, out T value)
+        public bool TryGetValue(long start, long end, Q? q, [NotNullWhen(true)] out T? value)
         {
             (start, end) = SanitizeTimes(start, end);
             q = q == null ? _nullValue : q;
@@ -21,7 +22,7 @@ namespace GW2EIEvtcParser
             {
                 if (subCache.TryGetValue(end, out Dictionary<Q, T> subSubCache))
                 {
-                    if (subSubCache.TryGetValue(q, out value))
+                    if (subSubCache.TryGetValue(q, out value!))
                     {
                         return true;
                     }
@@ -31,7 +32,7 @@ namespace GW2EIEvtcParser
             return false;
         }
 
-        public void Set(long start, long end, Q q, T value)
+        public void Set(long start, long end, Q? q, T value)
         {
             (start, end) = SanitizeTimes(start, end);
             q = q == null ? _nullValue : q;
@@ -55,9 +56,9 @@ namespace GW2EIEvtcParser
             return TryGetValue(start, end, q, out _);
         }
 
-        public T Get(long start, long end, Q q)
+        public T? Get(long start, long end, Q q)
         {
-            if (TryGetValue(start, end, q, out T value))
+            if (TryGetValue(start, end, q, out T? value))
             {
                 return value;
             }

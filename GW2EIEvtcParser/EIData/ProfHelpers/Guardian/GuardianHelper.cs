@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Guardian;
 
             // Ring of Warding (Hammer 5)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianRingOfWarding, out IReadOnlyList<EffectEvent> ringOfWardings))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianRingOfWarding, out var ringOfWardings))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, RingOfWarding, SkillModeCategory.CC);
                 foreach (EffectEvent effect in ringOfWardings)
@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Line of Warding (Staff 5)
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding, out IReadOnlyList<EffectEvent> lineOfWardings))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianLineOfWarding, out var lineOfWardings))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, LineOfWarding, SkillModeCategory.CC);
                 foreach (EffectEvent effect in lineOfWardings)
@@ -230,7 +230,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Wall of Reflection
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection, out IReadOnlyList<EffectEvent> wallOfReflections))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianWallOfReflection, out var wallOfReflections))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, WallOfReflection, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in wallOfReflections)
@@ -243,7 +243,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Sanctuary
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary, out IReadOnlyList<EffectEvent> sanctuaries))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSanctuary, out var sanctuaries))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SanctuaryGuardian, SkillModeCategory.CC | SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in sanctuaries)
@@ -253,7 +253,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Shield of the Avenger
-            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger, out IReadOnlyList<EffectEvent> shieldOfTheAvengers))
+            if (log.CombatData.TryGetEffectEventsByMasterWithGUID(player.AgentItem, EffectGUIDs.GuardianShieldOfTheAvenger, out var shieldOfTheAvengers))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, ShieldOfTheAvenger, SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in shieldOfTheAvengers)
@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Signet of Mercy
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSignetOfMercyEnd, out IReadOnlyList<EffectEvent> signetOfMercy))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSignetOfMercyEnd, out var signetOfMercy))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SignetOfMercySkill, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in signetOfMercy)
@@ -275,7 +275,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Hunter's Ward
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DragonhunterHuntersWardCage, out IReadOnlyList<EffectEvent> huntersWards))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DragonhunterHuntersWardCage, out var huntersWards))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, HuntersWard, SkillModeCategory.CC);
                 foreach (EffectEvent effect in huntersWards)
@@ -287,7 +287,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Symbol of Energy
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DragonhunterSymbolOfEnergy, out IReadOnlyList<EffectEvent> symbolsOfEnergy))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.DragonhunterSymbolOfEnergy, out var symbolsOfEnergy))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfEnergy, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfEnergy)
@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Symbol of Vengeance
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandSymbolOfVengeance1, out IReadOnlyList<EffectEvent> symbolsOfVengeance))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.FirebrandSymbolOfVengeance1, out var symbolsOfVengeance))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfVengeance, SkillModeCategory.ShowOnSelect | SkillModeCategory.CC); // CC when traited
                 foreach (EffectEvent effect in symbolsOfVengeance)
@@ -309,7 +309,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Symbol of Punishment
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfPunishment1, out IReadOnlyList<EffectEvent> symbolsOfPunishment))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfPunishment1, out var symbolsOfPunishment))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfPunishment, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfPunishment)
@@ -320,7 +320,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Symbol of Blades
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBlades, out IReadOnlyList<EffectEvent> symbolsOfBlades))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfBlades, out var symbolsOfBlades))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfBlades, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfBlades)
@@ -331,7 +331,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Symbol of Resolution
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfResolution, out IReadOnlyList<EffectEvent> symbolsOfResolution))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfResolution, out var symbolsOfResolution))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfWrath_SymbolOfResolution, SkillModeCategory.ShowOnSelect);
                 foreach (EffectEvent effect in symbolsOfResolution)
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Solar Storm
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormAerealEffect, out IReadOnlyList<EffectEvent> solarStorms))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormAerealEffect, out var solarStorms))
             {
                 // Skill definition has radius of 360, each hit has a radius of 180.
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SolarStorm, SkillModeCategory.ShowOnSelect);
@@ -352,7 +352,7 @@ namespace GW2EIEvtcParser.EIData
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectSolarStorm);
                 }
                 // Spear Impact
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormSpearImpact, out IReadOnlyList<EffectEvent> spearImpacts))
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormSpearImpact, out var spearImpacts))
                 {
                     foreach (EffectEvent effect in spearImpacts)
                     {
@@ -364,7 +364,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Symbol of Luminance
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfLuminance3, out IReadOnlyList<EffectEvent> symbolsOfLuminance))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSymbolOfLuminance3, out var symbolsOfLuminance))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SymbolOfLuminanceSkill, SkillModeCategory.CC);
                 foreach (EffectEvent effect in symbolsOfLuminance)

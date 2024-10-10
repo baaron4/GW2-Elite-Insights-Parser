@@ -432,9 +432,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Incineration Orbs - CM
-            if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMIncinerationOrbs, out IReadOnlyList<IReadOnlyList<EffectEvent>> cmOrbs))
+            if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.QadimCMIncinerationOrbs, out var cmOrbs))
             {
-                foreach (IReadOnlyList<EffectEvent> orbs in cmOrbs)
+                foreach (var orbs in cmOrbs)
                 {
                     var positions = orbs.Select(x => x.Position).ToList();
                     Point3D middle = positions.FirstOrDefault(x => Point3D.IsInTriangle2D(x, positions.Where(y => y != x).ToList()));
@@ -817,7 +817,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 {
                                     if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
-                                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbs))
+                                        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out var blueOrbs))
                                         {
                                             EffectEvent lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time);
                                             if (lastBlueOrb != null)
@@ -1360,7 +1360,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 if (log.CombatData.GetBuffData(AchievementEligibilityManipulateTheManipulator).Any())
                 {
-                    InstanceBuffs.AddRange(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
+                    InstanceBuffs.MaybeAdd(GetOnPlayerCustomInstanceBuff(log, AchievementEligibilityManipulateTheManipulator));
                 }
                 else if (CustomCheckManipulateTheManipulator(log))
                 {

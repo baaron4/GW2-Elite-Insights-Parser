@@ -166,7 +166,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var deads = new List<Segment>();
                 var downs = new List<Segment>();
                 var dcs = new List<Segment>();
-                playerAgent.GetAgentStatus(deads, downs, dcs, combatData, fightData);
+                playerAgent.GetAgentStatus(deads, downs, dcs, combatData);
                 if (deads.Any(x => x.ContainsPoint(timeToCheck)))
                 {
                     playerDeadOrDCCount++;

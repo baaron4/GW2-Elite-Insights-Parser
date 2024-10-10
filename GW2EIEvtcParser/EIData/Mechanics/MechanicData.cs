@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
@@ -7,32 +8,39 @@ namespace GW2EIEvtcParser.EIData
 {
     public class MechanicData
     {
-        private readonly Dictionary<Mechanic, List<MechanicEvent>> _mechanicLogs = new Dictionary<Mechanic, List<MechanicEvent>>();
+        private readonly Dictionary<Mechanic, List<MechanicEvent>> _mechanicLogs;
 
-        private CachingCollection<HashSet<Mechanic>> _presentOnFriendliesMechanics;
-        private CachingCollection<HashSet<Mechanic>> _presentOnEnemyMechanics;
-        private CachingCollection<HashSet<Mechanic>> _presentMechanics;
-        private CachingCollection<List<AbstractSingleActor>> _enemyList;
+        private CachingCollection<HashSet<Mechanic>>? _presentOnFriendliesMechanics;
+        private CachingCollection<HashSet<Mechanic>>? _presentOnEnemyMechanics;
+        private CachingCollection<HashSet<Mechanic>>? _presentMechanics;
+        private CachingCollection<List<AbstractSingleActor>>? _enemyList;
 
         internal MechanicData(List<Mechanic> fightMechanics)
         {
-            var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>();
-            var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>();
+            _mechanicLogs = new(fightMechanics.Count);
+
+            Tracing.Trace.TrackAverageStat("fightMechanics", fightMechanics.Count);
+            //TODO(Rennorb) @perf: find average complexity
+            var errorMechanicConfig = new Dictionary<string, Dictionary<string, Dictionary<int, List<Mechanic>>>>(fightMechanics.Count / 2);
+            var errorMechanicNaming = new Dictionary<string, Dictionary<string, Dictionary<string, List<Mechanic>>>>(fightMechanics.Count);
             foreach (Mechanic m in fightMechanics.OrderBy(x => !x.IsAchievementEligibility))
             {
                 {
-                    if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out Dictionary<string, Dictionary<int, List<Mechanic>>> colorDict))
+                    if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))
                     {
+                        //TODO(Rennorb) @perf
                         colorDict = new Dictionary<string, Dictionary<int, List<Mechanic>>>();
                         errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
                     }
-                    if (!colorDict.TryGetValue(m.PlotlySetting.Color, out Dictionary<int, List<Mechanic>> sizeDict))
+                    if (!colorDict.TryGetValue(m.PlotlySetting.Color, out var sizeDict))
                     {
+                        //TODO(Rennorb) @perf
                         sizeDict = new Dictionary<int, List<Mechanic>>();
                         colorDict[m.PlotlySetting.Color] = sizeDict;
                     }
-                    if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out List<Mechanic> mList))
+                    if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out var mList))
                     {
+                        //TODO(Rennorb) @perf
                         mList = new List<Mechanic>();
                         sizeDict[m.PlotlySetting.Size] = mList;
                     }
@@ -43,18 +51,21 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
                 {
-                    if (!errorMechanicNaming.TryGetValue(m.FullName, out Dictionary<string, Dictionary<string, List<Mechanic>>> shortNameDict))
+                    if (!errorMechanicNaming.TryGetValue(m.FullName, out var shortNameDict))
                     {
+                        //TODO(Rennorb) @perf
                         shortNameDict = new Dictionary<string, Dictionary<string, List<Mechanic>>>();
                         errorMechanicNaming[m.FullName] = shortNameDict;
                     }
-                    if (!shortNameDict.TryGetValue(m.ShortName, out Dictionary<string, List<Mechanic>> descriptionDict))
+                    if (!shortNameDict.TryGetValue(m.ShortName, out var descriptionDict))
                     {
+                        //TODO(Rennorb) @perf
                         descriptionDict = new Dictionary<string, List<Mechanic>>();
                         shortNameDict[m.ShortName] = descriptionDict;
                     }
-                    if (!descriptionDict.TryGetValue(m.Description, out List<Mechanic> mList))
+                    if (!descriptionDict.TryGetValue(m.Description, out var mList))
                     {
+                        //TODO(Rennorb) @perf
                         mList = new List<Mechanic>();
                         descriptionDict[m.Description] = mList;
                     }
@@ -64,44 +75,56 @@ namespace GW2EIEvtcParser.EIData
                         throw new InvalidDataException(mList[0].FullName + " and " + mList[1].FullName + " share the same naming configuration");
                     }
                 }
+                //TODO(Rennorb) @perf
                 _mechanicLogs.Add(m, new List<MechanicEvent>());
             }
+
+            Tracing.Trace.TrackAverageStat("errorMechanicConfig", errorMechanicConfig.Count);
+            Tracing.Trace.TrackAverageStat("errorMechanicNaming", errorMechanicNaming.Count);
 
         }
 
         private void ComputeMechanics(ParsedEvtcLog log)
         {
+            //TODO(Rennorb) @perf <regroupedMobs> = 0
             var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
             _mechanicLogs.Keys.Where(x => !x.Available(log)).ToList().ForEach(x => _mechanicLogs.Remove(x));
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);
             }
+            Tracing.Trace.TrackAverageStat("_mechanicLogs", _mechanicLogs.Count);
+            Tracing.Trace.TrackAverageStat("regroupedMobs", regroupedMobs.Count);
         }
 
+        [MemberNotNull(nameof(_presentOnFriendliesMechanics))]
+        [MemberNotNull(nameof(_presentOnEnemyMechanics))]
+        [MemberNotNull(nameof(_presentMechanics))]
+        [MemberNotNull(nameof(_enemyList))]
         private void ProcessMechanics(ParsedEvtcLog log)
         {
             if (_presentMechanics != null)
             {
+                #nullable disable
                 return;
+                #nullable restore
             }
             _presentOnFriendliesMechanics = new CachingCollection<HashSet<Mechanic>>(log);
             _presentOnEnemyMechanics = new CachingCollection<HashSet<Mechanic>>(log);
             _presentMechanics = new CachingCollection<HashSet<Mechanic>>(log);
             _enemyList = new CachingCollection<List<AbstractSingleActor>>(log);
             ComputeMechanics(log);
-            var emptyMechanic = _mechanicLogs.Where(pair => pair.Value.Count == 0).Select(pair => pair.Key).ToList();
-            foreach (Mechanic m in emptyMechanic)
+            foreach (var (mechanic, events) in _mechanicLogs)
             {
-                if (m.KeepIfEmpty(log))
+                if(events.Count != 0)
                 {
-                    continue;
+                    events.SortByTime();
                 }
-                _mechanicLogs.Remove(m);
-            }
-            foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
-            {
-                pair.Value.Sort((x, y) => x.Time.CompareTo(y.Time));
+                else if(!mechanic.KeepIfEmpty(log))
+                {
+                    //NOTE(Rennorb: Removing from dicts is allowed during iteration.
+                    _mechanicLogs.Remove(mechanic);
+                }
             }
         }
 
@@ -116,13 +139,13 @@ namespace GW2EIEvtcParser.EIData
             return _mechanicLogs.Values;
         }
 
-        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
+        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
         {
             ProcessMechanics(log);
-            return _mechanicLogs.TryGetValue(mech, out List<MechanicEvent> list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : new List<MechanicEvent>();
+            return _mechanicLogs.TryGetValue(mech, out var list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : new List<MechanicEvent>();
         }
 
-        public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, AbstractSingleActor actor, long start, long end)
+        public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, AbstractSingleActor actor, long start, long end)
         {
             return GetMechanicLogs(log, mech, start, end).Where(x => x.Actor == actor).ToList();
         }
@@ -173,7 +196,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 ComputeMechanicData(log, start, end);
             }
-            return _presentOnEnemyMechanics.Get(start, end);
+            return _presentOnEnemyMechanics.Get(start, end)!;
         }
         public IReadOnlyCollection<Mechanic> GetPresentFriendlyMechs(ParsedEvtcLog log, long start, long end)
         {
@@ -182,7 +205,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 ComputeMechanicData(log, start, end);
             }
-            return _presentOnFriendliesMechanics.Get(start, end);
+            return _presentOnFriendliesMechanics.Get(start, end)!;
         }
         public IReadOnlyCollection<Mechanic> GetPresentMechanics(ParsedEvtcLog log, long start, long end)
         {
@@ -191,7 +214,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 ComputeMechanicData(log, start, end);
             }
-            return _presentMechanics.Get(start, end);
+            return _presentMechanics.Get(start, end)!;
         }
 
         public IReadOnlyList<AbstractSingleActor> GetEnemyList(ParsedEvtcLog log, long start, long end)
@@ -201,7 +224,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 ComputeMechanicData(log, start, end);
             }
-            return _enemyList.Get(start, end);
+            return _enemyList.Get(start, end)!;
         }
     }
 }

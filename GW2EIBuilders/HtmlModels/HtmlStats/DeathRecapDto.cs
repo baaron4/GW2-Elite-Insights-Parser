@@ -8,34 +8,35 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
     internal class DeathRecapDto
     {
         public long Time { get; set; }
-        public List<object[]> ToDown { get; set; } = null;
-        public List<object[]> ToKill { get; set; } = null;
+        public List<object[]>? ToDown { get; set; } = null;
+        public List<object[]>? ToKill { get; set; } = null;
 
         private static List<object[]> BuildDeathRecapItemList(List<DeathRecap.DeathRecapDamageItem> list)
         {
-            var data = new List<object[]>();
+            var data = new List<object[]>(list.Count);
             foreach (DeathRecap.DeathRecapDamageItem item in list)
             {
                 data.Add(new object[]
                 {
-                            item.Time,
-                            item.ID,
-                            item.Damage,
-                            item.Src,
-                            item.IndirectDamage
+                        item.Time,
+                        item.ID,
+                        item.Damage,
+                        item.Src,
+                        item.IndirectDamage
                 });
             }
             return data;
         }
 
-        public static List<DeathRecapDto> BuildDeathRecap(ParsedEvtcLog log, AbstractSingleActor actor)
+        public static List<DeathRecapDto>? BuildDeathRecap(ParsedEvtcLog log, AbstractSingleActor actor)
         {
-            var res = new List<DeathRecapDto>();
             IReadOnlyList<DeathRecap> recaps = actor.GetDeathRecaps(log);
             if (!recaps.Any())
             {
                 return null;
             }
+
+            var res = new List<DeathRecapDto>(recaps.Count);
             foreach (DeathRecap deathRecap in recaps)
             {
                 var recap = new DeathRecapDto()

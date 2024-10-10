@@ -247,13 +247,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int endTime = (int)deathEmbrace.Time + deathsEmbraceCastDuration;
 
-                        Point3D ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
+                        Point3D? ankkaPosition = target.GetCurrentPosition(log, deathEmbrace.Time);
                         if (ankkaPosition == null)
                         {
                             continue;
                         }
 
-                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out IReadOnlyList<EffectEvent> deathsEmbraceEffects))
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DeathsEmbrace, out var deathsEmbraceEffects))
                         {
                             uint radius = 500; // Zone 1
                             // Zone 2
@@ -300,7 +300,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius300, out IReadOnlyList<EffectEvent> deathsHandOnPlayerNM))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius300, out var deathsHandOnPlayerNM))
                     {
                         foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerNM)
                         {
@@ -311,7 +311,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius380, out IReadOnlyList<EffectEvent> deathsHandOnPlayerCMOrInBetween))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DeathsHandByAnkkaRadius380, out var deathsHandOnPlayerCMOrInBetween))
                     {
                         foreach (EffectEvent deathsHandEffect in deathsHandOnPlayerCMOrInBetween)
                         {

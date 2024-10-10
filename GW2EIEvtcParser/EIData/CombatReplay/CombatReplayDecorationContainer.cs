@@ -9,10 +9,10 @@ namespace GW2EIEvtcParser.EIData
         private Dictionary<string, GenericDecorationMetadata> DecorationCache { get; }
         private List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)> Decorations { get; }
 
-        internal CombatReplayDecorationContainer(Dictionary<string, GenericDecorationMetadata> cache)
+        internal CombatReplayDecorationContainer(Dictionary<string, GenericDecorationMetadata> cache, int capacity = 0)
         {
             DecorationCache = cache;
-            Decorations = new List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)>();
+            Decorations = new(capacity);
         }
 
         public void Add(GenericDecoration decoration)
@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
+
             GenericDecorationMetadata constantPart = decoration.DecorationMetadata;
             var id = constantPart.GetSignature();
             if (!DecorationCache.TryGetValue(id, out GenericDecorationMetadata cached))
@@ -31,10 +32,17 @@ namespace GW2EIEvtcParser.EIData
             Decorations.Add((cached, decoration.DecorationRenderingData));
         }
 
+        public void ReserveAdditionalCapacity(int additionalCapacity)
+        {
+            if(Decorations.Capacity >= Decorations.Count + additionalCapacity) { return; }
+
+            Decorations.Capacity = (int)(Decorations.Capacity * 1.4f);
+        }
+
         public List<GenericDecorationRenderingDescription> GetCombatReplayRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            var result = new List<GenericDecorationRenderingDescription>();
-            foreach ((GenericDecorationMetadata constant, GenericDecorationRenderingData renderingData) in Decorations)
+            var result = new List<GenericDecorationRenderingDescription>(Decorations.Count);
+            foreach (var (constant, renderingData) in Decorations)
             {
                 result.Add(renderingData.GetCombatReplayRenderingDescription(map, log, usedSkills, usedBuffs, constant.GetSignature()));
             }

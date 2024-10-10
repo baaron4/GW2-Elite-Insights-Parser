@@ -60,7 +60,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Warrior;
 
             // Winds of Disenchantment
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpellbreakerWindsOfDisenchantment, out IReadOnlyList<EffectEvent> windsOfDisenchantments))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.SpellbreakerWindsOfDisenchantment, out var windsOfDisenchantments))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Spellbreaker, WindsOfDisenchantment, SkillModeCategory.Strip | SkillModeCategory.ProjectileManagement);
                 foreach (EffectEvent effect in windsOfDisenchantments)

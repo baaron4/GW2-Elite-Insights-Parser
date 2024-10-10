@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.EIData
             Color color = Colors.Mesmer;
 
             // Well of Eternity
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfEternity, out IReadOnlyList<EffectEvent> wellsOfEternity))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfEternity, out var wellsOfEternity))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfEternity, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in wellsOfEternity)
@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Eternity - Pulses
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfEternityPulse, EffectGUIDs.ChronomancerWellOfEternityExplosion }, out IReadOnlyList<EffectEvent> wellsOfEternityPulses))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, [ EffectGUIDs.ChronomancerWellOfEternityPulse, EffectGUIDs.ChronomancerWellOfEternityExplosion ], out var wellsOfEternityPulses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfEternity, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in wellsOfEternityPulses)
@@ -78,7 +78,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Well of Action
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfAction, out IReadOnlyList<EffectEvent> wellsOfAction))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfAction, out var wellsOfAction))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfAction);
                 foreach (EffectEvent effect in wellsOfAction)
@@ -112,7 +112,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Well of Calamity
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfCalamity, out IReadOnlyList<EffectEvent> wellsOfCalamity))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfCalamity, out var wellsOfCalamity))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfCalamity);
                 foreach (EffectEvent effect in wellsOfCalamity)
@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Calamity - Pulses
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfCalamityPulse, EffectGUIDs.ChronomancerWellOfCalamityExplosion }, out IReadOnlyList<EffectEvent> wellsOfCalamityPulses))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfCalamityPulse, EffectGUIDs.ChronomancerWellOfCalamityExplosion }, out var wellsOfCalamityPulses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfCalamity);
                 foreach (EffectEvent effect in wellsOfCalamityPulses)
@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Well of Precognition
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfPrecognition, out IReadOnlyList<EffectEvent> wellsOfPrecognition))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfPrecognition, out var wellsOfPrecognition))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfPrecognition, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in wellsOfPrecognition)
@@ -145,7 +145,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Well of Precognition - Pulses
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfPrecognitionPulse, EffectGUIDs.ChronomancerWellOfPrecognitionExplosion }, out IReadOnlyList<EffectEvent> wellsOfPrecognitionPulses))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfPrecognitionPulse, EffectGUIDs.ChronomancerWellOfPrecognitionExplosion }, out var wellsOfPrecognitionPulses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfPrecognition, SkillModeCategory.ImportantBuffs);
                 foreach (EffectEvent effect in wellsOfPrecognitionPulses)
@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Well of Senility
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfSenility, out IReadOnlyList<EffectEvent> wellsOfSenility))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerWellOfSenility, out var wellsOfSenility))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfRecall_Senility);
                 foreach (EffectEvent effect in wellsOfSenility)
@@ -192,7 +192,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Gravity Well
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerGravityWell, out IReadOnlyList<EffectEvent> gravityWells))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ChronomancerGravityWell, out var gravityWells))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell, SkillModeCategory.CC);
                 foreach (EffectEvent effect in gravityWells)
@@ -202,7 +202,7 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             // Gravity Well - Pulses
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerGravityWellPulse, EffectGUIDs.ChronomancerGravityWellExplosion }, out IReadOnlyList<EffectEvent> gravityWellPulses))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerGravityWellPulse, EffectGUIDs.ChronomancerGravityWellExplosion }, out var gravityWellPulses))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell, SkillModeCategory.CC);
                 foreach (EffectEvent effect in gravityWellPulses)

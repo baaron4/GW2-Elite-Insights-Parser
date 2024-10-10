@@ -101,7 +101,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal static void AddJadeSphereDecoration(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, Color color, string effectGUID, long skillId, string icon)
         {
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out IReadOnlyList<EffectEvent> jadeSphere))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out var jadeSphere))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Catalyst, skillId);
                 foreach (EffectEvent effect in jadeSphere)

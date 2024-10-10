@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -159,7 +160,7 @@ namespace GW2EIEvtcParser.EIData
 
         //Positions for group
         private List<ParametricPoint3D> _stackCenterPositions = null;
-        private List<ParametricPoint3D> _stackCommanderPositions = null;
+        private List<ParametricPoint3D?>? _stackCommanderPositions = null;
 
         public IReadOnlyList<ParametricPoint3D> GetStackCenterPositions(ParsedEvtcLog log)
         {
@@ -224,29 +225,34 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
         }
+
+        [MemberNotNull(nameof(_stackCommanderPositions))]
         private void SetStackCommanderPositions(ParsedEvtcLog log)
         {
-            _stackCommanderPositions = new List<ParametricPoint3D>();
+            _stackCommanderPositions = new List<ParametricPoint3D?>();
             if (log.CombatData.HasMovementData)
             {
-                var states = new List<(Player p, GenericSegment<string> seg)>();
-                foreach (Player p in log.PlayerList)
+                //TODO(Rennorb) @perf: find average complexity
+                var states = new List<(Player p, GenericSegment<string> seg)>(log.PlayerList.Count);
+                foreach (Player player in log.PlayerList)
                 {
-                    foreach (GenericSegment<string> seg in p.GetCommanderStates(log))
+                    var newStates = player.GetCommanderStates(log);
+                    foreach (var state in newStates)
                     {
-                        states.Add((p, seg));
+                        states.Add((player, state));
                     }
                 }
-                states = states.OrderBy(x => x.seg.Start).ToList();
-                GenericSegment<string> last = null;
+                states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
+
+                long start = long.MinValue;
                 foreach ((Player p, GenericSegment<string> seg) in states)
                 {
                     IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
-                    long start = last == null ? long.MinValue : last.End;
-                    var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList();
+                    //TODO(Rennorb) @perf @correctness: This feels like it might just be wrong.
+                    var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList<ParametricPoint3D?>();
                     for (int i = 0; i < toAdd.Count; i++)
                     {
-                        if (toAdd[i].Time < seg.Start)
+                        if (toAdd[i]!.Time < seg.Start)
                         {
                             toAdd[i] = null;
                         }
@@ -255,8 +261,9 @@ namespace GW2EIEvtcParser.EIData
                             break;
                         }
                     }
-                    last = seg;
                     _stackCommanderPositions.AddRange(toAdd);
+
+                    start = seg.End;
                 }
             }
         }

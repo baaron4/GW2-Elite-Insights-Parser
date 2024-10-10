@@ -90,7 +90,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return list;
             }
-            return new List<AgentItem>();
+            return [ ];
         }
         public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(int id, ulong agent)
         {
