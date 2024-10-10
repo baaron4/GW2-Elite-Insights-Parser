@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using GW2EIParserCommons;
+using System.Windows.Forms;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIParser
@@ -57,28 +59,19 @@ namespace GW2EIParser
             }
 
             var logFiles = new List<string>();
-            bool uiMode = true;
-            Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            Application.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
-                uiMode = false;
                 int parserArgOffset = 0;
 
                 if (args.Contains("-h"))
                 {
-                    Console.WriteLine("GuildWars2EliteInsights.exe [arguments] [logs...]");
+                    Console.WriteLine($"{args[0]} [arguments] [logs...]");
                     Console.WriteLine("");
                     Console.WriteLine("-c [config path] : use another config file");
                     Console.WriteLine("-p : disable windows specific functions");
-                    Console.WriteLine("-ui : runs in the application with user interface");
                     Console.WriteLine("-h : help");
                     return 0;
-                }
-
-                if (args.Contains("-ui"))
-                {
-                    parserArgOffset += 1;
-                    uiMode = true;
                 }
 
                 if (args.Contains("-p"))
@@ -134,25 +127,13 @@ namespace GW2EIParser
                 }
 
             }
+            var thisAssembly = Assembly.GetExecutingAssembly();
             var settings = CustomSettingsManager.GetProgramSettings();
-            var programHelper = new ProgramHelper(new Version(Application.ProductVersion), settings);
-            if (uiMode)
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                var form = new MainForm(logFiles, programHelper);
-                Application.Run(form);
-                form.Dispose();
-            }
-            else
-            {
-                if (logFiles.Count > 0)
-                {
-                    // Use the application through console 
-                    _ = new ConsoleProgram(logFiles, programHelper);
-                    return 0;
-                }
-            }
+            var programHelper = new ProgramHelper(thisAssembly.GetName().Version, settings);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            using var form = new MainForm(logFiles, programHelper);
+            Application.Run(form);
             return 0;
         }
     }

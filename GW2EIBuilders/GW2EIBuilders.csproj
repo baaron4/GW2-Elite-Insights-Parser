@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>10.0</LangVersion>
         <Nullable>disable</Nullable>
         <Version>0.54.1</Version>
         <Configurations>Debug;Release;NoRewards</Configurations>

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFramework>net8</TargetFramework>
+        <LangVersion>10.0</LangVersion>
         <Nullable>disable</Nullable>
-        <!--<TargetFramework>netcoreapp3.1</TargetFramework>-->
         <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
         <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
@@ -46,6 +46,6 @@
         <ProjectReference Include="..\GW2EIDPSReport\GW2EIDPSReport.csproj" />
         <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
         <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
-        <ProjectReference Include="..\GW2EIParser\GW2EIParser.csproj" />
+        <ProjectReference Include="..\GW2EIParserCommons\GW2EIParserCommons.csproj" />
     </ItemGroup>
 </Project>
