@@ -6,24 +6,21 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BuffDictionary
+    internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapacityBuffs, int layer2InitialCapacityExts, int layer3InitialCapacityExts)
     {
-        //TODO(Rennorb) @perf @mem: find average complexity
-        private readonly Dictionary<long, List<AbstractBuffEvent>> _dict = new(1024);
+        readonly int _layer2InitialCapacityBuffs = layer2InitialCapacityBuffs;
+        readonly int _layer2InitialCapacityExts = layer2InitialCapacityExts;
+        readonly int _layer3InitialCapacityExts = layer3InitialCapacityExts;
+        readonly Dictionary<long, List<AbstractBuffEvent>> _buffIdToEvents = new(layer1InitialCapacity);
         // Fast look up table for AddToList
-         //TODO(Rennorb) @perf
-        private readonly Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>> _buffIdToExtensions = new();
-
-        public BuffDictionary()
-        {
-        }
+        readonly Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>> _buffIdToExtensions = new(layer1InitialCapacity);
 
         public bool TryGetValue(long buffID, [NotNullWhen(true)] out List<AbstractBuffEvent>? list)
         {
-            return _dict.TryGetValue(buffID, out list);
+            return _buffIdToEvents.TryGetValue(buffID, out list);
         }
 
-        private static void AddToList(ParsedEvtcLog log, List<AbstractBuffEvent> list, Dictionary<uint, List<BuffExtensionEvent>> dictExtension, AbstractBuffEvent buffEvent)
+        static void AddToList(ParsedEvtcLog log, List<AbstractBuffEvent> list, Dictionary<uint, List<BuffExtensionEvent>> dictExtension, AbstractBuffEvent buffEvent, int initialListCapacity)
         {
             // Essence of speed issue for Soulbeast
             if (buffEvent is BuffExtensionEvent beeCurrent)
@@ -49,7 +46,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     else
                     {
-                        dictExtension[beeCurrent.BuffInstance] = [ beeCurrent ];
+                        dictExtension[beeCurrent.BuffInstance] = new(initialListCapacity){ beeCurrent };
                     }
                 }
             }
@@ -73,15 +70,16 @@ namespace GW2EIEvtcParser.EIData
             {
                 return;
             }
+
             buffEvent.TryFindSrc(log);
-            if (!_dict.TryGetValue(buff.ID, out var list))
+            if (!_buffIdToEvents.TryGetValue(buff.ID, out var list))
             {
-                //TODO(Rennorb) @perf
-                list = new List<AbstractBuffEvent>();
-                _dict[buff.ID] = list;
-                _buffIdToExtensions[buff.ID] = new Dictionary<uint, List<BuffExtensionEvent>>();
+                list = new(_layer2InitialCapacityBuffs);
+                _buffIdToEvents[buff.ID] = list;
+                _buffIdToExtensions[buff.ID] = new(_layer2InitialCapacityExts);
             }
-            AddToList(log, list, _buffIdToExtensions[buff.ID], buffEvent);
+
+            AddToList(log, list, _buffIdToExtensions[buff.ID], buffEvent, _layer3InitialCapacityExts);
         }
 
         private BuffRemoveSingleEvent? _lastRemovedRegen = null;
@@ -95,6 +93,7 @@ namespace GW2EIEvtcParser.EIData
                 }
                 return;
             }
+
             if (_lastRemovedRegen != null && buffEvent is BuffApplyEvent bae)
             {
                 if (bae.Time - _lastRemovedRegen.Time < ParserHelper.ServerDelayConstant)
@@ -104,15 +103,16 @@ namespace GW2EIEvtcParser.EIData
                 }
                 _lastRemovedRegen = null;
             }
+            
             buffEvent.TryFindSrc(log);
-            if (!_dict.TryGetValue(buff.ID, out var list))
+            if (!_buffIdToEvents.TryGetValue(buff.ID, out var list))
             {
-                //TODO(Rennorb) @perf
-                list = new List<AbstractBuffEvent>();
-                _dict[buff.ID] = list;
-                _buffIdToExtensions[buff.ID] = new Dictionary<uint, List<BuffExtensionEvent>>();
+                list = new(_layer2InitialCapacityBuffs);
+                _buffIdToEvents[buff.ID] = list;
+                _buffIdToExtensions[buff.ID] = new(_layer2InitialCapacityExts);
             }
-            AddToList(log, list, _buffIdToExtensions[buff.ID], buffEvent);
+            
+            AddToList(log, list, _buffIdToExtensions[buff.ID], buffEvent, _layer3InitialCapacityExts);
         }
 
 
@@ -123,30 +123,33 @@ namespace GW2EIEvtcParser.EIData
             foreach (DespawnEvent dsp in log.CombatData.GetDespawnEvents(agentItem))
             {
                 lastDespawn = dsp.Time;
-                foreach (var pair in _dict)
+                foreach (var pair in _buffIdToEvents)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, dsp.Time + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
+
             if (agentItem.LastAware < log.FightData.FightEnd - 2000 && agentItem.LastAware - lastDespawn > 2000)
             {
-                foreach (var pair in _dict)
+                foreach (var pair in _buffIdToEvents)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, agentItem.LastAware + ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
+
             foreach (SpawnEvent sp in log.CombatData.GetSpawnEvents(agentItem))
             {
-                foreach (var pair in _dict)
+                foreach (var pair in _buffIdToEvents)
                 {
                     pair.Value.Add(new BuffRemoveAllEvent(ParserHelper._unknownAgent, agentItem, sp.Time - ParserHelper.ServerDelayConstant, int.MaxValue, log.SkillData.Get(pair.Key), ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
                 }
             }
-            trackedBuffs = new HashSet<Buff>(_dict.Count);
-            foreach (var pair in _dict)
+
+            trackedBuffs = new HashSet<Buff>(_buffIdToEvents.Count);
+            foreach (var (buffId, events) in _buffIdToEvents)
             {
-                trackedBuffs.Add(log.Buffs.BuffsByIds[pair.Key]);
-                pair.Value.SortByTime();
+                trackedBuffs.Add(log.Buffs.BuffsByIds[buffId]);
+                events.SortByTime();
             }
         }
     }

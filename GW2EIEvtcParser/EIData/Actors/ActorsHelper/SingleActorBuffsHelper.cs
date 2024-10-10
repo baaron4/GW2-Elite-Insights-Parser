@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using GW2EIEvtcParser.EIData.BuffSimulators;
 using GW2EIEvtcParser.Exceptions;
@@ -13,8 +14,8 @@ namespace GW2EIEvtcParser.EIData
     {
         private List<Consumable> _consumeList;
         // Boons
-        private HashSet<Buff> _trackedBuffs;
-        private BuffDictionary _buffMap;
+        private HashSet<Buff>? _trackedBuffs;
+        private BuffDictionary? _buffMap;
         private Dictionary<long, BuffsGraphModel> _buffGraphs { get; set; }
         private Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>> _buffGraphsPerAgent { get; set; }
         private CachingCollection<BuffDistribution> _buffDistribution;
@@ -242,9 +243,9 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffStats == null)
             {
-                _buffStats = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffs>[]>(log, BuffEnum.Self);
+                _buffStats = new(log, BuffEnum.Self);
             }
-            if (!_buffStats.TryGetValue(start, end, type, out Dictionary<long, FinalActorBuffs>[] value))
+            if (!_buffStats.TryGetValue(start, end, type, out var value))
             {
                 value = Actor.ComputeBuffs(log, start, end, type);
                 _buffStats.Set(start, end, type, value);
@@ -256,9 +257,9 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffStats == null)
             {
-                _buffStats = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffs>[]>(log, BuffEnum.Self);
+                _buffStats = new(log, BuffEnum.Self);
             }
-            if (!_buffStats.TryGetValue(start, end, type, out Dictionary<long, FinalActorBuffs>[] value))
+            if (!_buffStats.TryGetValue(start, end, type, out var value))
             {
                 value = Actor.ComputeBuffs(log, start, end, type);
                 _buffStats.Set(start, end, type, value);
@@ -270,9 +271,9 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffVolumes == null)
             {
-                _buffVolumes = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffVolumes>[]>(log, BuffEnum.Self);
+                _buffVolumes = new(log, BuffEnum.Self);
             }
-            if (!_buffVolumes.TryGetValue(start, end, type, out Dictionary<long, FinalActorBuffVolumes>[] value))
+            if (!_buffVolumes.TryGetValue(start, end, type, out var value))
             {
                 value = Actor.ComputeBuffVolumes(log, start, end, type);
                 _buffVolumes.Set(start, end, type, value);
@@ -284,9 +285,9 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffVolumes == null)
             {
-                _buffVolumes = new CachingCollectionCustom<BuffEnum, Dictionary<long, FinalActorBuffVolumes>[]>(log, BuffEnum.Self);
+                _buffVolumes = new(log, BuffEnum.Self);
             }
-            if (!_buffVolumes.TryGetValue(start, end, type, out Dictionary<long, FinalActorBuffVolumes>[] value))
+            if (!_buffVolumes.TryGetValue(start, end, type, out var value))
             {
                 value = Actor.ComputeBuffVolumes(log, start, end, type);
                 _buffVolumes.Set(start, end, type, value);
@@ -296,17 +297,18 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
         {
-            if (_buffMap == null)
+            if (_trackedBuffs == null)
             {
                 ComputeBuffMap(log);
             }
             return _trackedBuffs;
         }
 
+        [MemberNotNull(nameof(_buffMap))]
+        [MemberNotNull(nameof(_trackedBuffs))]
         private void ComputeBuffMap(ParsedEvtcLog log)
         {
-            //
-            _buffMap = new BuffDictionary();
+            _buffMap = new BuffDictionary(64, 256, 32, 1);
             if (Actor.AgentItem == _unknownAgent)
             {
                 _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
@@ -317,25 +319,20 @@ namespace GW2EIEvtcParser.EIData
             var test = log.CombatData.GetBuffDataByDst(Actor.AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
             var test2 = log.CombatData.GetBuffDataByDst(Actor.AgentItem).Where(x => log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
-            var buffEventsDict = log.CombatData.GetBuffDataByDst(Actor.AgentItem).GroupBy(x => x.BuffID).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<long, List<AbstractBuffEvent>> buffEventPair in buffEventsDict)
+            foreach (var buffEvent in log.CombatData.GetBuffDataByDst(Actor.AgentItem))
             {
-                long buffID = buffEventPair.Key;
-                if (!log.Buffs.BuffsByIds.ContainsKey(buffID))
+                if (!log.Buffs.BuffsByIds.TryGetValue(buffEvent.BuffID, out var buff))
                 {
                     continue;
                 }
-                foreach (AbstractBuffEvent buffEvent in buffEventPair.Value)
+
+                if (buffEvent.BuffID != SkillIDs.Regeneration)
                 {
-                    Buff buff = log.Buffs.BuffsByIds[buffID];
-                    if (buffID != SkillIDs.Regeneration)
-                    {
-                        _buffMap.Add(log, buff, buffEvent);
-                    }
-                    else
-                    {
-                        _buffMap.AddRegen(log, buff, buffEvent);
-                    }
+                    _buffMap.Add(log, buff, buffEvent);
+                }
+                else
+                {
+                    _buffMap.AddRegen(log, buff, buffEvent);
                 }
             }
             _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
