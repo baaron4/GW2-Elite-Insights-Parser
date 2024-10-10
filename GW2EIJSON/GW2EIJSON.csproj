@@ -25,7 +25,6 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
