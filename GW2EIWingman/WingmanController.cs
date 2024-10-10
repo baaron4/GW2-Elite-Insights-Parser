@@ -292,15 +292,17 @@ namespace GW2EIWingman
                 }
                 catch (AggregateException agg)
                 {
-                    traceHandler(requestName + " tentaive failed - main message - " + agg.Message);
+                    traceHandler(requestName + " tentative failed");
+                    traceHandler("Main reason: " + agg.Message);
                     foreach (Exception e in agg.InnerExceptions)
                     {
-                        traceHandler(requestName + " tentaive failed - sub message - " + e.Message);
+                        traceHandler("Sub reason: " + e.Message);
                     }
                 }
                 catch (Exception e)
                 {
-                    traceHandler(requestName + " tentaive failed - " + e.Message);
+                    traceHandler(requestName + " tentaive failed");
+                    traceHandler("Reason: " + e.Message);
                 }
                 finally
                 {

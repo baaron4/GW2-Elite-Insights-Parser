@@ -259,10 +259,12 @@ namespace GW2EIDPSReport
             {
                 foreach (string URI in URIs)
                 {
-                    traceHandler(requestName + " tentative " + URI);
+                    traceHandler(requestName + " tentative");
                     var webService = new Uri(URI);
                     var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                     requestMessage.Headers.ExpectContinue = false;
+
+                    var forceTimeOutTokenSource = new CancellationTokenSource();
 
                     if (content != null)
                     {
@@ -270,7 +272,8 @@ namespace GW2EIDPSReport
                     }
                     try
                     {
-                        Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                        forceTimeOutTokenSource.CancelAfter(120000);
+                        Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, forceTimeOutTokenSource.Token);
                         HttpResponseMessage httpResponse = httpRequest.Result;
                         HttpStatusCode statusCode = httpResponse.StatusCode;
                         HttpContent responseContent = httpResponse.Content;
@@ -290,27 +293,35 @@ namespace GW2EIDPSReport
                                 ContractResolver = DefaultJsonContractResolver,
                                 StringEscapeHandling = StringEscapeHandling.EscapeHtml
                             });
-                            traceHandler(requestName + " tentative successful " + URI);
+                            traceHandler(requestName + " tentative successful");
                             return item;
                         }
                     }
                     catch (AggregateException agg)
                     {
-                        traceHandler(requestName + " tentative failed " + URI);
-                        traceHandler("Main reasong: " + agg.Message);
-                        foreach (Exception e in agg.InnerExceptions)
+                        traceHandler(requestName + " tentative failed");
+                        traceHandler("Main reason: " + agg.Message);
+                        if (forceTimeOutTokenSource.IsCancellationRequested)
                         {
-                            traceHandler("Sub reason: " + e.Message);
+                            traceHandler("Sub reason: Process timeout");
+                        } 
+                        else
+                        {
+                            foreach (Exception e in agg.InnerExceptions)
+                            {
+                                traceHandler("Sub reason: " + e.Message);
+                            }
                         }
                     }
                     catch (Exception e)
                     {
-                        traceHandler(requestName + " tentative failed " + URI);
+                        traceHandler(requestName + " tentative failed");
                         traceHandler("Reason: " + e.Message);
                     }
                     finally
                     {
                         requestMessage.Dispose();
+                        forceTimeOutTokenSource.Dispose();
                     }
                 }
             }
