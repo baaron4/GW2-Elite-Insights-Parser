@@ -18,23 +18,23 @@ namespace GW2EIEvtcParser.EIData
         public double ByExtension { get; internal set; }
         public double Extended { get; internal set; }
 
-        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
+        internal static (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs>ActiveBuffs) GetBuffsForPlayers(IEnumerable<Player> players, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
         {
-
             long phaseDuration = end - start;
 
+            //TODO(Rennorb) @perf: find complexity
             var buffDistributionPerPlayer = new Dictionary<Player, BuffDistribution>();
-            foreach (Player p in playerList)
+            var playerCount = 0;
+            foreach (Player p in players)
             {
                 buffDistributionPerPlayer[p] = p.GetBuffDistribution(log, start, end);
+                playerCount++;
             }
 
             var buffsToTrack = new HashSet<Buff>(buffDistributionPerPlayer.SelectMany(x => x.Value.BuffIDs).Select(x => log.Buffs.BuffsByIds[x]));
 
-            var buffs =
-                new Dictionary<long, FinalActorBuffs>();
-            var activeBuffs =
-                new Dictionary<long, FinalActorBuffs>();
+            var buffs = new Dictionary<long, FinalActorBuffs>();
+            var activeBuffs = new Dictionary<long, FinalActorBuffs>();
 
             foreach (Buff boon in buffsToTrack)
             {
@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
                 double totalUnknownExtension = 0;
                 double totalExtension = 0;
                 double totalExtended = 0;
-                //
+
                 double totalActiveGeneration = 0;
                 double totalActiveOverstack = 0;
                 double totalActiveWasted = 0;
@@ -53,6 +53,7 @@ namespace GW2EIEvtcParser.EIData
                 double totalActiveExtended = 0;
                 bool hasGeneration = false;
                 int activePlayerCount = 0;
+
                 foreach (KeyValuePair<Player, BuffDistribution> buffDistributionByPlayer in buffDistributionPerPlayer)
                 {
                     BuffDistribution buffDistribution = buffDistributionByPlayer.Value;
@@ -85,27 +86,28 @@ namespace GW2EIEvtcParser.EIData
                         }
                     }
                 }
-                totalGeneration /= phaseDuration;
-                totalOverstack /= phaseDuration;
-                totalWasted /= phaseDuration;
-                totalUnknownExtension /= phaseDuration;
-                totalExtension /= phaseDuration;
-                totalExtended /= phaseDuration;
 
                 if (hasGeneration)
                 {
+                    totalGeneration       /= phaseDuration;
+                    totalOverstack        /= phaseDuration;
+                    totalWasted           /= phaseDuration;
+                    totalUnknownExtension /= phaseDuration;
+                    totalExtension        /= phaseDuration;
+                    totalExtended         /= phaseDuration;
+
                     var uptime = new FinalActorBuffs();
                     var uptimeActive = new FinalActorBuffs();
                     buffs[boon.ID] = uptime;
                     activeBuffs[boon.ID] = uptimeActive;
                     if (boon.Type == BuffType.Duration)
                     {
-                        uptime.Generation = Math.Round(100.0 * totalGeneration / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.Wasted = Math.Round(100.0 * (totalWasted) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.ByExtension = Math.Round(100.0 * (totalExtension) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.Extended = Math.Round(100.0 * (totalExtended) / playerList.Count, ParserHelper.BuffDigit);
+                        uptime.Generation = Math.Round(100.0 * totalGeneration / playerCount, ParserHelper.BuffDigit);
+                        uptime.Overstack = Math.Round(100.0 * (totalOverstack + totalGeneration) / playerCount, ParserHelper.BuffDigit);
+                        uptime.Wasted = Math.Round(100.0 * (totalWasted) / playerCount, ParserHelper.BuffDigit);
+                        uptime.UnknownExtended = Math.Round(100.0 * (totalUnknownExtension) / playerCount, ParserHelper.BuffDigit);
+                        uptime.ByExtension = Math.Round(100.0 * (totalExtension) / playerCount, ParserHelper.BuffDigit);
+                        uptime.Extended = Math.Round(100.0 * (totalExtended) / playerCount, ParserHelper.BuffDigit);
                         //
                         if (activePlayerCount > 0)
                         {
@@ -119,12 +121,12 @@ namespace GW2EIEvtcParser.EIData
                     }
                     else if (boon.Type == BuffType.Intensity)
                     {
-                        uptime.Generation = Math.Round(totalGeneration / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.Wasted = Math.Round((totalWasted) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.UnknownExtended = Math.Round((totalUnknownExtension) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.ByExtension = Math.Round((totalExtension) / playerList.Count, ParserHelper.BuffDigit);
-                        uptime.Extended = Math.Round((totalExtended) / playerList.Count, ParserHelper.BuffDigit);
+                        uptime.Generation = Math.Round(totalGeneration / playerCount, ParserHelper.BuffDigit);
+                        uptime.Overstack = Math.Round((totalOverstack + totalGeneration) / playerCount, ParserHelper.BuffDigit);
+                        uptime.Wasted = Math.Round((totalWasted) / playerCount, ParserHelper.BuffDigit);
+                        uptime.UnknownExtended = Math.Round((totalUnknownExtension) / playerCount, ParserHelper.BuffDigit);
+                        uptime.ByExtension = Math.Round((totalExtension) / playerCount, ParserHelper.BuffDigit);
+                        uptime.Extended = Math.Round((totalExtended) / playerCount, ParserHelper.BuffDigit);
                         //
                         if (activePlayerCount > 0)
                         {
@@ -139,11 +141,11 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            return new Dictionary<long, FinalActorBuffs>[] { buffs, activeBuffs };
+            return (buffs, activeBuffs);
         }
 
 
-        internal static Dictionary<long, FinalActorBuffs>[] GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor dstActor, long start, long end)
+        internal static (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor dstActor, long start, long end)
         {
             var buffs = new Dictionary<long, FinalActorBuffs>();
             var activeBuffs = new Dictionary<long, FinalActorBuffs>();
@@ -240,7 +242,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            return new Dictionary<long, FinalActorBuffs>[] { buffs, activeBuffs };
+            return (buffs, activeBuffs);
         }
 
     }

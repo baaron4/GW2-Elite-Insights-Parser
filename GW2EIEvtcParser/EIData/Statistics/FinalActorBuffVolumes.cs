@@ -15,21 +15,22 @@ namespace GW2EIEvtcParser.EIData
         public double Outgoing { get; internal set; }
         public double OutgoingByExtension { get; internal set; }
 
-        internal static Dictionary<long, FinalActorBuffVolumes>[] GetBuffVolumesForPlayers(List<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
+        internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForPlayers(IEnumerable<Player> playerList, ParsedEvtcLog log, AgentItem srcAgentItem, long start, long end)
         {
 
             long phaseDuration = end - start;
 
             var buffsToTrack = new HashSet<Buff>();
+            var playerCount = 0;
             foreach (Player p in playerList)
             {
                 buffsToTrack.UnionWith(p.GetTrackedBuffs(log));
+                playerCount++;
             }
 
-            var buffs =
-                new Dictionary<long, FinalActorBuffVolumes>();
-            var activeBuffs =
-                new Dictionary<long, FinalActorBuffVolumes>();
+            //TODO(Rennorb) @perf
+            var buffs = new Dictionary<long, FinalActorBuffVolumes>();
+            var activeBuffs = new Dictionary<long, FinalActorBuffVolumes>();
 
             foreach (Buff buff in buffsToTrack)
             {
@@ -84,14 +85,15 @@ namespace GW2EIEvtcParser.EIData
                 totalOutgoing /= phaseDuration;
                 totalOutgoingByExtension /= phaseDuration;
 
+                //TODO(Rennorb) @perf
                 var uptime = new FinalActorBuffVolumes();
                 var uptimeActive = new FinalActorBuffVolumes();
                 buffs[buff.ID] = uptime;
                 activeBuffs[buff.ID] = uptimeActive;
                 if (buff.Type == BuffType.Duration)
                 {
-                    uptime.Outgoing = Math.Round(100.0 * totalOutgoing / playerList.Count, ParserHelper.BuffDigit);
-                    uptime.OutgoingByExtension = Math.Round(100.0 * (totalOutgoingByExtension) / playerList.Count, ParserHelper.BuffDigit);
+                    uptime.Outgoing = Math.Round(100.0 * totalOutgoing / playerCount, ParserHelper.BuffDigit);
+                    uptime.OutgoingByExtension = Math.Round(100.0 * (totalOutgoingByExtension) / playerCount, ParserHelper.BuffDigit);
                     //
                     if (activePlayerCount > 0)
                     {
@@ -101,8 +103,8 @@ namespace GW2EIEvtcParser.EIData
                 }
                 else if (buff.Type == BuffType.Intensity)
                 {
-                    uptime.Outgoing = Math.Round(totalOutgoing / playerList.Count, ParserHelper.BuffDigit);
-                    uptime.OutgoingByExtension = Math.Round((totalOutgoingByExtension) / playerList.Count, ParserHelper.BuffDigit);
+                    uptime.Outgoing = Math.Round(totalOutgoing / playerCount, ParserHelper.BuffDigit);
+                    uptime.OutgoingByExtension = Math.Round((totalOutgoingByExtension) / playerCount, ParserHelper.BuffDigit);
                     //
                     if (activePlayerCount > 0)
                     {
@@ -112,11 +114,11 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
 
-            return new Dictionary<long, FinalActorBuffVolumes>[] { buffs, activeBuffs };
+            return (buffs, activeBuffs);
         }
 
 
-        internal static Dictionary<long, FinalActorBuffVolumes>[] GetBuffVolumesForSelf(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
+        internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForSelf(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
         {
             var buffs = new Dictionary<long, FinalActorBuffVolumes>();
             var activeBuffs = new Dictionary<long, FinalActorBuffVolumes>();
@@ -237,7 +239,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
             }
-            return new Dictionary<long, FinalActorBuffVolumes>[] { buffs, activeBuffs };
+            return (buffs, activeBuffs);
         }
 
     }

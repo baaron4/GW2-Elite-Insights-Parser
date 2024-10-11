@@ -52,46 +52,32 @@ namespace GW2EIEvtcParser.EIData
             AgentItem.OverrideName(Character + "\0:" + Account + "\0" + Group);
         }
 
-        internal override Dictionary<long, FinalActorBuffs>[] ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        internal override (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
-            switch (type)
+            return (type) switch 
             {
-                case BuffEnum.Group:
-                    var otherPlayersInGroup = log.PlayerList
-                        .Where(p => p.Group == Group && this != p)
-                        .ToList();
-                    return FinalActorBuffs.GetBuffsForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
-                case BuffEnum.OffGroup:
-                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
-                    return FinalActorBuffs.GetBuffsForPlayers(offGroupPlayers, log, AgentItem, start, end);
-                case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
-                    return FinalActorBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
-                case BuffEnum.Self:
-                default:
-                    return FinalActorBuffs.GetBuffsForSelf(log, this, start, end);
-            }
+                BuffEnum.Group =>
+                    FinalActorBuffs.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group == Group && this != p), log, AgentItem, start, end),
+                BuffEnum.OffGroup => 
+                    FinalActorBuffs.GetBuffsForPlayers(log.PlayerList.Where(p => p.Group != Group), log, AgentItem, start, end),
+                BuffEnum.Squad =>
+                    FinalActorBuffs.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                _ =>  FinalActorBuffs.GetBuffsForSelf(log, this, start, end),
+            };
         }
 
-        internal override Dictionary<long, FinalActorBuffVolumes>[] ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        internal override (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
-            switch (type)
+            return (type) switch
             {
-                case BuffEnum.Group:
-                    var otherPlayersInGroup = log.PlayerList
-                        .Where(p => p.Group == Group && this != p)
-                        .ToList();
-                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayersInGroup, log, AgentItem, start, end);
-                case BuffEnum.OffGroup:
-                    var offGroupPlayers = log.PlayerList.Where(p => p.Group != Group).ToList();
-                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(offGroupPlayers, log, AgentItem, start, end);
-                case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
-                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayers, log, AgentItem, start, end);
-                case BuffEnum.Self:
-                default:
-                    return FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end);
-            }
+                BuffEnum.Group =>
+                    FinalActorBuffVolumes.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p.Group == Group && this != p), log, AgentItem, start, end),
+                BuffEnum.OffGroup =>
+                    FinalActorBuffVolumes.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p.Group != Group), log, AgentItem, start, end),
+                BuffEnum.Squad =>
+                    FinalActorBuffVolumes.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                _ => FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end),
+            };
         }
 
         /// <summary>

@@ -59,7 +59,6 @@ public struct AutoTrace : IDisposable
     void IDisposable.Dispose()
     {
         this.stopwatch.Stop();
-        Debug.Assert(this.Equals(s_parentTrace.Value.Peek()));
         s_parentTrace.Value.Pop();
         if(s_parentTrace.Value.Count > 0)
         {

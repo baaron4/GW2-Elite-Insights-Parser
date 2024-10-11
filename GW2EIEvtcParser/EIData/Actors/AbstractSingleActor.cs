@@ -364,48 +364,26 @@ namespace GW2EIEvtcParser.EIData
             return _buffHelper.GetBuffPresence(log, start, end);
         }
 
-        internal virtual Dictionary<long, FinalActorBuffs>[] ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        internal virtual (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
-            Dictionary<long, FinalActorBuffs>[] empty =
+            return (type) switch
             {
-                        new Dictionary<long, FinalActorBuffs>(),
-                        new Dictionary<long, FinalActorBuffs>()
-             };
-            switch (type)
-            {
-                case BuffEnum.Group:
-                    return empty;
-                case BuffEnum.OffGroup:
-                    return empty;
-                case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
-                    return FinalActorBuffs.GetBuffsForPlayers(otherPlayers, log, AgentItem, start, end);
-                case BuffEnum.Self:
-                default:
-                    return FinalActorBuffs.GetBuffsForSelf(log, this, start, end);
-            }
+                BuffEnum.Group or BuffEnum.OffGroup => ([ ], [ ]),
+                BuffEnum.Squad =>
+                    FinalActorBuffs.GetBuffsForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                _ => FinalActorBuffs.GetBuffsForSelf(log, this, start, end),
+            };
         }
 
-        internal virtual Dictionary<long, FinalActorBuffVolumes>[] ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
+        internal virtual (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) ComputeBuffVolumes(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
-            Dictionary<long, FinalActorBuffVolumes>[] empty =
+            return (type) switch 
             {
-                        new Dictionary<long, FinalActorBuffVolumes>(),
-                        new Dictionary<long, FinalActorBuffVolumes>()
-             };
-            switch (type)
-            {
-                case BuffEnum.Group:
-                    return empty;
-                case BuffEnum.OffGroup:
-                    return empty;
-                case BuffEnum.Squad:
-                    var otherPlayers = log.PlayerList.Where(p => p != this).ToList();
-                    return FinalActorBuffVolumes.GetBuffVolumesForPlayers(otherPlayers, log, AgentItem, start, end);
-                case BuffEnum.Self:
-                default:
-                    return FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end);
-            }
+                BuffEnum.Group or BuffEnum.OffGroup => ([ ], [ ]),
+                BuffEnum.Squad => 
+                    FinalActorBuffVolumes.GetBuffVolumesForPlayers(log.PlayerList.Where(p => p != this), log, AgentItem, start, end),
+                _ => FinalActorBuffVolumes.GetBuffVolumesForSelf(log, this, start, end),
+            };
         }
 
 
@@ -422,11 +400,6 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="buffId"></param>
-        /// <param name="time"></param>
-        /// <param name="window"></param>
-        /// <returns></returns>
         public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
         {
             return _buffHelper.HasBuff(log, buffId, time, window);
@@ -435,11 +408,6 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Checks if a buff is present on the actor and was applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="by"></param>
-        /// <param name="buffId"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
         public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
         {
             return _buffHelper.HasBuff(log, by, buffId, time);
@@ -458,14 +426,14 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Creates a <see cref="List{T}"/> of <see cref="Segment"/> of the <paramref name="buffIds"/> in input.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="buffIds">Buff IDs of which to find the <see cref="Segment"/> of.</param>
         /// <param name="start">Start time to search.</param>
         /// <param name="end">End time to search.</param>
-        /// <returns><see cref="IReadOnlyList{T}"/> with the <see cref="Segment"/>s found.</returns>
+        /// <returns><see cref="List{T}"/> with the <see cref="Segment"/>s found.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIds, long start, long end)
+        public List<Segment> GetBuffStatus(ParsedEvtcLog log, long[] buffIds, long start, long end)
         {
+            //TODO(Rennorb) @perf
             var result = new List<Segment>();
             foreach (long id in buffIds)
             {

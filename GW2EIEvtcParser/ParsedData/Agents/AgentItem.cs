@@ -336,10 +336,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="buffId"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
         public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
         {
             AbstractSingleActor actor = log.FindActor(this);
@@ -349,11 +345,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if a buff is present on the actor and applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="by"></param>
-        /// <param name="buffId"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
         public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
         {
             return log.FindActor(this).HasBuff(log, by, buffId, time);
@@ -383,7 +374,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if the agent will go into downstate before the next time they go above 90% health, or the fight ends.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="time">Current log time</param>
         /// <returns><see langword="true"/> if the agent will down before the next time they go above 90% health, otherwise <see langword="false"/>.</returns>
         public bool IsDownedBeforeNext90(ParsedEvtcLog log, long time)
@@ -394,7 +384,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if the agent is downed at given time.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="time">Downed time.</param>
         /// <returns><see langword="true"/> if the agent is downed, otherwise <see langword="false"/>.</returns>
         public bool IsDowned(ParsedEvtcLog log, long time)
@@ -405,7 +394,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if the agent is downed during a segment of time.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="start">Start time.</param>
         /// <param name="end">End Time.</param>
         /// <returns><see langword="true"/> if the agent is downed, otherwise <see langword="false"/>.</returns>
@@ -417,7 +405,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if the agent is dead at given time
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="time">Death time.</param>
         /// <returns><see langword="true"/> if the agent is dead, otherwise <see langword="false"/>.</returns>
         public bool IsDead(ParsedEvtcLog log, long time)
@@ -428,7 +415,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if the agent is dead during a segment of time.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="start">Start time.</param>
         /// <param name="end">End Time.</param>
         /// <returns><see langword="true"/> if the agent is dead, otherwise <see langword="false"/>.</returns>
@@ -440,7 +426,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if the agent is dc/not spawned at given time
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="time">Presence time.</param>
         /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>
         public bool IsDC(ParsedEvtcLog log, long time)
@@ -451,7 +436,6 @@ namespace GW2EIEvtcParser.ParsedData
         /// <summary>
         /// Checks if the agent is dc/not spawned during a segment of time.
         /// </summary>
-        /// <param name="log">The log.</param>
         /// <param name="start">Start time.</param>
         /// <param name="end">End Time.</param>
         /// <returns><see langword="true"/> if the agent isn't present, otherwise <see langword="false"/>.</returns>

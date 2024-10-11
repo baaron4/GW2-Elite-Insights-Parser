@@ -156,7 +156,9 @@ namespace GW2EIEvtcParser
                         {
                             // that part can't be // due to buff extensions
                             actor.GetTrackedBuffs(log);
+                            _t.Log("Buff");
                             actor.GetMinions(log);
+                            _t.Log("Minion");
                         }
                         _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
                         Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));

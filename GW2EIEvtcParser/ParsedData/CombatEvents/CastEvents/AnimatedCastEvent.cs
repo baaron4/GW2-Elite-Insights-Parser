@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.ParsedData
         private readonly int _scaledActualDuration;
         //private readonly int _effectHappenedDuration;
 
-        public Point3D EffectPosition { get; }
+        public Point3D? EffectPosition { get; }
 
         public bool HasEffectPosition => EffectPosition != null;
 
