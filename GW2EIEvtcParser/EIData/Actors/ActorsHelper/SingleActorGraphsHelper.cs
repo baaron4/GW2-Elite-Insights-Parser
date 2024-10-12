@@ -6,20 +6,16 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class SingleActorGraphsHelper : AbstractSingleActorHelper
+    partial class AbstractSingleActor
     {
-        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>>();
-        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageTakenList1S = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>>();
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = new();
+        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageTakenList1S = new();
 
-        private CachingCollectionWithTarget<double[]> _breakbarDamageList1S;
-        private CachingCollectionWithTarget<double[]> _breakbarDamageTakenList1S;
-        private List<Segment> _healthUpdates { get; set; }
-        private List<Segment> _breakbarPercentUpdates { get; set; }
-        private List<Segment> _barrierUpdates { get; set; }
-
-        public SingleActorGraphsHelper(AbstractSingleActor actor) : base(actor)
-        {
-        }
+        private CachingCollectionWithTarget<double[]>? _breakbarDamageList1S;
+        private CachingCollectionWithTarget<double[]>? _breakbarDamageTakenList1S;
+        private List<Segment>? _healthUpdates { get; set; }
+        private List<Segment>? _breakbarPercentUpdates { get; set; }
+        private List<Segment>? _barrierUpdates { get; set; }
 
 
 
@@ -29,6 +25,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
             }
+
             return _healthUpdates;
         }
 
@@ -38,6 +35,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
             }
+
             return _breakbarPercentUpdates;
         }
 
@@ -47,6 +45,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
             }
+
             return _barrierUpdates;
         }
 
@@ -70,10 +69,12 @@ namespace GW2EIEvtcParser.EIData
                 previousTime = time;
                 graph[time] += dl.HealthDamage;
             }
+
             for (int i = previousTime + 1; i < graph.Length; i++)
             {
                 graph[i] = graph[previousTime];
             }
+
             return graph;
         }
 
@@ -84,12 +85,14 @@ namespace GW2EIEvtcParser.EIData
                 graphs = new CachingCollectionWithTarget<int[]>(log);
                 _damageList1S[damageType] = graphs;
             }
-            if (!graphs.TryGetValue(start, end, target, out int[] graph))
+
+            if (!graphs.TryGetValue(start, end, target, out var graph))
             {
-                graph = ComputeDamageGraph(Actor.GetHitDamageEvents(target, log, start, end, damageType), start, end);
+                graph = ComputeDamageGraph(this.GetHitDamageEvents(target, log, start, end, damageType), start, end);
                 //
                 graphs.Set(start, end, target, graph);
             }
+
             return graph;
         }
 
@@ -100,12 +103,14 @@ namespace GW2EIEvtcParser.EIData
                 graphs = new CachingCollectionWithTarget<int[]>(log);
                 _damageTakenList1S[damageType] = graphs;
             }
-            if (!graphs.TryGetValue(start, end, target, out int[] graph))
+
+            if (!graphs.TryGetValue(start, end, target, out var graph))
             {
-                graph = ComputeDamageGraph(Actor.GetHitDamageTakenEvents(target, log, start, end, damageType), start, end);
+                graph = ComputeDamageGraph(this.GetHitDamageTakenEvents(target, log, start, end, damageType), start, end);
                 //
                 graphs.Set(start, end, target, graph); ;
             }
+
             return graph;
         }
 
@@ -129,47 +134,55 @@ namespace GW2EIEvtcParser.EIData
                 previousTime = time;
                 graph[time] += dl.BreakbarDamage;
             }
+
             for (int i = previousTime + 1; i < graph.Length; i++)
             {
                 graph[i] = graph[previousTime];
             }
+
             return graph;
         }
 
-        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        public IReadOnlyList<double>? Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
                 return null;
             }
+
             if (_breakbarDamageList1S == null)
             {
                 _breakbarDamageList1S = new CachingCollectionWithTarget<double[]>(log);
             }
-            if (_breakbarDamageList1S.TryGetValue(start, end, target, out double[] res))
+
+            if (_breakbarDamageList1S.TryGetValue(start, end, target, out var res))
             {
                 return res;
             }
-            var brkDmgList = ComputeBreakbarDamageGraph(Actor.GetBreakbarDamageEvents(target, log, start, end), start, end);
+
+            var brkDmgList = ComputeBreakbarDamageGraph(this.GetBreakbarDamageEvents(target, log, start, end), start, end);
             _breakbarDamageList1S.Set(start, end, target, brkDmgList);
             return brkDmgList;
         }
 
-        public IReadOnlyList<double> Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        public IReadOnlyList<double>? Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
                 return null;
             }
+
             if (_breakbarDamageTakenList1S == null)
             {
                 _breakbarDamageTakenList1S = new CachingCollectionWithTarget<double[]>(log);
             }
-            if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out double[] res))
+
+            if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out var res))
             {
                 return res;
             }
-            var brkDmgList = ComputeBreakbarDamageGraph(Actor.GetBreakbarDamageTakenEvents(target, log, start, end), start, end);
+
+            var brkDmgList = ComputeBreakbarDamageGraph(this.GetBreakbarDamageTakenEvents(target, log, start, end), start, end);
             _breakbarDamageTakenList1S.Set(start, end, target, brkDmgList);
             return brkDmgList;
         }
@@ -182,6 +195,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return found.Value;
             }
+
             return -1.0;
         }
 
@@ -192,6 +206,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return -1.0;
             }
+
             return GetPercentValue(hps, time);
         }
 
@@ -202,6 +217,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 return -1.0;
             }
+
             return GetPercentValue(barriers, time);
         }
 

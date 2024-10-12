@@ -147,15 +147,18 @@ namespace GW2EIEvtcParser
                         var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies.Count + log.FightData.Logic.Targets.Count);
                         friendliesAndTargets.AddRange(log.Friendlies);
                         friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
+                        Trace.TrackAverageStat("friendliesAndTargets", friendliesAndTargets.Count);
 
-                        var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs);
+                        var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs.Count + friendliesAndTargets.Count);
+                        friendliesAndTargetsAndMobs.AddRange(log.FightData.Logic.TrashMobs);
                         friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
+                        Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
                         
                         _t.Log("Paralell phases");
                         foreach (AbstractSingleActor actor in friendliesAndTargetsAndMobs)
                         {
                             // that part can't be // due to buff extensions
-                            actor.GetTrackedBuffs(log);
+                            actor.ComputeBuffMap(log);
                             _t.Log("Buff");
                             actor.GetMinions(log);
                             _t.Log("Minion");
@@ -168,7 +171,7 @@ namespace GW2EIEvtcParser
                             // init all positions
                             Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
                         }*/
-                        Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetBuffGraphs(log));
+                        Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.ComputeBuffGraphs(log));
                         _t.Log("friendliesAndTargetsAndMobs GetBuffGraphs");
                         Parallel.ForEach(friendliesAndTargets, actor =>
                         {

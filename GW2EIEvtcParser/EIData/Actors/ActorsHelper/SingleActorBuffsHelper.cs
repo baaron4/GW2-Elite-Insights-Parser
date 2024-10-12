@@ -10,14 +10,14 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class SingleActorBuffsHelper(AbstractSingleActor actor) : AbstractSingleActorHelper(actor)
+    partial class AbstractSingleActor
     {
         private List<Consumable>? _consumeList;
         // Boons
         private HashSet<Buff>? _trackedBuffs;
         private BuffDictionary? _buffMap;
-        private Dictionary<long, BuffsGraphModel>? _buffGraphs { get; set; }
-        private Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>>? _buffGraphsPerAgent { get; set; }
+        private Dictionary<long, BuffsGraphModel>? _buffGraphs;
+        private Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>>? _buffGraphsPerAgent;
         private CachingCollection<BuffDistribution>? _buffDistribution;
         private CachingCollection<Dictionary<long, long>>? _buffPresence;
         private CachingCollectionCustom<BuffEnum, (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs)>? _buffStats;
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffDistribution == null)
             {
-                SetBuffGraphs(log);
+                ComputeBuffGraphs(log);
             }
 
             if (!_buffDistribution.TryGetValue(start, end, out var value))
@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffPresence == null)
             {
-                SetBuffGraphs(log);
+                ComputeBuffGraphs(log);
             }
 
             if (!_buffPresence.TryGetValue(start, end, out var value))
@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_buffGraphs == null)
             {
-                SetBuffGraphs(log);
+                ComputeBuffGraphs(log);
             }
 
             return _buffGraphs;
@@ -113,7 +113,7 @@ namespace GW2EIEvtcParser.EIData
             AgentItem agent = by.AgentItem;
             if (_buffGraphs == null)
             {
-                SetBuffGraphs(log);
+                ComputeBuffGraphs(log);
             }
 
             _buffGraphsPerAgent ??= new Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>>();
@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EIData
             _buffStats ??= new(log, BuffEnum.Self);
             if (!_buffStats.TryGetValue(start, end, type, out var pair))
             {
-                pair = Actor.ComputeBuffs(log, start, end, type);
+                pair = this.ComputeBuffs(log, start, end, type);
                 _buffStats.Set(start, end, type, pair);
             }
             return pair.Buffs;
@@ -218,7 +218,7 @@ namespace GW2EIEvtcParser.EIData
             _buffStats ??= new(log, BuffEnum.Self);
             if (!_buffStats.TryGetValue(start, end, type, out var value))
             {
-                value = Actor.ComputeBuffs(log, start, end, type);
+                value = this.ComputeBuffs(log, start, end, type);
                 _buffStats.Set(start, end, type, value);
             }
             return value.ActiveBuffs;
@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EIData
             _buffVolumes ??= new(log, BuffEnum.Self);
             if (!_buffVolumes.TryGetValue(start, end, type, out var value))
             {
-                value = Actor.ComputeBuffVolumes(log, start, end, type);
+                value = this.ComputeBuffVolumes(log, start, end, type);
                 _buffVolumes.Set(start, end, type, value);
             }
             return value.Volumes;
@@ -240,7 +240,7 @@ namespace GW2EIEvtcParser.EIData
             _buffVolumes ??= new(log, BuffEnum.Self);
             if (!_buffVolumes.TryGetValue(start, end, type, out var value))
             {
-                value = Actor.ComputeBuffVolumes(log, start, end, type);
+                value = this.ComputeBuffVolumes(log, start, end, type);
                 _buffVolumes.Set(start, end, type, value);
             }
             return value.ActiveVolumes;
@@ -257,20 +257,20 @@ namespace GW2EIEvtcParser.EIData
 
         [MemberNotNull(nameof(_buffMap))]
         [MemberNotNull(nameof(_trackedBuffs))]
-        private void ComputeBuffMap(ParsedEvtcLog log)
+        internal void ComputeBuffMap(ParsedEvtcLog log)
         {
             _buffMap = new BuffDictionary(64, 256, 32, 1);
-            if (Actor.AgentItem == _unknownAgent)
+            if (this.AgentItem == _unknownAgent)
             {
-                _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
+                _buffMap.Finalize(log, this.AgentItem, out _trackedBuffs);
                 return;
             }
             // Fill in Boon Map
 #if DEBUG
-            var test = log.CombatData.GetBuffDataByDst(Actor.AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
-            var test2 = log.CombatData.GetBuffDataByDst(Actor.AgentItem).Where(x => log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+            var test = log.CombatData.GetBuffDataByDst(this.AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+            var test2 = log.CombatData.GetBuffDataByDst(this.AgentItem).Where(x => log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
-            foreach (var buffEvent in log.CombatData.GetBuffDataByDst(Actor.AgentItem))
+            foreach (var buffEvent in log.CombatData.GetBuffDataByDst(this.AgentItem))
             {
                 if (!log.Buffs.BuffsByIds.TryGetValue(buffEvent.BuffID, out var buff))
                 {
@@ -286,14 +286,14 @@ namespace GW2EIEvtcParser.EIData
                     _buffMap.AddRegen(log, buff, buffEvent);
                 }
             }
-            _buffMap.Finalize(log, Actor.AgentItem, out _trackedBuffs);
+            _buffMap.Finalize(log, this.AgentItem, out _trackedBuffs);
         }
 
 
         [MemberNotNull(nameof(_buffGraphs))]
         [MemberNotNull(nameof(_buffDistribution))]
         [MemberNotNull(nameof(_buffPresence))]
-        private void SetBuffGraphs(ParsedEvtcLog log)
+        internal void ComputeBuffGraphs(ParsedEvtcLog log)
         {
             if (_buffMap == null)
             {
@@ -303,8 +303,8 @@ namespace GW2EIEvtcParser.EIData
             _buffGraphs = new Dictionary<long, BuffsGraphModel>();
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
             var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
-            var numberOfClonesGraph = ProfHelper.CanSummonClones(Actor.Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
-            var numberOfRangerPets = ProfHelper.CanUseRangerPets(Actor.Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]) : null;
+            var numberOfClonesGraph = ProfHelper.CanSummonClones(this.Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
+            var numberOfRangerPets = ProfHelper.CanUseRangerPets(this.Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]) : null;
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
             var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
             var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
@@ -334,7 +334,7 @@ namespace GW2EIEvtcParser.EIData
                     catch (EIBuffSimulatorIDException e)
                     {
                         // get rid of logs invalid for HasStackIDs false
-                        log.UpdateProgressWithCancellationCheck("Parsing: Failed id based simulation on " + Actor.Character + " for " + buff.Name + " because " + e.Message);
+                        log.UpdateProgressWithCancellationCheck("Parsing: Failed id based simulation on " + this.Character + " for " + buff.Name + " because " + e.Message);
                         buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
                         simulator = buff.CreateSimulator(log, true);
                         simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EIData
                     _buffSimulators[buffID] = simulator;
                     bool updateBoonPresence = boonIds.Contains(buffID);
                     bool updateCondiPresence = condiIds.Contains(buffID);
-                    var graphSegments = new List<Segment>();
+                    var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count);
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
                         // Graph
@@ -378,7 +378,7 @@ namespace GW2EIEvtcParser.EIData
 
             _buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
             _buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
-            foreach (Minions minions in Actor.GetMinions(log).Values)
+            foreach (Minions minions in this.GetMinions(log).Values)
             {
                 IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanSegments(log);
                 foreach (IReadOnlyList<Segment> minionsSegments in segments)
@@ -517,7 +517,7 @@ namespace GW2EIEvtcParser.EIData
             var rates = new Dictionary<long, FinalBuffsDictionary>();
             var ratesActive = new Dictionary<long, FinalBuffsDictionary>();
             long duration = end - start;
-            long activeDuration = Actor.GetActiveDuration(log, start, end);
+            long activeDuration = this.GetActiveDuration(log, start, end);
 
             foreach (Buff buff in GetTrackedBuffs(log))
             {
@@ -536,7 +536,7 @@ namespace GW2EIEvtcParser.EIData
 
             foreach (Buff buff in GetTrackedBuffs(log))
             {
-                (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffVolumesDictionary.GetFinalBuffVolumesDictionary(log, buff, Actor, start, end);
+                (rates[buff.ID], ratesActive[buff.ID]) = FinalBuffVolumesDictionary.GetFinalBuffVolumesDictionary(log, buff, this, start, end);
             }
             return (rates, ratesActive);
         }

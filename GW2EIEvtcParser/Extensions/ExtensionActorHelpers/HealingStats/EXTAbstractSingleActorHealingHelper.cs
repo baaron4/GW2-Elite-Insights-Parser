@@ -10,16 +10,15 @@ namespace GW2EIEvtcParser.Extensions
 {
     public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
     {
-        private AbstractSingleActor _actor { get; }
-        private AgentItem _agentItem => _actor.AgentItem;
+        private readonly AbstractSingleActor _actor;
 
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedSelfHealEvents = new();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>? _typedSelfHealEvents = new();
 
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healing1S = new();
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healingReceived1S = new();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healing1S = new();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healingReceived1S = new();
 
-        private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat> _outgoingHealStats { get; set; }
-        private CachingCollectionWithTarget<EXTFinalIncomingHealingStat> _incomingHealStats { get; set; }
+        private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>? _outgoingHealStats { get; set; }
+        private CachingCollectionWithTarget<EXTFinalIncomingHealingStat>? _incomingHealStats { get; set; }
 
         internal EXTAbstractSingleActorHealingHelper(AbstractSingleActor actor) : base()
         {
@@ -35,7 +34,7 @@ namespace GW2EIEvtcParser.Extensions
 
             if (HealEvents == null)
             {
-                HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
+                HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_actor.AgentItem).Where(x => x.ToFriendly));
                 foreach (var minion in _actor.GetMinions(log).Values)
                 {
                     HealEvents.AddRange(minion.EXTHealing.GetOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
@@ -70,7 +69,7 @@ namespace GW2EIEvtcParser.Extensions
 
             if (this.HealEvents == null)
             {
-                this.HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_agentItem).Where(x => x.ToFriendly));
+                this.HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_actor.AgentItem).Where(x => x.ToFriendly));
                 foreach (var minion in _actor.GetMinions(log).Values)
                 {
                     minion.EXTHealing.AppendOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd, this.HealEvents);
@@ -117,6 +116,7 @@ namespace GW2EIEvtcParser.Extensions
                     return [ ];
                 }
             }
+
             return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.Extensions
         [MemberNotNull(nameof(HealReceivedEventsBySrc))]
         public void InitIncomingHealEvents(ParsedEvtcLog log)
         {
-            HealReceivedEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_agentItem).Where(x => x.ToFriendly));
+            HealReceivedEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_actor.AgentItem).Where(x => x.ToFriendly));
             HealReceivedEvents.SortByTime();
             HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
@@ -162,21 +162,23 @@ namespace GW2EIEvtcParser.Extensions
 
         public IReadOnlyList<EXTAbstractHealingEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From == _agentItem).ToList();
+            return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From == _actor.AgentItem).ToList();
         }
 
         internal IReadOnlyList<EXTAbstractHealingEvent> GetJustActorTypedOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
         {
-            if (!_typedSelfHealEvents.TryGetValue(healingType, out CachingCollectionWithTarget<List<EXTAbstractHealingEvent>> healEventsPerPhasePerTarget))
+            if (!_typedSelfHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
             {
                 healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>(log);
                 _typedSelfHealEvents[healingType] = healEventsPerPhasePerTarget;
             }
-            if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<EXTAbstractHealingEvent> dls))
+
+            if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
             {
-                dls = GetTypedOutgoingHealEvents(target, log, start, end, healingType).Where(x => x.From == _agentItem).ToList();
+                dls = GetTypedOutgoingHealEvents(target, log, start, end, healingType).Where(x => x.From == _actor.AgentItem).ToList();
                 healEventsPerPhasePerTarget.Set(start, end, target, dls);
             }
+
             return dls;
         }
 

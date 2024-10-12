@@ -378,7 +378,7 @@ namespace GW2EIEvtcParser.ParsedData
         /// <returns><see langword="true"/> if the agent will down before the next time they go above 90% health, otherwise <see langword="false"/>.</returns>
         public bool IsDownedBeforeNext90(ParsedEvtcLog log, long time)
         {
-            return log.FindActor(this).IsDownBefore90(log, time);
+            return log.FindActor(this).IsDownBeforeNext90(log, time);
         }
 
         /// <summary>

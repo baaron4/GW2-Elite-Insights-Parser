@@ -10,17 +10,13 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public abstract class AbstractSingleActor : AbstractActor
+    public abstract partial class AbstractSingleActor : AbstractActor
     {
         public new AgentItem AgentItem => base.AgentItem;
         public string Account { get; protected set; }
         public int Group { get; protected set; }
 
         // Helpers
-        private readonly SingleActorBuffsHelper _buffHelper;
-        private readonly SingleActorGraphsHelper _graphHelper;
-        private readonly SingleActorDamageModifierHelper _damageModifiersHelper;
-        private readonly SingleActorStatusHelper _statusHelper;
         public EXTAbstractSingleActorHealingHelper EXTHealing { get; }
         public EXTAbstractSingleActorBarrierHelper EXTBarrier { get; }
         // Minions
@@ -40,31 +36,11 @@ namespace GW2EIEvtcParser.EIData
         {
             Group = 51;
             Account = Character;
-            _buffHelper = new SingleActorBuffsHelper(this);
-            _graphHelper = new SingleActorGraphsHelper(this);
-            _damageModifiersHelper = new SingleActorDamageModifierHelper(this);
-            _statusHelper = new SingleActorStatusHelper(this);
             EXTHealing = new EXTAbstractSingleActorHealingHelper(this);
             EXTBarrier = new EXTAbstractSingleActorBarrierHelper(this);
         }
 
         internal abstract void OverrideName(string name);
-
-        public WeaponSets GetWeaponSets(ParsedEvtcLog log)
-        {
-            return _statusHelper.GetWeaponSets(log);
-        }
-
-        //
-        public IReadOnlyList<Consumable> GetConsumablesList(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetConsumablesList(log, start, end);
-        }
-        //
-        public IReadOnlyList<DeathRecap> GetDeathRecaps(ParsedEvtcLog log)
-        {
-            return _statusHelper.GetDeathRecaps(log);
-        }
 
         public abstract string GetIcon();
 
@@ -95,104 +71,73 @@ namespace GW2EIEvtcParser.EIData
 
         internal abstract void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null);
 
-        public virtual IReadOnlyList<(long hpValue, double percent)> GetHealthDistribution()
+        public virtual IReadOnlyList<(long hpValue, double percent)>? GetHealthDistribution()
         {
             return null;
         }
 
-        public (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) GetStatus(ParsedEvtcLog log)
-        {
-            return _statusHelper.GetStatus(log);
-        }
 
-        public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
-        {
-            return _statusHelper.GetBreakbarStatus(log);
-        }
-
-        public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
-        {
-            return _statusHelper.GetTimeSpentInCombat(log, start, end);
-        }
-
-        public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
-        {
-            return _statusHelper.GetActiveDuration(log, start, end);
-        }
-        public bool IsDownBefore90(ParsedEvtcLog log, long curTime)
-        {
-            return _statusHelper.IsDownBeforeNext90(log, curTime);
-        }
         public bool IsDowned(ParsedEvtcLog log, long time)
         {
-            (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
+            (_, IReadOnlyList<Segment> downs, _) = GetStatus(log);
             return downs.Any(x => x.ContainsPoint(time));
         }
         public bool IsDowned(ParsedEvtcLog log, long start, long end)
         {
-            (_, IReadOnlyList<Segment> downs, _) = _statusHelper.GetStatus(log);
+            (_, IReadOnlyList<Segment> downs, _) = GetStatus(log);
             return downs.Any(x => x.IntersectSegment(start, end));
         }
         public bool IsDead(ParsedEvtcLog log, long time)
         {
-            (IReadOnlyList<Segment> deads, _, _) = _statusHelper.GetStatus(log);
+            (IReadOnlyList<Segment> deads, _, _) = GetStatus(log);
             return deads.Any(x => x.ContainsPoint(time));
         }
         public bool IsDead(ParsedEvtcLog log, long start, long end)
         {
-            (IReadOnlyList<Segment> deads, _, _) = _statusHelper.GetStatus(log);
+            (IReadOnlyList<Segment> deads, _, _) = GetStatus(log);
             return deads.Any(x => x.IntersectSegment(start, end));
         }
         public bool IsDC(ParsedEvtcLog log, long time)
         {
-            (_, _, IReadOnlyList<Segment> dcs) = _statusHelper.GetStatus(log);
+            (_, _, IReadOnlyList<Segment> dcs) = GetStatus(log);
             return dcs.Any(x => x.ContainsPoint(time));
         }
         public bool IsDC(ParsedEvtcLog log, long start, long end)
         {
-            (_, _, IReadOnlyList<Segment> dcs) = _statusHelper.GetStatus(log);
+            (_, _, IReadOnlyList<Segment> dcs) = GetStatus(log);
             return dcs.Any(x => x.IntersectSegment(start, end));
         }
 
         public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
         {
-            (IReadOnlyList<Segment> nones, IReadOnlyList<Segment> actives, IReadOnlyList<Segment> immunes, IReadOnlyList<Segment> recoverings) = _statusHelper.GetBreakbarStatus(log);
+            var (nones, actives, immunes, recoverings) = GetBreakbarStatus(log);
             if (nones.Any(x => x.ContainsPoint(time)))
             {
                 return ArcDPSEnums.BreakbarState.None;
             }
+
             if (actives.Any(x => x.ContainsPoint(time)))
             {
                 return ArcDPSEnums.BreakbarState.Active;
             }
+
             if (immunes.Any(x => x.ContainsPoint(time)))
             {
                 return ArcDPSEnums.BreakbarState.Immune;
             }
+
             if (recoverings.Any(x => x.ContainsPoint(time)))
             {
                 return ArcDPSEnums.BreakbarState.Recover;
             }
+
             return ArcDPSEnums.BreakbarState.None;
         }
 
-        public IReadOnlyList<Segment> GetHealthUpdates(ParsedEvtcLog log)
-        {
-            return _graphHelper.GetHealthUpdates(log);
-        }
-
-        public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
-        {
-            return _graphHelper.GetCurrentHealthPercent(log, time);
-        }
-        //
 
         /// <summary>
         /// Return the health value at requested %
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="currentHealthPercent"></param>
-        /// <returns></returns>
         public abstract int GetCurrentHealth(ParsedEvtcLog log, double currentHealthPercent);
 
 
@@ -200,44 +145,22 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Return the health value at requested time
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
         public int GetCurrentHealth(ParsedEvtcLog log, long time)
         {
             var currentHPPercent = GetCurrentHealthPercent(log, time);
             return GetCurrentHealth(log, currentHPPercent);
         }
 
-        public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
-        {
-            return _graphHelper.GetBreakbarPercentUpdates(log);
-        }
-
-        public IReadOnlyList<Segment> GetBarrierUpdates(ParsedEvtcLog log)
-        {
-            return _graphHelper.GetBarrierUpdates(log);
-        }
-
-        public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
-        {
-            return _graphHelper.GetCurrentBarrierPercent(log, time);
-        }
         /// <summary>
         /// Return the barrier value at requested %
         /// </summary>
-        /// <param name="log"></param>
-        /// <param name="currentBarrierPercent"></param>
         /// <param name="time">Time at which to check for barrier. Barrier scales of the current maximum health of the actor and maximum health can change dynamically</param>
-        /// <returns></returns>
         public abstract int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time);
 
         /// <summary>
         /// Return the barrier value at requested time
         /// </summary>
-        /// <param name="log"></param>
         /// <param name="time">Time at which to check for barrier. Barrier scales of the current maximum health of the actor and maximum health can change dynamically</param>
-        /// <returns></returns>
         public int GetCurrentBarrier(ParsedEvtcLog log, long time)
         {
             var currentBarrierPercent = GetCurrentBarrierPercent(log, time);
@@ -259,7 +182,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (AgentItem agent in combatMinion)
                 {
                     long id = agent.ID;
-                    AbstractSingleActor singleActor = log.FindActor(agent);
+                    var singleActor = log.FindActor(agent);
                     if (singleActor is NPC npc)
                     {
                         if (auxMinions.TryGetValue(id, out Minions values))
@@ -285,7 +208,7 @@ namespace GW2EIEvtcParser.EIData
                 foreach (AgentItem agent in combatGadgetMinion)
                 {
                     string id = agent.Name;
-                    AbstractSingleActor singleActor = log.FindActor(agent);
+                    var singleActor = log.FindActor(agent);
                     if (singleActor is NPC npc)
                     {
                         if (auxGadgetMinions.TryGetValue(id, out Minions values))
@@ -309,60 +232,7 @@ namespace GW2EIEvtcParser.EIData
             return _minions;
         }
 
-        #region GRAPHS
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType)
-        {
-            return _graphHelper.Get1SDamageList(log, start, end, target, damageType);
-        }
-
-        public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType)
-        {
-            return _graphHelper.Get1SDamageTakenList(log, start, end, target, damageType);
-        }
-
-        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
-        {
-            return _graphHelper.Get1SBreakbarDamageList(log, start, end, target);
-        }
-        public IReadOnlyList<double> Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
-        {
-            return _graphHelper.Get1SBreakbarDamageTakenList(log, start, end, target);
-        }
-        #endregion GRAPHS
-
-        #region DAMAGE MODIFIERS
-
-        public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            return _damageModifiersHelper.GetOutgoingDamageModifierStats(target, log, start, end);
-        }
-
-        public IReadOnlyCollection<string> GetPresentOutgoingDamageModifier(ParsedEvtcLog log)
-        {
-            return _damageModifiersHelper.GetPresentOutgoingDamageModifier(log);
-        }
-
-        public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
-        {
-            return _damageModifiersHelper.GetIncomingDamageModifierStats(target, log, start, end);
-        }
-
-        public IReadOnlyCollection<string> GetPresentIncomingDamageModifier(ParsedEvtcLog log)
-        {
-            return _damageModifiersHelper.GetPresentIncomingDamageModifier(log);
-        }
-        #endregion DAMAGE MODIFIERS
-
         #region BUFFS
-        public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetBuffDistribution(log, start, end);
-        }
-
-        public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetBuffPresence(log, start, end);
-        }
 
         internal virtual (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) ComputeBuffs(ParsedEvtcLog log, long start, long end, BuffEnum type)
         {
@@ -386,43 +256,6 @@ namespace GW2EIEvtcParser.EIData
             };
         }
 
-
-        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
-        {
-            return _buffHelper.GetBuffGraphs(log);
-        }
-
-        public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log, AbstractSingleActor by)
-        {
-            return _buffHelper.GetBuffGraphs(log, by);
-        }
-
-        /// <summary>
-        /// Checks if a buff is present on the actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
-        /// </summary>
-        public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
-        {
-            return _buffHelper.HasBuff(log, buffId, time, window);
-        }
-
-        /// <summary>
-        /// Checks if a buff is present on the actor and was applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
-        /// </summary>
-        public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
-        {
-            return _buffHelper.HasBuff(log, by, buffId, time);
-        }
-
-        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, long buffId, long start, long end)
-        {
-            return _buffHelper.GetBuffStatus(log, buffId, start, end);
-        }
-
-        public Segment GetBuffStatus(ParsedEvtcLog log, long buffId, long time)
-        {
-            return _buffHelper.GetBuffStatus(log, buffId, time);
-        }
-
         /// <summary>
         /// Creates a <see cref="List{T}"/> of <see cref="Segment"/> of the <paramref name="buffIds"/> in input.
         /// </summary>
@@ -437,66 +270,11 @@ namespace GW2EIEvtcParser.EIData
             var result = new List<Segment>();
             foreach (long id in buffIds)
             {
-                result.AddRange(_buffHelper.GetBuffStatus(log, id, start, end));
+                result.AddRange(GetBuffStatus(log, id, start, end));
             }
             return result;
         }
 
-        public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
-        {
-            return _buffHelper.GetBuffStatus(log, by, buffId, start, end);
-        }
-
-        public Segment GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
-        {
-            return _buffHelper.GetBuffStatus(log, by, buffId, time);
-        }
-
-        public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetBuffs(type, log, start, end);
-        }
-
-        public IReadOnlyDictionary<long, FinalActorBuffs> GetActiveBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetActiveBuffs(type, log, start, end);
-        }
-
-        public IReadOnlyCollection<Buff> GetTrackedBuffs(ParsedEvtcLog log)
-        {
-            return _buffHelper.GetTrackedBuffs(log);
-        }
-
-
-        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetBuffsDictionary(log, start, end);
-        }
-
-        public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetActiveBuffsDictionary(log, start, end);
-        }
-
-        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetBuffVolumes(type, log, start, end);
-        }
-
-        public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetActiveBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetActiveBuffVolumes(type, log, start, end);
-        }
-
-        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetBuffVolumesDictionary(log, start, end);
-        }
-
-        public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
-        {
-            return _buffHelper.GetActiveBuffVolumesDictionary(log, start, end);
-        }
         #endregion BUFFS
 
         #region COMBAT REPLAY

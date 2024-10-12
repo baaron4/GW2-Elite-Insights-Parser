@@ -5,16 +5,12 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class SingleActorDamageModifierHelper : AbstractSingleActorHelper
+    partial class AbstractSingleActor
     {
-        private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>> _outgoingDamageModifiersPerTargets;
-        private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>> _outgoingDamageModifierEventsPerTargets;
-        private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>> _incomingDamageModifiersPerTargets;
-        private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>> _incomingDamageModifierEventsPerTargets;
-
-        public SingleActorDamageModifierHelper(AbstractSingleActor actor) : base(actor)
-        {
-        }
+        private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>? _outgoingDamageModifiersPerTargets;
+        private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>? _outgoingDamageModifierEventsPerTargets;
+        private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>? _incomingDamageModifiersPerTargets;
+        private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>? _incomingDamageModifierEventsPerTargets;
 
         private Dictionary<string, DamageModifierStat> ComputeDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
@@ -28,8 +24,8 @@ namespace GW2EIEvtcParser.EIData
                     if (damageMod != null)
                     {
                         var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
-                        int totalDamage = damageMod.GetTotalDamage(Actor, log, target, start, end);
-                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageMod.GetHitDamageEvents(Actor, log, target, start, end);
+                        int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
+                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
                         res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count, eventsToUse.Sum(x => x.DamageGain), totalDamage);
                     }
                 }
@@ -48,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (!log.ParserSettings.ComputeDamageModifiers || Actor.IsFakeActor)
+            if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
             {
                 return new Dictionary<string, DamageModifierStat>();
             }
@@ -84,12 +80,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 damageMods.AddRange(list);
             }
-            damageMods.AddRange(log.DamageModifiers.GetOutgoingModifiersPerSpec(Actor.Spec));
+            damageMods.AddRange(log.DamageModifiers.GetOutgoingModifiersPerSpec(this.Spec));
             //
             var damageModifierEvents = new List<DamageModifierEvent>();
             foreach (OutgoingDamageModifier damageMod in damageMods)
             {
-                damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(Actor, log));
+                damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(this, log));
             }
             damageModifierEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
             var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
@@ -121,8 +117,8 @@ namespace GW2EIEvtcParser.EIData
                     if (damageMod != null)
                     {
                         var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
-                        int totalDamage = damageMod.GetTotalDamage(Actor, log, target, start, end);
-                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageMod.GetHitDamageEvents(Actor, log, target, start, end);
+                        int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
+                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
                         res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count, eventsToUse.Sum(x => x.DamageGain), totalDamage);
                     }
                 }
@@ -141,7 +137,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (!log.ParserSettings.ComputeDamageModifiers || Actor.IsFakeActor)
+            if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
             {
                 return new Dictionary<string, DamageModifierStat>();
             }
@@ -177,12 +173,12 @@ namespace GW2EIEvtcParser.EIData
             {
                 damageMods.AddRange(list);
             }
-            damageMods.AddRange(log.DamageModifiers.GetIncomingModifiersPerSpec(Actor.Spec));
+            damageMods.AddRange(log.DamageModifiers.GetIncomingModifiersPerSpec(this.Spec));
             //
             var damageModifierEvents = new List<DamageModifierEvent>();
             foreach (IncomingDamageModifier damageMod in damageMods)
             {
-                damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(Actor, log));
+                damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(this, log));
             }
             damageModifierEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
             var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
