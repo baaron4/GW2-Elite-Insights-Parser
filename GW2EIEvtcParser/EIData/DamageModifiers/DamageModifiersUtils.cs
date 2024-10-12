@@ -32,8 +32,8 @@ namespace GW2EIEvtcParser.EIData
         internal static bool VulnerabilityAdditiveChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log, long buffID, double gainPerStack)
         {
             AbstractSingleActor target = log.FindActor(dl.To);
-            Segment buffSegment = target.GetBuffStatus(log, buffID, dl.Time);
-            Segment vulnSegment = target.GetBuffStatus(log, Vulnerability, dl.Time);
+            var buffSegment = target.GetBuffStatus(log, buffID, dl.Time);
+            var vulnSegment = target.GetBuffStatus(log, Vulnerability, dl.Time);
             double gain = buffSegment.Value * gainPerStack - vulnSegment.Value;
             if (gain >= 100)
             {

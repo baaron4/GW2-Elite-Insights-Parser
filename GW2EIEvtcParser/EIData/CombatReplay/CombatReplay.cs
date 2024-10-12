@@ -5,6 +5,9 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     public class CombatReplay
     {
         //TODO(Rennorb) @perf: capacity
@@ -640,11 +643,7 @@ namespace GW2EIEvtcParser.EIData
         /// <param name="buffID">Buff id</param>
         internal void AddHideByBuff(AbstractSingleActor actor, ParsedEvtcLog log, long buffID)
         {
-            var invuls = actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment segment in invuls)
-            {
-                Hidden.Add(new Segment(segment));
-            }
+            Hidden.AddRange(actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0));
         }
 
         /// <summary>

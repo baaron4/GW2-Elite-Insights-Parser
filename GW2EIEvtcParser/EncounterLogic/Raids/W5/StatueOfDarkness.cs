@@ -12,6 +12,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class StatueOfDarkness : HallOfChains
     {
         // TODO - add CR icons and some mechanics
@@ -185,13 +188,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     lastGraspsFateSegments.Add(new Segment(lastGraspsFate[i].Time, lastGraspsFate[i + 1].Time, 1));
                 }
                 //
-                Segment lastJudge = lastGraspsJudgementSegments.LastOrDefault();
-                Segment lastFate = lastGraspsFateSegments.LastOrDefault();
-                if (lastFate == null || lastJudge == null)
+                if (lastGraspsJudgementSegments.LastOrNull() is not Segment lastJudge || lastGraspsFateSegments.LastOrNull() is not Segment lastFate)
                 {
                     return;
                 }
-                if (lastFate.IntersectSegment(lastJudge))
+
+                if (lastFate.Intersects(lastJudge))
                 {
                     fightData.SetSuccess(true, Math.Max(lastJudge.Start, lastFate.Start));
                 }

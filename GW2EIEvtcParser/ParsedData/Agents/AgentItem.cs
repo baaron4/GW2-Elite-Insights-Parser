@@ -6,6 +6,9 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     public class AgentItem
     {
 

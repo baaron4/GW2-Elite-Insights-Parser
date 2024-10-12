@@ -13,6 +13,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class Slothasor : SalvationPass
     {
         public Slothasor(int triggerID) : base(triggerID)

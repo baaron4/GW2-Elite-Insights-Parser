@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)ArcDPSEnums.TrashID.Jade:
                     var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     uint shieldRadius = 100;
-                    foreach (Segment seg in shields)
+                    foreach (var seg in shields)
                     {
                         replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
                     }
@@ -116,7 +116,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(player, log, replay);
-            IEnumerable<Segment> claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            var claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
         }
 

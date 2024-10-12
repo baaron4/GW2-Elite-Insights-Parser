@@ -181,7 +181,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(player, log, replay);
 
             // consume fixations
-            IEnumerable<Segment> consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            var  consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             List<AbstractBuffEvent> consumeEvents = GetFilteredList(log.CombatData, new long[] { Consume }, player, true, true);
             replay.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
             replay.AddTether(consumeEvents, Colors.Red, 0.5);

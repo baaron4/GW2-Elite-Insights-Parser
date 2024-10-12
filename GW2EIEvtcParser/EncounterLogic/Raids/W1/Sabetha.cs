@@ -239,7 +239,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Sapper bombs
             var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in sapperBombs)
+            foreach (var seg in sapperBombs)
             {
                 replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);
                 replay.AddOverheadIcon(seg, p, ParserIcons.BombOverhead);

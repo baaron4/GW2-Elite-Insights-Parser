@@ -75,12 +75,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     IReadOnlyDictionary<long, BuffsGraphModel> graphs = p.GetBuffGraphs(log);
                     if (graphs.TryGetValue(BloodstoneBisque, out BuffsGraphModel graph))
                     {
-                        if (!graph.BuffChart.Any(x => x.Value == 0 && x.IntersectSegment(fightStart, fightEnd)))
+                        if (!graph.BuffChart.Any(x => x.Value == 0 && x.Intersects(fightStart, fightEnd)))
                         {
                             playersWithBisque++;
                         }
                     }
-                    (_, _, IReadOnlyList<Segment> dcs) = p.GetStatus(log);
+                    var (_, _, dcs) = p.GetStatus(log);
                     if (!dcs.Any(x => x.ContainsPoint(fightEnd)))
                     {
                         expectedPlayersForSuccess++;
@@ -251,7 +251,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         private static void AddMatthiasBubbles(long buffID, NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
             var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in shields)
+            foreach (var seg in shields)
             {
                 replay.Decorations.Add(new CircleDecoration(250, seg, Colors.Magenta, 0.5, new AgentConnector(target)));
             }
@@ -314,8 +314,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Corruption
-            IEnumerable<Segment> corruptedMatthias = p.GetBuffStatus(log, new long[] { Corruption1, Corruption2 }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-            foreach (Segment seg in corruptedMatthias)
+            var corruptedMatthias = p.GetBuffStatus(log, new long[] { Corruption1, Corruption2 }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            foreach (var seg in corruptedMatthias)
             {
                 int corruptedMatthiasEnd = (int)seg.End;
                 replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
@@ -328,7 +328,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             // Well of profane
             var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in wellMatthias)
+            foreach (var seg in wellMatthias)
             {
                 int wellMatthiasEnd = (int)seg.End;
                 replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
@@ -340,11 +340,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
             }
             // Sacrifice Selection
-            IEnumerable<Segment> sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
             // Sacrifice
             var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in sacrificeMatthias)
+            foreach (var seg in sacrificeMatthias)
             {
                 replay.AddDecorationWithGrowing(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
             }
@@ -357,7 +357,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.AddDecorationWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), Colors.Orange, 0.2, new AgentConnector(p)), zealousEnd);
             }
             // Unbalanced
-            IEnumerable<Segment> unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+            var unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
         }
 

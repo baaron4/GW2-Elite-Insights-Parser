@@ -15,6 +15,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class Kanaxai : SilentSurf
     {
         public Kanaxai(int triggerID) : base(triggerID)
@@ -384,7 +387,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int castDuration = 5400;
                         int expectedEndCastTime = (int)c.Time + castDuration;
 
-                        Segment quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrDefault();
+                        Segment? quickness = target.GetBuffStatus(log, Quickness, c.Time, expectedEndCastTime).Where(x => x.Value == 1).FirstOrNull();
 
                         // If the aspect has Sugar Rush AND Quickness
                         if (hasSugarRush && quickness != null)

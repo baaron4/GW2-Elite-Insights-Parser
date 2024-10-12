@@ -10,10 +10,13 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     public class Player : AbstractPlayer
     {
 
-        private List<GenericSegment<string>> CommanderStates { get; set; } = null;
+        private List<GenericSegment<string>>? CommanderStates = null;
         // Constructors
         internal Player(AgentItem agent, bool noSquad) : base(agent)
         {
@@ -150,21 +153,22 @@ namespace GW2EIEvtcParser.EIData
                 }
                 states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
 
-                CommanderStates = new List<GenericSegment<string>>(states.Count);
+                CommanderStates = new(states.Count);
 
-                GenericSegment<string>? lastAdded = null;
-                Player? lastPlayer = null;
-                foreach ((Player p, GenericSegment<string> seg) in states)
+                var (lastPlayer, lastSegment) = states[0];
+                foreach (var (player, seg) in states.Skip(1))
                 {
-                    if (lastPlayer == p && lastAdded.Value == seg.Value)
+                    if (lastPlayer == player && lastSegment.Value == seg.Value)
                     {
-                        lastAdded.End = seg.End;
+                        lastSegment.End = seg.End;
                     }
                     else
                     {
-                        lastAdded = seg;
-                        lastPlayer = p;
-                        if(p == this) { CommanderStates.Add(seg); }
+                        //TODO(Rennorb) @correctness: This just seems wrong. what if the players are interleaved?
+                        if(player == this) { CommanderStates.Add(lastSegment); }
+
+                        lastPlayer = player;
+                        lastSegment = seg;
                     }
                 }
 
@@ -178,25 +182,27 @@ namespace GW2EIEvtcParser.EIData
         /// Return commander status list, with no consideration of tag type.
         /// Player had a commander tag between every segment.Start and segment.End.
         /// </summary>
-        /// <param name="log"></param>
-        /// <returns></returns>
         public IReadOnlyList<Segment> GetCommanderStatesNoTagValues(ParsedEvtcLog log)
         {
             IReadOnlyList<GenericSegment<string>> commanderStates = GetCommanderStates(log);
+            if(commanderStates.Count == 0) { return [ ]; }
+
             var result = new List<Segment>();
-            Segment prev = null;
-            foreach (GenericSegment<string> state in commanderStates)
+            Segment last = commanderStates[0].WithOtherType<double>();
+            foreach (var state in commanderStates.Skip(1))
             {
-                if (prev == null || state.Start != prev.End)
+                if (state.Start != last.End)
                 {
-                    prev = new Segment(state.Start, state.End);
-                    result.Add(prev);
+                    result.Add(last);
+                    last = state.WithOtherType<double>();
                 }
                 else
                 {
-                    prev.End = state.End;
+                    last.End = state.End;
                 }
             }
+            result.Add(last);
+
             return result;
         }
 

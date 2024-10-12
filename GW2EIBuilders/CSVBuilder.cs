@@ -21,19 +21,21 @@ namespace GW2EIBuilders
         private readonly string _delimiter;
         private readonly string[] _uploadResult;
 
-        private readonly List<Player> _noFakePlayers;
+        private readonly IReadOnlyList<Player> _noFakePlayers;
 
         public CSVBuilder(ParsedEvtcLog log, CSVSettings settings, Version parserVersion, UploadResults uploadResults)
         {
+            //TODO(Rennorb) @cleanup: promote
             if (settings == null)
             {
                 throw new InvalidDataException("Missing settings in CSVBuilder");
             }
+
             _log = log;
             _parserVersion = parserVersion;
             _delimiter = settings.Delimiter;
             _phases = log.FightData.GetPhases(log);
-            _noFakePlayers = log.PlayerList.ToList();
+            _noFakePlayers = log.PlayerList;
 
             _statistics = log.StatisticsHelper;
 

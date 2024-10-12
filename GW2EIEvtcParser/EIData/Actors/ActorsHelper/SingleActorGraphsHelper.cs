@@ -6,6 +6,9 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     partial class AbstractSingleActor
     {
         private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = new();
@@ -13,9 +16,9 @@ namespace GW2EIEvtcParser.EIData
 
         private CachingCollectionWithTarget<double[]>? _breakbarDamageList1S;
         private CachingCollectionWithTarget<double[]>? _breakbarDamageTakenList1S;
-        private List<Segment>? _healthUpdates { get; set; }
-        private List<Segment>? _breakbarPercentUpdates { get; set; }
-        private List<Segment>? _barrierUpdates { get; set; }
+        private IReadOnlyList<Segment>? _healthUpdates;
+        private IReadOnlyList<Segment>? _breakbarPercentUpdates;
+        private IReadOnlyList<Segment>? _barrierUpdates;
 
 
 
@@ -23,7 +26,8 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_healthUpdates == null)
             {
-                _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+                var events = log.CombatData.GetHealthUpdateEvents(AgentItem);
+                _healthUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
             }
 
             return _healthUpdates;
@@ -33,7 +37,8 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_breakbarPercentUpdates == null)
             {
-                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+                var events = log.CombatData.GetBreakbarPercentEvents(AgentItem);
+                _breakbarPercentUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
             }
 
             return _breakbarPercentUpdates;
@@ -43,10 +48,44 @@ namespace GW2EIEvtcParser.EIData
         {
             if (_barrierUpdates == null)
             {
-                _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+                var events = log.CombatData.GetBarrierUpdateEvents(AgentItem);
+                _barrierUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
             }
 
             return _barrierUpdates;
+        }
+
+        //TODO(Rennorb) @cleanup
+        static IReadOnlyList<Segment> ListFromStates(IEnumerable<(long Start, double State)> states, int stateCount, long min, long max)
+        {
+            if (stateCount == 0)
+            {
+                return [ ];
+            }
+
+            //TODO(Rennorb) @perf
+            var res = new List<Segment>(stateCount);
+            double lastValue = states.First().State;
+            foreach ((long start, double state) in states)
+            {
+                long end = Math.Min(Math.Max(start, min), max);
+                if (res.Count == 0)
+                {
+                    res.Add(new Segment(0, end, lastValue));
+                }
+                else
+                {
+                    res.Add(new Segment(res.Last().End, end, lastValue));
+                }
+                lastValue = state;
+            }
+            res.Add(new Segment(res.Last().End, max, lastValue));
+            
+            //TODO(Rennorb) @perf
+            res.RemoveAll(x => x.Start >= x.End);
+            res.FuseConsecutive();
+
+            return res;
         }
 
         private static int[] ComputeDamageGraph(IReadOnlyList<AbstractHealthDamageEvent> dls, long start, long end)
@@ -189,7 +228,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
         {
-            int foundIndex = Segment.BinarySearchRecursive(segments, time, 0, segments.Count - 1);
+            int foundIndex = segments.BinarySearchRecursive(time, 0, segments.Count - 1);
             Segment found = segments[foundIndex];
             if (found.ContainsPoint(time))
             {

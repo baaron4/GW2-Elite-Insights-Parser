@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     public abstract class AbstractSingleActorCombatReplayDescription : AbstractCombatReplayDescription
     {
         public long Start { get; protected set; }

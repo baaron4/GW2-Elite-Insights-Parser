@@ -74,15 +74,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         // Dagda uses Demonic Blast at 90% but she will not spawn the red pushback AoE
                         // We check if she has gained the buff to be sure that the phase has started.
-                        Segment phaseBuff = phaseBuffs.Where(x => x.Start >= cast.Time).FirstOrDefault();
-                        if (phaseBuff is null || Math.Abs(cast.Time - phaseBuff.Start) > 4000)
+                        var phaseBuff = phaseBuffs.Where(x => x.Start >= cast.Time).FirstOrNull();
+                        if (phaseBuff is null || Math.Abs(cast.Time - phaseBuff.Value.Start) > 4000)
                         {
                             continue;
                         }
-                        (long, long) lifespan = (cast.Time, phaseBuff.End);
                         // Hardcoded positional value, Dagda isn't in the center but the AoE is
                         var connector = new PositionConnector(new Point3D(305.26892f, 920.6105f, -5961.992f));
-                        var circle = new CircleDecoration(800, lifespan, Colors.Red, 0.4, connector);
+                        var circle = new CircleDecoration(800, (cast.Time, phaseBuff.Value.End), Colors.Red, 0.4, connector);
                         replay.Decorations.Add(circle);
                     }
 

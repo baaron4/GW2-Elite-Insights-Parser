@@ -12,26 +12,28 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class Ensolyss : Nightmare
     {
         public Ensolyss(int triggerID) : base(triggerID)
         {
-            MechanicList.AddRange(new List<Mechanic>
-            {
-            new PlayerDstHitMechanic(new long[] { LungeEnsolyss, LungeNightmareHallucination }, "Lunge", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge","Lunge (KB charge over arena)", "Charge",150),
+            MechanicList.AddRange([
+            new PlayerDstHitMechanic([ LungeEnsolyss, LungeNightmareHallucination ], "Lunge", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightOrange), "Charge","Lunge (KB charge over arena)", "Charge",150),
             new PlayerDstHitMechanic(UpswingEnsolyss, "Upswing", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Smash 1","High damage Jump hit", "First Smash",0),
             new PlayerDstHitMechanic(UpswingHallucination, "Upswing", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Hall.AoE", "Hit by Hallucination Explosion", "Hallu Explosion", 0),
-            new PlayerDstHitMechanic(new long[] { NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 }, "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Goo)", "Miasma",0),
+            new PlayerDstHitMechanic([ NigthmareMiasmaEnsolyss1, NigthmareMiasmaEnsolyss2, NigthmareMiasmaEnsolyss3 ], "Nightmare Miasma", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Magenta), "Goo","Nightmare Miasma (Goo)", "Miasma",0),
             new EnemyCastStartMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","After Phase CC", "Breakbar", 0),
             new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","After Phase CC Failed", "CC Fail", 0).UsingChecker( (ce,log) => ce.ActualDuration >= 15260),
             new EnemyCastEndMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","After Phase CC Success", "CCed", 0).UsingChecker( (ce, log) => ce.ActualDuration < 15260),
             new PlayerDstHitMechanic(CausticExplosionEnsolyss, "Caustic Explosion", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Yellow), "CC KB","Knockback hourglass during CC", "CC KB", 0),
-            new EnemyCastStartMechanic(new long[] { NightmareDevastation1, NightmareDevastation2 }, "Nightmare Devastation", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble","Nightmare Devastation (bubble attack)", "Bubble",0),
+            new EnemyCastStartMechanic([ NightmareDevastation1, NightmareDevastation2 ], "Nightmare Devastation", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Bubble","Nightmare Devastation (bubble attack)", "Bubble",0),
             new PlayerDstHitMechanic(TailLashEnsolyss, "Tail Lash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Yellow), "Tail","Tail Lash (half circle Knockback)", "Tail Lash",0),
             new PlayerDstHitMechanic(RampageEnsolyss, "Rampage", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Rampage","Rampage (asterisk shaped Arrow attack)", "Rampage",150),
             new PlayerDstHitMechanic(CausticGrasp, "Caustic Grasp", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.LightOrange), "Pull","Caustic Grasp (Arena Wide Pull)", "Pull",0),
             new PlayerDstHitMechanic(TormentingBlast, "Tormenting Blast", new MechanicPlotlySetting(Symbols.Diamond,Colors.Yellow), "Quarter","Tormenting Blast (Two Quarter Circle attacks)", "Quarter circle",0),
-            });
+            ]);
             Extension = "ensol";
             Icon = EncounterIconEnsolyss;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
@@ -145,8 +147,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TargetID.Ensolyss:
                     IReadOnlyList<Segment> healthUpdates = target.GetHealthUpdates(log);
-                    Segment percent66treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 66);
-                    Segment percent15treshhold = healthUpdates.FirstOrDefault(x => x.Value <= 15);
+                    Segment? percent66treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 66);
+                    Segment? percent15treshhold = healthUpdates.FirstOrNull((in Segment x) => x.Value <= 15);
                     bool shield15_0Added = false; // This is used to also check wether the attack has been skipped or not
 
                     // Arkk's Shield
@@ -170,14 +172,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                                     int start = (int)shieldEffect.Time;
                                     int expectedHitEnd = start + duration;
                                     int attackEnd = start + duration;
-                                    Segment stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrDefault(x => x.Value > 0);
+                                    Segment? stunSegment = target.GetBuffStatus(log, Stun, shieldEffect.Time, shieldEffect.Time + duration).FirstOrNull((in Segment x) => x.Value > 0);
 
                                     // Modify the attackEnd if:
                                     // Ensolyss reaches 15% during the bubble attack, interrupt it and start 15% phase
                                     // Ensolyss reaches 15% while stunned (stunSegment.End < percent15treshhold.Start)
-                                    if (percent15treshhold != null && stunSegment != null && percent15treshhold.Start < attackEnd && stunSegment.End < percent15treshhold.Start)
+                                    if (percent15treshhold is Segment _percent15treshhold && stunSegment != null && _percent15treshhold.Start < attackEnd && _percent15treshhold.End < _percent15treshhold.Start)
                                     {
-                                        attackEnd = (int)percent15treshhold.Start;
+                                        attackEnd = (int)_percent15treshhold.Start;
                                     }
                                     replay.Decorations.Add(new CircleDecoration(300, (start, attackEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
                                     replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, (start, attackEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), expectedHitEnd, true);
@@ -195,7 +197,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (percent66treshhold != null)
                             {
                                 int start = (int)miasmaEffect.Time;
-                                int effectEnd = (int)percent66treshhold.Start;
+                                int effectEnd = (int)percent66treshhold.Value.Start;
                                 replay.Decorations.Add(new DoughnutDecoration(850, 1150, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(miasmaEffect.Position)));
                             }
                             else // Wipe before 66%
@@ -216,7 +218,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             if (shield15_0Added && percent15treshhold != null)
                             {
                                 int start = (int)miasmaEffect.Time;
-                                int effectEnd = (int)percent15treshhold.Start;
+                                int effectEnd = (int)percent15treshhold.Value.Start;
                                 replay.Decorations.Add(new DoughnutDecoration(595, 1150, (start, effectEnd), Colors.Red, 0.2, new PositionConnector(miasmaEffect.Position)));
                             }
                             else // Wipe before 15%

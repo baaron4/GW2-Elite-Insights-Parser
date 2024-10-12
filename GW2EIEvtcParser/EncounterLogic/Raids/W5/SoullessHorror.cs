@@ -15,6 +15,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class SoullessHorror : HallOfChains
     {
         private static readonly Point3D ChestOfDesminaPosition = new Point3D(-9349.45f, 258.757f, -807.954f);
@@ -25,7 +28,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             new PlayerDstHitMechanic(InnerVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Donut In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
             new PlayerDstHitMechanic(OuterVortexSlash, "Vortex Slash", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Donut Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
-            new PlayerDstHitMechanic(new long[] { InnerVortexSlash, OuterVortexSlash }, "Necro Dancer", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "NecDancer.Achiv", "Achievement Eligibility: Necro Dancer", "Necro Dancer", 0).UsingAchievementEligibility(true),
+            new PlayerDstHitMechanic([ InnerVortexSlash, OuterVortexSlash ], "Necro Dancer", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.LightOrange), "NecDancer.Achiv", "Achievement Eligibility: Necro Dancer", "Necro Dancer", 0).UsingAchievementEligibility(true),
             new PlayerDstHitMechanic(SoulRift, "Soul Rift", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
             new PlayerDstHitMechanic(QuadSlashFirstSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.LightOrange), "Slice1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
             new PlayerDstHitMechanic(QuadSlashSecondSet, "Quad Slash", new MechanicPlotlySetting(Symbols.StarSquareOpen,Colors.LightOrange), "Slice2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
@@ -209,11 +212,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     foreach ((double hpVal, uint innerRadius, uint outerRadius) in destroyedRings)
                     {
-                        Segment hpUpdate = target.GetHealthUpdates(log).FirstOrDefault(x => x.Value <= hpVal);
+                        Segment? hpUpdate = target.GetHealthUpdates(log).FirstOrNull((in Segment x) => x.Value <= hpVal);
                         if (hpUpdate != null)
                         {
-                            var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Start, log.FightData.FightEnd), Colors.Orange, 0.3, new PositionConnector(center));
-                            replay.AddDecorationWithGrowing(doughnut, hpUpdate.Start + 3000);
+                            var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Value.Start, log.FightData.FightEnd), Colors.Orange, 0.3, new PositionConnector(center));
+                            replay.AddDecorationWithGrowing(doughnut, hpUpdate.Value.Start + 3000);
                         }
                         else
                         {

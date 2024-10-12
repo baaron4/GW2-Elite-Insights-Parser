@@ -4,6 +4,9 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class CircleDecoration : FormDecoration
     {
         internal class CircleDecorationMetadata : FormDecorationMetadata
@@ -66,25 +69,25 @@ namespace GW2EIEvtcParser.EIData
         {
         }
 
-        public CircleDecoration(uint radius, Segment lifespan, string color, GeographicalConnector connector) : this(radius, (lifespan.Start, lifespan.End), color, connector)
+        public CircleDecoration(uint radius, in Segment lifespan, string color, GeographicalConnector connector) : this(radius, (lifespan.Start, lifespan.End), color, connector)
         {
         }
-        public CircleDecoration(uint radius, Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
-        {
-        }
-
-        public CircleDecoration(uint radius, uint minRadius, Segment lifespan, string color, GeographicalConnector connector) : this(radius, minRadius, (lifespan.Start, lifespan.End), color, connector)
+        public CircleDecoration(uint radius, in Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
         {
         }
 
-        public CircleDecoration(uint radius, uint minRadius, Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, minRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        public CircleDecoration(uint radius, uint minRadius, in Segment lifespan, string color, GeographicalConnector connector) : this(radius, minRadius, (lifespan.Start, lifespan.End), color, connector)
         {
         }
-        public override FormDecoration Copy(string color = null)
+
+        public CircleDecoration(uint radius, uint minRadius, in Segment lifespan, Color color, double opacity, GeographicalConnector connector) : this(radius, minRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
+        {
+        }
+        public override FormDecoration Copy(string? color = null)
         {
             return (FormDecoration)new CircleDecoration(Radius, MinRadius, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
         }
-        public override FormDecoration GetBorderDecoration(string borderColor = null)
+        public override FormDecoration GetBorderDecoration(string? borderColor = null)
         {
             if (!Filled)
             {

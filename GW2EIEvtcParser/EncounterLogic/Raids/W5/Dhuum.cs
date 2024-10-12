@@ -16,6 +16,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class Dhuum : HallOfChains
     {
         private bool _hasPrevent;
@@ -646,11 +649,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             // check Hastened Demise
             foreach (AgentItem soul in souls)
             {
-                Segment hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrDefault(x => x.Value == 1);
+                Segment? hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrNull((in Segment x) => x.Value == 1);
                 Point3D soulPosition = soul.GetCurrentPosition(log, soul.FirstAware, 1000);
                 if (hastenedDemise != null && soulPosition != null)
                 {
-                    AddSoulSplitDecorations(p, replay, soul, hastenedDemise, soulPosition);
+                    AddSoulSplitDecorations(p, replay, soul, hastenedDemise.Value, soulPosition);
                 }
             }
         }

@@ -128,7 +128,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (brother != null)
             {
                 var brothers = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                foreach (Segment seg in brothers)
+                foreach (var seg in brothers)
                 {
                     replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(brother)));
                 }
@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (target != null)
             {
                 var fixated = p.GetBuffStatus(log, fixationID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                foreach (Segment seg in fixated)
+                foreach (var seg in fixated)
                 {
                     replay.Decorations.Add(new LineDecoration(seg, color, 0.3, new AgentConnector(p), new AgentConnector(target)));
                     replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);

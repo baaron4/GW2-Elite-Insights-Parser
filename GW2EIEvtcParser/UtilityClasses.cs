@@ -50,6 +50,29 @@ namespace GW2EIEvtcParser {
 
             list.Add(value);
         }
+
+        public static T? FirstOrNull<T>(this IEnumerable<T> enumerable) where T : struct
+        {
+            var e = enumerable.GetEnumerator();
+            return e.MoveNext() ? e.Current : null;
+        }
+
+        public delegate bool FoNPredicate<T>(in T element);
+        public static T? FirstOrNull<T>(this IEnumerable<T> enumerable, FoNPredicate<T> predicate) where T : struct
+        {
+            var e = enumerable.GetEnumerator();
+            while(e.MoveNext())
+            {
+                var v = e.Current;
+                if(predicate(in v)) { return v; }
+            }
+            return null;
+        }
+
+        public static T? LastOrNull<T>(this IReadOnlyList<T> list) where T : struct
+        {
+            return list.Count == 0 ? null : list[^1];
+        }
     }
 
 }

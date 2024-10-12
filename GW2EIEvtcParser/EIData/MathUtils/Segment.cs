@@ -4,98 +4,89 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    public class Segment : GenericSegment<double>
-    {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
 
-        public Segment(long start, long end, double value) : base(start, end, value)
+    public static class SegmentExt {
+        public static double IntersectingArea(this in Segment self, in Segment other) => IntersectingArea(self, other.Start, other.End);
+
+        public static double IntersectingArea(this in Segment self, long start, long end)
         {
+            long maxStart = Math.Max(start, self.Start);
+            long minEnd = Math.Min(end, self.End);
+            return Math.Max(minEnd - maxStart, 0) * self.Value;
         }
 
-        public Segment(long start, long end) : this(start, end, 0)
+        
+        /// <summary>
+        /// Fuse consecutive segments with same value. The list should not be empty.
+        /// </summary>
+        public static void FuseConsecutive(this List<Segment> segments)
         {
-        }
 
-        public Segment(Segment other) : this(other.Start, other.End, other.Value)
-        {
-
-        }
-
-        public double IntersectingArea(Segment seg)
-        {
-            return IntersectingArea(seg.Start, seg.End);
-        }
-
-        public double IntersectingArea(long start, long end)
-        {
-            long maxStart = Math.Max(start, Start);
-            long minEnd = Math.Min(end, End);
-            return Math.Max(minEnd - maxStart, 0) * Value;
-        }
-
-        public static List<Segment> FromStates(List<(long start, double state)> states, long min, long max)
-        {
-            if (states.Count == 0)
+            Segment last = segments[0];
+            int lastIndex = 0;
+            for(int i = 1; i < segments.Count; i++)
             {
-                return new List<Segment>();
-            }
-            var res = new List<Segment>();
-            double lastValue = states.First().state;
-            foreach ((long start, double state) in states)
-            {
-                long end = Math.Min(Math.Max(start, min), max);
-                if (res.Count == 0)
+                var seg = segments[i];
+                //TODO(Rennorb) perf
+                if (seg.IsEmpty())
                 {
-                    res.Add(new Segment(0, end, lastValue));
+                    continue;
+                }
+
+                if (seg.Value == last.Value)
+                {
+                    last.End = seg.End;
                 }
                 else
                 {
-                    res.Add(new Segment(res.Last().End, end, lastValue));
+                    segments[lastIndex] = last;
+                    last = seg;
+                    lastIndex++;
                 }
-                lastValue = state;
             }
-            res.Add(new Segment(res.Last().End, max, lastValue));
-            res.RemoveAll(x => x.Start >= x.End);
-            return FuseSegments(res);
+            segments[lastIndex++] = last;
+
+            segments.RemoveRange(lastIndex, segments.Count - lastIndex);
         }
 
-
         /// <summary>
-        /// Fuse consecutive segments with same value
+        /// Fuse consecutive segments with same value. The list should not be empty.
         /// </summary>
-        public static List<Segment> FuseSegments(List<Segment> input)
+        public static List<Segment> FuseConsecutive(this IReadOnlyList<Segment> input)
         {
-            var newChart = new List<Segment>();
-            Segment last = null;
-            foreach (Segment seg in input)
+            //TODO(Rennorb) @mem could be trimmed if desired. dont always do it
+            var newChart = new List<Segment>(input.Count);
+
+            Segment last = input.First();
+            foreach (Segment seg in input.Skip(1))
             {
+                //TODO(Rennorb) perf
                 if (seg.Start == seg.End)
                 {
                     continue;
                 }
-                if (last == null)
+
+                if (seg.Value == last.Value)
                 {
-                    newChart.Add(new Segment(seg));
-                    last = newChart.Last();
+                    last.End = seg.End;
                 }
                 else
                 {
-                    if (seg.Value == last.Value)
-                    {
-                        last.End = seg.End;
-                    }
-                    else
-                    {
-                        newChart.Add(new Segment(seg));
-                        last = newChart.Last();
-                    }
+                    newChart.Add(last);
+                    last = seg;
                 }
             }
+            newChart.Add(last);
+
             return newChart;
         }
 
-        public static List<object[]> ToObjectList(List<Segment> segments, long start, long end)
+        //TODO(Rennorb) @cleanup @perf
+        public static List<object[]> ToObjectList(this IReadOnlyList<Segment> segments, long start, long end)
         {
-            var res = new List<object[]>();
+            var res = new List<object[]>(segments.Count + 1);
             foreach (Segment seg in segments)
             {
                 double segStart = Math.Round(Math.Max(seg.Start - start, 0) / 1000.0, ParserHelper.TimeDigit);
@@ -106,8 +97,10 @@ namespace GW2EIEvtcParser.EIData
             res.Add(new object[] { segEnd, lastSeg.Value });
             return res;
         }
+
+        //TODO(Rennorb) @cleanup
         // https://www.c-sharpcorner.com/blogs/binary-search-implementation-using-c-sharp1
-        public static int BinarySearchRecursive(IReadOnlyList<Segment> segments, long time, int minIndex, int maxIndex)
+        public static int BinarySearchRecursive(this IReadOnlyList<Segment> segments, long time, int minIndex, int maxIndex)
         {
             if (segments[minIndex].Start > time)
             {

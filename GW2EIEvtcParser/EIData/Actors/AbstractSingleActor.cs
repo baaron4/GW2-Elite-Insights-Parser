@@ -10,6 +10,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     public abstract partial class AbstractSingleActor : AbstractActor
     {
         public new AgentItem AgentItem => base.AgentItem;
@@ -69,7 +72,7 @@ namespace GW2EIEvtcParser.EIData
             return Health;
         }
 
-        internal abstract void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null);
+        internal abstract void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)>? hpDistribution = null);
 
         public virtual IReadOnlyList<(long hpValue, double percent)>? GetHealthDistribution()
         {
@@ -85,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
         public bool IsDowned(ParsedEvtcLog log, long start, long end)
         {
             (_, IReadOnlyList<Segment> downs, _) = GetStatus(log);
-            return downs.Any(x => x.IntersectSegment(start, end));
+            return downs.Any(x => x.Intersects(start, end));
         }
         public bool IsDead(ParsedEvtcLog log, long time)
         {
@@ -95,7 +98,7 @@ namespace GW2EIEvtcParser.EIData
         public bool IsDead(ParsedEvtcLog log, long start, long end)
         {
             (IReadOnlyList<Segment> deads, _, _) = GetStatus(log);
-            return deads.Any(x => x.IntersectSegment(start, end));
+            return deads.Any(x => x.Intersects(start, end));
         }
         public bool IsDC(ParsedEvtcLog log, long time)
         {
@@ -105,7 +108,7 @@ namespace GW2EIEvtcParser.EIData
         public bool IsDC(ParsedEvtcLog log, long start, long end)
         {
             (_, _, IReadOnlyList<Segment> dcs) = GetStatus(log);
-            return dcs.Any(x => x.IntersectSegment(start, end));
+            return dcs.Any(x => x.Intersects(start, end));
         }
 
         public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)
@@ -570,7 +573,7 @@ namespace GW2EIEvtcParser.EIData
 
         // Defense Stats
 
-        public FinalDefenses GetDefenseStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public FinalDefenses GetDefenseStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             _defenseStats ??= new CachingCollectionWithTarget<FinalDefenses>(log);
 
@@ -582,7 +585,7 @@ namespace GW2EIEvtcParser.EIData
             return value;
         }
 
-        public FinalDefensesAll GetDefenseStats(ParsedEvtcLog log, long start, long end)
+        public FinalDefensesAll? GetDefenseStats(ParsedEvtcLog log, long start, long end)
         {
             return GetDefenseStats(null, log, start, end) as FinalDefensesAll;
         }
@@ -614,12 +617,12 @@ namespace GW2EIEvtcParser.EIData
         }
 
         // Support stats
-        public FinalSupportAll GetSupportStats(ParsedEvtcLog log, long start, long end)
+        public FinalSupportAll? GetSupportStats(ParsedEvtcLog log, long start, long end)
         {
             return GetSupportStats(null, log, start, end) as FinalSupportAll;
         }
 
-        public FinalSupport GetSupportStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public FinalSupport GetSupportStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             _supportStats ??= new CachingCollectionWithTarget<FinalSupport>(log);
 

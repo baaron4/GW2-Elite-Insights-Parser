@@ -4,6 +4,10 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
+
     public class AnimatedCastEvent : AbstractCastEvent
     {
         private readonly int _scaledActualDuration;
@@ -139,10 +143,11 @@ namespace GW2EIEvtcParser.ParsedData
 
         public override long GetInterruptedByStunTime(ParsedEvtcLog log)
         {
-            Segment stunStatus = log.FindActor(Caster).GetBuffStatus(log, SkillIDs.Stun, Time, ExpectedEndTime).FirstOrDefault(x => x.Value > 0);
+            var stunStatus = log.FindActor(Caster).GetBuffStatus(log, SkillIDs.Stun, Time, ExpectedEndTime).FirstOrNull((in Segment x) => x.Value > 0);
             if (stunStatus != null)
             {
-                return (int)stunStatus.Start;
+                //TODO(Rennorb) @correctness: Why the cast?
+                return (int)stunStatus.Value.Start;
             }
             return EndTime;
         }

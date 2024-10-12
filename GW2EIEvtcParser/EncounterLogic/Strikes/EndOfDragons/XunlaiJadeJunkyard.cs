@@ -14,6 +14,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     {
         public XunlaiJadeJunkyard(int triggerID) : base(triggerID)
@@ -412,7 +415,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 foreach (Segment segment in value.BuffChart)
                 {
-                    if (segment != null && segment.Start > 0 && segment.Value == 1)
+                    //TODO(Rennorb) @correctnes: there was a null check here, i have no clue why.
+                    if (!segment.IsEmpty() && segment.Value == 1)
                     {
                         uint deathsHandRadius = (uint)(log.FightData.IsCM ? 380 : 300);
                         int deathsHandDuration = log.FightData.IsCM ? 33000 : 13000;

@@ -132,13 +132,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Ghastly Prison - Eggs AoEs
             var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-            foreach (Segment seg in eggs)
+            foreach (var seg in eggs)
             {
                 replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
             }
 
             // Spectral Darkness - Orbs Debuff Overhead
-            IEnumerable<Segment> spectralDarknesses = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            var spectralDarknesses = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(spectralDarknesses, p, ParserIcons.SpectralDarknessOverhead);
         }
 
@@ -288,8 +288,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Red, 0.2, new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(radius, (impactTime, impactTime + 100), Colors.Red, 0.4, new AgentConnector(target)));
                     }
-                    var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    foreach (Segment seg in protection)
+                    var protection = target.GetBuffStatus(log, ProtectiveShadow, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                    foreach (var seg in protection)
                     {
                         replay.Decorations.Add(new CircleDecoration(300, seg, "rgba(0, 180, 255, 0.5)", new AgentConnector(target)));
                     }

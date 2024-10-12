@@ -5,6 +5,9 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLCharts
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class BuffChartDataDto
     {
         public long Id { get; set; }
@@ -45,18 +48,17 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
 
         }
 
-        private BuffChartDataDto(BuffsGraphModel bgm, List<Segment> bChart, PhaseData phase)
+        private BuffChartDataDto(BuffsGraphModel bgm, IReadOnlyList<Segment> bChart, PhaseData phase)
         {
             Id = bgm.Buff.ID;
             Visible = (bgm.Buff.Name == "Might" || bgm.Buff.Name == "Quickness" || bgm.Buff.Name == "Vulnerability");
             Color = GetBuffColor(bgm.Buff.Name);
-            States = Segment.ToObjectList(bChart, phase.Start, phase.End);
+            States = bChart.ToObjectList(phase.Start, phase.End);
         }
 
-        private static BuffChartDataDto BuildBuffGraph(BuffsGraphModel bgm, PhaseData phase, Dictionary<long, Buff> usedBuffs)
+        private static BuffChartDataDto? BuildBuffGraph(BuffsGraphModel bgm, PhaseData phase, Dictionary<long, Buff> usedBuffs)
         {
-            var bChart = bgm.BuffChart.Where(x => x.End >= phase.Start && x.Start <= phase.End
-            ).ToList();
+            var bChart = bgm.BuffChart.Where(x => x.End >= phase.Start && x.Start <= phase.End).ToList();
             if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return null;
@@ -71,7 +73,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             {
                 if (boonGraphData.TryGetValue(buff.ID, out BuffsGraphModel bgm))
                 {
-                    BuffChartDataDto graph = BuildBuffGraph(bgm, phase, usedBuffs);
+                    BuffChartDataDto? graph = BuildBuffGraph(bgm, phase, usedBuffs);
                     if (graph != null)
                     {
                         list.Add(graph);
@@ -83,6 +85,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
 
         private static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, BuffsGraphModel> buffGraphData, Dictionary<long, Buff> usedBuffs)
         {
+            //TODO(Rennorb) @perf
             var list = new List<BuffChartDataDto>();
             BuildBoonGraphData(list, log.StatisticsHelper.PresentBoons, buffGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentConditions, buffGraphData, phase, usedBuffs);

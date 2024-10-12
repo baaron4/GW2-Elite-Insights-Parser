@@ -4,6 +4,9 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class BackgroundIconDecoration : GenericIconDecoration
     {
         internal class BackgroundIconDecorationMetadata : GenericIconDecorationMetadata

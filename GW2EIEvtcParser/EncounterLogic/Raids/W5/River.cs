@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)ArcDPSEnums.TargetID.Desmina:
                     var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
-                    foreach (Segment asylum in asylums)
+                    foreach (var asylum in asylums)
                     {
                         replay.Decorations.Add(new CircleDecoration(300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
                     }

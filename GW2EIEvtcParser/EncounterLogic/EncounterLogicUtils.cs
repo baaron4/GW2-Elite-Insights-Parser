@@ -9,6 +9,9 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal static class EncounterLogicUtils
     {
         internal static void RegroupTargetsByID(int id, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -262,10 +265,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static double ComputeCastTimeWithQuickness(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
         {
             long expectedEndCastTime = startCastTime + castDuration;
-            Segment quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrDefault(x => x.Value == 1);
+            Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in Segment x) => x.Value == 1);
             if (quickness != null)
             {
-                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max(startCastTime, quickness.Start);
+                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.Value.End) - Math.Max(startCastTime, quickness.Value.Start);
                 return castDuration - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66);
             }
             return 0;
@@ -292,10 +295,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static double ComputeCastTimeWithQuicknessAndSugarRush(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
         {
             long expectedEndCastTime = startCastTime + castDuration;
-            Segment quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrDefault(x => x.Value == 1);
+            Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in Segment x) => x.Value == 1);
             if (quickness != null)
             {
-                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.End) - Math.Max(startCastTime, quickness.Start);
+                long quicknessTimeDuringCast = Math.Min(expectedEndCastTime, quickness.Value.End) - Math.Max(startCastTime, quickness.Value.Start);
                 double castTimeWithSugarRush = ComputeCastTimeWithSugarRush(castDuration);
                 return castTimeWithSugarRush - quicknessTimeDuringCast + (quicknessTimeDuringCast * 0.66 / 0.8);
             }
@@ -315,10 +318,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal static long ComputeEndCastTimeByBuffApplication(ParsedEvtcLog log, AbstractSingleActor actor, long buffId, long startCastTime, long castDuration)
         {
             long end = startCastTime + castDuration;
-            Segment segment = actor.GetBuffStatus(log, buffId, startCastTime, end).FirstOrDefault(x => x.Value > 0);
+            Segment? segment = actor.GetBuffStatus(log, buffId, startCastTime, end).FirstOrNull((in Segment x) => x.Value > 0);
             if (segment != null)
             {
-                return segment.Start;
+                return segment.Value.Start;
             }
             return end;
         }

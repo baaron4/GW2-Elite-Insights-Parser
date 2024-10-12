@@ -17,18 +17,20 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     internal class Qadim : MythwrightGambit
     {
         private bool _manualPlatforms = true;
         public Qadim(int triggerID) : base(triggerID)
         {
-            MechanicList.AddRange(new List<Mechanic>
-            {
+            MechanicList.AddRange([
             new EnemyCastStartMechanic(QadimCC, "Qadim CC", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkTeal), "Q.CC","Qadim CC", "Qadim CC",0),
             new EnemyCastEndMechanic(QadimCC, "Qadim CC", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkGreen), "Q.CCed","Qadim Breakbar broken", "Qadim CCed",0).UsingChecker((ce, log) => ce.ActualDuration < 6500),
             new EnemyCastStartMechanic(QadimRiposte, "Riposte", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.DarkRed), "Q.CC Fail","Qadim Breakbar failed", "Qadim CC Fail",0),
             new PlayerDstHitMechanic(QadimRiposte, "Riposte", new MechanicPlotlySetting(Symbols.Circle,Colors.Magenta), "NoCC Attack", "Riposte (Attack if CC on Qadim failed)", "Riposte (No CC)", 0),
-            new PlayerDstHitMechanic(new long[] { FieryDance1, FieryDance2, FieryDance3, FieryDance4, }, "Fiery Dance", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
+            new PlayerDstHitMechanic([ FieryDance1, FieryDance2, FieryDance3, FieryDance4 ], "Fiery Dance", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Orange), "F.Dance", "Fiery Dance (Fire running along metal edges)", "Fire on Lines", 0),
             new PlayerDstHitMechanic(ShatteringImpact, "Shattering Impact", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Stun","Shattering Impact (Stunning flame bolt)", "Flame Bolt Stun",0),
             new PlayerDstHitMechanic(FlameWave, "Flame Wave", new MechanicPlotlySetting(Symbols.StarTriangleUpOpen,Colors.Pink), "KB","Flame Wave (Knockback Frontal Beam)", "KB Push",0),
             new PlayerDstHitMechanic(FireWaveQadim, "Fire Wave", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Q.Wave","Fire Wave (Shockwave after Qadim's Mace attack)", "Mace Shockwave",0),
@@ -68,7 +70,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             new EnemyStatusMechanic<DeadEvent>("Protect Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Orange), "Pyre.P.K","Protect Pyre Killed", "Protect Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianProtect) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Retal Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.LightRed), "Pyre.R.K","Retal Pyre Killed", "Retal Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianRetal) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
             new EnemyStatusMechanic<DeadEvent>("Resolution Pyre Guardian", new MechanicPlotlySetting(Symbols.Bowtie,Colors.DarkRed), "Pyre.R.K","Resolution Pyre Killed", "Resolution Pyre Killed",0, (log, a) => a.IsSpecies(TrashID.PyreGuardianResolution) ? log.CombatData.GetDeadEvents(a) : new List<DeadEvent>()),
-            });
+            ]);
             Extension = "qadim";
             Icon = EncounterIconQadim;
             GenericFallBackMethod = FallBackMethod.Death | FallBackMethod.CombatExit;
@@ -1077,7 +1079,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Interpolating to find the position to stop in would be necessary.
             int startOffset = -(int)log.FightData.FightStartOffset;
             (int start, int duration, (int x, int y, int z, double angle, double opacity)[] platforms)[] movements =
-            {
+            [
                 (
                     // Initial position, all platforms tightly packed
 
@@ -1315,7 +1317,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
                     }
                 ),
-            };
+            ];
 
             // All platforms have to have positions in all phases
             Debug.Assert(movements.All(x => x.platforms.Length == platformCount));

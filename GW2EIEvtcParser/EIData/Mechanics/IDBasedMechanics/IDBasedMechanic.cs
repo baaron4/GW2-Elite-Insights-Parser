@@ -12,6 +12,7 @@ namespace GW2EIEvtcParser.EIData
             MechanicIDs.Add(mechanicID);
         }
 
+        //TODO(Rennorb) @perf
         protected IDBasedMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
         {
             MechanicIDs.UnionWith(mechanicIDs);

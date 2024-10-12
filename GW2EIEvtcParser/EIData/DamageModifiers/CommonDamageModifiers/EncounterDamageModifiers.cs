@@ -66,14 +66,14 @@ namespace GW2EIEvtcParser.EIData
                 .UsingChecker((ahde, log) =>
                 {
                     AbstractSingleActor target = log.FindActor(ahde.To);
-                    Segment segment = target.GetBuffStatus(log, IonShield, ahde.Time);
+                    var segment = target.GetBuffStatus(log, IonShield, ahde.Time);
                     return segment.Value < 20;
                 }),
             new CounterOnFoeDamageModifier(IonShield, "Ion Shield (Invul)", "-5% per stack, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.IonShield, DamageModifierMode.PvE)
                 .UsingChecker((ahde, log) =>
                 {
                     AbstractSingleActor target = log.FindActor(ahde.To);
-                    Segment segment = target.GetBuffStatus(log, IonShield, ahde.Time);
+                    var segment = target.GetBuffStatus(log, IonShield, ahde.Time);
                     return segment.Value >= 20;
                 }),
             new BuffOnFoeDamageModifier(IcyBarrier, "Icy Barrier", "-10% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.ShieldOfIce, DamageModifierMode.PvE)

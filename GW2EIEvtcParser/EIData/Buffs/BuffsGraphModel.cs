@@ -4,17 +4,21 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     public class BuffsGraphModel
     {
-        public Buff Buff { get; }
+        public readonly Buff Buff;
 
         public IReadOnlyList<Segment> BuffChart => _buffChart;
-        private List<Segment> _buffChart { get; set; } = new List<Segment>();
+        private List<Segment> _buffChart;
 
         // Constructor
         internal BuffsGraphModel(Buff buff)
         {
             Buff = buff;
+            _buffChart = new();
         }
         internal BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
         {
@@ -29,21 +33,23 @@ namespace GW2EIEvtcParser.EIData
             {
                 return new Segment(long.MinValue, long.MaxValue, 0);
             }
-            int foundIndex = Segment.BinarySearchRecursive(BuffChart, time, 0, BuffChart.Count - 1);
+            
+            int foundIndex = BuffChart.BinarySearchRecursive(time, 0, BuffChart.Count - 1);
             Segment found = BuffChart[foundIndex];
             if (found.ContainsPoint(time))
             {
                 return found;
             }
+
             return new Segment(long.MinValue, long.MaxValue, 0);
         }
 
         public IReadOnlyList<Segment> GetBuffStatus(long start, long end)
         {
-            var res = new List<Segment>();
+            var res = new List<Segment>(BuffChart.Count);
             foreach (Segment seg in BuffChart)
             {
-                if (seg.IntersectSegment(start, end))
+                if (seg.Intersects(start, end))
                 {
                     res.Add(seg);
                 }
@@ -67,29 +73,29 @@ namespace GW2EIEvtcParser.EIData
             return GetStackCount(time) > 0;
         }
 
+        //TODO(Rennorb) @perf
         /// <summary>
         /// Fuse consecutive segments with same value
         /// </summary>
         internal void FuseSegments()
         {
-            _buffChart = Segment.FuseSegments(_buffChart);
             _buffChart.RemoveAll(x => x.Start > x.End);
+            _buffChart.FuseConsecutive();
         }
 
         /// <summary>
         /// This method will integrate the graph "from" to "to"
         /// It is going to add +1 to "to" when "from" has a value > 0
         /// </summary>
-        /// <param name="from"></param> 
-        /// <param name="to"></param>
         internal void MergePresenceInto(IReadOnlyList<Segment> from)
         {
             if (_buffChart.Count == 0)
             {
-                _buffChart = new List<Segment>(from.Select(x => new Segment(x.Start, x.End, x.Value > 0 ? 1 : 0)));
+                _buffChart.AddRange(from.Select(x => new Segment(x.Start, x.End, x.Value > 0 ? 1 : 0)));
             }
             else
             {
+                //TODO(Rennorb) @perf
                 var segmentsToFill = new LinkedList<Segment>(_buffChart);
                 LinkedListNode<Segment> node = segmentsToFill.Find(segmentsToFill.First());
                 foreach (Segment seg in from)
@@ -102,6 +108,7 @@ namespace GW2EIEvtcParser.EIData
                     {
                         continue;
                     }
+
                     while (node != null)
                     {
                         Segment curSeg = node.Value;
@@ -112,11 +119,13 @@ namespace GW2EIEvtcParser.EIData
                         {
                             break;
                         }
+
                         if (curEnd < start)
                         {
                             node = node.Next;
                             continue;
                         }
+
                         // The segment in inside current one
                         if (end <= curEnd)
                         {

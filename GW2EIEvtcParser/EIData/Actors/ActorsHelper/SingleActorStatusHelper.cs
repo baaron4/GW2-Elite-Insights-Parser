@@ -8,6 +8,9 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
+    /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+    using Segment = GenericSegment<double>;
+
     partial class AbstractSingleActor
     {
 
@@ -103,20 +106,20 @@ namespace GW2EIEvtcParser.EIData
             }
             
             // return false if fight ends before any down events
-            Segment nextDown = down.FirstOrDefault(downSegment => downSegment.IntersectSegment(remainingFightTime));
+            Segment? nextDown = down.FirstOrNull((in Segment downSegment) => downSegment.Intersects(remainingFightTime));
             if (nextDown == null)
             {
                 return false;
             }
 
             IReadOnlyList<Segment> healthUpdatesBeforeEnd = this.GetHealthUpdates(log).Where(update => update.Start > curTime).ToList();
-            Segment next90 = healthUpdatesBeforeEnd.FirstOrDefault(update => update.Value > 90);
+            Segment? next90 = healthUpdatesBeforeEnd.FirstOrNull((in Segment update) => update.Value > 90);
            
             // If there are no more 90 events before combat end and the actor has a down event remaining then the actor must down before next 90
             if(next90 == null) { return true; }
 
             // Otherwise return false if the next 90 is before the next down
-            if (next90.Start < nextDown.Start)
+            if (next90.Value.Start < nextDown.Value.Start)
             {
                 return false;
             }
