@@ -130,11 +130,6 @@ namespace GW2EIEvtcParser.ParsedData
                     Logic = new SoullessHorror(id);
                     break;
                 case ArcDPSEnums.TargetID.Desmina:
-                    if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Dhuum).Count > 0 && agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator).Count == 0)
-                    {
-                        Logic = new Dhuum((int)ArcDPSEnums.TargetID.Dhuum);
-                        break;
-                    }
                     Logic = new River((int)ArcDPSEnums.TargetID.DummyTarget);
                     break;
                 case ArcDPSEnums.TargetID.BrokenKing:
