@@ -438,6 +438,7 @@ namespace GW2EIEvtcParser
             DefensePercent = -33,
             SiphonIncomingAdditive2 = -34,
             HealingEffectivenessIncomingMultiplicative = -35,
+            AllStatsPercent = -36,
         }
         internal static BuffAttribute GetBuffAttribute(short bt, int evtcBuild)
         {
