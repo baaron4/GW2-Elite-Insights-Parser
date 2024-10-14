@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.Extensions
         }
 
 
-        public override IReadOnlyList<EXTAbstractBarrierEvent> GetOutgoingBarrierEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<EXTAbstractBarrierEvent> GetOutgoingBarrierEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (BarrierEvents == null)
             {
@@ -28,21 +28,23 @@ namespace GW2EIEvtcParser.Extensions
                 BarrierEvents.SortByTime();
                 BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (BarrierEventsByDst.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
-                    return new List<EXTAbstractBarrierEvent>();
+                    return [ ];
                 }
             }
-            return BarrierEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return BarrierEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
-        public override IReadOnlyList<EXTAbstractBarrierEvent> GetIncomingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<EXTAbstractBarrierEvent> GetIncomingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (BarrierReceivedEvents == null)
             {
@@ -54,18 +56,20 @@ namespace GW2EIEvtcParser.Extensions
                 BarrierReceivedEvents.SortByTime();
                 BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (BarrierReceivedEventsBySrc.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
-                    return new List<EXTAbstractBarrierEvent>();
+                    return [ ];
                 }
             }
-            return BarrierReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return BarrierReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
         }
     }
 }

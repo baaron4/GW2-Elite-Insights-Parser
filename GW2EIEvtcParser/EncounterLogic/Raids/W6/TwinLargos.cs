@@ -287,18 +287,18 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Nikare:
                     //CC
-                    var barrageN = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
+                    var barrageN = cls.Where(x => x.SkillId == AquaticBarrage);
                     foreach (AbstractCastEvent c in barrageN)
                     {
                         replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain).ToList();
+                    var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain);
                     foreach (AbstractCastEvent c in aquaticDomainN)
                     {
                         int start = (int)c.Time;
@@ -309,13 +309,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TargetID.Kenut:
                     //CC
-                    var barrageK = cls.Where(x => x.SkillId == AquaticBarrage).ToList();
+                    var barrageK = cls.Where(x => x.SkillId == AquaticBarrage);
                     foreach (AbstractCastEvent c in barrageK)
                     {
                         replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     //Platform wipe (CM only)
-                    var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain).ToList();
+                    var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain);
                     foreach (AbstractCastEvent c in aquaticDomainK)
                     {
                         int start = (int)c.Time;
@@ -323,7 +323,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         uint radius = 800;
                         replay.Decorations.Add(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.3, new AgentConnector(target)).UsingGrowingEnd(end));
                     }
-                    var shockwave = cls.Where(x => x.SkillId == SeaSwell).ToList();
+                    var shockwave = cls.Where(x => x.SkillId == SeaSwell);
                     foreach (AbstractCastEvent c in shockwave)
                     {
                         int start = (int)c.Time;
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int duration = 500;
                         uint width = 500;
                         uint height = 250;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Water "Poison Bomb"
-            var waterToDrop = p.GetBuffStatus(log, TidalPoolBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            var waterToDrop = p.GetBuffStatus(log, TidalPoolBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             foreach (Segment seg in waterToDrop)
             {
                 int timer = 5000;
@@ -370,7 +370,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 int toDropStart = (int)seg.Start;
                 int toDropEnd = (int)seg.End;
                 replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, Colors.Orange, 0.4, new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
-                Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
+                Point3D? position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
                 if (position != null)
                 {
                     replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), Colors.DarkWhite, 0.5, new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
@@ -378,7 +378,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
             }
             // Bubble (Aquatic Detainment)
-            var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             uint bubbleRadius = 100;
             foreach (Segment seg in bubble)
             {

@@ -218,14 +218,9 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
             return res;
         }
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
+        internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            var res = new List<ErrorEvent>();
-            foreach (FightLogic logic in _subLogics)
-            {
-                res.AddRange(logic.GetCustomWarningMessages(fightData, evtcVersion));
-            }
-            return res;
+            return _subLogics.SelectMany(logic => logic.GetCustomWarningMessages(fightData, evtcVersion));
         }
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {

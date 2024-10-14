@@ -258,8 +258,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<int> GetTargetsIDs()
         {
-            return new List<int>
-            {
+            return
+            [
                 (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidKralkatorrik,
                 (int)ArcDPSEnums.TargetID.TheDragonVoidMordremoth,
@@ -273,7 +273,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)ArcDPSEnums.TrashID.PushableVoidAmalgamate,
                 (int)ArcDPSEnums.TrashID.KillableVoidAmalgamate,
                 (int)ArcDPSEnums.TrashID.VoidGiant
-            };
+            ];
         }
 
         protected override Dictionary<int, int> GetTargetsSortIDs()
@@ -298,15 +298,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override HashSet<int> GetUniqueNPCIDs()
         {
-            return new HashSet<int>
-            {
-            };
+            return [ ];
         }
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
-            {
+            return
+            [
                 ArcDPSEnums.TrashID.ZhaitansReach,
                 ArcDPSEnums.TrashID.VoidAbomination,
                 ArcDPSEnums.TrashID.VoidAmalgamate,
@@ -326,7 +324,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TrashID.JormagMovingFrostBeam,
                 ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth,
                 ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter,
-            };
+            ];
         }
 
         internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -547,12 +545,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             //
             int purificationID = 0;
             bool needRedirect = false;
-            (HashSet<ulong> jormagDamagingAgents, NPC jormag) = (new HashSet<ulong>(), null);
-            (HashSet<ulong> primordusDamagingAgents, NPC primordus) = (new HashSet<ulong>(), null);
-            (HashSet<ulong> kralkDamagingAgents, NPC kralk) = (new HashSet<ulong>(), null);
-            (HashSet<ulong> mordDamagingAgents, NPC mord) = (new HashSet<ulong>(), null);
-            (HashSet<ulong> zhaitanDamagingAgents, NPC zhaitan) = (new HashSet<ulong>(), null);
-            (HashSet<ulong> soowonDamagingAgents, NPC soowon) = (new HashSet<ulong>(), null);
+            (HashSet<ulong> jormagDamagingAgents   , NPC? jormag   ) = (new(), null);
+            (HashSet<ulong> primordusDamagingAgents, NPC? primordus) = (new(), null);
+            (HashSet<ulong> kralkDamagingAgents    , NPC? kralk    ) = (new(), null);
+            (HashSet<ulong> mordDamagingAgents     , NPC? mord     ) = (new(), null);
+            (HashSet<ulong> zhaitanDamagingAgents  , NPC? zhaitan  ) = (new(), null);
+            (HashSet<ulong> soowonDamagingAgents   , NPC? soowon   ) = (new(), null);
             foreach (NPC target in Targets)
             {
                 switch (target.ID)
@@ -721,8 +719,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            var knownEffectsIDs = new HashSet<long>();
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); //TODO(Rennorb) @perf
 
             switch (target.ID)
             {
@@ -1141,26 +1138,26 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // Hard coded the orb positions and the durations for older logs
                             var positions = new List<ParametricPoint3D>()
                                 {
-                                    new ParametricPoint3D(1527.933f, -20447.47f, -15420.13f, 803),
-                                    new ParametricPoint3D(74.92969f, -20728.86f, -15420.13f, 803),
-                                    new ParametricPoint3D(-353.9098f, -21363.69f, -15420.13f, 803),
-                                    new ParametricPoint3D(1873.578f, -20620.1f, -15420.13f, 803),
-                                    new ParametricPoint3D(397.2551f, -20515.84f, -15420.13f, 803),
-                                    new ParametricPoint3D(-181.2787f, -21018.05f, -15420.13f, 803),
-                                    new ParametricPoint3D(763.7318f, -20393.5f, -15420.13f, 803),
-                                    new ParametricPoint3D(1149.385f, -20370.18f, -15420.13f, 803),
-                                    new ParametricPoint3D(1184.253f, -19876.46f, -15420.13f, 1133),
-                                    new ParametricPoint3D(1689.397f, -19979.6f, -15420.13f, 1133),
-                                    new ParametricPoint3D(-591.4208f, -20740.99f, -15420.13f, 1133),
-                                    new ParametricPoint3D(-249.5301f, -20355.09f, -15420.13f, 1133),
-                                    new ParametricPoint3D(180.5903f, -20070.83f, -15420.13f, 1133),
-                                    new ParametricPoint3D(669.6267f, -19907.58f, -15420.13f, 1133),
-                                    new ParametricPoint3D(-553.218f, -20005.25f, -15420.13f, 1133),
-                                    new ParametricPoint3D(1216.888f, -19414.34f, -15420.13f, 1133),
-                                    new ParametricPoint3D(-22.20401f, -19654.31f, -15420.13f, 1133),
-                                    new ParametricPoint3D(581.5457f, -19452.76f, -15420.13f, 1133),
-                                    new ParametricPoint3D(-224.9983f, -19237.79f, -15420.13f, 1133),
-                                    new ParametricPoint3D(493.4647f, -18997.94f, -15420.13f, 1133),
+                                    new(1527.933f, -20447.47f, -15420.13f, 803),
+                                    new(74.92969f, -20728.86f, -15420.13f, 803),
+                                    new(-353.9098f, -21363.69f, -15420.13f, 803),
+                                    new(1873.578f, -20620.1f, -15420.13f, 803),
+                                    new(397.2551f, -20515.84f, -15420.13f, 803),
+                                    new(-181.2787f, -21018.05f, -15420.13f, 803),
+                                    new(763.7318f, -20393.5f, -15420.13f, 803),
+                                    new(1149.385f, -20370.18f, -15420.13f, 803),
+                                    new(1184.253f, -19876.46f, -15420.13f, 1133),
+                                    new(1689.397f, -19979.6f, -15420.13f, 1133),
+                                    new(-591.4208f, -20740.99f, -15420.13f, 1133),
+                                    new(-249.5301f, -20355.09f, -15420.13f, 1133),
+                                    new(180.5903f, -20070.83f, -15420.13f, 1133),
+                                    new(669.6267f, -19907.58f, -15420.13f, 1133),
+                                    new(-553.218f, -20005.25f, -15420.13f, 1133),
+                                    new(1216.888f, -19414.34f, -15420.13f, 1133),
+                                    new(-22.20401f, -19654.31f, -15420.13f, 1133),
+                                    new(581.5457f, -19452.76f, -15420.13f, 1133),
+                                    new(-224.9983f, -19237.79f, -15420.13f, 1133),
+                                    new(493.4647f, -18997.94f, -15420.13f, 1133),
                                 };
 
                             // Orb indicator near the swipe cone
@@ -1297,7 +1294,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.ZhaitansReach:
                     // Thrash - Circle that pulls in
-                    var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashHT1 || x.SkillId == ZhaitansReachThrashHT2).ToList();
+                    var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashHT1 || x.SkillId == ZhaitansReachThrashHT2);
                     foreach (AbstractCastEvent c in thrash)
                     {
                         int castTime = 1900;
@@ -1305,7 +1302,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDecorationWithGrowing(new DoughnutDecoration(260, 480, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
                     // Ground Slam - AoE that knocks out
-                    var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamHT).ToList();
+                    var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamHT);
                     foreach (AbstractCastEvent c in groundSlam)
                     {
                         int castTime = c.SkillId == ZhaitansReachGroundSlam ? 800 : 2500;
@@ -1318,12 +1315,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Branded Artillery
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidBrandbomberBrandedArtillery, out var brandedArtilleryAoEs))
                     {
-                        var brandedArtillery = casts.Where(x => x.SkillId == BrandedArtillery).ToList();
+                        var brandedArtillery = casts.Where(x => x.SkillId == BrandedArtillery);
                         foreach (AbstractCastEvent c in brandedArtillery)
                         {
                             int castDuration = 2500;
                             EffectEvent brandedArtilleryAoE = brandedArtilleryAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration + 100);
-                            Point3D brandbomberPosition = target.GetCurrentPosition(log, c.Time, 1000);
+                            Point3D? brandbomberPosition = target.GetCurrentPosition(log, c.Time, 1000);
                             if (brandedArtilleryAoE != null && brandbomberPosition != null)
                             {
                                 // Shooting animation
@@ -1371,7 +1368,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidGiant:
                     // Death Scream - Fear
-                    var deathScreams = casts.Where(x => x.SkillId == DeathScream).ToList();
+                    var deathScreams = casts.Where(x => x.SkillId == DeathScream);
                     foreach (AbstractCastEvent c in deathScreams)
                     {
                         uint radius = 500;
@@ -1534,7 +1531,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidAbomination:
                     // Abomination Swipe - Launch
-                    var abominationSwipes = casts.Where(x => x.SkillId == AbominationSwipe).ToList();
+                    var abominationSwipes = casts.Where(x => x.SkillId == AbominationSwipe);
                     foreach (AbstractCastEvent c in abominationSwipes)
                     {
                         uint radius = 300;
@@ -1550,7 +1547,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidObliterator:
                     // Charge - Indicator
-                    var charges = casts.Where(x => x.SkillId == VoidObliteratorChargeWindup).ToList();
+                    var charges = casts.Where(x => x.SkillId == VoidObliteratorChargeWindup);
                     foreach (AbstractCastEvent c in charges)
                     {
                         uint length = 2000;
@@ -1558,7 +1555,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long castDuration = 1000;
                         long supposedEndCast = c.Time + castDuration;
                         long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
-                        Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
+                        Point3D? facing = target.GetCurrentRotation(log, c.Time + castDuration);
                         if (facing != null)
                         {
                             (long start, long end) lifespan = (c.Time, actualEndCast);
@@ -1570,7 +1567,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Wyvern Breath - Indicator
-                    var wyvernBreaths = casts.Where(x => x.SkillId == VoidObliteratorWyvernBreathSkill).ToList();
+                    var wyvernBreaths = casts.Where(x => x.SkillId == VoidObliteratorWyvernBreathSkill);
                     foreach (AbstractCastEvent c in wyvernBreaths)
                     {
                         uint radius = 750;
@@ -1626,12 +1623,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Firebomb
                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleVoidObliteratorFirebomb, out var firebombAoEs))
                     {
-                        var firebombs = casts.Where(x => x.SkillId == VoidObliteratorFirebomb).ToList();
+                        var firebombs = casts.Where(x => x.SkillId == VoidObliteratorFirebomb);
                         foreach (AbstractCastEvent c in firebombs)
                         {
                             long castDuration = 1500;
                             EffectEvent bombAoE = firebombAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration);
-                            Point3D obliteratorPosition = target.GetCurrentPosition(log, c.Time);
+                            Point3D? obliteratorPosition = target.GetCurrentPosition(log, c.Time);
                             if (bombAoE != null && obliteratorPosition != null)
                             {
                                 // Shooting animation
@@ -1651,7 +1648,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidGoliath:
                     // Glacial Slam - Cast Indicator
-                    var glacialSlams = casts.Where(x => x.SkillId == GlacialSlam).ToList();
+                    var glacialSlams = casts.Where(x => x.SkillId == GlacialSlam);
                     foreach (AbstractCastEvent c in glacialSlams)
                     {
                         uint radius = 600;

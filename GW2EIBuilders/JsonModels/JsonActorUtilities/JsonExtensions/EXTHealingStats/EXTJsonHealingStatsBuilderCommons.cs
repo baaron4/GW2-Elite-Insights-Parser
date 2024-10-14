@@ -51,6 +51,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
             };
         }
 
+        //TODO(Rennorb) @perf
         private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTAbstractHealingEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonHealingDist = new EXTJsonHealingDist();
@@ -98,12 +99,13 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing
             return jsonHealingDist;
         }
 
-        internal static List<EXTJsonHealingDist> BuildHealingDistList(Dictionary<long, List<EXTAbstractHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+        //TODO(Rennorb) @perf
+        internal static List<EXTJsonHealingDist> BuildHealingDistList(IEnumerable<IGrouping<long, EXTAbstractHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var res = new List<EXTJsonHealingDist>();
-            foreach (KeyValuePair<long, List<EXTAbstractHealingEvent>> pair in dlsByID)
+            foreach (var pair in dlsByID)
             {
-                res.Add(BuildHealingDist(pair.Key, pair.Value, log, skillMap, buffMap));
+                res.Add(BuildHealingDist(pair.Key, pair.ToList(), log, skillMap, buffMap));
             }
             return res;
         }

@@ -298,7 +298,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
             // Custom decoration not visible in game
-            List<AbstractBuffEvent> phantasmagorias = GetFilteredList(log.CombatData, Phantasmagoria, player, true, true);
+            var phantasmagorias = GetFilteredList(log.CombatData, Phantasmagoria, player, true, true);
             replay.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
 
             // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
@@ -325,21 +325,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
             switch (target.ID)
             {
                 case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
                     // World Cleaver
-                    var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver).ToList();
+                    var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver);
                     foreach (AbstractCastEvent c in worldCleaver)
                     {
                         int castDuration = 26320;
-                        var hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time).ToList();
                         (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                        if (hits.Count != 0)
+                        var hits = log.CombatData.GetDamageData(WorldCleaver).Where(x => x.Time > c.Time);
+                        var firstHit = hits.FirstOrDefault(x => x.Time > c.Time);
+                        if (firstHit != null)
                         {
-                            (long start, long end) lifespanHit = (c.Time, hits.FirstOrDefault(x => x.Time > c.Time).Time);
+                            (long start, long end) lifespanHit = (c.Time, firstHit.Time);
                             AddWorldCleaverDecoration(target, replay, lifespanHit, lifespan.end);
                         }
                         else
@@ -348,7 +349,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Dread Visage
-                    var dreadVisage = casts.Where(x => x.SkillId == DreadVisageKanaxaiSkill || x.SkillId == DreadVisageKanaxaiSkillIsland).ToList();
+                    var dreadVisage = casts.Where(x => x.SkillId == DreadVisageKanaxaiSkill || x.SkillId == DreadVisageKanaxaiSkillIsland);
                     foreach (AbstractCastEvent c in dreadVisage)
                     {
                         int castDuration = 5400;
@@ -378,7 +379,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(180, 20, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)).UsingFilled(false));
                     }
                     // Dread Visage
-                    var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill).ToList();
+                    var dreadVisageAspects = casts.Where(x => x.SkillId == DreadVisageAspectSkill);
                     // Check if the log contains Sugar Rush
                     bool hasSugarRush = log.CombatData.GetBuffData(MistlockInstabilitySugarRush).Any(x => x.To.IsPlayer);
 
@@ -430,7 +431,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Frightening Speed - Red AoE
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FrighteningSpeedRedAoE, out IReadOnlyList<EffectEvent> frighteningSpeedRedAoEs))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FrighteningSpeedRedAoE, out var frighteningSpeedRedAoEs))
             {
                 foreach (EffectEvent aoe in frighteningSpeedRedAoEs)
                 {
@@ -442,11 +443,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             // Rending Storm - Red Axe AoE
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out IReadOnlyList<EffectEvent> axeAoEs))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out var axeAoEs))
             {
                 // Get World Cleaver casts
                 AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
-                IReadOnlyList<AbstractCastEvent> casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                var casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
                 // Get Axe AoE Buffs
                 //TODO(Rennorb) @perf: find average complexity

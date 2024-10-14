@@ -264,13 +264,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
             switch (target.ID)
             {
                 case (int)TargetID.Skorvald:
                     // Horizon Strike
-                    var horizonStrike = casts.Where(x => x.SkillId == HorizonStrikeSkorvald2 || x.SkillId == HorizonStrikeSkorvald4).ToList();
+                    var horizonStrike = casts.Where(x => x.SkillId == HorizonStrikeSkorvald2 || x.SkillId == HorizonStrikeSkorvald4);
                     foreach (AbstractCastEvent c in horizonStrike)
                     {
                         int castDuration = 3900;
@@ -311,8 +311,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Crimson Dawn
-                    IReadOnlyList<long> skillIds = new List<long>() { CrimsonDawnSkorvaldCM1, CrimsonDawnSkorvaldCM2, CrimsonDawnSkorvaldCM3, CrimsonDawnSkorvaldCM4 };
-                    var crimsonDawn = casts.Where(x => skillIds.Contains(x.SkillId)).ToList();
+                    IReadOnlyList<long> skillIds = [ CrimsonDawnSkorvaldCM1, CrimsonDawnSkorvaldCM2, CrimsonDawnSkorvaldCM3, CrimsonDawnSkorvaldCM4 ];
+                    var crimsonDawn = casts.Where(x => skillIds.Contains(x.SkillId));
                     foreach (AbstractCastEvent c in crimsonDawn)
                     {
                         uint radius = 1200;
@@ -321,7 +321,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long start, long end) lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                         lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
 
-                        Point3D facingDirection = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        Point3D? facingDirection = target.GetCurrentRotation(log, c.Time + 100, castDuration);
                         if (facingDirection != null)
                         {
                             float degree = Point3D.GetZRotationFromFacing(facingDirection);
@@ -342,7 +342,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Punishing Kick
-                    var punishingKick = casts.Where(x => x.SkillId == PunishingKickSkorvald).ToList();
+                    var punishingKick = casts.Where(x => x.SkillId == PunishingKickSkorvald);
                     foreach (AbstractCastEvent c in punishingKick)
                     {
                         int castDuration = 1850;
@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
                         long expectedEndCast = c.Time + castDuration;
 
-                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
                         if (frontalPoint != null)
                         {
                             float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Radiant Fury
-                    var radiantFury = casts.Where(x => x.SkillId == RadiantFurySkorvald).ToList();
+                    var radiantFury = casts.Where(x => x.SkillId == RadiantFurySkorvald);
                     foreach (AbstractCastEvent c in radiantFury)
                     {
                         int duration = 2700;
@@ -377,7 +377,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Supernova - Phase Oneshot
-                    var supernova = casts.Where(x => x.SkillId == SupernovaSkorvaldCM).ToList();
+                    var supernova = casts.Where(x => x.SkillId == SupernovaSkorvaldCM);
                     foreach (AbstractCastEvent c in supernova)
                     {
                         int duration = 75000;
@@ -387,7 +387,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Cranial Cascade
-                    var cranialCascadeSkorvald = casts.Where(x => x.SkillId == CranialCascadeSkorvald).ToList();
+                    var cranialCascadeSkorvald = casts.Where(x => x.SkillId == CranialCascadeSkorvald);
                     foreach (AbstractCastEvent c in cranialCascadeSkorvald)
                     {
                         int castDuration = 1750;
@@ -397,7 +397,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                         lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
 
-                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
                         if (frontalPoint != null)
                         {
                             float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
@@ -416,7 +416,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TrashID.FluxAnomalyCM3:
                 case (int)TrashID.FluxAnomalyCM4:
                     // Solar Stomp
-                    var solarStomp = casts.Where(x => x.SkillId == SolarStomp).ToList();
+                    var solarStomp = casts.Where(x => x.SkillId == SolarStomp);
                     foreach (AbstractCastEvent c in solarStomp)
                     {
                         uint radius = 280;
@@ -431,14 +431,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Punishing Kick
-                    var punishingKickAnomaly = casts.Where(x => x.SkillId == PunishingKickAnomaly).ToList();
+                    var punishingKickAnomaly = casts.Where(x => x.SkillId == PunishingKickAnomaly);
                     foreach (AbstractCastEvent c in punishingKickAnomaly)
                     {
                         int castDuration = 1850;
                         long expectedEndCast = c.Time + castDuration;
                         (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
                         if (frontalPoint != null)
                         {
                             float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
@@ -448,7 +448,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Cranial Cascade
-                    var cranialCascadeAnomaly = casts.Where(x => x.SkillId == CranialCascadeAnomaly).ToList();
+                    var cranialCascadeAnomaly = casts.Where(x => x.SkillId == CranialCascadeAnomaly);
                     foreach (AbstractCastEvent c in cranialCascadeAnomaly)
                     {
                         int castDuration = 1750;
@@ -456,7 +456,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long expectedEndCast = c.Time + castDuration;
                         (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
                         if (frontalPoint != null)
                         {
                             float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
@@ -469,7 +469,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Mist Smash
-                    var mistSmash = casts.Where(x => x.SkillId == MistSmash).ToList();
+                    var mistSmash = casts.Where(x => x.SkillId == MistSmash);
                     foreach (AbstractCastEvent c in mistSmash)
                     {
                         int castDuration = 1933;
@@ -482,7 +482,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Wave of Mutilation
-                    var waveOfMutilation = casts.Where(x => x.SkillId == WaveOfMutilation).ToList();
+                    var waveOfMutilation = casts.Where(x => x.SkillId == WaveOfMutilation);
                     foreach (AbstractCastEvent c in waveOfMutilation)
                     {
                         int castDuration = 1850;
@@ -490,7 +490,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         long expectedEndCast = c.Time + castDuration;
                         (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                        Point3D frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
+                        Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
                         if (frontalPoint != null)
                         {
                             float rotation = Point3D.GetZRotationFromFacing(frontalPoint);

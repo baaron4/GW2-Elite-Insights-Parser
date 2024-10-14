@@ -213,22 +213,22 @@ namespace GW2EIEvtcParser.EIData
             CastEvents.SortByTimeThenSwap();
         }
 
-        public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
         {
             if (CastEvents == null)
             {
                 InitCastEvents(log);
             }
-            return CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return CastEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
-        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
         {
             if (CastEvents == null)
             {
                 InitCastEvents(log);
             }
-            return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
+            return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
         }
         #endregion CAST
 

@@ -447,7 +447,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="tethers">Buff events of the tethers.</param>
         /// <param name="color">color of the tether</param>
-        internal void AddTether(IReadOnlyList<AbstractBuffEvent> tethers, string color)
+        internal void AddTether(IEnumerable<AbstractBuffEvent> tethers, string color)
         {
             int tetherStart = 0;
             AgentItem src = ParserHelper._unknownAgent;
@@ -477,7 +477,7 @@ namespace GW2EIEvtcParser.EIData
         /// </summary>
         /// <param name="tethers">Buff events of the tethers.</param>
         /// <param name="color">color of the tether</param>
-        internal void AddTether(IReadOnlyList<AbstractBuffEvent> tethers, Color color, double opacity)
+        internal void AddTether(IEnumerable<AbstractBuffEvent> tethers, Color color, double opacity)
         {
             AddTether(tethers, color.WithAlpha(opacity).ToString(true));
         }

@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EIData
             return graph;
         }
 
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = DamageType.All)
+        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, ParserHelper.DamageType damageType = DamageType.All)
         {
             if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
             {
@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EIData
             return graph;
         }
 
-        public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = DamageType.All)
+        public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, ParserHelper.DamageType damageType = DamageType.All)
         {
             if (!_damageTakenList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
             {
@@ -182,17 +182,14 @@ namespace GW2EIEvtcParser.EIData
             return graph;
         }
 
-        public IReadOnlyList<double>? Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        public IReadOnlyList<double>? Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
                 return null;
             }
 
-            if (_breakbarDamageList1S == null)
-            {
-                _breakbarDamageList1S = new CachingCollectionWithTarget<double[]>(log);
-            }
+            _breakbarDamageList1S ??= new CachingCollectionWithTarget<double[]>(log);
 
             if (_breakbarDamageList1S.TryGetValue(start, end, target, out var res))
             {
@@ -204,17 +201,14 @@ namespace GW2EIEvtcParser.EIData
             return brkDmgList;
         }
 
-        public IReadOnlyList<double>? Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        public IReadOnlyList<double>? Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target)
         {
             if (!log.CombatData.HasBreakbarDamageData)
             {
                 return null;
             }
 
-            if (_breakbarDamageTakenList1S == null)
-            {
-                _breakbarDamageTakenList1S = new CachingCollectionWithTarget<double[]>(log);
-            }
+            _breakbarDamageTakenList1S ??= new CachingCollectionWithTarget<double[]>(log);
 
             if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out var res))
             {

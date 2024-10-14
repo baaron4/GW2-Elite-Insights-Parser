@@ -55,7 +55,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             // Breakbar
             if (settings.RawFormatTimelineArrays)
             {
-                jsonNPC.BreakbarPercents = npc.GetBreakbarPercentUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
+                jsonNPC.BreakbarPercents = npc.GetBreakbarPercentUpdates(log).Select(x => (x.Start, x.Value)).ToList();
             }
             return jsonNPC;
         }

@@ -11,14 +11,14 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
 {
     internal class ActorDetailsDto
     {
-        public List<DmgDistributionDto> DmgDistributions { get; set; }
-        public List<List<DmgDistributionDto>> DmgDistributionsTargets { get; set; }
-        public List<DmgDistributionDto> DmgDistributionsTaken { get; set; }
-        public List<List<object[]>> Rotation { get; set; }
-        public List<List<BuffChartDataDto>> BoonGraph { get; set; }
-        public List<List<List<BuffChartDataDto>>> BoonGraphPerSource { get; set; }
-        public List<FoodDto> Food { get; set; }
-        public List<ActorDetailsDto> Minions { get; set; }
+        public List<DmgDistributionDto>? DmgDistributions { get; set; }
+        public List<List<DmgDistributionDto>>? DmgDistributionsTargets { get; set; }
+        public List<DmgDistributionDto>? DmgDistributionsTaken { get; set; }
+        public List<List<object[]>>? Rotation { get; set; }
+        public List<List<BuffChartDataDto>>? BoonGraph { get; set; }
+        public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource { get; set; }
+        public List<FoodDto>? Food { get; set; }
+        public List<ActorDetailsDto>? Minions { get; set; }
         public List<DeathRecapDto>? DeathRecap { get; set; }
 
         // helpers
@@ -62,12 +62,14 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
 
         private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
+            var phases = log.FightData.GetPhases(log);
             var dto = new ActorDetailsDto
             {
-                DmgDistributions = new List<DmgDistributionDto>(),
-                DmgDistributionsTargets = new List<List<DmgDistributionDto>>()
+                DmgDistributions        = new (phases.Count),
+                DmgDistributionsTargets = new (phases.Count),
             };
-            foreach (PhaseData phase in log.FightData.GetPhases(log))
+
+            foreach (PhaseData phase in phases)
             {
                 var dmgTargetsDto = new List<DmgDistributionDto>();
                 foreach (AbstractSingleActor target in phase.AllTargets)
@@ -82,15 +84,16 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
 
         public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, AbstractSingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
         {
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
             var dto = new ActorDetailsDto
             {
-                DmgDistributions = new List<DmgDistributionDto>(),
-                DmgDistributionsTaken = new List<DmgDistributionDto>(),
-                BoonGraph = new List<List<BuffChartDataDto>>(),
-                BoonGraphPerSource = new List<List<List<BuffChartDataDto>>>(),
-                Rotation = new List<List<object[]>>()
+                DmgDistributions      = new(phases.Count),
+                DmgDistributionsTaken = new(phases.Count),
+                BoonGraph             = new(phases.Count),
+                BoonGraphPerSource    = new(phases.Count),
+                Rotation              = new(phases.Count),
             };
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

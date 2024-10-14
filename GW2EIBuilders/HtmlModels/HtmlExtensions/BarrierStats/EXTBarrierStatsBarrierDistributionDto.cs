@@ -14,14 +14,14 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
         public long ContributedBarrier { get; set; }
         public long TotalBarrier { get; set; }
         public long TotalCasting { get; set; }
-        public List<object[]> Distribution { get; set; }
+        public List<object[]>? Distribution { get; set; }
 
-        private static object[] GetBarrierToItem(SkillItem skill, List<EXTAbstractBarrierEvent> barrierLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+        private static object[] GetBarrierToItem(SkillItem skill, IEnumerable<EXTAbstractBarrierEvent> barrierLogs, Dictionary<SkillItem, List<AbstractCastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
         {
             int totalbarrier = 0,
-                    minbarrier = int.MaxValue,
-                    maxbarrier = int.MinValue,
-                    hits = 0;
+                minbarrier = int.MaxValue,
+                maxbarrier = int.MinValue,
+                hits = 0;
             bool isIndirectBarrier = false;
             foreach (EXTAbstractBarrierEvent dl in barrierLogs)
             {
@@ -31,8 +31,8 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
                 hits++;
                 if (curdmg < minbarrier) { minbarrier = curdmg; }
                 if (curdmg > maxbarrier) { maxbarrier = curdmg; }
-
             }
+
             if (isIndirectBarrier)
             {
                 if (!usedBoons.ContainsKey(skill.ID))
@@ -51,15 +51,14 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
             }
             else
             {
-                if (!usedSkills.ContainsKey(skill.ID))
-                {
-                    usedSkills.Add(skill.ID, skill);
-                }
+                usedSkills.TryAdd(skill.ID, skill);
             }
+
             if (castLogsBySkill != null && castLogsBySkill.ContainsKey(skill))
             {
                 isIndirectBarrier = false;
             }
+
             long timeSpentCasting = 0, timeSpentCastingNoInterrupt = 0;
             int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
             long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
@@ -68,6 +67,7 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
                 (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
                 castLogsBySkill.Remove(skill);
             }
+
             object[] skillItem = {
                     isIndirectBarrier,
                     skill.ID,
@@ -89,44 +89,41 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
 
         public static EXTBarrierStatsBarrierDistributionDto BuildIncomingBarrierDistData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            var dto = new EXTBarrierStatsBarrierDistributionDto
-            {
-                Distribution = new List<object[]>()
-            };
+            var barrierLogs = p.EXTBarrier.GetIncomingBarrierEvents(null, log, phase.Start, phase.End);
+            var distribution = barrierLogs.GroupBy(x => x.Skill)
+                .Select(group => GetBarrierToItem(group.Key, group, null, usedSkills, usedBuffs, log.Buffs, phase))
+                .ToList();
             EXTFinalIncomingBarrierStat incomingBarrierStats = p.EXTBarrier.GetIncomingBarrierStats(null, log, phase.Start, phase.End);
-            IReadOnlyList<EXTAbstractBarrierEvent> barrierLogs = p.EXTBarrier.GetIncomingBarrierEvents(null, log, phase.Start, phase.End);
-            var barrierLogsBySkill = barrierLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            dto.ContributedBarrier = incomingBarrierStats.BarrierReceived;
-            var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
-            foreach (KeyValuePair<SkillItem, List<EXTAbstractBarrierEvent>> pair in barrierLogsBySkill)
+            return new EXTBarrierStatsBarrierDistributionDto
             {
-                dto.Distribution.Add(GetBarrierToItem(pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
-            }
-            return dto;
+                Distribution = distribution,
+                ContributedBarrier = incomingBarrierStats.BarrierReceived
+            };
         }
 
 
-        private static List<object[]> BuildBarrierDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<EXTAbstractBarrierEvent> barrierLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+        private static List<object[]> BuildBarrierDistBodyData(ParsedEvtcLog log, IEnumerable<AbstractCastEvent> casting, IEnumerable<EXTAbstractBarrierEvent> barrierLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
         {
             var list = new List<object[]>();
             var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            var barrierLogsBySkill = barrierLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<SkillItem, List<EXTAbstractBarrierEvent>> pair in barrierLogsBySkill)
+            foreach (var group in barrierLogs.GroupBy(x => x.Skill))
             {
-                list.Add(GetBarrierToItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+                list.Add(GetBarrierToItem(group.Key, group, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
             return list;
         }
 
         private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, AbstractSingleActor p, AbstractSingleActor target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
-            var dto = new EXTBarrierStatsBarrierDistributionDto();
-            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
-            IReadOnlyList<EXTAbstractBarrierEvent> barrierLogs = p.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, phase.Start, phase.End);
-            dto.ContributedBarrier = outgoingBarrierStats.ActorBarrier;
-            dto.TotalBarrier = outgoingBarrierStats.Barrier;
-            dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
-            dto.Distribution = BuildBarrierDistBodyData(log, casting, barrierLogs, usedSkills, usedBuffs, phase);
+            var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
+            var barrierLogs = p.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, phase.Start, phase.End);
+            var dto = new EXTBarrierStatsBarrierDistributionDto
+            {
+                ContributedBarrier = outgoingBarrierStats.ActorBarrier,
+                TotalBarrier = outgoingBarrierStats.Barrier,
+                TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start)),
+                Distribution = BuildBarrierDistBodyData(log, casting, barrierLogs, usedSkills, usedBuffs, phase)
+            };
             return dto;
         }
 
@@ -140,10 +137,11 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier
         private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, Minions minions, AbstractSingleActor target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new EXTBarrierStatsBarrierDistributionDto();
-            IReadOnlyList<AbstractCastEvent> casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
-            IReadOnlyList<EXTAbstractBarrierEvent> barrierLogs = minions.EXTBarrier.GetOutgoingBarrierEvents(target, log, phase.Start, phase.End);
+            var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
+            var barrierLogs = minions.EXTBarrier.GetOutgoingBarrierEvents(target, log, phase.Start, phase.End).ToList();
             dto.ContributedBarrier = barrierLogs.Sum(x => x.BarrierGiven);
             dto.TotalBarrier = outgoingBarrierStats.Barrier;
+            //TODO(Rennorb) @perf
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));
             dto.Distribution = BuildBarrierDistBodyData(log, casting, barrierLogs, usedSkills, usedBuffs, phase);
             return dto;

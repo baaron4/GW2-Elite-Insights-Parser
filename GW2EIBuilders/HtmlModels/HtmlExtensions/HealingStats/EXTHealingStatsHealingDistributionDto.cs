@@ -96,16 +96,15 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
 
         public static EXTHealingStatsHealingDistributionDto BuildIncomingHealingDistData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
+            EXTFinalIncomingHealingStat incomingHealingStats = p.EXTHealing.GetIncomingHealStats(null, log, phase.Start, phase.End);
             var dto = new EXTHealingStatsHealingDistributionDto
             {
-                Distribution = new List<object[]>()
+                Distribution = new List<object[]>(),
+                ContributedHealing = incomingHealingStats.Healed,
+                ContributedDownedHealing = incomingHealingStats.DownedHealed
             };
-            EXTFinalIncomingHealingStat incomingHealingStats = p.EXTHealing.GetIncomingHealStats(null, log, phase.Start, phase.End);
-            IReadOnlyList<EXTAbstractHealingEvent> healingLogs = p.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End);
+            var healingLogs = p.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End);
             var healingLogsBySkill = healingLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            dto.ContributedHealing = incomingHealingStats.Healed;
-            dto.ContributedDownedHealing = incomingHealingStats.DownedHealed;
-            var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
             foreach (KeyValuePair<SkillItem, List<EXTAbstractHealingEvent>> pair in healingLogsBySkill)
             {
                 dto.Distribution.Add(GetHealingToItem(pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
@@ -178,8 +177,8 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
         private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, AbstractSingleActor p, AbstractSingleActor target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new EXTHealingStatsHealingDistributionDto();
-            IReadOnlyList<AbstractCastEvent> casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
-            IReadOnlyList<EXTAbstractHealingEvent> healingLogs = p.EXTHealing.GetJustActorOutgoingHealEvents(target, log, phase.Start, phase.End);
+            var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
+            var healingLogs = p.EXTHealing.GetJustActorOutgoingHealEvents(target, log, phase.Start, phase.End).ToList();
             dto.ContributedHealing = outgoingHealingStats.ActorHealing;
             dto.ContributedDownedHealing = outgoingHealingStats.ActorDownedHealing;
             dto.TotalHealing = outgoingHealingStats.Healing;
@@ -198,8 +197,8 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
         private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, Minions minions, AbstractSingleActor target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
         {
             var dto = new EXTHealingStatsHealingDistributionDto();
-            IReadOnlyList<AbstractCastEvent> casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
-            IReadOnlyList<EXTAbstractHealingEvent> healingLogs = minions.EXTHealing.GetOutgoingHealEvents(target, log, phase.Start, phase.End);
+            var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
+            var healingLogs = minions.EXTHealing.GetOutgoingHealEvents(target, log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
             dto.ContributedHealing = healingLogs.Sum(x => x.HealingDone);
             dto.TotalHealing = outgoingHealingStats.Healing;
             dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));

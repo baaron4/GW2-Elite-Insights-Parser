@@ -54,11 +54,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
-            return new List<InstantCastFinder>()
-            {
+            return
+            [
                 new DamageCastFinder(ChillingAura, ChillingAura),
                 new BuffGainCastFinder(IssueChallengeSAK, FixatedSH),
-            };
+            ];
         }
 
         protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -72,28 +72,27 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<int> GetTargetsIDs()
         {
-            return new List<int>
-            {
+            return
+            [
                 (int)TargetID.SoullessHorror,
                 (int)TrashID.TormentedDead,
-            };
+            ];
         }
 
         protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<TrashID>
-            {
+            return
+            [
                 TrashID.Scythe,
                 TrashID.SurgingSoul,
                 TrashID.FleshWurm
-            };
+            ];
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
+        internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, evtcVersion);
-            res.AddRange(GetConfusionDamageMissingMessage(evtcVersion));
-            return res;
+            return base.GetCustomWarningMessages(fightData, evtcVersion)
+                .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
         }
 
         internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -182,33 +181,33 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (int)TargetID.SoullessHorror:
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                     // arena reduction
                     var center = new Point3D(-10581, 825, -817);
                     List<(double, uint, uint)> destroyedRings;
                     if (log.FightData.IsCM)
                     {
-                        destroyedRings = new List<(double, uint, uint)>()
-                            {
+                        destroyedRings =
+                            [
                                 (100, 1330, 1550),
                                 (90, 1120, 1330),
                                 (66, 910, 1120),
                                 (33, 720, 910)
-                            };
+                            ];
                     }
                     else
                     {
-                        destroyedRings = new List<(double, uint, uint)>()
-                            {
+                        destroyedRings =
+                            [
                                 (90, 1330, 1550),
                                 (66, 1120, 1330),
                                 (33, 910, 1120),
-                            };
+                            ];
                     }
                     foreach ((double hpVal, uint innerRadius, uint outerRadius) in destroyedRings)
                     {
@@ -225,7 +224,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     //
-                    var howling = cls.Where(x => x.SkillId == HowlingDeath).ToList();
+                    var howling = cls.Where(x => x.SkillId == HowlingDeath);
                     foreach (AbstractCastEvent c in howling)
                     {
                         start = (int)c.Time;
@@ -233,12 +232,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                     }
-                    var vortex = cls.Where(x => x.SkillId == InnerVortexSlash).ToList();
+                    var vortex = cls.Where(x => x.SkillId == InnerVortexSlash);
                     foreach (AbstractCastEvent c in vortex)
                     {
                         start = (int)c.Time;
                         end = start + 4000;
-                        Point3D position = target.GetCurrentInterpolatedPosition(log, start);
+                        Point3D? position = target.GetCurrentInterpolatedPosition(log, start);
                         if (position != null)
                         {
                             var circle = new CircleDecoration(380, (start, end), Colors.LightOrange, 0.5, new PositionConnector(position));
@@ -246,12 +245,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), Colors.LightOrange, 0.5, new PositionConnector(position)));
                         }
                     }
-                    var deathBloom = cls.Where(x => x.SkillId == DeathBloom).ToList();
+                    var deathBloom = cls.Where(x => x.SkillId == DeathBloom);
                     foreach (AbstractCastEvent c in deathBloom)
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing == null)
                         {
                             continue;
@@ -265,13 +264,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
 
                     }
-                    var quad1 = cls.Where(x => x.SkillId == QuadSlashFirstSet).ToList();
-                    var quad2 = cls.Where(x => x.SkillId == QuadSlashSecondSet).ToList();
+                    var quad1 = cls.Where(x => x.SkillId == QuadSlashFirstSet);
+                    var quad2 = cls.Where(x => x.SkillId == QuadSlashSecondSet);
                     foreach (AbstractCastEvent c in quad1)
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing == null)
                         {
                             continue;
@@ -289,7 +288,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing == null)
                         {
                             continue;
@@ -358,11 +357,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (AbstractBuffEvent c in necrosis)
             {
                 AgentItem tank = c.To;
-                if (!splitNecrosis.ContainsKey(tank))
+                if (!splitNecrosis.TryGetValue(tank, out var value))
                 {
-                    splitNecrosis.Add(tank, new List<AbstractBuffEvent>());
+                    value = new();
+                    splitNecrosis.Add(tank, value);
                 }
-                splitNecrosis[tank].Add(c);
+
+                value.Add(c);
             }
             List<AbstractBuffEvent> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
             long minDiff = long.MaxValue;

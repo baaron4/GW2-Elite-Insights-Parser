@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -72,6 +73,30 @@ namespace GW2EIEvtcParser {
         public static T? LastOrNull<T>(this IReadOnlyList<T> list) where T : struct
         {
             return list.Count == 0 ? null : list[^1];
+        }
+
+        public static MaybeEnumerator<T> ToEnumerable<T>(this T? maybeValue) where T : class => new(maybeValue);
+
+        public readonly struct MaybeEnumerator<T>(T? maybeValue) : IEnumerable<T> where T : class
+        {
+            readonly T? maybeValue = maybeValue;
+
+            public readonly IEnumerator<T> GetEnumerator() => new Enumerator(maybeValue);
+            readonly IEnumerator IEnumerable.GetEnumerator() => new Enumerator(maybeValue);
+
+            struct Enumerator(T? maybeValue) : IEnumerator<T>
+            {
+                readonly T? _maybeValue = maybeValue;
+                public readonly T Current => _maybeValue!;
+
+                readonly object IEnumerator.Current => _maybeValue!;
+
+                int moved = 0;
+                public bool MoveNext() => this.Current != null  && this.moved++ == 0;
+
+                public readonly void Reset() { }
+                public readonly void Dispose() { }
+            }
         }
     }
 

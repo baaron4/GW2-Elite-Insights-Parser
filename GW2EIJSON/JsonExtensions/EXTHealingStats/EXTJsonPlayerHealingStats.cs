@@ -35,7 +35,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> AlliedHealing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>>? AlliedHealing1S { get; set; }
         /// <summary>
         /// Array of int representing 1S outgoing allied healing power based healing points \n
         /// Length == # of players and the length of each sub array is equal to # of phases
@@ -44,7 +44,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> AlliedHealingPowerHealing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>>? AlliedHealingPowerHealing1S { get; set; }
         /// <summary>
         /// Array of int representing 1S outgoing allied conversion based healing points \n
         /// Length == # of players and the length of each sub array is equal to # of phases
@@ -53,7 +53,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> AlliedConversionHealingHealing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>>? AlliedConversionHealingHealing1S { get; set; }
 
         /// <summary>
         /// Array of int representing 1S outgoing allied hybrid healing points \n
@@ -63,7 +63,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> AlliedHybridHealing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>>? AlliedHybridHealing1S { get; set; }
 
         /// <summary>
         /// Array of int representing 1S outgoing healing points \n
@@ -73,7 +73,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<int>> Healing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<int>>? Healing1S { get; set; }
         /// <summary>
         /// Array of int representing 1S outgoing healing power based healing points \n
         /// Length == # of phases
@@ -82,7 +82,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<int>> HealingPowerHealing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<int>>? HealingPowerHealing1S { get; set; }
         /// <summary>
         /// Array of int representing 1S outgoing conversion based healing points \n
         /// Length == # of phases
@@ -91,7 +91,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<int>> ConversionHealingHealing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<int>>? ConversionHealingHealing1S { get; set; }
         /// <summary>
         /// Array of int representing 1S outgoing hybrid healing points \n
         /// Length == # of phases
@@ -100,7 +100,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<int>> HybridHealing1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<int>>? HybridHealing1S { get; set; }
 
         /// <summary>
         /// Array of int representing 1S incoming healing points \n

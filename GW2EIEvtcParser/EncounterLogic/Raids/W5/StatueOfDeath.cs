@@ -14,18 +14,16 @@ namespace GW2EIEvtcParser.EncounterLogic
         
         public StatueOfDeath(int triggerID) : base(triggerID)
         {
-            MechanicList.AddRange(new List<Mechanic>
-            {
-            new PlayerDstHitMechanic(HungeringMiasma, "Hungering Miasma", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
-            new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, "Reclaimed Energy", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected","Applied when taking a light orb", "Light Orb",0),
-            new PlayerCastStartMechanic(ReclaimedEnergySkill, "Reclaimed Energy Thrown", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown","Has thrown a light orb", "Light Orb Thrown",0)
-                .UsingChecker((evt, log) =>
-                {
-                    return evt.Status != AbstractCastEvent.AnimationStatus.Interrupted;
-                }),
-            new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
-            }
-            );
+            MechanicList.AddRange([
+                new PlayerDstHitMechanic(HungeringMiasma, "Hungering Miasma", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.DarkGreen), "Vomit","Hungering Miasma (Vomit Goo)", "Vomit Dmg",0),
+                new PlayerDstBuffApplyMechanic(ReclaimedEnergyBuff, "Reclaimed Energy", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Light Orb Collected","Applied when taking a light orb", "Light Orb",0),
+                new PlayerCastStartMechanic(ReclaimedEnergySkill, "Reclaimed Energy Thrown", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown","Has thrown a light orb", "Light Orb Thrown",0)
+                    .UsingChecker((evt, log) =>
+                    {
+                        return evt.Status != AbstractCastEvent.AnimationStatus.Interrupted;
+                    }),
+                new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
+            ]);
             Extension = "souleater";
             Icon = EncounterIconStatueOfDeath;
             EncounterCategoryInformation.InSubCategoryOrder = 2;
@@ -86,13 +84,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.EaterOfSouls:
-                    var breakbar = cls.Where(x => x.SkillId == Imbibe).ToList();
+                case (int)ArcDPSEnums.TargetID.EaterOfSouls: {
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                    var breakbar = cls.Where(x => x.SkillId == Imbibe);
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         start = (int)c.Time;
@@ -100,7 +98,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                     }
-                    var vomit = cls.Where(x => x.SkillId == HungeringMiasma).ToList();
+                    var vomit = cls.Where(x => x.SkillId == HungeringMiasma);
                     foreach (AbstractCastEvent c in vomit)
                     {
                         start = (int)c.Time + 2100;
@@ -115,7 +113,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), Colors.GreenishYellow, 0.5, new PositionConnector(position)).UsingGrowingEnd(start + cascading).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
-                    var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls).ToList();
+                    var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls);
                     foreach (AbstractCastEvent c in pseudoDeath)
                     {
                         start = (int)c.Time;
@@ -124,10 +122,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         //replay.Actors.Add(new CircleActor(true, 0, 180, (start, end), "rgba(255, 150, 255, 0.35)", new AgentConnector(target)));
                         replay.Decorations.Add(new CircleDecoration(180, (start, end), "rgba(255, 180, 220, 0.7)", new AgentConnector(target)).UsingGrowingEnd(end));
                     }
-                    break;
+                } break;
                 case (int)ArcDPSEnums.TrashID.GreenSpirit1:
-                case (int)ArcDPSEnums.TrashID.GreenSpirit2:
-                    var green = cls.Where(x => x.SkillId == GreensEaterofSouls).ToList();
+                case (int)ArcDPSEnums.TrashID.GreenSpirit2: {
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                    var green = cls.Where(x => x.SkillId == GreensEaterofSouls);
                     foreach (AbstractCastEvent c in green)
                     {
                         int gstart = (int)c.Time + 667;
@@ -135,7 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var circle = new CircleDecoration(240, (gstart, gend), Colors.Green, 0.2, new AgentConnector(target));
                         replay.AddDecorationWithGrowing(circle, gend);
                     }
-                    break;
+                } break;
                 case (int)ArcDPSEnums.TrashID.SpiritHorde1:
                 case (int)ArcDPSEnums.TrashID.SpiritHorde2:
                 case (int)ArcDPSEnums.TrashID.SpiritHorde3:
@@ -151,7 +150,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
             // TODO check sizes
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiritOrbs, out IReadOnlyList<EffectEvent> orbEffectEvents))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiritOrbs, out var orbEffectEvents))
             {
                 foreach (EffectEvent effectEvent in orbEffectEvents)
                 {
@@ -159,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(20, lifespan, Colors.Pink, 0.8, new PositionConnector(effectEvent.Position)));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiderWeb, out IReadOnlyList<EffectEvent> webEffectEvents))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiderWeb, out var webEffectEvents))
             {
                 foreach (EffectEvent effectEvent in webEffectEvents)
                 {
@@ -173,7 +172,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(web);
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsLightOrbOnGround, out IReadOnlyList<EffectEvent> orbOnGroundEffectEvents))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsLightOrbOnGround, out var orbOnGroundEffectEvents))
             {
                 foreach (EffectEvent effectEvent in orbOnGroundEffectEvents)
                 {
@@ -181,7 +180,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(80, lifespan, Colors.Yellow, 0.6, new PositionConnector(effectEvent.Position)));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsLightOrbThrowHitGround, out IReadOnlyList<EffectEvent> orbThrowEffectEvents))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsLightOrbThrowHitGround, out var orbThrowEffectEvents))
             {
                 foreach (EffectEvent effectEvent in orbThrowEffectEvents)
                 {
@@ -189,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     EnvironmentDecorations.Add(new CircleDecoration(40, lifespan, Colors.Yellow, 0.6, new PositionConnector(effectEvent.Position)));
                 }
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiritShockwave2, out IReadOnlyList<EffectEvent> shockwaveEffectEvents))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EaterOfSoulsSpiritShockwave2, out var shockwaveEffectEvents))
             {
                 foreach (EffectEvent effectEvent in shockwaveEffectEvents)
                 {

@@ -239,12 +239,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
             switch (target.ID)
             {
-                case (int)ArcDPSEnums.TargetID.Ankka:
-                    var deathsEmbraces = casts.Where(x => x.SkillId == DeathsEmbraceSkill).ToList();
+                case (int)ArcDPSEnums.TargetID.Ankka: {
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                    var deathsEmbraces = casts.Where(x => x.SkillId == DeathsEmbraceSkill);
                     int deathsEmbraceCastDuration = 10143;
                     foreach (AbstractCastEvent deathEmbrace in deathsEmbraces)
                     {
@@ -336,7 +336,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     // Power of the Void
                     IEnumerable<Segment> potvSegments = target.GetBuffStatus(log, PowerOfTheVoid, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
                     replay.AddOverheadIcons(potvSegments, target, ParserIcons.PowerOfTheVoidOverhead);
-                    break;
+                } break;
                 case (int)ArcDPSEnums.TrashID.KraitsHallucination:
                     // Wall of Fear
                     long firstMovementTime = target.FirstAware + 2550;
@@ -353,7 +353,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     replay.Decorations.Add(new CircleDecoration(lichRadius, (target.FirstAware, awareTime), Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(awareTime));
                     replay.Decorations.Add(new CircleDecoration(lichRadius, (awareTime, target.LastAware), Colors.Red, 0.2, new AgentConnector(target)));
                     break;
-                case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM:
+                case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM: {
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM).ToList();
                     foreach (AbstractCastEvent c in waveOfTormentNM)
                     {
@@ -362,8 +363,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endTime = (int)c.Time + castTime;
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
-                    break;
-                case (int)ArcDPSEnums.TrashID.QuaggansHallucinationCM:
+                } break;
+                case (int)ArcDPSEnums.TrashID.QuaggansHallucinationCM: {
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var waveOfTormentCM = casts.Where(x => x.SkillId == WaveOfTormentCM).ToList();
                     foreach (AbstractCastEvent c in waveOfTormentCM)
                     {
@@ -372,8 +374,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int endTime = (int)c.Time + castTime;
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
-                    break;
-                case (int)ArcDPSEnums.TrashID.ZhaitansReach:
+                } break;
+                case (int)ArcDPSEnums.TrashID.ZhaitansReach: {
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     // Thrash - Circle that pulls in
                     var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashXJJ1 || x.SkillId == ZhaitansReachThrashXJJ2).ToList();
                     foreach (AbstractCastEvent c in thrash)
@@ -394,7 +397,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         endTime = (int)c.Time + castTime;
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                     }
-                    break;
+                } break;
                 case (int)ArcDPSEnums.TrashID.ReanimatedSpite:
                     break;
                 case (int)ArcDPSEnums.TrashID.SanctuaryPrism:
@@ -435,7 +438,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Tethering Players to Lich
-            List<AbstractBuffEvent> lichTethers = GetFilteredList(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
+            var lichTethers = GetFilteredList(log.CombatData, AnkkaLichHallucinationFixation, p, true, true);
             replay.AddTether(lichTethers, Colors.Teal, 0.5);
 
             // Reanimated Hatred Fixation

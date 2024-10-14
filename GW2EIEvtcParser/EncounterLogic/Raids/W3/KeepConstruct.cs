@@ -23,7 +23,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerDstBuffApplyMechanic(new long[] { StatueFixated1, StatueFixated2 }, "Fixate", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
+            new PlayerDstBuffApplyMechanic([StatueFixated1, StatueFixated2], "Fixate", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Statue", "Fixated",0),
             new PlayerDstHitMechanic(HailOfFury, "Hail of Fury", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
             new EnemyDstBuffApplyMechanic(Compromised, "Compromised", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
             new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0).UsingChecker( (de, log) => {
@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return condition;
             }),
             new SpawnMechanic((int) ArcDPSEnums.TrashID.InsidiousProjection, "Insidious Projection", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "Merge","Insidious Projection spawn (2 Statue merge)", "Merged Statues",0),
-            new PlayerDstHitMechanic(new long[] {PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1  }, "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
+            new PlayerDstHitMechanic([PhantasmalBlades2,PhantasmalBlades3, PhantasmalBlades1], "Phantasmal Blades", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Magenta), "Pizza","Phantasmal Blades (rotating Attack)", "Phantasmal Blades",0),
             new PlayerDstHitMechanic(TowerDrop, "Tower Drop", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new PlayerDstBuffApplyMechanic(XerasFury, "Xera's Fury", new MechanicPlotlySetting(Symbols.Circle,Colors.Orange), "Bomb","Xera's Fury (Large Bombs) application", "Bombs",0),
             new PlayerDstHitMechanic(WhiteOrb, "Good White Orb", new MechanicPlotlySetting(Symbols.Circle,Colors.White), "GW.Orb","Good White Orb", "Good White Orb",0).UsingChecker((de,log) => de.To.HasBuff(log, RadiantAttunementOrb, de.Time)),
@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Main phases 35025
-            List<AbstractBuffEvent> kcPhaseInvuls = GetFilteredList(log.CombatData, XerasBoon, mainTarget, true, true);
+            var kcPhaseInvuls = GetFilteredList(log.CombatData, XerasBoon, mainTarget, true, true);
             foreach (AbstractBuffEvent c in kcPhaseInvuls)
             {
                 if (c is BuffApplyEvent)
@@ -154,7 +154,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             // pre burn phases
             int preBurnCount = 1;
             var preBurnPhase = new List<PhaseData>();
-            List<AbstractBuffEvent> kcInvuls = GetFilteredList(log.CombatData, Determined762, mainTarget, true, true);
+            var kcInvuls = GetFilteredList(log.CombatData, Determined762, mainTarget, true, true);
             foreach (AbstractBuffEvent invul in kcInvuls)
             {
                 if (invul is BuffApplyEvent)
@@ -283,7 +283,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
@@ -295,7 +295,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
                     }
-                    var towerDrop = cls.Where(x => x.SkillId == TowerDrop).ToList();
+                    var towerDrop = cls.Where(x => x.SkillId == TowerDrop);
                     foreach (AbstractCastEvent c in towerDrop)
                     {
                         start = (int)c.Time;
@@ -307,9 +307,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), Colors.LightOrange, 0.5, new PositionConnector(position)).UsingFilled(false), true, skillCast);
                         }
                     }
-                    var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1).ToList();
-                    var blades2 = cls.Where(x => x.SkillId == PhantasmalBlades2).ToList();
-                    var blades3 = cls.Where(x => x.SkillId == PhantasmalBlades3).ToList();
+                    var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1);
+                    var blades2 = cls.Where(x => x.SkillId == PhantasmalBlades2);
+                    var blades3 = cls.Where(x => x.SkillId == PhantasmalBlades3);
                     int bladeDelay = 150;
                     int duration = 1000;
                     float bladeOpeningAngle = 360 * 3 / 32;
@@ -318,7 +318,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
-                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;
@@ -337,7 +337,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
-                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;
@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                         start = (int)c.Time + bladeDelay;
-                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;
@@ -434,15 +434,15 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             }
             // Fixated Statue tether to Player
-            List<AbstractBuffEvent> fixatedStatue = GetFilteredList(log.CombatData, new long[] { StatueFixated1, StatueFixated2 }, p, true, true);
+            var fixatedStatue = GetFilteredList(log.CombatData, [ StatueFixated1, StatueFixated2 ], p, true, true);
             replay.AddTether(fixatedStatue, Colors.Magenta, 0.5);
             // Fixation Overhead
-            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { StatueFixated1, StatueFixated2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, [ StatueFixated1, StatueFixated2 ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
             // Attunements Overhead
-            IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, new long[] { CrimsonAttunementPhantasm, CrimsonAttunementOrb }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, [ CrimsonAttunementPhantasm, CrimsonAttunementOrb ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
-            IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, new long[] { RadiantAttunementPhantasm, RadiantAttunementOrb }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, [ RadiantAttunementPhantasm, RadiantAttunementOrb ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
             replay.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
         }
 

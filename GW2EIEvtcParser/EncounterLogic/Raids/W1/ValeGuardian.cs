@@ -182,13 +182,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
             //var knownEffectsIDs = new HashSet<long>();
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.ValeGuardian:
-                    var magicStorms = cls.Where(x => x.SkillId == MagicStorm).ToList();
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var magicStorms = cls.Where(x => x.SkillId == MagicStorm);
                     foreach (AbstractCastEvent c in magicStorms)
                     {
                         int start = (int)c.Time;
@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int distributedMagicDuration = 6700;
                         int impactDuration = 110;
                         uint arenaRadius = 1600;
-                        var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen).ToList();
+                        var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen);
                         foreach (AbstractCastEvent c in distributedMagicGreen)
                         {
                             int start = (int)c.Time;
@@ -211,7 +211,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f))));
                         }
-                        var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue).ToList();
+                        var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue);
                         foreach (AbstractCastEvent c in distributedMagicBlue)
                         {
                             int start = (int)c.Time;
@@ -222,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
                             replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f))));
                         }
-                        var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed).ToList();
+                        var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed);
                         foreach (AbstractCastEvent c in distributedMagicRed)
                         {
                             int start = (int)c.Time;

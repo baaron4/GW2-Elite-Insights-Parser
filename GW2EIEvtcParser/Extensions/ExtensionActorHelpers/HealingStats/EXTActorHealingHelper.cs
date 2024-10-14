@@ -9,22 +9,22 @@ namespace GW2EIEvtcParser.Extensions
 {
     public abstract class EXTActorHealingHelper
     {
-        protected List<EXTAbstractHealingEvent>? HealEvents { get; set; }
-        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>> HealEventsByDst { get; set; }
-        protected List<EXTAbstractHealingEvent>? HealReceivedEvents { get; set; }
-        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>>? HealReceivedEventsBySrc { get; set; }
+        protected List<EXTAbstractHealingEvent>? HealEvents;
+        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>>? HealEventsByDst;
+        protected List<EXTAbstractHealingEvent>? HealReceivedEvents;
+        protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>>? HealReceivedEventsBySrc;
 
-
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedHealEvents = new Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>();
-        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedIncomingHealEvents = new Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>();
+        //TODO(Rennorb) @perf
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedHealEvents = new ();
+        private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedIncomingHealEvents = new();
 
         internal EXTActorHealingHelper()
         {
         }
 
-        public abstract List<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end);
 
-        public abstract List<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end);
 
         private static void FilterHealEvents(ParsedEvtcLog log, List<EXTAbstractHealingEvent> dls, EXTHealingType healingType)
         {
@@ -46,14 +46,14 @@ namespace GW2EIEvtcParser.Extensions
             }
         }
 
-        public IReadOnlyList<EXTAbstractHealingEvent> GetTypedOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
+        public IReadOnlyList<EXTAbstractHealingEvent> GetTypedOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
         {
             if (!_typedHealEvents.TryGetValue(healingType, out CachingCollectionWithTarget<List<EXTAbstractHealingEvent>> healEventsPerPhasePerTarget))
             {
                 healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>(log);
                 _typedHealEvents[healingType] = healEventsPerPhasePerTarget;
             }
-            if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<EXTAbstractHealingEvent> dls))
+            if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
             {
                 dls = GetOutgoingHealEvents(target, log, start, end).ToList();
                 FilterHealEvents(log, dls, healingType);
@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.Extensions
                 healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>(log);
                 _typedIncomingHealEvents[healingType] = healEventsPerPhasePerTarget;
             }
-            if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out List<EXTAbstractHealingEvent> dls))
+            if (!healEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
             {
                 dls = GetIncomingHealEvents(target, log, start, end).ToList();
                 FilterHealEvents(log, dls, healingType);

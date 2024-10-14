@@ -315,11 +315,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Xera:
-                    var summon = cls.Where(x => x.SkillId == SummonFragments).ToList();
+                    var cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
+                    var summon = cls.Where(x => x.SkillId == SummonFragments);
                     foreach (AbstractCastEvent c in summon)
                     {
                         replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));

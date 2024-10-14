@@ -50,7 +50,7 @@ namespace GW2EIEvtcParser.Extensions
             }
         }
 
-        private static (int healing, int healingPowerHealing, int conversionHealing, int hybridHealing, int downedHealing) ComputeHealingFrom(ParsedEvtcLog log, IReadOnlyList<EXTAbstractHealingEvent> healingEvents)
+        private static (int healing, int healingPowerHealing, int conversionHealing, int hybridHealing, int downedHealing) ComputeHealingFrom(ParsedEvtcLog log, IEnumerable<EXTAbstractHealingEvent> healingEvents)
         {
             int healing = 0;
             int healingPowerHealing = 0;
@@ -71,9 +71,8 @@ namespace GW2EIEvtcParser.Extensions
                     case EXTHealingType.HealingPower:
                         healingPowerHealing += healingEvent.HealingDone;
                         break;
-                    default:
-                        break;
                 }
+
                 if (healingEvent.AgainstDowned)
                 {
                     downedHealing += healingEvent.HealingDone;

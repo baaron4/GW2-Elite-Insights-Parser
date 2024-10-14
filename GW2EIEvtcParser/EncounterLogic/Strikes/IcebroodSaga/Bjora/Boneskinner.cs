@@ -91,13 +91,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
             switch (target.ID)
             {
                 case (int)TargetID.Boneskinner:
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                     // Death Wind
-                    var deathWind = casts.Where(x => x.SkillId == DeathWind).ToList();
+                    var deathWind = casts.Where(x => x.SkillId == DeathWind);
                     foreach (AbstractCastEvent c in deathWind)
                     {
                         int castTime = 3330;
@@ -119,7 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // Crushing Cruelty
-                    var crushingCruelty = casts.Where(x => x.SkillId == CrushingCruelty).ToList();
+                    var crushingCruelty = casts.Where(x => x.SkillId == CrushingCruelty);
                     foreach (AbstractCastEvent c in crushingCruelty)
                     {
                         int hitTime = 2833;
@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
             // Grasp AoE Orange Indicator
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspAoeIndicator, out IReadOnlyList<EffectEvent> indicators))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspAoeIndicator, out var indicators))
             {
                 foreach (EffectEvent indicator in indicators)
                 {
@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // Grasp Claws Effect / Dark Red AoE
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspClaws1, out IReadOnlyList<EffectEvent> claws))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GraspClaws1, out var claws))
             {
                 foreach (EffectEvent claw in claws)
                 {
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, uint width, uint height)
         {
-            if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> rectangularIndicators))
+            if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rectangularIndicators))
             {
                 foreach (EffectEvent indicator in rectangularIndicators)
                 {
@@ -212,7 +212,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     int start = (int)indicator.Time;
                     int end = (int)indicator.Time + duration;
 
-                    Point3D rotation = actor.GetCurrentRotation(log, start, duration);
+                    Point3D? rotation = actor.GetCurrentRotation(log, start, duration);
                     if (rotation != null)
                     {
                         var connector = new PositionConnector(indicator.Position);

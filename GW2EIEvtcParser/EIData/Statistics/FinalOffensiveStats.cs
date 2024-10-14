@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
         public double AppliedCrowdControlDuration { get; }
 
 
-        internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
+        internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
         {
             IReadOnlyList<AbstractHealthDamageEvent> dls = actor.GetDamageEvents(target, log, start, end);
             foreach (AbstractHealthDamageEvent dl in dls)

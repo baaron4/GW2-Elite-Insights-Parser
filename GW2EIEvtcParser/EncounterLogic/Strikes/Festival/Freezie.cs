@@ -150,13 +150,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-
             switch (target.ID)
             {
                 case (int)TargetID.Freezie:
                     // Fixation tether to Icy Protector
-                    List<AbstractBuffEvent> fixations = GetFilteredList(log.CombatData, IcyBarrier, target, true, true);
+                    var fixations = GetFilteredList(log.CombatData, IcyBarrier, target, true, true);
                     replay.AddTether(fixations, "rgba(30, 144, 255, 0.4)");
                     break;
                 default:

@@ -360,7 +360,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
             switch (target.ID)
             {
@@ -602,11 +602,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="log">The log.</param>
         /// <param name="replay">The Combat Replay.</param>
         /// <param name="casts">The cast events.</param>
-        private static void AddMaliciousIntentDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
+        private static void AddMaliciousIntentDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IEnumerable<AbstractCastEvent> casts)
         {
             // The Malicious Intent buff is only present in normal mode
             // The effect has no Src but we can check the skill cast
-            var maliciousIntent = casts.Where(x => x.SkillId == MaliciousIntentNM || x.SkillId == MaliciousIntentEmpoweredNM || x.SkillId == MaliciousIntentCM || x.SkillId == MaliciousIntentEmpoweredCM).ToList();
+            var maliciousIntent = casts.Where(x => x.SkillId == MaliciousIntentNM || x.SkillId == MaliciousIntentEmpoweredNM || x.SkillId == MaliciousIntentCM || x.SkillId == MaliciousIntentEmpoweredCM);
             foreach (AbstractCastEvent cast in maliciousIntent)
             {
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.TempleOfFebeMaliciousIntentTether, out var maliciousIntentTethers))
@@ -630,9 +630,9 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="log">The log.</param>
         /// <param name="replay">The Combat Replay.</param>
         /// <param name="casts">The cast events.</param>
-        private static void AddCryOfRageDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
+        private static void AddCryOfRageDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IEnumerable<AbstractCastEvent> casts)
         {
-            var cryOfRage = casts.Where(x => x.SkillId == CryOfRageNM || x.SkillId == CryOfRageCM || x.SkillId == CryOfRageEmpoweredNM || x.SkillId == CryOfRageEmpoweredCM).ToList();
+            var cryOfRage = casts.Where(x => x.SkillId == CryOfRageNM || x.SkillId == CryOfRageCM || x.SkillId == CryOfRageEmpoweredNM || x.SkillId == CryOfRageEmpoweredCM);
             foreach (AbstractCastEvent cast in cryOfRage)
             {
                 uint radius = 0;
@@ -676,18 +676,18 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="log">The log.</param>
         /// <param name="replay">The Combat Replay.</param>
         /// <param name="casts">The cast events.</param>
-        private static void AddEnviousGazeDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<AbstractCastEvent> casts)
+        private static void AddEnviousGazeDecoration(NPC target, ParsedEvtcLog log, CombatReplay replay, IEnumerable<AbstractCastEvent> casts)
         {
             uint width = 2200;
 
-            var enviousGaze = casts.Where(x => x.SkillId == EnviousGazeNM || x.SkillId == EnviousGazeEmpoweredNM || x.SkillId == EnviousGazeCM || x.SkillId == EnviousGazeEmpoweredCM).ToList();
+            var enviousGaze = casts.Where(x => x.SkillId == EnviousGazeNM || x.SkillId == EnviousGazeEmpoweredNM || x.SkillId == EnviousGazeCM || x.SkillId == EnviousGazeEmpoweredCM);
             foreach (AbstractCastEvent cast in enviousGaze)
             {
                 bool isEmpowered = cast.SkillId == EnviousGazeEmpoweredNM || cast.SkillId == EnviousGazeEmpoweredCM;
                 long indicatorDuration = 1500;
                 (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
                 long growing = lifespanIndicator.end;
-                Point3D facing = target.GetCurrentRotation(log, lifespanIndicator.end);
+                Point3D? facing = target.GetCurrentRotation(log, lifespanIndicator.end);
                 if (facing != null)
                 {
                     // Indicator
@@ -764,7 +764,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
                 if (target.IsSpecies(TargetID.Cerus))
                 {
-                    var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PetrifySkill).ToList();
+                    var casts = cerus.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PetrifySkill);
                     foreach (AbstractCastEvent cast in casts)
                     {
                         if (lifespan.start <= cast.Time && lifespan.end > cast.Time)
@@ -776,7 +776,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 else
                 {
                     // If a permanent Embodiment is casting a mechanic, cancel it when Cerus gains invulnerability (start 80% and 50% split phases)
-                    var invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>().ToList();
+                    var invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>();
                     foreach (BuffApplyEvent invulnApply in invulnsApply)
                     {
                         if (lifespan.start <= invulnApply.Time && lifespan.end > invulnApply.Time)
@@ -786,7 +786,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         else
                         {
                             // If a killable Embodiment is casting a mechanic, cancel it when Cerus loses invulnerability (end 80% and 50% split phases)
-                            var invulnsRemove = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffRemoveAllEvent>().ToList();
+                            var invulnsRemove = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffRemoveAllEvent>();
                             foreach (BuffRemoveAllEvent invulnRemove in invulnsRemove)
                             {
                                 if (lifespan.start <= invulnRemove.Time && lifespan.end > invulnRemove.Time)

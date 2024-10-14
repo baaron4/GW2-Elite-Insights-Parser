@@ -52,28 +52,28 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             }
             if (settings.RawFormatTimelineArrays)
             {
-                jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]);
+                jsonBuffsUptime.States = GetBuffStates(actor.GetBuffGraphs(log)[buffID]).ToList();
                 IReadOnlyDictionary<long, FinalBuffsDictionary> buffDicts = actor.GetBuffsDictionary(log, log.FightData.FightStart, log.FightData.FightEnd);
                 if (buffDicts.TryGetValue(buffID, out FinalBuffsDictionary buffDict))
                 {
-                    var statesPerSource = new Dictionary<string, IReadOnlyList<IReadOnlyList<int>>>();
+                    var statesPerSource = new Dictionary<string, IReadOnlyList<(long Time, int BoonCount)>>(buffDict.GeneratedBy.Count);
                     foreach (AbstractSingleActor source in buffDict.GeneratedBy.Keys)
                     {
-                        statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]);
+                        statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]).ToList();
                     }
                     jsonBuffsUptime.StatesPerSource = statesPerSource;
                 }
             }
             return jsonBuffsUptime;
         }
-        public static List<int[]> GetBuffStates(BuffsGraphModel bgm)
+        public static IEnumerable<(long Time, int BoonCount)>? GetBuffStates(BuffsGraphModel? bgm)
         {
             if (bgm == null || bgm.BuffChart.Count == 0)
             {
                 return null;
             }
-            var res = bgm.BuffChart.Select(x => new int[2] { (int)x.Start, (int)x.Value }).ToList();
-            return res.Count > 0 ? res : null;
+
+            return bgm.BuffChart.Select(x => (x.Start, (int)x.Value));
         }
     }
 

@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.Extensions
             _actor = actor;
         }
 
-        public override List<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.CombatData.HasEXTHealing)
             {
@@ -47,7 +47,7 @@ namespace GW2EIEvtcParser.Extensions
             {
                 if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
@@ -55,7 +55,7 @@ namespace GW2EIEvtcParser.Extensions
                 }
             }
 
-            return HealEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return HealEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
         /// <param name="healEventsList">Append to this list</param>
@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.Extensions
             return;
         }
 
-        public override List<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.CombatData.HasEXTHealing)
             {
@@ -109,7 +109,7 @@ namespace GW2EIEvtcParser.Extensions
             {
                 if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.Extensions
                 }
             }
 
-            return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
         /// <param name="healEventsList">Append to this list</param>
@@ -160,9 +160,9 @@ namespace GW2EIEvtcParser.Extensions
         }
 
 
-        public IReadOnlyList<EXTAbstractHealingEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IEnumerable<EXTAbstractHealingEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From == _actor.AgentItem).ToList();
+            return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From == _actor.AgentItem);
         }
 
         internal IReadOnlyList<EXTAbstractHealingEvent> GetJustActorTypedOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
@@ -209,14 +209,14 @@ namespace GW2EIEvtcParser.Extensions
             return graph;
         }
 
-        public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, EXTHealingType healingType = EXTHealingType.All)
+        public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, EXTHealingType healingType = EXTHealingType.All)
         {
             if (!_healing1S.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
             {
                 graphs = new CachingCollectionWithTarget<int[]>(log);
                 _healing1S[healingType] = graphs;
             }
-            if (!graphs.TryGetValue(start, end, target, out int[] graph))
+            if (!graphs.TryGetValue(start, end, target, out var graph))
             {
                 graph = ComputeHealingGraph(GetTypedOutgoingHealEvents(target, log, start, end, healingType), start, end);
                 //
@@ -225,14 +225,14 @@ namespace GW2EIEvtcParser.Extensions
             return graph;
         }
 
-        public IReadOnlyList<int> Get1SHealingReceivedList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, EXTHealingType healingType = EXTHealingType.All)
+        public IReadOnlyList<int> Get1SHealingReceivedList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, EXTHealingType healingType = EXTHealingType.All)
         {
             if (!_healingReceived1S.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
             {
                 graphs = new CachingCollectionWithTarget<int[]>(log);
                 _healingReceived1S[healingType] = graphs;
             }
-            if (!graphs.TryGetValue(start, end, target, out int[] graph))
+            if (!graphs.TryGetValue(start, end, target, out var graph))
             {
                 graph = ComputeHealingGraph(GetTypedIncomingHealEvents(target, log, start, end, healingType), start, end);
                 //
@@ -243,11 +243,8 @@ namespace GW2EIEvtcParser.Extensions
 
         public EXTFinalOutgoingHealingStat GetOutgoingHealStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            if (_outgoingHealStats == null)
-            {
-                _outgoingHealStats = new CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>(log);
-            }
-            if (!_outgoingHealStats.TryGetValue(start, end, target, out EXTFinalOutgoingHealingStat value))
+            _outgoingHealStats ??= new CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>(log);
+            if (!_outgoingHealStats.TryGetValue(start, end, target, out var value))
             {
                 value = new EXTFinalOutgoingHealingStat(log, start, end, _actor, target);
                 _outgoingHealStats.Set(start, end, target, value);
@@ -255,13 +252,10 @@ namespace GW2EIEvtcParser.Extensions
             return value;
         }
 
-        public EXTFinalIncomingHealingStat GetIncomingHealStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public EXTFinalIncomingHealingStat GetIncomingHealStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
-            if (_incomingHealStats == null)
-            {
-                _incomingHealStats = new CachingCollectionWithTarget<EXTFinalIncomingHealingStat>(log);
-            }
-            if (!_incomingHealStats.TryGetValue(start, end, target, out EXTFinalIncomingHealingStat value))
+            _incomingHealStats ??= new CachingCollectionWithTarget<EXTFinalIncomingHealingStat>(log);
+            if (!_incomingHealStats.TryGetValue(start, end, target, out var value))
             {
                 value = new EXTFinalIncomingHealingStat(log, start, end, _actor, target);
                 _incomingHealStats.Set(start, end, target, value);

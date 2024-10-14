@@ -68,7 +68,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
 
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int[] miniBossCount = new int[] { 1, 1, 1, 1 };
+            int[] miniBossCount = [1, 1, 1, 1];
             foreach (NPC target in _targets)
             {
                 switch (target.ID)
@@ -182,7 +182,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
             // consume fixations
             var  consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            List<AbstractBuffEvent> consumeEvents = GetFilteredList(log.CombatData, new long[] { Consume }, player, true, true);
+            var consumeEvents = GetFilteredList(log.CombatData, [ Consume ], player, true, true);
             replay.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
             replay.AddTether(consumeEvents, Colors.Red, 0.5);
         }
@@ -194,7 +194,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TrashID.KryptisRift:
                     {
-                        List<AbstractBuffEvent> events = GetFilteredList(log.CombatData, new long[] { KryptisRiftIncarnationTether }, target, true, true);
+                        var events = GetFilteredList(log.CombatData, [ KryptisRiftIncarnationTether ], target, true, true);
                         replay.AddTether(events, Colors.Red, 0.5);
                         break;
                     }

@@ -117,7 +117,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 int count = 0;
                 long start = det762Loss.Time;
-                List<AbstractBuffEvent> det895s = GetFilteredList(log.CombatData, Determined895, eye, true, true);
+                var det895s = GetFilteredList(log.CombatData, Determined895, eye, true, true);
                 foreach (AbstractBuffEvent abe in det895s)
                 {
                     if (abe is BuffApplyEvent)
@@ -134,6 +134,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = Math.Min(abe.Time, log.FightData.FightEnd);
                     }
                 }
+
                 if (start < log.FightData.FightEnd)
                 {
                     var phase = new PhaseData(start, log.FightData.FightEnd)
@@ -175,27 +176,25 @@ namespace GW2EIEvtcParser.EncounterLogic
                     throw new MissingKeyActorsException("Eyes not found");
                 }
                 //
-                List<AbstractBuffEvent> lastGraspsJudgement = GetFilteredList(combatData, LastGraspJudgment, eyeJudgement, true, true);
-                var lastGraspsJudgementSegments = new List<Segment>();
+                var lastGraspsJudgement = GetFilteredList(combatData, LastGraspJudgment, eyeJudgement, true, true).ToList(); //TODO(Rennorb) @perf
+                var lastGraspsJudgementSegments = new List<Segment>(lastGraspsJudgement.Count / 2);
                 for (int i = 0; i < lastGraspsJudgement.Count; i += 2)
                 {
                     lastGraspsJudgementSegments.Add(new Segment(lastGraspsJudgement[i].Time, lastGraspsJudgement[i + 1].Time, 1));
                 }
-                List<AbstractBuffEvent> lastGraspsFate = GetFilteredList(combatData, LastGraspFate, eyeFate, true, true);
-                var lastGraspsFateSegments = new List<Segment>();
+                var lastGraspsFate = GetFilteredList(combatData, LastGraspFate, eyeFate, true, true).ToList(); //TODO(Rennorb) @perf
+                var lastGraspsFateSegments = new List<Segment>(lastGraspsFate.Count / 2);
                 for (int i = 0; i < lastGraspsFate.Count; i += 2)
                 {
                     lastGraspsFateSegments.Add(new Segment(lastGraspsFate[i].Time, lastGraspsFate[i + 1].Time, 1));
                 }
                 //
-                if (lastGraspsJudgementSegments.LastOrNull() is not Segment lastJudge || lastGraspsFateSegments.LastOrNull() is not Segment lastFate)
+                if (lastGraspsJudgementSegments.LastOrNull() is Segment lastJudge && lastGraspsFateSegments.LastOrNull() is Segment lastFate)
                 {
-                    return;
-                }
-
-                if (lastFate.Intersects(lastJudge))
-                {
-                    fightData.SetSuccess(true, Math.Max(lastJudge.Start, lastFate.Start));
+                    if (lastFate.Intersects(lastJudge))
+                    {
+                        fightData.SetSuccess(true, Math.Max(lastJudge.Start, lastFate.Start));
+                    }
                 }
             }
         }

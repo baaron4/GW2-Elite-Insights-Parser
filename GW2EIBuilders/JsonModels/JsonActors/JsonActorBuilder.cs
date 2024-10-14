@@ -53,10 +53,10 @@ namespace GW2EIBuilders.JsonModels.JsonActors
                 jsonActor.Minions = minionsList.Values.Select(x => JsonMinionsBuilder.BuildJsonMinions(x, log, settings, skillMap, buffMap)).ToList();
             }
             //
-            var skillByID = actor.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            if (skillByID.Count != 0)
+            var casts = actor.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            if (casts.Any())
             {
-                jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, skillByID, skillMap);
+                jsonActor.Rotation = JsonRotationBuilder.BuildJsonRotationList(log, casts.GroupBy(x => x.SkillId), skillMap).ToList();
             }
             //
             if (settings.RawFormatTimelineArrays)
@@ -89,15 +89,15 @@ namespace GW2EIBuilders.JsonModels.JsonActors
             if (settings.RawFormatTimelineArrays)
             {
                 IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
-                jsonActor.BoonsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfBoons]);
-                jsonActor.ConditionsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfConditions]);
+                jsonActor.BoonsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfBoons]).ToList();
+                jsonActor.ConditionsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfConditions]).ToList();
                 if (buffGraphs.TryGetValue(SkillIDs.NumberOfActiveCombatMinions, out BuffsGraphModel states))
                 {
-                    jsonActor.ActiveCombatMinions = JsonBuffsUptimeBuilder.GetBuffStates(states);
+                    jsonActor.ActiveCombatMinions = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();
                 }
                 // Health
-                jsonActor.HealthPercents = actor.GetHealthUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
-                jsonActor.BarrierPercents = actor.GetBarrierUpdates(log).Select(x => new double[2] { x.Start, x.Value }).ToList();
+                jsonActor.HealthPercents = actor.GetHealthUpdates(log).Select(x => (x.Start, x.Value)).ToList();
+                jsonActor.BarrierPercents = actor.GetBarrierUpdates(log).Select(x => (x.Start, x.Value)).ToList();
             }
             if (log.CanCombatReplay)
             {

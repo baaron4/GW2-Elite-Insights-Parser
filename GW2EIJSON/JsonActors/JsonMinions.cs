@@ -72,7 +72,7 @@ namespace GW2EIJSON
         /// Rotation data
         /// </summary>
         /// <seealso cref="JsonRotation"/>
-        public IReadOnlyList<JsonRotation> Rotation { get; set; }
+        public IReadOnlyList<JsonRotation>? Rotation { get; set; }
 
         /// <summary>
         /// Healing stats data

@@ -25,17 +25,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-            new PlayerDstHitMechanic(new long[] { HorizonStrikeArkk1, HorizonStrikeArkk2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0),
-            new PlayerDstHitMechanic(new long[] { DiffractiveEdge1, DiffractiveEdge2 }, "Diffractive Edge", new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "5 Cone","Diffractive Edge (5 Cone Knockback)", "Five Cones",0),
+            new PlayerDstHitMechanic([ HorizonStrikeArkk1, HorizonStrikeArkk2 ], "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle, Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0),
+            new PlayerDstHitMechanic([ DiffractiveEdge1, DiffractiveEdge2 ], "Diffractive Edge", new MechanicPlotlySetting(Symbols.Star,Colors.Yellow), "5 Cone","Diffractive Edge (5 Cone Knockback)", "Five Cones",0),
             new PlayerDstHitMechanic(SolarFury, "Solar Fury", new MechanicPlotlySetting(Symbols.Circle,Colors.LightRed), "Ball","Stood in Red Overhead Ball Field", "Red Ball Aoe",0),
             new PlayerDstHitMechanic(FocusedRage, "Focused Rage", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Cone KB","Knockback in Cone with overhead crosshair", "Knockback Cone",0),
             new PlayerDstHitMechanic(SolarDischarge, "Solar Discharge", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Shockwave","Knockback shockwave after Overhead Balls", "Shockwave",0),
-            new PlayerDstHitMechanic(new long[] { StarbustCascade1, StarbustCascade2 }, "Starburst Cascade", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Float Ring","Starburst Cascade (Expanding/Retracting Lifting Ring)", "Float Ring",500),
+            new PlayerDstHitMechanic([ StarbustCascade1, StarbustCascade2 ], "Starburst Cascade", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightOrange), "Float Ring","Starburst Cascade (Expanding/Retracting Lifting Ring)", "Float Ring",500),
             new PlayerDstHitMechanic(HorizonStrikeNormal, "Horizon Strike Normal", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike norm","Horizon Strike (normal)", "Horizon Strike (normal)",0),
             new PlayerDstHitMechanic(OverheadSmash, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightRed), "Smash","Overhead Smash","Overhead Smash",0),
             new PlayerDstBuffApplyMechanic(CorporealReassignmentBuff, "Corporeal Reassignment", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Skull","Exploding Skull mechanic application", "Corporeal Reassignment",0),
             new PlayerDstHitMechanic(ExplodeArkk, "Explode", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bloom Explode","Hit by Solar Bloom explosion", "Bloom Explosion",0),
-            new PlayerDstBuffApplyMechanic(new long[] {FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4}, "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
+            new PlayerDstBuffApplyMechanic([ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], "Fixate", new MechanicPlotlySetting(Symbols.StarOpen,Colors.Magenta), "Bloom Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new PlayerDstBuffApplyMechanic(CosmicMeteor, "Cosmic Meteor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green","Temporal Realignment (Green) application", "Green",0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), // //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new EnemyCastStartMechanic(ArkkBreakbarCast, "Breakbar Start", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "Breakbar","Start Breakbar", "CC",0),
@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     bloomPhases.Add(new PhaseData(start, end));
                 }
             }
-            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true);
+            var invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true).ToList();
             for (int i = 0; i < bloomPhases.Count; i++)
             {
                 PhaseData phase = bloomPhases[i];
@@ -215,7 +215,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>().ToList();
                 if (invulsRemoveTarget.Count == 5)
                 {
-                    SetSuccessByCombatExit(new List<AbstractSingleActor> { target }, combatData, fightData, adjustedPlayers);
+                    SetSuccessByCombatExit([ target ], combatData, fightData, adjustedPlayers);
                 }
             }
         }
@@ -252,8 +252,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
 
             // Bloom Fixations
-            IEnumerable<Segment> fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, new long[] { FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 }, p, true, true);
+            IEnumerable<Segment> fixations = p.GetBuffStatus(log, [ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+            var fixationEvents = GetFilteredList(log.CombatData, [ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
             replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
 

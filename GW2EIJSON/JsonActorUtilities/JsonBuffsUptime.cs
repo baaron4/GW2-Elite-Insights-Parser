@@ -80,7 +80,7 @@ namespace GW2EIJSON
         /// Array[i][0] will be the time, Array[i][1] will be the number of buff present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<int>> States { get; set; }
+        public IReadOnlyList<(long Time, int BoonCount)> States { get; set; }
 
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace GW2EIJSON
         /// Array[i][0] will be the time, Array[i][1] will be the number of buff present from Array[i][0] to Array[i+1][0] \n
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight
         /// </summary>
-        public IReadOnlyDictionary<string, IReadOnlyList<IReadOnlyList<int>>> StatesPerSource { get; set; }
+        public IReadOnlyDictionary<string, IReadOnlyList<(long Time, int BoonCount)>> StatesPerSource { get; set; }
 
 
         public JsonBuffsUptime()

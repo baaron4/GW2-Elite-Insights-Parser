@@ -143,7 +143,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             return trashIDs;
         }
 
-        private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()
+        private static readonly Dictionary<int, string> PhaseNames = new()
         {
             { (int)TrashID.GreenKnight, "Green Knight" },
             { (int)TrashID.RedKnight, "Red Knight" },
@@ -152,13 +152,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
             switch (target.ID)
             {
                 case (int)TargetID.MAMA:
                     // Blastwave - AoE Knockback
-                    var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2).ToList();
+                    var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2);
                     foreach (AbstractCastEvent c in blastwave)
                     {
                         int castDuration = 2750;
@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Leap with shockwaves
-                    var leap = casts.Where(x => x.SkillId == Leap).ToList();
+                    var leap = casts.Where(x => x.SkillId == Leap);
                     foreach (AbstractCastEvent c in leap)
                     {
                         int castDuration = 2400;
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
 
                         // Find position at the end of the leap time
-                        Point3D targetPosition = target.GetCurrentPosition(log, expectedEndCast + 1000);
+                        Point3D? targetPosition = target.GetCurrentPosition(log, expectedEndCast + 1000);
                         if (targetPosition != null)
                         {
                             replay.AddDecorationWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), expectedEndCast);
@@ -209,7 +209,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 case (int)TrashID.RedKnight:
                 case (int)TrashID.GreenKnight:
                     // Explosive Launch - Knight Jump in air
-                    var explosiveLaunch = casts.Where(x => x.SkillId == ExplosiveLaunch).ToList();
+                    var explosiveLaunch = casts.Where(x => x.SkillId == ExplosiveLaunch);
                     foreach (AbstractCastEvent c in explosiveLaunch)
                     {
                         int castDuration = 1714;
@@ -219,7 +219,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Explosive Impact - Knight fall and knockback AoE
-                    var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact).ToList();
+                    var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact);
                     foreach (AbstractCastEvent c in explosiveImpact)
                     {
                         int castDuration = 533;
@@ -229,7 +229,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Pull AoE
-                    var extraction = casts.Where(x => x.SkillId == Extraction).ToList();
+                    var extraction = casts.Where(x => x.SkillId == Extraction);
                     foreach (AbstractCastEvent c in extraction)
                     {
                         int castDuration = 3835;

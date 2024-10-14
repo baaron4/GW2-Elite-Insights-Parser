@@ -510,22 +510,22 @@ namespace GW2EIEvtcParser.EIData
         #endregion COMBAT REPLAY
 
         #region CAST
-        public override IReadOnlyList<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
         {
             if (CastEvents == null)
             {
                 SetCastEvents(log);
             }
-            return CastEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return CastEvents.Where(x => x.Time >= start && x.Time <= end);
 
         }
-        public override IReadOnlyList<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
         {
             if (CastEvents == null)
             {
                 SetCastEvents(log);
             }
-            return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end)).ToList();
+            return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
 
         }
         protected void SetCastEvents(ParsedEvtcLog log)
@@ -604,7 +604,7 @@ namespace GW2EIEvtcParser.EIData
             return value;
         }
 
-        public FinalOffensiveStats GetOffensiveStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public FinalOffensiveStats GetOffensiveStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             _offensiveStats ??= new CachingCollectionWithTarget<FinalOffensiveStats>(log);
 
@@ -675,7 +675,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
         }

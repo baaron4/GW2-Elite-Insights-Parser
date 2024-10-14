@@ -141,7 +141,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); // avoid deep double enumeration
 
             switch (target.ID)
             {
@@ -246,7 +246,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Tail Lash
-                    var tailLash = casts.Where(x => x.SkillId == TailLashEnsolyss).ToList();
+                    var tailLash = casts.Where(x => x.SkillId == TailLashEnsolyss);
                     foreach (AbstractCastEvent c in tailLash)
                     {
                         int castDuration = 1550;
@@ -262,7 +262,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Tormenting Blast (Quarter attacks)
-                    var tormentingBlast = casts.Where(x => x.SkillId == TormentingBlast).ToList();
+                    var tormentingBlast = casts.Where(x => x.SkillId == TormentingBlast);
                     foreach (AbstractCastEvent c in tormentingBlast)
                     {
                         int firstQuarterAoe = 400;
@@ -286,7 +286,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Caustic Grasp (AoE Pull)
-                    var causticGrasp = casts.Where(x => x.SkillId == CausticGrasp).ToList();
+                    var causticGrasp = casts.Where(x => x.SkillId == CausticGrasp);
                     foreach (AbstractCastEvent c in causticGrasp)
                     {
                         int castDuration = 1500;
@@ -296,7 +296,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Upswing
-                    var upswingEnso = casts.Where(x => x.SkillId == UpswingEnsolyss).ToList();
+                    var upswingEnso = casts.Where(x => x.SkillId == UpswingEnsolyss);
                     foreach (AbstractCastEvent c in upswingEnso)
                     {
                         int castDuration = 1333;
@@ -310,7 +310,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // 66% & 33% Breakbars
-                    var causticExplosion = casts.Where(x => x.SkillId == CausticExplosionEnsolyss).ToList();
+                    var causticExplosion = casts.Where(x => x.SkillId == CausticExplosionEnsolyss);
                     foreach (AbstractCastEvent c in causticExplosion)
                     {
                         int castDuration = 15000;
@@ -356,7 +356,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Lunge (Dash)
-                    var lungeEnso = casts.Where(x => x.SkillId == LungeEnsolyss).ToList();
+                    var lungeEnso = casts.Where(x => x.SkillId == LungeEnsolyss);
                     foreach (AbstractCastEvent c in lungeEnso)
                     {
                         int castDuration = 1000;
@@ -370,7 +370,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Rampage - 8 Arrows attack
-                    var rampage = casts.Where(x => x.SkillId == RampageEnsolyss).ToList();
+                    var rampage = casts.Where(x => x.SkillId == RampageEnsolyss);
                     foreach (AbstractCastEvent c in rampage)
                     {
                         // Cast duration is 4050 but visually fits better 4450
@@ -407,7 +407,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)TrashID.NightmareHallucination1:
                     // Lunge (Dash)
-                    var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination).ToList();
+                    var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination);
                     foreach (AbstractCastEvent c in lungeHallu)
                     {
                         int castDuration = 1000;
@@ -421,7 +421,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Upswing
-                    var upswingHallu = casts.Where(x => x.SkillId == UpswingHallucination).ToList();
+                    var upswingHallu = casts.Where(x => x.SkillId == UpswingHallucination);
                     foreach (AbstractCastEvent c in upswingHallu)
                     {
                         int castDuration = 1333;

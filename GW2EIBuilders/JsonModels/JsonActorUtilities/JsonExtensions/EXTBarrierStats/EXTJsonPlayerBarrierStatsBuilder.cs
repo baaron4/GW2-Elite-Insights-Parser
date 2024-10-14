@@ -21,7 +21,49 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
             var alliedBarrierDist = new List<List<List<EXTJsonBarrierDist>>>();
             var totalBarrierDist = new List<List<EXTJsonBarrierDist>>();
             var totalIncomingBarrierDist = new List<List<EXTJsonBarrierDist>>();
-            var res = new EXTJsonPlayerBarrierStats()
+
+            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+            foreach (AbstractSingleActor friendly in log.Friendlies)
+            {
+                var outgoingBarrierAlly = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>();
+                var allyBarrier1S = new List<IReadOnlyList<int>>();
+                var allyBarrierDist = new List<List<EXTJsonBarrierDist>>();
+                
+                foreach (PhaseData phase in phases)
+                {
+                    outgoingBarrierAlly.Add(EXTJsonBarrierStatsBuilderCommons.BuildOutgoingBarrierStatistics(a.EXTBarrier.GetOutgoingBarrierStats(friendly, log, phase.Start, phase.End)));
+                    if (settings.RawFormatTimelineArrays)
+                    {
+                        allyBarrier1S.Add(a.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, friendly));
+                    }
+                    allyBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetOutgoingBarrierEvents(friendly, log, phase.Start, phase.End).GroupBy(x => x.SkillId), log, skillMap, buffMap).ToList());
+                }
+
+                outgoingBarrierAllies.Add(outgoingBarrierAlly);
+                alliedBarrier1S.Add(allyBarrier1S);
+                alliedBarrierDist.Add(allyBarrierDist);
+            }
+
+            foreach (PhaseData phase in phases)
+            {
+                outgoingBarrier.Add(EXTJsonBarrierStatsBuilderCommons.BuildOutgoingBarrierStatistics(a.EXTBarrier.GetOutgoingBarrierStats(null, log, phase.Start, phase.End)));
+                incomingBarrier.Add(EXTJsonBarrierStatsBuilderCommons.BuildIncomingBarrierStatistics(a.EXTBarrier.GetIncomingBarrierStats(null, log, phase.Start, phase.End)));
+                if (settings.RawFormatTimelineArrays)
+                {
+                    barrier1S.Add(a.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, null));
+                    barrierReceived1S.Add(a.EXTBarrier.Get1SBarrierReceivedList(log, phase.Start, phase.End, null));
+                }
+                totalBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetOutgoingBarrierEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId), log, skillMap, buffMap).ToList());
+                totalIncomingBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetIncomingBarrierEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId), log, skillMap, buffMap).ToList());
+            }
+
+            if (!settings.RawFormatTimelineArrays)
+            {
+                alliedBarrier1S = null;
+                barrier1S = null;
+            }
+
+            return new()
             {
                 OutgoingBarrier = outgoingBarrier,
                 OutgoingBarrierAllies = outgoingBarrierAllies,
@@ -33,46 +75,6 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
                 TotalBarrierDist = totalBarrierDist,
                 TotalIncomingBarrierDist = totalIncomingBarrierDist,
             };
-            IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-            foreach (AbstractSingleActor friendly in log.Friendlies)
-            {
-                //
-                var outgoingBarrierAlly = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>();
-                outgoingBarrierAllies.Add(outgoingBarrierAlly);
-                //
-                var allyBarrier1S = new List<IReadOnlyList<int>>();
-                alliedBarrier1S.Add(allyBarrier1S);
-                //
-                var allyBarrierDist = new List<List<EXTJsonBarrierDist>>();
-                alliedBarrierDist.Add(allyBarrierDist);
-                foreach (PhaseData phase in phases)
-                {
-                    outgoingBarrierAlly.Add(EXTJsonBarrierStatsBuilderCommons.BuildOutgoingBarrierStatistics(a.EXTBarrier.GetOutgoingBarrierStats(friendly, log, phase.Start, phase.End)));
-                    if (settings.RawFormatTimelineArrays)
-                    {
-                        allyBarrier1S.Add(a.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, friendly));
-                    }
-                    allyBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetOutgoingBarrierEvents(friendly, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillMap, buffMap));
-                }
-            }
-            foreach (PhaseData phase in phases)
-            {
-                outgoingBarrier.Add(EXTJsonBarrierStatsBuilderCommons.BuildOutgoingBarrierStatistics(a.EXTBarrier.GetOutgoingBarrierStats(null, log, phase.Start, phase.End)));
-                incomingBarrier.Add(EXTJsonBarrierStatsBuilderCommons.BuildIncomingBarrierStatistics(a.EXTBarrier.GetIncomingBarrierStats(null, log, phase.Start, phase.End)));
-                if (settings.RawFormatTimelineArrays)
-                {
-                    barrier1S.Add(a.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, null));
-                    barrierReceived1S.Add(a.EXTBarrier.Get1SBarrierReceivedList(log, phase.Start, phase.End, null));
-                }
-                totalBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetOutgoingBarrierEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillMap, buffMap));
-                totalIncomingBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(a.EXTBarrier.GetIncomingBarrierEvents(null, log, phase.Start, phase.End).GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList()), log, skillMap, buffMap));
-            }
-            if (!settings.RawFormatTimelineArrays)
-            {
-                res.AlliedBarrier1S = null;
-                res.Barrier1S = null;
-            }
-            return res;
         }
     }
 }

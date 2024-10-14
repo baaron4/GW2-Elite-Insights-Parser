@@ -169,11 +169,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int crStart = (int)replay.TimeOffsets.start;
             int crEnd = (int)replay.TimeOffsets.end;
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Adina:
-                    var doubleQuantumQuakes = cls.Where(x => x.SkillId == DoubleRotatingEarthRays).ToList();
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var doubleQuantumQuakes = casts.Where(x => x.SkillId == DoubleRotatingEarthRays);
                     foreach (AbstractCastEvent c in doubleQuantumQuakes)
                     {
                         long start = c.Time;
@@ -188,7 +188,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     //
-                    var tripleQuantumQuakes = cls.Where(x => x.SkillId == TripleRotatingEarthRays).ToList();
+                    var tripleQuantumQuakes = casts.Where(x => x.SkillId == TripleRotatingEarthRays);
                     foreach (AbstractCastEvent c in tripleQuantumQuakes)
                     {
                         long start = c.Time;
@@ -204,7 +204,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     }
                     //
-                    var terraforms = cls.Where(x => x.SkillId == Terraform).ToList();
+                    var terraforms = casts.Where(x => x.SkillId == Terraform);
                     foreach (AbstractCastEvent c in terraforms)
                     {
                         long start = c.Time;
@@ -222,7 +222,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
                     }
                     //
-                    var boulderBarrages = cls.Where(x => x.SkillId == BoulderBarrage).ToList();
+                    var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage).ToList();
                     foreach (AbstractCastEvent c in boulderBarrages)
                     {
                         long start = c.Time;
@@ -244,7 +244,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             AbstractSingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
             phases[0].AddTarget(adina);
             var handIds = new ArcDPSEnums.TrashID[] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption };
-            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true);
+            var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList(); //TODO(Rennorb) @perf
             AbstractBuffEvent lastInvuln = invuls.LastOrDefault();
             long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
             phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart));

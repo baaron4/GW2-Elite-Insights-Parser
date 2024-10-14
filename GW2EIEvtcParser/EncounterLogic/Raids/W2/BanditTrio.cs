@@ -276,11 +276,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
-                case (int)TargetID.Berg:
-                    var overheadSmash = cls.Where(x => x.SkillId == OverheadSmashBerg).ToList();
+                case (int)TargetID.Berg: {
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                    var overheadSmash = casts.Where(x => x.SkillId == OverheadSmashBerg);
                     foreach (AbstractCastEvent c in overheadSmash)
                     {
                         uint radius = 550;
@@ -295,9 +295,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.AddDecorationWithGrowing(cone, lifespan.Item2);
                         }
                     }
-                    break;
-                case (int)TargetID.Zane:
-                    var bulletHail = cls.Where(x => x.SkillId == HailOfBulletsZane).ToList();
+                } break;
+                case (int)TargetID.Zane: {
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                    var bulletHail = casts.Where(x => x.SkillId == HailOfBulletsZane).ToList();
                     foreach (AbstractCastEvent c in bulletHail)
                     {
                         long start = c.Time;
@@ -318,7 +319,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(radius, 81, (thirdConeStart, thirdConeEnd), Colors.Yellow, 0.3, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
-                    break;
+                } break;
 
                 case (int)TargetID.Narella:
                     break;

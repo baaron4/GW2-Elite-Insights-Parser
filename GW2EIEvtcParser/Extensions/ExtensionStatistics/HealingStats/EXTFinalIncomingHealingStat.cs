@@ -11,7 +11,7 @@ namespace GW2EIEvtcParser.Extensions
         public int HybridHealed { get; }
         public int DownedHealed { get; }
 
-        internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
+        internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
         {
             foreach (EXTAbstractHealingEvent healingEvent in actor.EXTHealing.GetIncomingHealEvents(target, log, start, end))
             {

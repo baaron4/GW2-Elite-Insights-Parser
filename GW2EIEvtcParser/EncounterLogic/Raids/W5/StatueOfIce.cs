@@ -82,10 +82,10 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.BrokenKing:
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards).ToList();
                     foreach (AbstractCastEvent c in Cone)
                     {
@@ -93,7 +93,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int end = (int)c.EndTime;
                         uint range = 450;
                         int angle = 100;
-                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing == null)
                         {
                             continue;

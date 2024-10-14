@@ -61,7 +61,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
             switch (target.ID)
             {
@@ -69,7 +69,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
 
                     // Red AoE during 75-50-25 % phases
-                    var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast).ToList();
+                    var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast);
                     foreach (AbstractCastEvent cast in demonicBlasts)
                     {
                         // Dagda uses Demonic Blast at 90% but she will not spawn the red pushback AoE
@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Spinning nebula
-                    var spinningNebulas = casts.Where(x => x.SkillId == SpinningNebulaCentral || x.SkillId == SpinningNebulaWithTeleport).ToList();
+                    var spinningNebulas = casts.Where(x => x.SkillId == SpinningNebulaCentral || x.SkillId == SpinningNebulaWithTeleport);
                     foreach (AbstractCastEvent cast in spinningNebulas)
                     {
                         (long, long) lifespan = (cast.Time, cast.Time + cast.ActualDuration);
@@ -96,7 +96,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
 
                     // Shooting Stars - Green Arrow
-                    var shootingStars = casts.Where(x => x.SkillId == ShootingStars).ToList();
+                    var shootingStars = casts.Where(x => x.SkillId == ShootingStars);
                     foreach (AbstractCastEvent cast in shootingStars)
                     {
                         uint length = 1500;

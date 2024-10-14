@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
@@ -99,28 +100,30 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 return phases;
             }
-            IReadOnlyList<AbstractCastEvent> cls = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            var wallopingWinds = cls.Where(x => x.SkillId == WallopingWind).ToList();
-            long start = 0, end = 0;
-            for (int i = 0; i < wallopingWinds.Count; i++)
+
+            var casts = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+            var wallopingWinds = casts.Where(x => x.SkillId == WallopingWind);
+            long start = 0;
+            int i = 0;
+            foreach (var wallopingWind in wallopingWinds)
             {
-                AbstractCastEvent wallopingWind = wallopingWinds[i];
-                end = wallopingWind.Time;
-                var phase = new PhaseData(start, end, "Phase " + (i + 1));
+                var phase = new PhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
                 phase.AddTarget(mainTarget);
                 phases.Add(phase);
-                AbstractCastEvent nextAttack = cls.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
+                AbstractCastEvent nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
                 if (nextAttack == null)
                 {
                     break;
                 }
                 start = nextAttack.Time;
-                if (i == wallopingWinds.Count - 1)
-                {
-                    phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 2));
-                    phase.AddTarget(mainTarget);
-                    phases.Add(phase);
-                }
+                
+                i++;
+            }
+            if (i > 0)
+            {
+                var phase = new PhaseData(start, log.FightData.FightEnd, "Phase " + (i + 1));
+                phase.AddTarget(mainTarget);
+                phases.Add(phase);
             }
 
             return phases;
@@ -151,28 +154,28 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int crStart = (int)replay.TimeOffsets.start;
             int crEnd = (int)replay.TimeOffsets.end;
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Sabir:
-                    var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                     foreach (Segment seg in repulsionFields)
                     {
                         replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
                     }
-                    var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                     foreach (Segment seg in ionShields)
                     {
                         replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
                     }
                     //
-                    var furyOfTheStorm = cls.Where(x => x.SkillId == FuryOfTheStorm).ToList();
+                    var furyOfTheStorm = casts.Where(x => x.SkillId == FuryOfTheStorm);
                     foreach (AbstractCastEvent c in furyOfTheStorm)
                     {
                         replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
                     }
                     //
-                    var unbridledTempest = cls.Where(x => x.SkillId == UnbridledTempest).ToList();
+                    var unbridledTempest = casts.Where(x => x.SkillId == UnbridledTempest);
                     foreach (AbstractCastEvent c in unbridledTempest)
                     {
                         int start = (int)c.Time;

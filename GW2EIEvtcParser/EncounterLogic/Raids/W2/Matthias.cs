@@ -259,29 +259,29 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Matthias:
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                     AddMatthiasBubbles(BloodShield, target, log, replay);
                     AddMatthiasBubbles(BloodShieldAbo, target, log, replay);
-                    var rageShards = cls.Where(x => x.SkillId == ShardsOfRageHuman || x.SkillId == ShardsOfRageAbomination).ToList();
+                    var rageShards = cls.Where(x => x.SkillId == ShardsOfRageHuman || x.SkillId == ShardsOfRageAbomination);
                     foreach (AbstractCastEvent c in rageShards)
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, end);
                     }
-                    var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman).ToList();
+                    var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman);
                     foreach (AbstractCastEvent c in hadouken)
                     {
                         start = (int)c.Time;
                         int preCastTime = 1000;
                         int duration = 750;
                         uint width = 4000; uint height = 130;
-                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);

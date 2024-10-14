@@ -271,12 +271,12 @@ namespace GW2EIEvtcParser.EncounterLogic
             return start >= 0 ? start : genericStart;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
+        internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, evtcVersion);
+            var res = base.GetCustomWarningMessages(fightData, evtcVersion);
             if (!fightData.IsCM)
             {
-                res.Add(new ErrorEvent("Missing outgoing Saul damage due to % based damage"));
+                return res.Concat(new ErrorEvent("Missing outgoing Saul damage due to % based damage").ToEnumerable());
             }
             return res;
         }
@@ -530,11 +530,11 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Deimos:
-                    var mindCrush = cls.Where(x => x.SkillId == MindCrush).ToList();
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var mindCrush = cls.Where(x => x.SkillId == MindCrush);
                     foreach (AbstractCastEvent c in mindCrush)
                     {
                         start = (int)c.Time;
@@ -546,7 +546,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
                         }
                     }
-                    var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1)).ToList();
+                    var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1));
                     foreach (AbstractCastEvent c in annihilate)
                     {
                         start = (int)c.Time;
@@ -573,7 +573,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                    var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                     foreach (Segment seg in signets)
                     {
                         replay.Decorations.Add(new CircleDecoration(120, seg, Colors.Teal, 0.4, new AgentConnector(target)));
@@ -611,7 +611,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                     if (shackledPrisoner != null)
                     {
-                        Point3D shackledPos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant);
+                        Point3D? shackledPos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant);
                         if (shackledPos != null)
                         {
                             float diffX = 0;

@@ -197,19 +197,19 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.PeerlessQadim:
-                    var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop).ToList();
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop);
                     foreach (AbstractCastEvent c in cataCycle)
                     {
                         uint magmaRadius = 850;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D pylonPosition = target.GetCurrentPosition(log, end);
+                        Point3D? pylonPosition = target.GetCurrentPosition(log, end);
                         if (pylonPosition == null)
                         {
                             continue;
@@ -217,7 +217,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
                         replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                     }
-                    var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2).ToList();
+                    var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2);
                     foreach (AbstractCastEvent c in forceOfHavoc)
                     {
                         uint roadLength = 2400;
@@ -228,8 +228,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         start = (int)c.Time;
                         int preCastTime = 1500;
                         int duration = 22500;
-                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                        Point3D position = target.GetCurrentPosition(log, start + 1000);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D? position = target.GetCurrentPosition(log, start + 1000);
                         if (facing != null && position != null)
                         {
                             replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
@@ -240,7 +240,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast).ToList();
+                    var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast);
                     foreach (AbstractCastEvent c in forceOfRetal)
                     {
                         uint radius = 650;
@@ -249,7 +249,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int timeBetweenCascades = 200;
                         int cascades = 5;
                         start = (int)c.Time + 1400;
-                        Point3D position = target.GetCurrentPosition(log, start + 1000);
+                        Point3D? position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
                             replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
@@ -260,14 +260,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2).ToList();
+                    var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2);
                     foreach (AbstractCastEvent c in etherStrikes)
                     {
                         uint coneRadius = 2600;
                         int coneAngle = 60;
                         start = (int)c.Time;
                         end = start + 250;
-                        Point3D facing = target.GetCurrentRotation(log, start + 300);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 300);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
@@ -275,7 +275,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
-                    var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile).ToList();
+                    var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile);
                     foreach (AbstractCastEvent c in causticChaos)
                     {
                         double acceleration = c.Acceleration;
@@ -304,13 +304,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                             }
                         }
                     }
-                    var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion).ToList();
+                    var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion);
                     foreach (AbstractCastEvent c in expoReperc)
                     {
                         uint radius = 650;
                         start = (int)c.Time;
                         end = (int)c.EndTime;
-                        Point3D position = target.GetCurrentPosition(log, start + 1000);
+                        Point3D? position = target.GetCurrentPosition(log, start + 1000);
                         if (position != null)
                         {
                             replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
@@ -343,7 +343,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.PeerlessQadimPylon:
                     // Red tether from Qadim to the Pylon during breakbar
-                    List<AbstractBuffEvent> breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
+                    var breakbarBuffs = GetFilteredList(log.CombatData, QadimThePeerlessBreakbarTargetBuff, target, true, true);
                     replay.AddTether(breakbarBuffs, Colors.Red, 0.4);
                     break;
                 case (int)ArcDPSEnums.TrashID.PeerlessQadimAuraPylon:

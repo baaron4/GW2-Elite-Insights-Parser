@@ -133,13 +133,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
             switch (target.ID)
             {
                 case (int)TargetID.Siax:
                     // Siax's Breakbar
-                    var causticExplosionBreakbar = casts.Where(x => x.SkillId == CausticExplosionSiaxBreakbar).ToList();
+                    var causticExplosionBreakbar = casts.Where(x => x.SkillId == CausticExplosionSiaxBreakbar);
                     foreach (AbstractCastEvent c in causticExplosionBreakbar)
                     {
                         int castDuration = 15000;
@@ -150,12 +150,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.AddDecorationWithGrowing(doughnut, expectedEndCast, true);
                     }
                     // Tail Swipe
-                    var tailLash = casts.Where(x => x.SkillId == TailLashSiax).ToList();
+                    var tailLash = casts.Where(x => x.SkillId == TailLashSiax);
                     foreach (AbstractCastEvent c in tailLash)
                     {
                         int castDuration = 1550;
                         (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                        Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
+                        Point3D? facing = target.GetCurrentRotation(log, c.Time + castDuration);
                         if (facing != null)
                         {
                             var rotation = new AngleConnector(facing);
@@ -163,7 +163,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
                     // 66% and 33% phases
-                    var causticExplosionPhases = casts.Where(x => x.SkillId == CausticExplosionSiaxPhase66 || x.SkillId == CausticExplosionSiaxPhase33).ToList();
+                    var causticExplosionPhases = casts.Where(x => x.SkillId == CausticExplosionSiaxPhase66 || x.SkillId == CausticExplosionSiaxPhase33);
                     foreach (AbstractCastEvent c in causticExplosionPhases)
                     {
                         int castDuration = 20000;
@@ -175,7 +175,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
                     break;
                 case (int)TrashID.EchoOfTheUnclean:
-                    var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho).ToList();
+                    var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho);
                     foreach (AbstractCastEvent c in causticExplosionEcho)
                     {
                         // Duration is the same as Siax's explosion but starts 2 seconds later
@@ -207,7 +207,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixations
             IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-            List<AbstractBuffEvent> fixationEvents = GetFilteredList(log.CombatData, FixatedNightmare, p, true, true);
+            var fixationEvents = GetFilteredList(log.CombatData, FixatedNightmare, p, true, true);
             replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
             replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
         }

@@ -28,7 +28,7 @@ namespace GW2EIJSON
         /// Array[i][0] will be the time at which player got tag. \n
         /// Array[i][1] will be the time at which player lost tag.
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<int>> CommanderTagStates { get; set; }
+        public IReadOnlyList<(long GotTagTime, long LostTagTime)>? CommanderTagStates { get; set; }
 
         /// <summary>
         /// Profession of the player
@@ -65,7 +65,7 @@ namespace GW2EIJSON
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// Only relevant for clone summoning capable specs.
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<int>> ActiveClones { get; set; }
+        public IReadOnlyList<(long Time, int CloneCount)> ActiveClones { get; set; }
 
         /// <summary>
         /// Array of int[2] that represents the number of active ranger pets \n
@@ -73,7 +73,7 @@ namespace GW2EIJSON
         /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
         /// Only relevant for rangers.
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<int>> ActiveRangerPets { get; set; }
+        public IReadOnlyList<(long Time, int PetCount)> ActiveRangerPets { get; set; }
 
         /// <summary>
         /// Array of Total DPS stats \n
@@ -159,7 +159,7 @@ namespace GW2EIJSON
         /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
         /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
         /// </remarks>
-        public IReadOnlyList<IReadOnlyList<IReadOnlyList<double>>> TargetBreakbarDamage1S { get; set; }
+        public IReadOnlyList<IReadOnlyList<IReadOnlyList<double>>>? TargetBreakbarDamage1S { get; set; }
 
         /// <summary>
         /// Per Target Damage distribution array \n
@@ -219,25 +219,25 @@ namespace GW2EIJSON
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffs { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? SelfBuffs { get; set; }
 
         /// <summary>
         /// List of buff status on group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> GroupBuffs { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? GroupBuffs { get; set; }
 
         /// <summary>
         /// List of buff status on off group generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> OffGroupBuffs { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? OffGroupBuffs { get; set; }
 
         /// <summary>
         /// List of buff status on squad generation
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> SquadBuffs { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? SquadBuffs { get; set; }
 
         /// <summary>
         /// List of buff status on active time
@@ -249,23 +249,23 @@ namespace GW2EIJSON
         /// List of buff status on self generation on active time
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> SelfBuffsActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? SelfBuffsActive { get; set; }
 
         /// <summary>
         /// List of buff status on group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> GroupBuffsActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? GroupBuffsActive { get; set; }
 
         /// <summary>
         /// List of buff status on off group generation on active time
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> OffGroupBuffsActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? OffGroupBuffsActive { get; set; }
 
         /// <summary>
         /// List of buff status on squad generation on active time
         /// </summary>
         /// <seealso cref="JsonPlayerBuffsGeneration"/>
-        public IReadOnlyList<JsonPlayerBuffsGeneration> SquadBuffsActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffsGeneration>? SquadBuffsActive { get; set; }
 
 
         /// <summary>
@@ -278,25 +278,25 @@ namespace GW2EIJSON
         /// Key is "'b' + id"
         /// </summary>
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SelfBuffVolumes { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? SelfBuffVolumes { get; set; }
 
         /// <summary>
         /// List of buff volumes on group outgoing
         /// </summary>
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> GroupBuffVolumes { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? GroupBuffVolumes { get; set; }
 
         /// <summary>
         /// List of buff volumes on off group outgoing
         /// </summary>
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> OffGroupBuffVolumes { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? OffGroupBuffVolumes { get; set; }
 
         /// <summary>
         /// List of buff volumes on squad outgoing
         /// </summary>
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SquadBuffVolumes { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? SquadBuffVolumes { get; set; }
 
 
         /// <summary>
@@ -308,23 +308,23 @@ namespace GW2EIJSON
         /// List of buff volumes on self outgoing on active time
         /// </summary>
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SelfBuffVolumesActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? SelfBuffVolumesActive { get; set; }
 
         /// <summary>
         /// List of buff volumes on group outgoing on active time
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> GroupBuffVolumesActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? GroupBuffVolumesActive { get; set; }
 
         /// <summary>
         /// List of buff volumes on off group outgoing on active time
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> OffGroupBuffVolumesActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? OffGroupBuffVolumesActive { get; set; }
 
         /// <summary>
         /// List of buff volumes on squad outgoing on active time
         /// </summary>
         /// <seealso cref="JsonPlayerBuffOutgoingVolumes"/>
-        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes> SquadBuffVolumesActive { get; set; }
+        public IReadOnlyList<JsonPlayerBuffOutgoingVolumes>? SquadBuffVolumesActive { get; set; }
 
         /// <summary>
         /// List of death recaps \n

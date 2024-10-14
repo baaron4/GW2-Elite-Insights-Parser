@@ -47,10 +47,10 @@ namespace GW2EIBuilders.HtmlModels
         public Dictionary<string, DamageModDto> DamageIncModMap { get; } = new Dictionary<string, DamageModDto>();
         public List<MechanicDto> MechanicMap { get; set; } = new List<MechanicDto>();
         // Extra components
-        public CombatReplayDto CrData { get; set; } = null;
-        public ChartDataDto GraphData { get; set; } = null;
-        public HealingStatsExtension HealingStatsExtension { get; set; } = null;
-        public BarrierStatsExtension BarrierStatsExtension { get; set; } = null;
+        public CombatReplayDto? CrData { get; set; } = null;
+        public ChartDataDto? GraphData { get; set; } = null;
+        public HealingStatsExtension? HealingStatsExtension { get; set; } = null;
+        public BarrierStatsExtension? BarrierStatsExtension { get; set; } = null;
         // meta data
         public string EncounterDuration { get; set; }
         public bool Success { get; set; }

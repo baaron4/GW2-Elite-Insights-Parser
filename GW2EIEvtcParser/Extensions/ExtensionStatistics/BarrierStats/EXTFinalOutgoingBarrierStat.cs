@@ -18,8 +18,8 @@ namespace GW2EIEvtcParser.Extensions
 
         internal EXTFinalOutgoingBarrierStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
         {
-            (Barrier, DownedBarrier) = ComputeBarrierFrom(log, actor.EXTBarrier.GetOutgoingBarrierEvents(target, log, start, end));
-            (ActorBarrier, ActorDownedBarrier) = ComputeBarrierFrom(log, actor.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, start, end));
+            (Barrier, DownedBarrier) = ComputeBarrierFrom(actor.EXTBarrier.GetOutgoingBarrierEvents(target, log, start, end));
+            (ActorBarrier, ActorDownedBarrier) = ComputeBarrierFrom(actor.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, start, end));
             double phaseDuration = (end - start) / 1000.0;
             if (phaseDuration > 0)
             {
@@ -31,7 +31,7 @@ namespace GW2EIEvtcParser.Extensions
             }
         }
 
-        private static (int barrier, int downedBarrier) ComputeBarrierFrom(ParsedEvtcLog log, IReadOnlyList<EXTAbstractBarrierEvent> barrierEvents)
+        private static (int barrier, int downedBarrier) ComputeBarrierFrom(IEnumerable<EXTAbstractBarrierEvent> barrierEvents)
         {
             int barrier = 0;
             int downedBarrier = 0;

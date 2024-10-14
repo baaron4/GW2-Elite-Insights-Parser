@@ -109,11 +109,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Cairn:
-                    var swordSweep = cls.Where(x => x.SkillId == OrbitalSweep).ToList();
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var swordSweep = cls.Where(x => x.SkillId == OrbitalSweep);
                     foreach (AbstractCastEvent c in swordSweep)
                     {
                         int start = (int)c.Time;
@@ -121,7 +121,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int initialHitDuration = 850;
                         int sweepDuration = 1100;
                         uint width = 1400; uint height = 80;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
@@ -131,7 +131,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime + initialHitDuration, start + preCastTime + initialHitDuration + sweepDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
                         }
                     }
-                    var wave = cls.Where(x => x.SkillId == GravityWave).ToList();
+                    var wave = cls.Where(x => x.SkillId == GravityWave);
                     foreach (AbstractCastEvent c in wave)
                     {
                         int start = (int)c.Time;
@@ -145,9 +145,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         replay.Decorations.Add(new DoughnutDecoration(secondRadius, thirdRadius, (start + preCastTime + 2 * duration, start + preCastTime + 3 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
                         replay.Decorations.Add(new DoughnutDecoration(thirdRadius, fourthRadius, (start + preCastTime + 5 * duration, start + preCastTime + 6 * duration), Colors.Purple, 0.3, new AgentConnector(target)));
                     }
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out IReadOnlyList<EffectEvent> dashGreenEffects))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDashGreen, out var dashGreenEffects))
                     {
-                        var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6).ToList();
+                        var spatialManipulations = cls.Where(x => x.SkillId == SpatialManipulation6);
                         foreach (EffectEvent dashGreen in dashGreenEffects)
                         {
                             long dashGreenStart = dashGreen.Time;

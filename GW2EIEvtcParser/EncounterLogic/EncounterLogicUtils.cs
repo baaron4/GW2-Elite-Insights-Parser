@@ -99,16 +99,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             }
         }*/
 
-        internal static List<ErrorEvent> GetConfusionDamageMissingMessage(EvtcVersionEvent evtcVersion)
+        internal static ErrorEvent? GetConfusionDamageMissingMessage(EvtcVersionEvent evtcVersion)
         {
             if (evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.ProperConfusionDamageSimulation)
             {
-                return new List<ErrorEvent>();
+                return null;
             }
-            return new List<ErrorEvent>()
-            {
-                new ErrorEvent("Missing confusion damage")
-            };
+            return new("Missing confusion damage");
         }
         internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
         {
@@ -141,22 +138,17 @@ namespace GW2EIEvtcParser.EncounterLogic
             return filtered;
         }
 
-        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+        internal static IEnumerable<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
         {
             return GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart, padEnd);
         }
 
-        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithStart, bool padEnd)
+        internal static IEnumerable<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithStart, bool padEnd)
         {
-            var filteredList = new List<AbstractBuffEvent>();
-            foreach (long buffID in buffIDs)
-            {
-                filteredList.AddRange(GetFilteredList(combatData, buffID, target, beginWithStart, padEnd));
-            }
-            return filteredList;
+            return buffIDs.SelectMany(buffID => GetFilteredList(combatData, buffID, target, beginWithStart, padEnd));
         }
 
-        internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+        internal static IEnumerable<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AbstractSingleActor target, bool beginWithStart, bool padEnd)
         {
             return GetFilteredList(combatData, buffIDs, target.AgentItem, beginWithStart, padEnd);
         }

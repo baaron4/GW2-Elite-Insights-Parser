@@ -36,14 +36,9 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
             return jsonRotation;
         }
 
-        public static List<JsonRotation> BuildJsonRotationList(ParsedEvtcLog log, Dictionary<long, List<AbstractCastEvent>> skillByID, Dictionary<long, SkillItem> skillMap)
+        public static IEnumerable<JsonRotation> BuildJsonRotationList(ParsedEvtcLog log, IEnumerable<IGrouping<long, AbstractCastEvent>> skillByID, Dictionary<long, SkillItem> skillMap)
         {
-            var res = new List<JsonRotation>();
-            foreach (KeyValuePair<long, List<AbstractCastEvent>> pair in skillByID)
-            {
-                res.Add(BuildJsonRotation(log, pair.Key, pair.Value, skillMap));
-            }
-            return res;
+            return skillByID.Select(group => BuildJsonRotation(log, group.Key, group.ToList(), skillMap));
         }
     }
 }

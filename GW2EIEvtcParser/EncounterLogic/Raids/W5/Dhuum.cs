@@ -119,6 +119,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             };
         }
 
+        //TODO(Rennorb) @perf
         private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<AbstractCastEvent> castLogs, long fightDuration, long start)
         {
             AbstractCastEvent shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
@@ -149,13 +150,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, AbstractSingleActor dhuum, long mainStart, long mainEnd, bool hasRitual)
         {
-            IReadOnlyList<AbstractCastEvent> cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
             var cataCycles = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
             var gDeathmarks = cls.Where(x => x.SkillId == GreaterDeathMark).ToList();
             if (gDeathmarks.Count < cataCycles.Count)
             {
                 // anomaly, don't do sub phases
-                return new List<PhaseData>();
+                return [ ];
             }
             var phases = new List<PhaseData>();
             long start = mainStart;
@@ -189,12 +190,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 return phases;
             }
             // Sometimes the pre event is not in the evtc
-            IReadOnlyList<AbstractCastEvent> castLogs = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            IReadOnlyList<AbstractCastEvent> dhuumCast = dhuum.GetCastEvents(log, log.FightData.FightStart, 20000);
+            var castLogs = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             if (!_hasPrevent)
             {
                 // full fight does not contain the pre event
-                ComputeFightPhases(phases, castLogs, fightDuration, 0);
+                ComputeFightPhases(phases, castLogs.ToList(), fightDuration, 0);
             }
             else
             {
@@ -206,7 +206,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     long end = invulDhuum.Time;
                     phases.Add(new PhaseData(0, end, "Pre Event"));
                     phases.Add(new PhaseData(end, fightDuration, "Main Fight") { CanBeSubPhase = false });
-                    ComputeFightPhases(phases, castLogs, fightDuration, end);
+                    ComputeFightPhases(phases, castLogs.ToList(), fightDuration, end);
                 }
             }
             bool hasRitual = phases.Last().Name == "Ritual";
@@ -342,13 +342,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             int start = (int)replay.TimeOffsets.start;
             int end = (int)replay.TimeOffsets.end;
             switch (target.ID)
             {
-                case (int)TargetID.Dhuum:
-                    var deathmark = cls.Where(x => x.SkillId == DeathMark).ToList();
+                case (int)TargetID.Dhuum: {
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var deathmark = cls.Where(x => x.SkillId == DeathMark);
                     AbstractCastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
                     // Using new effects method for logs that contain them
                     if (!log.CombatData.HasEffectData)
@@ -377,8 +377,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
                             }
                             int spellCenterDistance = 200; //hitbox radius
-                            Point3D facing = target.GetCurrentRotation(log, start + castDuration);
-                            Point3D targetPosition = target.GetCurrentPosition(log, start + castDuration);
+                            Point3D? facing = target.GetCurrentRotation(log, start + castDuration);
+                            Point3D? targetPosition = target.GetCurrentPosition(log, start + castDuration);
                             if (facing != null && targetPosition != null)
                             {
                                 var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
@@ -424,7 +424,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             start = (int)c.Time;
                             end = (int)c.EndTime;
                             // Get Dhuum's rotation with 200 ms delay and a 200ms forward time window.
-                            Point3D facing = target.GetCurrentRotation(log, start + 200, 200);
+                            Point3D? facing = target.GetCurrentRotation(log, start + 200, 200);
                             if (facing == null)
                             {
                                 continue;
@@ -507,19 +507,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                         end = (int)log.FightData.FightEnd;
                         replay.Decorations.Add(new CircleDecoration(320, (start, end), "rgba(0, 180, 255, 0.2)", new AgentConnector(target)));
                     }
-                    break;
+                } break;
                 case (int)TrashID.DhuumDesmina:
                     break;
                 case (int)TrashID.Echo:
                     replay.Decorations.Add(new CircleDecoration(120, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                     break;
-                case (int)TrashID.Enforcer:
-                    var rendingSwipes = cls.Where(x => x.SkillId == RendingSwipe).ToList();
+                case (int)TrashID.Enforcer: {
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+                    var rendingSwipes = cls.Where(x => x.SkillId == RendingSwipe);
                     foreach (AbstractCastEvent c in rendingSwipes)
                     {
                         long castDuration = 667;
                         (long, long) lifespan = (c.Time, c.Time + castDuration);
-                        Point3D facing = target.GetCurrentRotation(log, c.Time, 200);
+                        Point3D? facing = target.GetCurrentRotation(log, c.Time, 200);
                         if (facing == null)
                         {
                             continue;
@@ -529,11 +530,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
                         replay.AddDecorationWithFilledWithGrowing(cone, true, lifespan.Item2);
                     }
-                    break;
+                } break;
                 case (int)TrashID.Messenger:
                     replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                     // Fixation tether to player
-                    List<AbstractBuffEvent> fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
+                    var fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
                     replay.AddTether(fixations, Colors.Red, 0.4);
                     break;
                 case (int)TrashID.Deathling:
@@ -634,13 +635,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                 replay.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
             }
             // shackles connection
-            List<AbstractBuffEvent> shackles = GetFilteredList(log.CombatData, new long[] { DhuumShacklesBuff, DhuumShacklesBuff2 }, p, true, true);
+            var shackles = GetFilteredList(log.CombatData, [ DhuumShacklesBuff, DhuumShacklesBuff2 ], p, true, true);
             replay.AddTether(shackles, Colors.Teal, 0.5);
 
             // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
             // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
             // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
-            List<AbstractBuffEvent> shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
+            var shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
             replay.AddTether(shacklesDmg, Colors.Yellow, 0.5);
 
             // Soul split

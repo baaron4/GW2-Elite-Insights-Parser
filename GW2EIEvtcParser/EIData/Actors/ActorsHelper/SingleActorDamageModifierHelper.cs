@@ -42,7 +42,7 @@ namespace GW2EIEvtcParser.EIData
             return null;
         }
 
-        public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
             {
@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EIData
             return null;
         }
 
-        public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
             {

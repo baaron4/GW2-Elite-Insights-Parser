@@ -44,11 +44,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
         {
-            var phases = new List<PhaseData>();
             long last = start;
-            List<AbstractBuffEvent> invuls = GetFilteredList(log.CombatData, skillIDs, mainTarget, beginWithStart, true);
-            invuls.RemoveAll(x => x.Time < 0);
-            invuls.Sort((event1, event2) => event1.Time.CompareTo(event2.Time)); // Sort in case there were multiple skillIDs
+            var invuls = GetFilteredList(log.CombatData, skillIDs, mainTarget, beginWithStart, true)
+                .Where(x => x.Time >= 0)
+                .ToList();
+            invuls.SortByTime(); // Sort in case there were multiple skillIDs
+
+            var phases = new List<PhaseData>(invuls.Count);
             bool nextToAddIsSkipPhase = !beginWithStart;
             foreach (AbstractBuffEvent c in invuls)
             {
@@ -79,7 +81,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
         {
-            return GetPhasesByInvul(log, new[] { skillID }, mainTarget, addSkipPhases, beginWithStart, start, end);
+            return GetPhasesByInvul(log, [ skillID ], mainTarget, addSkipPhases, beginWithStart, start, end);
         }
 
         internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
@@ -89,13 +91,13 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)
         {
-            return new List<PhaseData>
-            {
+            return
+            [
                 new PhaseData(log.FightData.FightStart, log.FightData.FightEnd, "Full Fight")
                 {
                     CanBeSubPhase = false
                 }
-            };
+            ];
         }
     }
 }

@@ -147,18 +147,18 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Sabetha:
-                    var flameWall = cls.Where(x => x.SkillId == Firestorm).ToList();
+                    var flameWall = cls.Where(x => x.SkillId == Firestorm);
                     foreach (AbstractCastEvent c in flameWall)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 2800;
                         int duration = 10000;
                         uint width = 1300; uint height = 60;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
@@ -168,7 +168,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Kernan:
-                    var bulletHail = cls.Where(x => x.SkillId == BulletHail).ToList();
+                    var bulletHail = cls.Where(x => x.SkillId == BulletHail);
                     foreach (AbstractCastEvent c in bulletHail)
                     {
                         int start = (int)c.Time;
@@ -179,7 +179,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         int secondConeEnd = secondConeStart + 400;
                         int thirdConeEnd = thirdConeStart + 400;
                         uint radius = 1500;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
@@ -191,20 +191,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Knuckles:
-                    var breakbar = cls.Where(x => x.SkillId == PlatformQuake).ToList();
+                    var breakbar = cls.Where(x => x.SkillId == PlatformQuake);
                     foreach (AbstractCastEvent c in breakbar)
                     {
                         replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
                     break;
                 case (int)ArcDPSEnums.TrashID.Karde:
-                    var flameBlast = cls.Where(x => x.SkillId == FlameBlast).ToList();
+                    var flameBlast = cls.Where(x => x.SkillId == FlameBlast);
                     foreach (AbstractCastEvent c in flameBlast)
                     {
                         int start = (int)c.Time;
                         int end = start + 4000;
                         uint radius = 600;
-                        Point3D facing = target.GetCurrentRotation(log, start);
+                        Point3D? facing = target.GetCurrentRotation(log, start);
                         if (facing != null)
                         {
                             replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), Colors.Yellow, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));

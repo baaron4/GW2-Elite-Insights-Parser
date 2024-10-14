@@ -150,23 +150,23 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Slothasor:
-                    var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill).ToList();
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill);
                     foreach (AbstractCastEvent c in sleepy)
                     {
                         replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                     }
-                    var breath = cls.Where(x => x.SkillId == Halitosis).ToList();
+                    var breath = cls.Where(x => x.SkillId == Halitosis);
                     foreach (AbstractCastEvent c in breath)
                     {
                         int start = (int)c.Time;
                         int preCastTime = 1000;
                         int duration = 2000;
                         uint range = 600;
-                        Point3D facing = target.GetCurrentRotation(log, start + 1000);
+                        Point3D? facing = target.GetCurrentRotation(log, start + 1000);
                         if (facing != null)
                         {
                             var connector = new AgentConnector(target);
@@ -176,7 +176,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             replay.Decorations.Add(new PieDecoration(range, openingAngle, (start + preCastTime, start + preCastTime + duration), Colors.Orange, 0.4, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
-                    var tantrum = cls.Where(x => x.SkillId == TantrumSkill).ToList();
+                    var tantrum = cls.Where(x => x.SkillId == TantrumSkill);
                     foreach (AbstractCastEvent c in tantrum)
                     {
                         int start = (int)c.Time;
@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         var circle = new CircleDecoration(300, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target));
                         replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     }
-                    var shakes = cls.Where(x => x.SkillId == SporeRelease).ToList();
+                    var shakes = cls.Where(x => x.SkillId == SporeRelease);
                     foreach (AbstractCastEvent c in shakes)
                     {
                         int start = (int)c.Time;

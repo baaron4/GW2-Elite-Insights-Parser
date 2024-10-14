@@ -350,8 +350,8 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Conjured Protection - Shield AoE
-            IReadOnlyList<AbstractCastEvent> cls = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-            var shieldCast = cls.Where(x => x.SkillId == ConjuredProtectionSAK).ToList();
+            var casts = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var shieldCast = casts.Where(x => x.SkillId == ConjuredProtectionSAK);
             foreach (AbstractCastEvent c in shieldCast)
             {
                 int start = (int)c.Time;

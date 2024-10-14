@@ -78,26 +78,25 @@ namespace GW2EIEvtcParser.EncounterLogic
             return phases;
         }
 
-        internal override List<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
+        internal override IEnumerable<ErrorEvent> GetCustomWarningMessages(FightData fightData, EvtcVersionEvent evtcVersion)
         {
-            List<ErrorEvent> res = base.GetCustomWarningMessages(fightData, evtcVersion);
-            res.AddRange(GetConfusionDamageMissingMessage(evtcVersion));
-            return res;
+            return base.GetCustomWarningMessages(fightData, evtcVersion)
+                .Concat(GetConfusionDamageMissingMessage(evtcVersion).ToEnumerable());
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TrashID.Jade:
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
                     uint shieldRadius = 100;
                     foreach (var seg in shields)
                     {
                         replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
                     }
-                    var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion).ToList();
+                    var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion);
                     foreach (AbstractCastEvent c in explosion)
                     {
                         int start = (int)c.Time;

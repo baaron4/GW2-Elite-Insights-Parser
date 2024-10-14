@@ -31,6 +31,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
             };
         }
 
+        //TODO(Rennorb) @perf
         private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTAbstractBarrierEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
             var jsonBarrierDist = new EXTJsonBarrierDist();
@@ -74,14 +75,9 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
             return jsonBarrierDist;
         }
 
-        internal static List<EXTJsonBarrierDist> BuildBarrierDistList(Dictionary<long, List<EXTAbstractBarrierEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+        internal static IEnumerable<EXTJsonBarrierDist> BuildBarrierDistList(IEnumerable<IGrouping<long, EXTAbstractBarrierEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
-            var res = new List<EXTJsonBarrierDist>();
-            foreach (KeyValuePair<long, List<EXTAbstractBarrierEvent>> pair in dlsByID)
-            {
-                res.Add(BuildBarrierDist(pair.Key, pair.Value, log, skillMap, buffMap));
-            }
-            return res;
+            return dlsByID.Select(group => BuildBarrierDist(group.Key, group.ToList(), log, skillMap, buffMap));
         }
     }
 }

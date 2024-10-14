@@ -17,24 +17,26 @@ namespace GW2EIEvtcParser.Extensions
         }
 
 
-        public override List<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<EXTAbstractHealingEvent> GetOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (HealEvents == null)
             {
                InitHealEvents(log);
             }
+
             if (target != null)
             {
                 if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
                     return [ ];
                 }
             }
-            return HealEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return HealEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
         /// <param name="healEventsList">Append to this list</param>
@@ -74,24 +76,26 @@ namespace GW2EIEvtcParser.Extensions
             HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
 
-        public override List<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
             if (HealReceivedEvents == null)
             {
                 InitIncomingHealEvents(log);
             }
+
             if (target != null)
             {
                 if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
                     return [ ];
                 }
             }
-            return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
         /// <param name="healEventsList">Append to this list</param>

@@ -144,11 +144,11 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            IReadOnlyList<AbstractCastEvent> cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.Gorseval:
-                    var blooms = cls.Where(x => x.SkillId == GorsevalBloom).ToList();
+                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                    var blooms = cls.Where(x => x.SkillId == GorsevalBloom);
                     foreach (AbstractCastEvent c in blooms)
                     {
                         int start = (int)c.Time;
@@ -158,7 +158,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                     if (phases.Count > 1)
                     {
-                        var rampage = cls.Where(x => x.SkillId == GhastlyRampage).ToList();
+                        var rampage = cls.Where(x => x.SkillId == GhastlyRampage);
                         const byte first = 1 << 0;
                         const byte second = 1 << 1;
                         const byte third = 1 << 2;

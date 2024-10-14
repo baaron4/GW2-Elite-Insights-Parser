@@ -65,7 +65,7 @@ namespace GW2EIJSON
         /// Value[i][0] will be the time, value[i][1] will be breakbar % \n
         /// If i corresponds to the last element that means the breakbar did not change for the remainder of the fight \n
         /// </summary>
-        public IReadOnlyList<IReadOnlyList<double>> BreakbarPercents { get; set; }
+        public IReadOnlyList<(long Time, double Breakbar)>? BreakbarPercents { get; set; }
 
 
         public JsonNPC()
