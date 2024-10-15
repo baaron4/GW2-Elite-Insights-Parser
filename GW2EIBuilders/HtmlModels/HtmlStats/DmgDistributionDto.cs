@@ -134,17 +134,15 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             long timeSpentCastingNoInterrupt = 0;
             int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
             long minTimeSpentCastingNoInterrupt = 0, maxTimeSpentCastingNoInterrupt = 0;
-            if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.TryGetValue(skill, out List<AbstractCastEvent> clList))
+            if (!IsIndirectDamage && castLogsBySkill != null && castLogsBySkill.Remove(skill, out List<AbstractCastEvent> clList))
             {
                 (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCastingNoInterrupt, maxTimeSpentCastingNoInterrupt, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = GetCastValues(clList, phase);
-                castLogsBySkill.Remove(skill);
             }
 
             double breakbarDamage = 0.0;
-            if (breakbarLogsBySkill.TryGetValue(skill, out List<BreakbarDamageEvent> brList))
+            if (breakbarLogsBySkill.Remove(skill, out List<BreakbarDamageEvent> brList))
             {
                 breakbarDamage = Math.Round(brList.Sum(x => x.BreakbarDamage), 1);
-                breakbarLogsBySkill.Remove(skill);
             }
 
             object[] skillItem = {
@@ -216,10 +214,9 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     usedSkills.Add(pair.Key.ID, pair.Key);
                 }
                 double breakbarDamage = 0.0;
-                if (breakbarLogsBySkill.TryGetValue(pair.Key, out List<BreakbarDamageEvent> brList))
+                if (breakbarLogsBySkill.Remove(pair.Key, out List<BreakbarDamageEvent> brList))
                 {
                     breakbarDamage = Math.Round(brList.Sum(x => x.BreakbarDamage), 1);
-                    breakbarLogsBySkill.Remove(pair.Key);
                 }
 
                 (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) = GetCastValues(pair.Value, phase);

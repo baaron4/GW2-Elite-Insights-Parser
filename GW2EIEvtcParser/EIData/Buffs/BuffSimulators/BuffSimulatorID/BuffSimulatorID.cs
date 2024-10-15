@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
         {
-            BuffStackItemID toRemove;
+            int toRemoveIdx = -1;
             switch (removeType)
             {
                 case ArcDPSEnums.BuffRemove.All:
@@ -97,19 +97,21 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                         BuffStack.Clear();
                         return;
                     }
-                    toRemove = BuffStack[0];
+                    toRemoveIdx = 0;
                     break;
                 case ArcDPSEnums.BuffRemove.Single:
-                    toRemove = BuffStack.FirstOrDefault(x => x.StackID == stackID);
+                    toRemoveIdx = BuffStack.FindIndex(x => x.StackID == stackID);
                     break;
                 default:
                     throw new InvalidDataException("Unknown remove type");
             }
-            if (toRemove == null)
+            if (toRemoveIdx == -1)
             {
                 throw new EIBuffSimulatorIDException("Remove has failed");
             }
-            BuffStack.Remove(toRemove);
+            var toRemove = BuffStack[toRemoveIdx];
+            BuffStack.RemoveAt(toRemoveIdx);
+
             if (removedDuration > ParserHelper.BuffSimulatorDelayConstant)
             {
                 // safe checking, this can happen when an inactive stack is being removed but it was actually active

@@ -34,8 +34,9 @@ namespace GW2EIEvtcParser.EIData
                         {
                             if (Math.Abs(beeCurrent.OldDuration - beeLast.OldDuration) <= 1)
                             {
+                                //TODO(Rennorb) @perf
                                 list.Remove(beeLast);
-                                listExtension.Remove(beeLast);
+                                listExtension.RemoveAt(listExtension.Count - 1);
                             }
                             else if (Math.Abs(beeCurrent.NewDuration - beeLast.NewDuration) <= 1)
                             {

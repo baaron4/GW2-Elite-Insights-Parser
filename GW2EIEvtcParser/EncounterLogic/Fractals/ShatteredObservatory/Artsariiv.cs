@@ -125,6 +125,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
             if (artsariivs.Count != 0)
             {
+                //TODO(Rennorb) perf
                 artsariivs.Remove(artsariivs.MaxBy(x => x.LastAware - x.FirstAware));
                 if (artsariivs.Count != 0)
                 {

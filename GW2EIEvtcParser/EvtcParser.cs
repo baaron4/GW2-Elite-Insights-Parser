@@ -869,8 +869,11 @@ namespace GW2EIEvtcParser
         private void CompleteAgents(ParserController operation)
         {
             using var _t = new AutoTrace("Linking Agents to list");
-            var allAgentValues = new HashSet<ulong>(_combatItems.Where(x => x.SrcIsAgent()).Select(x => x.SrcAgent));
-            allAgentValues.UnionWith(_combatItems.Where(x => x.DstIsAgent()).Select(x => x.DstAgent));
+            var allAgentValues = new HashSet<ulong>(
+                _combatItems.Where(x => x.SrcIsAgent())
+                .Concat(_combatItems.Where(x => x.DstIsAgent()))
+                .Select(x => x.SrcAgent)
+            );
             allAgentValues.ExceptWith(_allAgentsList.Select(x => x.Agent));
             allAgentValues.Remove(0);
             operation.UpdateProgressWithCancellationCheck("Parsing: Creating " + allAgentValues.Count + " missing agents");

@@ -66,6 +66,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal void RemoveTarget(AbstractSingleActor target)
         {
+            //TODO(Rennorb) @perf
             _targets.Remove(target);
         }
 

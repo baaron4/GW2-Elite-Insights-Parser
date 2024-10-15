@@ -28,7 +28,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     wastes.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
                 }
             }
-            stacks.Remove(toRemove);
+            stacks.RemoveAt(0);
             Add(log, stacks, toAdd);
             return true;
         }

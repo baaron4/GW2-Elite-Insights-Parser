@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
@@ -71,7 +72,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
         {
             foreach (Buff buff in listToUse)
             {
-                if (boonGraphData.TryGetValue(buff.ID, out BuffsGraphModel bgm))
+                if(boonGraphData.Remove(buff.ID, out var bgm))
                 {
                     BuffChartDataDto? graph = BuildBuffGraph(bgm, phase, usedBuffs);
                     if (graph != null)
@@ -79,14 +80,20 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
                         list.Add(graph);
                     }
                 }
-                boonGraphData.Remove(buff.ID);
             }
         }
 
-        private static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, BuffsGraphModel> buffGraphData, Dictionary<long, Buff> usedBuffs)
+        private static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, PhaseData phase, Dictionary<long, BuffsGraphModel> buffGraphData, Dictionary<long, Buff> usedBuffs)
         {
-            //TODO(Rennorb) @perf
-            var list = new List<BuffChartDataDto>();
+            var list = new List<BuffChartDataDto>(
+                log.StatisticsHelper.PresentBoons.Count +
+                log.StatisticsHelper.PresentConditions.Count +
+                log.StatisticsHelper.PresentOffbuffs.Count +
+                log.StatisticsHelper.PresentSupbuffs.Count +
+                log.StatisticsHelper.PresentDefbuffs.Count +
+                log.StatisticsHelper.PresentDebuffs.Count +
+                log.StatisticsHelper.PresentGearbuffs.Count
+            );
             BuildBoonGraphData(list, log.StatisticsHelper.PresentBoons, buffGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentConditions, buffGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentOffbuffs, buffGraphData, phase, usedBuffs);
@@ -94,7 +101,11 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
             BuildBoonGraphData(list, log.StatisticsHelper.PresentDefbuffs, buffGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentDebuffs, buffGraphData, phase, usedBuffs);
             BuildBoonGraphData(list, log.StatisticsHelper.PresentGearbuffs, buffGraphData, phase, usedBuffs);
-            var footList = new List<BuffChartDataDto>();
+            var footList = new List<BuffChartDataDto>(
+                log.StatisticsHelper.PresentNourishements.Count +
+                log.StatisticsHelper.PresentEnhancements.Count +
+                log.StatisticsHelper.PresentOtherConsumables.Count
+            );
             BuildBoonGraphData(footList, log.StatisticsHelper.PresentNourishements, buffGraphData, phase, usedBuffs);
             BuildBoonGraphData(footList, log.StatisticsHelper.PresentEnhancements, buffGraphData, phase, usedBuffs);
             BuildBoonGraphData(footList, log.StatisticsHelper.PresentOtherConsumables, buffGraphData, phase, usedBuffs);
@@ -104,7 +115,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
                 {
                     continue;
                 }
-                BuffChartDataDto graph = BuildBuffGraph(bgm, phase, usedBuffs);
+                BuffChartDataDto? graph = BuildBuffGraph(bgm, phase, usedBuffs);
                 if (graph != null)
                 {
                     list.Add(graph);
@@ -117,12 +128,12 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts
 
         public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, Buff> usedBuffs)
         {
-            return BuildBuffGraphData(log, p, phase, p.GetBuffGraphs(log).ToDictionary(x => x.Key, x => x.Value), usedBuffs);
+            return BuildBuffGraphData(log, phase, p.GetBuffGraphs(log).ToDictionary(x => x.Key, x => x.Value), usedBuffs);
         }
 
         public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, AbstractSingleActor p, AbstractSingleActor by, PhaseData phase, Dictionary<long, Buff> usedBuffs)
         {
-            return BuildBuffGraphData(log, p, phase, p.GetBuffGraphs(log, by).ToDictionary(x => x.Key, x => x.Value), usedBuffs);
+            return BuildBuffGraphData(log, phase, p.GetBuffGraphs(log, by).ToDictionary(x => x.Key, x => x.Value), usedBuffs);
         }
     }
 }

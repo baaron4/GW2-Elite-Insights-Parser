@@ -63,15 +63,19 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Activate(List<BuffStackItem> stacks, uint stackID)
         {
-            BuffStackItem toActivate = stacks.FirstOrDefault(x => x.StackID == stackID);
-            if (toActivate != null)
+            int toActivateIdx = stacks.FindIndex(x => x.StackID == stackID);
+            if (toActivateIdx != -1)
             {
                 _noSort = true;
-                stacks.Remove(toActivate);
-                stacks.Insert(0, toActivate);
-                if (stacks.Count > 1 && stacks[1].TotalDuration < 50)
+                var toActivate = stacks[toActivateIdx];
+                stacks.RemoveAt(toActivateIdx);
+                if (stacks.Count > 0 && stacks[0].TotalDuration < 50)
                 {
-                    stacks.Remove(stacks[1]);
+                    stacks[0] = toActivate;
+                }
+                else
+                {
+                    stacks.Insert(0, toActivate);
                 }
             }
         }

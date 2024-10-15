@@ -34,6 +34,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         }
         public override void Activate(List<BuffStackItem> stacks, BuffStackItem stackItem)
         {
+            //TODO(Rennorb) @perf
             stacks.Remove(stackItem);
             stacks.Insert(0, stackItem);
         }

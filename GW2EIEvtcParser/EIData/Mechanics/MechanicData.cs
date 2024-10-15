@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
         {
             //TODO(Rennorb) @perf <regroupedMobs> = 0
             var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
-            _mechanicLogs.Keys.Where(x => !x.Available(log)).ToList().ForEach(x => _mechanicLogs.Remove(x));
+            foreach(var x in _mechanicLogs.Keys.Where(x => !x.Available(log))) { _mechanicLogs.Remove(x); }
             foreach (Mechanic mech in _mechanicLogs.Keys)
             {
                 mech.CheckMechanic(log, _mechanicLogs, regroupedMobs);

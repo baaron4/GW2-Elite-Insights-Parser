@@ -401,41 +401,39 @@ namespace GW2EIEvtcParser.ParsedData
                     .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
                 var dictExtensions = events.OfType<BuffExtensionEvent>()
                     .Where(x => x.BuffInstance != 0)
-                    .GroupBy(x => x.BuffInstance)
-                    .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
-                foreach (var (instance, extensionEventsPerId) in dictExtensions)
+                    .GroupBy(x => x.BuffInstance);
+                   
+                foreach (var extensionEventsPerId in dictExtensions)
                 {
-                    if (!dictApply.TryGetValue(instance, out var appliesPerBuffID)) { continue; }
+                    if (!dictApply.TryGetValue(extensionEventsPerId.Key, out var appliesPerBuffID)) { continue; }
 
-                    foreach (var (buffId, extensionEvents) in extensionEventsPerId)
+                    foreach (var extensionEvents in extensionEventsPerId.GroupBy(y => y.BuffID))
                     {
-                        if (appliesPerBuffID.TryGetValue(buffId, out List<BuffApplyEvent> applies))
+                        if (!appliesPerBuffID.TryGetValue(extensionEvents.Key, out var applies)) { continue; }
+
+                        BuffExtensionEvent? previousExtension = null;
+                        foreach (BuffExtensionEvent extensionEvent in extensionEvents)
                         {
-                            BuffExtensionEvent? previousExtension = null;
-                            foreach (BuffExtensionEvent extensionEvent in extensionEvents)
+                            BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
+                            if (initialStackApplication == null) { continue; }
+
+                            var sequence = new List<AbstractBuffEvent>(2) { initialStackApplication };
+                            if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out var stacksPerBuffID))
                             {
-                                BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
-                                if (initialStackApplication != null)
+                                if (stacksPerBuffID.TryGetValue(extensionEvent.BuffID, out var stacks))
                                 {
-                                    var sequence = new List<AbstractBuffEvent>() { initialStackApplication };
-                                    if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out var stacksPerBuffID))
-                                    {
-                                        if (stacksPerBuffID.TryGetValue(extensionEvent.BuffID, out var stacks))
-                                        {
-                                            sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time));
-                                        }
-                                    }
-
-                                    if (previousExtension != null && previousExtension.Time >= initialStackApplication.Time)
-                                    {
-                                        sequence.Add(previousExtension);
-                                    }
-
-                                    previousExtension = extensionEvent;
-                                    sequence.SortByTime();
-                                    extensionEvent.OffsetNewDuration(sequence, evtcVersion);
+                                    sequence.AddRange(stacks.Where(x => x.Time >= initialStackApplication.Time && x.Time <= extensionEvent.Time));
                                 }
                             }
+
+                            if (previousExtension != null && previousExtension.Time >= initialStackApplication.Time)
+                            {
+                                sequence.Add(previousExtension);
+                            }
+
+                            previousExtension = extensionEvent;
+                            sequence.SortByTime();
+                            extensionEvent.OffsetNewDuration(sequence, evtcVersion);
                         }
                     }
                 }
