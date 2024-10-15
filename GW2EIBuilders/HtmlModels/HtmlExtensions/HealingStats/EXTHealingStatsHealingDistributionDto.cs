@@ -17,7 +17,7 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
         public long TotalCasting { get; set; }
         public List<object[]> Distribution { get; set; }
 
-        private static object[] GetHealingToItem(SkillItem skill, List<EXTAbstractHealingEvent> healingLogs, Dictionary<SkillItem, List<AbstractCastEvent>> castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+        private static object[] GetHealingToItem(SkillItem skill, IEnumerable<EXTAbstractHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<AbstractCastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
         {
             int totalhealing = 0,
                 totaldownedhealing = 0,
@@ -62,14 +62,17 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
                     usedSkills.Add(skill.ID, skill);
                 }
             }
-            if (castLogsBySkill != null && castLogsBySkill.ContainsKey(skill))
+
+            IEnumerable<AbstractCastEvent>? clList = null;
+            if (castLogsBySkill != null && castLogsBySkill.Remove(skill, out clList))
             {
                 isIndirectHealing = false;
             }
+
             long timeSpentCasting = 0, timeSpentCastingNoInterrupt = 0;
             int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
             long minTimeSpentCasting = 0, maxTimeSpentCasting = 0;
-            if (!isIndirectHealing && castLogsBySkill != null && castLogsBySkill.Remove(skill, out List<AbstractCastEvent> clList))
+            if (clList != null)
             {
                 (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
             }
@@ -103,10 +106,9 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
                 ContributedDownedHealing = incomingHealingStats.DownedHealed
             };
             var healingLogs = p.EXTHealing.GetIncomingHealEvents(null, log, phase.Start, phase.End);
-            var healingLogsBySkill = healingLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<SkillItem, List<EXTAbstractHealingEvent>> pair in healingLogsBySkill)
+            foreach (var group in healingLogs.GroupBy(x => x.Skill))
             {
-                dto.Distribution.Add(GetHealingToItem(pair.Key, pair.Value, null, usedSkills, usedBuffs, log.Buffs, phase));
+                dto.Distribution.Add(GetHealingToItem(group.Key, group, null, usedSkills, usedBuffs, log.Buffs, phase));
             }
             return dto;
         }
@@ -115,12 +117,10 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing
         private static List<object[]> BuildHealingDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<EXTAbstractHealingEvent> healingLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
         {
             var list = new List<object[]>();
-            var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            var healingLogsBySkill = healingLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.ToList());
-            var conditionsById = log.StatisticsHelper.PresentConditions.ToDictionary(x => x.ID);
-            foreach (KeyValuePair<SkillItem, List<EXTAbstractHealingEvent>> pair in healingLogsBySkill)
+            var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
+            foreach (var group in healingLogs.GroupBy(x => x.Skill))
             {
-                list.Add(GetHealingToItem(pair.Key, pair.Value, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
+                list.Add(GetHealingToItem(group.Key, group, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
             }
             // non damaging
             /*foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)

@@ -116,32 +116,39 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
             bool refresh = false;
-            var maxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
+            var maxHPUpdates = combatData
+                .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
+                .Select(x => new MaxHealthUpdateEvent(x, agentData))
+                .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
             if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
             {
                 if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialPlatformAgentMaxHPs))
                 {
-                    var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578).ToList();
+                    var any = false;
+                    var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
                     foreach (AgentItem platform in platformAgents)
                     {
+                        any = true;
                         platform.OverrideType(AgentItem.AgentType.NPC);
                         platform.OverrideID(TrashID.QadimPlatform);
                         platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
                     }
-                    refresh = refresh || platformAgents.Count != 0;
+                    refresh = refresh || any;
                 }
             }
             IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
             // Lamps
             if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialLampAgentMaxHPs))
             {
-                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202).ToList();
+                var any = false;
+                var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
                 foreach (AgentItem lamp in lampAgents)
                 {
+                    any = true;
                     lamp.OverrideType(AgentItem.AgentType.NPC);
                     lamp.OverrideID(TrashID.QadimLamp);
                 }
-                refresh = refresh || lampAgents.Count != 0;
+                refresh = refresh || any;
             }
             // Pyres
             var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
@@ -231,7 +238,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             if (combatData.HasMovementData)
             {
                 var qadimAroundInitialPosition = new Point3D(-9742.406f, 12075.2627f, -4731.031f);
-                var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D()).ToList();
+                var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D());
                 if (!positions.Any(x => x.Distance2DToPoint(qadimAroundInitialPosition) < 150))
                 {
                     return FightData.EncounterStartStatus.Late;
@@ -247,10 +254,7 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override List<InstantCastFinder> GetInstantCastFinders()
         {
-            return new List<InstantCastFinder>()
-            {
-                new DamageCastFinder(BurningCrucible, BurningCrucible),
-            };
+            return [ new DamageCastFinder(BurningCrucible, BurningCrucible) ];
         }
 
         internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -359,8 +363,8 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<TrashID> GetTrashMobsIDs()
         {
-            return new List<TrashID>()
-            {
+            return
+            [
                 TrashID.QadimPlatform,
                 TrashID.LavaElemental1,
                 TrashID.LavaElemental2,
@@ -421,7 +425,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 TrashID.TamedWarg,
                 TrashID.TarElemental,
                 TrashID.WindRider,
-            };
+            ];
         }
 
         internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

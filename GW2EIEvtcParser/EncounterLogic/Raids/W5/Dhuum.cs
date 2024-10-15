@@ -285,22 +285,21 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Player Souls - Filter out souls without master
             var yourSoul = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate)
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-                .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100)
-                .ToList();
+                .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 120 && x.HitboxWidth == 100);
             var dhuumPlayerToSoulTrackBuffApplications = combatData.Where(x => x.IsBuffApply() && x.SkillID == DhuumPlayerToSoulTrackBuff)
                 .Select(x => (agentData.GetAgent(x.SrcAgent, x.Time), agentData.GetAgent(x.DstAgent, x.Time)))
                 .Where(x => x.Item1.IsPlayer)
                 .GroupBy(x => x.Item2)
-                .ToDictionary(x => x.Key, x => x.Select(y => y.Item1).ToList());
+                .ToDictionary(x => x.Key, x => x.Select(y => y.Item1).FirstOrDefault());
             foreach (AgentItem soul in yourSoul)
             {
-                if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out List<AgentItem> appliers) && appliers.Count != 0)
+                if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out var firstApplier) && firstApplier != null)
                 {
                     soul.OverrideType(AgentItem.AgentType.NPC);
                     soul.OverrideID(TrashID.YourSoul);
-                    if (soul.GetFinalMaster() != appliers.First())
+                    if (soul.GetFinalMaster() != firstApplier)
                     {
-                        soul.SetMaster(appliers.First());
+                        soul.SetMaster(firstApplier);
                     }
                 }
             }
@@ -309,10 +308,11 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
             // Adding counting number to the Enforcers
-            var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer)).ToList();
-            for (int i = 0; i < enforcers.Count; i++)
+            int i = 1;
+            foreach (var enforcer in Targets.Where(x => x.IsSpecies(TrashID.Enforcer)))
             {
-                enforcers[i].OverrideName(enforcers[i].Character + " " + (i + 1));
+                enforcer.OverrideName(enforcer.Character + " " + i);
+                i++;
             }
         }
 

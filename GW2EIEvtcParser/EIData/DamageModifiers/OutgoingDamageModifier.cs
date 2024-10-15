@@ -14,31 +14,23 @@ namespace GW2EIEvtcParser.EIData
             Incoming = false;
         }
 
-        public override int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
+        public override int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end)
         {
             FinalDPS damageData = actor.GetDPSStats(t, log, start, end);
-            switch (CompareType)
+            return (CompareType) switch
             {
-                case DamageType.All:
-                    return DmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage;
-                case DamageType.Condition:
-                    return DmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage;
-                case DamageType.Power:
-                    return DmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage;
-                case DamageType.LifeLeech:
-                    return DmgSrc == DamageSource.All ? damageData.LifeLeechDamage : damageData.ActorLifeLeechDamage;
-                case DamageType.Strike:
-                    return DmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage;
-                case DamageType.StrikeAndCondition:
-                    return DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage;
-                case DamageType.StrikeAndConditionAndLifeLeech:
-                    return DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage + damageData.ActorLifeLeechDamage;
-                default:
-                    throw new NotImplementedException("Not implemented damage type " + CompareType);
-            }
+                DamageType.All                => DmgSrc == DamageSource.All ? damageData.Damage : damageData.ActorDamage,
+                DamageType.Condition          => DmgSrc == DamageSource.All ? damageData.CondiDamage : damageData.ActorCondiDamage,
+                DamageType.Power              => DmgSrc == DamageSource.All ? damageData.PowerDamage : damageData.ActorPowerDamage,
+                DamageType.LifeLeech          => DmgSrc == DamageSource.All ? damageData.LifeLeechDamage : damageData.ActorLifeLeechDamage,
+                DamageType.Strike             => DmgSrc == DamageSource.All ? damageData.StrikeDamage : damageData.ActorStrikeDamage,
+                DamageType.StrikeAndCondition => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage,
+                DamageType.StrikeAndConditionAndLifeLeech => DmgSrc == DamageSource.All ? damageData.StrikeDamage + damageData.CondiDamage + damageData.LifeLeechDamage : damageData.ActorStrikeDamage + damageData.ActorCondiDamage + damageData.ActorLifeLeechDamage,
+                _ => throw new NotImplementedException("Not implemented damage type " + CompareType),
+            };
         }
 
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end)
+        public override IEnumerable<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end)
         {
             return DmgSrc == DamageSource.All ? actor.GetHitDamageEvents(t, log, start, end, SrcType) : actor.GetJustActorHitDamageEvents(t, log, start, end, SrcType);
         }

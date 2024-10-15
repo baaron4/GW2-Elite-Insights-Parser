@@ -65,7 +65,7 @@ namespace GW2EIEvtcParser.EIData
             ActorBreakbarDamage = Math.Round(actor.GetJustActorBreakbarDamageEvents(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
         }
 
-        private static (int allDamage, int powerDamage, int conditionDamage, int strikeDamage, int lifeLeechDamage, int barrierDamage) ComputeDamageFrom(ParsedEvtcLog log, IReadOnlyList<AbstractHealthDamageEvent> damageEvents)
+        private static (int allDamage, int powerDamage, int conditionDamage, int strikeDamage, int lifeLeechDamage, int barrierDamage) ComputeDamageFrom(ParsedEvtcLog log, IEnumerable<AbstractHealthDamageEvent> damageEvents)
         {
             int allDamage = 0;
             int powerDamage = 0;

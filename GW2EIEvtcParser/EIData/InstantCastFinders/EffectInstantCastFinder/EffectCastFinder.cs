@@ -133,15 +133,15 @@ namespace GW2EIEvtcParser.EIData
             EffectGUIDEvent effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
             if (effectGUIDEvent != null)
             {
-                var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(x => GetAgent(x)).ToDictionary(x => x.Key, x => x.ToList());
-                foreach (KeyValuePair<AgentItem, List<EffectEvent>> pair in effects)
+                var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
+                foreach (var group in effects)
                 {
-                    if (pair.Key == ParserHelper._unknownAgent)
+                    if (group.Key == ParserHelper._unknownAgent)
                     {
                         continue;
                     }
                     long lastTime = int.MinValue;
-                    foreach (EffectEvent effectEvent in pair.Value)
+                    foreach (EffectEvent effectEvent in group)
                     {
                         if (CheckCondition(effectEvent, combatData, agentData, skillData))
                         {
@@ -151,7 +151,7 @@ namespace GW2EIEvtcParser.EIData
                                 continue;
                             }
                             lastTime = effectEvent.Time;
-                            AgentItem caster = pair.Key;
+                            AgentItem caster = group.Key;
                             if (_speciesId > 0 && caster.IsUnamedSpecies())
                             {
                                 AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);

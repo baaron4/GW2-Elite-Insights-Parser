@@ -88,11 +88,11 @@ namespace GW2EIEvtcParser.EIData
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
-            var applies = combatData.GetBuffData(BuffID).OfType<Event>().GroupBy(x => GetCasterAgent(x)).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<Event>> pair in applies)
+            var applies = combatData.GetBuffData(BuffID).OfType<Event>().GroupBy(x => GetCasterAgent(x));
+            foreach (var group in applies)
             {
                 long lastTime = int.MinValue;
-                foreach (Event evt in pair.Value)
+                foreach (Event evt in group)
                 {
                     if (CheckCondition(evt, combatData, agentData, skillData))
                     {
@@ -102,7 +102,7 @@ namespace GW2EIEvtcParser.EIData
                             continue;
                         }
                         lastTime = evt.Time;
-                        res.Add(new InstantCastEvent(GetTime(evt, pair.Key, combatData), skillData.Get(SkillID), pair.Key));
+                        res.Add(new InstantCastEvent(GetTime(evt, group.Key, combatData), skillData.Get(SkillID), group.Key));
                     }
                 }
             }

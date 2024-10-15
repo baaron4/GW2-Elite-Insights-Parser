@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser {
 
+    //TODO(Rennorb) @cleanup: needed? 
     /// HashSet that only exposes Contains, saves a copy of the whole set in the one case where its used.
     class ReadonlyHashSet<T>(HashSet<T> source)
     {
@@ -96,6 +97,16 @@ namespace GW2EIEvtcParser {
 
                 public readonly void Reset() { }
                 public readonly void Dispose() { }
+            }
+        }
+
+        /// Reserves space at least 'count' additional elements in the list should they not fit already.
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void ReserveAdditional<T>(this List<T> list, int count)
+        {
+            if(list.Capacity < list.Count + count)
+            {
+                list.Capacity = (int)Math.Max(list.Capacity * 1.4, list.Count + count);
             }
         }
     }

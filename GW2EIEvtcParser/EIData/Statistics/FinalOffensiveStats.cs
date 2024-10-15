@@ -44,7 +44,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
         {
-            IReadOnlyList<AbstractHealthDamageEvent> dls = actor.GetDamageEvents(target, log, start, end);
+            var dls = actor.GetDamageEvents(target, log, start, end);
             foreach (AbstractHealthDamageEvent dl in dls)
             {
                 if (dl.From == actor.AgentItem)
@@ -167,7 +167,7 @@ namespace GW2EIEvtcParser.EIData
                     Downed++;
                 }
             }
-            IReadOnlyList<CrowdControlEvent> ccs = actor.GetOutgoingCrowdControlEvents(target, log, start, end);
+            var ccs = actor.GetOutgoingCrowdControlEvents(target, log, start, end);
             foreach (CrowdControlEvent cc in ccs)
             {
                 AppliedCrowdControl++;

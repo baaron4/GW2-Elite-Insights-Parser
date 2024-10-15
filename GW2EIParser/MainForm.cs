@@ -661,11 +661,11 @@ namespace GW2EIParser
                 return DateTime.Parse(x.BasicMetaData.LogStart).CompareTo(DateTime.Parse(y.BasicMetaData.LogStart));
             });
             AddTraceMessage("Discord: Splitting logs by start day");
-            var fullDpsReportsLogsByDate = fullDpsReportLogs.GroupBy(x => DateTime.Parse(x.BasicMetaData.LogStart).Date).ToDictionary(x => x.Key, x => x.ToList());
+            var fullDpsReportsLogsByDate = fullDpsReportLogs.GroupBy(x => DateTime.Parse(x.BasicMetaData.LogStart).Date);
             // split the logs so that a single embed does not reach the discord embed limit and also keep a reasonable size by embed
             string message = "";
             bool start = true;
-            foreach (KeyValuePair<DateTime, List<FormOperationController>> pair in fullDpsReportsLogsByDate)
+            foreach (var group in fullDpsReportsLogsByDate)
             {
                 if (!start)
                 {
@@ -673,10 +673,10 @@ namespace GW2EIParser
                 }
                 start = false;
                 var splitDpsReportLogs = new List<List<FormOperationController>>() { new List<FormOperationController>() };
-                message += pair.Key.ToString("yyyy-MM-dd") + " - ";
+                message += group.Key.ToString("yyyy-MM-dd") + " - ";
                 List<FormOperationController> curListToFill = splitDpsReportLogs.First();
                 AddTraceMessage("Discord: Splitting message to avoid reaching discord's character limit");
-                foreach (FormOperationController controller in pair.Value)
+                foreach (FormOperationController controller in group)
                 {
                     if (curListToFill.Count < 40)
                     {
@@ -697,7 +697,7 @@ namespace GW2EIParser
                     AddTraceMessage("Discord: Creating embed for " + dpsReportLogs.Count + " logs");
                     var first = DateTime.Parse(dpsReportLogs.First().BasicMetaData.LogStart);
                     var last = DateTime.Parse(dpsReportLogs.Last().BasicMetaData.LogEnd);
-                    embedBuilder.WithFooter(pair.Key.ToString("dd/MM/yyyy") + " - " + first.ToString("T") + " - " + last.ToString("T"));
+                    embedBuilder.WithFooter(group.Key.ToString("dd/MM/yyyy") + " - " + first.ToString("T") + " - " + last.ToString("T"));
                     AddTraceMessage("Discord: Sorting logs by category");
                     dpsReportLogs.Sort((x, y) =>
                     {

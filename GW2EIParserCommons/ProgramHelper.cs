@@ -139,16 +139,16 @@ namespace GW2EIParserCommons
                 builder.AddField("Instance Buffs", string.Join("\n", log.FightData.Logic.GetInstanceBuffs(log).Select(x => (x.stack > 1 ? x.stack + " " : "") + x.buff.Name)));
             }
             //
-            /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group).ToDictionary(x => x.Key, x => x.ToList());
+            /*var playerByGroup = log.PlayerList.Where(x => !x.IsFakeActor).GroupBy(x => x.Group);
             var hasGroups = playerByGroup.Count > 1;
-            foreach (KeyValuePair<int, List<Player>> pair in playerByGroup)
+            foreach (var group in playerByGroup)
             {
                 var groupField = new List<string>();
-                foreach (Player p in pair.Value)
+                foreach (Player p in group)
                 {
                     groupField.Add(p.Character + " - " + p.Prof);
                 }
-                builder.AddField(hasGroups ? "Group " + pair.Key : "Party Composition", String.Join("\n", groupField));
+                builder.AddField(hasGroups ? "Group " + group.Key : "Party Composition", String.Join("\n", groupField));
             }*/
             //
             builder.AddField("Game Data", "ARC: " + log.LogData.ArcVersion + " | " + "GW2 Build: " + log.LogData.GW2Build);

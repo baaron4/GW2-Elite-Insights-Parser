@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ParserHelper;
@@ -17,51 +18,51 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             {
                 if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
                 {
-                    Data.Add(new object[]
-                    {
+                    Data.Add(
+                    [
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
                         data.TotalDamage
-                    });
+                    ]);
                 }
                 else
                 {
-                    Data.Add(new object[]
-                    {
+                    Data.Add(
+                    [
                         0,
-                        dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count,
+                        dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
                         0,
                         dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
-                    });
+                    ]);
                 }
             }
             foreach (AbstractSingleActor target in phase.AllTargets)
             {
-                var pTarget = new List<object[]>();
+                var pTarget = new List<object[]>(1 + listToUse.Count);
                 DataTarget.Add(pTarget);
                 dModData = actor.GetOutgoingDamageModifierStats(target, log, phase.Start, phase.End);
                 foreach (OutgoingDamageModifier dMod in listToUse)
                 {
                     if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
                     {
-                        pTarget.Add(new object[]
-                        {
+                        pTarget.Add(
+                        [
                             data.HitCount,
                             data.TotalHitCount,
                             data.DamageGain,
                             data.TotalDamage
-                        });
+                        ]);
                     }
                     else
                     {
-                        pTarget.Add(new object[]
-                        {
+                        pTarget.Add(
+                        [
                             0,
-                            dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count,
+                            dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
                             0,
                             dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
-                        });
+                        ]);
                     }
                 }
             }
@@ -73,23 +74,23 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
             {
                 if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
                 {
-                    Data.Add(new object[]
-                    {
+                    Data.Add(
+                    [
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
                         data.TotalDamage
-                    });
+                    ]);
                 }
                 else
                 {
-                    Data.Add(new object[]
-                    {
+                    Data.Add(
+                    [
                         0,
-                        dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count,
+                        dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
                         0,
                         dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
-                    });
+                    ]);
                 }
             }
             foreach (AbstractSingleActor target in phase.Targets)
@@ -101,30 +102,30 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                 {
                     if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
                     {
-                        pTarget.Add(new object[]
-                        {
+                        pTarget.Add(
+                        [
                             data.HitCount,
                             data.TotalHitCount,
                             data.DamageGain,
                             data.TotalDamage
-                        });
+                        ]);
                     }
                     else
                     {
-                        pTarget.Add(new object[]
-                        {
+                        pTarget.Add(
+                        [
                             0,
-                            dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count,
+                            dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
                             0,
                             dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
-                        });
+                        ]);
                     }
                 }
             }
         }
         public static List<DamageModData> BuildOutgoingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<OutgoingDamageModifier> damageModsToUse)
         {
-            var pData = new List<DamageModData>();
+            var pData = new List<DamageModData>(log.Friendlies.Count);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 pData.Add(new DamageModData(actor, log, damageModsToUse, phase));
@@ -134,7 +135,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
 
         public static List<DamageModData> BuildIncomingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<IncomingDamageModifier> damageModsToUse)
         {
-            var pData = new List<DamageModData>();
+            var pData = new List<DamageModData>(log.Friendlies.Count);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 pData.Add(new DamageModData(actor, log, damageModsToUse, phase));
@@ -144,7 +145,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
 
         public static List<DamageModData> BuildPersonalOutgoingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> damageModsToUse)
         {
-            var pData = new List<DamageModData>();
+            var pData = new List<DamageModData>(log.Friendlies.Count);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 pData.Add(new DamageModData(actor, log, damageModsToUse[actor.Spec], phase));
@@ -154,7 +155,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
 
         public static List<DamageModData> BuildPersonalIncomingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<IncomingDamageModifier>> damageModsToUse)
         {
-            var pData = new List<DamageModData>();
+            var pData = new List<DamageModData>(log.Friendlies.Count);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 pData.Add(new DamageModData(actor, log, damageModsToUse[actor.Spec], phase));

@@ -382,12 +382,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
             bool needRefreshAgentPool = false;
-            var maxHPEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
+            var maxHPEvents = combatData
+                .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
+                .Select(x => new MaxHealthUpdateEvent(x, agentData))
+                .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key);
             //
-            if (maxHPEvents.TryGetValue(491550, out List<MaxHealthUpdateEvent> dragonOrbMaxHPs))
+            if (maxHPEvents.TryGetValue(491550, out var dragonOrbMaxHPs))
             {
+                var any = false;
                 foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
                 {
+                    any = true;
                     AgentItem dragonOrb = dragonOrbMaxHP.Src;
                     if (dragonOrb != _unknownAgent && combatData.Count(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
                     {
@@ -395,13 +400,12 @@ namespace GW2EIEvtcParser.EncounterLogic
                         dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
                     }
                 }
-                if (dragonOrbMaxHPs.Count != 0)
+                if (any)
                 {
                     needRefreshAgentPool = true;
                 }
             }
             //
-            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
             var idsToUse = new List<ArcDPSEnums.TargetID> {
                 ArcDPSEnums.TargetID.TheDragonVoidJormag,
                 ArcDPSEnums.TargetID.TheDragonVoidPrimordus,
@@ -410,15 +414,16 @@ namespace GW2EIEvtcParser.EncounterLogic
                 ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
                 ArcDPSEnums.TargetID.TheDragonVoidSooWon,
             };
+            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
             var targetableEvents = combatData.Where(y => y.IsStateChange == ArcDPSEnums.StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
-            attackTargetEvents.RemoveAll(x =>
+            attackTargetEvents = attackTargetEvents.Where(x =>
             {
                 AgentItem atAgent = x.AttackTarget;
                 if (targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
                 {
-                    return !targetables.Any(y => y.Targetable);
+                    return targetables.Any(y => y.Targetable);
                 }
-                return true;
+                return false;
             });
             int index = 0;
             var processedAttackTargets = new HashSet<AgentItem>();
@@ -496,13 +501,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             // Gravity Ball - Timecaster gadget
             if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out AgentItem timecaster))
             {
-                if (maxHPEvents.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialGravityBallHPs))
+                if (maxHPEvents.TryGetValue(14940, out var potentialGravityBallHPs))
                 {
                     var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src).ToList();
                     var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
-                    int referenceLength = 200;
-                    gravityBalls = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y).Length2D() - referenceLength) < 10)).ToList();
-                    foreach (AgentItem ball in gravityBalls)
+                    const int referenceLength = 200;
+                    var gravityBalls_ = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y).Length2D() - referenceLength) < 10));
+                    foreach (AgentItem ball in gravityBalls_)
                     {
                         ball.OverrideType(AgentItem.AgentType.NPC);
                         ball.OverrideID(ArcDPSEnums.TrashID.GravityBall);

@@ -29,10 +29,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override int GetStacks(AbstractSingleActor actor)
         {
-            if (_stacksPerSource == null)
-            {
-                _stacksPerSource = _sources.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
-            }
+            _stacksPerSource ??= _sources.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
             if (_stacksPerSource.TryGetValue(actor.AgentItem, out var stacks))
             {
                 return stacks;

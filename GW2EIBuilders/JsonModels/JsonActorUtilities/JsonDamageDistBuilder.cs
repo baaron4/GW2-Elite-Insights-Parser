@@ -80,23 +80,25 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities
 
         internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
         {
-            var res = new List<JsonDamageDist>();
-            foreach (KeyValuePair<long, List<AbstractHealthDamageEvent>> pair in dlsByID)
+            var res = new List<JsonDamageDist>(dlsByID.Count + brlsByID.Count);
+
+            foreach (var pair in dlsByID)
             {
-                if (!brlsByID.TryGetValue(pair.Key, out List<BreakbarDamageEvent> brls))
+                if (brlsByID.TryGetValue(pair.Key, out var brls))
                 {
-                    brls = new List<BreakbarDamageEvent>();
+                    brls = new();
                 }
+
                 res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, log, skillMap, buffMap));
             }
 
-            foreach (KeyValuePair<long, List<BreakbarDamageEvent>> pair in brlsByID)
+            foreach (var (key, brls) in brlsByID)
             {
-                if (dlsByID.ContainsKey(pair.Key))
+                if (dlsByID.ContainsKey(key))
                 {
                     continue;
                 }
-                res.Add(BuildJsonDamageDist(pair.Key, new List<AbstractHealthDamageEvent>(), pair.Value, log, skillMap, buffMap));
+                res.Add(BuildJsonDamageDist(key, [ ], brls, log, skillMap, buffMap));
             }
             return res;
         }

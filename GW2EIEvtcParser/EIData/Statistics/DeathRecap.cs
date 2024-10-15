@@ -21,6 +21,7 @@ namespace GW2EIEvtcParser.EIData
 
         internal DeathRecap(ParsedEvtcLog log, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, DeadEvent dead, IReadOnlyList<DownEvent> downs, IReadOnlyList<AliveEvent> ups, long lastDeathTime)
         {
+            //TODO(Rennorb) @perf
             DeathTime = dead.Time;
             DownEvent downed;
             AliveEvent upped = ups.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);

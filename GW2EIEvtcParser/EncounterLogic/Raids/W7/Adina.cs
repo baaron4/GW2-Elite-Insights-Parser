@@ -68,16 +68,22 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
         {
-            var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
-            var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable).Select(x => new TargetableEvent(x, agentData)).Where(x => x.Src.Type == AgentItem.AgentType.Gadget).GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
-            attackTargetEvents.RemoveAll(x =>
+            var attackTargetEvents = combatData
+                .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget)
+                .Select(x => new AttackTargetEvent(x, agentData));
+            var targetableEvents = combatData
+                .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable)
+                .Select(x => new TargetableEvent(x, agentData))
+                .Where(x => x.Src.Type == AgentItem.AgentType.Gadget)
+                .GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.ToList());
+            attackTargetEvents = attackTargetEvents.Where(x =>
             {
                 AgentItem atAgent = x.AttackTarget;
                 if (targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
                 {
-                    return !targetables.Any(y => y.Targetable);
+                    return targetables.Any(y => y.Targetable);
                 }
-                return true;
+                return false;
             });
             long final = fightData.FightEnd;
             var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) }; // gadget locations
@@ -136,12 +142,12 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<int> GetTargetsIDs()
         {
-            return new List<int>()
-            {
+            return
+            [
                 (int)ArcDPSEnums.TargetID.Adina,
                 (int)ArcDPSEnums.TrashID.HandOfErosion,
                 (int)ArcDPSEnums.TrashID.HandOfEruption
-            };
+            ];
         }
 
         protected override Dictionary<int, int> GetTargetsSortIDs()

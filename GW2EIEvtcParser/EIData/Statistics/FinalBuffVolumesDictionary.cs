@@ -24,15 +24,14 @@ namespace GW2EIEvtcParser.EIData
             var buffsActive = new FinalBuffVolumesDictionary();
 
             var applies = log.CombatData.GetBuffDataByIDByDst(buff.ID, dstActor.AgentItem).OfType<AbstractBuffApplyEvent>().ToList();
-            applies.ForEach(x => x.TryFindSrc(log));
-            var appliesBySrc = applies.GroupBy(x => x.CreditedBy).ToDictionary(x => x.Key, x => x.ToList());
-
-            foreach (KeyValuePair<AgentItem, List<AbstractBuffApplyEvent>> pair in appliesBySrc)
+            applies.ForEach(x => x.TryFindSrc(log)); //TODO(Rennorb) @perf
+            var appliesBySrc = applies.GroupBy(x => x.CreditedBy);
+            foreach (var group in appliesBySrc)
             {
-                AbstractSingleActor actor = log.FindActor(pair.Key);
+                AbstractSingleActor? actor = log.FindActor(group.Key);
                 double incoming = 0;
                 double incomingByExtension = 0;
-                foreach (AbstractBuffApplyEvent abae in pair.Value)
+                foreach (AbstractBuffApplyEvent abae in group)
                 {
                     if (abae.Time >= start && abae.Time <= end)
                     {

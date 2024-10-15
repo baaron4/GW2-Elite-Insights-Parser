@@ -19,15 +19,16 @@ namespace GW2EIEvtcParser.Extensions
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
-            var heals = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in heals)
+            var heals = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From);
+            foreach (var group in heals)
             {
+                var groupedHeals = group.ToList();
                 long lastTime = int.MinValue;
-                if (!HealingStatsExtensionHandler.SanitizeForSrc(pair.Value))
+                if (!HealingStatsExtensionHandler.SanitizeForSrc(groupedHeals))
                 {
                     continue;
                 }
-                foreach (EXTAbstractBarrierEvent be in pair.Value)
+                foreach (EXTAbstractBarrierEvent be in groupedHeals)
                 {
                     if (be.Time - lastTime < ICD)
                     {

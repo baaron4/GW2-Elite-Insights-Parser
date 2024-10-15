@@ -34,10 +34,10 @@ namespace GW2EIEvtcParser.EIData
         internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
         {
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
-                if (ComputeGain(null, evt, log, out double gain) && CheckCondition(evt, log))
+                if (ComputeGain(null, evt, log, out _) && CheckCondition(evt, log))
                 {
                     res.Add(new DamageModifierEvent(evt, damageModifier, evt.HealthDamage));
                 }
@@ -45,7 +45,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+        protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
         {
             gain = 0;
             if (dl.SkillId != _skillID)

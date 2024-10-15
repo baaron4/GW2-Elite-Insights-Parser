@@ -40,7 +40,7 @@ namespace GW2EIGW2API
 
             public APIItems(List<T> traits)
             {
-                Items = traits.GroupBy(x => x.Id).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+                Items = traits.GroupBy(x => x.Id).ToDictionary(x => x.Key, x => x.FirstOrDefault());
             }
 
             public Dictionary<long, T> Items { get; }

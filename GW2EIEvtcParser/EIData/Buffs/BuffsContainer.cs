@@ -146,7 +146,7 @@ namespace GW2EIEvtcParser.EIData
             BuffInfoSolver.AdjustBuffs(combatData, BuffsByIds, operation);
             foreach (Buff buff in currentBuffs)
             {
-                BuffInfoEvent buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
+                BuffInfoEvent? buffInfoEvt = combatData.GetBuffInfoEvent(buff.ID);
                 if (buffInfoEvt != null)
                 {
                     foreach (BuffFormula formula in buffInfoEvt.Formulas)
@@ -169,18 +169,18 @@ namespace GW2EIEvtcParser.EIData
                 foreach (Buff buff in stackType0Buffs)
                 {
                     IReadOnlyList<AbstractBuffEvent> buffData = combatData.GetBuffData(buff.ID);
-                    var buffDataByDst = buffData.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-                    foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in buffDataByDst)
+                    foreach (var group in buffData.GroupBy(x => x.To))
                     {
-                        var appliesPerInstanceID = pair.Value.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
-                        var removeSinglesPerInstanceID = pair.Value.OfType<BuffRemoveSingleEvent>().Where(x => !x.OverstackOrNaturalEnd).GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
-                        foreach (KeyValuePair<uint, List<BuffRemoveSingleEvent>> removePair in removeSinglesPerInstanceID)
+                        var buffs = group.ToList();
+                        var appliesPerInstanceID = buffs.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                        var removeSinglesPerInstanceID = buffs.OfType<BuffRemoveSingleEvent>().Where(x => !x.OverstackOrNaturalEnd).GroupBy(x => x.BuffInstance);
+                        foreach (var removePair in removeSinglesPerInstanceID)
                         {
                             if (appliesPerInstanceID.TryGetValue(removePair.Key, out List<BuffApplyEvent> applyList))
                             {
-                                foreach (BuffRemoveSingleEvent remove in removePair.Value)
+                                foreach (BuffRemoveSingleEvent remove in removePair)
                                 {
-                                    BuffApplyEvent apply = applyList.LastOrDefault(x => x.Time <= remove.Time);
+                                    BuffApplyEvent apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
                                     if (apply != null && apply.OriginalAppliedDuration == remove.RemovedDuration)
                                     {
                                         int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;

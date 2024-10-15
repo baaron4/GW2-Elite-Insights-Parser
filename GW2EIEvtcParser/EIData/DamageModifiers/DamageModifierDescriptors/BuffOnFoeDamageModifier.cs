@@ -72,11 +72,11 @@ namespace GW2EIEvtcParser.EIData
                 }
             }
             var res = new List<DamageModifierEvent>();
-            IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+            var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
             var ignoredTargets = new HashSet<AbstractSingleActor>();
             foreach (AbstractHealthDamageEvent evt in typeHits)
             {
-                AbstractSingleActor target = log.FindActor(damageModifier.GetFoe(evt));
+                AbstractSingleActor? target = log.FindActor(damageModifier.GetFoe(evt));
                 if (ignoredTargets.Contains(target))
                 {
                     continue;

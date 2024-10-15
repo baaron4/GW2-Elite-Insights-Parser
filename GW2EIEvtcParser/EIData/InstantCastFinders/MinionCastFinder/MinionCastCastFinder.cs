@@ -15,15 +15,14 @@ namespace GW2EIEvtcParser.EIData
 
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
-            var result = new List<InstantCastEvent>();
+            var result = new List<InstantCastEvent>(); //TODO(Rennorb) @perf
             var casts = combatData.GetAnimatedCastData(MinionSkillID)
                 .Where(x => x.Caster.Master != null)
-                .GroupBy(x => x.Caster)
-                .ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<AnimatedCastEvent>> pair in casts)
+                .GroupBy(x => x.Caster);
+            foreach (var group in casts)
             {
                 long lastTime = int.MinValue;
-                foreach (AnimatedCastEvent cast in pair.Value)
+                foreach (AnimatedCastEvent cast in group)
                 {
                     if (CheckCondition(cast, combatData, agentData, skillData))
                     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -699,32 +700,32 @@ namespace GW2EIEvtcParser.EIData
 
         private static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, IReadOnlyList<AbstractBuffEvent> buffs, SkillItem skill)
         {
-            var res = new List<AnimatedCastEvent>();
             if (combatData.GetAnimatedCastData(skill.ID).Count > 0)
             {
-                return res;
+                return [ ];
             }
+
             var applies = buffs.OfType<BuffApplyEvent>().ToList();
             var removals = buffs.OfType<BuffRemoveAllEvent>().ToList();
-            for (int i = 0; i < applies.Count && i < removals.Count; i++)
+            var minCount = Math.Min(applies.Count, removals.Count);
+            var res = new List<AnimatedCastEvent>(minCount);
+
+            for (int i = 0; i < minCount; i++)
             {
                 res.Add(new AnimatedCastEvent(applies[i].To, skill, applies[i].Time, removals[i].Time - applies[i].Time));
             }
+
             return res;
         }
 
-        private static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(CombatData combatData, IReadOnlyList<BuffApplyEvent> buffs, SkillItem skill, long startOffset, long skillDuration)
+        private static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(CombatData combatData, IEnumerable<BuffApplyEvent> buffs, SkillItem skill, long startOffset, long skillDuration)
         {
-            var res = new List<AnimatedCastEvent>();
             if (combatData.GetAnimatedCastData(skill.ID).Count > 0)
             {
-                return res;
+                return [ ];
             }
-            foreach (BuffApplyEvent bae in buffs)
-            {
-                res.Add(new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
-            }
-            return res;
+
+            return buffs.Select(bae => new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
         }
 
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
@@ -733,20 +734,20 @@ namespace GW2EIEvtcParser.EIData
             return ComputeUnderBuffCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem), skill);
         }
 
-        internal static IReadOnlyList<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
+        internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
         {
             SkillItem skill = skillData.Get(skillId);
-            return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>().ToList(), skill, startOffset, skillDuration);
+            return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);
         }
 
         internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, SkillData skillData, long skillId, long buffId)
         {
             SkillItem skill = skillData.Get(skillId);
-            var dict = combatData.GetBuffData(buffId).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             var res = new List<AnimatedCastEvent>();
-            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in dict)
+            var dict = combatData.GetBuffData(buffId).GroupBy(x => x.To);
+            foreach (var group in dict)
             {
-                res.AddRange(ComputeUnderBuffCastEvents(combatData, pair.Value, skill));
+                res.AddRange(ComputeUnderBuffCastEvents(combatData, group.ToList(), skill));
             }
             return res;
         }

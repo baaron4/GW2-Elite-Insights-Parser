@@ -241,13 +241,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
         {
             List<AbstractBuffEvent> toAdd = base.SpecialBuffEventProcess(combatData, skillData);
-            var shields = combatData.GetBuffData(LeyWovenShielding).GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<AbstractBuffEvent>> pair in shields)
+            var shields = combatData.GetBuffData(LeyWovenShielding).GroupBy(x => x.To);
+            foreach (var group in shields)
             {
                 // Missing Buff Initial
-                if (pair.Value.FirstOrDefault() is AbstractBuffRemoveEvent)
+                if (group.FirstOrDefault() is AbstractBuffRemoveEvent)
                 {
-                    toAdd.Add(new BuffApplyEvent(pair.Key, pair.Key, pair.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), IFF.Friend, 1, true));
+                    toAdd.Add(new BuffApplyEvent(group.Key, group.Key, group.Key.FirstAware, int.MaxValue, skillData.Get(LeyWovenShielding), IFF.Friend, 1, true));
                 }
             }
             return toAdd;

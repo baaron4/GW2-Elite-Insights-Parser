@@ -61,6 +61,6 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end);
 
-        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end);
+        public abstract IEnumerable<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end);
     }
 }

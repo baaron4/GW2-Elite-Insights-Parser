@@ -786,10 +786,10 @@ namespace GW2EIEvtcParser
                 {
                     if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
                     {
-                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => TeamChangeEvent.GetTeamIDInto(x)));
+                        greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDInto));
                         if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
                         {
-                            greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(x => TeamChangeEvent.GetTeamIDComingFrom(x)));
+                            greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDComingFrom));
                         }
                     }
                 }
@@ -807,10 +807,10 @@ namespace GW2EIEvtcParser
                 {
                     if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out List<CombatItem> teamChangeList))
                     {
-                        var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => TeamChangeEvent.GetTeamIDInto(x)).ToList();
+                        var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDInto).ToList();
                         if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
                         {
-                            team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(x => TeamChangeEvent.GetTeamIDComingFrom(x)));
+                            team.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDComingFrom));
                         }
                         team.RemoveAll(x => x == 0);
                         nonSquadPlayer.OverrideIsNotInSquadFriendlyPlayer(team.Any(x => x == greenTeam));
@@ -934,7 +934,7 @@ namespace GW2EIEvtcParser
                 throw new InvalidDataException("Must remove " + invalidCombatItems.Count + " invalid combat items");
 #else
                 operation.UpdateProgressWithCancellationCheck("Removing " + invalidCombatItems.Count + " invalid combat items");
-                _combatItems.RemoveAll(x => invalidCombatItems.Contains(x));
+                _combatItems.RemoveAll(invalidCombatItems.Contains);
 #endif
             }
             _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));

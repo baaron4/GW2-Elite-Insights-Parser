@@ -13,7 +13,7 @@ namespace GW2EIEvtcParser.EIData
             base.UsingChecker(checker);
         }
 
-        protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+        protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, AbstractHealthDamageEvent? dl, ParsedEvtcLog log, out double gain)
         {
             gain = GainComputer.ComputeGain(GainPerStack, 1);
             return true;
@@ -25,7 +25,7 @@ namespace GW2EIEvtcParser.EIData
             if (ComputeGain(null, null, log, out double gain))
             {
 
-                IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
+                var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (AbstractHealthDamageEvent evt in typeHits)
                 {
                     if (CheckCondition(evt, log))

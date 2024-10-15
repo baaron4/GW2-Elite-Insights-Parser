@@ -103,7 +103,7 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // All class specific boons
-            var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
+            var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault());
             foreach (Player player in players)
             {
                 _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();

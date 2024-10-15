@@ -112,10 +112,10 @@ namespace GW2EIEvtcParser.EIData
 
         // Getters
         // Damage logs
-        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end);
 
-        public abstract IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
-        public abstract IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         private static void FilterDamageEvents(ParsedEvtcLog log, List<AbstractHealthDamageEvent> dls, ParserHelper.DamageType damageType)
         {
@@ -145,13 +145,14 @@ namespace GW2EIEvtcParser.EIData
                     throw new NotImplementedException("Not implemented damage type " + damageType);
             }
         }
-        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+        public IEnumerable<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
             if (!_typedHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
             {
                 hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>(log);
                 _typedHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
             }
+
             if (!hitDamageEventsPerPhasePerTarget.TryGetValue(start, end, target, out var dls))
             {
                 dls = GetDamageEvents(target, log, start, end).Where(x => x.HasHit).ToList();
@@ -161,7 +162,7 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetHitDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+        public IEnumerable<AbstractHealthDamageEvent> GetHitDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
         {
             if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageTakenEventsPerPhasePerTarget))
             {
@@ -177,10 +178,10 @@ namespace GW2EIEvtcParser.EIData
             return dls;
         }
 
-        public abstract IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end);
 
-        public abstract IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
-        public abstract IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
+        public abstract IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end);
 
         // Cast logs
         public abstract IEnumerable<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end);

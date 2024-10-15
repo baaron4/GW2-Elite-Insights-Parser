@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData
 
         public delegate IReadOnlyList<T> CombatEventsGetter(ParsedEvtcLog log, AgentItem agent);
 
-        private readonly CombatEventsGetter _getter = null;
+        private readonly CombatEventsGetter _getter;
 
         public IReadOnlyList<T> GetEvents(ParsedEvtcLog log, AgentItem a)
         {

@@ -17,11 +17,11 @@ namespace GW2EIEvtcParser.EIData
         public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
         {
             var res = new List<InstantCastEvent>();
-            var damages = combatData.GetBreakbarDamageData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<BreakbarDamageEvent>> pair in damages)
+            var damages = combatData.GetBreakbarDamageData(_damageSkillID).GroupBy(x => x.From);
+            foreach (var group in damages)
             {
                 long lastTime = int.MinValue;
-                foreach (BreakbarDamageEvent de in pair.Value)
+                foreach (BreakbarDamageEvent de in group)
                 {
                     if (CheckCondition(de, combatData, agentData, skillData))
                     {

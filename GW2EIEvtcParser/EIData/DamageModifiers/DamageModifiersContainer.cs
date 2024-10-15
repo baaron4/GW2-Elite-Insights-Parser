@@ -70,7 +70,7 @@ namespace GW2EIEvtcParser.EIData
                 WeaverHelper.OutgoingDamageModifiers,
                 CatalystHelper.OutgoingDamageModifiers,
             };
-            var currentOutgoingDamageMods = new List<OutgoingDamageModifier>();
+            var currentOutgoingDamageMods = new List<OutgoingDamageModifier>(AllOutgoingDamageModifiers.Count);
             foreach (List<DamageModifierDescriptor> modifierDescriptor in AllOutgoingDamageModifiers)
             {
                 currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
@@ -78,12 +78,10 @@ namespace GW2EIEvtcParser.EIData
             OutgoingDamageModifiersPerSource = currentOutgoingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<OutgoingDamageModifier>)x.ToList());
             OutgoingDamageModifiersByName = currentOutgoingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
-                var list = x.ToList();
-                if (list.Count > 1)
-                {
-                    throw new InvalidDataException("Same name present multiple times in damage mods - " + x.First().Name);
-                }
-                return list.First();
+                var e = x.GetEnumerator(); e.MoveNext();
+                var first = e.Current;
+                if(e.MoveNext()) { throw new InvalidDataException("Same name present multiple times in damage mods - " + first.Name); }
+                return first;
             });
             //
             var AllIncomingDamageModifiers = new List<List<DamageModifierDescriptor>>
@@ -146,12 +144,10 @@ namespace GW2EIEvtcParser.EIData
             IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<IncomingDamageModifier>)x.ToList());
             IncomingDamageModifiersByName = currentIncomingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
             {
-                var list = x.ToList();
-                if (list.Count > 1)
-                {
-                    throw new InvalidDataException("Same name present multiple times in damage mods - " + x.First().Name);
-                }
-                return list.First();
+                var e = x.GetEnumerator(); e.MoveNext();
+                var first = e.Current;
+                if(e.MoveNext()) { throw new InvalidDataException("Same name present multiple times in damage mods - " + first.Name); }
+                return first;
             });
         }
 

@@ -193,7 +193,7 @@ namespace GW2EIEvtcParser.EIData
             IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(this.AgentItem);
             _deathRecaps = new List<DeathRecap>(deads.Count);
             long lastDeathTime = 0;
-            IReadOnlyList<AbstractHealthDamageEvent> damageLogs = this.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
+            var damageLogs = this.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
             foreach (DeadEvent dead in deads)
             {
                 _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));

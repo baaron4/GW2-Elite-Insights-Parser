@@ -25,8 +25,8 @@ namespace GW2EIEvtcParser.EIData
                     {
                         var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
                         int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
-                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
-                        res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count, eventsToUse.Sum(x => x.DamageGain), totalDamage);
+                        var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
+                        res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
                     }
                 }
                 _outgoingDamageModifiersPerTargets.Set(start, end, target, res);
@@ -118,8 +118,8 @@ namespace GW2EIEvtcParser.EIData
                     {
                         var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
                         int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
-                        IReadOnlyList<AbstractHealthDamageEvent> typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
-                        res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count, eventsToUse.Sum(x => x.DamageGain), totalDamage);
+                        var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
+                        res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
                     }
                 }
                 _incomingDamageModifiersPerTargets.Set(start, end, target, res);

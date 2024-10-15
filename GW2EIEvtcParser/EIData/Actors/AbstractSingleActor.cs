@@ -648,7 +648,7 @@ namespace GW2EIEvtcParser.EIData
         #endregion STATISTICS
 
         #region DAMAGE
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageEvents == null)
             {
@@ -661,26 +661,28 @@ namespace GW2EIEvtcParser.EIData
                 DamageEvents.SortByTime();
                 DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (DamageEventByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
-                    return new List<AbstractHealthDamageEvent>();
+                    return [ ];
                 }
             }
-            return DamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return DamageEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
-        public IReadOnlyList<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public IEnumerable<AbstractHealthDamageEvent> GetJustActorDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
-            return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+            return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
         }
 
-        public override IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (DamageTakenEvents == null)
             {
@@ -688,20 +690,21 @@ namespace GW2EIEvtcParser.EIData
                 DamageTakenEvents.SortByTime();
                 DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
                 {
                     long targetStart = target.FirstAware;
                     long targetEnd = target.LastAware;
-                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
                 }
                 else
                 {
-                    return new List<AbstractHealthDamageEvent>();
+                    return [ ];
                 }
             }
-            return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+            return DamageTakenEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
         /// <summary>
@@ -726,12 +729,12 @@ namespace GW2EIEvtcParser.EIData
 
         #region BREAKBAR DAMAGE
 
-        public IReadOnlyList<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public IEnumerable<BreakbarDamageEvent> GetJustActorBreakbarDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
-            return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+            return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
         }
 
-        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageEvents == null)
             {
@@ -744,21 +747,23 @@ namespace GW2EIEvtcParser.EIData
                 BreakbarDamageEvents.SortByTime();
                 BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out var list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
-                    return new List<BreakbarDamageEvent>();
+                    return [ ];
                 }
             }
-            return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
-        public override IReadOnlyList<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (BreakbarDamageTakenEvents == null)
             {
@@ -766,32 +771,34 @@ namespace GW2EIEvtcParser.EIData
                 BreakbarDamageTakenEvents.SortByTime();
                 BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
                     long targetStart = target.FirstAware;
                     long targetEnd = target.LastAware;
-                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
                 }
                 else
                 {
-                    return new List<BreakbarDamageEvent>();
+                    return [ ];
                 }
             }
-            return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return BreakbarDamageTakenEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
         #endregion BREAKBAR DAMAGE
 
         #region CROWD CONTROL
 
-        public IReadOnlyList<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        public IEnumerable<CrowdControlEvent> GetJustOutgoingActorCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
         {
-            return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == AgentItem).ToList();
+            return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == AgentItem);
         }
 
-        public override IReadOnlyList<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (OutgoingCrowdControlEvents == null)
             {
@@ -804,21 +811,23 @@ namespace GW2EIEvtcParser.EIData
                 OutgoingCrowdControlEvents.SortByTime();
                 OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
                 {
-                    return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    return list.Where(x => x.Time >= start && x.Time <= end);
                 }
                 else
                 {
-                    return new List<CrowdControlEvent>();
+                    return [ ];
                 }
             }
-            return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
-        public override IReadOnlyList<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (IncomingCrowdControlEvents == null)
             {
@@ -826,20 +835,22 @@ namespace GW2EIEvtcParser.EIData
                 IncomingCrowdControlEvents.SortByTime();
                 IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
             }
+
             if (target != null)
             {
                 if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out var list))
                 {
                     long targetStart = target.FirstAware;
                     long targetEnd = target.LastAware;
-                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd).ToList();
+                    return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
                 }
                 else
                 {
-                    return new List<CrowdControlEvent>();
+                    return [ ];
                 }
             }
-            return IncomingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end).ToList();
+
+            return IncomingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end);
         }
 
         #endregion CROWD CONTROL

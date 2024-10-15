@@ -88,7 +88,7 @@ namespace GW2EIEvtcParser.EIData
             return res;
         }
 
-        private static int[] ComputeDamageGraph(IReadOnlyList<AbstractHealthDamageEvent> dls, long start, long end)
+        private static int[] ComputeDamageGraph(IEnumerable<AbstractHealthDamageEvent> dls, long start, long end)
         {
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;
@@ -153,7 +153,7 @@ namespace GW2EIEvtcParser.EIData
             return graph;
         }
 
-        private static double[] ComputeBreakbarDamageGraph(IReadOnlyList<BreakbarDamageEvent> dls, long start, long end)
+        private static double[] ComputeBreakbarDamageGraph(IEnumerable<BreakbarDamageEvent> dls, long start, long end)
         {
             int durationInMS = (int)(end - start);
             int durationInS = durationInMS / 1000;
