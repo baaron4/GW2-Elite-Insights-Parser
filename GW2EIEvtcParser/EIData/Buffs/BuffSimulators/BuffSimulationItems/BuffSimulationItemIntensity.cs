@@ -13,11 +13,14 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void OverrideEnd(long end)
         {
+            long maxDur = 0;
             foreach (BuffSimulationItemBase stack in Stacks)
             {
                 stack.OverrideEnd(end);
+
+                if(stack.Duration > maxDur) { maxDur = stack.Duration; }
             }
-            Duration = Stacks.Max(x => x.Duration);
+            Duration = maxDur;
         }
 
         public override int GetActiveStacks()
@@ -25,7 +28,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return Stacks.Length;
         }
 
-        public override IReadOnlyList<AgentItem> GetActiveSources()
+        public override IEnumerable<AgentItem> GetActiveSources()
         {
             return GetSources();
         }

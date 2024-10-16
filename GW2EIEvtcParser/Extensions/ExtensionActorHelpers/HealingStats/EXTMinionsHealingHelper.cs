@@ -62,8 +62,8 @@ namespace GW2EIEvtcParser.Extensions
             return;
         }
 
-        [MemberNotNull(nameof(HealEvents))]
-        [MemberNotNull(nameof(HealEventsByDst))]
+        //[MemberNotNull(nameof(HealEvents))]
+        //[MemberNotNull(nameof(HealEventsByDst))]
         void InitHealEvents(ParsedEvtcLog log)
         {
             //TODO(Rennorb) @perf: find average complexity
@@ -121,8 +121,8 @@ namespace GW2EIEvtcParser.Extensions
             return;
         }
 
-        [MemberNotNull(nameof(HealReceivedEvents))]
-        [MemberNotNull(nameof(HealReceivedEventsBySrc))]
+        //[MemberNotNull(nameof(HealReceivedEvents))]
+        //[MemberNotNull(nameof(HealReceivedEventsBySrc))]
         void InitIncomingHealEvents(ParsedEvtcLog log)
         {
             //TODO(Rennorb) @perf: find average complexity

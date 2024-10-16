@@ -594,7 +594,7 @@ namespace GW2EIEvtcParser.EIData
 
         public FinalGameplayStats GetGameplayStats(ParsedEvtcLog log, long start, long end)
         {
-            _gameplayStats ??= new CachingCollection<FinalGameplayStats>(log);
+            _gameplayStats ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
 
             if (!_gameplayStats.TryGetValue(start, end, out var value))
             {
@@ -636,7 +636,7 @@ namespace GW2EIEvtcParser.EIData
 
         public FinalToPlayersSupport GetToPlayerSupportStats(ParsedEvtcLog log, long start, long end)
         {
-            _toPlayerSupportStats ??= new CachingCollection<FinalToPlayersSupport>(log);
+            _toPlayerSupportStats ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
 
             if (!_toPlayerSupportStats.TryGetValue(start, end, out var value))
             {

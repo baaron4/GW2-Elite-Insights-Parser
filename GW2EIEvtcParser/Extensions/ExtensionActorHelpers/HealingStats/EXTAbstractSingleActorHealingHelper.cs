@@ -150,8 +150,8 @@ namespace GW2EIEvtcParser.Extensions
         }
 
 
-        [MemberNotNull(nameof(HealReceivedEvents))]
-        [MemberNotNull(nameof(HealReceivedEventsBySrc))]
+        //[MemberNotNull(nameof(HealReceivedEvents))]
+        //[MemberNotNull(nameof(HealReceivedEventsBySrc))]
         public void InitIncomingHealEvents(ParsedEvtcLog log)
         {
             HealReceivedEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_actor.AgentItem).Where(x => x.ToFriendly));

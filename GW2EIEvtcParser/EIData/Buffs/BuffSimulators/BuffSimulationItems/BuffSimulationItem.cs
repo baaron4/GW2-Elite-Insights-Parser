@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
     internal abstract class BuffSimulationItem : AbstractSimulationItem
     {
         public long Duration { get; protected set; }
-        public long Start { get; protected set; }
+        public readonly long Start;
         public long End => Start + Duration;
 
         protected BuffSimulationItem(long start, long duration)
@@ -21,14 +21,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public long GetClampedDuration(long start, long end)
         {
-            if (end > 0 && end - start > 0)
-            {
-                long startoffset = Math.Max(Math.Min(Duration, start - Start), 0);
-                long itemEnd = Start + Duration;
-                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end), 0);
-                return Duration - startoffset - endOffset;
-            }
-            return 0;
+            return Math.Max(0, Math.Clamp(this.End, start, end) - Math.Clamp(this.Start, start, end));
         }
 
         public Segment ToSegment()
@@ -47,11 +40,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         }
 
         public abstract void OverrideEnd(long end);
-        public abstract IReadOnlyList<long> GetActualDurationPerStack();
+        public abstract IEnumerable<long> GetActualDurationPerStack();
         public abstract long GetActualDuration();
 
-        public abstract IReadOnlyList<AgentItem> GetSources();
-        public abstract IReadOnlyList<AgentItem> GetActiveSources();
+        public abstract IEnumerable<AgentItem> GetSources();
+        public abstract IEnumerable<AgentItem> GetActiveSources();
 
         public abstract int GetActiveStacks();
         public abstract int GetStacks();

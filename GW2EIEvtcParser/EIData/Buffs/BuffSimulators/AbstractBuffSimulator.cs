@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
-    internal abstract class AbstractBuffSimulator
+    internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
     {
         // Fields
-        public List<BuffSimulationItem> GenerationSimulation { get; } = new List<BuffSimulationItem>();
-        public List<BuffSimulationItemOverstack> OverstackSimulationResult { get; } = new List<BuffSimulationItemOverstack>();
-        public List<BuffSimulationItemWasted> WasteSimulationResult { get; } = new List<BuffSimulationItemWasted>();
+        public readonly List<BuffSimulationItem>          GenerationSimulation      = new(); //TODO(Rennorb) @perf
+        public readonly List<BuffSimulationItemOverstack> OverstackSimulationResult = new(); //TODO(Rennorb) @perf
+        public readonly List<BuffSimulationItemWasted>    WasteSimulationResult     = new(); //TODO(Rennorb) @perf
 
-        public Buff Buff { get; }
+        public readonly Buff Buff = buff;
 
-        protected ParsedEvtcLog Log { get; }
-
-        // Constructor
-        protected AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
-        {
-            Buff = buff;
-            Log = log;
-        }
+        protected readonly ParsedEvtcLog Log = log;
 
 
         // Abstract Methods
@@ -43,7 +37,6 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     break;
                 }
             }
-            GenerationSimulation.RemoveAll(x => x.Duration <= 0);
         }
 
         protected abstract void UpdateSimulator(AbstractBuffEvent buffEvent);
@@ -54,27 +47,24 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 return;
             }
-            long firstTimeValue = buffEvents.Count > 0 ? Math.Min(buffEvents.First().Time, fightStart) : fightStart;
-            long timeCur = firstTimeValue;
-            long timePrev = firstTimeValue;
+            long timePrev = buffEvents.Count > 0 ? Math.Min(buffEvents[0].Time, fightStart) : fightStart;
             foreach (AbstractBuffEvent buffEvent in buffEvents)
             {
-                timeCur = buffEvent.Time;
-                if (timeCur - timePrev < 0)
-                {
-                    throw new InvalidOperationException("Negative passed time in boon simulation");
-                }
+                long timeCur = buffEvent.Time;
+                Debug.Assert(timeCur - timePrev < 0, "Negative passed time in boon simulation");
+
                 Update(timeCur - timePrev);
                 UpdateSimulator(buffEvent);
                 timePrev = timeCur;
             }
             Update(fightEnd - timePrev);
+
             GenerationSimulation.RemoveAll(x => x.Duration <= 0);
             Clear();
             Trim(fightEnd);
         }
 
-        protected abstract void Clear();
+        protected abstract void Clear(); //TODO(Rennorb): rename
 
         protected abstract void Update(long timePassed);
 

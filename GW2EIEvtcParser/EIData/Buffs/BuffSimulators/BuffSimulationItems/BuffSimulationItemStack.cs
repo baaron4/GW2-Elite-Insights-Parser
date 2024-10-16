@@ -7,19 +7,23 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
     internal abstract class BuffSimulationItemStack : BuffSimulationItem
     {
         protected readonly BuffSimulationItemBase[] Stacks;
-        private readonly AgentItem[] _sources;
-        private Dictionary<AgentItem, int> _stacksPerSource { get; set; }
+        private AgentItem[]? _sources;
+        private Dictionary<AgentItem, int>? _stacksPerSource;
 
         public BuffSimulationItemStack(IReadOnlyList<BuffStackItem> stacks) : base(stacks.First().Start, stacks.First().Duration)
         {
             int count = stacks.Count;
-            _sources = new AgentItem[count];
-            Stacks = new BuffSimulationItemBase[count];
-            for (int i = 0; i < count; i++)
+            if (count > 0)
             {
-                BuffStackItem stackItem = stacks[i];
-                Stacks[i] = new BuffSimulationItemBase(stackItem);
-                _sources[i] = stackItem.Src;
+                Stacks = new BuffSimulationItemBase[count];
+                for (int i = 0; i < count; i++)
+                {
+                    Stacks[i] = new BuffSimulationItemBase(stacks[i]);
+                }
+            }
+            else
+            {
+                Stacks = [ ]; // this is array.empty, reused object
             }
         }
         public override int GetStacks()
@@ -29,21 +33,51 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override int GetStacks(AbstractSingleActor actor)
         {
-            _stacksPerSource ??= _sources.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
-            if (_stacksPerSource.TryGetValue(actor.AgentItem, out var stacks))
+            //NOTE(Rennorb): This method only gets called for ~5% of the instances created, so we don't create the buffer in the constructor.
+            if(_stacksPerSource == null)
             {
-                return stacks;
+                if(Stacks.Length > 0)
+                {
+                    _stacksPerSource = new(10);
+                    foreach (var stack in Stacks)
+                    {
+                        _stacksPerSource.IncrementValue(stack._buffStackItem.Src);
+                    }
+                }
+                else
+                {
+                    _stacksPerSource = [ ];
+                }
             }
-            return 0;
+
+            return _stacksPerSource.TryGetValue(actor.AgentItem, out var stacks) ? stacks : 0;
         }
 
-        public override IReadOnlyList<long> GetActualDurationPerStack()
+        public override IEnumerable<long> GetActualDurationPerStack()
         {
-            return new List<long>(Stacks.Select(x => x.GetActualDuration()));
+            return Stacks.Select(x => x.GetActualDuration());
         }
 
-        public override IReadOnlyList<AgentItem> GetSources()
+        public override IEnumerable<AgentItem> GetSources()
         {
+            //NOTE(Rennorb): This method only gets called for ~5% of the instances created, so we don't create the buffer in the constructor.
+            if(_sources == null)
+            {
+                var count = Stacks.Length;
+                if(count > 0)
+                {
+                    _sources = new AgentItem[count];
+                    for (int i = 0; i < count; i++)
+                    {
+                        _sources[i] = Stacks[i]._buffStackItem.Src;
+                    }
+                }
+                else
+                {
+                    _sources =  [ ]; // this is array.empty, reused object
+                }
+            }
+
             return _sources;
         }
     }

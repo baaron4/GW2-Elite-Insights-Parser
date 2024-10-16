@@ -26,7 +26,7 @@ namespace GW2EIEvtcParser.EIData
         {
             throw new InvalidOperationException("Players' name can't be overriden");
         }
-        internal override void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null)
+        internal override void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)>? hpDistribution = null)
         {
             throw new InvalidOperationException("Players' health can't be overriden");
         }

@@ -41,6 +41,14 @@ namespace GW2EIEvtcParser {
             return dict.TryGetValue(key, out var value) ? value : [ ];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<V> GetValueOrEmpty<K, V, L>(this Dictionary<K, L> dict, in K key) where K : notnull where L : class, IEnumerable<K>
+        {
+            //NOTE(Rennorb): [] internally calls to Array.Empty here, which is static on the type and doesn't need additional caching. 
+            // Only one of those will be created per T, not one per call.
+            return dict.TryGetValue(key, out var value) ? (IEnumerable<V>)value : [ ];
+        }
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void AddToList<K, V>(this Dictionary<K, List<V>> dict, in K key, in V value, int initialCapacity = 1) where K : notnull
@@ -51,6 +59,30 @@ namespace GW2EIEvtcParser {
             }
 
             list.Add(value);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void IncrementValue<K>(this Dictionary<K, int> dict, in K key, int value) where K : notnull
+        {
+            dict[key] = dict.TryGetValue(key, out var old) ? old + value : value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void IncrementValue<K>(this Dictionary<K, int> dict, in K key) where K : notnull
+        {
+            dict[key] = dict.TryGetValue(key, out var old) ? old + 1 : 1;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void IncrementValue<K>(this Dictionary<K, long> dict, in K key, long value) where K : notnull
+        {
+            dict[key] = dict.TryGetValue(key, out var old) ? old + value : value;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void IncrementValue<K>(this Dictionary<K, long> dict, in K key) where K : notnull
+        {
+            dict[key] = dict.TryGetValue(key, out var old) ? old + 1 : 1;
         }
 
         public static T? FirstOrNull<T>(this IEnumerable<T> enumerable) where T : struct

@@ -3,13 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GW2EIEvtcParser
 {
-    public class CachingCollection<T> : AbstractCachingCollection<T>
+    public class CachingCollection<T>(ParsedEvtcLog log, int initiaPrimaryCapacity, int initialSecondaryCapacity) : AbstractCachingCollection<T>(log)
     {
-
-        private readonly Dictionary<long, Dictionary<long, T>> _cache = new();
-        public CachingCollection(ParsedEvtcLog log) : base(log)
-        {
-        }
+		readonly int _initialSecondaryCap = initialSecondaryCapacity;
+        private readonly Dictionary<long, Dictionary<long, T>> _cache = new(initiaPrimaryCapacity);
 
         public bool TryGetValue(long start, long end, [NotNullWhen(true)] out T? value)
         {
@@ -31,7 +28,7 @@ namespace GW2EIEvtcParser
 
             if (!_cache.TryGetValue(start, out Dictionary<long, T> subCache))
             {
-                _cache[start] = new Dictionary<long, T>();
+                _cache[start] = new Dictionary<long, T>(_initialSecondaryCap);
                 subCache = _cache[start];
             }
             subCache[end] = value;

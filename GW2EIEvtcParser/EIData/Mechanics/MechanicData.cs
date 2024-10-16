@@ -109,10 +109,10 @@ namespace GW2EIEvtcParser.EIData
                 return;
                 #nullable restore
             }
-            _presentOnFriendliesMechanics = new CachingCollection<HashSet<Mechanic>>(log);
-            _presentOnEnemyMechanics = new CachingCollection<HashSet<Mechanic>>(log);
-            _presentMechanics = new CachingCollection<HashSet<Mechanic>>(log);
-            _enemyList = new CachingCollection<List<AbstractSingleActor>>(log);
+            _presentOnFriendliesMechanics = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
+            _presentOnEnemyMechanics      = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
+            _presentMechanics             = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
+            _enemyList                    = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
             ComputeMechanics(log);
             foreach (var (mechanic, events) in _mechanicLogs)
             {

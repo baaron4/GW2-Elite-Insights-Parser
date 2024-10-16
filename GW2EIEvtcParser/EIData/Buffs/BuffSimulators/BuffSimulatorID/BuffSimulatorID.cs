@@ -40,7 +40,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             }
         }
 
-        protected List<BuffStackItemID> BuffStack { get; set; } = new List<BuffStackItemID>();
+        protected readonly List<BuffStackItemID> BuffStack = new();
 
         // Constructor
         protected BuffSimulatorID(ParsedEvtcLog log, Buff buff) : base(log, buff)
@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void Extend(long extension, long oldValue, AgentItem src, long time, uint stackID)
         {
-            BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException("Extend has failed");
+            BuffStackItem toExtend = BuffStack.FirstOrDefault(x => x.StackID == stackID) ?? throw new EIBuffSimulatorIDException($"Extend has failed: Could not find stack id {stackID}.");
             toExtend.Extend(extension, src);
         }
 

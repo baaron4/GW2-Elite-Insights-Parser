@@ -54,16 +54,18 @@ namespace GW2EIEvtcParser.EIData
         }
     }
 
-    public class BuffDistribution
+    public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCapacity)
     {
-        private readonly Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>> _distribution = new Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>>();
+        readonly int _initialSecondaryCapacity = initialSecondaryCapacity;
+
+        private readonly Dictionary<long, Dictionary<AgentItem, BuffDistributionItem>> _distribution = new(initialPrimaryCapacity);
         public ICollection<long> BuffIDs => _distribution.Keys;
 
         internal Dictionary<AgentItem, BuffDistributionItem> GetDistrib(long buffID)
         {
             if (!_distribution.TryGetValue(buffID, out Dictionary<AgentItem, BuffDistributionItem> distrib))
             {
-                distrib = new Dictionary<AgentItem, BuffDistributionItem>();
+                distrib = new Dictionary<AgentItem, BuffDistributionItem>(_initialSecondaryCapacity);
                 _distribution.Add(buffID, distrib);
             }
             return distrib;

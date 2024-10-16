@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override void OverrideEnd(long end)
         {
-            Stacks.First().OverrideEnd(end);
-            Duration = Stacks.First().Duration;
+            Stacks[0].OverrideEnd(end);
+            Duration = Stacks[0].Duration;
         }
 
         public override int GetActiveStacks()
@@ -22,15 +22,11 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         }
         public override int GetActiveStacks(AbstractSingleActor actor)
         {
-            if (GetSources().First() == actor.AgentItem)
-            {
-                return 1;
-            }
-            return 0;
+            return (GetSources().First() == actor.AgentItem) ? 1 : 0;
         }
-        public override IReadOnlyList<AgentItem> GetActiveSources()
+        public override IEnumerable<AgentItem> GetActiveSources()
         {
-            return new List<AgentItem>() { GetSources().First() };
+            return GetSources().Take(1);
         }
 
         public override long GetActualDuration()

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators
@@ -9,16 +8,16 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
         public long Start { get; private set; }
         public long Duration { get; private set; }
         public AgentItem Src { get; private set; }
-        public AgentItem SeedSrc { get; }
+        public readonly AgentItem SeedSrc;
         public bool IsExtension { get; private set; }
-        public long StackID { get; } = 0;
+        public readonly long StackID;
 
-        public long TotalDuration
+        public long TotalDuration //TODO(Rennorb) @perf
         {
             get
             {
                 long res = Duration;
-                foreach ((AgentItem src, long value) in Extensions)
+                foreach ((_, long value) in Extensions)
                 {
                     res += value;
                 }
@@ -26,7 +25,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             }
         }
 
-        public List<(AgentItem src, long value)> Extensions { get; } = new List<(AgentItem src, long value)>();
+        public readonly List<(AgentItem src, long value)> Extensions = new();
 
         public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension, long stackID)
         {
@@ -54,10 +53,8 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             Duration -= durationShift;
             if (Duration == 0 && Extensions.Count != 0)
             {
-                (AgentItem src, long value) = Extensions.First();
+                (this.Src, this.Duration) = Extensions[0];
                 Extensions.RemoveAt(0);
-                Src = src;
-                Duration = value;
                 IsExtension = true;
             }
         }

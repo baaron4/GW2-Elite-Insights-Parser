@@ -3,16 +3,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GW2EIEvtcParser
 {
-    public class CachingCollectionCustom<Q, T> : AbstractCachingCollection<T>
+    public class CachingCollectionCustom<Q, T>(ParsedEvtcLog log, Q nullValue, int initialPrimaryCapacity, int initialSecondaryCapacity, int initialTertiaryCapacity) 
+        : AbstractCachingCollection<T>(log)
     {
-        private readonly Q _nullValue;
+        private readonly int _initialSecondaryCapacity = initialSecondaryCapacity;
+        private readonly int _initialTertiaryCapacity = initialTertiaryCapacity;
+        private readonly Q _nullValue = nullValue;
 
-        private readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new();
-
-        public CachingCollectionCustom(ParsedEvtcLog log, Q nullValue) : base(log)
-        {
-            _nullValue = nullValue;
-        }
+        private readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new(initialPrimaryCapacity);
 
         public bool TryGetValue(long start, long end, Q? q, [NotNullWhen(true)] out T? value)
         {
@@ -39,13 +37,13 @@ namespace GW2EIEvtcParser
 
             if (!_cache.TryGetValue(start, out Dictionary<long, Dictionary<Q, T>> subCache))
             {
-                _cache[start] = new Dictionary<long, Dictionary<Q, T>>();
+                _cache[start] = new Dictionary<long, Dictionary<Q, T>>(_initialSecondaryCapacity);
                 subCache = _cache[start];
             }
 
             if (!subCache.TryGetValue(end, out Dictionary<Q, T> subSubCache))
             {
-                subCache[end] = new Dictionary<Q, T>();
+                subCache[end] = new Dictionary<Q, T>(_initialTertiaryCapacity);
                 subSubCache = subCache[end];
             }
             subSubCache[q] = value;

@@ -143,36 +143,30 @@ namespace GW2EIEvtcParser.EIData
 
         internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
         {
-            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
+            BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
             int capacity = Capacity;
             if (buffInfoEvent != null && buffInfoEvent.MaxStacks != capacity)
             {
                 capacity = buffInfoEvent.MaxStacks;
             }
+
             if (!log.CombatData.UseBuffInstanceSimulator || forceNoId)
             {
 
-                switch (Type)
+                return Type switch
                 {
-                    case BuffType.Intensity:
-                        return new BuffSimulatorIntensity(log, this, capacity);
-                    case BuffType.Duration:
-                        return new BuffSimulatorDuration(log, this, capacity);
-                    case BuffType.Unknown:
-                    default:
-                        throw new InvalidDataException("Buffs can not be stackless");
-                }
+                    BuffType.Intensity => new BuffSimulatorIntensity(log, this, capacity),
+                    BuffType.Duration => new BuffSimulatorDuration(log, this, capacity),
+                    _ => throw new InvalidDataException("Buffs can not be stackless"),
+                };
             }
-            switch (Type)
+
+            return Type switch
             {
-                case BuffType.Intensity:
-                    return new BuffSimulatorIDIntensity(log, this, capacity);
-                case BuffType.Duration:
-                    return new BuffSimulatorIDDuration(log, this);
-                case BuffType.Unknown:
-                default:
-                    throw new InvalidDataException("Buffs can not be stackless");
-            }
+                BuffType.Intensity => new BuffSimulatorIDIntensity(log, this, capacity),
+                BuffType.Duration => new BuffSimulatorIDDuration(log, this),
+                _ => throw new InvalidDataException("Buffs can not be stackless"),
+            };
         }
 
         internal static BuffSourceFinder GetBuffSourceFinder(CombatData combatData, HashSet<long> boonIds)

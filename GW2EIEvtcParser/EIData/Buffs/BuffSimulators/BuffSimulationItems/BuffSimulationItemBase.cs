@@ -7,22 +7,18 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 {
     internal class BuffSimulationItemBase : BuffSimulationItem
     {
-        private readonly AgentItem _src;
-        private readonly AgentItem _seedSrc;
-        private readonly bool _isExtension;
-        private long _totalDuration { get; }
+        internal readonly BuffStackItem _buffStackItem;
+        internal readonly long _totalDuration;
 
         protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Duration)
         {
-            _src = buffStackItem.Src;
-            _seedSrc = buffStackItem.SeedSrc;
-            _isExtension = buffStackItem.IsExtension;
+            _buffStackItem = buffStackItem;
             _totalDuration = buffStackItem.TotalDuration;
         }
 
         public override void OverrideEnd(long end)
         {
-            Duration = Math.Min(Math.Max(end - Start, 0), Duration);
+            Duration = Math.Clamp(end - Start, 0, Duration);
         }
 
         public override int GetActiveStacks()
@@ -42,16 +38,12 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
 
         public override int GetStacks(AbstractSingleActor actor)
         {
-            if (GetActiveSources().Any(x => x == actor.AgentItem))
-            {
-                return 1;
-            }
-            return 0;
+            return GetActiveSources().Any(x => x == actor.AgentItem) ? 1 : 0;
         }
 
-        public override IReadOnlyList<long> GetActualDurationPerStack()
+        public override IEnumerable<long> GetActualDurationPerStack()
         {
-            return new List<long>() { GetActualDuration() };
+            return [ GetActualDuration() ];
         }
 
         public override long GetActualDuration()
@@ -59,12 +51,12 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             return _totalDuration;
         }
 
-        public override IReadOnlyList<AgentItem> GetSources()
+        public override IEnumerable<AgentItem> GetSources()
         {
-            return new List<AgentItem>() { _src };
+            return [ _buffStackItem.Src ];
         }
 
-        public override IReadOnlyList<AgentItem> GetActiveSources()
+        public override IEnumerable<AgentItem> GetActiveSources()
         {
             return GetSources();
         }
@@ -76,9 +68,10 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             {
                 return;
             }
+
             Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
-            AgentItem agent = _src;
-            AgentItem seedAgent = _seedSrc;
+            AgentItem agent = _buffStackItem.Src;
+            AgentItem seedAgent = _buffStackItem.SeedSrc;
             if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
             {
                 toModify.IncrementValue(cDur);
@@ -89,7 +82,8 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                     cDur,
                     0, 0, 0, 0, 0));
             }
-            if (_isExtension)
+
+            if (_buffStackItem.IsExtension)
             {
                 if (distrib.TryGetValue(agent, out toModify))
                 {
@@ -102,6 +96,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                         0, 0, 0, cDur, 0));
                 }
             }
+
             if (agent != seedAgent)
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))
@@ -115,6 +110,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                         0, 0, 0, 0, cDur));
                 }
             }
+
             if (agent == ParserHelper._unknownAgent)
             {
                 if (distrib.TryGetValue(seedAgent, out toModify))

@@ -27,8 +27,7 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollectionCustom<BuffEnum, (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes)>? _buffVolumes;
         private CachingCollection<(Dictionary<long, FinalBuffsDictionary> Rates, Dictionary<long, FinalBuffsDictionary> ActiveRates)>? _buffsDictionary;
         private CachingCollection<(Dictionary<long, FinalBuffVolumesDictionary> Rates, Dictionary<long, FinalBuffVolumesDictionary> ActiveRates)>? _buffVolumesDictionary;
-        //TODO(Rennorb) @perf
-        private readonly Dictionary<long, AbstractBuffSimulator> _buffSimulators = new();
+        private Dictionary<long, AbstractBuffSimulator>? _buffSimulators;
 
         public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
         {
@@ -39,31 +38,35 @@ namespace GW2EIEvtcParser.EIData
 
             if (!_buffDistribution.TryGetValue(start, end, out var value))
             {
-                value = ComputeBuffDistribution(start, end);
+                value = ComputeBuffDistribution(_buffSimulators!, start, end);
                 _buffDistribution.Set(start, end, value);
             }
+
             return value;
         }
 
-        private BuffDistribution ComputeBuffDistribution(long start, long end)
+        private static BuffDistribution ComputeBuffDistribution(Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
         {
-            //TODO(Rennorb) @perf
-            var res = new BuffDistribution();
-            foreach (var (buff, simulator) in _buffSimulators)
+            var res = new BuffDistribution(buffSimulators.Count, 8); //TODO(Rennorb) @perf: find capacity dependencies
+
+            foreach (var (buff, simulator) in buffSimulators)
             {
                 foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                 {
                     simul.SetBuffDistributionItem(res, start, end, buff);
                 }
+
                 foreach (BuffSimulationItemWasted simul in simulator.WasteSimulationResult)
                 {
                     simul.SetBuffDistributionItem(res, start, end, buff);
                 }
+
                 foreach (BuffSimulationItemOverstack simul in simulator.OverstackSimulationResult)
                 {
                     simul.SetBuffDistributionItem(res, start, end, buff);
                 }
             }
+
             return res;
         }
 
@@ -76,26 +79,24 @@ namespace GW2EIEvtcParser.EIData
 
             if (!_buffPresence.TryGetValue(start, end, out var value))
             {
-                value = ComputeBuffPresence(start, end);
+                value = ComputeBuffPresence(_buffSimulators, start, end);
                 _buffPresence.Set(start, end, value);
             }
             return value;
         }
 
-        private Dictionary<long, long> ComputeBuffPresence(long start, long end)
+        private Dictionary<long, long> ComputeBuffPresence(Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
         {
-            //TODO(Rennorb) @perf
-            var buffPresence = new Dictionary<long, long>(_buffSimulators.Count);
-            foreach (KeyValuePair<long, AbstractBuffSimulator> pair in _buffSimulators)
+            var buffPresence = new Dictionary<long, long>(buffSimulators.Count);
+            foreach (KeyValuePair<long, AbstractBuffSimulator> pair in buffSimulators)
             {
                 foreach (BuffSimulationItem simul in pair.Value.GenerationSimulation)
                 {
                     long value = simul.GetClampedDuration(start, end);
-                    if (value == 0)
+                    if (value != 0)
                     {
-                        continue;
+                        buffPresence.IncrementValue(pair.Key, value);
                     }
-                    IncreaseBy(buffPresence, pair.Key, value);
                 }
             }
             return buffPresence;
@@ -119,11 +120,12 @@ namespace GW2EIEvtcParser.EIData
                 ComputeBuffGraphs(log);
             }
 
-            _buffGraphsPerAgent ??= new Dictionary<AgentItem, Dictionary<long, BuffsGraphModel>>();
+            _buffGraphsPerAgent ??= new(8); //TODO(Rennorb) @perf: find capacity dependencies
             if (!_buffGraphsPerAgent.ContainsKey(agent))
             {
                 SetBuffGraphs(log, by);
             }
+
             return _buffGraphsPerAgent[agent];
         }
 
@@ -207,7 +209,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            _buffStats ??= new(log, BuffEnum.Self);
+            _buffStats ??= new(log, BuffEnum.Self, 8, 2, 4);  //TODO(Rennorb) @perf: find capacity dependenceis
             if (!_buffStats.TryGetValue(start, end, type, out var pair))
             {
                 pair = this.ComputeBuffs(log, start, end, type);
@@ -218,7 +220,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalActorBuffs> GetActiveBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            _buffStats ??= new(log, BuffEnum.Self);
+            _buffStats ??= new(log, BuffEnum.Self, 8, 2, 4); //TODO(Rennorb) @perf: find capacity dependenceis
             if (!_buffStats.TryGetValue(start, end, type, out var value))
             {
                 value = this.ComputeBuffs(log, start, end, type);
@@ -229,7 +231,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            _buffVolumes ??= new(log, BuffEnum.Self);
+            _buffVolumes ??= new(log, BuffEnum.Self, 4, 2, 4); //TODO(Rennorb) @perf: find capacity dependenceis
             if (!_buffVolumes.TryGetValue(start, end, type, out var value))
             {
                 value = this.ComputeBuffVolumes(log, start, end, type);
@@ -240,7 +242,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetActiveBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
         {
-            _buffVolumes ??= new(log, BuffEnum.Self);
+            _buffVolumes ??= new(log, BuffEnum.Self, 4, 2, 4);  //TODO(Rennorb) @perf: find capacity dependenceis
             if (!_buffVolumes.TryGetValue(start, end, type, out var value))
             {
                 value = this.ComputeBuffVolumes(log, start, end, type);
@@ -296,6 +298,7 @@ namespace GW2EIEvtcParser.EIData
         [MemberNotNull(nameof(_buffGraphs))]
         [MemberNotNull(nameof(_buffDistribution))]
         [MemberNotNull(nameof(_buffPresence))]
+        [MemberNotNull(nameof(_buffSimulators))]
         internal void ComputeBuffGraphs(ParsedEvtcLog log)
         {
             if (_buffMap == null)
@@ -303,7 +306,8 @@ namespace GW2EIEvtcParser.EIData
                 ComputeBuffMap(log);
             }
 
-            _buffGraphs = new Dictionary<long, BuffsGraphModel>();
+            var trackedBuffs = GetTrackedBuffs(log);
+            _buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count + 5);
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
             var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
             var numberOfClonesGraph = ProfHelper.CanSummonClones(this.Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
@@ -313,9 +317,11 @@ namespace GW2EIEvtcParser.EIData
             var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
 
             // Init status
-            _buffDistribution = new CachingCollection<BuffDistribution>(log);
-            _buffPresence = new CachingCollection<Dictionary<long, long>>(log);
-            foreach (Buff buff in GetTrackedBuffs(log))
+            _buffDistribution = new(log, 8, 2); //TODO(Rennorb) @perf: find capacity dependencies
+            _buffPresence     = new(log, 8, 2); //TODO(Rennorb) @perf: find capacity dependencies
+            _buffSimulators   = new(trackedBuffs.Count * 5);
+
+            foreach (Buff buff in trackedBuffs)
             {
                 long buffID = buff.ID;
                 if (_buffMap.TryGetValue(buffID, out var buffEvents) && buffEvents.Count != 0 && !_buffGraphs.ContainsKey(buffID))
@@ -419,7 +425,8 @@ namespace GW2EIEvtcParser.EIData
 
         private void SetBuffGraphs(ParsedEvtcLog log, AbstractSingleActor by)
         {
-            var buffGraphs = new Dictionary<long, BuffsGraphModel>();
+            var trackedBuffs = GetTrackedBuffs(log);
+            var buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count);
             _buffGraphsPerAgent[by.AgentItem] = buffGraphs;
             BuffDictionary buffMap = _buffMap;
             var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
@@ -428,14 +435,14 @@ namespace GW2EIEvtcParser.EIData
             var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
             var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
             //
-            foreach (Buff buff in GetTrackedBuffs(log))
+            foreach (Buff buff in trackedBuffs)
             {
                 long buffID = buff.ID;
                 if (_buffSimulators.TryGetValue(buff.ID, out AbstractBuffSimulator simulator) && !buffGraphs.ContainsKey(buffID))
                 {
                     bool updateBoonPresence = boonIds.Contains(buffID);
                     bool updateCondiPresence = condiIds.Contains(buffID);
-                    var graphSegments = new List<Segment>();
+                    var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count + 2);
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {
                         // Graph
@@ -473,7 +480,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
-            _buffsDictionary ??= new(log);
+            _buffsDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
             if (!_buffsDictionary.TryGetValue(start, end, out var value))
             {
                 value = ComputeBuffsDictionaries(log, start, end);
@@ -484,7 +491,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
         {
-            _buffsDictionary ??= new(log);
+            _buffsDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
             if (!_buffsDictionary.TryGetValue(start, end, out var value))
             {
                 value = ComputeBuffsDictionaries(log, start, end);
@@ -495,7 +502,7 @@ namespace GW2EIEvtcParser.EIData
 
         public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
         {
-            _buffVolumesDictionary ??= new(log);
+            _buffVolumesDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
             if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
             {
                 value = ComputeBuffVolumesDictionaries(log, start, end);
@@ -505,7 +512,7 @@ namespace GW2EIEvtcParser.EIData
         }
         public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
         {
-            _buffVolumesDictionary ??= new(log);
+            _buffVolumesDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
             if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
             {
                 value = ComputeBuffVolumesDictionaries(log, start, end);
@@ -588,18 +595,6 @@ namespace GW2EIEvtcParser.EIData
             }
             _consumeList.Sort((x, y) => x.Time.CompareTo(y.Time));
 
-        }
-
-        protected static void IncreaseBy<T>(Dictionary<T, long> dictionary, T key, long value)
-        {
-            if (dictionary.TryGetValue(key, out long existing))
-            {
-                dictionary[key] = existing + value;
-            }
-            else
-            {
-                dictionary.Add(key, value);
-            }
         }
 
     }

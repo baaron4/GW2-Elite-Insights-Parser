@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser.Extensions
         private readonly Dictionary<AgentItem, List<EXTAbstractHealingEvent>> _healReceivedData;
         private readonly Dictionary<long, List<EXTAbstractHealingEvent>> _healDataById;
 
-        private readonly Dictionary<long, EXTHealingType> EncounteredIDs = new Dictionary<long, EXTHealingType>();
+        private readonly Dictionary<long, EXTHealingType> EncounteredIDs = new(); //TODO(Rennorb) @perf
 
         private readonly ReadonlyHashSet<long> _hybridHealIDs;
 
@@ -26,28 +26,16 @@ namespace GW2EIEvtcParser.Extensions
 
         public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(AgentItem key)
         {
-            if (_healData.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
-            {
-                return res;
-            }
-            return new List<EXTAbstractHealingEvent>();
+            return _healData.GetValueOrEmpty(key);
         }
         public IReadOnlyList<EXTAbstractHealingEvent> GetHealReceivedData(AgentItem key)
         {
-            if (_healReceivedData.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
-            {
-                return res;
-            }
-            return new List<EXTAbstractHealingEvent>();
+            return _healReceivedData.GetValueOrEmpty(key);
         }
 
         public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(long key)
         {
-            if (_healDataById.TryGetValue(key, out List<EXTAbstractHealingEvent> res))
-            {
-                return res;
-            }
-            return new List<EXTAbstractHealingEvent>();
+            return _healDataById.GetValueOrEmpty(key);
         }
 
         public EXTHealingType GetHealingType(long id, ParsedEvtcLog log)

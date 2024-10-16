@@ -158,10 +158,11 @@ namespace GW2EIEvtcParser
                         foreach (AbstractSingleActor actor in friendliesAndTargetsAndMobs)
                         {
                             // that part can't be // due to buff extensions
+                            _t.SetAverageTimeStart();
                             actor.ComputeBuffMap(log);
-                            _t.Log("Buff");
+                            _t.TrackAverageTime("Buff");
                             actor.GetMinions(log);
-                            _t.Log("Minion");
+                            _t.TrackAverageTime("Minion");
                         }
                         _t.Log("friendliesAndTargetsAndMobs GetTrackedBuffs GetMinions");
                         Parallel.ForEach(friendliesAndTargets, actor => actor.GetStatus(log));
@@ -172,7 +173,7 @@ namespace GW2EIEvtcParser
                             Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.GetCombatReplayPolledPositions(log));
                         }*/
                         Parallel.ForEach(friendliesAndTargetsAndMobs, actor => actor.ComputeBuffGraphs(log));
-                        _t.Log("friendliesAndTargetsAndMobs GetBuffGraphs");
+                        _t.Log("friendliesAndTargetsAndMobs ComputeBuffGraphs");
                         Parallel.ForEach(friendliesAndTargets, actor =>
                         {
                             foreach (PhaseData phase in phases)
