@@ -12,7 +12,7 @@ using Tracing;
 namespace GW2EIBuilders
 {
     // compile-time generated serialization logic
-    [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Serialization, IncludeFields = true, WriteIndented = false)]
+    [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Serialization, IncludeFields = true, WriteIndented = false, PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
     [JsonSerializable(typeof(LogDataDto))]
     partial class LogDataDtoSerializerContext : JsonSerializerContext {  }
 
