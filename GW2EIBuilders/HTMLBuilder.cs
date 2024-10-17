@@ -4,7 +4,7 @@ using System.IO.Compression;
 using System.Text;
 using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIBuilders
@@ -77,15 +77,15 @@ namespace GW2EIBuilders
             _compressJson = settings.CompressJson;
         }
 
-        private (string, string) BuildAssetPaths(string path)
+        private (string?, string?) BuildAssetPaths(string path)
         {
-            string cdn = null;
-            string external = null;
+            string? cdn = null;
+            string? external = null;
             if (_externalScripts && !string.IsNullOrWhiteSpace(path))
             {
                 if (!string.IsNullOrWhiteSpace(_externalScriptsCdn))
                 {
-                    cdn = (_externalScriptsCdn.EndsWith("/") && _externalScriptsCdn.Length > 1 ? _externalScriptsCdn.Substring(0, _externalScriptsCdn.Length - 1) : _externalScriptsCdn);
+                    cdn = _externalScriptsCdn.EndsWith('/') ? _externalScriptsCdn[..^1] : _externalScriptsCdn;
                 }
                 external = path;
                 // Setting: External Scripts Path
@@ -143,6 +143,12 @@ namespace GW2EIBuilders
             return (external, cdn);
         }
 
+        static readonly JsonSerializerOptions SerializerOption = new()
+        {
+            IncludeFields = true,
+            WriteIndented = false,
+        };
+
         /// <summary>
         /// Create the damage taken distribution table for a given player
         /// </summary>
@@ -151,25 +157,25 @@ namespace GW2EIBuilders
 
         public void CreateHTML(StreamWriter sw, string path)
         {
-            string html = Properties.Resources.tmplMain;
-            (string externalPath, string cdnPath) = BuildAssetPaths(path);
+            StringBuilder html = new(Properties.Resources.tmplMain);
+            var (externalPath, cdnPath) = BuildAssetPaths(path);
             _log.UpdateProgressWithCancellationCheck("HTML: replacing global variables");
-            html = html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
+            html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
 
             _log.UpdateProgressWithCancellationCheck("HTML: building CSS");
-            html = html.Replace("<!--${Css}-->", BuildCss(externalPath, cdnPath));
+            html.Replace("<!--${Css}-->", BuildCss(externalPath, cdnPath));
             _log.UpdateProgressWithCancellationCheck("HTML: building JS");
-            html = html.Replace("<!--${Js}-->", BuildEIJs(externalPath, cdnPath));
+            html.Replace("<!--${Js}-->", BuildEIJs(externalPath, cdnPath));
             _log.UpdateProgressWithCancellationCheck("HTML: building Combat Replay JS");
-            html = html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(externalPath, cdnPath));
-            html = html.Replace("<!--${HealingExtensionJS}-->", BuildHealingExtensionJS(externalPath, cdnPath));
+            html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(externalPath, cdnPath));
+            html.Replace("<!--${HealingExtensionJS}-->", BuildHealingExtensionJS(externalPath, cdnPath));
 
-            string json = ToJson(LogDataDto.BuildLogData(_log, _cr, _light, _parserVersion, _uploadLink));
+            string json = JsonSerializer.Serialize(LogDataDto.BuildLogData(_log, _cr, _light, _parserVersion, _uploadLink), SerializerOption);
 
-            html = html.Replace("'${logDataJson}'", _compressJson ? ("'" + CompressAndBase64(json) + "'") : json);
+            html.Replace("'${logDataJson}'", _compressJson ? ("'" + CompressAndBase64(json) + "'") : json);
             // Compression stuff
-            html = html.Replace("<!--${CompressionRequire}-->", _compressJson ? "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js\"></script>" : "");
-            html = html.Replace("<!--${CompressionUtils}-->", _compressJson ? Properties.Resources.compressionUtils : "");
+            html.Replace("<!--${CompressionRequire}-->", _compressJson ? "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js\"></script>" : "");
+            html.Replace("<!--${CompressionUtils}-->", _compressJson ? Properties.Resources.compressionUtils : "");
 
             sw.Write(html);
             return;
@@ -292,17 +298,6 @@ namespace GW2EIBuilders
             {
                 return "<script>\r\n" + scriptContent + "\r\n</script>";
             }
-        }
-
-        private static string ToJson(object value)
-        {
-            var settings = new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = RawFormatBuilder.DefaultJsonContractResolver,
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
-            };
-            return JsonConvert.SerializeObject(value, settings);
         }
     }
 }

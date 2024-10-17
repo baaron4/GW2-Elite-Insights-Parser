@@ -1,40 +1,34 @@
 ﻿using System.Collections.Generic;
 
 
-namespace GW2EIJSON
+namespace GW2EIJSON;
+
+/// <summary>
+/// Class regrouping minion related Barrier statistics
+/// </summary>
+public class EXTJsonMinionsBarrierStats
 {
     /// <summary>
-    /// Class regrouping minion related Barrier statistics
+    /// Total barrier done by minions \n
+    /// Length == # of phases
     /// </summary>
-    public class EXTJsonMinionsBarrierStats(
-        IReadOnlyList<int> totalBarrier,
-        IReadOnlyList<IReadOnlyList<int>> totalAlliedBarrier,
-        IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>> totalBarrierDist,
-        IReadOnlyList<IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>>> alliedBarrierDist
-    ) {
+    public IReadOnlyList<int> TotalBarrier;
+    /// <summary>
+    /// Total Allied Barrier done by minions \n
+    /// Length == # of players and the length of each sub array is equal to # of phases
+    /// </summary>
+    public IReadOnlyList<IReadOnlyList<int>> TotalAlliedBarrier;
+    /// <summary>
+    /// Total Outgoing Barrier distribution array \n
+    /// Length == # of phases
+    /// </summary>
+    /// <seealso cref="EXTJsonBarrierDist"/>
+    public IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>> TotalBarrierDist;
 
-        /// <summary>
-        /// Total barrier done by minions \n
-        /// Length == # of phases
-        /// </summary>
-        public readonly IReadOnlyList<int> TotalBarrier = totalBarrier;
-        /// <summary>
-        /// Total Allied Barrier done by minions \n
-        /// Length == # of players and the length of each sub array is equal to # of phases
-        /// </summary>
-        public readonly IReadOnlyList<IReadOnlyList<int>> TotalAlliedBarrier = totalAlliedBarrier;
-        /// <summary>
-        /// Total Outgoing Barrier distribution array \n
-        /// Length == # of phases
-        /// </summary>
-        /// <seealso cref="EXTJsonBarrierDist"/>
-        public readonly IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>> TotalBarrierDist = totalBarrierDist;
-
-        /// <summary>
-        /// Total Outgoing Allied Barrier distribution array \n
-        /// Length == # of players and the length of each sub array is equal to # of phases
-        /// </summary>
-        /// <seealso cref="EXTJsonBarrierDist"/>
-        public readonly IReadOnlyList<IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>>> AlliedBarrierDist = alliedBarrierDist;
-    }
+    /// <summary>
+    /// Total Outgoing Allied Barrier distribution array \n
+    /// Length == # of players and the length of each sub array is equal to # of phases
+    /// </summary>
+    /// <seealso cref="EXTJsonBarrierDist"/>
+    public IReadOnlyList<IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>>> AlliedBarrierDist;
 }

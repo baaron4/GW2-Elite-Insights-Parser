@@ -1,59 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using GW2EIGW2API.GW2API;
 
-namespace GW2EIGW2API
+namespace GW2EIGW2API;
+
+internal class GW2SkillAPIController
 {
-    internal class GW2SkillAPIController
+    private const string APIPath = "/v2/skills";
+
+    private GW2APIUtilities.APIItems<GW2APISkill> _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>();
+    private static List<GW2APISkill> GetGW2APISkills()
     {
-        private const string APIPath = "/v2/skills";
+        Console.WriteLine("Getting skills from API");
 
-        private GW2APIUtilities.APIItems<GW2APISkill> _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>();
-        private static List<GW2APISkill> GetGW2APISkills()
+        return GW2APIUtilities.GetGW2APIItems<GW2APISkill>(APIPath);
+    }
+    internal GW2APIUtilities.APIItems<GW2APISkill> GetAPISkills(string cachePath)
+    {
+        if (_apiSkills.Items.Count == 0)
         {
-            Console.WriteLine("Getting skills from API");
-
-            return GW2APIUtilities.GetGW2APIItems<GW2APISkill>(APIPath);
+            SetAPISkills(cachePath);
         }
-        internal GW2APIUtilities.APIItems<GW2APISkill> GetAPISkills(string cachePath)
+        return _apiSkills;
+    }
+
+    internal void WriteAPISkillsToFile(string filePath)
+    {
+        FileStream fcreate = File.Open(filePath, FileMode.Create);
+        fcreate.Close();
+
+        List<GW2APISkill> skills = GetGW2APISkills();
+        using(var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
         {
-            if (_apiSkills.Items.Count == 0)
-            {
-                SetAPISkills(cachePath);
-            }
-            return _apiSkills;
+            JsonSerializer.Serialize(writer, skills, GW2APIUtilities.SerializerSettings);
         }
 
-        internal void WriteAPISkillsToFile(string filePath)
+        // refresh API cache
+        _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(skills);
+    }
+    private void SetAPISkills(string filePath)
+    {
+        var fi = new FileInfo(filePath);
+        if (fi.Exists && fi.Length != 0)
         {
-            FileStream fcreate = File.Open(filePath, FileMode.Create);
-            fcreate.Close();
-
-            List<GW2APISkill> skills = GetGW2APISkills();
-            var writer = new StreamWriter(filePath);
-            GW2APIUtilities.Serializer.Serialize(writer, skills);
-            writer.Close();
-
-            // refresh API cache
-            _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(skills);
+            Console.WriteLine("Reading Skilllist");
+            using (var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var skillList = JsonSerializer.Deserialize<List<GW2APISkill>>(reader, GW2APIUtilities.DeserializerSettings);
+                _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(skillList);
+            }
         }
-        private void SetAPISkills(string filePath)
+        else
         {
-            if (File.Exists(filePath) && new FileInfo(filePath).Length != 0)
-            {
-                Console.WriteLine("Reading Skilllist");
-                using (var reader = new StreamReader(filePath))
-                {
-                    var skillList = (List<GW2APISkill>)GW2APIUtilities.Deserializer.Deserialize(reader, typeof(List<GW2APISkill>));
-                    _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(skillList);
-                    reader.Close();
-                }
-            }
-            else
-            {
-                _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(GetGW2APISkills());
-            }
+            _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>(GetGW2APISkills());
         }
     }
 }

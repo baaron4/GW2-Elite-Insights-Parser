@@ -59,11 +59,9 @@ namespace GW2EIParser.tst
         public static string JsonString(ParsedEvtcLog log)
         {
             var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
             var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
 
-            builder.CreateJSON(sw, false);
-            sw.Close();
+            builder.CreateJSON(ms, false);
 
             return Encoding.UTF8.GetString(ms.ToArray());
         }

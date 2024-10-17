@@ -5,20 +5,14 @@ using System.Xml;
 using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
 using GW2EIJSON;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using System.Xml.Serialization;
 
 namespace GW2EIBuilders
 {
     public class RawFormatBuilder
     {
-        internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
-        private JsonLog _jsonLog { get; }
-
-        //
+        private JsonLog _jsonLog;
 
         public RawFormatBuilder(ParsedEvtcLog log, RawFormatSettings settings, Version parserVersion, UploadResults uploadResults)
         {
@@ -32,98 +26,49 @@ namespace GW2EIBuilders
         /// <summary>
         /// Returns a copy of JsonLog object that will be used by the builder.
         /// </summary>
-        /// <returns></returns>
         public JsonLog GetJson()
         {
-            var sw = new StringWriter();
-            var serializer = new JsonSerializer
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
-            };
-            var writer = new JsonTextWriter(sw)
-            {
-                Formatting = Newtonsoft.Json.Formatting.None
-            };
-            serializer.Serialize(writer, _jsonLog);
-            writer.Close();
-            JsonLog log = JsonConvert.DeserializeObject<JsonLog>(sw.ToString(), new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-            return log;
+            //TODO(Rennorb) @perf: What in the javascript is this...
+            return JsonSerializer.Deserialize<JsonLog>(JsonSerializer.Serialize(_jsonLog, SerializerSettings.Default)!, SerializerSettings.Default)!;
         }
 
         /// <summary>
-        /// Creates a json file based on the original JsonLog of the RawFormat builder
+        /// Writes the original JsonLog of the RawFormat builder
         /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="indent"></param>
-        public void CreateJSON(StreamWriter sw, bool indent)
+        public void CreateJSON(Stream stream, bool indent)
         {
-            CreateJSON(_jsonLog, sw, indent);
+            CreateJSON(_jsonLog, stream, indent);
         }
 
         /// <summary>
-        /// Creates a json file based on the given JsonLog
+        /// Writes the given JsonLog to the stream as json formatted text.
         /// </summary>
-        /// <param name="jsonLog"></param>
-        /// <param name="sw"></param>
-        /// <param name="indent"></param>
-        public static void CreateJSON(JsonLog jsonLog, StreamWriter sw, bool indent)
+        public static void CreateJSON(JsonLog jsonLog, Stream stream, bool indent)
         {
-            var serializer = new JsonSerializer
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = DefaultJsonContractResolver,
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
-            };
-            var writer = new JsonTextWriter(sw)
-            {
-                Formatting = indent ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None
-            };
-            serializer.Serialize(writer, jsonLog);
-            writer.Close();
+            JsonSerializer.Serialize(stream, jsonLog, indent ? SerializerSettings.Indentent : SerializerSettings.Default);
         }
 
         /// <summary>
         /// Creates an xml file based on the original JsonLog of the RawFormat builder
         /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="indent"></param>
         public void CreateXML(StreamWriter sw, bool indent)
         {
             CreateXML(_jsonLog, sw, indent);
         }
 
+
+        static readonly XmlSerializer s_xmlSerializer = new(typeof(JsonLog), new XmlRootAttribute("log"));
+
         /// <summary>
         /// Creates an xml file based on the given JsonLog
         /// </summary>
-        /// <param name="jsonLog"></param>
-        /// <param name="sw"></param>
-        /// <param name="indent"></param>
         public static void CreateXML(JsonLog jsonLog, StreamWriter sw, bool indent)
         {
-            var settings = new JsonSerializerSettings()
+            using var xmlTextWriter = new XmlTextWriter(sw)
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = DefaultJsonContractResolver,
-                StringEscapeHandling = StringEscapeHandling.EscapeHtml
+                Formatting = indent ? Formatting.Indented : Formatting.None
             };
-            var root = new Dictionary<string, JsonLog>()
-            {
-                {"log", jsonLog }
-            };
-            string json = JsonConvert.SerializeObject(root, settings);
-
-            XmlDocument xml = JsonConvert.DeserializeXmlNode(json);
-            var xmlTextWriter = new XmlTextWriter(sw)
-            {
-                Formatting = indent ? System.Xml.Formatting.Indented : System.Xml.Formatting.None
-            };
-
-            xml.WriteTo(xmlTextWriter);
-            xmlTextWriter.Close();
+            s_xmlSerializer.Serialize(xmlTextWriter, jsonLog);
         }
 
     }

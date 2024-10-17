@@ -1,49 +1,48 @@
 ﻿using System;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
+    using Position = (float x, float y, float z, float angle, float opacity, int time);
+
     internal class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
     {
-        private class PositionConverter : JsonConverter
+        private class PositionConverter : JsonConverter<Position[]>
         {
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void Write(Utf8JsonWriter writer, Position[] positions, JsonSerializerOptions serializer)
             {
-                var positions = ((float x, float y, float z, float angle, float opacity, int time)[])value;
                 writer.WriteStartArray();
                 foreach ((float x, float y, float z, float angle, float opacity, int time) in positions)
                 {
                     writer.WriteStartArray();
-                    writer.WriteValue(x);
-                    writer.WriteValue(y);
-                    writer.WriteValue(z);
-                    writer.WriteValue(angle);
-                    writer.WriteValue(opacity);
-                    writer.WriteValue(time);
+                    writer.WriteNumberValue(x);
+                    writer.WriteNumberValue(y);
+                    writer.WriteNumberValue(z);
+                    writer.WriteNumberValue(angle);
+                    writer.WriteNumberValue(opacity);
+                    writer.WriteNumberValue(time);
                     writer.WriteEndArray();
                 }
 
                 writer.WriteEndArray();
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                JsonSerializer serializer)
+            public override Position[] Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions serializer)
             {
                 throw new NotSupportedException();
             }
 
-            public override bool CanRead => false;
-
             public override bool CanConvert(Type objectType)
             {
-                return objectType == typeof((float x, float y, float z, float angle, float opacity, int time));
+                return objectType == typeof(Position);
             }
         }
 
         [JsonConverter(typeof(PositionConverter))]
-        public (float x, float y, float z, float angle, float opacity, int time)[] Positions { get; set; }
+        public Position[] Positions { get; set; }
 
 
         internal MovingPlatformDecorationRenderingDescription(MovingPlatformDecorationRenderingData decoration, CombatReplayMap map, string metadataSignature) : base(decoration, metadataSignature)

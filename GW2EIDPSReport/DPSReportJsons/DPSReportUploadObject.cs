@@ -1,60 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace GW2EIDPSReport.DPSReportJsons
+namespace GW2EIDPSReport.DPSReportJsons;
+
+public class DPSReportUploadObject
 {
-    public class DPSReportUploadObject
+    
+    public string Id;
+    
+    public string Permalink;
+    
+    public string Identifier;
+    
+    public long UploadTime;
+    
+    public long EncounterTime;
+    
+    public string Generator;
+    
+    public int GeneratorId;
+    
+    public int GeneratorVersion;
+    
+    public string Language;
+    
+    public int LanguageId;
+    
+    public string UserToken;
+    
+    public string Error;
+    
+    public DPSReportUploadEncounterObject Encounter;
+    
+    public DPSReportUploadEvtcObject Evtc;
+
+    [JsonIgnore]
+    public Dictionary<string, DPSReportUploadPlayerObject> Players
     {
-        [JsonProperty]
-        public string Id { get; internal set; }
-        [JsonProperty]
-        public string Permalink { get; internal set; }
-        [JsonProperty]
-        public string Identifier { get; internal set; }
-        [JsonProperty]
-        public long UploadTime { get; internal set; }
-        [JsonProperty]
-        public long EncounterTime { get; internal set; }
-        [JsonProperty]
-        public string Generator { get; internal set; }
-        [JsonProperty]
-        public int GeneratorId { get; internal set; }
-        [JsonProperty]
-        public int GeneratorVersion { get; internal set; }
-        [JsonProperty]
-        public string Language { get; internal set; }
-        [JsonProperty]
-        public int LanguageId { get; internal set; }
-        [JsonProperty]
-        public string UserToken { get; internal set; }
-        [JsonProperty]
-        public string Error { get; internal set; }
-        [JsonProperty]
-        public DPSReportUploadEncounterObject Encounter { get; internal set; }
-        [JsonProperty]
-        public DPSReportUploadEvtcObject Evtc { get; internal set; }
-        [JsonIgnore]
-        public Dictionary<string, DPSReportUploadPlayerObject> Players
+        get
         {
-            get
+            var json = PlayersJson.ToString();
+            try
             {
-                var json = PlayersJson.ToString();
-                try
-                {
-                    return JsonConvert.DeserializeObject<Dictionary<string, DPSReportUploadPlayerObject>>(json);
-                }
-                catch
-                {
-                    return new Dictionary<string, DPSReportUploadPlayerObject>();
-                }
+                return JsonSerializer.Deserialize<Dictionary<string, DPSReportUploadPlayerObject>>(json);
+            }
+            catch
+            {
+                return new Dictionary<string, DPSReportUploadPlayerObject>();
             }
         }
-        [JsonProperty(PropertyName = "players")]
-        internal object PlayersJson { get; set; }
-        [JsonProperty]
-        public DPSReportReportObject Report { get; internal set; }
-        [JsonProperty]
-        public string TempApiId { get; internal set; }
     }
+
+    [JsonPropertyName("players")]
+    internal object PlayersJson { get; set; }
+    
+    public DPSReportReportObject Report;
+    
+    public string TempApiId;
 }

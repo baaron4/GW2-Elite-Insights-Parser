@@ -46,7 +46,7 @@ namespace GW2EIBuilders.JsonModels
                 ConversionBasedHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.ConversionBased : false,
                 HybridHealing = log.CombatData.HasEXTHealing ? log.CombatData.EXTHealingCombatData.GetHealingType(buff, log) == HealingStatsExtensionHandler.EXTHealingType.Hybrid : false
             };
-            BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
+            BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
             if (buffInfoEvent != null)
             {
                 var descriptions = new List<string>(){

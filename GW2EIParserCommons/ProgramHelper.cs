@@ -229,21 +229,21 @@ namespace GW2EIParserCommons
                                 // We need to create a parser that matches Wingman's expected settings
                                 var parser = new EvtcParser(expectedSettings, APIController);
                                 originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog, this will extend total processing duration if file generation is also requested");
-                                logToUse = parser.ParseLog(originalController, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, !Settings.SingleThreaded);
+                                logToUse = parser.ParseLog(originalController, fInfo, out ParsingFailureReason failureReason, !Settings.SingleThreaded);
                             }
+
                             byte[] jsonFile, htmlFile;
                             originalController.UpdateProgressWithCancellationCheck("Wingman: Creating JSON");
                             var uploadResult = new UploadResults();
                             {
                                 var ms = new MemoryStream();
-                                var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
                                 var builder = new RawFormatBuilder(logToUse, new RawFormatSettings(true), ParserVersion, uploadResult);
 
-                                builder.CreateJSON(sw, false);
-                                sw.Close();
+                                builder.CreateJSON(ms, false);
 
                                 jsonFile = ms.ToArray();
                             }
+
                             originalController.UpdateProgressWithCancellationCheck("Wingman: Creating HTML");
                             {
                                 var ms = new MemoryStream();
@@ -254,11 +254,14 @@ namespace GW2EIParserCommons
                                 sw.Close();
                                 htmlFile = ms.ToArray();
                             }
+
                             if (logToUse != originalLog)
                             {
                                 originalController.UpdateProgressWithCancellationCheck("Wingman: new ParsedEvtcLog processing completed");
                             }
+
                             originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing Upload");
+
                             string result = logToUse.FightData.Success ? "kill" : "fail";
                             WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
                         }
@@ -470,23 +473,14 @@ namespace GW2EIParserCommons
                 {
                     using var _t1 = new AutoTrace("Generate JSON");
                     operation.UpdateProgressWithCancellationCheck("Program: Creating JSON");
-                    string outputFile = Path.Combine(
-                        saveDirectory.FullName,
-                        $"{fName}.json"
-                    );
-                    Stream str;
-                    if (Settings.CompressRaw)
-                    {
-                        str = new MemoryStream();
-                    }
-                    else
-                    {
-                        str = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
-                    }
-                    using (var sw = new StreamWriter(str, NoBOMEncodingUTF8))
-                    {
-                        builder.CreateJSON(sw, Settings.IndentJSON);
-                    }
+                    string outputFile = Path.Combine(saveDirectory.FullName, $"{fName}.json");
+                    
+                    using Stream str = Settings.CompressRaw 
+                        ? new MemoryStream()
+                        : new FileStream(outputFile, FileMode.Create, FileAccess.Write);
+
+                    builder.CreateJSON(str, Settings.IndentJSON);
+
                     if (str is MemoryStream msr)
                     {
                         CompressFile(outputFile, msr, operation);
@@ -496,6 +490,7 @@ namespace GW2EIParserCommons
                     {
                         operation.AddFile(outputFile);
                     }
+
                     operation.UpdateProgressWithCancellationCheck("Program: JSON created");
                 }
                 if (Settings.SaveOutXML)

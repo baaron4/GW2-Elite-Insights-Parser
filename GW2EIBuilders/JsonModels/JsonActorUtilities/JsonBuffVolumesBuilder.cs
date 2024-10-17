@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
-using GW2EIEvtcParser.ParsedData;
 using GW2EIJSON;
-using Newtonsoft.Json;
 using static GW2EIJSON.JsonBuffVolumes;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities

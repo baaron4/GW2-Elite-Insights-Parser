@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EIData;
-using Newtonsoft.Json;
+﻿using GW2EIEvtcParser.EIData;
 using static GW2EIJSON.JsonPlayerBuffOutgoingVolumes;
 
 namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonPlayerUtilities

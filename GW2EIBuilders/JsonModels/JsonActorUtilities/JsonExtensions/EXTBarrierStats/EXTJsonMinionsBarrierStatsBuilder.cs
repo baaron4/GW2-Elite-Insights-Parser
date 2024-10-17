@@ -38,7 +38,12 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier
                 totalBarrierDist.Add(EXTJsonBarrierStatsBuilderCommons.BuildBarrierDistList(list.GroupBy(x => x.SkillId), log, skillMap, buffMap).ToList());
             }
 
-            return new(totalBarrier, totalAlliedBarrier, totalBarrierDist, alliedBarrierDist);
+            return new() {
+                TotalBarrier       = totalBarrier,
+                TotalAlliedBarrier = totalAlliedBarrier,
+                TotalBarrierDist   = totalBarrierDist,
+                AlliedBarrierDist  = alliedBarrierDist,
+            };
         }
 
     }
