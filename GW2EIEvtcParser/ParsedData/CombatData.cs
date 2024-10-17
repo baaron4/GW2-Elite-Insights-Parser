@@ -1584,7 +1584,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return evt;
             }
-#if DEBUG
+#if DEBUG2
             if (GetEffectEventsByEffectID(effectID).Count > 0)
             {
                 throw new EvtcCombatEventException("Missing GUID event for effect " + effectID);
