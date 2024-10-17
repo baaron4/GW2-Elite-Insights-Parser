@@ -16,71 +16,72 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels
 {
+    //TODO(Rennorb) @perf
     internal class LogDataDto
     {
-        public List<TargetDto> Targets { get; set; } = new List<TargetDto>();
-        public List<PlayerDto> Players { get; } = new List<PlayerDto>();
-        public List<EnemyDto> Enemies { get; } = new List<EnemyDto>();
-        public List<PhaseDto> Phases { get; } = new List<PhaseDto>();
+        public List<TargetDto> Targets = new List<TargetDto>();
+        public List<PlayerDto> Players = new List<PlayerDto>();
+        public List<EnemyDto> Enemies = new List<EnemyDto>();
+        public List<PhaseDto> Phases = new List<PhaseDto>();
         // Present buffs and damamge modifiers
-        public List<long> Boons { get; } = new List<long>();
-        public List<long> OffBuffs { get; } = new List<long>();
-        public List<long> SupBuffs { get; } = new List<long>();
-        public List<long> DefBuffs { get; } = new List<long>();
-        public List<long> Debuffs { get; } = new List<long>();
-        public List<long> GearBuffs { get; } = new List<long>();
-        public List<long> Nourishments { get; } = new List<long>();
-        public List<long> Enhancements { get; } = new List<long>();
-        public List<long> OtherConsumables { get; } = new List<long>();
-        public List<object[]> InstanceBuffs { get; } = new List<object[]>();
-        public List<long> DmgModifiersItem { get; } = new List<long>();
-        public List<long> DmgIncModifiersItem { get; } = new List<long>();
-        public List<long> DmgModifiersCommon { get; } = new List<long>();
-        public List<long> DmgIncModifiersCommon { get; } = new List<long>();
-        public Dictionary<string, List<long>> DmgModifiersPers { get; } = new Dictionary<string, List<long>>();
-        public Dictionary<string, List<long>> DmgIncModifiersPers { get; } = new Dictionary<string, List<long>>();
-        public Dictionary<string, List<long>> PersBuffs { get; } = new Dictionary<string, List<long>>();
-        public List<long> Conditions { get; } = new List<long>();
+        public List<long> Boons = new List<long>();
+        public List<long> OffBuffs = new List<long>();
+        public List<long> SupBuffs = new List<long>();
+        public List<long> DefBuffs = new List<long>();
+        public List<long> Debuffs = new List<long>();
+        public List<long> GearBuffs = new List<long>();
+        public List<long> Nourishments = new List<long>();
+        public List<long> Enhancements = new List<long>();
+        public List<long> OtherConsumables = new List<long>();
+        public List<object[]> InstanceBuffs = new List<object[]>();
+        public List<long> DmgModifiersItem = new List<long>();
+        public List<long> DmgIncModifiersItem = new List<long>();
+        public List<long> DmgModifiersCommon = new List<long>();
+        public List<long> DmgIncModifiersCommon = new List<long>();
+        public Dictionary<string, List<long>> DmgModifiersPers = new Dictionary<string, List<long>>();
+        public Dictionary<string, List<long>> DmgIncModifiersPers = new Dictionary<string, List<long>>();
+        public Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();
+        public List<long> Conditions = new List<long>();
         // Dictionaries
-        public Dictionary<string, SkillDto> SkillMap { get; } = new Dictionary<string, SkillDto>();
-        public Dictionary<string, BuffDto> BuffMap { get; } = new Dictionary<string, BuffDto>();
-        public Dictionary<string, DamageModDto> DamageModMap { get; } = new Dictionary<string, DamageModDto>();
-        public Dictionary<string, DamageModDto> DamageIncModMap { get; } = new Dictionary<string, DamageModDto>();
-        public List<MechanicDto> MechanicMap { get; set; } = new List<MechanicDto>();
+        public Dictionary<string, SkillDto> SkillMap = new Dictionary<string, SkillDto>();
+        public Dictionary<string, BuffDto> BuffMap = new Dictionary<string, BuffDto>();
+        public Dictionary<string, DamageModDto> DamageModMap = new Dictionary<string, DamageModDto>();
+        public Dictionary<string, DamageModDto> DamageIncModMap = new Dictionary<string, DamageModDto>();
+        public List<MechanicDto> MechanicMap = new List<MechanicDto>();
         // Extra components
-        public CombatReplayDto? CrData { get; set; } = null;
-        public ChartDataDto? GraphData { get; set; } = null;
-        public HealingStatsExtension? HealingStatsExtension { get; set; } = null;
-        public BarrierStatsExtension? BarrierStatsExtension { get; set; } = null;
+        public CombatReplayDto? CrData;
+        public ChartDataDto? GraphData;
+        public HealingStatsExtension? HealingStatsExtension;
+        public BarrierStatsExtension? BarrierStatsExtension;
         // meta data
-        public string EncounterDuration { get; set; }
-        public bool Success { get; set; }
-        public bool Wvw { get; set; }
-        public bool HasCommander { get; set; }
-        public bool Targetless { get; set; }
-        public string FightName { get; set; }
-        public string FightIcon { get; set; }
-        public bool LightTheme { get; set; }
-        public bool NoMechanics { get; set; }
-        public bool SingleGroup { get; set; }
-        public bool HasBreakbarDamage { get; set; }
-        public List<string> LogErrors { get; set; }
-        public string EncounterStart { get; set; }
-        public string EncounterEnd { get; set; }
-        public string InstanceStart { get; set; }
-        public string InstanceIP { get; set; }
-        public string ArcVersion { get; set; }
-        public long EvtcBuild { get; set; }
-        public ulong Gw2Build { get; set; }
-        public long TriggerID { get; set; }
-        public long EncounterID { get; set; }
-        public string Parser { get; set; }
-        public string RecordedBy { get; set; }
-        public string RecordedAccountBy { get; set; }
-        public int FractalScale { get; set; }
-        public List<string> UploadLinks { get; set; }
-        public List<string> UsedExtensions { get; set; }
-        public List<List<string>> PlayersRunningExtensions { get; set; }
+        public string EncounterDuration;
+        public bool Success;
+        public bool Wvw;
+        public bool HasCommander;
+        public bool Targetless;
+        public string FightName;
+        public string FightIcon;
+        public bool LightTheme;
+        public bool NoMechanics;
+        public bool SingleGroup;
+        public bool HasBreakbarDamage;
+        public List<string> LogErrors;
+        public string EncounterStart;
+        public string EncounterEnd;
+        public string InstanceStart;
+        public string InstanceIP;
+        public string ArcVersion;
+        public long EvtcBuild;
+        public ulong Gw2Build;
+        public long TriggerID;
+        public long EncounterID;
+        public string Parser;
+        public string RecordedBy;
+        public string RecordedAccountBy;
+        public int FractalScale;
+        public List<string> UploadLinks;
+        public List<string> UsedExtensions;
+        public List<List<string>> PlayersRunningExtensions;
         //
         private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, string[] uploadLinks)
         {
