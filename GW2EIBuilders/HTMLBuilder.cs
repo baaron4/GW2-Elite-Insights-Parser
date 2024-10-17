@@ -39,7 +39,7 @@ namespace GW2EIBuilders
     [JsonSerializable(typeof(PositionConnector.PositionConnectorDescriptor))]
     [JsonSerializable(typeof(AgentFacingConnector.AgentFacingConnectorDescriptor))]
     [JsonSerializable(typeof(AngleConnector.AngleConnectorDescriptor))]
-    [JsonSerializable(typeof(AngleInterpolationConnector.InterpolationConnectorDescriptor))]
+    [JsonSerializable(typeof(AngleInterpolationConnector.AngleInterpolationConnectorDescriptor))]
     [JsonSerializable(typeof(InterpolationConnector.InterpolationConnectorDescriptor))]
     [JsonSerializable(typeof(GenericAttachedDecorationRenderingDescription.SkillModeDescription))]
     partial class LogDataDtoSerializerContext : JsonSerializerContext {  }

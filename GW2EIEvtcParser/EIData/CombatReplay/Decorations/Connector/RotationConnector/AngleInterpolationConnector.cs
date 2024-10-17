@@ -48,11 +48,11 @@ namespace GW2EIEvtcParser.EIData
             _method = interpolationMethod;
         }
 
-        public class InterpolationConnectorDescriptor : RotationConnectorDescriptor
+        public class AngleInterpolationConnectorDescriptor : RotationConnectorDescriptor
         {
             public int InterpolationMethod { get; private set; }
             public IReadOnlyList<float> Angles { get; private set; }
-            public InterpolationConnectorDescriptor(AngleInterpolationConnector connector, CombatReplayMap map) : base(connector, map)
+            public AngleInterpolationConnectorDescriptor(AngleInterpolationConnector connector, CombatReplayMap map) : base(connector, map)
             {
                 InterpolationMethod = (int)connector._method;
                 var angles = new List<float>();
@@ -67,7 +67,7 @@ namespace GW2EIEvtcParser.EIData
 
         public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
         {
-            return new InterpolationConnectorDescriptor(this, map);
+            return new AngleInterpolationConnectorDescriptor(this, map);
         }
     }
 }
