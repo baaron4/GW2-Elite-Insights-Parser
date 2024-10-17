@@ -59,7 +59,7 @@ namespace GW2EIEvtcParser.EIData
             return DamageModDescriptor.ComputeDamageModifier(actor, log, this);
         }
 
-        public abstract int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor t, long start, long end);
+        public abstract int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end);
 
         public abstract IEnumerable<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end);
     }

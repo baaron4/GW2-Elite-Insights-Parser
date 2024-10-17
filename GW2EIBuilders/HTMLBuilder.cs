@@ -185,7 +185,7 @@ namespace GW2EIBuilders
             _t.Log("Serialized JSON");
 
             html.Replace("'${logDataJson}'", _compressJson ? ("'" + CompressAndBase64(json) + "'") : json);
-            _t.Log("appended JOSN");
+            _t.Log("appended JSON");
 
             sw.Write(html);
             return;

@@ -8,70 +8,79 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels
 {
-
+    //TODO(Rennorb) @perf: IF we wanted more performance we could try to just get rid of this json data step all together.
+    // It should be doable to just merge it with existing structures, as to not need to copy everything..
+    // If this is reasonably possible it should give time savings around 20-30%
     internal class PhaseDto
     {
-        public string Name { get; set; }
-        public long Duration { get; set; }
-        public double Start { get; set; }
-        public double End { get; set; }
-        public List<int> Targets { get; set; } = new List<int>();
-        public List<bool> SecondaryTargets { get; set; } = new List<bool>();
-        public bool BreakbarPhase { get; set; }
+        public string Name;
+        public long Duration;
+        public double Start;
+        public double End;
+        public List<int> Targets;
+        public List<bool> SecondaryTargets;
+        public bool BreakbarPhase;
 
-        public List<List<object>> DpsStats { get; set; }
-        public List<List<List<object>>> DpsStatsTargets { get; set; }
-        public List<List<List<object>>> OffensiveStatsTargets { get; set; }
-        public List<List<object>> OffensiveStats { get; set; }
-        public List<List<object>> GameplayStats { get; set; }
-        public List<List<object>> DefStats { get; set; }
-        public List<List<object>> SupportStats { get; set; }
+        public List<List<object>> DpsStats;
+        public List<List<List<object>>> DpsStatsTargets;
+        public List<List<List<object>>> OffensiveStatsTargets;
+        public List<List<object>> OffensiveStats;
+        public List<List<object>> GameplayStats;
+        public List<List<object>> DefStats;
+        public List<List<object>> SupportStats;
 
-        public BuffsContainerDto BuffsStatContainer { get; set; }
-        public BuffVolumesContainerDto BuffVolumesStatContainer { get; set; }
+        public BuffsContainerDto BuffsStatContainer;
+        public BuffVolumesContainerDto BuffVolumesStatContainer;
 
-        public List<DamageModData> DmgModifiersCommon { get; set; }
-        public List<DamageModData> DmgModifiersItem { get; set; }
-        public List<DamageModData> DmgModifiersPers { get; set; }
-
-
-        public List<DamageModData> DmgIncModifiersCommon { get; set; }
-        public List<DamageModData> DmgIncModifiersItem { get; set; }
-        public List<DamageModData> DmgIncModifiersPers { get; set; }
+        public List<DamageModData> DmgModifiersCommon;
+        public List<DamageModData> DmgModifiersItem;
+        public List<DamageModData> DmgModifiersPers;
 
 
-        public List<List<int[]>> MechanicStats { get; set; }
-        public List<List<int[]>> EnemyMechanicStats { get; set; }
-        public List<long> PlayerActiveTimes { get; set; }
+        public List<DamageModData> DmgIncModifiersCommon;
+        public List<DamageModData> DmgIncModifiersItem;
+        public List<DamageModData> DmgIncModifiersPers;
 
-        public List<double> MarkupLines { get; set; }
-        public List<AreaLabelDto> MarkupAreas { get; set; }
-        public List<int> SubPhases { get; set; }
+
+        public List<List<(int, int)>> MechanicStats;
+        public List<List<(int, int)>> EnemyMechanicStats;
+        public List<long> PlayerActiveTimes;
+
+        public List<double>? MarkupLines;
+        public List<AreaLabelDto>? MarkupAreas;
+        public List<int>? SubPhases;
 
         public PhaseDto(PhaseData phase, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> persBuffDict,
             IReadOnlyList<OutgoingDamageModifier> commonOutDamageModifiers, IReadOnlyList<OutgoingDamageModifier> itemOutDamageModifiers, IReadOnlyDictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict,
             IReadOnlyList<IncomingDamageModifier> commonIncDamageModifiers, IReadOnlyList<IncomingDamageModifier> itemIncDamageModifiers, IReadOnlyDictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict)
         {
-            Name = phase.Name;
-            Duration = phase.DurationInMS;
-            Start = phase.Start / 1000.0;
-            End = phase.End / 1000.0;
+            Name          = phase.Name;
+            Duration      = phase.DurationInMS;
+            Start         = phase.Start / 1000.0;
+            End           = phase.End / 1000.0;
             BreakbarPhase = phase.BreakbarPhase;
-            foreach (AbstractSingleActor target in phase.AllTargets)
+
+            var allTargets = phase.AllTargets;
+            Targets          = new(allTargets.Count);
+            SecondaryTargets = new(allTargets.Count);
+            foreach (AbstractSingleActor target in allTargets)
             {
                 Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
                 SecondaryTargets.Add(phase.IsSecondaryTarget(target));
             }
-            PlayerActiveTimes = new List<long>();
+
+            PlayerActiveTimes = new(log.Friendlies.Count);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 PlayerActiveTimes.Add(actor.GetActiveDuration(log, phase.Start, phase.End));
             }
+
             // add phase markup
-            MarkupLines = new List<double>();
-            MarkupAreas = new List<AreaLabelDto>();
+            
             if (!BreakbarPhase)
             {
+                MarkupLines = new(phases.Count);
+                MarkupAreas = new(phases.Count);
                 for (int j = 1; j < phases.Count; j++)
                 {
                     PhaseData curPhase = phases[j];
@@ -80,11 +89,10 @@ namespace GW2EIBuilders.HtmlModels
                     {
                         continue;
                     }
-                    if (SubPhases == null)
-                    {
-                        SubPhases = new List<int>();
-                    }
+
+                    SubPhases ??= new List<int>(phases.Count);
                     SubPhases.Add(j);
+
                     long start = curPhase.Start - phase.Start;
                     long end = curPhase.End - phase.Start;
                     if (curPhase.DrawStart)
@@ -104,37 +112,40 @@ namespace GW2EIBuilders.HtmlModels
                         Label = curPhase.DrawLabel ? curPhase.Name : null,
                         Highlight = curPhase.DrawArea
                     };
+
                     MarkupAreas.Add(phaseArea);
                 }
             }
-            if (MarkupAreas.Count == 0)
+
+            if (MarkupAreas?.Count == 0)
             {
                 MarkupAreas = null;
             }
 
-            if (MarkupLines.Count == 0)
+            if (MarkupLines?.Count == 0)
             {
                 MarkupLines = null;
             }
-            BuffsStatContainer = new BuffsContainerDto(phase, log, persBuffDict);
+
+            BuffsStatContainer       = new BuffsContainerDto(phase, log, persBuffDict);
             BuffVolumesStatContainer = new BuffVolumesContainerDto(phase, log, persBuffDict);
-            //
-            DpsStats = BuildDPSData(log, phase);
-            DpsStatsTargets = BuildDPSTargetsData(log, phase);
+            
+            DpsStats              = BuildDPSData(log, phase);
+            DpsStatsTargets       = BuildDPSTargetsData(log, phase);
             OffensiveStatsTargets = BuildOffensiveStatsTargetsData(log, phase);
-            OffensiveStats = BuildOffensiveStatsData(log, phase);
-            GameplayStats = BuildGameplayStatsData(log, phase);
-            DefStats = BuildDefenseData(log, phase);
-            SupportStats = BuildSupportData(log, phase);
-            //
-            DmgModifiersCommon = DamageModData.BuildOutgoingDmgModifiersData(log, phase, commonOutDamageModifiers);
-            DmgModifiersItem = DamageModData.BuildOutgoingDmgModifiersData(log, phase, itemOutDamageModifiers);
-            DmgModifiersPers = DamageModData.BuildPersonalOutgoingDmgModifiersData(log, phase, persOutDamageModDict);
+            OffensiveStats        = BuildOffensiveStatsData(log, phase);
+            GameplayStats         = BuildGameplayStatsData(log, phase);
+            DefStats              = BuildDefenseData(log, phase);
+            SupportStats          = BuildSupportData(log, phase);
+            
+            DmgModifiersCommon    = DamageModData.BuildOutgoingDmgModifiersData(log, phase, commonOutDamageModifiers);
+            DmgModifiersItem      = DamageModData.BuildOutgoingDmgModifiersData(log, phase, itemOutDamageModifiers);
+            DmgModifiersPers      = DamageModData.BuildPersonalOutgoingDmgModifiersData(log, phase, persOutDamageModDict);
             DmgIncModifiersCommon = DamageModData.BuildIncomingDmgModifiersData(log, phase, commonIncDamageModifiers);
-            DmgIncModifiersItem = DamageModData.BuildIncomingDmgModifiersData(log, phase, itemIncDamageModifiers);
-            DmgIncModifiersPers = DamageModData.BuildPersonalIncomingDmgModifiersData(log, phase, persIncDamageModDict);
-            MechanicStats = MechanicDto.BuildPlayerMechanicData(log, phase);
-            EnemyMechanicStats = MechanicDto.BuildEnemyMechanicData(log, phase);
+            DmgIncModifiersItem   = DamageModData.BuildIncomingDmgModifiersData(log, phase, itemIncDamageModifiers);
+            DmgIncModifiersPers   = DamageModData.BuildPersonalIncomingDmgModifiersData(log, phase, persIncDamageModDict);
+            MechanicStats         = MechanicDto.BuildPlayerMechanicData(log, phase);
+            EnemyMechanicStats    = MechanicDto.BuildEnemyMechanicData(log, phase);
         }
 
         private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)

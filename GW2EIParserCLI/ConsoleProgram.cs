@@ -15,6 +15,7 @@ namespace GW2EIParser
         /// <returns>0 on success, other value on error</returns>
         public static int ParseAll(List<string> logFiles, ProgramHelper programHelper)
         {
+            using var _t = new AutoTrace("ParseAll");
             if (programHelper.ParseMultipleLogs())
             {
                 var state = new ThreadingState()

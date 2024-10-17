@@ -462,17 +462,17 @@ namespace GW2EIBuilders.HtmlModels
             Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict = BuildPersonalOutgoingDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
             Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict = BuildPersonalIncomingDamageModData(log, logData.DmgIncModifiersPers, usedIncDamageMods);
             
-            var allOutDamageMods = new HashSet<string>();
+            var allOutDamageMods         = new HashSet<string>();
             var commonOutDamageModifiers = new List<OutgoingDamageModifier>();
-            var itemOutDamageModifiers = new List<OutgoingDamageModifier>();
-            var allIncDamageMods = new HashSet<string>();
+            var itemOutDamageModifiers   = new List<OutgoingDamageModifier>();
+            var allIncDamageMods         = new HashSet<string>();
             var commonIncDamageModifiers = new List<IncomingDamageModifier>();
-            var itemIncDamageModifiers = new List<IncomingDamageModifier>();
+            var itemIncDamageModifiers   = new List<IncomingDamageModifier>();
             
             logData.BuildBuffDictionaries(log, usedBuffs);
             logData.BuildOutgoingDamageModDictionaries(log, usedDamageMods, allOutDamageMods, commonOutDamageModifiers, itemOutDamageModifiers);
             logData.BuildIncomingDamageModDictionaries(log, usedIncDamageMods, allIncDamageMods, commonIncDamageModifiers, itemIncDamageModifiers);
-            _t.Log("built mdofiier dicts");
+            _t.Log("built modifier dicts");
             
             log.UpdateProgressWithCancellationCheck("HTML: building Phases");
             IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);

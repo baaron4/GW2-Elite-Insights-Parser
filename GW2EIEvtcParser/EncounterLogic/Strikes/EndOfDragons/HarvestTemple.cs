@@ -427,7 +427,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             });
             int index = 0;
             var processedAttackTargets = new HashSet<AgentItem>();
-            foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
+            foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents.ToList()) //TODO(Rennorb) @perf: avoid creating the list. has to be for now because we modifiy the collection later on. 
             {
                 AgentItem atAgent = attackTargetEvent.AttackTarget;
                 // We take attack events, filter out the first one, present at spawn, that is always a non targetable event

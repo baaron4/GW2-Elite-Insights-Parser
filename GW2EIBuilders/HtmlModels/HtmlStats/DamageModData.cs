@@ -8,12 +8,14 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
 {
     internal class DamageModData
     {
-        public List<object[]> Data { get; } = new List<object[]>();
-        public List<List<object[]>> DataTarget { get; } = new List<List<object[]>>();
+        public readonly List<object[]> Data;
+        public readonly List<List<object[]>> DataTarget;
 
         private DamageModData(AbstractSingleActor actor, ParsedEvtcLog log, IReadOnlyList<OutgoingDamageModifier> listToUse, PhaseData phase)
         {
-            IReadOnlyDictionary<string, DamageModifierStat> dModData = actor.GetOutgoingDamageModifierStats(null, log, phase.Start, phase.End);
+            var dModData = actor.GetOutgoingDamageModifierStats(null, log, phase.Start, phase.End);
+
+            Data = new(listToUse.Count);
             foreach (OutgoingDamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
@@ -37,7 +39,10 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     ]);
                 }
             }
-            foreach (AbstractSingleActor target in phase.AllTargets)
+
+            var allTargets = phase.AllTargets;
+            DataTarget = new(allTargets.Count);
+            foreach (AbstractSingleActor target in allTargets)
             {
                 var pTarget = new List<object[]>(1 + listToUse.Count);
                 DataTarget.Add(pTarget);
@@ -69,7 +74,9 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
         }
         private DamageModData(AbstractSingleActor actor, ParsedEvtcLog log, IReadOnlyList<IncomingDamageModifier> listToUse, PhaseData phase)
         {
-            IReadOnlyDictionary<string, DamageModifierStat> dModData = actor.GetIncomingDamageModifierStats(null, log, phase.Start, phase.End);
+            var dModData = actor.GetIncomingDamageModifierStats(null, log, phase.Start, phase.End);
+
+            Data = new(listToUse.Count);
             foreach (IncomingDamageModifier dMod in listToUse)
             {
                 if (dModData.TryGetValue(dMod.Name, out DamageModifierStat data))
@@ -93,6 +100,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
                     ]);
                 }
             }
+
+            DataTarget = new(phase.Targets.Count);
             foreach (AbstractSingleActor target in phase.Targets)
             {
                 var pTarget = new List<object[]>();

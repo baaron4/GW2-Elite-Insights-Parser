@@ -215,30 +215,46 @@ namespace GW2EIEvtcParser.ParsedData
         internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, CombatData combatData)
         {
             //TODO(Rennorb) @perf: find average complexity
-            var status = new List<AbstractStatusEvent>();
-            status.AddRange(combatData.GetDownEvents(this));
-            status.AddRange(combatData.GetAliveEvents(this));
-            status.AddRange(combatData.GetDeadEvents(this));
-            status.AddRange(combatData.GetSpawnEvents(this));
-            status.AddRange(combatData.GetDespawnEvents(this));
+            var downEvents = combatData.GetDownEvents(this);
+            var aliveEvents = combatData.GetAliveEvents(this);
+            var deadEvents = combatData.GetDeadEvents(this);
+            var spawnEvents = combatData.GetSpawnEvents(this);
+            var despawnEvents = combatData.GetDespawnEvents(this);
+
+            var status = new List<AbstractStatusEvent>(
+                downEvents.Count +
+                aliveEvents.Count +
+                deadEvents.Count +
+                spawnEvents.Count +
+                despawnEvents.Count
+            );
+            status.AddRange(downEvents);
+            status.AddRange(aliveEvents);
+            status.AddRange(deadEvents);
+            status.AddRange(spawnEvents);
+            status.AddRange(despawnEvents);
             dc.Add(new Segment(long.MinValue, FirstAware, 1));
             // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
             if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
             {
                 return;
             }
+
             if (status.Count == 0)
             {
                 dc.Add(new Segment(LastAware, long.MaxValue, 1));
                 return;
             }
+
             status.SortByTime();
+
             for (int i = 0; i < status.Count - 1; i++)
             {
                 AbstractStatusEvent cur = status[i];
                 AbstractStatusEvent next = status[i + 1];
                 AddValueToStatusList(dead, down, dc, cur, next.Time, FirstAware, i);
             }
+
             // check last value
             if (status.Count > 0)
             {

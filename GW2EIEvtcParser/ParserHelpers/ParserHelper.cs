@@ -300,7 +300,7 @@ namespace GW2EIEvtcParser
         /// <param name="to">AgentItem the events need to be redirected to</param>
         /// <param name="copyPositionalDataFromAttackTarget">If true, "to" will get the positional data from attack targets, if possible</param>
         /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-        internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection extraRedirections = null)
+        internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null)
         {
             // Redirect combat events
             foreach (CombatItem evt in combatData)

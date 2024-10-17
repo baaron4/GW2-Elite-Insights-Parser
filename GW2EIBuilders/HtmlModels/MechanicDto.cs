@@ -16,9 +16,9 @@ namespace GW2EIBuilders.HtmlModels
         public bool PlayerMech { get; set; }
         public bool IsAchievementEligibility { get; set; }
 
-        private static List<int[]> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
+        private static List<(int, int)> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
         {
-            var res = new List<int[]>();
+            var res = new List<(int, int)>(presMech.Count);
 
             foreach (Mechanic mech in presMech)
             {
@@ -49,7 +49,7 @@ namespace GW2EIBuilders.HtmlModels
                 {
                     count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;
                 }
-                res.Add(new int[] { count - filterCount, count });
+                res.Add((count - filterCount, count));
             }
             return res;
         }
@@ -72,10 +72,9 @@ namespace GW2EIBuilders.HtmlModels
             }
         }
 
-        public static List<List<int[]>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
+        public static List<List<(int, int)>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
         {
-            var list = new List<List<int[]>>();
-
+            var list = new List<List<(int, int)>>(log.Friendlies.Count);
             foreach (AbstractSingleActor actor in log.Friendlies)
             {
                 list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, actor, phase));
@@ -83,10 +82,11 @@ namespace GW2EIBuilders.HtmlModels
             return list;
         }
 
-        public static List<List<int[]>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
+        public static List<List<(int, int)>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
         {
-            var list = new List<List<int[]>>();
-            foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd))
+            var enemies = log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd);
+            var list = new List<List<(int, int)>>(enemies.Count);
+            foreach (AbstractSingleActor enemy in enemies)
             {
                 list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, enemy, phase));
             }

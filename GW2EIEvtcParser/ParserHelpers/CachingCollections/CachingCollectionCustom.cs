@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser
         private readonly int _initialTertiaryCapacity = initialTertiaryCapacity;
         private readonly Q _nullValue = nullValue;
 
-        private readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new(initialPrimaryCapacity);
+        internal readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new(initialPrimaryCapacity);
 
         public bool TryGetValue(long start, long end, Q? q, [NotNullWhen(true)] out T? value)
         {

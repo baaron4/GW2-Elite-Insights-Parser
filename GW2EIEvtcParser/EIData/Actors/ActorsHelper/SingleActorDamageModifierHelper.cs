@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
+using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
@@ -12,15 +13,15 @@ namespace GW2EIEvtcParser.EIData
         private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>? _incomingDamageModifiersPerTargets;
         private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>? _incomingDamageModifierEventsPerTargets;
 
-        private Dictionary<string, DamageModifierStat> ComputeDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        private Dictionary<string, DamageModifierStat>? ComputeDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             // Check if damage mods against target
-            if (_outgoingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out Dictionary<string, List<DamageModifierEvent>> events))
+            if (_outgoingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
             {
                 var res = new Dictionary<string, DamageModifierStat>();
                 foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
                 {
-                    DamageModifier damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
+                    DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                     if (damageMod != null)
                     {
                         var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -39,65 +40,76 @@ namespace GW2EIEvtcParser.EIData
                 _outgoingDamageModifiersPerTargets.Set(start, end, target, res);
                 return res;
             }
+
             return null;
         }
 
-        public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<string, DamageModifierStat>? GetOutgoingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
             {
                 return new Dictionary<string, DamageModifierStat>();
             }
+
             if (_outgoingDamageModifiersPerTargets == null)
             {
-                _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
-                _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
+                _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log, 8, 2);
+                _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log, 1, 1);
             }
-            if (_outgoingDamageModifiersPerTargets.TryGetValue(start, end, target, out Dictionary<string, DamageModifierStat> res))
+
+            if (_outgoingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
             {
                 return res;
             }
+
             res = ComputeDamageModifierStats(target, log, start, end);
             if (res != null)
             {
                 return res;
             }
-            //
-            var damageMods = new List<OutgoingDamageModifier>();
+
+            var damageMods = new List<OutgoingDamageModifier>(40);
             if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<OutgoingDamageModifier> list))
             {
                 damageMods.AddRange(list);
             }
+
             if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Gear, out list))
             {
                 damageMods.AddRange(list);
             }
+
             if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Common, out list))
             {
                 damageMods.AddRange(list);
             }
+
             if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
             {
                 damageMods.AddRange(list);
             }
+
             damageMods.AddRange(log.DamageModifiers.GetOutgoingModifiersPerSpec(this.Spec));
-            //
-            var damageModifierEvents = new List<DamageModifierEvent>();
+
+            var damageModifierEvents = new List<DamageModifierEvent>(damageMods.Count * 150);
             foreach (OutgoingDamageModifier damageMod in damageMods)
             {
                 damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(this, log));
             }
-            damageModifierEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+            damageModifierEvents.SortByTime();
+
+
             var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
             _outgoingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
-            var damageModifiersEventsByTarget = damageModifierEvents.GroupBy(x => x.Dst).ToDictionary(x => x.Key, x => x.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList()));
-            foreach (AgentItem actor in damageModifiersEventsByTarget.Keys)
+
+            foreach (var modsByActor in damageModifierEvents.GroupBy(x => x.Dst))
             {
-                _outgoingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), damageModifiersEventsByTarget[actor]);
+                var actor = modsByActor.Key;
+                var events = modsByActor.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
+                _outgoingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), events);
             }
-            //
-            res = ComputeDamageModifierStats(target, log, start, end);
-            return res;
+            
+            return ComputeDamageModifierStats(target, log, start, end);
         }
 
         public IReadOnlyCollection<string> GetPresentOutgoingDamageModifier(ParsedEvtcLog log)
@@ -105,15 +117,15 @@ namespace GW2EIEvtcParser.EIData
             return new HashSet<string>(GetOutgoingDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
         }
 
-        private Dictionary<string, DamageModifierStat> ComputeIncomingDamageModifierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+        private Dictionary<string, DamageModifierStat>? ComputeIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             // Check if damage mods against target
-            if (_incomingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out Dictionary<string, List<DamageModifierEvent>> events))
+            if (_incomingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
             {
-                var res = new Dictionary<string, DamageModifierStat>();
+                var res = new Dictionary<string, DamageModifierStat>(events.Count);
                 foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
                 {
-                    DamageModifier damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
+                    DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                     if (damageMod != null)
                     {
                         var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -123,6 +135,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                 }
                 _incomingDamageModifiersPerTargets.Set(start, end, target, res);
+
                 return res;
             }
             // Check if we already filled the cache, that means no damage modifiers against given target
@@ -135,62 +148,70 @@ namespace GW2EIEvtcParser.EIData
             return null;
         }
 
-        public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+        public IReadOnlyDictionary<string, DamageModifierStat>? GetIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
         {
             if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
             {
                 return new Dictionary<string, DamageModifierStat>();
             }
+
             if (_incomingDamageModifiersPerTargets == null)
             {
-                _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
-                _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
+                _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log, 8, 2);
+                _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log, 1, 1);
             }
-            if (_incomingDamageModifiersPerTargets.TryGetValue(start, end, target, out Dictionary<string, DamageModifierStat> res))
+
+            if (_incomingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
             {
                 return res;
             }
+
             res = ComputeIncomingDamageModifierStats(target, log, start, end);
             if (res != null)
             {
                 return res;
             }
-            //
-            var damageMods = new List<IncomingDamageModifier>();
+
+            var damageMods = new List<IncomingDamageModifier>(32);
             if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<IncomingDamageModifier> list))
             {
                 damageMods.AddRange(list);
             }
+
             if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Gear, out list))
             {
                 damageMods.AddRange(list);
             }
+
             if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Common, out list))
             {
                 damageMods.AddRange(list);
             }
+
             if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.FightSpecific, out list))
             {
                 damageMods.AddRange(list);
             }
             damageMods.AddRange(log.DamageModifiers.GetIncomingModifiersPerSpec(this.Spec));
-            //
-            var damageModifierEvents = new List<DamageModifierEvent>();
+            
+            var damageModifierEvents = new List<DamageModifierEvent>(damageMods.Count * 60);
             foreach (IncomingDamageModifier damageMod in damageMods)
             {
                 damageModifierEvents.AddRange(damageMod.ComputeDamageModifier(this, log));
             }
-            damageModifierEvents.Sort((x, y) => x.Time.CompareTo(y.Time));
+            damageModifierEvents.SortByTime();
+
             var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
             _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
-            var damageModifiersEventsByTarget = damageModifierEvents.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => x.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList()));
-            foreach (AgentItem actor in damageModifiersEventsByTarget.Keys)
+
+            foreach (var eventsByTarget in damageModifierEvents.GroupBy(x => x.Src))
             {
-                _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), damageModifiersEventsByTarget[actor]);
+                var actor = eventsByTarget.Key;
+                var events = eventsByTarget.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
+                _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), events);
             }
-            //
-            res = ComputeIncomingDamageModifierStats(target, log, start, end);
-            return res;
+
+            return ComputeIncomingDamageModifierStats(target, log, start, end);
         }
 
         public IReadOnlyCollection<string> GetPresentIncomingDamageModifier(ParsedEvtcLog log)

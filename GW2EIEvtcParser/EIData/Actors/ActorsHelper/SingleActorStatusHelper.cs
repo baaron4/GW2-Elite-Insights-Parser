@@ -86,7 +86,7 @@ namespace GW2EIEvtcParser.EIData
 
         public long GetActiveDuration(ParsedEvtcLog log, long start, long end)
         {
-            (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = GetStatus(log);
+            var (dead, down, dc) = GetStatus(log);
             return (end - start) -
                 (long)dead.Sum(x => x.IntersectingArea(start, end)) -
                 (long)dc.Sum(x => x.IntersectingArea(start, end));
