@@ -14,9 +14,9 @@ namespace GW2EIEvtcParser.Extensions
 
         private readonly Dictionary<long, EXTHealingType> EncounteredIDs = new(); //TODO(Rennorb) @perf
 
-        private readonly ReadonlyHashSet<long> _hybridHealIDs;
+        private readonly IReadOnlyCollection<long> _hybridHealIDs;
 
-        internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healData, Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healReceivedData, Dictionary<long, List<EXTAbstractHealingEvent>> healDataById, ReadonlyHashSet<long> hybridHealIDs)
+        internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healData, Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healReceivedData, Dictionary<long, List<EXTAbstractHealingEvent>> healDataById, IReadOnlyCollection<long> hybridHealIDs)
         {
             _healData = healData;
             _healReceivedData = healReceivedData;

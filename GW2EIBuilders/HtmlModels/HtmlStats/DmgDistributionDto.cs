@@ -9,13 +9,15 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats
 {
     internal class DmgDistributionDto
     {
-        public long ContributedDamage { get; set; }
-        public double ContributedBreakbarDamage { get; set; }
-        public long ContributedShieldDamage { get; set; }
-        public long TotalDamage { get; set; }
-        public double TotalBreakbarDamage { get; set; }
-        public long TotalCasting { get; set; }
-        public List<object[]>? Distribution { get; set; }
+        public static readonly DmgDistributionDto EmptyInstance = new();
+
+        public long            ContributedDamage;
+        public double          ContributedBreakbarDamage;
+        public long            ContributedShieldDamage;
+        public long            TotalDamage;
+        public double          TotalBreakbarDamage;
+        public long            TotalCasting;
+        public List<object[]>? Distribution;
 
         internal static (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) GetCastValues(IEnumerable<AbstractCastEvent> clList, PhaseData phase)
         {

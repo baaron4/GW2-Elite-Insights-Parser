@@ -5,10 +5,18 @@ using System.Text;
 using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using Tracing;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIBuilders
 {
+    // compile-time generated serialization logic
+    [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Serialization, IncludeFields = true, WriteIndented = false)]
+    [JsonSerializable(typeof(LogDataDto))]
+    partial class LogDataDtoSerializerContext : JsonSerializerContext {  }
+
+
     public class HTMLBuilder
     {
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
@@ -143,12 +151,6 @@ namespace GW2EIBuilders
             return (external, cdn);
         }
 
-        static readonly JsonSerializerOptions SerializerOption = new()
-        {
-            IncludeFields = true,
-            WriteIndented = false,
-        };
-
         /// <summary>
         /// Create the damage taken distribution table for a given player
         /// </summary>
@@ -157,10 +159,16 @@ namespace GW2EIBuilders
 
         public void CreateHTML(StreamWriter sw, string path)
         {
+            using var _t = new AutoTrace("Create HTML (write to stream)");
+
             StringBuilder html = new(Properties.Resources.tmplMain);
             var (externalPath, cdnPath) = BuildAssetPaths(path);
             _log.UpdateProgressWithCancellationCheck("HTML: replacing global variables");
             html.Replace("${bootstrapTheme}", !_light ? "slate" : "yeti");
+            
+            // Compression stuff
+            html.Replace("<!--${CompressionRequire}-->", _compressJson ? "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js\"></script>" : "");
+            html.Replace("<!--${CompressionUtils}-->", _compressJson ? Properties.Resources.compressionUtils : "");
 
             _log.UpdateProgressWithCancellationCheck("HTML: building CSS");
             html.Replace("<!--${Css}-->", BuildCss(externalPath, cdnPath));
@@ -170,12 +178,14 @@ namespace GW2EIBuilders
             html.Replace("<!--${CombatReplayJS}-->", BuildCombatReplayJS(externalPath, cdnPath));
             html.Replace("<!--${HealingExtensionJS}-->", BuildHealingExtensionJS(externalPath, cdnPath));
 
-            string json = JsonSerializer.Serialize(LogDataDto.BuildLogData(_log, _cr, _light, _parserVersion, _uploadLink), SerializerOption);
+            var logData = LogDataDto.BuildLogData(_log, _cr, _light, _parserVersion, _uploadLink);
+            _t.Log("built log data");
+            //NOTE(Rennoeb): json last, because its large
+            string json = JsonSerializer.Serialize(logData, LogDataDtoSerializerContext.Default.LogDataDto);
+            _t.Log("Serialized JSON");
 
             html.Replace("'${logDataJson}'", _compressJson ? ("'" + CompressAndBase64(json) + "'") : json);
-            // Compression stuff
-            html.Replace("<!--${CompressionRequire}-->", _compressJson ? "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.10/pako.min.js\"></script>" : "");
-            html.Replace("<!--${CompressionUtils}-->", _compressJson ? Properties.Resources.compressionUtils : "");
+            _t.Log("appended JOSN");
 
             sw.Write(html);
             return;

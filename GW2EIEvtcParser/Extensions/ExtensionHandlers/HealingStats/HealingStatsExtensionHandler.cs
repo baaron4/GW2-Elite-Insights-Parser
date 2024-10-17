@@ -184,10 +184,6 @@ namespace GW2EIEvtcParser.Extensions
             return c.IsShields > 0 && ((c.IsBuff == 0 && c.Value < 0) || (c.IsBuff != 0 && c.Value == 0 && c.BuffDmg < 0));
         }
 
-        private ReadonlyHashSet<long> GetHybridIDs()
-        {
-            return new ReadonlyHashSet<long>(HybridHealIDs);
-        }
 
         internal override bool HasTime(CombatItem c)
         {
@@ -285,7 +281,7 @@ namespace GW2EIEvtcParser.Extensions
                     }
                 }
                 var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-                combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, GetHybridIDs());
+                combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, this.HybridHealIDs);
                 operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _healingEvents.Count + " heal events to CombatData");
             }
             //

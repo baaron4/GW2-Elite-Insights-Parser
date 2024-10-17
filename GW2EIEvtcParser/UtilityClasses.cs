@@ -5,15 +5,6 @@ using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser {
 
-    //TODO(Rennorb) @cleanup: needed? 
-    /// HashSet that only exposes Contains, saves a copy of the whole set in the one case where its used.
-    class ReadonlyHashSet<T>(HashSet<T> source)
-    {
-        readonly HashSet<T> _source = source;
-
-        public bool Contains(in T needle) => _source.Contains(needle);
-    }
-
     public static partial class ListExt
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
