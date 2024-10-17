@@ -158,7 +158,7 @@ namespace GW2EIParserCommons
             AgentItem pov = log.LogData.PoV;
             AbstractSingleActor povActor = log.FindActor(pov);
             builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon());
-            builder.WithColor(log.FightData.Success ? Color.Green : Color.Red);
+            builder.WithColor(log.FightData.Success ? Discord.Color.Green : Discord.Color.Red);
             if (dpsReportPermalink.Length > 0)
             {
                 builder.WithUrl(dpsReportPermalink);

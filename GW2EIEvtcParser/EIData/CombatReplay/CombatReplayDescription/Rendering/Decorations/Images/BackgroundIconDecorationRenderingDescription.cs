@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.BackgroundIconDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class BackgroundIconDecorationRenderingDescription : GenericIconDecorationRenderingDescription
+    public class BackgroundIconDecorationRenderingDescription : GenericIconDecorationRenderingDescription
     {
 
         public IReadOnlyList<float> Opacities { get; private set; }

@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class AgentFacingConnector : RotationConnector
+    public class AgentFacingConnector : RotationConnector
     {
         public AgentItem Agent { get; }
 

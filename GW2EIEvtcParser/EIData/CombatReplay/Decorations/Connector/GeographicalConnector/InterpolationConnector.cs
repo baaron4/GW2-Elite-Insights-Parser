@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class InterpolationConnector : GeographicalConnector
+    public class InterpolationConnector : GeographicalConnector
     {
         protected IReadOnlyList<ParametricPoint3D> Positions { get; set; }
 
@@ -20,7 +20,7 @@ namespace GW2EIEvtcParser.EIData
             _method = interpolationMethod;
         }
 
-        protected class InterpolationConnectorDescriptor : GeographicalConnectorDescriptor
+        public class InterpolationConnectorDescriptor : GeographicalConnectorDescriptor
         {
             public int InterpolationMethod { get; private set; }
             public IReadOnlyList<float> Positions { get; private set; }

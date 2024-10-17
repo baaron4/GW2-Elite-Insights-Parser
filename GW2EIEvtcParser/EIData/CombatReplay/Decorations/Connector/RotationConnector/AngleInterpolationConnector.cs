@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class AngleInterpolationConnector : RotationConnector
+    public class AngleInterpolationConnector : RotationConnector
     {
         /// <summary>
         /// Points for angles, in degrees, around Z axis
@@ -48,7 +48,7 @@ namespace GW2EIEvtcParser.EIData
             _method = interpolationMethod;
         }
 
-        protected class InterpolationConnectorDescriptor : RotationConnectorDescriptor
+        public class InterpolationConnectorDescriptor : RotationConnectorDescriptor
         {
             public int InterpolationMethod { get; private set; }
             public IReadOnlyList<float> Angles { get; private set; }

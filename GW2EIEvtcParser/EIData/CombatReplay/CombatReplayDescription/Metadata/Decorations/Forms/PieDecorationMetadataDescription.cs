@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.PieDecoration;
+﻿using static GW2EIEvtcParser.EIData.PieDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class PieDecorationMetadataDescription : CircleDecorationMetadataDescription
+    public class PieDecorationMetadataDescription : CircleDecorationMetadataDescription
     {
         public float OpeningAngle { get; set; }
 

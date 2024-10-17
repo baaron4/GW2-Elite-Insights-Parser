@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class RotationConnector : Connector
+    public abstract class RotationConnector : Connector
     {
         public abstract class RotationConnectorDescriptor
         {

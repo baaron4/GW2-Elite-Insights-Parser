@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class AngleConnector : RotationConnector
+    public class AngleConnector : RotationConnector
     {
         /// <summary>
         /// Angle around Z axis in degrees

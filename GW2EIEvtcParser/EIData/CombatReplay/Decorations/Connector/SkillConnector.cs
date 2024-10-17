@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class SkillConnector : Connector
+    public class SkillConnector : Connector
     {
         public AgentItem Agent { get; }
 

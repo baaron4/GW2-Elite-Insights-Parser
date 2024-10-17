@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData
 {
     using Position = (float x, float y, float z, float angle, float opacity, int time);
 
-    internal class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
+    public class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
     {
         private class PositionConverter : JsonConverter<Position[]>
         {

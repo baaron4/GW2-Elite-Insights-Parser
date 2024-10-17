@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class GeographicalConnector : Connector
+    public abstract class GeographicalConnector : Connector
     {
         private Point3D Offset { get; set; }
 

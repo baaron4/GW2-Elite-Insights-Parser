@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class PieDecoration : CircleDecoration
+    public class PieDecoration : CircleDecoration
     {
         internal class PieDecorationMetadata : CircleDecorationMetadata
         {

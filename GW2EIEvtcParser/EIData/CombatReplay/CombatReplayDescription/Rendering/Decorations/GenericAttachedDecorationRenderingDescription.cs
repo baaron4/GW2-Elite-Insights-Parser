@@ -5,12 +5,12 @@ using static GW2EIEvtcParser.EIData.GenericAttachedDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class GenericAttachedDecorationRenderingDescription : GenericDecorationRenderingDescription
+    public abstract class GenericAttachedDecorationRenderingDescription : GenericDecorationRenderingDescription
     {
         public object ConnectedTo { get; }
         public object RotationConnectedTo { get; }
 
-        private class SkillModeDescription
+        public class SkillModeDescription
         {
             public object Owner { get; internal set; }
 

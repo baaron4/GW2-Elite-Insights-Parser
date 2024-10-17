@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    internal class PlayerCombatReplayDescription : AbstractSingleActorCombatReplayDescription
+    public class PlayerCombatReplayDescription : AbstractSingleActorCombatReplayDescription
     {
         public int Group { get; }
 

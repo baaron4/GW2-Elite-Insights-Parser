@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class NPCCombatReplayDescription : AbstractSingleActorCombatReplayDescription
+    public class NPCCombatReplayDescription : AbstractSingleActorCombatReplayDescription
     {
         public int MasterID { get; }
 

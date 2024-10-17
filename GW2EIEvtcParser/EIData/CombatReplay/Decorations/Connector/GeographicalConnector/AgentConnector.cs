@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class AgentConnector : GeographicalConnector
+    public class AgentConnector : GeographicalConnector
     {
         public AgentItem Agent { get; }
 
@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EIData
             Agent = agent;
         }
 
-        protected class AgentConnectorDescriptor : GeographicalConnectorDescriptor
+        public class AgentConnectorDescriptor : GeographicalConnectorDescriptor
         {
             public int MasterId { get; private set; }
             public AgentConnectorDescriptor(AgentConnector connector, CombatReplayMap map) : base(connector, map)

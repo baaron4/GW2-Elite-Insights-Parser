@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using GW2EIEvtcParser.ParsedData;
+﻿using System.IO;
 using static GW2EIEvtcParser.EIData.GenericIconDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class GenericIconDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
+    public abstract class GenericIconDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
     {
         public string Image { get; }
         public uint PixelSize { get; }

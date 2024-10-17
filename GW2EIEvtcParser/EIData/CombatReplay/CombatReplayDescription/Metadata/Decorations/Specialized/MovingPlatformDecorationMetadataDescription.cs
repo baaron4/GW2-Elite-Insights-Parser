@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class MovingPlatformDecorationMetadataDescription : BackgroundDecorationMetadataDescription
+    public class MovingPlatformDecorationMetadataDescription : BackgroundDecorationMetadataDescription
     {
         public string Image { get; }
         public int Height { get; }

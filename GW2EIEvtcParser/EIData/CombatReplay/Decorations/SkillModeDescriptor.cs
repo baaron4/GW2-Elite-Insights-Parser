@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class SkillModeDescriptor
+    public class SkillModeDescriptor
     {
         [Flags]
         public enum SkillModeCategory : uint

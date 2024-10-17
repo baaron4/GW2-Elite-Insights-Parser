@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.CircleDecoration;
+﻿using static GW2EIEvtcParser.EIData.CircleDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class CircleDecorationMetadataDescription : FormDecorationMetadataDescription
+    public class CircleDecorationMetadataDescription : FormDecorationMetadataDescription
     {
         public uint Radius { get; }
         public uint MinRadius { get; }

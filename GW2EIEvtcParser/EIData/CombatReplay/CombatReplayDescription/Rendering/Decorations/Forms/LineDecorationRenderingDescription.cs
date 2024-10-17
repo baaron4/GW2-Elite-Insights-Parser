@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.LineDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class LineDecorationRenderingDescription : FormDecorationRenderingDescription
+    public class LineDecorationRenderingDescription : FormDecorationRenderingDescription
     {
         public object ConnectedFrom { get; }
 

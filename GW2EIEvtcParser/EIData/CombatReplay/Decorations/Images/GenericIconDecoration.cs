@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class GenericIconDecoration : GenericAttachedDecoration
+    public abstract class GenericIconDecoration : GenericAttachedDecoration
     {
         internal abstract class GenericIconDecorationMetadata : GenericAttachedDecorationMetadata
         {

@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.DoughnutDecoration;
+﻿using static GW2EIEvtcParser.EIData.DoughnutDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
+    public class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
     {
         public uint InnerRadius { get; }
         public uint OuterRadius { get; }

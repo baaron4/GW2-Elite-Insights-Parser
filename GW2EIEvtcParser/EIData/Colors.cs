@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.EIData
 {
-    internal class Color
+    public class Color
     {
         public byte R { get; set; }
         public byte G { get; set; }

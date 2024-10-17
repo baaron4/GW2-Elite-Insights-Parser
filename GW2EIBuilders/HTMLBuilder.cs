@@ -7,6 +7,7 @@ using GW2EIEvtcParser;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tracing;
+using GW2EIEvtcParser.EIData;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIBuilders
@@ -34,6 +35,13 @@ namespace GW2EIBuilders
         Converters = [ typeof(IntTupleArrayConverter) ]
     )]
     [JsonSerializable(typeof(LogDataDto))]
+    [JsonSerializable(typeof(AgentConnector.AgentConnectorDescriptor))]
+    [JsonSerializable(typeof(PositionConnector.PositionConnectorDescriptor))]
+    [JsonSerializable(typeof(AgentFacingConnector.AgentFacingConnectorDescriptor))]
+    [JsonSerializable(typeof(AngleConnector.AngleConnectorDescriptor))]
+    [JsonSerializable(typeof(AngleInterpolationConnector.InterpolationConnectorDescriptor))]
+    [JsonSerializable(typeof(InterpolationConnector.InterpolationConnectorDescriptor))]
+    [JsonSerializable(typeof(GenericAttachedDecorationRenderingDescription.SkillModeDescription))]
     partial class LogDataDtoSerializerContext : JsonSerializerContext {  }
 
 

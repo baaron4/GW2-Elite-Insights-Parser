@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.FormDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class FormDecorationRenderingDescription : GenericAttachedDecorationRenderingDescription
+    public abstract class FormDecorationRenderingDescription : GenericAttachedDecorationRenderingDescription
     {
         public bool Fill { get; }
         public int GrowingEnd { get; }

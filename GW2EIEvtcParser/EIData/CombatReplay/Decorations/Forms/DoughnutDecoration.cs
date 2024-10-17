@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class DoughnutDecoration : FormDecoration
+    public class DoughnutDecoration : FormDecoration
     {
         internal class DoughnutDecorationMetadata : FormDecorationMetadata
         {

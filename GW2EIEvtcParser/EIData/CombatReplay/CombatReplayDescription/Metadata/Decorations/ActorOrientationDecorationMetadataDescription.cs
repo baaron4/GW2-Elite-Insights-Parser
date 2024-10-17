@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.ActorOrientationDecoration;
 
 namespace GW2EIEvtcParser.EIData
 {
-    internal class ActorOrientationDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
+    public class ActorOrientationDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
     {
 
         internal ActorOrientationDecorationMetadataDescription(ActorOrientationDecorationMetadata decoration) : base(decoration)

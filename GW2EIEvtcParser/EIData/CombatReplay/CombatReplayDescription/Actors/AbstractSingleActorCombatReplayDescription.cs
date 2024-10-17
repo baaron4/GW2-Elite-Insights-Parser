@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace GW2EIEvtcParser.EIData
 {
     /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
     using Segment = GenericSegment<double>;
 
+    [JsonPolymorphic(UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization)]
+    [JsonDerivedType(typeof(NPCCombatReplayDescription))]
+    [JsonDerivedType(typeof(PlayerCombatReplayDescription))]
     public abstract class AbstractSingleActorCombatReplayDescription : AbstractCombatReplayDescription
     {
         public long Start { get; protected set; }

@@ -1,9 +1,11 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System.Text.Json.Serialization;
+
+namespace GW2EIEvtcParser.EIData
 {
-    internal abstract class Connector
+    public abstract class Connector
     {
 
-        internal enum InterpolationMethod
+        public enum InterpolationMethod
         {
             Linear = 0
         }
