@@ -6,7 +6,7 @@
         private const ulong RevMask = 0x00FFFFFF00000000;
         private const byte RevShift = 32;
 
-        internal static AbstractExtensionHandler GetExtensionHandler(CombatItem c)
+        internal static AbstractExtensionHandler? GetExtensionHandler(CombatItem c)
         {
             if (c.IsStateChange != ArcDPSEnums.StateChange.Extension || c.Pad != 0)
             {

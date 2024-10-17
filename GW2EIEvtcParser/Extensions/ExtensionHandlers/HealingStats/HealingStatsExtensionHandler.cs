@@ -151,7 +151,9 @@ namespace GW2EIEvtcParser.Extensions
             bytes.PushNative(c.SrcMasterInstid);
             // 2 bytes
             bytes.PushNative(c.DstMasterInstid);
-            Version = System.Text.Encoding.UTF8.GetString(bytes);
+
+            var nullTerm = bytes.AsUsedSpan().IndexOf((byte)0);
+            Version = System.Text.Encoding.UTF8.GetString(nullTerm != -1 ? bytes.AsUsedSpan()[..nullTerm] : bytes);
         }
         public static bool SanitizeForSrc<T>(List<T> events) where T : EXTAbstractHealingExtensionEvent
         {
