@@ -264,7 +264,7 @@ namespace GW2EIEvtcParser
                 throw new EvtcFileException("Not EVTC");
             }
             _evtcVersion = new EvtcVersionEvent(headerVersion);
-            operation.UpdateProgressWithCancellationCheck("Parsing: ArcDPS Build " + evtcVersion);
+            operation.UpdateProgressWithCancellationCheck("Parsing: ArcDPS Build " + evtcVersion.AsSpan().ToString());
 
             // 1 byte: revision
             _revision = reader.ReadByte();

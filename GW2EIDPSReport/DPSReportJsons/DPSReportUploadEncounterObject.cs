@@ -4,7 +4,7 @@ public class DPSReportUploadEncounterObject
 {
     public string UniqueId;
     public bool Success;
-    public long Duration;
+    public double Duration;
     public long CompDps;
     public int NumberOfPlayers;
     public int NumberOfGroups;

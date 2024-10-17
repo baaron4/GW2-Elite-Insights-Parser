@@ -286,8 +286,7 @@ public static class DPSReportController
 
                     if (responseContent != null)
                     {
-                        Task<string> stringContentsTask = responseContent.ReadAsStringAsync();
-                        string stringContents = stringContentsTask.Result;
+                        var stringContents = responseContent.ReadAsStringAsync().Result;
                         T item = JsonSerializer.Deserialize<T>(stringContents, DeserializerSettings);
                         traceHandler(requestName + " tentative successful");
                         return item;

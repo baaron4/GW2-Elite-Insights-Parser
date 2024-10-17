@@ -51,7 +51,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
             foreach (AbstractBuffEvent buffEvent in buffEvents)
             {
                 long timeCur = buffEvent.Time;
-                Debug.Assert(timeCur - timePrev < 0, "Negative passed time in boon simulation");
+                Debug.Assert(timeCur >= timePrev, "Negative passed time in boon simulation");
 
                 Update(timeCur - timePrev);
                 UpdateSimulator(buffEvent);
