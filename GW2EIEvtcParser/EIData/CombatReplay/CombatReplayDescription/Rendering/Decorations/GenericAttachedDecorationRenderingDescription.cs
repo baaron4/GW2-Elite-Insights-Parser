@@ -8,18 +8,18 @@ namespace GW2EIEvtcParser.EIData
     public abstract class GenericAttachedDecorationRenderingDescription : GenericDecorationRenderingDescription
     {
         public object ConnectedTo { get; }
-        public object RotationConnectedTo { get; }
+        public object? RotationConnectedTo { get; }
 
         public class SkillModeDescription
         {
-            public object Owner { get; internal set; }
+            public object? Owner { get; internal set; }
 
             public uint Category { get; internal set; }
 
             public long SkillID { get; internal set; }
             public bool IsBuff { get; internal set; }
         }
-        public object SkillMode { get; } = null;
+        public object? SkillMode { get; } = null;
 
         internal GenericAttachedDecorationRenderingDescription(ParsedEvtcLog log, GenericAttachedDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(decoration, metadataSignature)
         {

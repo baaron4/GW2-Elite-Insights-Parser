@@ -31,7 +31,7 @@ namespace GW2EIBuilders
     // compile-time generated serialization logic
     [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata | JsonSourceGenerationMode.Serialization,
         PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
-        IncludeFields = true, WriteIndented = false, 
+        IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
         Converters = [ typeof(IntTupleArrayConverter) ]
     )]
     [JsonSerializable(typeof(LogDataDto))]
