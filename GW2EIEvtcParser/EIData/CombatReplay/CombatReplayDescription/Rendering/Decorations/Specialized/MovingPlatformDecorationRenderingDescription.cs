@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData
 
     public class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
     {
-        private class PositionConverter : JsonConverter<Position[]>
+        public class PositionConverter : JsonConverter<Position[]>
         {
             public override void Write(Utf8JsonWriter writer, Position[] positions, JsonSerializerOptions serializer)
             {

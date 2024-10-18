@@ -1,17 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData
 {
+
+    [JsonConverter(typeof(SkillDataConverter))]
+    public struct SkillData2
+    {
+        public double Start;
+        public long   SkillId;
+        public int    ActualDuration;
+        public int    Status;
+        public double Acceleration;
+    }
+
+    class SkillDataConverter : JsonConverter<SkillData2>
+    {
+        public override SkillData2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, SkillData2 value, JsonSerializerOptions options)
+        {
+            writer.WriteStartArray();
+            writer.WriteNumberValue(value.Start);
+            writer.WriteNumberValue(value.SkillId);
+            writer.WriteNumberValue(value.ActualDuration);
+            writer.WriteNumberValue(value.Status);
+            writer.WriteNumberValue(value.Acceleration);
+            writer.WriteEndArray();
+        }
+    }
+
+
+
     internal class SkillDto : AbstractSkillDto
     {
-        public bool Aa { get; set; }
-        public bool IsSwap { get; set; }
-        public bool NotAccurate { get; set; }
-        public bool TraitProc { get; set; }
-        public bool GearProc { get; set; }
+        public bool Aa;
+        public bool IsSwap;
+        public bool NotAccurate;
+        public bool TraitProc;
+        public bool GearProc;
 
         public SkillDto(SkillItem skill, ParsedEvtcLog log) : base(skill, log)
         {
@@ -30,22 +65,21 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData
             }
         }
 
-        private static object[] GetSkillData(AbstractCastEvent cl, long phaseStart)
+        private static SkillData2 GetSkillData(AbstractCastEvent cl, long phaseStart)
         {
-            object[] rotEntry = new object[5];
-            double start = (cl.Time - phaseStart) / 1000.0;
-            rotEntry[0] = start;
-            rotEntry[1] = cl.SkillId;
-            rotEntry[2] = cl.ActualDuration;
-            rotEntry[3] = (int)cl.Status;
-            rotEntry[4] = cl.Acceleration;
-            return rotEntry;
+            return new SkillData2()
+            {
+                Start = (cl.Time - phaseStart) / 1000.0,
+                SkillId = cl.SkillId,
+                ActualDuration = cl.ActualDuration,
+                Status = (int)cl.Status,
+                Acceleration = cl.Acceleration,
+            };
         }
 
-        //TODO(Rennorb) @perf
-        public static List<object[]> BuildRotationData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
+        public static List<SkillData2> BuildRotationData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
         {
-            var list = new List<object[]>();
+            var list = new List<SkillData2>(); //TODO(Rennorb) @perf
             var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
             foreach (AbstractCastEvent cl in casting)
             {

@@ -7,16 +7,16 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
 
     internal abstract class ActorDto
     {
-        public int UniqueID { get; set; }
-        public string Name { get; set; }
-        public uint Tough { get; set; }
-        public uint Condi { get; set; }
-        public uint Conc { get; set; }
-        public uint Heal { get; set; }
-        public string Icon { get; set; }
-        public long Health { get; set; }
-        public List<MinionDto> Minions { get; } = new List<MinionDto>();
-        public ActorDetailsDto Details { get; set; }
+        public int UniqueID;
+        public string Name;
+        public uint Tough;
+        public uint Condi;
+        public uint Conc;
+        public uint Heal;
+        public string Icon;
+        public long Health;
+        public List<MinionDto> Minions;
+        public ActorDetailsDto Details;
 
         protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
         {
@@ -29,7 +29,9 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
             Tough = actor.Toughness;
             Details = details;
             UniqueID = actor.UniqueID;
-            foreach (KeyValuePair<long, Minions> pair in actor.GetMinions(log))
+            var minions = actor.GetMinions(log);
+            Minions = new(minions.Count);
+            foreach (KeyValuePair<long, Minions> pair in minions)
             {
                 Minions.Add(new MinionDto()
                 {

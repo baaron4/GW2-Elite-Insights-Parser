@@ -14,7 +14,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
         public List<DmgDistributionDto>?           DmgDistributions;
         public List<List<DmgDistributionDto>>?     DmgDistributionsTargets;
         public List<DmgDistributionDto>?           DmgDistributionsTaken;
-        public List<List<object[]>>?               Rotation;
+        public List<List<SkillData2>>?             Rotation;
         public List<List<BuffChartDataDto>>?       BoonGraph;
         public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
         public List<FoodDto>?                      Food;
@@ -82,6 +82,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
         }
 
         static readonly List<List<BuffChartDataDto>> EmptyBuffChartList = new();
+        static readonly List<SkillData2>             EmptyRotationList  = new();
+        static readonly List<BuffChartDataDto>       EmptyBoonGraphList = new();
 
         public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, AbstractSingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
         {
@@ -122,6 +124,11 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors
                     {
                         dto.Rotation.Add(SkillDto.BuildRotationData(log, target, phase, usedSkills));
                         dto.BoonGraph.Add(BuffChartDataDto.BuildBuffGraphData(log, target, phase, usedBuffs));
+                    }
+                    else
+                    {
+                        dto.Rotation.Add(EmptyRotationList);
+                        dto.BoonGraph.Add(EmptyBoonGraphList);
                     }
 
                     dto.DmgDistributions.Add(DmgDistributionDto.EmptyInstance);
