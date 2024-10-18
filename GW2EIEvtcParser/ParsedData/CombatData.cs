@@ -1260,7 +1260,7 @@ namespace GW2EIEvtcParser.ParsedData
             //NOTE(Rennorb): Has entries due to invariant on TryGetEffectEventsBySrcWithGUID
             var startTime = effects[0].Time;
             var endTime = effects[^1].Time;
-            var slices = (int)((endTime - startTime + (epsilon - 1)) / epsilon); // basically ceiling of total duration / epsilon
+            var slices = Math.Max(1, (int)((endTime - startTime + (epsilon - 1)) / epsilon)); // ceiling of total duration / epsilon, and at least one slice
             var groupedEffectEvents = new List<List<EffectEvent>>(slices);
 
 
