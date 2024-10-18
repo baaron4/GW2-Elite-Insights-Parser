@@ -138,6 +138,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                 {
                     return new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfJudgement);
                 }
+                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Dhuum).Any(dhuum => combatData.Any(evt => evt.IsDamagingDamage() && (evt.DstMatchesAgent(dhuum) || evt.SrcMatchesAgent(dhuum)))))
+                {
+                    return new Dhuum((int)ArcDPSEnums.TargetID.Dhuum);
+                }
             }
             return base.AdjustLogic(agentData, combatData);
         }

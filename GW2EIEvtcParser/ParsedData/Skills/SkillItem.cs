@@ -921,6 +921,7 @@ namespace GW2EIEvtcParser.ParsedData
             { ShadowStrike, "https://wiki.guildwars2.com/images/6/66/Shadow_Assault.png" },
             { InfiltratorsStrikeSomething, "https://wiki.guildwars2.com/images/2/2c/Infiltrator%27s_Strike.png" },
             { BarbedSpearRanged, "https://wiki.guildwars2.com/images/a/a4/Barbed_Spear.png" },
+            { TraversingDuskHeal, "https://wiki.guildwars2.com/images/1/10/Traversing_Dusk.png" },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, "https://wiki.guildwars2.com/images/e/e7/Mending_Might.png" },

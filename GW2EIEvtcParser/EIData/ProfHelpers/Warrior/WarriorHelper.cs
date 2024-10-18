@@ -83,6 +83,7 @@ namespace GW2EIEvtcParser.EIData
             new BuffOnActorDamageModifier(Resolution, "Hardened Armor", "-10% under resolution", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.HardenedArmor, DamageModifierMode.All).WithBuilds(GW2Builds.March2020Balance),
             new BuffOnActorDamageModifier(Rampage, "Rampage", "-25%", DamageSource.NoPets, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
             new BuffOnActorDamageModifier(Rampage, "Rampage", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
+            new BuffOnActorDamageModifier(DolyakSignetBuff, "Dolyak Signet", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.DolyakSignet, DamageModifierMode.All).WithBuilds(GW2Builds.October2024Balance),
         };
 
         internal static readonly List<Buff> Buffs = new List<Buff>

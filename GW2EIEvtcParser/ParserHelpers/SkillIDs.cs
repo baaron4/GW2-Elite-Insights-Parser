@@ -3516,6 +3516,7 @@
         public const long BarrierBurst = 63141;
         public const long PetUnleashed = 63145;
         public const long UnleashRanger = 63147;
+        public const long TraversingDuskHeal = 63149;
         public const long TripleThreat = 63154;
         public const long EnterShadowShroud = 63155;
         public const long EternalNight = 63160;

@@ -257,13 +257,16 @@ namespace GW2EIWingman
         //
         private static string _GetWingmanResponse(string requestName, string url, TraceHandler traceHandler, HttpMethod method, Func<HttpContent> content = null)
         {
-            const int tentatives = 5;
+            const int tentatives = 3;
             for (int i = 0; i < tentatives; i++)
             {
                 traceHandler(requestName + " tentative");
                 var webService = new Uri(@url);
                 var requestMessage = new HttpRequestMessage(method, webService);
                 requestMessage.Headers.ExpectContinue = false;
+
+
+                var forceTimeOutTokenSource = new CancellationTokenSource();
 
                 if (content != null)
                 {
@@ -272,7 +275,8 @@ namespace GW2EIWingman
 
                 try
                 {
-                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+                    forceTimeOutTokenSource.CancelAfter(120000);
+                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, forceTimeOutTokenSource.Token);
                     HttpResponseMessage httpResponse = httpRequest.Result;
                     HttpStatusCode statusCode = httpResponse.StatusCode;
                     HttpContent responseContent = httpResponse.Content;
@@ -292,19 +296,30 @@ namespace GW2EIWingman
                 }
                 catch (AggregateException agg)
                 {
-                    traceHandler(requestName + " tentaive failed - main message - " + agg.Message);
-                    foreach (Exception e in agg.InnerExceptions)
+                    traceHandler(requestName + " tentative failed");
+                    traceHandler("Main reason: " + agg.Message);
+
+                    if (forceTimeOutTokenSource.IsCancellationRequested)
                     {
-                        traceHandler(requestName + " tentaive failed - sub message - " + e.Message);
+                        traceHandler("Sub reason: Process timeout");
+                    }
+                    else
+                    {
+                        foreach (Exception e in agg.InnerExceptions)
+                        {
+                            traceHandler("Sub reason: " + e.Message);
+                        }
                     }
                 }
                 catch (Exception e)
                 {
-                    traceHandler(requestName + " tentaive failed - " + e.Message);
+                    traceHandler(requestName + " tentaive failed");
+                    traceHandler("Reason: " + e.Message);
                 }
                 finally
                 {
                     requestMessage.Dispose();
+                    forceTimeOutTokenSource.Dispose();
                 }
             }
             return null;
