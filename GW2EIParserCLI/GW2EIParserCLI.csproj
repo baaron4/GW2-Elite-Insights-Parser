@@ -19,7 +19,7 @@
 
         <ApplicationIcon>Content\ArenaNet\LI.ico</ApplicationIcon>
         <AssemblyName>GuildWars2EliteInsights-CLI</AssemblyName>
-        <OutputPath>..\GW2EI.bin\$(Configuration)\</OutputPath>
+        <OutputPath>..\GW2EI.bin\$(Configuration)\CLI\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 

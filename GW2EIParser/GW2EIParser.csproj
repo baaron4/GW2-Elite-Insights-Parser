@@ -35,7 +35,7 @@
 
         <AssemblyName>GuildWars2EliteInsights</AssemblyName>
         <OutputType>WinExe</OutputType>
-        <OutputPath>..\GW2EI.bin\$(Configuration)\</OutputPath>
+        <OutputPath>..\GW2EI.bin\$(Configuration)\UI\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 
