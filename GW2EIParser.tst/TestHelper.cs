@@ -31,7 +31,7 @@ namespace GW2EIParser.tst
 
         internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
-        private class TestOperationController : ParserController
+        private sealed class TestOperationController : ParserController
         {
             public TestOperationController()
             {

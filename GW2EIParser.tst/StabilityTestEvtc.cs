@@ -18,7 +18,7 @@ namespace GW2EIParser.tst
     [TestFixture]
     public class StabilityTestEvtc
     {
-        internal class EVTCTestItem
+        internal sealed class EVTCTestItem
         {
             public string File { get; }
             public bool Failed { get; private set; }

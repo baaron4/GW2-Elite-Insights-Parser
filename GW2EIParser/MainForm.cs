@@ -15,7 +15,7 @@ using GW2EIParserCommons.Exceptions;
 
 namespace GW2EIParser
 {
-    internal partial class MainForm : Form
+    internal sealed partial class MainForm : Form
     {
         private readonly SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;
@@ -61,7 +61,7 @@ namespace GW2EIParser
             NumericCustomPopulateLimit.Value = Properties.Settings.Default.PopulateHourLimit;
         }
 
-        public MainForm(IEnumerable<string> filesArray, ProgramHelper programHelper) : this(programHelper)
+        public MainForm(IReadOnlyList<string> filesArray, ProgramHelper programHelper) : this(programHelper)
         {
             AddLogFiles(filesArray);
         }
@@ -70,7 +70,7 @@ namespace GW2EIParser
         /// Adds log files to the bound data source for display in the interface
         /// </summary>
         /// <param name="filesArray"></param>
-        private void AddLogFiles(IEnumerable<string> filesArray)
+        private void AddLogFiles(IReadOnlyList<string> filesArray)
         {
             foreach (string file in filesArray)
             {
@@ -95,7 +95,7 @@ namespace GW2EIParser
                 SortDgvFiles();
             }
 
-            BtnParse.Enabled = !_anyRunning && filesArray.Any();
+            BtnParse.Enabled = !_anyRunning && filesArray.Count > 0;
         }
 
         private void _RunOperation(FormOperationController operation)
