@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser {
@@ -132,8 +134,24 @@ namespace GW2EIEvtcParser {
                 list.Capacity = (int)Math.Max(list.Capacity * 1.4, list.Count + count);
             }
         }
-    }
 
+        //TODO(Rennorb) @cleanup @unstable
+        public static Span<T> AsSpan<T>(this List<T> list)
+        {
+            var array = (T[])ListInternals<T>.ItemsField.GetValue(list);
+            return array.AsSpan(0, list.Count);
+        }
+
+        static class ListInternals<T>
+        {
+            public static FieldInfo ItemsField;
+            static ListInternals()
+            {
+                ItemsField = typeof(List<T>).GetField("_items", BindingFlags.Instance | BindingFlags.NonPublic);
+                Debug.Assert(ItemsField != null);
+            }
+        }
+    }
 }
 
 //TODO not needed in c#12?

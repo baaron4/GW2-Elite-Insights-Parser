@@ -6,7 +6,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser
 {
-    internal class CombatItem
+    public class CombatItem
     {
         public long Time { get; private set; }
         public ulong SrcAgent { get; private set; }
@@ -46,7 +46,7 @@ namespace GW2EIEvtcParser
         public bool IsEffect => IsStateChange == ArcDPSEnums.StateChange.Effect_51 || IsStateChange == ArcDPSEnums.StateChange.Effect_45;
 
         // Constructor
-        internal CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
+        public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                uint skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid,
                ushort dstMasterInstid, byte iff, byte isBuff,
                byte result, byte isActivation,
@@ -359,9 +359,9 @@ namespace GW2EIEvtcParser
     public static partial class ListExt
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void SortByTime<T>(this List<T> list)  where T : CombatItem
+        public static void SortByTime<T>(this List<T> list)  where T : CombatItem
         {
-            list.Sort((a, b) => (int)(a.Time - b.Time));
+            StableSort<T>.fluxsort(list.AsSpan(), (a, b) => (int)(a.Time - b.Time));
         }
     }
 }

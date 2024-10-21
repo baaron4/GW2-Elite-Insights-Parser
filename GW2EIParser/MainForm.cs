@@ -133,13 +133,13 @@ namespace GW2EIParser
                             {
                                 operation.UpdateProgress("Program: something terrible has happened");
                             }
-                            if (!(ex.InnerException is OperationCanceledException))
-                            {
-                                operation.UpdateProgress("Program: " + ex.InnerException.Message);
-                            }
-                            else
+                            if (ex.InnerException is OperationCanceledException)
                             {
                                 operation.UpdateProgress("Program: operation Aborted");
+                            }
+                            else if(ex.InnerException != null)
+                            {
+                                operation.UpdateProgress("Program: " + ex.InnerException.Message);
                             }
                         }
                     }

@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData
     {
         public long Time { get; protected set; }
 
-        internal AbstractTimeCombatEvent(long time)
+        public AbstractTimeCombatEvent(long time)
         {
             Time = time;
         }
@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.ParsedData
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SortByTime<T>(this List<T> list)  where T : AbstractTimeCombatEvent
         {
-            list.Sort((a, b) => (int)(a.Time - b.Time));
+            StableSort<T>.fluxsort(list.AsSpan(), (a, b) => (int)(a.Time - b.Time));
         }
 
         /// Finds the event that is fist in the timeline and has a time above zero.

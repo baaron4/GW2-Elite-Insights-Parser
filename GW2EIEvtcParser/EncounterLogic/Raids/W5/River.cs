@@ -44,31 +44,31 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
         {
-            return new List<ArcDPSEnums.TrashID>
-            {
+            return
+            [
                 ArcDPSEnums.TrashID.Enervator,
                 ArcDPSEnums.TrashID.HollowedBomber,
                 ArcDPSEnums.TrashID.RiverOfSouls,
                 ArcDPSEnums.TrashID.SpiritHorde1,
                 ArcDPSEnums.TrashID.SpiritHorde2,
                 ArcDPSEnums.TrashID.SpiritHorde3
-            };
+            ];
         }
 
         protected override HashSet<int> GetUniqueNPCIDs()
         {
-            return new HashSet<int>()
-            {
+            return
+            [
                 (int)ArcDPSEnums.TargetID.Desmina
-            };
+            ];
         }
 
         protected override List<int> GetFriendlyNPCIDs()
         {
-            return new List<int>()
-            {
+            return
+            [
                 (int)ArcDPSEnums.TargetID.Desmina
-            };
+            ];
         }
 
         internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)

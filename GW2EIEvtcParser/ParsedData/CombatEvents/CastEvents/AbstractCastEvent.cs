@@ -32,7 +32,7 @@ namespace GW2EIEvtcParser.ParsedData
             Caster = agentData.GetAgent(baseItem.SrcAgent, baseItem.Time);
         }
 
-        internal AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
+        public AbstractCastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
         {
             Skill = skill;
             Caster = caster;
@@ -49,12 +49,13 @@ namespace GW2EIEvtcParser.ParsedData
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SortByTimeThenNegatedSwap<T>(this List<T> list)  where T : AbstractCastEvent
         {
-            list.Sort((a, b) => (int)(a.Time - b.Time) * 2 + (Convert.ToInt32(b.Skill.IsSwap) - Convert.ToInt32(a.Skill.IsSwap)));
+            StableSort<T>.fluxsort(list.AsSpan(), (a, b) => (int)(a.Time - b.Time) * 2 + (Convert.ToInt32(b.Skill.IsSwap) - Convert.ToInt32(a.Skill.IsSwap)));
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SortByTimeThenSwap<T>(this List<T> list)  where T : AbstractCastEvent
         {
-            list.Sort((a, b) => (int)(a.Time - b.Time) * 2 + (Convert.ToInt32(a.Skill.IsSwap) - Convert.ToInt32(b.Skill.IsSwap)));
+            true.CompareTo(false);
+            StableSort<T>.fluxsort(list.AsSpan(), (a, b) => (int)(a.Time - b.Time) * 2 + (Convert.ToInt32(a.Skill.IsSwap) - Convert.ToInt32(b.Skill.IsSwap)));
         }
     }
 }

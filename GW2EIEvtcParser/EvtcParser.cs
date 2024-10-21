@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser
         public ParsedEvtcLog? ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
-            try
+            //try
             {
                 if (!evtc.Exists)
                 {
@@ -98,11 +98,11 @@ namespace GW2EIEvtcParser
                 }
                 return evtcLog;
             }
-            catch (Exception ex)
-            {
-                parsingFailureReason = new ParsingFailureReason(ex);
-                return null;
-            }
+            //catch (Exception ex)
+            //{
+            //    parsingFailureReason = new ParsingFailureReason(ex);
+            //    return null;
+            //}
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace GW2EIEvtcParser
         public ParsedEvtcLog? ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
-            try
-            {
+            //try
+            //{
                 using (BinaryReader reader = CreateReader(evtcStream))
                 {
                     operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
@@ -236,12 +236,16 @@ namespace GW2EIEvtcParser
                     //
                     return log;
                 }
-            }
-            catch (Exception ex)
-            {
-                parsingFailureReason = new ParsingFailureReason(ex);
-                return null;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    #if DEBUG
+            //    Console.Error.WriteLine(ex);
+            //    #endif
+
+            //    parsingFailureReason = new ParsingFailureReason(ex);
+            //    return null;
+            //}
         }
 
         #endregion Main Parse Method
@@ -581,6 +585,7 @@ namespace GW2EIEvtcParser
                     discardedCbtEvents++;
                     continue;
                 }
+                
                 if (combatItem.IsStateChange == ArcDPSEnums.StateChange.ArcBuild)
                 {
                     EvtcVersionEvent oldEvent = _evtcVersion;
@@ -592,8 +597,10 @@ namespace GW2EIEvtcParser
                     {
                         _evtcVersion = oldEvent;
                     }
+
                     continue;
                 }
+                
                 if (combatItem.HasTime())
                 {
                     if (_logStartTime == 0)
@@ -602,11 +609,14 @@ namespace GW2EIEvtcParser
                     }
                     _logEndTime = combatItem.Time;
                 }
+
                 _combatItems.Add(combatItem);
+
                 if (combatItem.IsStateChange == ArcDPSEnums.StateChange.GWBuild && GW2BuildEvent.GetBuild(combatItem) != 0)
                 {
                     _gw2Build = GW2BuildEvent.GetBuild(combatItem);
                 }
+
                 if (combatItem.IsStateChange == ArcDPSEnums.StateChange.SquadCombatEnd)
                 {
                     keepOnlyExtensionEvents = true;
