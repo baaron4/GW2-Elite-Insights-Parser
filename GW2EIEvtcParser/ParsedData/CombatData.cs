@@ -241,7 +241,7 @@ namespace GW2EIEvtcParser.ParsedData
                         toAdd.AddRange(ProfHelper.ComputeEffectCastEvents(p, this, skillData, AbyssalBlitz, EffectGUIDs.RevenantSpearAbyssalBlitz1, 0, 3000, 
                             (abyssalBlitz, effect, combatData, skllData) =>
                             {
-                                return abyssalBlitz.Where(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 300).Count() == 0;
+                                return !abyssalBlitz.Where(x => x.Time < effect.Time && Math.Abs(x.Time - effect.Time) < 300).Any();
                             }));
                         break;
                     default:
