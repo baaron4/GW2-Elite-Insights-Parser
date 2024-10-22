@@ -664,7 +664,7 @@ namespace GW2EIEvtcParser.EIData
 
         public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
-        private Point3D GetCurrentPoint(IReadOnlyList<ParametricPoint3D> points, ParsedEvtcLog log, long time, long forwardWindow = 0)
+        private static Point3D GetCurrentPoint(IReadOnlyList<ParametricPoint3D> points, ParsedEvtcLog log, long time, long forwardWindow = 0)
         {
             if (forwardWindow != 0)
             {
