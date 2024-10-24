@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EIData
         internal BuffsGraphModel(Buff buff)
         {
             Buff = buff;
-            _buffChart = new();
+            _buffChart = [ ];
         }
         internal BuffsGraphModel(Buff buff, List<Segment> buffChartWithSource)
         {
@@ -44,17 +44,9 @@ namespace GW2EIEvtcParser.EIData
             return new Segment(long.MinValue, long.MaxValue, 0);
         }
 
-        public IReadOnlyList<Segment> GetBuffStatus(long start, long end)
+        public IEnumerable<Segment> GetBuffStatus(long start, long end)
         {
-            var res = new List<Segment>(BuffChart.Count);
-            foreach (Segment seg in BuffChart)
-            {
-                if (seg.Intersects(start, end))
-                {
-                    res.Add(seg);
-                }
-            }
-            return res;
+            return BuffChart.Where(seg => seg.Intersects(start, end));
         }
 
         public int GetStackCount(long time)
@@ -97,7 +89,7 @@ namespace GW2EIEvtcParser.EIData
             {
                 //TODO(Rennorb) @perf
                 var segmentsToFill = new LinkedList<Segment>(_buffChart);
-                LinkedListNode<Segment> node = segmentsToFill.Find(segmentsToFill.First());
+                var node = segmentsToFill.First;
                 foreach (Segment seg in from)
                 {
                     long start = seg.Start;
@@ -126,10 +118,12 @@ namespace GW2EIEvtcParser.EIData
                             continue;
                         }
 
+                        curSeg.End = start;
+                        node.Value = curSeg;
+
                         // The segment in inside current one
                         if (end <= curEnd)
                         {
-                            curSeg.End = start;
                             segmentsToFill.AddAfter(node, new Segment(start, end, curVal + presence));
                             node = node.Next;
                             segmentsToFill.AddAfter(node, new Segment(end, curEnd, curVal));
@@ -139,7 +133,6 @@ namespace GW2EIEvtcParser.EIData
                         else
                         {
                             // the segment straddles cur and next
-                            curSeg.End = start;
                             segmentsToFill.AddAfter(node, new Segment(start, curEnd, curVal + presence));
                             node = node.Next;
                             start = curEnd;

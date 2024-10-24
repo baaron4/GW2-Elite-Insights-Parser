@@ -184,7 +184,7 @@ namespace GW2EIEvtcParser.EIData
 
         private static IReadOnlyList<Segment> GetBuffStatus(long buffId, long start, long end, IReadOnlyDictionary<long, BuffsGraphModel> bgms)
         {
-            return bgms.TryGetValue(buffId, out BuffsGraphModel bgm) ? bgm.GetBuffStatus(start, end) : [ _emptySegment ];
+            return bgms.TryGetValue(buffId, out BuffsGraphModel bgm) ? bgm.GetBuffStatus(start, end).ToList() : [ _emptySegment ];
         }
 
         /// <exception cref="InvalidOperationException"></exception>
@@ -350,7 +350,7 @@ namespace GW2EIEvtcParser.EIData
                     }
                     _buffSimulators[buffID] = simulator;
                     bool updateBoonPresence = boonIds.Contains(buffID);
-                    bool updateCondiPresence = condiIds.Contains(buffID);
+                    bool updateCondiPresence = condiIds.Contains(buffID); // move
                     var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count);
                     foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
                     {

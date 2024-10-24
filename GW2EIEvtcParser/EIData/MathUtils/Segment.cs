@@ -28,21 +28,22 @@ namespace GW2EIEvtcParser.EIData
             int lastIndex = 0;
             for(int i = 1; i < segments.Count; i++)
             {
-                var seg = segments[i];
+                var current = segments[i];
                 //TODO(Rennorb) perf
-                if (seg.IsEmpty())
+                if (current.IsEmpty())
                 {
                     continue;
                 }
 
-                if (seg.Value == last.Value)
+                if (current.Value == last.Value)
                 {
-                    last.End = seg.End;
+                    last.End = current.End;
+                    segments[lastIndex] = last;
                 }
                 else
                 {
                     segments[lastIndex] = last;
-                    last = seg;
+                    last = current;
                     lastIndex++;
                 }
             }
