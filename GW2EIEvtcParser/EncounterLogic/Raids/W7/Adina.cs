@@ -84,7 +84,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     return targetables.Any(y => y.Targetable);
                 }
                 return false;
-            });
+            })
+                .ToList(); //NOTE(Rennorb): Unfortunate ToList because we have to insert into the collection we iterate. 
             long final = fightData.FightEnd;
             var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) }; // gadget locations
             var processedAttackTargets = new HashSet<AgentItem>();

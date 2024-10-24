@@ -66,7 +66,7 @@ namespace GW2EIEvtcParser
         public ParsedEvtcLog? ParseLog(ParserController operation, FileInfo evtc, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
-            //try
+            try
             {
                 if (!evtc.Exists)
                 {
@@ -98,11 +98,11 @@ namespace GW2EIEvtcParser
                 }
                 return evtcLog;
             }
-            //catch (Exception ex)
-            //{
-            //    parsingFailureReason = new ParsingFailureReason(ex);
-            //    return null;
-            //}
+            catch (Exception ex)
+            {
+                parsingFailureReason = new ParsingFailureReason(ex);
+                return null;
+            }
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace GW2EIEvtcParser
         public ParsedEvtcLog? ParseLog(ParserController operation, Stream evtcStream, out ParsingFailureReason? parsingFailureReason, bool multiThreadAccelerationForBuffs = false)
         {
             parsingFailureReason = null;
-            //try
-            //{
+            try
+            {
                 using (BinaryReader reader = CreateReader(evtcStream))
                 {
                     operation.UpdateProgressWithCancellationCheck("Parsing: Reading Binary");
@@ -236,17 +236,17 @@ namespace GW2EIEvtcParser
                     //
                     return log;
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    #if DEBUG
-            //    Console.Error.WriteLine(ex);
-            //    #endif
+            }
+            catch (Exception ex)
+            {
+                #if DEBUG
+                Console.Error.WriteLine(ex);
+                #endif
 
-            //    parsingFailureReason = new ParsingFailureReason(ex);
-            //    return null;
-            //}
-        }
+                parsingFailureReason = new ParsingFailureReason(ex);
+                return null;
+            }
+}
 
         #endregion Main Parse Method
 
