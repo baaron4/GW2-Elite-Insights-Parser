@@ -57,6 +57,7 @@
         public const long SuperiorSigilOfLeeching = -38;
         public const long BlitzMinesDrop = -39;
         public const long RelicOfTheClawBuffLoss = -40;
+        public const long BerserkEndSkill = -41;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
@@ -1478,7 +1479,7 @@
         public const long SandSquall = 29453;
         public const long BloodReckoning = 29466;
         public const long ForceOfWill = 29485;
-        public const long Berserk = 29502;
+        public const long BerserkBuff = 29502;
         public const long ShieldOfCourage = 29523;
         public const long WellOfPrecognition = 29526;
         public const long SpitefulSpirit = 29560;
@@ -1540,6 +1541,7 @@
         public const long VampiricStrikes = 30398;
         public const long PalmStrike = 30423;
         public const long FencersFinesse = 30426;
+        public const long BerserkSkill = 30435;
         public const long NaturalMender = 30449;
         public const long HeatSync = 30462;
         public const long YourSoulIsMine = 30488;
