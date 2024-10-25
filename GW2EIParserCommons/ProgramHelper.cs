@@ -94,6 +94,7 @@ namespace GW2EIParserCommons
             if (Settings.MemoryLimit == 0 && RunningMemoryCheck != null)
             {
                 RunningMemoryCheck.Cancel();
+                RunningMemoryCheck.Dispose();
                 RunningMemoryCheck = null;
             }
             if (Settings.MemoryLimit == 0 || RunningMemoryCheck != null)
@@ -107,7 +108,7 @@ namespace GW2EIParserCommons
                 {
                     while (true)
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(500).ConfigureAwait(false);
                         proc.Refresh();
                         if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1e6)
                         {
