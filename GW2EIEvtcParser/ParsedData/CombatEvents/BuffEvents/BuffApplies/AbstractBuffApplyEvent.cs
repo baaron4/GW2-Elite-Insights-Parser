@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public abstract class AbstractBuffApplyEvent : AbstractBuffEvent
 {
-    public uint BuffInstance { get; }
+    public readonly uint BuffInstance;
 
     internal AbstractBuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
     {

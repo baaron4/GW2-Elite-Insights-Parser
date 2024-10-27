@@ -21,10 +21,10 @@ internal class Mordremoth : StoryInstance
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.SmotheringShadow,
-        };
+        ];
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -56,8 +56,8 @@ internal class Mordremoth : StoryInstance
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Mordremoth,
             (int)ArcDPSEnums.TrashID.BlightedRytlock,
             //ArcDPSEnums.TrashID.BlightedCanach,
@@ -70,7 +70,7 @@ internal class Mordremoth : StoryInstance
             //ArcDPSEnums.TrashID.BlightedPaleTree,
             //ArcDPSEnums.TrashID.BlightedTrahearne,
             //ArcDPSEnums.TrashID.BlightedEir,
-        };
+        ];
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
@@ -91,18 +91,18 @@ internal class Mordremoth : StoryInstance
 
     protected override List<int> GetFriendlyNPCIDs()
     {
-        return new List<int>()
-        {
+        return
+        [
             (int)ArcDPSEnums.TrashID.Canach,
             (int)ArcDPSEnums.TrashID.Braham,
             (int)ArcDPSEnums.TrashID.Caithe,
-        };
+        ];
     }
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>()
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Mordremoth,
             (int)ArcDPSEnums.TrashID.Canach,
             (int)ArcDPSEnums.TrashID.Braham,
@@ -118,6 +118,6 @@ internal class Mordremoth : StoryInstance
             //ArcDPSEnums.TrashID.BlightedPaleTree,
             //ArcDPSEnums.TrashID.BlightedTrahearne,
             //ArcDPSEnums.TrashID.BlightedEir,           
-        };
+        ];
     }
 }

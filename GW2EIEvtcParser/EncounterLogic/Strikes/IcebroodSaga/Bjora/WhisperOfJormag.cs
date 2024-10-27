@@ -51,10 +51,10 @@ internal class WhisperOfJormag : Bjora
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(FrostbiteAuraWhisperOfJormag, FrostbiteAuraWhisperOfJormag),
-        };
+        ];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -111,8 +111,8 @@ internal class WhisperOfJormag : Bjora
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.WhisperEcho,
             ArcDPSEnums.TrashID.DoppelgangerElementalist,
             ArcDPSEnums.TrashID.DoppelgangerElementalist2,
@@ -132,6 +132,6 @@ internal class WhisperOfJormag : Bjora
             ArcDPSEnums.TrashID.DoppelgangerThief2,
             ArcDPSEnums.TrashID.DoppelgangerWarrior,
             ArcDPSEnums.TrashID.DoppelgangerWarrior2,
-        };
+        ];
     }
 }

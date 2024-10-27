@@ -31,7 +31,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public string InitialTooltip { get; protected set; }
 
     internal readonly DamageModifierMode Mode = DamageModifierMode.All;
-    private List<DamageLogChecker> _dlCheckers { get; set; }
+    private List<DamageLogChecker> _dlCheckers;
 
     internal DamageModifierDescriptor(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
     {

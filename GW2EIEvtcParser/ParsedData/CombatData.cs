@@ -15,12 +15,12 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class CombatData
 {
-    public bool HasMovementData { get; }
+    public readonly bool HasMovementData;
 
     //private List<CombatItem> _healingData;
     //private List<CombatItem> _healingReceivedData;
-    private readonly StatusEventsContainer _statusEvents = new StatusEventsContainer();
-    private readonly MetaEventsContainer _metaDataEvents = new MetaEventsContainer();
+    private readonly StatusEventsContainer _statusEvents = new();
+    private readonly MetaEventsContainer _metaDataEvents = new();
     private readonly HashSet<long> _skillIds;
     private readonly Dictionary<long, List<AbstractBuffEvent>> _buffData;
     private Dictionary<long, Dictionary<uint, List<AbstractBuffEvent>>> _buffDataByInstanceID;
@@ -41,19 +41,19 @@ public class CombatData
     private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
-    private readonly List<RewardEvent> _rewardEvents = new List<RewardEvent>();
+    private readonly List<RewardEvent> _rewardEvents = new();
     // EXTENSIONS
     public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
     public EXTBarrierCombatData EXTBarrierCombatData { get; internal set; }
     public bool HasEXTHealing => EXTHealingCombatData != null;
     public bool HasEXTBarrier => EXTBarrierCombatData != null;
 
-    internal bool UseBuffInstanceSimulator { get; } = false;
+    internal readonly bool UseBuffInstanceSimulator = false;
 
-    internal bool HasStackIDs { get; }
+    internal readonly bool HasStackIDs;
 
-    public bool HasBreakbarDamageData { get; } = false;
-    public bool HasEffectData { get; } = false;
+    public readonly bool HasBreakbarDamageData = false;
+    public readonly bool HasEffectData = false;
 
     private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, EvtcVersionEvent evtcVersion)
     {
@@ -852,7 +852,7 @@ public class CombatData
     /// <summary>
     /// Returns list of buff events applied on agent for given id
     /// </summary>
-    public IReadOnlyList<AbstractBuffEvent> GetBuffDataByIDByDst(long buffID, AgentItem dst)
+    public IReadOnlyList<AbstractBuffEvent> GetBuffDataByIDByDst(long buffID, AgentItem? dst)
     {
         if (_buffDataByIDByDst.TryGetValue(buffID, out var agentDict))
         {
@@ -1415,7 +1415,7 @@ public class CombatData
             .Any();
     }
 
-    public bool HasLostBuffStack(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+    public bool HasLostBuffStack(long buffID, AgentItem? agent, long time, long epsilon = ServerDelayConstant)
     {
         return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<AbstractBuffRemoveEvent>(), time, epsilon)
             .Any();

@@ -6,8 +6,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class CombatReplayDecorationContainer
 {
-    private Dictionary<string, GenericDecorationMetadata> DecorationCache { get; }
-    private List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)> Decorations { get; }
+    private readonly Dictionary<string, GenericDecorationMetadata> DecorationCache;
+    private readonly List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)> Decorations;
 
     internal CombatReplayDecorationContainer(Dictionary<string, GenericDecorationMetadata> cache, int capacity = 0)
     {

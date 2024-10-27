@@ -46,5 +46,5 @@ public class JsonDamageModifierData
     /// Length == # of phases
     /// </summary>
     /// <seealso cref="JsonDamageModifierItem"/>
-    public IReadOnlyList<JsonDamageModifierItem> DamageModifiers;
+    public IReadOnlyList<JsonDamageModifierItem>? DamageModifiers;
 }

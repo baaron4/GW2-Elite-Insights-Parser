@@ -6,9 +6,9 @@ public abstract class GenericIconDecoration : GenericAttachedDecoration
 {
     internal abstract class GenericIconDecorationMetadata : GenericAttachedDecorationMetadata
     {
-        public string Image { get; }
-        public uint PixelSize { get; }
-        public uint WorldSize { get; }
+        public readonly string Image;
+        public readonly uint PixelSize;
+        public readonly uint WorldSize;
         protected GenericIconDecorationMetadata(string icon, uint pixelSize, uint worldSize) : base()
         {
             Image = icon;

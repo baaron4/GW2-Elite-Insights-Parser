@@ -2,7 +2,7 @@
 
 public class MapIDEvent : AbstractMetaDataEvent
 {
-    public int MapID { get; }
+    public readonly int MapID;
 
     internal MapIDEvent(CombatItem evtcItem) : base(evtcItem)
     {

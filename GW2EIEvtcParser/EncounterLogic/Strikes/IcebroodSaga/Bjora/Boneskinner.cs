@@ -47,23 +47,23 @@ internal class Boneskinner : Bjora
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(UnnaturalAura, UnnaturalAura),
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return new List<TrashID>
-        {
+        return
+        [
             TrashID.VigilTactician,
             TrashID.VigilRecruit,
             TrashID.PrioryExplorer,
             TrashID.PrioryScholar,
             TrashID.AberrantWisp,
             TrashID.Torch,
-        };
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

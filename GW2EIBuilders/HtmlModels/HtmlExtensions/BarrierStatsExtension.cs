@@ -7,22 +7,24 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 
 internal class BarrierStatsExtension
 {
-    public List<EXTBarrierStatsPhaseDto> BarrierPhases { get; }
+    public readonly List<EXTBarrierStatsPhaseDto> BarrierPhases;
 
-    public List<EXTBarrierStatsPlayerDetailsDto> PlayerBarrierDetails { get; }
+    public readonly List<EXTBarrierStatsPlayerDetailsDto> PlayerBarrierDetails;
 
-    public List<List<EXTBarrierStatsPlayerChartDto>> PlayerBarrierCharts { get; }
+    public readonly List<List<EXTBarrierStatsPlayerChartDto>> PlayerBarrierCharts;
 
     public BarrierStatsExtension(ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        BarrierPhases = new List<EXTBarrierStatsPhaseDto>();
-        PlayerBarrierCharts = new List<List<EXTBarrierStatsPlayerChartDto>>();
-        PlayerBarrierDetails = new List<EXTBarrierStatsPlayerDetailsDto>();
-        foreach (PhaseData phase in log.FightData.GetPhases(log))
+        var phases = log.FightData.GetPhases(log);
+        BarrierPhases       = new(phases.Count);
+        PlayerBarrierCharts = new(phases.Count);
+        foreach (PhaseData phase in phases)
         {
             BarrierPhases.Add(new EXTBarrierStatsPhaseDto(phase, log));
             PlayerBarrierCharts.Add(EXTBarrierStatsPlayerChartDto.BuildPlayersBarrierGraphData(log, phase));
         }
+
+        PlayerBarrierDetails = new(log.Friendlies.Count);
         foreach (AbstractSingleActor actor in log.Friendlies)
         {
             PlayerBarrierDetails.Add(EXTBarrierStatsPlayerDetailsDto.BuildPlayerBarrierData(log, actor, usedSkills, usedBuffs));

@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class InterpolationConnector : GeographicalConnector
 {
-    protected IReadOnlyList<ParametricPoint3D> Positions { get; set; }
+    protected IReadOnlyList<ParametricPoint3D> Positions;
 
     private readonly InterpolationMethod _method;
 

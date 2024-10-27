@@ -2,7 +2,7 @@
 
 public class ParametricPoint1D : Point1D
 {
-    public long Time { get; }
+    public readonly long Time;
 
 
     public ParametricPoint1D(float x, long time) : base(x)

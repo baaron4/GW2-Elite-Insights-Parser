@@ -21,25 +21,25 @@ internal abstract class InstantCastFinder : IVersionable
     public InstantCastOrigin CastOrigin { get; private set; } = InstantCastOrigin.Skill;
 
     public delegate bool InstantCastEnableChecker(CombatData combatData);
-    private List<InstantCastEnableChecker> _enableConditions { get; }
+    private readonly List<InstantCastEnableChecker> _enableConditions;
 
 
     public const long DefaultICD = 50;
-    public long SkillID { get; }
+    public readonly long SkillID;
 
     public bool NotAccurate { get; private set; } = false;
 
-    protected long TimeOffset { get; set; } = 0;
+    protected long TimeOffset = 0;
 
-    protected bool BeforeWeaponSwap { get; set; } = false;
-    protected bool AfterWeaponSwap { get; set; } = false;
+    protected bool BeforeWeaponSwap = false;
+    protected bool AfterWeaponSwap = false;
 
     protected long ICD { get; private set; } = DefaultICD;
 
-    private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
-    private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
-    private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
-    private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
+    private ulong _maxBuild = GW2Builds.EndOfLife;
+    private ulong _minBuild = GW2Builds.StartOfLife;
+    private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
+    private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
 
     protected InstantCastFinder(long skillID)
     {

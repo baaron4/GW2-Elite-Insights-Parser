@@ -15,8 +15,8 @@ internal class Instance : FightLogic
 {
     public bool StartedLate { get; private set; }
     public bool EndedBeforeExpectedEnd { get; private set; }
-    private readonly List<FightLogic> _subLogics = new List<FightLogic>();
-    private readonly List<int> _targetIDs = new List<int>();
+    private readonly List<FightLogic> _subLogics = new();
+    private readonly List<int> _targetIDs = new();
     public Instance(int id) : base(id)
     {
         Extension = "instance";
@@ -269,21 +269,21 @@ internal class Instance : FightLogic
         {
             return _targetIDs;
         }
-        return new List<int>()
-        {
+        return
+        [
             GenericTriggerID
-        };
+        ];
     }
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>();
+        return [];
     }
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>();
+        return [];
     }
     protected override List<int> GetFriendlyNPCIDs()
     {
-        return new List<int>();
+        return [];
     }
 }

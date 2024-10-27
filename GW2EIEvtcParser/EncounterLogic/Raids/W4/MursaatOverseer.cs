@@ -51,18 +51,18 @@ internal class MursaatOverseer : BastionOfThePenitent
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.Jade
-        };
+        ];
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(PunishementAura, PunishementAura),
             new EffectCastFinder(ProtectSAK, EffectGUIDs.MursaarOverseerProtectBubble),
-        };
+        ];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

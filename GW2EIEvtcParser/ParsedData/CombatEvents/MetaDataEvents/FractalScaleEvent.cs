@@ -2,7 +2,7 @@
 
 public class FractalScaleEvent : AbstractMetaDataEvent
 {
-    public byte Scale { get; }
+    public readonly byte Scale;
 
     internal FractalScaleEvent(CombatItem evtcItem) : base(evtcItem)
     {

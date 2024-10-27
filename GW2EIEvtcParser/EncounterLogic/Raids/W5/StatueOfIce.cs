@@ -165,13 +165,13 @@ internal class StatueOfIce : HallOfChains
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(BitingAura, BitingAura),
             new EffectCastFinder(Hailstorm, EffectGUIDs.BrokenKingHailstormGreen),
             new EffectCastFinder(IceBreaker, EffectGUIDs.BrokenKingIceBreakerGreenExplosion)
                 .UsingAgentRedirectionIfUnknown((int)ArcDPSEnums.TargetID.BrokenKing),
-        };
+        ];
     }
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {

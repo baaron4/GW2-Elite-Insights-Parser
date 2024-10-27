@@ -2,9 +2,9 @@
 
 public class InstanceStartEvent : AbstractMetaDataEvent
 {
-    public long TimeOffsetFromInstanceCreation { get; }
+    public readonly long TimeOffsetFromInstanceCreation;
 
-    public string InstanceIP { get; } = null;
+    public readonly string? InstanceIP = null;
 
     internal InstanceStartEvent(CombatItem evtcItem) : base(evtcItem)
     {

@@ -56,10 +56,10 @@ internal static class JsonDamageModifierDataBuilder
                     }
                     else
                     {
-                        personalDamageMods[player.Spec.ToString()] = new HashSet<long>()
-                            {
+                        personalDamageMods[player.Spec.ToString()] =
+                            [
                                 iKey
-                            };
+                            ];
                     }
                 }
                 if (dict.TryGetValue(iKey, out List<JsonDamageModifierItem> list))
@@ -68,10 +68,10 @@ internal static class JsonDamageModifierDataBuilder
                 }
                 else
                 {
-                    dict[iKey] = new List<JsonDamageModifierItem>
-                    {
+                    dict[iKey] =
+                    [
                         BuildJsonDamageModifierItem(damageModDict[key])
-                    };
+                    ];
                 }
             }
         }
@@ -106,10 +106,10 @@ internal static class JsonDamageModifierDataBuilder
                     }
                     else
                     {
-                        personalDamageMods[player.Spec.ToString()] = new HashSet<long>()
-                            {
+                        personalDamageMods[player.Spec.ToString()] =
+                            [
                                 iKey
-                            };
+                            ];
                     }
                 }
                 if (dict.TryGetValue(iKey, out List<JsonDamageModifierItem> list))
@@ -118,10 +118,10 @@ internal static class JsonDamageModifierDataBuilder
                 }
                 else
                 {
-                    dict[iKey] = new List<JsonDamageModifierItem>
-                    {
+                    dict[iKey] =
+                    [
                         BuildJsonDamageModifierItem(damageModDict[key])
-                    };
+                    ];
                 }
             }
         }

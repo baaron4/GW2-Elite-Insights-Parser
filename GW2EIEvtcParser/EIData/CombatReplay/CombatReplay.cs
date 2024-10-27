@@ -11,17 +11,17 @@ using Segment = GenericSegment<double>;
 public class CombatReplay
 {
     //TODO(Rennorb) @perf: capacity
-    internal List<ParametricPoint3D> Positions { get; } = new();
-    internal List<ParametricPoint3D> PolledPositions { get; private set; } = new();
-    internal List<ParametricPoint3D> Velocities { get; private set; } = new();
-    internal List<ParametricPoint3D> Rotations { get; } = new();
-    internal List<ParametricPoint3D> PolledRotations { get; private set; } = new();
-    internal List<Segment> Hidden { get; private set; } = new();
+    internal readonly List<ParametricPoint3D> Positions = new();
+    internal readonly List<ParametricPoint3D> PolledPositions = new();
+    internal readonly List<ParametricPoint3D> Velocities = new();
+    internal readonly List<ParametricPoint3D> Rotations = new();
+    internal readonly List<ParametricPoint3D> PolledRotations = new();
+    internal readonly List<Segment> Hidden = new();
     private long _start = -1;
     private long _end = -1;
     internal (long start, long end) TimeOffsets => (_start, _end);
     // actors
-    internal CombatReplayDecorationContainer Decorations { get; }
+    internal readonly CombatReplayDecorationContainer Decorations;
 
     internal CombatReplay(ParsedEvtcLog log)
     {
@@ -63,10 +63,10 @@ public class CombatReplay
         List<ParametricPoint3D> positions = Positions;
         if (Positions.Count == 0 && forcePolling)
         {
-            positions = new List<ParametricPoint3D>()
-            {
-                new ParametricPoint3D(int.MinValue, int.MinValue, 0, 0)
-            };
+            positions =
+            [
+                new(int.MinValue, int.MinValue, 0, 0)
+            ];
         } else if (Positions.Count == 0)
         {
             return;
@@ -118,7 +118,7 @@ public class CombatReplay
                 }
             }
         }
-        PolledPositions = PolledPositions.Where(x => x.Time >= 0).ToList();
+        PolledPositions.RemoveAll(x => x.Time < 0);
     }
     /// <summary>
     /// The method exists only to have the same amount of rotation as positions, it's easier to do it here than
@@ -172,7 +172,7 @@ public class CombatReplay
                 }
             }
         }
-        PolledRotations = PolledRotations.Where(x => x.Time >= 0).ToList();
+        PolledRotations.RemoveAll(x => x.Time < 0);
     }
 
     internal void PollingRate(long fightDuration, bool forcePositionPolling)
@@ -396,7 +396,7 @@ public class CombatReplay
     /// </summary>
     /// <param name="decoration">Must be filled</param>
     /// <param name="color"></param>
-    internal void AddDecorationWithBorder(FormDecoration decoration, string color = null)
+    internal void AddDecorationWithBorder(FormDecoration decoration, string? color = null)
     {
         Decorations.Add(decoration);
         Decorations.Add(decoration.GetBorderDecoration(color));
@@ -419,7 +419,7 @@ public class CombatReplay
     /// <param name="color"></param>
     /// <param name="growingEnd"></param>
     /// <param name="reverseGrowing"></param>
-    internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, string color = null, bool reverseGrowing = false)
+    internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, string? color = null, bool reverseGrowing = false)
     {
         Decorations.Add(decoration);
         Decorations.Add(decoration.GetBorderDecoration(color).UsingGrowingEnd(growingEnd, reverseGrowing));

@@ -218,8 +218,8 @@ internal class Skorvald : ShatteredObservatory
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>()
-        {
+        return
+        [
             (int)TargetID.Skorvald,
             (int)TrashID.FluxAnomaly1,
             (int)TrashID.FluxAnomaly2,
@@ -229,7 +229,7 @@ internal class Skorvald : ShatteredObservatory
             (int)TrashID.FluxAnomalyCM2,
             (int)TrashID.FluxAnomalyCM3,
             (int)TrashID.FluxAnomalyCM4,
-        };
+        ];
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

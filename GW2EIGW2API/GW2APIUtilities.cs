@@ -37,7 +37,7 @@ internal static class GW2APIUtilities
             Items = traits.GroupBy(x => x.Id).ToDictionary(x => x.Key, x => x.FirstOrDefault());
         }
 
-        public Dictionary<long, T> Items { get; }
+        public readonly Dictionary<long, T> Items;
     }
 
     internal static List<T> GetGW2APIItems<T>(string apiPath) where T : GW2APIBaseItem
@@ -68,7 +68,7 @@ internal static class GW2APIUtilities
     }
     // 
 
-    private static HttpClient APIClient { get; set; }
+    private static HttpClient APIClient;
 
     internal static HttpClient GetAPIClient()
     {

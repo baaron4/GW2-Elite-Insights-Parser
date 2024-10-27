@@ -16,8 +16,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class GuardianHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(ShieldOfWrathSkill, ShieldOfWrathBuff),
         new BuffGainCastFinder(ZealotsFlameSkill, ZealotsFlameBuff)
             .UsingICD(0),
@@ -87,11 +87,11 @@ internal static class GuardianHelper
             .UsingSrcBaseSpecChecker(Spec.Guardian),
         new EffectCastFinder(DetonateJurisdiction, EffectGUIDs.GuardianDetonateJurisdictionLevel3)
             .UsingSrcBaseSpecChecker(Spec.Guardian),
-    };
+    ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Zeal
         new BuffOnFoeDamageModifier(Burning, "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.FieryWrath, DamageModifierMode.All),
         new BuffOnFoeDamageModifier(Vulnerability, "Symbolic Exposure", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.SymbolicExposure, DamageModifierMode.All),
@@ -115,17 +115,17 @@ internal static class GuardianHelper
             .WithBuilds(GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.VirtuousSolace, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2020Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(SignetOfJudgmentBuff, "Signet of Judgment", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
         new BuffOnActorDamageModifier(SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.NoPets, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
         new CounterOnActorDamageModifier(RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Guardian, BuffImages.RenewedFocus, DamageModifierMode.All)
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {        
+    internal static readonly List<Buff> Buffs =
+    [        
         // Skills
         new Buff("Zealot's Flame", ZealotsFlameBuff, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ZealotsFlame),
         new Buff("Purging Flames", PurgingFlames, Source.Guardian, BuffClassification.Other, BuffImages.PurgingFlames),
@@ -188,15 +188,15 @@ internal static class GuardianHelper
         // Spear
         new Buff("Symbol of Luminance", SymbolOfLuminanceBuff, Source.Guardian, BuffClassification.Other, BuffImages.SymbolOfLuminance),
         new Buff("Illuminated", Illuminated, Source.Guardian, BuffClassification.Other, BuffImages.Illuminated),
-    };
+    ];
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.BowOfTruth,
         (int)MinionID.HammerOfWisdom,
         (int)MinionID.ShieldOfTheAvenger,
         (int)MinionID.SwordOfJustice,
-    };
+    ];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

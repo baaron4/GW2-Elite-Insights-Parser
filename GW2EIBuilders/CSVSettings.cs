@@ -2,7 +2,7 @@
 
 public class CSVSettings
 {
-    public string Delimiter { get; }
+    public readonly string Delimiter;
     public CSVSettings(string delimiter)
     {
         Delimiter = delimiter;

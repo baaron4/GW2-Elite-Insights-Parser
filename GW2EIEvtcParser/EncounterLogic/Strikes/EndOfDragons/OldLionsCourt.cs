@@ -67,15 +67,15 @@ internal class OldLionsCourt : EndOfDragonsStrike
     }
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.PrototypeVermilion,
             (int)TargetID.PrototypeIndigo,
             (int)TargetID.PrototypeArsenite,
             (int)TargetID.PrototypeVermilionCM,
             (int)TargetID.PrototypeIndigoCM,
             (int)TargetID.PrototypeArseniteCM,
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()
@@ -121,21 +121,21 @@ internal class OldLionsCourt : EndOfDragonsStrike
             List<int> idsToCheck;
             if (fightData.IsCM)
             {
-                idsToCheck = new List<int>
-                {
+                idsToCheck =
+                [
                     (int)TargetID.PrototypeVermilionCM,
                     (int)TargetID.PrototypeIndigoCM,
                     (int)TargetID.PrototypeArseniteCM,
-                };
+                ];
             }
             else
             {
-                idsToCheck = new List<int>
-                {
+                idsToCheck =
+                [
                     (int)TargetID.PrototypeVermilion,
                     (int)TargetID.PrototypeIndigo,
                     (int)TargetID.PrototypeArsenite,
-                };
+                ];
             }
             SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)).ToList(), combatData, fightData, playerAgents, true);
         }
@@ -148,15 +148,15 @@ internal class OldLionsCourt : EndOfDragonsStrike
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)TargetID.PrototypeVermilion,
             (int)TargetID.PrototypeIndigo,
             (int)TargetID.PrototypeArsenite,
             (int)TargetID.PrototypeVermilionCM,
             (int)TargetID.PrototypeIndigoCM,
             (int)TargetID.PrototypeArseniteCM,
-        };
+        ];
     }
 
     private AbstractSingleActor Vermilion()
@@ -187,7 +187,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         {
             if (subPhases.Count > 3)
             {
-                return new List<PhaseData>();
+                return [];
             }
             phaseNames =
             [
@@ -200,7 +200,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         {
             if (subPhases.Count > 4)
             {
-                return new List<PhaseData>();
+                return [];
             }
             phaseNames =
             [

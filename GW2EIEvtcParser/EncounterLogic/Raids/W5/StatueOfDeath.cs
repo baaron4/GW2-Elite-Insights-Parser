@@ -40,22 +40,22 @@ internal class StatueOfDeath : HallOfChains
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(HungeringAura , HungeringAura ), // Hungering Aura
-        };
+        ];
     }
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.OrbSpider,
             ArcDPSEnums.TrashID.SpiritHorde1,
             ArcDPSEnums.TrashID.SpiritHorde2,
             ArcDPSEnums.TrashID.SpiritHorde3,
             ArcDPSEnums.TrashID.GreenSpirit1,
             ArcDPSEnums.TrashID.GreenSpirit2
-        };
+        ];
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)

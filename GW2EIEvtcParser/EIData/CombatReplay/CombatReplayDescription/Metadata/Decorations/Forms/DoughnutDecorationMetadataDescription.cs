@@ -4,8 +4,8 @@ namespace GW2EIEvtcParser.EIData;
 
 public class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
 {
-    public uint InnerRadius { get; }
-    public uint OuterRadius { get; }
+    public readonly uint InnerRadius;
+    public readonly uint OuterRadius;
 
     internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration) : base(decoration)
     {

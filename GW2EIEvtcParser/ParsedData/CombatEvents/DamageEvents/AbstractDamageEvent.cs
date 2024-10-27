@@ -3,11 +3,11 @@
 public abstract class AbstractDamageEvent : AbstractSkillEvent
 {
     //private int _damage;
-    public bool IsOverNinety { get; }
-    public bool AgainstUnderFifty { get; }
-    public bool IsMoving { get; }
-    public bool AgainstMoving { get; }
-    public bool IsFlanking { get; }
+    public readonly bool IsOverNinety;
+    public readonly bool AgainstUnderFifty;
+    public readonly bool IsMoving;
+    public readonly bool AgainstMoving;
+    public readonly bool IsFlanking;
     public bool AgainstDowned { get; protected set; }
 
     internal AbstractDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

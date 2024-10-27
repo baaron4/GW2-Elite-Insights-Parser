@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class HealthUpdateEvent : AbstractStatusEvent, IStateable
 {
-    public double HealthPercent { get; }
+    public readonly double HealthPercent;
 
     internal HealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

@@ -3,14 +3,14 @@
 public class HTMLSettings
 {
 
-    public bool HTMLLightTheme { get; }
+    public readonly bool HTMLLightTheme;
 
-    public bool ExternalHTMLScripts { get; }
+    public readonly bool ExternalHTMLScripts;
 
-    public string ExternalHtmlScriptsPath { get; }
+    public readonly string? ExternalHtmlScriptsPath;
 
-    public string ExternalHtmlScriptsCdn { get; }
-    public bool CompressJson { get; }
+    public readonly string? ExternalHtmlScriptsCdn;
+    public readonly bool CompressJson;
 
     public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts)
     {

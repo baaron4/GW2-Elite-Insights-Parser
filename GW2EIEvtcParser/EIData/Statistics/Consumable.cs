@@ -2,9 +2,9 @@
 
 public class Consumable
 {
-    public Buff Buff { get; }
-    public long Time { get; }
-    public int Duration { get; }
+    public readonly Buff Buff;
+    public readonly long Time;
+    public readonly int Duration;
     public int Stack { get; internal set; }
 
     public Consumable(Buff item, long time, int duration)

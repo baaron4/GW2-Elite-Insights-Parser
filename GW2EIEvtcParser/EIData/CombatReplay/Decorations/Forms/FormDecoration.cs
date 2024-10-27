@@ -4,7 +4,7 @@ public abstract class FormDecoration : GenericAttachedDecoration
 {
     internal abstract class FormDecorationMetadata : GenericAttachedDecorationMetadata
     {
-        public string Color { get; }
+        public readonly string Color;
 
         protected FormDecorationMetadata(string color)
         {
@@ -55,9 +55,9 @@ public abstract class FormDecoration : GenericAttachedDecoration
         return this;
     }
 
-    public abstract FormDecoration Copy(string color = null);
+    public abstract FormDecoration Copy(string? color = null);
 
-    public abstract FormDecoration GetBorderDecoration(string borderColor = null);
+    public abstract FormDecoration GetBorderDecoration(string? borderColor = null);
     public FormDecoration GetBorderDecoration(Color borderColor, double opacity)
     {
         return GetBorderDecoration(borderColor.WithAlpha(opacity).ToString(true));

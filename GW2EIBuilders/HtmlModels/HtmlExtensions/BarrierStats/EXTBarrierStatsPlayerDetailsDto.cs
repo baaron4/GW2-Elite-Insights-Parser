@@ -7,10 +7,10 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 
 internal class EXTBarrierStatsPlayerDetailsDto
 {
-    public List<EXTBarrierStatsBarrierDistributionDto> BarrierDistributions { get; set; }
-    public List<List<EXTBarrierStatsBarrierDistributionDto>> BarrierDistributionsTargets { get; set; }
-    public List<EXTBarrierStatsBarrierDistributionDto> IncomingBarrierDistributions { get; set; }
-    public List<EXTBarrierStatsPlayerDetailsDto> Minions { get; set; }
+    public List<EXTBarrierStatsBarrierDistributionDto>? BarrierDistributions { get; set; }
+    public List<List<EXTBarrierStatsBarrierDistributionDto>>? BarrierDistributionsTargets { get; set; }
+    public List<EXTBarrierStatsBarrierDistributionDto>? IncomingBarrierDistributions { get; set; }
+    public List<EXTBarrierStatsPlayerDetailsDto>? Minions { get; set; }
 
     // helpers
 

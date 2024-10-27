@@ -66,10 +66,10 @@ internal class Samarog : BastionOfThePenitent
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(BrutalAura, BrutalAura),
-        };
+        ];
     }
 
     internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
@@ -96,7 +96,7 @@ internal class Samarog : BastionOfThePenitent
                 healthDamageEvent.MakeIntoAbsorbed();
             }
         }
-        return new List<AbstractHealthDamageEvent>();
+        return [];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -167,19 +167,19 @@ internal class Samarog : BastionOfThePenitent
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Samarog,
             (int)ArcDPSEnums.TrashID.Rigom,
             (int)ArcDPSEnums.TrashID.Guldhem,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>() {
+        return [
             ArcDPSEnums.TrashID.SpearAggressionRevulsion
-        };
+        ];
     }
 
 

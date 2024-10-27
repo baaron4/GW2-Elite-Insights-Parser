@@ -8,9 +8,9 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
 {
     public long OldDuration => NewDuration - ExtendedDuration;
     public long ExtendedDuration { get; protected set; }
-    private long OriginalExtendedDuration { get; set; }
+    private long OriginalExtendedDuration;
     public long NewDuration { get; protected set; }
-    private long OriginalNewDuration { get; set; }
+    private long OriginalNewDuration;
     private bool _sourceFinderRan = false;
 
     internal BuffExtensionEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

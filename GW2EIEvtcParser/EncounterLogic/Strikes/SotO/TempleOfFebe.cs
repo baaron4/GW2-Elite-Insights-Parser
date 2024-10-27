@@ -20,10 +20,10 @@ using Segment = GenericSegment<double>;
 
 internal class TempleOfFebe : SecretOfTheObscureStrike
 {
-    private static HashSet<long> UnboundOptimismSkillIDs = new HashSet<long>()
-    {
+    private static HashSet<long> UnboundOptimismSkillIDs =
+    [
         WailOfDespairCM, WailOfDespairEmpoweredCM, PoolOfDespairCM, PoolOfDespairEmpoweredCM
-    };
+    ];
 
     public TempleOfFebe(int triggerID) : base(triggerID)
     {
@@ -123,8 +123,8 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>()
-        {
+        return
+        [
             (int)TargetID.Cerus,
             (int)TrashID.EmbodimentOfDespair,
             (int)TrashID.EmbodimentOfEnvy,
@@ -140,7 +140,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             (int)TrashID.PermanentEmbodimentOfRegret,
             (int)TrashID.MaliciousShadow,
             (int)TrashID.MaliciousShadowCM,
-        };
+        ];
     }
 
     protected override Dictionary<int, int> GetTargetsSortIDs()

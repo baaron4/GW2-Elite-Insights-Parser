@@ -9,9 +9,9 @@ public abstract class GenericAttachedDecoration : GenericDecoration
     }
     internal abstract class GenericAttachedDecorationRenderingData : GenericDecorationRenderingData
     {
-        public GeographicalConnector ConnectedTo { get; }
-        public RotationConnector RotationConnectedTo { get; protected set; }
-        public SkillModeDescriptor SkillMode { get; protected set; }
+        public readonly GeographicalConnector ConnectedTo;
+        public RotationConnector? RotationConnectedTo { get; protected set; }
+        public SkillModeDescriptor? SkillMode { get; protected set; }
         protected GenericAttachedDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan)
         {
             ConnectedTo = connector;
@@ -36,8 +36,8 @@ public abstract class GenericAttachedDecoration : GenericDecoration
     private new GenericAttachedDecorationRenderingData DecorationRenderingData => (GenericAttachedDecorationRenderingData)base.DecorationRenderingData;
 
     public GeographicalConnector ConnectedTo => DecorationRenderingData.ConnectedTo;
-    public RotationConnector RotationConnectedTo => DecorationRenderingData.RotationConnectedTo;
-    public SkillModeDescriptor SkillMode => DecorationRenderingData.SkillMode;
+    public RotationConnector? RotationConnectedTo => DecorationRenderingData.RotationConnectedTo;
+    public SkillModeDescriptor? SkillMode => DecorationRenderingData.SkillMode;
 
     internal GenericAttachedDecoration(GenericAttachedDecorationMetadata metadata, GenericAttachedDecorationRenderingData renderingData) : base(metadata, renderingData)
     {

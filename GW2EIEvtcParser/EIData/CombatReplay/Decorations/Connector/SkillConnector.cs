@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class SkillConnector : Connector
 {
-    public AgentItem Agent { get; }
+    public readonly AgentItem Agent;
 
     public SkillConnector(AbstractSingleActor agent)
     {

@@ -19,35 +19,35 @@ namespace GW2EIBuilders.HtmlModels;
 //TODO(Rennorb) @perf
 internal class LogDataDto
 {
-    public List<TargetDto> Targets = new List<TargetDto>();
-    public List<PlayerDto> Players = new List<PlayerDto>();
-    public List<EnemyDto> Enemies = new List<EnemyDto>();
-    public List<PhaseDto> Phases = new List<PhaseDto>();
+    public List<TargetDto> Targets = new();
+    public List<PlayerDto> Players = new();
+    public List<EnemyDto> Enemies = new();
+    public List<PhaseDto> Phases = new();
     // Present buffs and damamge modifiers
-    public List<long> Boons = new List<long>();
-    public List<long> OffBuffs = new List<long>();
-    public List<long> SupBuffs = new List<long>();
-    public List<long> DefBuffs = new List<long>();
-    public List<long> Debuffs = new List<long>();
-    public List<long> GearBuffs = new List<long>();
-    public List<long> Nourishments = new List<long>();
-    public List<long> Enhancements = new List<long>();
-    public List<long> OtherConsumables = new List<long>();
-    public List<object[]> InstanceBuffs = new List<object[]>();
-    public List<long> DmgModifiersItem = new List<long>();
-    public List<long> DmgIncModifiersItem = new List<long>();
-    public List<long> DmgModifiersCommon = new List<long>();
-    public List<long> DmgIncModifiersCommon = new List<long>();
-    public Dictionary<string, List<long>> DmgModifiersPers = new Dictionary<string, List<long>>();
-    public Dictionary<string, List<long>> DmgIncModifiersPers = new Dictionary<string, List<long>>();
-    public Dictionary<string, List<long>> PersBuffs = new Dictionary<string, List<long>>();
-    public List<long> Conditions = new List<long>();
+    public List<long> Boons = new();
+    public List<long> OffBuffs = new();
+    public List<long> SupBuffs = new();
+    public List<long> DefBuffs = new();
+    public List<long> Debuffs = new();
+    public List<long> GearBuffs = new();
+    public List<long> Nourishments = new();
+    public List<long> Enhancements = new();
+    public List<long> OtherConsumables = new();
+    public List<object[]> InstanceBuffs = new();
+    public List<long> DmgModifiersItem = new();
+    public List<long> DmgIncModifiersItem = new();
+    public List<long> DmgModifiersCommon = new();
+    public List<long> DmgIncModifiersCommon = new();
+    public Dictionary<string, List<long>> DmgModifiersPers = new();
+    public Dictionary<string, List<long>> DmgIncModifiersPers = new();
+    public Dictionary<string, List<long>> PersBuffs = new();
+    public List<long> Conditions = new();
     // Dictionaries
-    public Dictionary<string, SkillDto> SkillMap = new Dictionary<string, SkillDto>();
-    public Dictionary<string, BuffDto> BuffMap = new Dictionary<string, BuffDto>();
-    public Dictionary<string, DamageModDto> DamageModMap = new Dictionary<string, DamageModDto>();
-    public Dictionary<string, DamageModDto> DamageIncModMap = new Dictionary<string, DamageModDto>();
-    public List<MechanicDto> MechanicMap = new List<MechanicDto>();
+    public Dictionary<string, SkillDto> SkillMap = new();
+    public Dictionary<string, BuffDto> BuffMap = new();
+    public Dictionary<string, DamageModDto> DamageModMap = new();
+    public Dictionary<string, DamageModDto> DamageIncModMap = new();
+    public List<MechanicDto> MechanicMap = new();
     // Extra components
     public CombatReplayDto? CrData;
     public ChartDataDto? GraphData;

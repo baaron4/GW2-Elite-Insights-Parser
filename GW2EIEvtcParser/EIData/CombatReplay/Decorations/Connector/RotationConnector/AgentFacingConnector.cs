@@ -4,12 +4,12 @@ namespace GW2EIEvtcParser.EIData;
 
 public class AgentFacingConnector : RotationConnector
 {
-    public AgentItem Agent { get; }
+    public readonly AgentItem Agent;
 
     /// <summary>
     /// Offset angle around Z axis, in degrees
     /// </summary>
-    public float RotationOffset { get; } = 0;
+    public readonly float RotationOffset = 0;
 
     public enum RotationOffsetMode
     {
@@ -18,7 +18,7 @@ public class AgentFacingConnector : RotationConnector
         RotateAfterTranslationOffset = 2,
     }
 
-    public RotationOffsetMode OffsetMode { get; } = RotationOffsetMode.RotateAfterTranslationOffset;
+    public readonly RotationOffsetMode OffsetMode = RotationOffsetMode.RotateAfterTranslationOffset;
 
     public AgentFacingConnector(AbstractSingleActor agent) : this(agent.AgentItem)
     {

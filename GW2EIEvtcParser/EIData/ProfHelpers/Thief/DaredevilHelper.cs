@@ -11,8 +11,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class DaredevilHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(Bound, BoundingDodger)
             .UsingOrigin(InstantCastOrigin.Trait),
         new BuffGainCastFinder(ImpalingLotus, LotusTraining)
@@ -20,10 +20,10 @@ internal static class DaredevilHelper
         new BuffGainCastFinder(Dash, UnhinderedCombatant)
             .UsingOrigin(InstantCastOrigin.Trait),
         //new DamageCastFinder(30520, 30520), // Debilitating Arc
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.LotusTraining, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(LotusTraining, "Lotus Training", "10% cDam (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.LotusTraining, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2021Balance),
         new BuffOnActorDamageModifier(LotusTraining, "Lotus Training", "15% cDam (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Condition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.LotusTraining, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2021Balance),
@@ -35,26 +35,26 @@ internal static class DaredevilHelper
         new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.August2022Balance),
         new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
         new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "10% if weakness on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "-10% if weakness on foe", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.All),
         new BuffOnActorDamageModifier(UnhinderedCombatant, "Unhindered Combatant", "-10%", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.UnhinderedCombatant, DamageModifierMode.All),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Palm Strike", PalmStrike, Source.Daredevil, BuffClassification.Other, BuffImages.PalmStrike),
         new Buff("Pulmonary Impact", PulmonaryImpactBuff, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PalmStrike),
         new Buff("Lotus Training", LotusTraining, Source.Daredevil, BuffClassification.Other, BuffImages.LotusTraining),
         new Buff("Unhindered Combatant", UnhinderedCombatant, Source.Daredevil, BuffClassification.Other, BuffImages.UnhinderedCombatant),
         new Buff("Bounding Dodger", BoundingDodger, Source.Daredevil, BuffClassification.Other, BuffImages.BoundingDodger),
         new Buff("Weakening Strikes", WeakeningStrikes, Source.Daredevil, BuffClassification.Other, BuffImages.WeakeningStrikes).WithBuilds(GW2Builds.April2019Balance),
-    };
+    ];
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.DaredevilSylvari1,
         (int)MinionID.DaredevilAsura1,
         (int)MinionID.DaredevilHuman1,
@@ -65,7 +65,7 @@ internal static class DaredevilHelper
         (int)MinionID.DaredevilSylvari2,
         (int)MinionID.DaredevilHuman2,
         (int)MinionID.DaredevilCharr2,
-    };
+    ];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

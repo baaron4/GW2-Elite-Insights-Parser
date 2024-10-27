@@ -5,12 +5,12 @@ public class MarkerEvent : AbstractStatusEvent
     /// <summary>
     /// ID of the marker. Match to stable GUID with <see cref="MarkerGUIDEvent"/>.
     /// </summary>
-    public int MarkerID { get; }
+    public readonly int MarkerID;
 
     /// <summary>
     /// GUID event of the effect
     /// </summary>
-    public MarkerGUIDEvent GUIDEvent { get; private set; }
+    public MarkerGUIDEvent? GUIDEvent { get; private set; }
 
     /// <summary>
     /// Time at which marker has been removed.

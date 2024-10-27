@@ -10,9 +10,9 @@ namespace GW2EIEvtcParser.EIData;
 /// </summary>
 public class MechanicPlotlySetting
 {
-    public string Color { get; }
-    public int Size { get; } = 15;
-    public string Symbol { get; }
+    public readonly string Color;
+    public readonly int Size = 15;
+    public readonly string Symbol;
 
     /// <summary>
     /// 
@@ -42,23 +42,23 @@ public class MechanicPlotlySetting
 
 public abstract class Mechanic
 {
-    public int InternalCooldown { get; }
-    public MechanicPlotlySetting PlotlySetting { get; }
-    public string Description { get; }
+    public readonly int InternalCooldown;
+    public readonly MechanicPlotlySetting PlotlySetting;
+    public readonly string Description;
     private readonly string _inGameName;
-    public string ShortName { get; }
-    public string FullName { get; }
+    public readonly string ShortName;
+    public readonly string FullName;
     public bool IsEnemyMechanic { get; protected set; }
     public bool ShowOnTable { get; private set; }
 
     public bool IsAchievementEligibility { get; private set; }
 
     public delegate bool Keeper(ParsedEvtcLog log);
-    private List<Keeper> _enableConditions { get; }
-    private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
-    private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
-    private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
-    private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
+    private readonly List<Keeper> _enableConditions;
+    private ulong _maxBuild = GW2Builds.EndOfLife;
+    private ulong _minBuild = GW2Builds.StartOfLife;
+    private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
+    private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
 
     /// <summary>
     /// Full constructor without special checks

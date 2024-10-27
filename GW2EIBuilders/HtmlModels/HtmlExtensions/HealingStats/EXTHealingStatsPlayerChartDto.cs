@@ -8,10 +8,10 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing;
 
 internal class EXTHealingStatsPlayerChartDto
 {
-    public PlayerDamageChartDto<int> Healing { get; }
-    public PlayerDamageChartDto<int> HealingPowerHealing { get; }
-    public PlayerDamageChartDto<int> ConversionBasedHealing { get; }
-    //public PlayerDamageChartDto<int> HybridHealing { get; }
+    public readonly PlayerDamageChartDto<int> Healing;
+    public readonly PlayerDamageChartDto<int> HealingPowerHealing;
+    public readonly PlayerDamageChartDto<int> ConversionBasedHealing;
+    //public readonly PlayerDamageChartDto<int> HybridHealing;
 
     private EXTHealingStatsPlayerChartDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor p)
     {
@@ -19,7 +19,7 @@ internal class EXTHealingStatsPlayerChartDto
         {
             Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.All),
             Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
-            Targets = new List<IReadOnlyList<int>>()
+            Targets = new()
         };
         //
         var hybridHealingPower = new List<int>(p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.HealingPower));
@@ -38,14 +38,14 @@ internal class EXTHealingStatsPlayerChartDto
         {
             Total = hybridHealingPower,
             Taken = hybridHealingPowerReceived,
-            Targets = new List<IReadOnlyList<int>>()
+            Targets = new()
         };
         //
         ConversionBasedHealing = new PlayerDamageChartDto<int>()
         {
             Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
             Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
-            Targets = new List<IReadOnlyList<int>>()
+            Targets = new()
         };
         //
         /*HybridHealing = new PlayerDamageChartDto<int>()
@@ -74,7 +74,7 @@ internal class EXTHealingStatsPlayerChartDto
 
     public static List<EXTHealingStatsPlayerChartDto> BuildPlayersHealingGraphData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<EXTHealingStatsPlayerChartDto>();
+        var list = new List<EXTHealingStatsPlayerChartDto>(log.Friendlies.Count);
 
         foreach (AbstractSingleActor actor in log.Friendlies)
         {

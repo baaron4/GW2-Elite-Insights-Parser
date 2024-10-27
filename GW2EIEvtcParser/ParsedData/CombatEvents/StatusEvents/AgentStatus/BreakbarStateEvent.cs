@@ -3,7 +3,7 @@
 public class BreakbarStateEvent : AbstractStatusEvent
 {
 
-    public ArcDPSEnums.BreakbarState State { get; }
+    public readonly ArcDPSEnums.BreakbarState State;
 
     internal BreakbarStateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

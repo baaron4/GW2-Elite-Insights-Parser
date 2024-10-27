@@ -34,12 +34,12 @@ public class JsonBuffVolumes
         /// <summary>
         /// Buff incoming by
         /// </summary>
-        public IReadOnlyDictionary<string, double> IncomingBy;
+        public IReadOnlyDictionary<string, double>? IncomingBy;
         
         /// <summary>
         /// Buff incoming by extension by
         /// </summary>
-        public IReadOnlyDictionary<string, double> IncomingByExtensionBy;
+        public IReadOnlyDictionary<string, double>? IncomingByExtensionBy;
     }
 
     
@@ -54,5 +54,5 @@ public class JsonBuffVolumes
     /// Length == # of phases
     /// </summary>
     /// <seealso cref="JsonBuffVolumesData"/>
-    public IReadOnlyList<JsonBuffVolumesData> BuffVolumeData;
+    public IReadOnlyList<JsonBuffVolumesData>? BuffVolumeData;
 }

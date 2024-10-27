@@ -21,29 +21,29 @@ public class JsonMechanics
         /// <summary>
         /// The actor who is concerned by the mechanic
         /// </summary>
-        public string Actor;
+        public string? Actor;
     }
 
 
     /// <summary>
     /// List of mechanics application
     /// </summary>
-    public IReadOnlyList<JsonMechanic> MechanicsData;
+    public IReadOnlyList<JsonMechanic>? MechanicsData;
 
     /// <summary>
     /// Name of the mechanic, this is the short name as it appears on EI HTML Mechanic tables.
     /// </summary>
-    public string Name;
+    public string? Name;
 
     /// <summary>
     /// Non reduced name of the mechanic, this is the full name as it appears on EI HTML Graphs.
     /// </summary>
-    public string FullName;
+    public string? FullName;
 
     /// <summary>
     /// Description of the mechanic, this is the description that appears on hover on EI HTML Mechanic tables.
     /// </summary>
-    public string Description;
+    public string? Description;
 
     /// <summary>
     /// If true, then the mechanic represent an achievement eligibility mechanic. \n

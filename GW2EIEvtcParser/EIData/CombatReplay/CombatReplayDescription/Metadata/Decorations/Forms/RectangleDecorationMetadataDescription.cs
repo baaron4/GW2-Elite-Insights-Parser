@@ -4,8 +4,8 @@ namespace GW2EIEvtcParser.EIData;
 
 public class RectangleDecorationMetadataDescription : FormDecorationMetadataDescription
 {
-    public uint Height { get; }
-    public uint Width { get; }
+    public readonly uint Height;
+    public readonly uint Width;
 
     internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration) : base(decoration)
     {

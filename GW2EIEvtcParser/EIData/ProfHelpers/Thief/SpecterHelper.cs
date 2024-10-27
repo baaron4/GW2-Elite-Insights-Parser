@@ -14,44 +14,44 @@ namespace GW2EIEvtcParser.EIData;
 internal static class SpecterHelper
 {
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(EnterShadowShroud, ShadowShroud).UsingBeforeWeaponSwap(true), // Shadow Shroud Enter
         new BuffLossCastFinder(ExitShadowShroud, ShadowShroud).UsingBeforeWeaponSwap(true), // Shadow Shroud Exit
-    };
+    ];
 
-    private static readonly HashSet<long> _shroudTransform = new HashSet<long>
-    {
+    private static readonly HashSet<long> _shroudTransform =
+    [
         EnterShadowShroud, ExitShadowShroud,
-    };
+    ];
 
     public static bool IsShroudTransform(long id)
     {
         return _shroudTransform.Contains(id);
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new()
     {
     };
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, BuffImages.EnterShadowShroud, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Shadow Shroud", ShadowShroud, Source.Specter, BuffClassification.Other, BuffImages.EnterShadowShroud),
         new Buff("Endless Night", EndlessNight, Source.Specter, BuffClassification.Other, BuffImages.EndlessNight),
         new Buff("Shrouded", Shrouded, Source.Specter, BuffClassification.Support, BuffImages.EnterShadowShroud),
         new Buff("Shrouded Ally", ShroudedAlly, Source.Specter, BuffClassification.Other, BuffImages.Siphon),
         new Buff("Rot Wallow Venom", RotWallowVenom, Source.Specter, BuffStackType.StackingConditionalLoss, 100, BuffClassification.Offensive, BuffImages.DarkSentry),
         new Buff("Consume Shadows", ConsumeShadows, Source.Specter, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.ConsumeShadows),
-    };
+    ];
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.SpecterAsura1,
         (int)MinionID.SpecterHuman1,
         (int)MinionID.SpecterAsura2,
@@ -62,7 +62,7 @@ internal static class SpecterHelper
         (int)MinionID.SpecterSylvari2,
         (int)MinionID.SpecterCharr2,
         (int)MinionID.SpecterNorn2,
-    };
+    ];
 
     internal static bool IsKnownMinionID(int id)
     {

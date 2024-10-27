@@ -85,23 +85,23 @@ internal class Kanaxai : SilentSurf
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
-        };
+        ];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.KanaxaiScytheOfHouseAurkusCM,
             (int)TrashID.AspectOfTorment,
             (int)TrashID.AspectOfLethargy,
             (int)TrashID.AspectOfExposure,
             (int)TrashID.AspectOfDeath,
             (int)TrashID.AspectOfFear,
-        };
+        ];
     }
 
     protected override Dictionary<int, int> GetTargetsSortIDs()

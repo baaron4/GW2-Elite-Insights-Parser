@@ -27,7 +27,7 @@ public class LineDecoration : FormDecoration
     }
     internal class LineDecorationRenderingData : FormDecorationRenderingData
     {
-        public GeographicalConnector ConnectedFrom { get; }
+        public readonly GeographicalConnector ConnectedFrom;
         public LineDecorationRenderingData((long, long) lifespan, GeographicalConnector connector, GeographicalConnector targetConnector) : base(lifespan, connector)
         {
             ConnectedFrom = targetConnector;
@@ -65,12 +65,12 @@ public class LineDecoration : FormDecoration
     public LineDecoration(Segment lifespan, Color color, double opacity, GeographicalConnector connector, GeographicalConnector targetConnector) : this((lifespan.Start, lifespan.End), color.WithAlpha(opacity).ToString(true), connector, targetConnector)
     {
     }
-    public override FormDecoration Copy(string color = null)
+    public override FormDecoration Copy(string? color = null)
     {
         return (FormDecoration)new LineDecoration(Lifespan, color ?? Color, ConnectedTo, ConnectedFrom).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
     }
 
-    public override FormDecoration GetBorderDecoration(string borderColor = null)
+    public override FormDecoration GetBorderDecoration(string? borderColor = null)
     {
         throw new InvalidOperationException("Lines can't have borders");
     }

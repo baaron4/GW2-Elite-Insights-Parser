@@ -6,8 +6,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
 internal abstract class ActorChartDataDto
 {
-    public List<object[]> HealthStates { get; }
-    public List<object[]> BarrierStates { get; }
+    public readonly List<object[]>? HealthStates;
+    public readonly List<object[]>? BarrierStates;
 
     public ActorChartDataDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor, bool nullableHPStates)
     {

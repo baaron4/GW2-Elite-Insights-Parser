@@ -10,24 +10,24 @@ namespace GW2EIEvtcParser;
 
 public class ParsedEvtcLog
 {
-    public LogData LogData { get; }
-    public FightData FightData { get; }
-    public AgentData AgentData { get; }
-    public SkillData SkillData { get; }
-    public CombatData CombatData { get; }
-    public IReadOnlyList<Player> PlayerList { get; }
-    public IReadOnlyList<AbstractSingleActor> Friendlies { get; }
-    public IReadOnlyCollection<AgentItem> PlayerAgents { get; }
-    public IReadOnlyCollection<AgentItem> FriendlyAgents { get; }
+    public readonly LogData LogData;
+    public readonly FightData FightData;
+    public readonly AgentData AgentData;
+    public readonly SkillData SkillData;
+    public readonly CombatData CombatData;
+    public readonly IReadOnlyList<Player> PlayerList;
+    public readonly IReadOnlyList<AbstractSingleActor> Friendlies;
+    public readonly IReadOnlyCollection<AgentItem> PlayerAgents;
+    public readonly IReadOnlyCollection<AgentItem> FriendlyAgents;
     public bool IsBenchmarkMode => FightData.Logic.ParseMode == FightLogic.ParseModeEnum.Benchmark;
-    public IReadOnlyDictionary<ParserHelper.Spec, List<AbstractSingleActor>> FriendliesListBySpec { get; }
-    public DamageModifiersContainer DamageModifiers { get; }
-    public BuffsContainer Buffs { get; }
-    public EvtcParserSettings ParserSettings { get; }
+    public readonly IReadOnlyDictionary<ParserHelper.Spec, List<AbstractSingleActor>> FriendliesListBySpec;
+    public readonly DamageModifiersContainer DamageModifiers;
+    public readonly BuffsContainer Buffs;
+    public readonly EvtcParserSettings ParserSettings;
     public bool CanCombatReplay => ParserSettings.ParseCombatReplay && CombatData.HasMovementData;
 
-    public MechanicData MechanicData { get; }
-    public StatisticsHelper StatisticsHelper { get; }
+    public readonly MechanicData MechanicData;
+    public readonly StatisticsHelper StatisticsHelper;
 
     private readonly ParserController _operation;
 

@@ -12,23 +12,23 @@ public class EXTJsonMinionsBarrierStats
     /// Total barrier done by minions \n
     /// Length == # of phases
     /// </summary>
-    public IReadOnlyList<int> TotalBarrier;
+    public IReadOnlyList<int>? TotalBarrier;
     /// <summary>
     /// Total Allied Barrier done by minions \n
     /// Length == # of players and the length of each sub array is equal to # of phases
     /// </summary>
-    public IReadOnlyList<IReadOnlyList<int>> TotalAlliedBarrier;
+    public IReadOnlyList<IReadOnlyList<int>>? TotalAlliedBarrier;
     /// <summary>
     /// Total Outgoing Barrier distribution array \n
     /// Length == # of phases
     /// </summary>
     /// <seealso cref="EXTJsonBarrierDist"/>
-    public IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>> TotalBarrierDist;
+    public IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>>? TotalBarrierDist;
 
     /// <summary>
     /// Total Outgoing Allied Barrier distribution array \n
     /// Length == # of players and the length of each sub array is equal to # of phases
     /// </summary>
     /// <seealso cref="EXTJsonBarrierDist"/>
-    public IReadOnlyList<IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>>> AlliedBarrierDist;
+    public IReadOnlyList<IReadOnlyList<IReadOnlyList<EXTJsonBarrierDist>>>? AlliedBarrierDist;
 }

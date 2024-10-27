@@ -2,7 +2,7 @@
 
 public class PointOfViewEvent : AbstractMetaDataEvent
 {
-    public AgentItem PoV { get; }
+    public readonly AgentItem PoV;
 
     internal PointOfViewEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
     {

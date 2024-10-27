@@ -49,39 +49,39 @@ internal class StatueOfDarkness : HallOfChains
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.LightThieves,
             ArcDPSEnums.TrashID.MazeMinotaur,
-        };
+        ];
     }
 
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.EyeOfFate,
             (int)ArcDPSEnums.TargetID.EyeOfJudgement
-        };
+        ];
     }
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.EyeOfFate,
             (int)ArcDPSEnums.TargetID.EyeOfJudgement
-        };
+        ];
     }
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.EyeOfFate,
             (int)ArcDPSEnums.TargetID.EyeOfJudgement
-        };
+        ];
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)

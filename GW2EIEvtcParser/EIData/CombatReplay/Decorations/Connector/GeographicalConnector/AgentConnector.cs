@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class AgentConnector : GeographicalConnector
 {
-    public AgentItem Agent { get; }
+    public readonly AgentItem Agent;
 
     public AgentConnector(AbstractSingleActor agent)
     {

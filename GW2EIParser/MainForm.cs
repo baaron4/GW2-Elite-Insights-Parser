@@ -19,10 +19,10 @@ internal partial class MainForm : Form
 {
     private readonly SettingsForm _settingsForm;
     private readonly List<string> _logsFiles;
-    private List<ulong> _currentDiscordMessageIDs = new List<ulong>();
+    private List<ulong> _currentDiscordMessageIDs = new();
     private int _runningCount = 0;
     private bool _anyRunning => _runningCount > 0;
-    private readonly Queue<FormOperationController> _logQueue = new Queue<FormOperationController>();
+    private readonly Queue<FormOperationController> _logQueue = new();
 
     private readonly string _traceFileName;
 
@@ -672,7 +672,7 @@ internal partial class MainForm : Form
                 message += "\r\n";
             }
             start = false;
-            var splitDpsReportLogs = new List<List<FormOperationController>>() { new List<FormOperationController>() };
+            var splitDpsReportLogs = new List<List<FormOperationController>>() { new() };
             message += group.Key.ToString("yyyy-MM-dd") + " - ";
             List<FormOperationController> curListToFill = splitDpsReportLogs.First();
             AddTraceMessage("Discord: Splitting message to avoid reaching discord's character limit");
@@ -684,10 +684,10 @@ internal partial class MainForm : Form
                 }
                 else
                 {
-                    curListToFill = new List<FormOperationController>()
-                    {
+                    curListToFill =
+                    [
                         controller
-                    };
+                    ];
                     splitDpsReportLogs.Add(curListToFill);
                 }
             }

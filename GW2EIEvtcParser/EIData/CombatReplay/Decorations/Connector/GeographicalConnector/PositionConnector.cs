@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class PositionConnector : GeographicalConnector
 {
-    protected Point3D Position { get; set; }
+    protected Point3D Position;
 
     public PositionConnector(Point3D position)
     {

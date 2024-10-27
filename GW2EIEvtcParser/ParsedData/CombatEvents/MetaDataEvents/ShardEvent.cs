@@ -2,7 +2,7 @@
 
 public class ShardEvent : AbstractMetaDataEvent
 {
-    public int ShardID { get; }
+    public readonly int ShardID;
 
     internal ShardEvent(CombatItem evtcItem) : base(evtcItem)
     {

@@ -10,11 +10,11 @@ namespace GW2EIEvtcParser.ParsedData;
 public class FightData
 {
     // Fields
-    private List<PhaseData> _phases = new List<PhaseData>();
-    public int TriggerID { get; }
-    public FightLogic Logic { get; }
+    private List<PhaseData> _phases = new();
+    public readonly int TriggerID;
+    public readonly FightLogic Logic;
     public long FightEnd { get; private set; } = long.MaxValue;
-    public long FightStart { get; } = 0;
+    public readonly long FightStart = 0;
     public long FightDuration => FightEnd;
 
     public string FightName { get; private set; }

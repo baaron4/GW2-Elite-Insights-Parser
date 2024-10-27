@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ThiefHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(Shadowstep, Infiltration),
         new BuffLossCastFinder(ShadowReturn, Infiltration).UsingChecker((evt, combatData, agentData, skillData) => evt.RemovedDuration > ServerDelayConstant),
         new DamageCastFinder(Mug, Mug),
@@ -39,10 +39,10 @@ internal static class ThiefHelper
             .UsingSecondaryEffectChecker(EffectGUIDs.ThiefInfiltratorsSignet2),
         new EffectCastFinderByDst(SignetOfAgilitySkill, EffectGUIDs.ThiefSignetOfAgility).UsingDstBaseSpecChecker(Spec.Thief),
         new EffectCastFinderByDst(SignetOfShadowsSkill, EffectGUIDs.ThiefSignetOfShadows).UsingDstBaseSpecChecker(Spec.Thief),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Deadly arts
         new BuffOnFoeDamageModifier(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, BuffImages.ExposedWeakness, DamageModifierMode.All).WithBuilds(GW2Builds.July2018Balance),
         new BuffOnFoeDamageModifier(NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.ExposedWeakness, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
@@ -61,10 +61,10 @@ internal static class ThiefHelper
         // Spear       
         new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "5%", DamageSource.NoPets, 5, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.sPvPWvW),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new DamageLogDamageModifier("Marauder's Resilience", "-10% from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.MaraudersResilience, (x,log) =>
         {
             Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
@@ -75,11 +75,11 @@ internal static class ThiefHelper
             }
             return currentPosition.DistanceToPoint(currentTargetPosition) <= 360.0;
         }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.April2019Balance)
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         // Skills
         new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedBuff, Source.Thief, BuffClassification.Other, BuffImages.PrepareShadowPortal),
         new Buff("Shadow Portal (Open)", ShadowPortalOpenedBuff, Source.Thief, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ShadowPortal),
@@ -113,10 +113,10 @@ internal static class ThiefHelper
         new Buff("Distracting Throw", DistractingThrowBuff, Source.Thief, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.DistractingThrow),
         new Buff("Shadow Veil", ShadowVeilBuff, Source.Thief, BuffClassification.Other, BuffImages.ShadowVeil),
         new Buff("Shadow Veil (Stacks)", ShadowVeilBuffStacks, Source.Thief, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ShadowVeil),
-    };
+    ];
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.ThiefDaggerHuman,
         (int)MinionID.ThiefPistolHuman,
         (int)MinionID.ThiefUnknown1,
@@ -139,7 +139,7 @@ internal static class ThiefHelper
         (int)MinionID.ThiefSwordHuman1,
         (int)MinionID.ThiefSwordHuman2,
         (int)MinionID.ThiefSwordSylvari2,
-    };
+    ];
 
     internal static bool IsKnownMinionID(int id)
     {

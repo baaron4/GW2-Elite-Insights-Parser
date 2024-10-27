@@ -9,8 +9,8 @@ namespace GW2EIEvtcParser.EIData.Buffs;
 
 internal static class WvWBuffs
 {
-    internal static readonly List<Buff> Commons = new List<Buff>
-    {
+    internal static readonly List<Buff> Commons =
+    [
         new Buff("Minor Borderlands Bloodlust", MinorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),
         new Buff("Major Borderlands Bloodlust", MajorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),
         new Buff("Superior Borderlands Bloodlust", SuperiorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),
@@ -93,5 +93,5 @@ internal static class WvWBuffs
         new Buff("Guild Hall - PvE", GuildHallPvEMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallPvEMode),
         new Buff("Guild Hall - sPvP", GuildHallsPvPMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallsPvPMode),
         new Buff("Guild Hall - WvW", GuildHallWvWMode, Source.Common, BuffClassification.Other, BuffImages.GuildHallWvWMode),
-    };
+    ];
 }

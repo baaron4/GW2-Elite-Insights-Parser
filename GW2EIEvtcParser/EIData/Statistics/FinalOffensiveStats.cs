@@ -6,40 +6,40 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalOffensiveStats
 {
-    public int TotalDamageCount { get; }
-    public int TotalDmg { get; }
-    public int DirectDamageCount { get; }
-    public int DirectDmg { get; }
-    public int ConnectedDamageCount { get; }
-    public int ConnectedDmg { get; }
-    public int ConnectedDirectDamageCount { get; }
-    public int ConnectedDirectDmg { get; }
-    public int CritableDirectDamageCount { get; }
-    public int CriticalCount { get; }
-    public int CriticalDmg { get; }
-    public int FlankingCount { get; }
-    public int GlanceCount { get; }
-    public int AgainstMovingCount { get; }
-    public int Missed { get; }
-    public int Blocked { get; }
-    public int Evaded { get; }
-    public int Interrupts { get; }
-    public int Invulned { get; }
-    public int Killed { get; }
-    public int Downed { get; }
+    public readonly int TotalDamageCount;
+    public readonly int TotalDmg;
+    public readonly int DirectDamageCount;
+    public readonly int DirectDmg;
+    public readonly int ConnectedDamageCount;
+    public readonly int ConnectedDmg;
+    public readonly int ConnectedDirectDamageCount;
+    public readonly int ConnectedDirectDmg;
+    public readonly int CritableDirectDamageCount;
+    public readonly int CriticalCount;
+    public readonly int CriticalDmg;
+    public readonly int FlankingCount;
+    public readonly int GlanceCount;
+    public readonly int AgainstMovingCount;
+    public readonly int Missed;
+    public readonly int Blocked;
+    public readonly int Evaded;
+    public readonly int Interrupts;
+    public readonly int Invulned;
+    public readonly int Killed;
+    public readonly int Downed;
 
-    public int AgainstDownedCount { get; }
-    public int AgainstDownedDamage { get; }
+    public readonly int AgainstDownedCount;
+    public readonly int AgainstDownedDamage;
 
-    public int ConnectedPowerCount { get; }
-    public int ConnectedPowerAbove90HPCount { get; }
-    public int ConnectedConditionCount { get; }
-    public int ConnectedConditionAbove90HPCount { get; }
+    public readonly int ConnectedPowerCount;
+    public readonly int ConnectedPowerAbove90HPCount;
+    public readonly int ConnectedConditionCount;
+    public readonly int ConnectedConditionAbove90HPCount;
 
-    public int DownContribution { get; }
+    public readonly int DownContribution;
 
-    public int AppliedCrowdControl { get; }
-    public double AppliedCrowdControlDuration { get; }
+    public readonly int AppliedCrowdControl;
+    public readonly double AppliedCrowdControlDuration;
 
 
     internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)

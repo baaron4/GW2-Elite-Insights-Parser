@@ -20,7 +20,7 @@ using Segment = GenericSegment<double>;
 
 internal class SoullessHorror : HallOfChains
 {
-    private static readonly Point3D ChestOfDesminaPosition = new Point3D(-9349.45f, 258.757f, -807.954f);
+    private static readonly Point3D ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);
     public SoullessHorror(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>

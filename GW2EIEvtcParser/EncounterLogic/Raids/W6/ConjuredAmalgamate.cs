@@ -19,7 +19,7 @@ using Segment = GenericSegment<double>;
 internal class ConjuredAmalgamate : MythwrightGambit
 {
     private readonly bool _cn;
-    private static readonly Point3D CAChestPosition = new Point3D(-4594f, -13004f, -2063.04f);
+    private static readonly Point3D CAChestPosition = new(-4594f, -13004f, -2063.04f);
     public ConjuredAmalgamate(int triggerID) : base((int)ArcDPSEnums.TargetID.ConjuredAmalgamate)
     {
         MechanicList.AddRange(new List<Mechanic>
@@ -98,29 +98,29 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.ConjuredAmalgamate,
             (int)ArcDPSEnums.TargetID.CARightArm,
             (int)ArcDPSEnums.TargetID.CALeftArm
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>()
-        {
+        return
+        [
             ArcDPSEnums.TrashID.ConjuredGreatsword,
             ArcDPSEnums.TrashID.ConjuredShield
-        };
+        ];
     }
 
     protected override List<int> GetFriendlyNPCIDs()
     {
-        return new List<int>()
-        {
+        return
+        [
             (int)ArcDPSEnums.TrashID.ConjuredPlayerSword
-        };
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -172,12 +172,12 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.ConjuredAmalgamate,
             (int)ArcDPSEnums.TargetID.CALeftArm,
             (int)ArcDPSEnums.TargetID.CARightArm
-        };
+        ];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -260,7 +260,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         if (target == null)
         {
-            return new List<long>();
+            return [];
         }
         var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).ToList();
         var attackTargets = new HashSet<AgentItem>();

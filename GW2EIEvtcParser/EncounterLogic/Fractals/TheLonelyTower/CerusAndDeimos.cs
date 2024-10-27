@@ -177,11 +177,11 @@ internal class CerusAndDeimos : LonelyTower
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.CerusLonelyTower,
             (int)TargetID.DeimosLonelyTower,
-        };
+        ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {

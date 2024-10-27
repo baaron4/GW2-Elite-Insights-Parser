@@ -139,14 +139,14 @@ internal class Eparch : LonelyTower
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.EparchLonelyTower,
             (int)TrashID.IncarnationOfCruelty,
             (int)TrashID.IncarnationOfJudgement,
             (int)TrashID.AvatarOfSpite,
             (int)TrashID.KryptisRift,
-        };
+        ];
     }
 
     protected override Dictionary<int, int> GetTargetsSortIDs()
@@ -163,11 +163,11 @@ internal class Eparch : LonelyTower
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return new List<TrashID>
-        {
+        return
+        [
             TrashID.TheTormentedLonelyTower,
             TrashID.TheCravenLonelyTower,
-        };
+        ];
     }
 
     private AbstractSingleActor GetEparchActor()

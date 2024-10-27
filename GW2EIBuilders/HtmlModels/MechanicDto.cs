@@ -7,11 +7,11 @@ namespace GW2EIBuilders.HtmlModels;
 
 internal class MechanicDto
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public int Icd { get; set; }
-    public string ShortName { get; set; }
-    public string Description { get; set; }
+    public string? ShortName { get; set; }
+    public string? Description { get; set; }
     public bool EnemyMech { get; set; }
     public bool PlayerMech { get; set; }
     public bool IsAchievementEligibility { get; set; }

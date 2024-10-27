@@ -7,7 +7,7 @@ public class BuffRemoveAllEvent : AbstractBuffRemoveEvent
 {
     public const int FullRemoval = int.MaxValue;
 
-    public int RemovedStacks { get; }
+    public readonly int RemovedStacks;
     private readonly int _lastRemovedDuration;
 
     internal BuffRemoveAllEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

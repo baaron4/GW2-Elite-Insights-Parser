@@ -10,7 +10,7 @@ public class JsonPlayer : JsonActor
     /// <summary>
     /// Account name of the player
     /// </summary>
-    public string Account;
+    public string? Account;
 
     /// <summary>
     /// Group of the player
@@ -32,7 +32,7 @@ public class JsonPlayer : JsonActor
     /// <summary>
     /// Profession of the player
     /// </summary>
-    public string Profession;
+    public string? Profession;
 
     /// <summary>
     /// Indicates that the JsonPlayer is actually a friendly NPC
@@ -47,7 +47,7 @@ public class JsonPlayer : JsonActor
     /// <summary>
     /// Guild id to be used to fetch from the official API
     /// </summary>
-    public string GuildID;
+    public string? GuildID;
 
     /// <summary>
     /// Weapons of the player \n
@@ -56,7 +56,7 @@ public class JsonPlayer : JsonActor
     /// When unknown, 'Unknown' value will appear \n
     /// If 2 handed weapon even indices will have "2Hand" as value
     /// </summary>
-    public IReadOnlyList<string> Weapons;
+    public IReadOnlyList<string>? Weapons;
 
     /// <summary>
     /// Array of int[2] that represents the number of active clones \n
@@ -64,7 +64,7 @@ public class JsonPlayer : JsonActor
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
     /// Only relevant for clone summoning capable specs.
     /// </summary>
-    public IReadOnlyList<(long Time, int CloneCount)> ActiveClones;
+    public IReadOnlyList<(long Time, int CloneCount)>? ActiveClones;
 
     /// <summary>
     /// Array of int[2] that represents the number of active ranger pets \n
@@ -72,14 +72,14 @@ public class JsonPlayer : JsonActor
     /// If i corresponds to the last element that means the status did not change for the remainder of the fight \n
     /// Only relevant for rangers.
     /// </summary>
-    public IReadOnlyList<(long Time, int PetCount)> ActiveRangerPets;
+    public IReadOnlyList<(long Time, int PetCount)>? ActiveRangerPets;
 
     /// <summary>
     /// Array of Total DPS stats \n
     /// Length == # of targets and the length of each sub array is equal to # of phases
     /// </summary>
     /// <seealso cref="JsonStatistics.JsonDPS"/>
-    public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonDPS>> DpsTargets;
+    public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonDPS>>? DpsTargets;
 
 
     /// <summary>
@@ -90,7 +90,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<int>> DamageTaken1S;
+    public IReadOnlyList<IReadOnlyList<int>>? DamageTaken1S;
     /// <summary>
     /// Array of int representing 1S power damage taken points \n
     /// Length == # of phases
@@ -99,7 +99,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<int>> PowerDamageTaken1S;
+    public IReadOnlyList<IReadOnlyList<int>>? PowerDamageTaken1S;
     /// <summary>
     /// Array of int representing 1S condition damage taken points \n
     /// Length == # of phases
@@ -108,7 +108,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<int>> ConditionDamageTaken1S;
+    public IReadOnlyList<IReadOnlyList<int>>? ConditionDamageTaken1S;
 
     /// <summary>
     /// Array of double representing 1S breakbar damage taken points \n
@@ -118,7 +118,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<double>> BreakbarDamageTaken1S;
+    public IReadOnlyList<IReadOnlyList<double>>? BreakbarDamageTaken1S;
 
     /// <summary>
     /// Array of int representing 1S damage points \n
@@ -128,7 +128,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> TargetDamage1S;
+    public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>>? TargetDamage1S;
 
     /// <summary>
     /// Array of int representing 1S power damage points \n
@@ -138,7 +138,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> TargetPowerDamage1S;
+    public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>>? TargetPowerDamage1S;
 
     /// <summary>
     /// Array of int representing 1S condition damage points \n
@@ -148,7 +148,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>> TargetConditionDamage1S;
+    public IReadOnlyList<IReadOnlyList<IReadOnlyList<int>>>? TargetConditionDamage1S;
 
     /// <summary>
     /// Array of double representing 1S breakbar damage points \n
@@ -165,53 +165,53 @@ public class JsonPlayer : JsonActor
     /// Length == # of targets and the length of each sub array is equal to # of phases
     /// </summary>
     /// <seealso cref="JsonDamageDist"/>
-    public IReadOnlyList<IReadOnlyList<IReadOnlyList<JsonDamageDist>>> TargetDamageDist;
+    public IReadOnlyList<IReadOnlyList<IReadOnlyList<JsonDamageDist>>>? TargetDamageDist;
 
     /// <summary>
     /// Stats against targets  \n
     /// Length == # of targets and the length of each sub array is equal to # of phases
     /// </summary>
     /// <seealso cref="JsonStatistics.JsonGameplayStats"/>
-    public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonGameplayStats>> StatsTargets;
+    public IReadOnlyList<IReadOnlyList<JsonStatistics.JsonGameplayStats>>? StatsTargets;
 
     /// <summary>
     /// Support stats \n
     /// Length == # of phases
     /// </summary>
     /// <seealso cref="JsonStatistics.JsonPlayerSupport"/>
-    public IReadOnlyList<JsonStatistics.JsonPlayerSupport> Support;
+    public IReadOnlyList<JsonStatistics.JsonPlayerSupport>? Support;
 
     /// <summary>
     /// Damage modifiers against all
     /// </summary>
     /// <seealso cref="JsonDamageModifierData"/>
-    public IReadOnlyList<JsonDamageModifierData> DamageModifiers;
+    public IReadOnlyList<JsonDamageModifierData>? DamageModifiers;
 
     /// <summary>
     /// Damage modifiers against targets \n
     /// Length == # of targets
     /// </summary>
     /// <seealso cref="JsonDamageModifierData"/>
-    public IReadOnlyList<IReadOnlyList<JsonDamageModifierData>> DamageModifiersTarget;
+    public IReadOnlyList<IReadOnlyList<JsonDamageModifierData>>? DamageModifiersTarget;
 
     /// <summary>
     /// Incoming damage modifiers from all
     /// </summary>
     /// <seealso cref="JsonDamageModifierData"/>
-    public IReadOnlyList<JsonDamageModifierData> IncomingDamageModifiers;
+    public IReadOnlyList<JsonDamageModifierData>? IncomingDamageModifiers;
 
     /// <summary>
     /// Incoming damage modifiers from targets \n
     /// Length == # of targets
     /// </summary>
     /// <seealso cref="JsonDamageModifierData"/>
-    public IReadOnlyList<IReadOnlyList<JsonDamageModifierData>> IncomingDamageModifiersTarget;
+    public IReadOnlyList<IReadOnlyList<JsonDamageModifierData>>? IncomingDamageModifiersTarget;
 
     /// <summary>
     /// List of buff status
     /// </summary>
     /// <seealso cref="JsonBuffsUptime"/>
-    public IReadOnlyList<JsonBuffsUptime> BuffUptimes;
+    public IReadOnlyList<JsonBuffsUptime>? BuffUptimes;
 
     /// <summary>
     /// List of buff status on self generation  \n
@@ -242,7 +242,7 @@ public class JsonPlayer : JsonActor
     /// List of buff status on active time
     /// </summary>
     /// <seealso cref="JsonBuffsUptime"/>
-    public IReadOnlyList<JsonBuffsUptime> BuffUptimesActive;
+    public IReadOnlyList<JsonBuffsUptime>? BuffUptimesActive;
 
     /// <summary>
     /// List of buff status on self generation on active time
@@ -271,7 +271,7 @@ public class JsonPlayer : JsonActor
     /// List of volumes status
     /// </summary>
     /// <seealso cref="JsonBuffVolumes"/>
-    public IReadOnlyList<JsonBuffVolumes> BuffVolumes;
+    public IReadOnlyList<JsonBuffVolumes>? BuffVolumes;
     /// <summary>
     /// List of buff volumes on self outgoing  \n
     /// Key is "'b' + id"
@@ -302,7 +302,7 @@ public class JsonPlayer : JsonActor
     /// List of buff volumes on active time
     /// </summary>
     /// <seealso cref="JsonBuffVolumes"/>
-    public IReadOnlyList<JsonBuffVolumes> BuffVolumesActive;
+    public IReadOnlyList<JsonBuffVolumes>? BuffVolumesActive;
     /// <summary>
     /// List of buff volumes on self outgoing on active time
     /// </summary>
@@ -330,27 +330,27 @@ public class JsonPlayer : JsonActor
     /// Length == number of death
     /// </summary>
     /// <seealso cref="JsonDeathRecap"/>
-    public IReadOnlyList<JsonDeathRecap> DeathRecap;
+    public IReadOnlyList<JsonDeathRecap>? DeathRecap;
 
     /// <summary>
     /// List of used consumables
     /// </summary>
     /// <seealso cref="JsonConsumable"/>
-    public IReadOnlyList<JsonConsumable> Consumables;
+    public IReadOnlyList<JsonConsumable>? Consumables;
 
     /// <summary>
     /// List of time during which the player was active (not dead and not dc) \n
     /// Length == number of phases
     /// </summary>
-    public IReadOnlyList<long> ActiveTimes;
+    public IReadOnlyList<long>? ActiveTimes;
 
     /// <summary>
     /// Healing stats data
     /// </summary>
-    public EXTJsonPlayerHealingStats EXTHealingStats;
+    public EXTJsonPlayerHealingStats? EXTHealingStats;
 
     /// <summary>
     /// Barrier stats data
     /// </summary>
-    public EXTJsonPlayerBarrierStats EXTBarrierStats;
+    public EXTJsonPlayerBarrierStats? EXTBarrierStats;
 }

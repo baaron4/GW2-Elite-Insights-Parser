@@ -54,33 +54,33 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>()
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.PeerlessQadim,
             (int)ArcDPSEnums.TrashID.EntropicDistortion,
             (int)ArcDPSEnums.TrashID.PeerlessQadimPylon,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>()
-        {
+        return
+        [
             //ArcDPSEnums.TrashID.PeerlessQadimAuraPylon,
             ArcDPSEnums.TrashID.BigKillerTornado,
             ArcDPSEnums.TrashID.EnergyOrb,
             //ArcDPSEnums.TrashID.Brandstorm,
             ArcDPSEnums.TrashID.GiantQadimThePeerless,
             //ArcDPSEnums.TrashID.DummyPeerlessQadim,
-        };
+        ];
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(UnbrearablePower, UnbrearablePower),
-        };
+        ];
     }
 
     private static readonly IReadOnlyList<(string, Point3D)> PylonLocations = new List<(string, Point3D)>()

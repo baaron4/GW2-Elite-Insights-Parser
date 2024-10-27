@@ -174,7 +174,7 @@ namespace System.Diagnostics.CodeAnalysis
         public MemberNotNullAttribute(params string[] members) => Members = members;
  
         /// <summary>Gets field or property member names.</summary>
-        public string[] Members { get; }
+        public readonly string[] Members;
     }
  
 
@@ -208,9 +208,9 @@ namespace System.Diagnostics.CodeAnalysis
         }
 
         /// <summary>Gets the return value condition.</summary>
-        public bool ReturnValue { get; }
+        public readonly bool ReturnValue;
 
         /// <summary>Gets field or property member names.</summary>
-        public string[] Members { get; }
+        public readonly string[] Members;
     }
 }

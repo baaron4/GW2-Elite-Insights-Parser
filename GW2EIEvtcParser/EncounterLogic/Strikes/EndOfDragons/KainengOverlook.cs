@@ -63,8 +63,8 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.MinisterLi,
             (int)ArcDPSEnums.TargetID.MinisterLiCM,
             (int)ArcDPSEnums.TrashID.TheEnforcer,
@@ -77,16 +77,16 @@ internal class KainengOverlook : EndOfDragonsStrike
             (int)ArcDPSEnums.TrashID.TheMechRiderCM,
             (int)ArcDPSEnums.TrashID.TheRitualistCM,
             (int)ArcDPSEnums.TrashID.TheSniperCM,
-        };
+        ];
     }
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.MinisterLi,
             (int)ArcDPSEnums.TargetID.MinisterLiCM,
-        };
+        ];
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -96,17 +96,17 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.SpiritOfDestruction,
             ArcDPSEnums.TrashID.SpiritOfPain,
-        };
+        ];
     }
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.MinisterLi,
             (int)ArcDPSEnums.TargetID.MinisterLiCM,
             (int)ArcDPSEnums.TrashID.TheEnforcer,
@@ -119,17 +119,17 @@ internal class KainengOverlook : EndOfDragonsStrike
             (int)ArcDPSEnums.TrashID.TheMechRiderCM,
             (int)ArcDPSEnums.TrashID.TheRitualistCM,
             (int)ArcDPSEnums.TrashID.TheSniperCM,
-        };
+        ];
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(DestructiveAuraSkill, DestructiveAuraSkill),
             new DamageCastFinder(EnhancedDestructiveAuraSkill1, EnhancedDestructiveAuraSkill1),
             new DamageCastFinder(EnhancedDestructiveAuraSkill2, EnhancedDestructiveAuraSkill2),
-        };
+        ];
     }
 
     private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<AbstractSingleActor> targets, AbstractSingleActor ministerLi, ParsedEvtcLog log, int phaseID)

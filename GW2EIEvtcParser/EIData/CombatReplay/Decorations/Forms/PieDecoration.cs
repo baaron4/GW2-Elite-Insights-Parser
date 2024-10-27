@@ -8,7 +8,7 @@ public class PieDecoration : CircleDecoration
 {
     internal class PieDecorationMetadata : CircleDecorationMetadata
     {
-        public float OpeningAngle { get; } //in degrees
+        public readonly float OpeningAngle; //in degrees
 
         public PieDecorationMetadata(string color, uint radius, uint minRadius, float openingAngle) : base(color, radius, minRadius)
         {
@@ -60,7 +60,7 @@ public class PieDecoration : CircleDecoration
     {
     }
 
-    public override FormDecoration Copy(string color = null)
+    public override FormDecoration Copy(string? color = null)
     {
         return (PieDecoration)new PieDecoration(Radius, OpeningAngle, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
     }

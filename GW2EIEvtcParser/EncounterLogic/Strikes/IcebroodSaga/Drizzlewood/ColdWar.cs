@@ -56,8 +56,8 @@ internal class ColdWar : IcebroodSagaStrike
     // TODO - complete IDs
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.PropagandaBallon,
             ArcDPSEnums.TrashID.DominionBladestorm,
             ArcDPSEnums.TrashID.DominionStalker,
@@ -70,6 +70,6 @@ internal class ColdWar : IcebroodSagaStrike
             ArcDPSEnums.TrashID.BloodLegionBlademaster,
             ArcDPSEnums.TrashID.CharrTank,
             ArcDPSEnums.TrashID.SonsOfSvanirHighShaman,
-        };
+        ];
     }
 }

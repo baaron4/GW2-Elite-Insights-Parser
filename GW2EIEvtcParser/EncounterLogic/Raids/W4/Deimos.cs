@@ -78,30 +78,30 @@ internal class Deimos : BastionOfThePenitent
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(DemonicAura, DemonicAura),
-        };
+        ];
     }
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Deimos,
             (int)ArcDPSEnums.TrashID.Saul,
             (int)ArcDPSEnums.TrashID.Thief,
             (int)ArcDPSEnums.TrashID.Drunkard,
             (int)ArcDPSEnums.TrashID.Gambler,
-        };
+        ];
     }
 
     protected override List<int> GetFriendlyNPCIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TrashID.Saul,
             (int)ArcDPSEnums.TrashID.ShackledPrisoner
-        };
+        ];
     }
 
     private static void MergeWithGadgets(AgentItem deimos, long upperTimeThreshold, HashSet<AgentItem> gadgets, AgentItem mainBody, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -501,21 +501,21 @@ internal class Deimos : BastionOfThePenitent
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Deimos,
             (int)ArcDPSEnums.TargetID.DummyTarget,
             (int)ArcDPSEnums.TrashID.Thief,
             (int)ArcDPSEnums.TrashID.Drunkard,
             (int)ArcDPSEnums.TrashID.Gambler,
             (int)ArcDPSEnums.TrashID.DemonicBond
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.GamblerClones,
             ArcDPSEnums.TrashID.GamblerReal,
             ArcDPSEnums.TrashID.Greed,
@@ -523,7 +523,7 @@ internal class Deimos : BastionOfThePenitent
             ArcDPSEnums.TrashID.Oil,
             ArcDPSEnums.TrashID.Tear,
             ArcDPSEnums.TrashID.Hands
-        };
+        ];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

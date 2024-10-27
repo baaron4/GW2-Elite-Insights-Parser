@@ -58,10 +58,10 @@ public class EncounterCategory
         UnknownEncounter,
         Unknown
     };
-    internal FightCategory Category { get; set; } = FightCategory.Unknown;
-    internal SubFightCategory SubCategory { get; set; } = SubFightCategory.Unknown;
+    internal FightCategory Category = FightCategory.Unknown;
+    internal SubFightCategory SubCategory = SubFightCategory.Unknown;
 
-    internal int InSubCategoryOrder { get; set; } = 0;
+    internal int InSubCategoryOrder = 0;
 
     public int CompareTo(EncounterCategory other)
     {

@@ -8,33 +8,33 @@ namespace GW2EIEvtcParser.EIData;
 public class FinalDPS
 {
     // Total
-    public int Dps { get; }
-    public int Damage { get; }
-    public int CondiDps { get; }
-    public int CondiDamage { get; }
-    public int PowerDps { get; }
-    public int PowerDamage { get; }
-    public int StrikeDps { get; }
-    public int StrikeDamage { get; }
-    public int LifeLeechDps { get; }
-    public int LifeLeechDamage { get; }
-    public double BreakbarDamage { get; }
-    public int BarrierDps { get; }
-    public int BarrierDamage { get; }
+    public readonly int Dps;
+    public readonly int Damage;
+    public readonly int CondiDps;
+    public readonly int CondiDamage;
+    public readonly int PowerDps;
+    public readonly int PowerDamage;
+    public readonly int StrikeDps;
+    public readonly int StrikeDamage;
+    public readonly int LifeLeechDps;
+    public readonly int LifeLeechDamage;
+    public readonly double BreakbarDamage;
+    public readonly int BarrierDps;
+    public readonly int BarrierDamage;
     // Actor only
-    public int ActorDps { get; }
-    public int ActorDamage { get; }
-    public int ActorCondiDps { get; }
-    public int ActorCondiDamage { get; }
-    public int ActorPowerDps { get; }
-    public int ActorPowerDamage { get; }
-    public int ActorStrikeDps { get; }
-    public int ActorStrikeDamage { get; }
-    public int ActorLifeLeechDps { get; }
-    public int ActorLifeLeechDamage { get; }
-    public double ActorBreakbarDamage { get; }
-    public int ActorBarrierDps { get; }
-    public int ActorBarrierDamage { get; }
+    public readonly int ActorDps;
+    public readonly int ActorDamage;
+    public readonly int ActorCondiDps;
+    public readonly int ActorCondiDamage;
+    public readonly int ActorPowerDps;
+    public readonly int ActorPowerDamage;
+    public readonly int ActorStrikeDps;
+    public readonly int ActorStrikeDamage;
+    public readonly int ActorLifeLeechDps;
+    public readonly int ActorLifeLeechDamage;
+    public readonly double ActorBreakbarDamage;
+    public readonly int ActorBarrierDps;
+    public readonly int ActorBarrierDamage;
 
 
     internal FinalDPS(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)

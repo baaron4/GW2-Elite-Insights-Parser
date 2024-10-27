@@ -5,10 +5,10 @@ namespace GW2EIEvtcParser.ParsedData;
 public class SkillData
 {
     // Fields
-    private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
+    private readonly Dictionary<long, SkillItem> _skills = new();
     private readonly GW2EIGW2API.GW2APIController _apiController;
-    public long DodgeId { get; }
-    public long GenericBreakbarId { get; }
+    public readonly long DodgeId;
+    public readonly long GenericBreakbarId;
     // Public Methods
 
     internal SkillData(GW2EIGW2API.GW2APIController apiController, EvtcVersionEvent evtcVersion)
@@ -27,20 +27,20 @@ public class SkillData
         return _skills[ID];
     }
 
-    internal HashSet<long> NotAccurate = new HashSet<long>();
+    internal HashSet<long> NotAccurate = new();
 
     public bool IsNotAccurate(long ID)
     {
         return NotAccurate.Contains(ID);
     }
 
-    internal HashSet<long> GearProc = new HashSet<long>();
+    internal HashSet<long> GearProc = new();
     public bool IsGearProc(long ID)
     {
         return GearProc.Contains(ID);
     }
 
-    internal HashSet<long> TraitProc = new HashSet<long>();
+    internal HashSet<long> TraitProc = new();
     public bool IsTraitProc(long ID)
     {
         return TraitProc.Contains(ID);

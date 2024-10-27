@@ -16,8 +16,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class RevenantHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(LegendaryAssassinStanceSkill, LegendaryAssassinStanceBuff),
         new BuffGainCastFinder(LegendaryDemonStanceSkill, LegendaryDemonStanceBuff),
         new BuffGainCastFinder(LegendaryDwarfStanceSkill, LegendaryDwarfStanceBuff),
@@ -74,11 +74,11 @@ internal static class RevenantHelper
         new EffectCastFinder(BlitzMines, EffectGUIDs.RevenantSpearBlitzMinesDetonation1)
             .UsingSecondaryEffectChecker(EffectGUIDs.RevenantSpearBlitzMinesDetonation2)
             .UsingSrcBaseSpecChecker(Spec.Revenant),
-    };
+    ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Retribution
         new BuffOnFoeDamageModifier(Weakness, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DwarvenBattleTraining, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance),
         new BuffOnActorDamageModifier(Retaliation, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.ViciousReprisal, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
@@ -126,10 +126,10 @@ internal static class RevenantHelper
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         new DamageLogDamageModifier("Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.All, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
         new BuffOnActorDamageModifier(RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.All, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
         new BuffOnActorDamageModifier(RiteOfTheGreatDwarfAncientEcho, "Rite of the Great Dwarf (Ancient Echo)", "-50%", DamageSource.All, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
@@ -155,10 +155,10 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.UnyieldingSpirit, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2022FractalInstabilitiesRework),
         new BuffOnActorDamageModifier(UnyieldingSpirit, "Unyielding Spirit", "-15%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.UnyieldingSpirit, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
         new BuffOnActorDamageModifier(UnyieldingSpirit, "Unyielding Spirit", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.UnyieldingSpirit, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Vengeful Hammers", VengefulHammersBuff, Source.Revenant, BuffClassification.Other, BuffImages.VengefulHammers),
         new Buff("Rite of the Great Dwarf", RiteOfTheGreatDwarf, Source.Revenant, BuffClassification.Defensive, BuffImages.RiteOfTheGreatDwarf),
         new Buff("Rite of the Great Dwarf (Ancient Echo)", RiteOfTheGreatDwarfAncientEcho, Source.Revenant, BuffClassification.Defensive, BuffImages.RiteOfTheGreatDwarf),
@@ -187,10 +187,10 @@ internal static class RevenantHelper
         new Buff("Blossoming Aura", BlossomingAuraBuff, Source.Revenant, BuffClassification.Other, BuffImages.BlossomingAura),
         // Spear
         new Buff("Crushing Abyss", CrushingAbyss, Source.Revenant, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.CrushingAbyss),
-    };
+    ];
 
-    private static readonly HashSet<long> _legendSwaps = new HashSet<long>
-    {
+    private static readonly HashSet<long> _legendSwaps =
+    [
         LegendaryAssassinStanceSkill, // Assassin
         LegendaryDemonStanceSkill, // Demon
         LegendaryDwarfStanceSkill, // Dwarf
@@ -199,17 +199,17 @@ internal static class RevenantHelper
         LegendaryRenegadeStanceSkill, // Renegade
         LegendaryAllianceStanceSkill, // Alliance
         //LegendaryAllianceStanceUWSkill, // Alliance (UW)
-    };
+    ];
 
     public static bool IsLegendSwap(long id)
     {
         return _legendSwaps.Contains(id);
     }
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.VentariTablet
-    };
+    ];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

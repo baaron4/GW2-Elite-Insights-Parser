@@ -6,9 +6,9 @@ namespace GW2EIGW2API;
 
 public class GW2APIController
 {
-    private readonly GW2SkillAPIController skillAPIController = new GW2SkillAPIController();
-    private readonly GW2SpecAPIController specAPIController = new GW2SpecAPIController();
-    private readonly GW2TraitAPIController traitAPIController = new GW2TraitAPIController();
+    private readonly GW2SkillAPIController skillAPIController = new();
+    private readonly GW2SpecAPIController specAPIController = new();
+    private readonly GW2TraitAPIController traitAPIController = new();
     /// <summary>
     /// API Cache init with a cache file locations, 
     /// If the files are present, the content will be used to initialize the API caches

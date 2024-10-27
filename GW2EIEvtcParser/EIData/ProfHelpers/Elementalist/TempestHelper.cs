@@ -14,17 +14,17 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class TempestHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         //new DamageCastFinder(30662, 30662, 10000), // "Feel the Burn!" - shockwave, fire aura indiscernable from the focus skill
         new EffectCastFinder(FeelTheBurn, EffectGUIDs.TempestFeelTheBurn)
             .UsingSrcSpecChecker(Spec.Tempest),
         new EffectCastFinder(EyeOfTheStormShout, EffectGUIDs.TempestEyeOfTheStorm1)
             .UsingSrcSpecChecker(Spec.Tempest),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(HarmoniousConduit, "Harmonious Conduit", "10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HarmoniousConduit, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife ,GW2Builds.October2019Balance),
         new BuffOnActorDamageModifier(TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.All)
@@ -43,16 +43,16 @@ internal static class TempestHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(TempestuousAria, "Tempestuous Aria (Condition)", "5% after giving aura", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HardyConduit, DamageModifierMode.All), // We only compute the added effectiveness
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Rebound", Rebound, Source.Tempest, BuffClassification.Defensive, BuffImages.Rebound),
         new Buff("Harmonious Conduit", HarmoniousConduit, Source.Tempest, BuffClassification.Other, BuffImages.HarmoniousConduit)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
@@ -62,7 +62,7 @@ internal static class TempestHelper
         new Buff("Heat Sync", HeatSync, Source.Tempest, BuffClassification.Support, BuffImages.HeatSync),
         new Buff("Tempestuous Aria", TempestuousAria, Source.Tempest, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.TempestuousAria)
             .WithBuilds(GW2Builds.June2023Balance),
-    };
+    ];
 
 
     internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)

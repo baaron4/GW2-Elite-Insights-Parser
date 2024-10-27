@@ -7,14 +7,14 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
 internal abstract class BuffSourceFinder
 {
-    private List<AbstractCastEvent> _extensionSkills = null;
-    private readonly HashSet<long> _boonIds = null;
-    protected HashSet<long> ExtensionIDS { get; set; } = new HashSet<long>();
-    protected Dictionary<long, HashSet<long>> DurationToIDs { get; set; } = new Dictionary<long, HashSet<long>>();
+    private List<AbstractCastEvent>? _extensionSkills = null;
+    private readonly HashSet<long>? _boonIds = null;
+    protected HashSet<long> ExtensionIDS = new();
+    protected Dictionary<long, HashSet<long>> DurationToIDs = new();
     // non trackable times
-    protected long EssenceOfSpeed { get; set; } = int.MinValue;
-    protected long ImbuedMelodies { get; set; } = int.MinValue;
-    protected long ImperialImpactExtension { get; set; } = int.MinValue;
+    protected long EssenceOfSpeed = int.MinValue;
+    protected long ImbuedMelodies = int.MinValue;
+    protected long ImperialImpactExtension = int.MinValue;
 
     protected BuffSourceFinder(HashSet<long> boonIds)
     {
@@ -77,7 +77,7 @@ internal abstract class BuffSourceFinder
 
     protected virtual List<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
     {
-        return new List<AgentItem>();
+        return [];
     }
 
 

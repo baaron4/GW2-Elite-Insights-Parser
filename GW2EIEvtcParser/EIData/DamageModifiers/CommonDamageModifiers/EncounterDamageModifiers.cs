@@ -8,8 +8,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class EncounterDamageModifiers
 {
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnFoeDamageModifier(UnnaturalSignet, "Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.UnnaturalSignet, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
         new BuffOnFoeDamageModifier(Compromised, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Compromised, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(ErraticEnergy, "Erratic Energy", "5% per stack, stacks additively with Vulnerability", DamageSource.All, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Unstable, DamageModifierMode.PvE)
@@ -65,14 +65,14 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(IonShield, "Ion Shield", "-5% per stack, while still capable of doing damage", DamageSource.All, -5.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.IonShield, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) =>
             {
-                AbstractSingleActor target = log.FindActor(ahde.To);
+                var target = log.FindActor(ahde.To);
                 var segment = target.GetBuffStatus(log, IonShield, ahde.Time);
                 return segment.Value < 20;
             }),
         new CounterOnFoeDamageModifier(IonShield, "Ion Shield (Invul)", "-5% per stack, while doing 0 damages", DamageSource.All, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.IonShield, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) =>
             {
-                AbstractSingleActor target = log.FindActor(ahde.To);
+                var target = log.FindActor(ahde.To);
                 var segment = target.GetBuffStatus(log, IonShield, ahde.Time);
                 return segment.Value >= 20;
             }),
@@ -132,10 +132,10 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(Enraged_100_strike_25_reduc, "Enraged (-25%)", "-25%, stacks additively with Vulnerability", DamageSource.All, -25, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
         new BuffOnFoeDamageModifier(Enraged_200_strike_50_reduc, "Enraged (-50%)", "-50%, stacks additively with Vulnerability", DamageSource.All, -50, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
         new BuffOnFoeDamageModifier(Enraged_300_strike_75_reduc, "Enraged (-75%)", "-75%, stacks additively with Vulnerability", DamageSource.All, -75, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
 
         new BuffOnActorDamageModifier(ConjuredProtection, "Conjured Protection", "-10% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Fractured, DamageModifierMode.PvE)
             .UsingGainAdjuster(VulnerabilityAdjuster)
@@ -182,5 +182,5 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(EnragedCairn2, "Enraged (Cairn)", "200% per stack", DamageSource.All, 200, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Enraged, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(EnragedTwinLargos, "Enraged (Twin Largos)", "100%", DamageSource.All, 100, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(EnragedWyvern, "Enraged (Wyvern)", "100%", DamageSource.All, 100, DamageType.Strike, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),
-    };
+    ];
 }

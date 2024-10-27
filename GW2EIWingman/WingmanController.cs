@@ -20,25 +20,25 @@ public static class WingmanController
 {
     public delegate void TraceHandler(string trace);
 
-    private static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
+    private static readonly DefaultContractResolver DefaultJsonContractResolver = new()
     {
         NamingStrategy = new CamelCaseNamingStrategy()
     };
-    private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
-    private static readonly HttpClient HTTPClient = new HttpClient();
+    private static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
+    private static readonly HttpClient HTTPClient = new();
 
 
     ///////////////// URL Utilities
     private const string BaseURL = "https://gw2wingman.nevermindcreations.de/";
-    private static string TestConnectionURL { get; } = BaseURL + "testConnection";
+    private readonly static string TestConnectionURL = BaseURL + "testConnection";
 
     private const string BaseAPIURL = BaseURL + "api/";
-    private static string EIVersionURL { get; } = BaseAPIURL + "EIversion";
-    private static string ImportLogQueuedURL { get; } = BaseAPIURL + "importLogQueued";
-    private static string CheckLogQueuedURL { get; } = BaseAPIURL + "checkLogQueued";
-    private static string CheckLogQueuedOrDBURL { get; } = BaseAPIURL + "checkLogQueuedOrDB";
-    private static string CheckUploadURL { get; } = BaseURL + "checkUpload";
-    private static string UploadProcessedURL { get; } = BaseURL + "uploadProcessed";
+    private readonly static string EIVersionURL = BaseAPIURL + "EIversion";
+    private readonly static string ImportLogQueuedURL = BaseAPIURL + "importLogQueued";
+    private readonly static string CheckLogQueuedURL = BaseAPIURL + "checkLogQueued";
+    private readonly static string CheckLogQueuedOrDBURL = BaseAPIURL + "checkLogQueuedOrDB";
+    private readonly static string CheckUploadURL = BaseURL + "checkUpload";
+    private readonly static string UploadProcessedURL = BaseURL + "uploadProcessed";
 
     private static bool IsDPSReportLinkValid(string dpsReportLink, TraceHandler traceHandler)
     {

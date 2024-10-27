@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class BuffInfoEvent : AbstractMetaDataEvent
 {
-    public long BuffID { get; }
+    public readonly long BuffID;
 
     public bool ProbablyInvul { get; private set; }
 
@@ -24,7 +24,7 @@ public class BuffInfoEvent : AbstractMetaDataEvent
 
     public ushort MaxStacks { get; private set; }
     public uint DurationCap { get; private set; }
-    public List<BuffFormula> Formulas { get; } = new List<BuffFormula>();
+    public readonly List<BuffFormula> Formulas = new();
 
     internal BuffInfoEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {

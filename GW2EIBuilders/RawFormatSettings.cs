@@ -1,11 +1,6 @@
 ﻿namespace GW2EIBuilders;
 
-public class RawFormatSettings
+public class RawFormatSettings(bool rawFormatTimelineArrays)
 {
-    public bool RawFormatTimelineArrays { get; }
-
-    public RawFormatSettings(bool rawFormatTimelineArrays)
-    {
-        RawFormatTimelineArrays = rawFormatTimelineArrays;
-    }
+    public readonly bool RawFormatTimelineArrays = rawFormatTimelineArrays;
 }

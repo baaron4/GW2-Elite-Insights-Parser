@@ -50,7 +50,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         IReadOnlyDictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
         if (Skip(Tracker, bgms, GainComputer))
         {
-            return new();
+            return [];
         }
         var res = new List<DamageModifierEvent>();
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);

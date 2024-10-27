@@ -16,7 +16,7 @@ public class JsonLog
         /// <summary>
         /// Name of the skill
         /// </summary>
-        public string Name;
+        public string? Name;
 
         /// <summary>
         /// If the skill is an auto attack
@@ -31,7 +31,7 @@ public class JsonLog
         /// <summary>
         /// Icon of the skill
         /// </summary>
-        public string Icon;
+        public string? Icon;
 
         /// <summary>
         /// True if this skill can trigger on weapon swap sigils
@@ -73,12 +73,12 @@ public class JsonLog
         /// <summary>
         /// Name of the buff
         /// </summary>
-        public string Name;
+        public string? Name;
 
         /// <summary>
         /// Icon of the buff
         /// </summary>
-        public string Icon;
+        public string? Icon;
 
         /// <summary>
         /// True if the buff is stacking
@@ -97,7 +97,7 @@ public class JsonLog
         /// <summary>
         /// Descriptions of the buffs (no traits)
         /// </summary>
-        public IReadOnlyList<string> Descriptions;
+        public IReadOnlyList<string>? Descriptions;
     }
 
     /// <summary>
@@ -108,12 +108,12 @@ public class JsonLog
         /// <summary>
         /// Name of the extension
         /// </summary>
-        public string Name;
+        public string? Name;
 
         /// <summary>
         /// Version of the extension, "Unknown" if missing
         /// </summary>
-        public string Version;
+        public string? Version;
 
         /// <summary>
         /// Revision of the extension
@@ -128,7 +128,7 @@ public class JsonLog
         /// <summary>
         /// List of <see cref="JsonActor.Name"/> running the extension.
         /// </summary>
-        public IReadOnlyList<string> RunningExtension;
+        public IReadOnlyList<string>? RunningExtension;
     }
 
     /// <summary>
@@ -139,17 +139,17 @@ public class JsonLog
         /// <summary>
         /// Name of the damage modifier
         /// </summary>
-        public string Name;
+        public string? Name;
 
         /// <summary>
         /// Icon of the damage modifier
         /// </summary>
-        public string Icon;
+        public string? Icon;
 
         /// <summary>
         /// Description of the damage modifier
         /// </summary>
-        public string Description;
+        public string? Description;
 
         /// <summary>
         /// False if the modifier is multiplicative \n
@@ -174,7 +174,7 @@ public class JsonLog
     /// <summary>
     /// The used EI version.
     /// </summary>
-    public string EliteInsightsVersion;
+    public string? EliteInsightsVersion;
 
     /// <summary>
     /// The id with which the log has been triggered
@@ -189,17 +189,17 @@ public class JsonLog
     /// <summary>
     /// The name of the fight
     /// </summary>
-    public string FightName;
+    public string? FightName;
 
     /// <summary>
     /// The icon of the fight
     /// </summary>
-    public string FightIcon;
+    public string? FightIcon;
 
     /// <summary>
     /// The used arcdps version
     /// </summary>
-    public string ArcVersion;
+    public string? ArcVersion;
 
     /// <summary>
     /// The used arcdps revision
@@ -214,7 +214,7 @@ public class JsonLog
     /// <summary>
     /// Language with which the evtc was generated
     /// </summary>
-    public string Language;
+    public string? Language;
 
     /// <summary>
     /// Scale of the fractal, only applicable for fractal encounters. \n
@@ -230,44 +230,44 @@ public class JsonLog
     /// <summary>
     /// The player who recorded the fight
     /// </summary>
-    public string RecordedBy;
+    public string? RecordedBy;
 
     /// <summary>
     /// The account name of the player who recorded the fight
     /// </summary>
-    public string RecordedAccountBy;
+    public string? RecordedAccountBy;
 
     /// <summary>
     /// DEPRECATED: use TimeStartStd instead \n
     /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
-    public string TimeStart;
+    public string? TimeStart;
 
     /// <summary>
     /// DEPRECATED: use TimeEndStd instead \n
     /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
-    public string TimeEnd;
+    public string? TimeEnd;
 
 
     /// <summary>
     /// The time at which the fight started in "yyyy-mm-dd hh:mm:ss zzz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
-    public string TimeStartStd;
+    public string? TimeStartStd;
 
     /// <summary>
     /// The time at which the fight ended in "yyyy-mm-dd hh:mm:ss zzz" format \n
     /// The value will be <see cref="LogData.DefaultTimeValue"/> if the event does not exist
     /// </summary>
-    public string TimeEndStd;
+    public string? TimeEndStd;
 
     /// <summary>
     /// The duration of the fight in "xh xm xs xms" format
     /// </summary>
-    public string Duration;
+    public string? Duration;
 
     /// <summary>
     /// The duration of the fight in ms
@@ -282,14 +282,14 @@ public class JsonLog
     /// The time at which the instance started in "yyyy-mm-dd hh:mm:ss zzz" format \n
     /// The value will be null if the event does not exist
     /// </summary>
-    public string InstanceTimeStartStd;
+    public string? InstanceTimeStartStd;
 
 
     /// <summary>
     /// XXX.XXX.XXX.XXX IP address of the instance \n
     /// The value will be null if the event does not exist
     /// </summary>
-    public string InstanceIP;
+    public string? InstanceIP;
 
     /// <summary>
     /// The success status of the fight
@@ -331,84 +331,84 @@ public class JsonLog
     /// The list of targets
     /// </summary>
     /// <seealso cref="JsonNPC"/>
-    public IReadOnlyList<JsonNPC> Targets;
+    public IReadOnlyList<JsonNPC>? Targets;
 
     /// <summary>
     /// The list of players
     /// </summary>
     /// <seealso cref="JsonPlayer"/>
-    public IReadOnlyList<JsonPlayer> Players;
+    public IReadOnlyList<JsonPlayer>? Players;
 
     /// <summary>
     /// The list of phases
     /// </summary>
     /// <seealso cref="JsonPhase"/>
-    public IReadOnlyList<JsonPhase> Phases;
+    public IReadOnlyList<JsonPhase>? Phases;
 
     /// <summary>
     /// List of mechanics
     /// </summary>
     /// <seealso cref="JsonMechanics"/>
-    public IReadOnlyList<JsonMechanics> Mechanics;
+    public IReadOnlyList<JsonMechanics>? Mechanics;
 
     /// <summary>
     /// Upload links to dps.reports/raidar
     /// </summary>
-    public IReadOnlyList<string> UploadLinks;
+    public IReadOnlyList<string>? UploadLinks;
 
     /// <summary>
     /// Dictionary of skills' description, the key is in "'s' + id" format
     /// </summary>
     /// <seealso cref="SkillDesc"/>
-    public IReadOnlyDictionary<string, SkillDesc> SkillMap;
+    public IReadOnlyDictionary<string, SkillDesc>? SkillMap;
 
     /// <summary>
     /// Dictionary of buffs' description, the key is in "'b' + id" format
     /// </summary>
     /// <seealso cref="BuffDesc"/>
-    public IReadOnlyDictionary<string, BuffDesc> BuffMap;
+    public IReadOnlyDictionary<string, BuffDesc>? BuffMap;
 
     /// <summary>
     /// Dictionary of damage modifiers' description, the key is in "'d' + id" format
     /// </summary>
     /// <seealso cref="DamageModDesc"/>
-    public IReadOnlyDictionary<string, DamageModDesc> DamageModMap;
+    public IReadOnlyDictionary<string, DamageModDesc>? DamageModMap;
 
     /// <summary>
     /// Dictionary of personal buffs. The key is the profession, the value is a list of buff ids
     /// </summary>
     /// <seealso cref="BuffMap"/>
-    public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalBuffs;
+    public IReadOnlyDictionary<string, IReadOnlyCollection<long>>? PersonalBuffs;
 
     /// <summary>
     /// Dictionary of damage modifiers. The key is the profession, the value is a list of damage mod ids
     /// </summary>
     /// <seealso cref="DamageModMap"/>
-    public IReadOnlyDictionary<string, IReadOnlyCollection<long>> PersonalDamageMods;
+    public IReadOnlyDictionary<string, IReadOnlyCollection<long>>? PersonalDamageMods;
 
     /// <summary>
     /// List of present fractal instabilities, the values are buff ids. DEPRECATED: use PresentInstanceBuffs instead
     /// </summary>
     /// <seealso cref="BuffMap"/>
-    public IReadOnlyList<long> PresentFractalInstabilities;
+    public IReadOnlyList<long>? PresentFractalInstabilities;
     /// <summary>
     /// List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks.
     /// </summary>
     /// <seealso cref="BuffMap"/>
-    public IReadOnlyList<long[]> PresentInstanceBuffs;
+    public IReadOnlyList<long[]>? PresentInstanceBuffs;
 
     /// <summary>
     /// List of error messages given by ArcDPS
     /// </summary>
-    public IReadOnlyList<string> LogErrors;
+    public IReadOnlyList<string>? LogErrors;
 
     /// <summary>
     /// List of used extensions
     /// </summary>
-    public IReadOnlyList<ExtensionDesc> UsedExtensions;
+    public IReadOnlyList<ExtensionDesc>? UsedExtensions;
     /// <summary>
     /// Contains combat replay related meta data
     /// </summary>
     /// <seealso cref="JsonCombatReplayMetaData"/>
-    public JsonCombatReplayMetaData CombatReplayMetaData;
+    public JsonCombatReplayMetaData? CombatReplayMetaData;
 }

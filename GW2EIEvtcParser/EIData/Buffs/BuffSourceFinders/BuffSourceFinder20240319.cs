@@ -12,7 +12,7 @@ internal class BuffSourceFinder20240319 : BuffSourceFinder20221018
 
     protected override List<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
     {
-        return new List<AgentItem>();
+        return [];
     }
 
 }

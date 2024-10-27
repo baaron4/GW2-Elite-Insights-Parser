@@ -6,9 +6,9 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 internal class DamageModDto
 {
     public long Id { get; set; }
-    public string Name { get; set; }
-    public string Icon { get; set; }
-    public string Tooltip { get; set; }
+    public string? Name { get; set; }
+    public string? Icon { get; set; }
+    public string? Tooltip { get; set; }
     public bool NonMultiplier { get; set; }
     public bool SkillBased { get; set; }
     public bool Approximate { get; set; }

@@ -181,7 +181,7 @@ internal static class EncounterLogicUtils
 
     internal delegate bool ChestAgentChecker(AgentItem agent);
 
-    internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Point3D chestPosition, ChestAgentChecker chestChecker = null)
+    internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Point3D chestPosition, ChestAgentChecker? chestChecker = null)
     {
         if (chestID == ArcDPSEnums.ChestID.None)
         {

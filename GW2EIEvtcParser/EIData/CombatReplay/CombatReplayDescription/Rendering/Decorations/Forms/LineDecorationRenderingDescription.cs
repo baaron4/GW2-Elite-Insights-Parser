@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class LineDecorationRenderingDescription : FormDecorationRenderingDescription
 {
-    public object ConnectedFrom { get; }
+    public readonly object ConnectedFrom;
 
     internal LineDecorationRenderingDescription(ParsedEvtcLog log, LineDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {

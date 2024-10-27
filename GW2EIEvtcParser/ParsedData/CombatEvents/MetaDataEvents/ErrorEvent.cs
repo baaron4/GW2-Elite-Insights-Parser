@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class ErrorEvent : AbstractMetaDataEvent
 {
-    public string Message { get; }
+    public readonly string Message;
     internal ErrorEvent(CombatItem evtcItem) : base(evtcItem)
     {
         var bytes = new ByteBuffer(stackalloc byte[32]); // 32 * sizeof(char), char as in C not C#

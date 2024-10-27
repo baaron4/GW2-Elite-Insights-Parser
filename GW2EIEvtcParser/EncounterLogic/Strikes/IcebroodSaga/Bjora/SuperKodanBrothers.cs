@@ -44,10 +44,10 @@ internal class SuperKodanBrothers : Bjora
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(VengefulAuraClaw, VengefulAuraClaw),
-        };
+        ];
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
@@ -216,29 +216,29 @@ internal class SuperKodanBrothers : Bjora
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.ClawOfTheFallen,
             (int)ArcDPSEnums.TargetID.VoiceOfTheFallen,
-        };
+        ];
     }
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.ClawOfTheFallen,
             (int)ArcDPSEnums.TargetID.VoiceOfTheFallen,
-        };
+        ];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.VoiceOfTheFallen,
             (int)ArcDPSEnums.TargetID.ClawOfTheFallen,
             (int)ArcDPSEnums.TargetID.VoiceAndClaw,
-        };
+        ];
     }
 }

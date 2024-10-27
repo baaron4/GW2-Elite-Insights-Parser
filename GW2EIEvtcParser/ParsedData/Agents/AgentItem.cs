@@ -12,17 +12,17 @@ using Segment = GenericSegment<double>;
 public class AgentItem
 {
 
-    private static int AgentCount = 0;
+    private static int AgentCount = 0; //TODO(Rennorb) @correctness @threadding: should this be atomic? 
     public enum AgentType { NPC, Gadget, Player, NonSquadPlayer }
 
     public bool IsPlayer => Type == AgentType.Player || Type == AgentType.NonSquadPlayer;
     public bool IsNPC => Type == AgentType.NPC || Type == AgentType.Gadget;
 
     // Fields
-    public ulong Agent { get; }
+    public readonly ulong Agent;
     public int ID { get; protected set; } = ArcDPSEnums.NonIdentifiedSpecies;
-    public int UniqueID { get; }
-    public AgentItem Master { get; protected set; }
+    public readonly int UniqueID;
+    public AgentItem? Master { get; protected set; }
     public ushort InstID { get; protected set; }
     public AgentType Type { get; protected set; } = AgentType.NPC;
     public long FirstAware { get; protected set; }
@@ -31,15 +31,15 @@ public class AgentItem
     public ParserHelper.Spec Spec { get; private set; } = ParserHelper.Spec.Unknown;
     public ParserHelper.Spec BaseSpec { get; private set; } = ParserHelper.Spec.Unknown;
     public ushort Toughness { get; protected set; }
-    public ushort Healing { get; }
-    public ushort Condition { get; }
-    public ushort Concentration { get; }
-    public uint HitboxWidth { get; }
-    public uint HitboxHeight { get; }
+    public readonly ushort Healing;
+    public readonly ushort Condition;
+    public readonly ushort Concentration;
+    public readonly uint HitboxWidth;
+    public readonly uint HitboxHeight;
 
-    private bool Unamed { get; }
+    private readonly bool Unamed;
 
-    public bool IsFake { get; }
+    public readonly bool IsFake;
     public bool IsNotInSquadFriendlyPlayer { get; private set; }
 
     // Constructors

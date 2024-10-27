@@ -145,21 +145,21 @@ public class StatisticsHelper
 
     //
 
-    private readonly List<Buff> _presentBoons = new List<Buff>();//Used only for Boon tables
-    private readonly List<Buff> _presentConditions = new List<Buff>();//Used only for Condition tables
-    private readonly List<Buff> _presentOffbuffs = new List<Buff>();//Used only for Off Buff tables
-    private readonly List<Buff> _presentSupbuffs = new List<Buff>();//Used only for Off Buff tables
-    private readonly List<Buff> _presentDefbuffs = new List<Buff>();//Used only for Def Buff tables
-    private readonly List<Buff> _presentDebuffs = new List<Buff>();//Used only for Debuff tables
-    private readonly List<Buff> _presentGearbuffs = new List<Buff>();//Used only for Gear Buff tables
-    private readonly List<Buff> _presentNourishments = new List<Buff>();
-    private readonly List<Buff> _presentEnhancements = new List<Buff>();
-    private readonly List<Buff> _presentOtherConsumables = new List<Buff>();
-    private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer = new Dictionary<Player, HashSet<Buff>>();
+    private readonly List<Buff> _presentBoons = new();//Used only for Boon tables
+    private readonly List<Buff> _presentConditions = new();//Used only for Condition tables
+    private readonly List<Buff> _presentOffbuffs = new();//Used only for Off Buff tables
+    private readonly List<Buff> _presentSupbuffs = new();//Used only for Off Buff tables
+    private readonly List<Buff> _presentDefbuffs = new();//Used only for Def Buff tables
+    private readonly List<Buff> _presentDebuffs = new();//Used only for Debuff tables
+    private readonly List<Buff> _presentGearbuffs = new();//Used only for Gear Buff tables
+    private readonly List<Buff> _presentNourishments = new();
+    private readonly List<Buff> _presentEnhancements = new();
+    private readonly List<Buff> _presentOtherConsumables = new();
+    private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer = new();
 
 
     //Positions for group
-    private List<ParametricPoint3D> _stackCenterPositions = null;
+    private List<ParametricPoint3D>? _stackCenterPositions = null;
     private List<ParametricPoint3D?>? _stackCommanderPositions = null;
 
     public IReadOnlyList<ParametricPoint3D> GetStackCenterPositions(ParsedEvtcLog log)

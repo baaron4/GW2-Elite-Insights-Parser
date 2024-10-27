@@ -46,5 +46,5 @@ public class JsonRotation
     /// List of casted skills
     /// </summary>
     /// <seealso cref="JsonSkill"/>
-    public IReadOnlyList<JsonSkill> Skills;
+    public IReadOnlyList<JsonSkill>? Skills;
 }

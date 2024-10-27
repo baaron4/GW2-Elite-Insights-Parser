@@ -7,10 +7,10 @@ namespace GW2EIBuilders;
 
 public class HTMLAssets
 {
-    internal string EIJavascriptCode { get; }
+    internal readonly string EIJavascriptCode;
 
-    internal string EICRJavascriptCode { get; }
-    internal string EIHealingExtJavascriptCode { get; }
+    internal readonly string EICRJavascriptCode;
+    internal readonly string EIHealingExtJavascriptCode;
 
     public HTMLAssets()
     {

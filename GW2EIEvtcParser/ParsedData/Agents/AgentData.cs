@@ -175,7 +175,7 @@ public class AgentData
         return ParserHelper._unknownAgent;
     }
 
-    public bool HasSpawnedMinion(MinionID minion, AgentItem master, long time, long epsilon = ParserHelper.ServerDelayConstant)
+    public bool HasSpawnedMinion(MinionID minion, AgentItem? master, long time, long epsilon = ParserHelper.ServerDelayConstant)
     {
         return GetNPCsByID(minion)
             .Any(agent => agent.GetFinalMaster() == master && Math.Abs(agent.FirstAware - time) < epsilon);
@@ -247,7 +247,7 @@ public class AgentData
 
     internal void SwapMasters(AgentItem from, AgentItem to)
     {
-        SwapMasters(new HashSet<AgentItem> { from }, to);
+        SwapMasters([from], to);
     }
 
     /// <summary>

@@ -21,7 +21,7 @@ internal class CounterOnFoeDamageModifier : BuffOnFoeDamageModifier
         }
     }
 
-    private static readonly GainComputerCounter counterGainComputer = new GainComputerCounter();
+    private static readonly GainComputerCounter counterGainComputer = new();
 
     internal CounterOnFoeDamageModifier(long id, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
     {

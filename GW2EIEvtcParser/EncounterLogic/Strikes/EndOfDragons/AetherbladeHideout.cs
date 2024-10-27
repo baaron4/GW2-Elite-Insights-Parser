@@ -48,38 +48,38 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     }
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.MaiTrinStrike,
             (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
             (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
             (int)ArcDPSEnums.TrashID.ScarletPhantomBreakbar,
             (int)ArcDPSEnums.TrashID.ScarletPhantomHP,
             (int)ArcDPSEnums.TrashID.ScarletPhantomHPCM,
-        };
+        ];
     }
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.MaiTrinStrike,
             (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
             (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.ScarletPhantomNormalBeam,
             ArcDPSEnums.TrashID.ScarletPhantomConeWaveNM,
             ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM,
             ArcDPSEnums.TrashID.ScarletPhantomDeathBeamCM2,
             ArcDPSEnums.TrashID.MaiTrinStrikeDuringEcho,
             ArcDPSEnums.TrashID.FerrousBomb,
-        };
+        ];
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
@@ -89,12 +89,12 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.MaiTrinStrike,
             (int)ArcDPSEnums.TargetID.EchoOfScarletBriarNM,
             (int)ArcDPSEnums.TargetID.EchoOfScarletBriarCM,
-        };
+        ];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -114,12 +114,12 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new BuffLossCastFinder(ReverseThePolaritySAK, MaiTrinCMBeamsTargetGreen),
             new BuffLossCastFinder(ReverseThePolaritySAK, MaiTrinCMBeamsTargetBlue),
             new BuffLossCastFinder(ReverseThePolaritySAK, MaiTrinCMBeamsTargetRed),
-        };
+        ];
     }
 
     internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)

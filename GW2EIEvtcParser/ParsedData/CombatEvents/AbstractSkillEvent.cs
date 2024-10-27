@@ -5,11 +5,11 @@ namespace GW2EIEvtcParser.ParsedData;
 public abstract class AbstractSkillEvent : AbstractTimeCombatEvent
 {
     private int _isCondi = -1;
-    public AgentItem From { get; }
+    public readonly AgentItem From;
     public AgentItem CreditedFrom => From.GetFinalMaster();
-    public AgentItem To { get; }
+    public readonly AgentItem To;
 
-    public SkillItem Skill { get; }
+    public readonly SkillItem Skill;
     public long SkillId => Skill.ID;
     private readonly ArcDPSEnums.IFF _iff;
 

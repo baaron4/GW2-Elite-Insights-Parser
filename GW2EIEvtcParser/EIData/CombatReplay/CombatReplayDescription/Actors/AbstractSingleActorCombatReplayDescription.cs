@@ -14,17 +14,17 @@ public abstract class AbstractSingleActorCombatReplayDescription : AbstractComba
 {
     public long Start { get; protected set; }
     public long End { get; protected set; }
-    public string Img { get; }
-    public int ID { get; }
-    public IReadOnlyList<float> Positions { get; }
-    public IReadOnlyList<float> Angles { get; }
+    public readonly string Img;
+    public readonly int ID;
+    public readonly IReadOnlyList<float> Positions;
+    public readonly IReadOnlyList<float> Angles;
     public IReadOnlyList<long> Dead { get; private set; }
     public IReadOnlyList<long> Down { get; private set; }
     public IReadOnlyList<long> Dc { get; private set; }
-    public IReadOnlyList<long> Hide { get; }
+    public readonly IReadOnlyList<long> Hide;
     public IReadOnlyList<long> BreakbarActive { get; private set; }
 
-    public long HitboxWidth { get; }
+    public readonly long HitboxWidth;
 
     private static string GetActorType(AbstractSingleActor actor, ParsedEvtcLog log)
     {

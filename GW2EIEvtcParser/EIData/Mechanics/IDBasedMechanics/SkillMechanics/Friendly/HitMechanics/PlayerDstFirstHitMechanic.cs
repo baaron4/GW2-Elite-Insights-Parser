@@ -12,7 +12,7 @@ internal class PlayerDstFirstHitMechanic : PlayerDstHitMechanic
         return c.From != ParserHelper._unknownAgent && base.Keep(c, log) && GetFirstHit(c.From, log) == c;
     }
 
-    private readonly Dictionary<AgentItem, AbstractHealthDamageEvent> _firstHits = new Dictionary<AgentItem, AbstractHealthDamageEvent>();
+    private readonly Dictionary<AgentItem, AbstractHealthDamageEvent> _firstHits = new();
 
     public PlayerDstFirstHitMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {

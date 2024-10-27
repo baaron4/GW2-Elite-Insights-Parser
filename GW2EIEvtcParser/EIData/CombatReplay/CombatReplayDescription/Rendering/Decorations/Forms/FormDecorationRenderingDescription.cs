@@ -6,9 +6,9 @@ namespace GW2EIEvtcParser.EIData;
 
 public abstract class FormDecorationRenderingDescription : GenericAttachedDecorationRenderingDescription
 {
-    public bool Fill { get; }
-    public int GrowingEnd { get; }
-    public bool GrowingReverse { get; }
+    public readonly bool Fill;
+    public readonly int GrowingEnd;
+    public readonly bool GrowingReverse;
 
     internal FormDecorationRenderingDescription(ParsedEvtcLog log, FormDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {

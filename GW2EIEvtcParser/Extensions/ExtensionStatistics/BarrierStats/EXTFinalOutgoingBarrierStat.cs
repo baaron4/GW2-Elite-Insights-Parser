@@ -6,15 +6,15 @@ namespace GW2EIEvtcParser.Extensions;
 
 public class EXTFinalOutgoingBarrierStat
 {
-    public int Bps { get; }
-    public int Barrier { get; }
-    private int DownedBps { get; }
-    private int DownedBarrier { get; }
+    public readonly int Bps;
+    public readonly int Barrier;
+    private readonly int DownedBps;
+    private readonly int DownedBarrier;
 
-    public int ActorBps { get; }
-    public int ActorBarrier { get; }
-    private int ActorDownedBps { get; }
-    private int ActorDownedBarrier { get; }
+    public readonly int ActorBps;
+    public readonly int ActorBarrier;
+    private readonly int ActorDownedBps;
+    private readonly int ActorDownedBarrier;
 
     internal EXTFinalOutgoingBarrierStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
     {

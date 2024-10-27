@@ -2,8 +2,8 @@
 
 public abstract class LogDateEvent : AbstractMetaDataEvent
 {
-    public uint ServerUnixTimeStamp { get; }
-    public uint LocalUnixTimeStamp { get; }
+    public readonly uint ServerUnixTimeStamp;
+    public readonly uint LocalUnixTimeStamp;
 
     internal LogDateEvent(CombatItem evtcItem) : base(evtcItem)
     {

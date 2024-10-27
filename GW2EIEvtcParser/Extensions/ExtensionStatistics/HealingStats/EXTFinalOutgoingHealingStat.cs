@@ -7,27 +7,27 @@ namespace GW2EIEvtcParser.Extensions;
 
 public class EXTFinalOutgoingHealingStat
 {
-    public int Hps { get; }
-    public int Healing { get; }
-    public int HealingPowerHps { get; }
-    public int HealingPowerHealing { get; }
-    public int ConversionHps { get; }
-    public int ConversionHealing { get; }
-    public int HybridHps { get; }
-    public int HybridHealing { get; }
-    public int DownedHps { get; }
-    public int DownedHealing { get; }
+    public readonly int Hps;
+    public readonly int Healing;
+    public readonly int HealingPowerHps;
+    public readonly int HealingPowerHealing;
+    public readonly int ConversionHps;
+    public readonly int ConversionHealing;
+    public readonly int HybridHps;
+    public readonly int HybridHealing;
+    public readonly int DownedHps;
+    public readonly int DownedHealing;
 
-    public int ActorHps { get; }
-    public int ActorHealing { get; }
-    public int ActorHealingPowerHps { get; }
-    public int ActorHealingPowerHealing { get; }
-    public int ActorConversionHps { get; }
-    public int ActorConversionHealing { get; }
-    public int ActorHybridHps { get; }
-    public int ActorHybridHealing { get; }
-    public int ActorDownedHps { get; }
-    public int ActorDownedHealing { get; }
+    public readonly int ActorHps;
+    public readonly int ActorHealing;
+    public readonly int ActorHealingPowerHps;
+    public readonly int ActorHealingPowerHealing;
+    public readonly int ActorConversionHps;
+    public readonly int ActorConversionHealing;
+    public readonly int ActorHybridHps;
+    public readonly int ActorHybridHealing;
+    public readonly int ActorDownedHps;
+    public readonly int ActorDownedHealing;
 
     internal EXTFinalOutgoingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
     {

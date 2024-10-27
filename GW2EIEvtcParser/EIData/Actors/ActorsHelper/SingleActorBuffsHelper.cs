@@ -79,7 +79,7 @@ partial class AbstractSingleActor
 
         if (!_buffPresence.TryGetValue(start, end, out var value))
         {
-            value = ComputeBuffPresence(_buffSimulators, start, end);
+            value = ComputeBuffPresence(_buffSimulators!, start, end);
             _buffPresence.Set(start, end, value);
         }
         return value;

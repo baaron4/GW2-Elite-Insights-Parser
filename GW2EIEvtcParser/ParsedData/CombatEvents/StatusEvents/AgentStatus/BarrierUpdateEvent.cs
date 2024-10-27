@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class BarrierUpdateEvent : AbstractStatusEvent, IStateable
 {
-    public double BarrierPercent { get; }
+    public readonly double BarrierPercent;
 
     internal BarrierUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

@@ -31,7 +31,7 @@ public static class DPSReportController
         IncludeFields = true,
     };
 
-    private static readonly HttpClient HTTPClient = new HttpClient();
+    private static readonly HttpClient HTTPClient = new();
 
     private class DPSReportUserTokenResponse
     {
@@ -63,7 +63,7 @@ public static class DPSReportController
     private static readonly string GetJsonURL = "/getJson";
 
     // https://stackoverflow.com/questions/273313/randomize-a-listt
-    private static readonly Random rng = new Random();
+    private static readonly Random rng = new();
 
     private static List<T> Shuffle<T>(List<T> list)
     {

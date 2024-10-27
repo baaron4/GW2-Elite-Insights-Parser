@@ -4,9 +4,9 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class EnterCombatEvent : AbstractStatusEvent
 {
-    public int Subgroup { get; }
-    public Spec Spec { get; } = Spec.Unknown;
-    public Spec BaseSpec { get; } = Spec.Unknown;
+    public readonly int Subgroup;
+    public readonly Spec Spec = Spec.Unknown;
+    public readonly Spec BaseSpec = Spec.Unknown;
     internal EnterCombatEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         Subgroup = (int)evtcItem.DstAgent;

@@ -42,31 +42,31 @@ public class BuffFormula
     }
 
     // Effect type
-    public int Type { get; }
+    public readonly int Type;
     // Effect attributes
-    public byte ByteAttr1 { get; }
+    public readonly byte ByteAttr1;
     public ArcDPSEnums.BuffAttribute Attr1 { get; private set; }
-    public byte ByteAttr2 { get; }
+    public readonly byte ByteAttr2;
     public ArcDPSEnums.BuffAttribute Attr2 { get; private set; }
     // Effect parameters
-    public float ConstantOffset { get; }
-    public float LevelOffset { get; }
-    public float Variable { get; }
+    public readonly float ConstantOffset;
+    public readonly float LevelOffset;
+    public readonly float Variable;
     // Effect Condition
-    public int TraitSrc { get; }
-    public int TraitSelf { get; }
-    public float ContentReference { get; }
-    public int BuffSrc { get; }
-    public int BuffSelf { get; }
+    public readonly int TraitSrc;
+    public readonly int TraitSelf;
+    public readonly float ContentReference;
+    public readonly int BuffSrc;
+    public readonly int BuffSelf;
     internal long SortKey => TraitSrc + TraitSelf + BuffSrc + BuffSelf;
     public bool IsConditional => SortKey > 0;
     // Meta data
-    private bool Npc { get; }
-    private bool Player { get; }
-    private bool Break { get; }
+    private readonly bool Npc;
+    private readonly bool Player;
+    private readonly bool Break;
     // Extra number
-    private byte ExtraNumberState { get; }
-    private uint ExtraNumber { get; }
+    private readonly byte ExtraNumberState;
+    private readonly uint ExtraNumber;
     private bool IsExtraNumberBuffID => ExtraNumberState == 2;
     private bool IsExtraNumberNone => ExtraNumberState == 0;
     private bool IsExtraNumberSomething => ExtraNumberState == 1;
@@ -75,7 +75,7 @@ public class BuffFormula
 
     private bool MultiplyBy100 => Attr2 != None || Attr1 == HealingEffectivenessIncomingMultiplicative;
 
-    private string _solvedDescription = null;
+    private string? _solvedDescription = null;
 
 
     private int Level(Buff buff) => buff.Classification == Buff.BuffClassification.Enhancement || buff.Classification == Buff.BuffClassification.Nourishment || buff.Classification == Buff.BuffClassification.OtherConsumable ? 0 : (Attr1 == DamageFormulaSquaredLevel ? 6400 : 80);

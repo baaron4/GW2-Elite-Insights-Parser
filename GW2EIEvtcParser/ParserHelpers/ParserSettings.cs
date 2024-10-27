@@ -4,13 +4,13 @@ namespace GW2EIEvtcParser;
 
 public class EvtcParserSettings
 {
-    public bool AnonymousPlayers { get; }
-    public bool SkipFailedTries { get; }
-    public bool ParsePhases { get; }
-    public bool ParseCombatReplay { get; }
-    public bool ComputeDamageModifiers { get; }
-    public long TooShortLimit { get; }
-    public bool DetailedWvWParse { get; }
+    public readonly bool AnonymousPlayers;
+    public readonly bool SkipFailedTries;
+    public readonly bool ParsePhases;
+    public readonly bool ParseCombatReplay;
+    public readonly bool ComputeDamageModifiers;
+    public readonly long TooShortLimit;
+    public readonly bool DetailedWvWParse;
 
     public EvtcParserSettings(bool anonymousPlayer, bool skipFailedTries, bool parsePhases, bool parseCombatReplay, bool computeDamageModifiers, long tooShortLimit) : this(anonymousPlayer, skipFailedTries, parsePhases, parseCombatReplay, computeDamageModifiers, tooShortLimit, false)
     {

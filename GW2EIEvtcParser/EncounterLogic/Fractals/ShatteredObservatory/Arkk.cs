@@ -91,13 +91,13 @@ internal class Arkk : ShatteredObservatory
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Arkk,
             (int)TrashID.Archdiviner,
             (int)TrashID.EliteBrazenGladiator,
             (int)TrashID.TemporalAnomalyArkk,
-        };
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -120,7 +120,7 @@ internal class Arkk : ShatteredObservatory
             return;
         }
         var phaseData = new PhaseData(Math.Max(target.FirstAware, log.FightData.FightStart), Math.Min(target.LastAware, log.FightData.FightEnd), phaseName);
-        AddTargetsToPhaseAndFit(phaseData, new List<int> { targetID }, log);
+        AddTargetsToPhaseAndFit(phaseData, [targetID], log);
         phases.Add(phaseData);
     }
 

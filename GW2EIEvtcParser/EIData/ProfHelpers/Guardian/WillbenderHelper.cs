@@ -14,12 +14,12 @@ namespace GW2EIEvtcParser.EIData;
 internal static class WillbenderHelper
 {
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
+    internal static readonly List<InstantCastFinder> InstantCastFinder = new()
     {
     };
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.All)
             .UsingChecker( (x, log) => {
                 AgentItem src = x.From;
@@ -146,18 +146,18 @@ internal static class WillbenderHelper
         //
         new CounterOnActorDamageModifier(RushingJusticeBuff, "Rushing Justice", "Applies burning on consecutive hits", DamageSource.NoPets, DamageType.Strike, DamageType.Strike, Source.Willbender, BuffImages.RushingJustice, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta1)
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(CrashingCourage, "Deathless Courage", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, BuffImages.DeathlessCourage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
         new BuffOnActorDamageModifier(CrashingCourage, "Deathless Courage", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, BuffImages.DeathlessCourage, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         // Virtues
         new Buff("Rushing Justice", RushingJusticeBuff, Source.Willbender, BuffClassification.Other, BuffImages.RushingJustice),
         new Buff("Flowing Resolve", FlowingResolveBuff, Source.Willbender, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.FlowingResolve),
@@ -166,5 +166,5 @@ internal static class WillbenderHelper
         new Buff("Repose", Repose, Source.Willbender, BuffClassification.Other, BuffImages.Repose),
         new Buff("Lethal Tempo", LethalTempo, Source.Willbender, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.LethalTempo),
         //new Buff("Tyrant's Lethal Tempo", 62657, Source.Willbender, BuffStackType.Stacking, 5, BuffNature.GraphOnlyBuff, BuffImages.TyrantsMomentum),
-    };
+    ];
 }

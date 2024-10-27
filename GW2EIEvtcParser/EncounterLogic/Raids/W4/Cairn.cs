@@ -56,10 +56,10 @@ internal class Cairn : BastionOfThePenitent
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(CosmicAura, CosmicAura), // Cosmic Aura
-        };
+        ];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

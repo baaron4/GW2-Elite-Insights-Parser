@@ -36,27 +36,27 @@ internal class BuffData
         {
             if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.GeneratedBy.ContainsKey(actor))
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         toUse.GeneratedBy[actor],
                         toUse.OverstackedBy[actor],
                         toUse.WastedFrom[actor],
                         toUse.UnknownExtensionFrom[actor],
                         toUse.ExtensionBy[actor],
                         toUse.ExtendedFrom[actor]
-                    });
+                    ]);
             }
             else
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         0,
                         0,
                         0,
                         0,
                         0,
                         0
-                    });
+                    ]);
             }
         }
     }
@@ -67,27 +67,27 @@ internal class BuffData
         {
             if (uptimes.TryGetValue(buff.ID, out FinalActorBuffs uptime))
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         uptime.Generation,
                         uptime.Overstack,
                         uptime.Wasted,
                         uptime.UnknownExtended,
                         uptime.ByExtension,
                         uptime.Extended
-                    });
+                    ]);
             }
             else
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         0,
                         0,
                         0,
                         0,
                         0,
                         0
-                    });
+                    ]);
             }
         }
     }

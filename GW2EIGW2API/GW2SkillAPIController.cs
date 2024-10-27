@@ -10,7 +10,7 @@ internal class GW2SkillAPIController
 {
     private const string APIPath = "/v2/skills";
 
-    private GW2APIUtilities.APIItems<GW2APISkill> _apiSkills = new GW2APIUtilities.APIItems<GW2APISkill>();
+    private GW2APIUtilities.APIItems<GW2APISkill> _apiSkills = new();
     private static List<GW2APISkill> GetGW2APISkills()
     {
         Console.WriteLine("Getting skills from API");

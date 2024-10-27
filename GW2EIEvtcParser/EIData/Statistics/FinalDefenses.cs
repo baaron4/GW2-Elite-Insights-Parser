@@ -9,26 +9,26 @@ namespace GW2EIEvtcParser.EIData;
 public class FinalDefenses
 {
     //public long allHealReceived;
-    public int DamageTaken { get; }
-    public int ConditionDamageTaken { get; }
-    public int PowerDamageTaken { get; }
-    public int LifeLeechDamageTaken { get; }
-    public int StrikeDamageTaken { get; }
-    public int DownedDamageTaken { get; }
-    public double BreakbarDamageTaken { get; }
-    public int BlockedCount { get; }
-    public int MissedCount { get; }
-    public int EvadedCount { get; }
-    public int DodgeCount { get; }
-    public int InvulnedCount { get; }
-    public int DamageBarrier { get; }
-    public int InterruptedCount { get; }
-    public int BoonStrips { get; }
-    public double BoonStripsTime { get; }
-    public int ConditionCleanses { get; }
-    public double ConditionCleansesTime { get; }
-    public int ReceivedCrowdControl { get; }
-    public double ReceivedCrowdControlDuration { get; }
+    public readonly int DamageTaken;
+    public readonly int ConditionDamageTaken;
+    public readonly int PowerDamageTaken;
+    public readonly int LifeLeechDamageTaken;
+    public readonly int StrikeDamageTaken;
+    public readonly int DownedDamageTaken;
+    public readonly double BreakbarDamageTaken;
+    public readonly int BlockedCount;
+    public readonly int MissedCount;
+    public readonly int EvadedCount;
+    public readonly int DodgeCount;
+    public readonly int InvulnedCount;
+    public readonly int DamageBarrier;
+    public readonly int InterruptedCount;
+    public readonly int BoonStrips;
+    public readonly double BoonStripsTime;
+    public readonly int ConditionCleanses;
+    public readonly double ConditionCleansesTime;
+    public readonly int ReceivedCrowdControl;
+    public readonly double ReceivedCrowdControlDuration;
 
     private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from, bool excludeSelf)
     {

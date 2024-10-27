@@ -21,8 +21,8 @@ internal static class RenegadeHelper
         }
     }
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(LegendaryRenegadeStanceSkill, LegendaryRenegadeStanceBuff),
         new DamageCastFinder(CallOfTheRenegade, CallOfTheRenegade),
         new EffectCastFinder(OrdersFromAbove, EffectGUIDs.RenegadeOrdersFromAboveRighteousRebel)
@@ -33,10 +33,10 @@ internal static class RenegadeHelper
         new BandTogetherCastFinder(RazorclawsRageSkill, RazorclawsRageSkillEnhanced, EffectGUIDs.RenegadeRazorclawsRage),
         new BandTogetherCastFinder(DarkrazorsDaringSkill, DarkrazorsDaringSkillEnhanced, EffectGUIDs.RenegadeDarkrazorsDaring),
         new BandTogetherCastFinder(IcerazorsIreSkill, IcerazorsIreSkillEnhanced, EffectGUIDs.RenegadeIcerazorsIre),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
@@ -45,34 +45,34 @@ internal static class RenegadeHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new SkillDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.SoulcleavesSummit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(BreakrazorsBastionBuff, "Breakrazor's Bastion", "-50%", DamageSource.NoPets, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.BreakrazorsBastion, DamageModifierMode.All),
         new BuffOnActorDamageModifier(KallasFervor, "Righteous Rebel", "-33%", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Renegade, ByPresence, BuffImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         new BuffOnActorDamageModifier(KallasFervor, "Righteous Rebel", "-7% per stack", DamageSource.NoPets, -7.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.October2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(KallasFervor, "Righteous Rebel", "-4% per stack", DamageSource.NoPets, -4.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceBuff, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),
         new Buff("Breakrazor's Bastion", BreakrazorsBastionBuff, Source.Renegade, BuffClassification.Defensive, BuffImages.BreakrazorsBastion),
         new Buff("Razorclaw's Rage", RazorclawsRageBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.RazorclawsRage),
         new Buff("Soulcleave's Summit", SoulcleavesSummitBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.SoulcleavesSummit),
         new Buff("Kalla's Fervor", KallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
         new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
-    };
+    ];
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.JasRazorclaw,
         (int)MinionID.ViskIcerazor,
         (int)MinionID.KusDarkrazor,
         (int)MinionID.EraBreakrazor,
         (int)MinionID.OfelaSoulcleave,
-    };
+    ];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

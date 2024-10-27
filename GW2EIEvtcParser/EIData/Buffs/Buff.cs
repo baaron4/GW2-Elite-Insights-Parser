@@ -38,37 +38,30 @@ public class Buff : IVersionable
     }
 
     // Fields
-    public string Name { get; }
-    public long ID { get; }
-    public BuffClassification Classification { get; }
-    public ParserHelper.Source Source { get; }
-    public BuffStackType StackType { get; }
-    public BuffType Type
+    public readonly string Name;
+    public readonly long ID;
+    public readonly BuffClassification Classification;
+    public readonly ParserHelper.Source Source;
+    public readonly BuffStackType StackType;
+    public BuffType Type => this.StackType switch
     {
-        get
-        {
-            switch (StackType)
-            {
-                case BuffStackType.Queue:
-                case BuffStackType.Regeneration:
-                case BuffStackType.Force:
-                    return BuffType.Duration;
-                case BuffStackType.Stacking:
-                case BuffStackType.StackingTargetUniqueSrc:
-                case BuffStackType.StackingConditionalLoss:
-                    return BuffType.Intensity;
-                default:
-                    return BuffType.Unknown;
-            }
-        }
-    }
+        BuffStackType.Queue or
+        BuffStackType.Regeneration or
+        BuffStackType.Force
+            => BuffType.Duration,
+        BuffStackType.Stacking or
+        BuffStackType.StackingTargetUniqueSrc or
+        BuffStackType.StackingConditionalLoss
+            => BuffType.Intensity,
+        _ => BuffType.Unknown,
+    };
 
-    private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
-    private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
-    private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
-    private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
-    public int Capacity { get; }
-    public string Link { get; }
+    private ulong _maxBuild = GW2Builds.EndOfLife;
+    private ulong _minBuild = GW2Builds.StartOfLife;
+    private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
+    private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
+    public readonly int Capacity;
+    public readonly string Link;
 
     /// <summary>
     /// Buff constructor

@@ -38,24 +38,24 @@ internal class SpiritRace : SpiritVale
     }
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.DummyTarget,
             (int)ArcDPSEnums.TargetID.EtherealBarrier,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.WallOfGhosts,
             ArcDPSEnums.TrashID.AngeredSpiritSR,
             ArcDPSEnums.TrashID.AngeredSpiritSR2,
             ArcDPSEnums.TrashID.EnragedSpiritSR,
             ArcDPSEnums.TrashID.DerangedSpiritSR,
             ArcDPSEnums.TrashID.DerangedSpiritSR2,
-        };
+        ];
     }
 
     internal override int GetTriggerID()
@@ -65,7 +65,7 @@ internal class SpiritRace : SpiritVale
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>();
+        return [];
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

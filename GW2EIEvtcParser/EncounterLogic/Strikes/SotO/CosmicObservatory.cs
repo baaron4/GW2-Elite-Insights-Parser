@@ -440,23 +440,23 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>()
-        {
+        return
+        [
             (int)TargetID.Dagda,
             (int)TrashID.ChampionTheTormented,
             (int)TrashID.EliteTheTormented,
             (int)TrashID.VeteranTheTormented,
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return new List<TrashID>()
-        {
+        return
+        [
             TrashID.SoulFeast,
             TrashID.TheTormented,
             TrashID.TormentedPhantom,
-        };
+        ];
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

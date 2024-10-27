@@ -110,12 +110,12 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.AiKeeperOfThePeak,
             (int)TargetID.AiKeeperOfThePeak2,
             (int)TrashID.CCSorrowDemon,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
@@ -139,11 +139,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)TargetID.AiKeeperOfThePeak,
             (int)TargetID.AiKeeperOfThePeak2,
-        };
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -165,7 +165,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == BuffRemove.All && x.SrcMatchesAgent(aiAgent) && x.Value > Determined895Duration);
                 long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                 AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
-                RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, aiAgent, new List<AgentItem> { aiAgent }, darkAiAgent, false);
+                RedirectEventsAndCopyPreviousStates(combatData, extensions, agentData, aiAgent, [aiAgent], darkAiAgent, false);
                 aiAgent.OverrideAwareTimes(aiAgent.FirstAware, elementalLastAwareTime);
             }
             else

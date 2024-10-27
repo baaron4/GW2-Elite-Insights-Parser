@@ -8,8 +8,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class FoodBuffs
 {
-    internal static readonly List<Buff> NormalFoods = new List<Buff>
-    {
+    internal static readonly List<Buff> NormalFoods =
+    [
         new Buff("Malnourished", Malnourished, Source.Item, BuffClassification.Nourishment, BuffImages.Malnourished),
         new Buff("Plate of Truffle Steak", PlateOfTruffleSteak, Source.Item, BuffClassification.Nourishment, BuffImages.PlateOfTruffleSteak),
         new Buff("Bowl of Sweet and Spicy Butternut Squash Soup", BowlOfSweetAndSpicyButternutSquashSoup, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfSweetAndSpicyButternutSquashSoup),
@@ -378,10 +378,10 @@ internal static class FoodBuffs
         new Buff("Poor Nourishment", PoorNourishment, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentFood),
         new Buff("Nourishment (Guild Banquet Table)", NourishmentGuildBanquetTable, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentBirthdayBlaster),
         new Buff("Weight of the World", WeightOfTheWorld, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentFood),
-    };
+    ];
 
-    internal static readonly List<Buff> AscendedFood = new List<Buff>
-    {
+    internal static readonly List<Buff> AscendedFood =
+    [
         // Ascended Food
         new Buff("Bowl of Fruit Salad with Cilantro Garnish", BowlOfFruitSaladWithCilantroGarnish, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfFruitSaladWithCilantroGarnish),
         new Buff("Bowl of Fruit Salad with Mint Garnish", BowlOfFruitSaladWithMintGarnish, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfFruitSaladWithMintGarnish),
@@ -451,10 +451,10 @@ internal static class FoodBuffs
         new Buff("Bowl of Mists-Infused Fruit Salad with Mint Garnish", BowlOfMistsInfusedFruitSaladWithMintGarnish, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfFruitSaladWithMintGarnish),
         new Buff("Mists-Infused Peppercorn-Crusted Sous-Vide Steak", MistsInfusedPeppercornCrustedSousVideSteak, Source.Item, BuffClassification.Nourishment, BuffImages.PeppercornCrustedSousVideSteak),
         new Buff("Mists-Infused Spherified Peppercorn-Spiced Oyster Soup", MistsInfusedSpherifiedPeppercornSpicedOysterSoup, Source.Item, BuffClassification.Nourishment, BuffImages.SpherifiedPeppercornSpicedOysterSoup),
-    };
+    ];
 
-    internal static readonly List<Buff> FoodProcs = new List<Buff>
-    {
+    internal static readonly List<Buff> FoodProcs =
+    [
         // Buff procs for On Kill Food
         new Buff("Nourishment (Bonus 40 Power)", NourishmentBonusPower40, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
         new Buff("Nourishment (Bonus 60 Power)", NourishmentBonusPower60, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
@@ -465,6 +465,6 @@ internal static class FoodBuffs
         new Buff("Nourishment (Bonus 100 Power & 100 Ferocity)", NourishmentBonusPowerFerocity100, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
         new Buff("Nourishment (Bonus 150 Power & 150 Vitality)", NourishmentBonusPowerVitality150, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
         new Buff("Malice (Bonus Condition Damage)", MaliceBonusConditionDamage, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),
-    };
+    ];
 
 }

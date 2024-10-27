@@ -13,23 +13,23 @@ namespace GW2EIParser.tst;
 
 public static class TestHelper
 {
-    internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
-    internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
+    internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
+    internal static readonly DefaultContractResolver DefaultJsonContractResolver = new()
     {
         NamingStrategy = new CamelCaseNamingStrategy()
     };
-    private static readonly Version Version = new Version(1, 0);
-    private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, false, true, true, true, 2200, true);
-    private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
-    private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
-    private static readonly CSVSettings csvSettings = new CSVSettings(",");
-    private static readonly HTMLAssets htmlAssets = new HTMLAssets();
+    private static readonly Version Version = new(1, 0);
+    private static readonly EvtcParserSettings parserSettings = new(false, false, true, true, true, 2200, true);
+    private static readonly HTMLSettings htmlSettings = new(false, false);
+    private static readonly RawFormatSettings rawSettings = new(true);
+    private static readonly CSVSettings csvSettings = new(",");
+    private static readonly HTMLAssets htmlAssets = new();
 
     internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
     internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
     internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
 
-    internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
+    internal static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
     private class TestOperationController : ParserController
     {

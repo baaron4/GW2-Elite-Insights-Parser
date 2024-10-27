@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 public abstract class IDBasedMechanic<Checkable> : CheckedMechanic<Checkable>
 {
 
-    protected HashSet<long> MechanicIDs { get; } = new HashSet<long>();
+    protected readonly HashSet<long> MechanicIDs = new();
 
     protected IDBasedMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {

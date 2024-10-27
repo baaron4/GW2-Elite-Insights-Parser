@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class MinionCommandCastFinder : BuffGainCastFinder
 {
-    protected int SpeciesID { get; }
+    protected readonly int SpeciesID;
 
     public override BuffCastFinder<BuffApplyEvent> WithMinions(bool minions)
     {

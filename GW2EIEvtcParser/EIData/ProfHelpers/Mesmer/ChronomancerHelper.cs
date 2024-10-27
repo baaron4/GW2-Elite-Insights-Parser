@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ChronomancerHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(ContinuumSplit, TimeAnchored), // Continuum Split
         new BuffLossCastFinder(ContinuumShift, TimeAnchored), // Continuum Shift
         new EffectCastFinder(SplitSecond, EffectGUIDs.ChronomancerSplitSecond).UsingSrcSpecChecker(Spec.Chronomancer)
@@ -23,28 +23,28 @@ internal static class ChronomancerHelper
             .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter),
         new EffectCastFinder(TimeSink, EffectGUIDs.ChronomancerTimeSink).UsingSrcSpecChecker(Spec.Chronomancer)
             .UsingSecondaryEffectChecker(EffectGUIDs.ChronomancerSeizeTheMomentShatter),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnFoeDamageModifier(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
         new BuffOnFoeDamageModifier(Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
     {
     };
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
         new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ContinuumSplit),
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
-    };
+    ];
 
-    private static HashSet<int> NonCloneMinions = new HashSet<int>();
+    private static HashSet<int> NonCloneMinions = new();
     internal static bool IsKnownMinionID(int id)
     {
         return NonCloneMinions.Contains(id);

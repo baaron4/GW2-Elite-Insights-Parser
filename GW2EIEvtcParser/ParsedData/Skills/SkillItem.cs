@@ -25,7 +25,7 @@ public class SkillItem
         }
     }
 
-    private static readonly Dictionary<long, string> _overrideNames = new Dictionary<long, string>()
+    private static readonly Dictionary<long, string> _overrideNames = new()
     {
         { WeaponSwap, "Weapon Swap" },
         { Resurrect, "Resurrect" },
@@ -384,7 +384,7 @@ public class SkillItem
         #endregion WvW
     };
 
-    private static readonly Dictionary<long, string> _overrideIcons = new Dictionary<long, string>()
+    private static readonly Dictionary<long, string> _overrideIcons = new()
     {
         { WeaponSwap, "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" },
         { WeaponStow, "https://i.imgur.com/K7taOUe.png" },
@@ -1297,7 +1297,7 @@ public class SkillItem
 	        #endregion FinisherIcons
     };
 
-    private static readonly Dictionary<long, ulong> _nonCritable = new Dictionary<long, ulong>
+    private static readonly Dictionary<long, ulong> _nonCritable = new()
     {
         { LightningStrike_SigilOfAir, GW2Builds.StartOfLife },
         { FlameBlast_SigilOfFire, GW2Builds.StartOfLife },
@@ -1324,19 +1324,19 @@ public class SkillItem
     private const string DefaultIcon = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
 
     // Fields
-    public long ID { get; }
+    public readonly long ID;
     //public int Range { get; private set; } = 0;
-    public bool AA { get; }
+    public readonly bool AA;
 
     public bool IsSwap => ID == WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID) || HarbingerHelper.IsHarbingerShroudTransform(ID);
     public bool IsDodge(SkillData skillData) => IsAnimatedDodge(skillData) || ID == MirageCloakDodge;
     public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId || VindicatorHelper.IsVindicatorDodge(ID);
-    public string Name { get; }
-    public string Icon { get; }
+    public readonly string Name;
+    public readonly string Icon;
     private readonly WeaponDescriptor _weaponDescriptor;
     public bool IsWeaponSkill => _weaponDescriptor != null;
-    internal GW2APISkill ApiSkill { get; }
-    private SkillInfoEvent _skillInfo { get; set; }
+    internal readonly GW2APISkill ApiSkill;
+    private SkillInfoEvent _skillInfo;
 
     internal const string DefaultName = "UNKNOWN";
 

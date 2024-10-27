@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class NPC : AbstractSingleActor
 {
-    private IReadOnlyList<(long hpValue, double percent)> HpDistribution { get; set; }
+    private IReadOnlyList<(long hpValue, double percent)> HpDistribution;
     // Constructors
     internal NPC(AgentItem agent) : base(agent)
     {
@@ -22,7 +22,7 @@ public class NPC : AbstractSingleActor
     {
         Character = name;
     }
-    internal override void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)> hpDistribution = null)
+    internal override void SetManualHealth(int health, IReadOnlyList<(long hpValue, double percent)>? hpDistribution = null)
     {
         Health = health;
         HpDistribution = hpDistribution;

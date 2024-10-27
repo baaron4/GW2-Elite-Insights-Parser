@@ -5,11 +5,11 @@ namespace GW2EIEvtcParser.Extensions;
 
 public class EXTFinalIncomingHealingStat
 {
-    public int Healed { get; }
-    public int HealingPowerHealed { get; }
-    public int ConversionHealed { get; }
-    public int HybridHealed { get; }
-    public int DownedHealed { get; }
+    public readonly int Healed;
+    public readonly int HealingPowerHealed;
+    public readonly int ConversionHealed;
+    public readonly int HybridHealed;
+    public readonly int DownedHealed;
 
     internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
     {

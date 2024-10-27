@@ -14,8 +14,8 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
     public enum EXTHealingType { All, HealingPower, ConversionBased, Hybrid };
 
     // from https://github.com/Krappa322/arcdps_healing_stats/blob/master/src/Skills.cpp
-    internal readonly HashSet<long> HybridHealIDs = new HashSet<long>()
-    {
+    internal readonly HashSet<long> HybridHealIDs =
+    [
         CrashingWaves,
         WaterBlast,
         WaterTrident,
@@ -119,10 +119,10 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
         EnervationEcho,
         DeathlyEnervation,
         EssenceOfLivingShadows,
-    };
+    ];
 
-    private readonly List<EXTAbstractHealingEvent> _healingEvents = new List<EXTAbstractHealingEvent>();
-    private readonly List<EXTAbstractBarrierEvent> _barrierEvents = new List<EXTAbstractBarrierEvent>();
+    private readonly List<EXTAbstractHealingEvent> _healingEvents = new();
+    private readonly List<EXTAbstractBarrierEvent> _barrierEvents = new();
     internal HealingStatsExtensionHandler(CombatItem c, uint revision) : base(EXT_HealingStats, "Healing Stats")
     {
         Revision = revision;

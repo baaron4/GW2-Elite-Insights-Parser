@@ -27,7 +27,7 @@ public class JsonDeathRecap
         /// <summary>
         /// Source of the damage
         /// </summary>
-        public string Src;
+        public string? Src;
 
         /// <summary>
         /// Damage done
@@ -49,10 +49,10 @@ public class JsonDeathRecap
     /// <summary>
     /// List of damaging events to put into downstate
     /// </summary>
-    public IReadOnlyList<JsonDeathRecapDamageItem> ToDown;
+    public IReadOnlyList<JsonDeathRecapDamageItem>? ToDown;
 
     /// <summary>
     /// List of damaging events to put into deadstate
     /// </summary>
-    public IReadOnlyList<JsonDeathRecapDamageItem> ToKill;
+    public IReadOnlyList<JsonDeathRecapDamageItem>? ToKill;
 }

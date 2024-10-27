@@ -2,7 +2,7 @@
 
 public class ParametricPoint3D : Point3D
 {
-    public long Time { get; }
+    public readonly long Time;
 
 
     public ParametricPoint3D(float x, float y, float z, long time) : base(x, y, z)

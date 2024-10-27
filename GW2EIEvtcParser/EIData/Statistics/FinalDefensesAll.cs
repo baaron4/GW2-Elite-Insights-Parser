@@ -9,12 +9,12 @@ namespace GW2EIEvtcParser.EIData;
 using Segment = GenericSegment<double>;
 public class FinalDefensesAll : FinalDefenses
 {
-    public int DownCount { get; }
-    public long DownDuration { get; }
-    public int DeadCount { get; }
-    public long DeadDuration { get; }
-    public int DcCount { get; }
-    public long DcDuration { get; }
+    public readonly int DownCount;
+    public readonly long DownDuration;
+    public readonly int DeadCount;
+    public readonly long DeadDuration;
+    public readonly int DcCount;
+    public readonly long DcDuration;
 
     public FinalDefensesAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
     {

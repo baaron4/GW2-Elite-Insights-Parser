@@ -77,10 +77,10 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(ConstructAura, ConstructAura),
-        };
+        ];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -205,8 +205,8 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.KeepConstruct,
             (int)ArcDPSEnums.TrashID.Jessica,
             (int)ArcDPSEnums.TrashID.Olson,
@@ -216,7 +216,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             (int)ArcDPSEnums.TrashID.Henley,
             (int)ArcDPSEnums.TrashID.Galletta,
             (int)ArcDPSEnums.TrashID.Ianim,
-        };
+        ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {
@@ -236,8 +236,8 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.KeepConstructCore,
             ArcDPSEnums.TrashID.GreenPhantasm,
             ArcDPSEnums.TrashID.InsidiousProjection,
@@ -245,7 +245,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             ArcDPSEnums.TrashID.RadiantPhantasm,
             ArcDPSEnums.TrashID.CrimsonPhantasm,
             ArcDPSEnums.TrashID.RetrieverProjection
-        };
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)

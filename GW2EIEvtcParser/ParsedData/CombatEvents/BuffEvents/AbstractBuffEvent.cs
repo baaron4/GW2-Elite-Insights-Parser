@@ -18,7 +18,7 @@ public abstract class AbstractBuffEvent : AbstractTimeCombatEvent
 
     public AgentItem To { get; protected set; }
 
-    internal IFF IFF { get; }
+    internal readonly IFF IFF;
 
     internal AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time)
     {

@@ -6,14 +6,14 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalSupport
 {
-    private Dictionary<long, (int count, long time)> _friendlyRemovals { get; } = new Dictionary<long, (int count, long time)>();
+    private readonly Dictionary<long, (int count, long time)> _friendlyRemovals = new();
     public IReadOnlyDictionary<long, (int count, long time)> FriendlyRemovals => _friendlyRemovals;
-    private Dictionary<long, (int count, long time)> _foeRemovals { get; } = new Dictionary<long, (int count, long time)>();
+    private readonly Dictionary<long, (int count, long time)> _foeRemovals = new();
     public IReadOnlyDictionary<long, (int count, long time)> FoeRemovals => _foeRemovals;
-    private Dictionary<long, (int count, long time)> _unknownRemovals { get; } = new Dictionary<long, (int count, long time)>();
+    private readonly Dictionary<long, (int count, long time)> _unknownRemovals = new();
     public IReadOnlyDictionary<long, (int count, long time)> UnknownRemovals => _unknownRemovals;
 
-    internal FinalSupport(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor to)
+    internal FinalSupport(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? to)
     {
         foreach (long buffID in log.Buffs.BuffsByIds.Keys)
         {

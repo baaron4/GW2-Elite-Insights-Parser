@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class PlayerDstBuffRemoveMechanic : PlayerBuffRemoveMechanic<BuffRemoveAllEvent>
 {
-    private bool _withMinions { get; set; }
+    private bool _withMinions;
     public PlayerDstBuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }

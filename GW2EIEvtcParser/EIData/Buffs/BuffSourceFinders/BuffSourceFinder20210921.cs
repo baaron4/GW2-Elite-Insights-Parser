@@ -17,7 +17,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
     {
         if (extension > ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
-            return new List<AgentItem>();
+            return [];
         }
 
         if (_vindicatorDodges == null)
@@ -39,7 +39,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
         {
             if (Math.Abs(extension - ImperialImpactExtension) > ParserHelper.BuffSimulatorStackActiveDelayConstant)
             {
-                return new List<AgentItem>();
+                return [];
             }
         }
         var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();

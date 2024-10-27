@@ -2,8 +2,8 @@
 
 public class RewardEvent : AbstractTimeCombatEvent
 {
-    public ulong RewardID { get; }
-    public int RewardType { get; }
+    public readonly ulong RewardID;
+    public readonly int RewardType;
 
     internal RewardEvent(CombatItem evtcItem) : base(evtcItem.Time)
     {

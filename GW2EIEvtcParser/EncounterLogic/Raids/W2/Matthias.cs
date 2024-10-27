@@ -94,13 +94,13 @@ internal class Matthias : SalvationPass
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(SpontaneousCombustion, SpontaneousCombustion),
             new DamageCastFinder(SnowstormSkill, SnowstormSkill),
             new DamageCastFinder(DownpourSkill, DownpourSkill),
             new BuffLossCastFinder(UnstableBloodMagic, UnstableBloodMagic),
-        };
+        ];
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -229,23 +229,23 @@ internal class Matthias : SalvationPass
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Matthias,
             (int)ArcDPSEnums.TrashID.MatthiasSacrificeCrystal
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.Storm,
             ArcDPSEnums.TrashID.Spirit,
             ArcDPSEnums.TrashID.Spirit2,
             ArcDPSEnums.TrashID.IcePatch,
             ArcDPSEnums.TrashID.Tornado
-        };
+        ];
     }
 
     private static void AddMatthiasBubbles(long buffID, NPC target, ParsedEvtcLog log, CombatReplay replay)

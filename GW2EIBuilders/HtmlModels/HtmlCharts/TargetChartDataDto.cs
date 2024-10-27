@@ -6,10 +6,10 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
 internal class TargetChartDataDto : ActorChartDataDto
 {
-    public IReadOnlyList<int> Total { get; }
-    public IReadOnlyList<int> TotalPower { get; }
-    public IReadOnlyList<int> TotalCondition { get; }
-    public List<object[]> BreakbarPercentStates { get; }
+    public readonly IReadOnlyList<int> Total;
+    public readonly IReadOnlyList<int> TotalPower;
+    public readonly IReadOnlyList<int> TotalCondition;
+    public readonly List<object[]>? BreakbarPercentStates;
 
     public TargetChartDataDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target) : base(log, phase, target, false)
     {

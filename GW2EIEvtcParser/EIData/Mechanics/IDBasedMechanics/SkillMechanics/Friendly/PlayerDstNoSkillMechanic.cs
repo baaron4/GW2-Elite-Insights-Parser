@@ -48,7 +48,7 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
                     }
                     else
                     {
-                        regroupedSkillDst[time] = new HashSet<AbstractSingleActor> { amp };
+                        regroupedSkillDst[time] = [amp];
                     }
                 }
 

@@ -10,14 +10,14 @@ public class DeathRecap
     {
         public long ID { get; internal set; }
         public bool IndirectDamage { get; internal set; }
-        public string Src { get; internal set; }
+        public string? Src { get; internal set; }
         public int Damage { get; internal set; }
         public int Time { get; internal set; }
     }
 
-    public long DeathTime { get; }
-    public List<DeathRecapDamageItem> ToDown { get; }
-    public List<DeathRecapDamageItem> ToKill { get; }
+    public readonly long DeathTime;
+    public readonly List<DeathRecapDamageItem>? ToDown;
+    public readonly List<DeathRecapDamageItem>? ToKill;
 
     internal DeathRecap(ParsedEvtcLog log, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, DeadEvent dead, IReadOnlyList<DownEvent> downs, IReadOnlyList<AliveEvent> ups, long lastDeathTime)
     {
@@ -36,7 +36,7 @@ public class DeathRecap
         if (downed != null)
         {
             var damageToDown = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= downed.Time && (x.HasHit || x.HasDowned)).ToList();
-            ToDown = damageToDown.Count > 0 ? new List<DeathRecapDamageItem>() : null;
+            ToDown = damageToDown.Count > 0 ? new() : null;
             int damage = 0;
             for (int i = damageToDown.Count - 1; i >= 0; i--)
             {
@@ -51,14 +51,14 @@ public class DeathRecap
                     Src = log.FindActor(ag)?.Character
                 };
                 damage += dl.HealthDamage;
-                ToDown.Add(item);
+                ToDown!.Add(item);
                 if (damage > 20000)
                 {
                     break;
                 }
             }
             var damageToKill = damageLogs.Where(x => x.Time > downed.Time && x.Time <= dead.Time && (x.HasHit || x.HasKilled)).ToList();
-            ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
+            ToKill = damageToKill.Count > 0 ? new() : null;
             for (int i = damageToKill.Count - 1; i >= 0; i--)
             {
                 AbstractHealthDamageEvent dl = damageToKill[i];
@@ -71,14 +71,14 @@ public class DeathRecap
                     Damage = dl.HealthDamage,
                     Src = log.FindActor(ag)?.Character
                 };
-                ToKill.Add(item);
+                ToKill!.Add(item);
             }
         }
         else
         {
             ToDown = null;
             var damageToKill = damageLogs.Where(x => x.Time > lastDeathTime && x.Time <= dead.Time && (x.HasHit || x.HasKilled)).ToList();
-            ToKill = damageToKill.Count > 0 ? new List<DeathRecapDamageItem>() : null;
+            ToKill = damageToKill.Count > 0 ? new() : null;
             int damage = 0;
             for (int i = damageToKill.Count - 1; i >= 0; i--)
             {
@@ -93,7 +93,7 @@ public class DeathRecap
                     Src = log.FindActor(ag)?.Character
                 };
                 damage += dl.HealthDamage;
-                ToKill.Add(item);
+                ToKill!.Add(item);
                 if (damage > 20000)
                 {
                     break;

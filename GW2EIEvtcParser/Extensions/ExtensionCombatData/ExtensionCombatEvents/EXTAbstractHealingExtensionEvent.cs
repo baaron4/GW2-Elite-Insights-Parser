@@ -6,8 +6,8 @@ namespace GW2EIEvtcParser.Extensions;
 public abstract class EXTAbstractHealingExtensionEvent : AbstractDamageEvent
 {
 
-    public bool SrcIsPeer { get; }
-    public bool DstIsPeer { get; }
+    public readonly bool SrcIsPeer;
+    public readonly bool DstIsPeer;
 
     [Flags]
     protected enum HealingExtensionOffcycleBits : byte

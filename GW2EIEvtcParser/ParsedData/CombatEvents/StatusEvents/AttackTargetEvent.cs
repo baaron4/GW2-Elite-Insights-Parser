@@ -2,9 +2,9 @@
 
 public class AttackTargetEvent : AbstractStatusEvent
 {
-    public AgentItem AttackTarget { get; }
+    public readonly AgentItem AttackTarget;
 
-    public bool Targetable { get; }
+    public readonly bool Targetable;
 
     internal AttackTargetEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

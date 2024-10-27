@@ -37,7 +37,7 @@ public abstract class FightLogic
 
 
     private CombatReplayMap _map;
-    protected List<Mechanic> MechanicList { get; }//Resurrects (start), Resurrect
+    protected readonly List<Mechanic> MechanicList;//Resurrects (start), Resurrect
     public ParseModeEnum ParseMode { get; protected set; } = ParseModeEnum.Unknown;
     public SkillModeEnum SkillMode { get; protected set; } = SkillModeEnum.PvE;
     public string Extension { get; protected set; }
@@ -51,26 +51,26 @@ public abstract class FightLogic
     public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
     public IReadOnlyList<AbstractSingleActor> Targets => _targets;
     public IReadOnlyList<AbstractSingleActor> Hostiles => _hostiles;
-    protected List<NPC> _trashMobs { get; private set; } = new List<NPC>();
-    protected List<AbstractSingleActor> _nonPlayerFriendlies { get; private set; } = new List<AbstractSingleActor>();
-    protected List<AbstractSingleActor> _targets { get; private set; } = new List<AbstractSingleActor>();
-    protected List<AbstractSingleActor> _hostiles { get; private set; } = new List<AbstractSingleActor>();
+    protected List<NPC> _trashMobs { get; private set; } = new();
+    protected List<AbstractSingleActor> _nonPlayerFriendlies { get; private set; } = new();
+    protected List<AbstractSingleActor> _targets { get; private set; } = new();
+    protected List<AbstractSingleActor> _hostiles { get; private set; } = new();
 
-    internal Dictionary<string, GenericDecorationMetadata> DecorationCache { get; } = new Dictionary<string, GenericDecorationMetadata>();
+    internal readonly Dictionary<string, GenericDecorationMetadata> DecorationCache = new();
 
-    internal CombatReplayDecorationContainer EnvironmentDecorations { get; private set; } = null;
+    internal CombatReplayDecorationContainer? EnvironmentDecorations = null;
 
-    protected ArcDPSEnums.ChestID ChestID { get; set; } = ChestID.None;
+    protected ArcDPSEnums.ChestID ChestID = ChestID.None;
 
-    protected List<(Buff buff, int stack)> InstanceBuffs { get; private set; } = null;
+    protected List<(Buff buff, int stack)>? InstanceBuffs { get; private set; } = null;
 
     public bool Targetless { get; protected set; } = false;
-    internal int GenericTriggerID { get; }
+    internal readonly int GenericTriggerID;
 
     public long EncounterID { get; protected set; } = EncounterIDs.Unknown;
 
     public EncounterCategory EncounterCategoryInformation { get; protected set; }
-    protected FallBackMethod GenericFallBackMethod { get; set; } = FallBackMethod.Death;
+    protected FallBackMethod GenericFallBackMethod = FallBackMethod.Death;
 
     protected FightLogic(int triggerID)
     {

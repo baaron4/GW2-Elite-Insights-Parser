@@ -38,10 +38,10 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(SeismicSuffering, SeismicSuffering), // Seismic Suffering
-        };
+        ];
     }
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
@@ -59,12 +59,13 @@ internal class Adina : TheKeyOfAhdashim
     }
 
     // note: these are the attack target not gadget locations
-    static readonly List<(string, Point3D)> HandLocations = new List<(string, Point3D)> {
+    static readonly List<(string, Point3D)> HandLocations =
+    [
         ("NW", new Point3D(14359.6f, -789.288f)), // erosion
         ("NE", new Point3D(15502.5f, -841.978f)), // eruption
         ("SW", new Point3D(14316.6f, -2080.17f)), // eruption
         ("SE", new Point3D(15478.0f, -2156.67f)), // erosion
-    };
+    ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
     {
@@ -87,7 +88,7 @@ internal class Adina : TheKeyOfAhdashim
         })
             .ToList(); //NOTE(Rennorb): Unfortunate ToList because we have to insert into the collection we iterate. 
         long final = fightData.FightEnd;
-        var handOfEruptionPositions = new List<Point3D> { new Point3D(15570.5f, -693.117f), new Point3D(14277.2f, -2202.52f) }; // gadget locations
+        var handOfEruptionPositions = new List<Point3D> { new(15570.5f, -693.117f), new(14277.2f, -2202.52f) }; // gadget locations
         var processedAttackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
         {
@@ -274,7 +275,7 @@ internal class Adina : TheKeyOfAhdashim
                 {
                     splitPhase = new PhaseData(start, log.FightData.FightEnd, "Split " + (i / 2 + 1));
                     splitPhaseEnds.Add(log.FightData.FightEnd);
-                    AddTargetsToPhaseAndFit(splitPhase, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
+                    AddTargetsToPhaseAndFit(splitPhase, [(int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption], log);
                     splitPhases.Add(splitPhase);
                 }
             }
@@ -283,7 +284,7 @@ internal class Adina : TheKeyOfAhdashim
                 long end = be.Time;
                 splitPhase = new PhaseData(start, end, "Split " + (i / 2 + 1));
                 splitPhaseEnds.Add(end);
-                AddTargetsToPhaseAndFit(splitPhase, new List<int> { (int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption }, log);
+                AddTargetsToPhaseAndFit(splitPhase, [(int)ArcDPSEnums.TrashID.HandOfErosion, (int)ArcDPSEnums.TrashID.HandOfEruption], log);
                 splitPhases.Add(splitPhase);
             }
         }

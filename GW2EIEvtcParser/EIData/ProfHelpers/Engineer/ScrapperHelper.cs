@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ScrapperHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyroTraited)
             .UsingSrcSpecChecker(Spec.Scrapper),
         new EffectCastFinder(BulwarkGyro, EffectGUIDs.ScrapperBulwarkGyro)
@@ -27,27 +27,27 @@ internal static class ScrapperHelper
             .UsingSrcSpecChecker(Spec.Scrapper),
         new EffectCastFinder(BypassCoating, EffectGUIDs.ScrapperBypassCoating)
             .UsingSrcSpecChecker(Spec.Scrapper),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier([Swiftness, Superspeed, Stability], "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance)
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new DamageLogDamageModifier("Adaptive Armor", "-20%", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, BuffImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Watchful Eye", WatchfulEye, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),
         new Buff("Watchful Eye PvP", WatchfulEyePvP, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),
-    };
+    ];
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.BlastGyro,
         (int)MinionID.BulwarkGyro,
         (int)MinionID.FunctionGyro,
@@ -55,7 +55,7 @@ internal static class ScrapperHelper
         (int)MinionID.ShredderGyro,
         (int)MinionID.SneakGyro,
         (int)MinionID.PurgeGyro,
-    };
+    ];
 
     internal static bool IsKnownMinionID(int id)
     {

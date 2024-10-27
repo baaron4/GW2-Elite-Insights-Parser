@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public abstract class AbstractActor
 {
-    protected AgentItem AgentItem { get; }
+    protected readonly AgentItem AgentItem;
     public string Character { get; protected set; }
 
     public int UniqueID => AgentItem.UniqueID;
@@ -24,24 +24,24 @@ public abstract class AbstractActor
     public uint HitboxWidth => AgentItem.HitboxWidth;
     public bool IsFakeActor => AgentItem.IsFake;
     // Damage
-    protected List<AbstractHealthDamageEvent> DamageEvents { get; set; }
-    protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageEventByDst { get; set; }
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageTakenEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
-    protected List<AbstractHealthDamageEvent> DamageTakenEvents { get; set; }
-    protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>> DamageTakenEventsBySrc { get; set; }
+    protected List<AbstractHealthDamageEvent>? DamageEvents;
+    protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>>? DamageEventByDst;
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageEvents = new();
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageTakenEvents = new();
+    protected List<AbstractHealthDamageEvent>? DamageTakenEvents;
+    protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>>? DamageTakenEventsBySrc;
     // Breakbar Damage
-    protected List<BreakbarDamageEvent> BreakbarDamageEvents { get; set; }
-    protected Dictionary<AgentItem, List<BreakbarDamageEvent>> BreakbarDamageEventsByDst { get; set; }
-    protected List<BreakbarDamageEvent> BreakbarDamageTakenEvents { get; set; }
-    protected Dictionary<AgentItem, List<BreakbarDamageEvent>> BreakbarDamageTakenEventsBySrc { get; set; }
+    protected List<BreakbarDamageEvent>? BreakbarDamageEvents;
+    protected Dictionary<AgentItem, List<BreakbarDamageEvent>>? BreakbarDamageEventsByDst;
+    protected List<BreakbarDamageEvent>? BreakbarDamageTakenEvents;
+    protected Dictionary<AgentItem, List<BreakbarDamageEvent>>? BreakbarDamageTakenEventsBySrc;
     // Crowd Control
-    protected List<CrowdControlEvent> OutgoingCrowdControlEvents { get; set; }
-    protected Dictionary<AgentItem, List<CrowdControlEvent>> OutgoingCrowdControlEventsByDst { get; set; }
-    protected List<CrowdControlEvent> IncomingCrowdControlEvents { get; set; }
-    protected Dictionary<AgentItem, List<CrowdControlEvent>> IncomingCrowdControlEventsBySrc { get; set; }
+    protected List<CrowdControlEvent>? OutgoingCrowdControlEvents;
+    protected Dictionary<AgentItem, List<CrowdControlEvent>>? OutgoingCrowdControlEventsByDst;
+    protected List<CrowdControlEvent>? IncomingCrowdControlEvents;
+    protected Dictionary<AgentItem, List<CrowdControlEvent>>? IncomingCrowdControlEventsBySrc;
     // Cast
-    protected List<AbstractCastEvent>? CastEvents { get; set; }
+    protected List<AbstractCastEvent>? CastEvents;
 
     protected AbstractActor(AgentItem agent)
     {

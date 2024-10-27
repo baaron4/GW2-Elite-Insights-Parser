@@ -56,11 +56,11 @@ internal class Ensolyss : Nightmare
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Ensolyss,
             //(int)TrashID.NightmareAltar,
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()

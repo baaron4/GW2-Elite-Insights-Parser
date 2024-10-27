@@ -60,11 +60,11 @@ internal class Siax : Nightmare
     }
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Siax,
             (int)TrashID.EchoOfTheUnclean,
-        };
+        ];
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
@@ -104,7 +104,8 @@ internal class Siax : Nightmare
         return phases;
     }
 
-    static readonly List<(string, Point3D)> EchoLocations = new List<(string, Point3D)> {
+    static readonly List<(string, Point3D)> EchoLocations =
+    [
         ("N", new Point3D(1870.630f, -2205.379f)),
         ("E", new Point3D(2500.260f, -3288.280f)),
         ("S", new Point3D(1572.040f, -3992.580f)),
@@ -113,7 +114,7 @@ internal class Siax : Nightmare
         ("NE", new Point3D(2556.450f, -2628.590f)),
         ("SE", new Point3D(2293.149f, -3912.510f)),
         ("SW", new Point3D(891.370f, -3722.450f)),
-    };
+    ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
     {

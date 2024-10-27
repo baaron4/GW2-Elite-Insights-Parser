@@ -8,9 +8,9 @@ public class MovingPlatformDecoration : BackgroundDecoration
 {
     internal class MovingPlatformDecorationMetadata : BackgroundDecorationMetadata
     {
-        public string Image { get; }
-        public int Width { get; }
-        public int Height { get; }
+        public readonly string Image;
+        public readonly int Width;
+        public readonly int Height;
         public MovingPlatformDecorationMetadata(string image, int width, int height)
         {
             Image = image;
@@ -29,8 +29,7 @@ public class MovingPlatformDecoration : BackgroundDecoration
     }
     internal class MovingPlatformDecorationRenderingData : BackgroundDecorationRenderingData
     {
-        public List<(float x, float y, float z, float angle, float opacity, int time)> Positions { get; } =
-            new List<(float x, float y, float z, float angle, float opacity, int time)>();
+        public readonly List<(float x, float y, float z, float angle, float opacity, int time)> Positions = new();
         public MovingPlatformDecorationRenderingData((long, long) lifespan) : base(lifespan)
         {
         }

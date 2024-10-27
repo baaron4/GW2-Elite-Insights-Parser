@@ -4,8 +4,8 @@ namespace GW2EIEvtcParser.Extensions;
 
 public class EXTFinalIncomingBarrierStat
 {
-    public int BarrierReceived { get; }
-    public int DownedBarrierReceived { get; }
+    public readonly int BarrierReceived;
+    public readonly int DownedBarrierReceived;
 
     internal EXTFinalIncomingBarrierStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
     {

@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class NecromancerHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(EnterDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
         new BuffLossCastFinder(ExitDeathShroud, DeathShroud).UsingBeforeWeaponSwap(true),
         new DamageCastFinder(LesserEnfeeble, LesserEnfeeble).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -47,10 +47,10 @@ internal static class NecromancerHelper
         // new EffectCastFinder(NecroticTraversal, EffectGUIDs.NecromancerNecroticTraversal),
         // Spear
         new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress).UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff).OfType<BuffRemoveAllEvent>(), effectEvent.Time).Any()),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Spite
         new BuffOnFoeDamageModifier(NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, BuffImages.SpitefulTalisman, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Downed, "Death's Embrace", "25% on while downed", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathsEmbrace, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
@@ -65,19 +65,19 @@ internal static class NecromancerHelper
         new BuffOnActorDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, BuffImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier([DeathShroud, ReapersShroud, HarbingerShroud], "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathPerception, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.June2022Balance), // no tracked for Scourge
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(DeathShroud, "Death Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(DeathShroud, "Death Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathShroud, DamageModifierMode.sPvPWvW),
         new BuffOnActorDamageModifier(DeathsCarapace, "Beyond the Veil", "-10%", DamageSource.NoPets, -10, DamageType.Condition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.BeyondTheVeil, DamageModifierMode.PvE)
             .UsingChecker((dl, log) => dl.To.GetBuffStatus(log, DeathsCarapace, dl.Time).Value >= 10)
             .WithBuilds(GW2Builds.October2019Balance),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {     
+    internal static readonly List<Buff> Buffs =
+    [     
         // Forms
         new Buff("Lich Form", LichForm, Source.Necromancer, BuffClassification.Other, BuffImages.LichForm),
         new Buff("Death Shroud", DeathShroud, Source.Necromancer, BuffClassification.Other, BuffImages.DeathShroud),
@@ -116,12 +116,12 @@ internal static class NecromancerHelper
         new Buff("Soul Shards", SoulShards, Source.Necromancer, BuffStackType.StackingConditionalLoss, 6, BuffClassification.Other, BuffImages.SoulShards),
         new Buff("Distress", DistressBuff, Source.Necromancer, BuffClassification.Other, BuffImages.Distress),
         new Buff("Dark Stalker", DarkStalker, Source.Necromancer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MonsterSkill),
-    };
+    ];
 
-    private static readonly HashSet<long> _shroudTransform = new HashSet<long>
-    {
+    private static readonly HashSet<long> _shroudTransform =
+    [
         EnterDeathShroud, ExitDeathShroud,
-    };
+    ];
 
     public static bool IsShroudTransform(long id)
     {
@@ -130,8 +130,8 @@ internal static class NecromancerHelper
             || HarbingerHelper.IsHarbingerShroudTransform(id);
     }
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.BloodFiend,
         (int)MinionID.FleshGolem,
         (int)MinionID.ShadowFiend,
@@ -139,7 +139,7 @@ internal static class NecromancerHelper
         (int)MinionID.BoneFiend,
         (int)MinionID.BoneMinion,
         (int)MinionID.UnstableHorror,
-    };
+    ];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

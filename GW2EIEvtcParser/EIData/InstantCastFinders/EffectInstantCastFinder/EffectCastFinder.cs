@@ -8,9 +8,9 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 {
-    protected bool Minions { get; set; } = false;
+    protected bool Minions = false;
     private readonly string _effectGUID;
-    private int _speciesId { get; set; } = 0;
+    private int _speciesId = 0;
 
     public EffectCastFinder WithMinions(bool minions)
     {
@@ -97,7 +97,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
-            if (combatData.TryGetEffectEventsByGUID(effectGUID, out IReadOnlyList<EffectEvent> effectEvents))
+            if (combatData.TryGetEffectEventsByGUID(effectGUID, out var effectEvents))
             {
                 return effectEvents.Any(other => other != evt && GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
             }

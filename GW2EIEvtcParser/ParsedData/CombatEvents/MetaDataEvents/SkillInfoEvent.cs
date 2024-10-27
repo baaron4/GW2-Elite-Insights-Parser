@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class SkillInfoEvent : AbstractMetaDataEvent
 {
-    public uint SkillID { get; }
+    public readonly uint SkillID;
 
     public float Recharge { get; protected set; }
 
@@ -17,7 +17,7 @@ public class SkillInfoEvent : AbstractMetaDataEvent
     public float TooltipTime { get; protected set; }
     public IReadOnlyList<SkillTiming> SkillTimings => _SkillTimings;
 
-    private List<SkillTiming> _SkillTimings { get; } = new List<SkillTiming>();
+    private readonly List<SkillTiming> _SkillTimings = new();
 
     internal SkillInfoEvent(CombatItem evtcItem) : base(evtcItem)
     {

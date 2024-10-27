@@ -5,9 +5,9 @@ namespace GW2EIEvtcParser.Extensions;
 
 public abstract class AbstractExtensionHandler
 {
-    public uint Signature { get; }
+    public readonly uint Signature;
     public uint Revision { get; protected set; }
-    public string Name { get; } = "Unknown";
+    public readonly string Name = "Unknown";
     public string Version { get; protected set; } = "Unknown";
 
     protected HashSet<AgentItem> RunningExtensionInternal { get; private set; }
@@ -17,7 +17,7 @@ public abstract class AbstractExtensionHandler
     {
         Signature = sig;
         Name = name;
-        RunningExtensionInternal = new HashSet<AgentItem>();
+        RunningExtensionInternal = new();
     }
 
     internal abstract bool HasTime(CombatItem c);

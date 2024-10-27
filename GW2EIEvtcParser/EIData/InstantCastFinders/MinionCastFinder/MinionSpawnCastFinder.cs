@@ -6,11 +6,11 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class MinionSpawnCastFinder : CheckedCastFinder<SpawnEvent>
 {
-    protected List<int> SpeciesIDs { get; }
+    protected readonly List<int> SpeciesIDs;
 
     public MinionSpawnCastFinder(long skillID, int speciesID) : base(skillID)
     {
-        SpeciesIDs = new List<int> { speciesID };
+        SpeciesIDs = [speciesID];
     }
 
     public MinionSpawnCastFinder(long skillID, IList<int> speciesIDs) : base(skillID)

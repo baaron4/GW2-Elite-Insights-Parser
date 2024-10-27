@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class FirebrandHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new DamageCastFinder(FlameRushOld, FlameRushOld)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance)
             .UsingDisableWithEffectData(),
@@ -92,15 +92,15 @@ internal static class FirebrandHelper
         new BuffLossCastFinder(StowTome, TomeOfCourageOpen)
             .WithBuilds(GW2Builds.November2022Balance)
             .UsingBeforeWeaponSwap(true),
-    };
+    ];
 
-    private static readonly HashSet<long> _firebrandTomes = new HashSet<long>
-    {
+    private static readonly HashSet<long> _firebrandTomes =
+    [
         TomeOfJusticeSkill,
         TomeOfResolveSkill,
         TomeOfCourageSkill,
         StowTome,
-    };
+    ];
 
     public static bool IsFirebrandTome(long id)
     {
@@ -108,16 +108,16 @@ internal static class FirebrandHelper
     }
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new()
     {
     };
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
     {
     };
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Ashes of the Just", AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.EpilogueAshesOfTheJust),
         new Buff("Eternal Oasis", EternalOasis, Source.Firebrand, BuffClassification.Defensive, BuffImages.EpilogueEternalOasis),
         new Buff("Unbroken Lines", UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, BuffImages.EpilogueUnbrokenLines),
@@ -128,7 +128,7 @@ internal static class FirebrandHelper
         new Buff("Dormant Justice", DormantJustice, Source.Firebrand, BuffClassification.Other, BuffImages.DormantJustice),
         new Buff("Dormant Courage", DormantCourage, Source.Firebrand, BuffClassification.Other, BuffImages.DormantCourage),
         new Buff("Dormant Resolve", DormantResolve, Source.Firebrand, BuffClassification.Other, BuffImages.DormantResolve),
-    };
+    ];
 
     internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
     {

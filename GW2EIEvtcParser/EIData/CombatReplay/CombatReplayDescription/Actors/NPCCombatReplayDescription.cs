@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class NPCCombatReplayDescription : AbstractSingleActorCombatReplayDescription
 {
-    public int MasterID { get; }
+    public readonly int MasterID;
 
     internal NPCCombatReplayDescription(NPC npc, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(npc, log, map, replay)
     {

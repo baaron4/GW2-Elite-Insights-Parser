@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.ParserHelpers;
 /// </summary>
 public class ParsingFailureReason
 {
-    private Exception _reason { get; }
+    private readonly Exception _reason;
 
     public bool IsEvtcContentIssue => _reason is EvtcContentException;
 

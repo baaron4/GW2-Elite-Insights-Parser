@@ -11,8 +11,8 @@ public class CircleDecoration : FormDecoration
 {
     internal class CircleDecorationMetadata : FormDecorationMetadata
     {
-        public uint Radius { get; }
-        public uint MinRadius { get; }
+        public readonly uint Radius;
+        public readonly uint MinRadius;
 
         public CircleDecorationMetadata(string color, uint radius, uint minRadius) : base(color)
         {

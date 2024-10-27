@@ -53,7 +53,7 @@ public class DPSReportUploadObject
     }
 
     [JsonPropertyName("players")]
-    internal object PlayersJson { get; set; }
+    internal object PlayersJson;
     
     public DPSReportReportObject Report;
     

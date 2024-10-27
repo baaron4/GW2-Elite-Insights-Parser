@@ -20,13 +20,13 @@ public abstract partial class AbstractSingleActor : AbstractActor
     public int Group { get; protected set; }
 
     // Helpers
-    public EXTAbstractSingleActorHealingHelper EXTHealing { get; }
-    public EXTAbstractSingleActorBarrierHelper EXTBarrier { get; }
+    public readonly EXTAbstractSingleActorHealingHelper EXTHealing;
+    public readonly EXTAbstractSingleActorBarrierHelper EXTBarrier;
     // Minions
     private Dictionary<long, Minions> _minions;
     // Replay
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>>();
-    protected CombatReplay CombatReplay { get; set; }
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = new();
+    protected CombatReplay CombatReplay;
     // Statistics
     private CachingCollectionWithTarget<FinalDPS> _dpsStats;
     private CachingCollectionWithTarget<FinalDefenses> _defenseStats;
@@ -49,7 +49,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
     #region STATUS
 
-    protected int Health { get; set; } = -2;
+    protected int Health = -2;
 
     public int GetHealth(CombatData combatData)
     {

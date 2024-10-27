@@ -5,9 +5,9 @@ namespace GW2EIEvtcParser.EIData;
 
 public abstract class GeographicalConnector : Connector
 {
-    private Point3D Offset { get; set; }
+    private Point3D? Offset;
 
-    private bool OffsetAfterRotation { get; set; }
+    private bool OffsetAfterRotation;
     public abstract class GeographicalConnectorDescriptor
     {
         public IReadOnlyList<float> Offset { get; private set; }

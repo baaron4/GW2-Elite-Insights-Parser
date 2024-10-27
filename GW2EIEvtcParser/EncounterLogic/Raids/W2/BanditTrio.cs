@@ -18,7 +18,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class BanditTrio : SalvationPass
 {
-    private static readonly Point3D ChestOfPrisonCampPosition = new Point3D(-903.703f, -9450.76f, -126.277008f);
+    private static readonly Point3D ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
     public BanditTrio(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>()
@@ -49,28 +49,28 @@ internal class BanditTrio : SalvationPass
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Narella
-        };
+        ];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Berg,
             (int)TargetID.Zane,
             (int)TargetID.Narella
-        };
+        ];
     }
 
     protected override List<int> GetFriendlyNPCIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TrashID.Cage
-        };
+        ];
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -214,12 +214,12 @@ internal class BanditTrio : SalvationPass
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)TargetID.Berg,
             (int)TargetID.Zane,
             (int)TargetID.Narella
-        };
+        ];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
@@ -242,8 +242,8 @@ internal class BanditTrio : SalvationPass
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             TrashID.BanditSaboteur,
             TrashID.Warg,
             TrashID.VeteranTorturedWarg,
@@ -266,7 +266,7 @@ internal class BanditTrio : SalvationPass
             TrashID.Prisoner2,
             TrashID.InsectSwarm,
             TrashID.Bombs,
-        };
+        ];
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

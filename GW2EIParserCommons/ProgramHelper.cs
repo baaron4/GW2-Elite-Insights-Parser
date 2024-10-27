@@ -60,19 +60,19 @@ public class ProgramHelper
         return SupportedFileFormats.IsTemporaryFormat(path);
     }
 
-    internal static HTMLAssets htmlAssets { get; } = new HTMLAssets();
+    internal readonly static HTMLAssets htmlAssets = new();
 
     public ProgramSettings Settings { get; private set; }
-    private Version ParserVersion { get; }
+    private readonly Version ParserVersion;
 
-    private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+    private static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
 
     public static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
     public static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
     public static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
     public static readonly string EILogPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Logs/";
 
-    public static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
+    public static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
     private CancellationTokenSource RunningMemoryCheck = null;
 

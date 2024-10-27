@@ -14,8 +14,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class ScourgeHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(TrailOfAnguish, TrailOfAnguishBuff),
         // Trail of Anguish? Unique effect?
         // new EffectCastFinder(TrailOfAnguish, EffectGUIDs.ScourgeTrailOfAnguish).UsingSrcSpecChecker(Spec.Scourge).UsingICD(6100),
@@ -35,22 +35,22 @@ internal static class ScourgeHelper
             }
             return false;
         }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new()
     {
     };
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
     {
         // Investigate for Blood as Sand, add a custom buff like for weaver attunements/ virtuoso blades using effect events?
     };
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Sadistic Searing", SadisticSearing, Source.Scourge, BuffClassification.Other, BuffImages.SadisticSearing),
         new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SandSwell),
-    };
+    ];
 
     internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
     {

@@ -37,7 +37,7 @@ public static class MarkerGUIDs
     /// <summary>
     /// HashSet containing the types of Commander Tag GUIDs.
     /// </summary>
-    public static IReadOnlyCollection<string> CommanderTagMarkersHexGUIDs { get; } = new HashSet<string>()
+    public readonly static IReadOnlyCollection<string> CommanderTagMarkersHexGUIDs = new HashSet<string>()
     {
         RedCommanderTag,
         OrangeCommanderTag,
@@ -62,7 +62,7 @@ public static class MarkerGUIDs
     /// <summary>
     /// HashSet containing the types of Squad Marker GUIDs.
     /// </summary>
-    public static IReadOnlyCollection<string> SquadOverheadMarkersHexGUIDs { get; } = new HashSet<string>()
+    public readonly static IReadOnlyCollection<string> SquadOverheadMarkersHexGUIDs = new HashSet<string>()
     {
         ArrowOverhead,
         CircleOverhead,

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class AgentFacingAgentConnector : AgentFacingConnector
 {
-    public AgentItem DstAgent { get; }
+    public readonly AgentItem DstAgent;
 
     public AgentFacingAgentConnector(AbstractSingleActor agent, AbstractSingleActor dstAgent) : this(agent.AgentItem, dstAgent.AgentItem)
     {

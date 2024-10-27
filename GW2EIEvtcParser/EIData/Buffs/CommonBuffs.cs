@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData;
 internal static class CommonBuffs
 {
 
-    internal static readonly List<Buff> Boons = new List<Buff>
-    {
+    internal static readonly List<Buff> Boons =
+    [
         new Buff("Might", Might, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Boon, BuffImages.Might),
         new Buff("Fury", Fury, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Fury),
         new Buff("Quickness", Quickness, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Quickness),
@@ -27,10 +27,10 @@ internal static class CommonBuffs
         new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution).WithBuilds(GW2Builds.May2021Balance),
         //
         new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.BoonDuration),
-    };
+    ];
 
-    internal static readonly List<Buff> Conditions = new List<Buff>
-    {
+    internal static readonly List<Buff> Conditions =
+    [
         new Buff("Bleeding", Bleeding, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Bleeding),
         new Buff("Burning", Burning, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Burning),
         new Buff("Confusion", Confusion, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Confusion),
@@ -47,10 +47,10 @@ internal static class CommonBuffs
         new Buff("Vulnerability", Vulnerability, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Condition, BuffImages.Vulnerability),
         //
         new Buff("Number of Conditions", NumberOfConditions, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.ConditionDuration),
-    };
+    ];
 
-    internal static readonly List<Buff> Commons = new List<Buff>
-    {
+    internal static readonly List<Buff> Commons =
+    [
         new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfRanger),
         new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfMesmer),
         new Buff("Number of Ranger Pets", NumberOfRangerPets, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RangerPets),
@@ -130,10 +130,10 @@ internal static class CommonBuffs
         // Primers
         new Buff("Metabolic Primer", MetabolicPrimer, Source.Common, BuffClassification.Other, BuffImages.MetabolicPrimer),
         new Buff("Utility Primer", UtilityPrimer, Source.Common, BuffClassification.Other, BuffImages.UtilityPrimer),
-    };
+    ];
 
-    internal static readonly List<Buff> Gear = new List<Buff>
-    {
+    internal static readonly List<Buff> Gear =
+    [
         // Sigils
         new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
@@ -208,6 +208,6 @@ internal static class CommonBuffs
         new Buff("Relic of Sorrow", RelicOfSorrowBuff, Source.Gear, BuffClassification.Defensive, BuffImages.RelicOfTheSorrow),
         new Buff("Greer's Virulence", GreersVirulence, Source.Gear,  BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, BuffImages.RelicOfTheBlightbringer),
         new Buff("Relic of the Claw", RelicOfTheClaw, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheClaw),
-    };
+    ];
 
 }

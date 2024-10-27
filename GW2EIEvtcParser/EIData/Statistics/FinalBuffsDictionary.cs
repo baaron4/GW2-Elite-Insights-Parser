@@ -6,17 +6,17 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalBuffsDictionary
 {
-    private Dictionary<AbstractSingleActor, double> _generatedBy { get; } = new Dictionary<AbstractSingleActor, double>();
+    private readonly Dictionary<AbstractSingleActor, double> _generatedBy = new();
     public IReadOnlyDictionary<AbstractSingleActor, double> GeneratedBy => _generatedBy;
-    private Dictionary<AbstractSingleActor, double> _overstackedBy { get; } = new Dictionary<AbstractSingleActor, double>();
+    private readonly Dictionary<AbstractSingleActor, double> _overstackedBy = new();
     public IReadOnlyDictionary<AbstractSingleActor, double> OverstackedBy => _overstackedBy;
-    private Dictionary<AbstractSingleActor, double> _wastedFrom { get; } = new Dictionary<AbstractSingleActor, double>();
+    private readonly Dictionary<AbstractSingleActor, double> _wastedFrom = new();
     public IReadOnlyDictionary<AbstractSingleActor, double> WastedFrom => _wastedFrom;
-    private Dictionary<AbstractSingleActor, double> _unknownExtensionFrom { get; } = new Dictionary<AbstractSingleActor, double>();
+    private readonly Dictionary<AbstractSingleActor, double> _unknownExtensionFrom = new();
     public IReadOnlyDictionary<AbstractSingleActor, double> UnknownExtensionFrom => _unknownExtensionFrom;
-    private Dictionary<AbstractSingleActor, double> _extensionBy { get; } = new Dictionary<AbstractSingleActor, double>();
+    private readonly Dictionary<AbstractSingleActor, double> _extensionBy = new();
     public IReadOnlyDictionary<AbstractSingleActor, double> ExtensionBy => _extensionBy;
-    private Dictionary<AbstractSingleActor, double> _extendedFrom { get; } = new Dictionary<AbstractSingleActor, double>();
+    private readonly Dictionary<AbstractSingleActor, double> _extendedFrom = new();
     public IReadOnlyDictionary<AbstractSingleActor, double> ExtendedFrom => _extendedFrom;
 
 

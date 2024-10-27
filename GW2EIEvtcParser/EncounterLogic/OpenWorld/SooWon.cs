@@ -240,8 +240,8 @@ internal class SooWon : OpenWorldLogic
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.SooWonOW,
             (int)ArcDPSEnums.TrashID.SooWonTail,
             (int)ArcDPSEnums.TrashID.VoidGiant2,
@@ -249,13 +249,13 @@ internal class SooWon : OpenWorldLogic
             (int)ArcDPSEnums.TrashID.VoidBrandstalker,
             (int)ArcDPSEnums.TrashID.VoidColdsteel2,
             (int)ArcDPSEnums.TrashID.VoidObliterator2,
-        };
+        ];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.SooWonOW,
             (int)ArcDPSEnums.TrashID.SooWonTail,
             (int)ArcDPSEnums.TrashID.VoidGiant2,
@@ -263,13 +263,13 @@ internal class SooWon : OpenWorldLogic
             (int)ArcDPSEnums.TrashID.VoidBrandstalker,
             (int)ArcDPSEnums.TrashID.VoidColdsteel2,
             (int)ArcDPSEnums.TrashID.VoidObliterator2,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.VoidAbomination,
             ArcDPSEnums.TrashID.VoidAbomination2,
             ArcDPSEnums.TrashID.VoidBomber,
@@ -310,6 +310,6 @@ internal class SooWon : OpenWorldLogic
             ArcDPSEnums.TrashID.VoidThornheart2,
             ArcDPSEnums.TrashID.VoidWarforged2,
             ArcDPSEnums.TrashID.VoidWorm,
-        };
+        ];
     }
 }

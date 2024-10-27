@@ -13,7 +13,7 @@ public class AnimatedCastEvent : AbstractCastEvent
     private readonly int _scaledActualDuration;
     //private readonly int _effectHappenedDuration;
 
-    public Point3D? EffectPosition { get; }
+    public readonly Point3D? EffectPosition;
 
     public bool HasEffectPosition => EffectPosition != null;
 

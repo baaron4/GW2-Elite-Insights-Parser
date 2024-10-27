@@ -63,16 +63,16 @@ internal abstract class FractalLogic : FightLogic
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             GenericTriggerID
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return new List<TrashID>()
-        {
+        return
+        [
             TrashID.FractalAvenger,
             TrashID.FractalVindicator,
             TrashID.TheMossman,
@@ -80,7 +80,7 @@ internal abstract class FractalLogic : FightLogic
             TrashID.ChampionRabbit,
             TrashID.JadeMawTentacle,
             TrashID.AwakenedAbomination,
-        };
+        ];
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

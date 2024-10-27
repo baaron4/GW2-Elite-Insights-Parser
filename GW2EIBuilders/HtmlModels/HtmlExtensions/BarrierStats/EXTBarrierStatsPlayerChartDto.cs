@@ -7,7 +7,7 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 
 internal class EXTBarrierStatsPlayerChartDto
 {
-    public PlayerDamageChartDto<int> Barrier { get; }
+    public readonly PlayerDamageChartDto<int> Barrier;
 
     private EXTBarrierStatsPlayerChartDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor p)
     {
@@ -15,7 +15,7 @@ internal class EXTBarrierStatsPlayerChartDto
         {
             Total = p.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, null),
             Taken = p.EXTBarrier.Get1SBarrierReceivedList(log, phase.Start, phase.End, null),
-            Targets = new List<IReadOnlyList<int>>()
+            Targets = new()
         };
         foreach (AbstractSingleActor target in log.Friendlies)
         {
@@ -25,7 +25,7 @@ internal class EXTBarrierStatsPlayerChartDto
 
     public static List<EXTBarrierStatsPlayerChartDto> BuildPlayersBarrierGraphData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<EXTBarrierStatsPlayerChartDto>();
+        var list = new List<EXTBarrierStatsPlayerChartDto>(log.Friendlies.Count);
 
         foreach (AbstractSingleActor actor in log.Friendlies)
         {

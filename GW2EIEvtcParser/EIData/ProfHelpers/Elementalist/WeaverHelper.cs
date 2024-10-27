@@ -35,8 +35,8 @@ internal static class WeaverHelper
         return Unknown;
     }
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(PrimordialStanceSkill, PrimordialStanceBuff),
         new BuffGainCastFinder(StoneResonanceSkill, StoneResonanceBuff)
             .UsingICD(500),
@@ -211,11 +211,11 @@ internal static class WeaverHelper
         new BuffGainCastFinder(FieryImpactSkill, FieryImpactBuff),
         new BuffGainCastFinder(ElutriateSkill, ElutriateBuff),
         new BuffGainCastFinder(ShaleStormSkill, ShaleStormBuff),
-    };
+    ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
@@ -244,17 +244,17 @@ internal static class WeaverHelper
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier([Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance)
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(WovenEarth, "Woven Earth", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenEarth, DamageModifierMode.All),
         new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Dual Fire Attunement", DualFireAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireAttunement),
         new Buff("Fire Water Attunement", FireWaterAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireWaterAttunement),
         new Buff("Fire Air Attunement", FireAirAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireAirAttunement),
@@ -290,10 +290,10 @@ internal static class WeaverHelper
         new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
         new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
         new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
-    };
+    ];
 
 
-    private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new Dictionary<long, HashSet<long>>
+    private static readonly Dictionary<long, HashSet<long>> _minorsTranslation = new()
     {
         { FireMinorAttunement, new HashSet<long> { WaterFireAttunement, AirFireAttunement, EarthFireAttunement, DualFireAttunement }},
         { WaterMinorAttunement, new HashSet<long> { FireWaterAttunement, AirWaterAttunement, EarthWaterAttunement, DualWaterAttunement }},
@@ -301,7 +301,7 @@ internal static class WeaverHelper
         { EarthMinorAttunement, new HashSet<long> { FireEarthAttunement, WaterEarthAttunement, AirEarthAttunement, DualEarthAttunement }},
     };
 
-    private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new Dictionary<long, HashSet<long>>
+    private static readonly Dictionary<long, HashSet<long>> _majorsTranslation = new()
     {
         { FireMajorAttunement, new HashSet<long> { FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement }},
         { WaterMajorAttunement, new HashSet<long> { WaterFireAttunement, WaterAirAttunement, WaterEarthAttunement, DualWaterAttunement }},

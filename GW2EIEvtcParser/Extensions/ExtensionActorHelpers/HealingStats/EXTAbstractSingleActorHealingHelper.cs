@@ -17,8 +17,8 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
     private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healing1S = new();
     private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healingReceived1S = new();
 
-    private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>? _outgoingHealStats { get; set; }
-    private CachingCollectionWithTarget<EXTFinalIncomingHealingStat>? _incomingHealStats { get; set; }
+    private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>? _outgoingHealStats;
+    private CachingCollectionWithTarget<EXTFinalIncomingHealingStat>? _incomingHealStats;
 
     internal EXTAbstractSingleActorHealingHelper(AbstractSingleActor actor) : base()
     {

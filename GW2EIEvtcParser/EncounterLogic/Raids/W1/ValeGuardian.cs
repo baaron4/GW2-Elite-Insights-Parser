@@ -52,24 +52,24 @@ internal class ValeGuardian : SpiritVale
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(MagicAuraValeGuardian, MagicAuraValeGuardian),
             new DamageCastFinder(MagicAuraRedGuardian, MagicAuraRedGuardian),
             new DamageCastFinder(MagicAuraBlueGuardian, MagicAuraBlueGuardian),
             new DamageCastFinder(MagicAuraGreenGuardian, MagicAuraGreenGuardian),
-        };
+        ];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.ValeGuardian,
             (int)ArcDPSEnums.TrashID.RedGuardian,
             (int)ArcDPSEnums.TrashID.BlueGuardian,
             (int)ArcDPSEnums.TrashID.GreenGuardian
-        };
+        ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {
@@ -142,10 +142,10 @@ internal class ValeGuardian : SpiritVale
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
            ArcDPSEnums.TrashID.Seekers
-        };
+        ];
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

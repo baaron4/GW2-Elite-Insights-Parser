@@ -119,7 +119,7 @@ public class EXTAbstractSingleActorBarrierHelper : EXTActorBarrierHelper
         return graph;
     }
 
-    public IReadOnlyList<int> Get1SBarrierList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+    public IReadOnlyList<int> Get1SBarrierList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target)
     {
         _barrier1S ??= new CachingCollectionWithTarget<int[]>(log);
         if (!_barrier1S.TryGetValue(start, end, target, out int[]? graph))
@@ -130,7 +130,7 @@ public class EXTAbstractSingleActorBarrierHelper : EXTActorBarrierHelper
         }
         return graph;
     }
-    public IReadOnlyList<int> Get1SBarrierReceivedList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+    public IReadOnlyList<int> Get1SBarrierReceivedList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target)
     {
         _barrierReceived1S ??= new CachingCollectionWithTarget<int[]>(log);
         if (!_barrierReceived1S.TryGetValue(start, end, target, out int[]? graph))
@@ -142,7 +142,7 @@ public class EXTAbstractSingleActorBarrierHelper : EXTActorBarrierHelper
         return graph;
     }
 
-    public EXTFinalOutgoingBarrierStat GetOutgoingBarrierStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public EXTFinalOutgoingBarrierStat GetOutgoingBarrierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _outgoinBarrierStats ??= new CachingCollectionWithTarget<EXTFinalOutgoingBarrierStat>(log);
         if (!_outgoinBarrierStats.TryGetValue(start, end, target, out EXTFinalOutgoingBarrierStat? value))

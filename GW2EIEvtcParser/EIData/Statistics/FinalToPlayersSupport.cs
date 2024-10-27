@@ -7,20 +7,20 @@ namespace GW2EIEvtcParser.EIData;
 public class FinalToPlayersSupport
 {
     //public long allHeal;
-    public int Resurrects { get; }
-    public double ResurrectTime { get; }
-    public int CondiCleanse { get; }
-    public double CondiCleanseTime { get; }
-    public int CondiCleanseSelf { get; }
-    public double CondiCleanseTimeSelf { get; }
-    public int BoonStrips { get; }
-    public double BoonStripsTime { get; }
-    public int StunBreak { get; }
-    public double RemovedStunDuration { get; }
+    public readonly int Resurrects;
+    public readonly double ResurrectTime;
+    public readonly int CondiCleanse;
+    public readonly double CondiCleanseTime;
+    public readonly int CondiCleanseSelf;
+    public readonly double CondiCleanseTimeSelf;
+    public readonly int BoonStrips;
+    public readonly double BoonStripsTime;
+    public readonly int StunBreak;
+    public readonly double RemovedStunDuration;
 
     internal FinalToPlayersSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
     {
-        FinalSupportAll totals = actor.GetSupportStats(log, start, end);
+        var totals = actor.GetSupportStats(log, start, end);
         Resurrects = totals.Resurrects;
         ResurrectTime = totals.ResurrectTime;
         StunBreak = totals.StunBreak;

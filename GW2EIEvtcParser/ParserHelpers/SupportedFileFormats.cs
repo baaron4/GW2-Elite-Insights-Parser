@@ -15,11 +15,11 @@ public static class SupportedFileFormats
     /// <item>.evtc.zip</item>
     /// </list>
     /// </summary>
-    private static readonly HashSet<string> _compressedFiles = new HashSet<string>()
-    {
+    private static readonly HashSet<string> _compressedFiles =
+    [
         ".zevtc",
         ".evtc.zip",
-    };
+    ];
 
     /// <summary>
     /// Temporary compressed file formats.
@@ -27,18 +27,18 @@ public static class SupportedFileFormats
     /// <item>.tmp.zip</item>
     /// </list>
     /// </summary>
-    private static readonly HashSet<string> _tmpCompressedFiles = new HashSet<string>()
-    {
+    private static readonly HashSet<string> _tmpCompressedFiles =
+    [
         ".tmp.zip"
-    };
+    ];
 
     /// <summary>
     /// Temporary file formats.
     /// </summary>
-    private static readonly HashSet<string> _tmpFiles = new HashSet<string>()
-    {
+    private static readonly HashSet<string> _tmpFiles =
+    [
         ""
-    };
+    ];
 
     /// <summary>
     /// Supported file formats.
@@ -46,7 +46,7 @@ public static class SupportedFileFormats
     /// <item>.evtc</item>
     /// </list>
     /// </summary>
-    private static readonly HashSet<string> _supportedFiles = new HashSet<string>(_compressedFiles)
+    private static readonly HashSet<string> _supportedFiles = new(_compressedFiles)
     {
         ".evtc"
     };

@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.ParsedData;
 public class MechanicEvent : AbstractTimeCombatEvent
 {
     private readonly Mechanic _mechanic;
-    public AbstractSingleActor Actor { get; }
+    public readonly AbstractSingleActor Actor;
     public string ShortName => _mechanic.ShortName;
     public string Description => _mechanic.Description;
 

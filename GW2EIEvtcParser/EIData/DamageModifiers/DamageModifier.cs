@@ -7,11 +7,11 @@ namespace GW2EIEvtcParser.EIData;
 
 public abstract class DamageModifier
 {
-    internal DamageModifierDescriptor DamageModDescriptor { get; }
+    internal readonly DamageModifierDescriptor DamageModDescriptor;
 
     public DamageType CompareType => DamageModDescriptor.CompareType;
     public DamageType SrcType => DamageModDescriptor.SrcType;
-    internal DamageSource DmgSrc { get; }
+    internal readonly DamageSource DmgSrc;
     public bool Multiplier => DamageModDescriptor.Multiplier;
     public bool SkillBased => DamageModDescriptor.SkillBased;
 

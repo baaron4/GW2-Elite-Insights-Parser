@@ -4,9 +4,9 @@ namespace GW2EIEvtcParser.EIData;
 
 public class MovingPlatformDecorationMetadataDescription : BackgroundDecorationMetadataDescription
 {
-    public string Image { get; }
-    public int Height { get; }
-    public int Width { get; }
+    public readonly string Image;
+    public readonly int Height;
+    public readonly int Width;
 
     internal MovingPlatformDecorationMetadataDescription(MovingPlatformDecorationMetadata decoration) : base(decoration)
     {

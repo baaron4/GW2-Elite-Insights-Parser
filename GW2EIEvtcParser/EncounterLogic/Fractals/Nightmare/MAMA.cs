@@ -114,13 +114,13 @@ internal class MAMA : Nightmare
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.MAMA,
             (int)TrashID.GreenKnight,
             (int)TrashID.RedKnight,
             (int)TrashID.BlueKnight
-        };
+        ];
     }
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {

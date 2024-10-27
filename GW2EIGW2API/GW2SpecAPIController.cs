@@ -11,7 +11,7 @@ internal class GW2SpecAPIController
 
     private const string APIPath = "/v2/specializations";
 
-    private GW2APIUtilities.APIItems<GW2APISpec> _apiSpecs = new GW2APIUtilities.APIItems<GW2APISpec>();
+    private GW2APIUtilities.APIItems<GW2APISpec> _apiSpecs = new();
 
     private static List<GW2APISpec> GetGW2APISpecs()
     {

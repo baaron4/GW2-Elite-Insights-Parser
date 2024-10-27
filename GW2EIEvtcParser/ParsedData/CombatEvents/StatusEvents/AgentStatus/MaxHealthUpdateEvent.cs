@@ -2,7 +2,7 @@
 
 public class MaxHealthUpdateEvent : AbstractStatusEvent
 {
-    public int MaxHealth { get; }
+    public readonly int MaxHealth;
 
     internal MaxHealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

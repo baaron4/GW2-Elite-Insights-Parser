@@ -46,10 +46,10 @@ internal class Freezie : FestivalStrikeMissionLogic
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(ColdHeartedAura, ColdHeartedAura),
-        };
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -121,31 +121,31 @@ internal class Freezie : FestivalStrikeMissionLogic
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)TargetID.Freezie,
             (int)TrashID.FreeziesFrozenHeart
-        };
+        ];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Freezie,
             (int)TrashID.FreeziesFrozenHeart
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return new List<TrashID>()
-        {
+        return
+        [
             TrashID.IceStormer,
             TrashID.IceSpiker,
             TrashID.IcyProtector,
             TrashID.SnowPile,
-        };
+        ];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

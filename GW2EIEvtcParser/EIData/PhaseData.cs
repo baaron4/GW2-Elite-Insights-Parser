@@ -12,7 +12,7 @@ public class PhaseData
     public long DurationInS { get; private set; }
     public long DurationInMS { get; private set; }
     public long DurationInM { get; private set; }
-    public string Name { get; internal set; }
+    public string? Name { get; internal set; }
     public bool DrawStart { get; internal set; } = true;
     public bool DrawEnd { get; internal set; } = true;
     public bool DrawArea { get; internal set; } = true;
@@ -22,12 +22,12 @@ public class PhaseData
     public bool BreakbarPhase { get; internal set; } = false;
 
     public IReadOnlyList<AbstractSingleActor> Targets => _targets;
-    private readonly List<AbstractSingleActor> _targets = new List<AbstractSingleActor>();
+    private readonly List<AbstractSingleActor> _targets = new();
     public IReadOnlyList<AbstractSingleActor> SecondaryTargets => _secondaryTargets;
-    private readonly List<AbstractSingleActor> _secondaryTargets = new List<AbstractSingleActor>();
+    private readonly List<AbstractSingleActor> _secondaryTargets = new();
 
     public IReadOnlyList<AbstractSingleActor> AllTargets => _secondaryTargets.Count != 0 ? _allTargets : _targets;
-    private readonly List<AbstractSingleActor> _allTargets = new List<AbstractSingleActor>();
+    private readonly List<AbstractSingleActor> _allTargets = new();
 
     internal PhaseData(long start, long end)
     {

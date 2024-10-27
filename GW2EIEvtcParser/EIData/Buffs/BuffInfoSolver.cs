@@ -103,7 +103,8 @@ internal static class BuffInfoSolver
         }
     }
     // VERY IMPORTANT: if using an id multiple time, make sure the stricter checking conditions are done first
-    private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new Dictionary<BuffFormulaDescriptor, long> {
+    private static readonly Dictionary<BuffFormulaDescriptor, long> _recognizer = new()
+    {
         
         //
         {new BuffFormulaDescriptor(AnyPositive, 0, 0, 0, 0, 0, 0, BuffAttribute.AttackSpeed).WithEvtcBuilds(ArcDPSBuilds.EICanDoManualBuffAttributes), Quickness },

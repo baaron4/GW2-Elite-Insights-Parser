@@ -36,5 +36,5 @@ public class JsonPlayerBuffOutgoingVolumes
     /// Length == # of phases
     /// </summary>
     /// <seealso cref="JsonBuffOutgoingVolumesData"/>
-    public IReadOnlyList<JsonBuffOutgoingVolumesData> BuffVolumeData;
+    public IReadOnlyList<JsonBuffOutgoingVolumesData>? BuffVolumeData;
 }

@@ -17,18 +17,18 @@ namespace GW2EIEvtcParser.EIData;
 internal static class RangerHelper
 {
 
-    private static readonly HashSet<int> SpiritIDs = new HashSet<int>()
-    {
+    private static readonly HashSet<int> SpiritIDs =
+    [
         (int)MinionID.FrostSpirit,
         (int)MinionID.StoneSpirit,
         (int)MinionID.StormSpirit,
         (int)MinionID.SunSpirit,
         (int)MinionID.WaterSpirit,
         (int)MinionID.SpiritOfNatureRenewal,
-    };
+    ];
 
-    private static HashSet<int> JuvenilePetIDs = new HashSet<int>()
-    {
+    private static HashSet<int> JuvenilePetIDs =
+    [
         (int)MinionID.JuvenileAlpineWolf,
         (int)MinionID.JuvenileArctodus,
         (int)MinionID.JuvenileArmorFish,
@@ -91,7 +91,7 @@ internal static class RangerHelper
         (int)MinionID.JuvenileAetherHunter,
         (int)MinionID.JuvenileSkyChakStriker,
         (int)MinionID.JuvenileSpinegazer,
-    };
+    ];
 
     private static bool IsJuvenilePetID(int id)
     {
@@ -112,8 +112,8 @@ internal static class RangerHelper
         return IsJuvenilePetID(id) || SpiritIDs.Contains(id);
     }
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         //new DamageCastFinder(12573,12573), // Hunter's Shot
         //new DamageCastFinder(12507,12507), // Crippling Shot
         new BuffGainCastFinder(SicEmSkill, SicEmBuff).WithMinions(true),
@@ -134,11 +134,11 @@ internal static class RangerHelper
         new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
         new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs.ToList()).UsingNotAccurate(true),
-    };
+    ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Skills
         new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.PvE).UsingChecker((x, log) => {
             AgentItem src = x.From;
@@ -269,17 +269,17 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary, GW2Builds.May2024LonelyTowerFractalRelease),
         new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.NoPets, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.OakheartSalve, DamageModifierMode.All),
         new DamageLogDamageModifier("Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Counterattack", Counterattack, Source.Ranger, BuffClassification.Other, BuffImages.Counterattack),
         // Signets
         new Buff("Signet of Renewal", SignetOfRenewalBuff, Source.Ranger, BuffClassification.Other, BuffImages.SignetOfRenewal),
@@ -330,7 +330,7 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.February2024NewWeapons),
         // Spear
         new Buff("Hunter's Prowess", HuntersProwess, Source.Ranger, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.HuntersProwess),
-    };
+    ];
 
     public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
     {

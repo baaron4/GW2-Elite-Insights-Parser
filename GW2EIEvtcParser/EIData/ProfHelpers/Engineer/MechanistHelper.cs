@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData;
 internal static class MechanistHelper
 {
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new EffectCastFinder(ShiftSignetSkill, EffectGUIDs.MechanistShiftSignet1)
             .UsingSrcSpecChecker(Spec.Mechanist),
         new MinionCastCastFinder(OverclockSignetSkill, JadeBusterCannon)
@@ -50,10 +50,10 @@ internal static class MechanistHelper
         new MinionCastCastFinder(JadeMortar, JadeMortar),
         new MinionCastCastFinder(BarrierBurst, BarrierBurst),
         new MinionCastCastFinder(SkyCircus, SkyCircus),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Need to check mech specy id for those
         new BuffOnActorDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
@@ -67,16 +67,16 @@ internal static class MechanistHelper
             {
                 return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
             }),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(BarrierSignet, "Barrier Signet", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.BarrierSignet, DamageModifierMode.All),
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Rectifier Signet", RectifierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.RectifierSignet),
         new Buff("Barrier Signet", BarrierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.BarrierSignet),
         new Buff("Force Signet", ForceSignet, Source.Mechanist, BuffClassification.Other, BuffImages.ForceSignet),
@@ -92,12 +92,12 @@ internal static class MechanistHelper
         //new Buff("Shift Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.ShiftSignet),
         //new Buff("Superconducting Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.SuperconductingSignet),
         new Buff("Overclock Signet (J-Drive)", OverclockSignetJDrive, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
-    };
+    ];
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.JadeMech,
-    };
+    ];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

@@ -11,8 +11,8 @@ internal static class EncounterBuffs
 {
 
 
-    internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
-    {
+    internal static readonly List<Buff> FractalInstabilities =
+    [
         // Legacy
         new Buff("Mistlock Instability: Fleeting Precision", MistlockInstabilityFleetingPrecision, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
         new Buff("Mistlock Instability: Impaired Immunity", MistlockInstabilityImpairedImmunity, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
@@ -53,10 +53,10 @@ internal static class EncounterBuffs
         new Buff("Mistlock Instability: Toxic Sickness", MistlockInstabilityToxicSickness, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityToxicSickness),
         // Related buffs
         new Buff("Flux Bomb Target", FluxBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
-    };
+    ];
 
-    internal static readonly List<Buff> FightSpecific = new List<Buff>
-    {
+    internal static readonly List<Buff> FightSpecific =
+    [
         // Generic
         new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, BuffImages.Emboldened),
         new Buff("Spectral Agony", SpectralAgony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.SpectralAgony),
@@ -665,6 +665,6 @@ internal static class EncounterBuffs
         new Buff("Achievement Eligibility: The Floor Is Void", AchievementEligibilityTheFloorIsVoid, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
         new Buff("Achievement Eligibility: True Ending", AchievementEligibilityTrueEnding, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
         new Buff("Achievement Eligibility: Untarnished Spirits", AchievementEligibilityUntarnishedSpirits, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-    };
+    ];
 
 }

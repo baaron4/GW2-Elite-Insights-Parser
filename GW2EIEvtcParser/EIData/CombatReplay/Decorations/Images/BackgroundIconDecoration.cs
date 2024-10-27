@@ -27,8 +27,8 @@ internal class BackgroundIconDecoration : GenericIconDecoration
     }
     internal class BackgroundIconDecorationRenderingData : GenericIconDecorationRenderingData
     {
-        public IReadOnlyList<ParametricPoint1D> Opacities { get; }
-        public IReadOnlyList<ParametricPoint1D> Heights { get; }
+        public readonly IReadOnlyList<ParametricPoint1D> Opacities;
+        public readonly IReadOnlyList<ParametricPoint1D> Heights;
         public BackgroundIconDecorationRenderingData((long, long) lifespan, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, GeographicalConnector connector) : base(lifespan, connector)
         {
             Opacities = opacities;

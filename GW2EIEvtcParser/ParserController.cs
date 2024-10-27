@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser;
 public abstract class ParserController
 {
 
-    protected List<string> StatusList { get; }
+    protected readonly List<string> StatusList;
 
     protected ParserController()
     {

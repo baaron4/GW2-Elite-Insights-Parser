@@ -33,9 +33,9 @@ partial class AbstractSingleActor
     {
         if (_deads == null)
         {
-            _deads = new List<Segment>();
-            _downs = new List<Segment>();
-            _dcs = new List<Segment>();
+            _deads = [];
+            _downs = [];
+            _dcs = [];
             AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData);
         }
         return (_deads, _downs, _dcs);
@@ -45,10 +45,10 @@ partial class AbstractSingleActor
     {
         if (_breakbarNones == null)
         {
-            _breakbarNones = new List<Segment>();
-            _breakbarActives = new List<Segment>();
-            _breakbarImmunes = new List<Segment>();
-            _breakbarRecoverings = new List<Segment>();
+            _breakbarNones = [];
+            _breakbarActives = [];
+            _breakbarImmunes = [];
+            _breakbarRecoverings = [];
             AgentItem.GetAgentBreakbarStatus(_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings, log.CombatData);
         }
         return (_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings);

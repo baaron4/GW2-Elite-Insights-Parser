@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class HolosmithHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(EnterPhotonForge, PhotonForge)
             .UsingBeforeWeaponSwap(true),
         new BuffLossCastFinder(ExitPhotonForge, PhotonForge)
@@ -26,33 +26,33 @@ internal static class HolosmithHelper
         new EffectCastFinderByDst(BladeBurstOrParticleAccelerator, EffectGUIDs.HolosmitBladeBurstParticleAccelerator1)
             .UsingDstSpecChecker(Spec.Holosmith)
             .UsingSecondaryEffectChecker(EffectGUIDs.HolosmitBladeBurstParticleAccelerator2),
-    };
+    ];
 
-    private static readonly HashSet<long> _photonForgeCast = new HashSet<long>
-    {
+    private static readonly HashSet<long> _photonForgeCast =
+    [
         EnterPhotonForge, ExitPhotonForge
-    };
+    ];
 
     public static bool IsPhotonForgeTransform(long id)
     {
         return _photonForgeCast.Contains(id);
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LasersEdge, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(SpectrumShieldBuff, "Spectrum Shield", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.sPvP).WithBuilds(GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(PhotonForge, "Light Density Amplifier", "-15%", DamageSource.NoPets, -15, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LightDensityAmplifier, DamageModifierMode.All),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Cooling Vapor", CoolingVapor, Source.Holosmith, BuffClassification.Other, BuffImages.CoolantBlast),
         new Buff("Photon Wall Deployed", PhotonWallDeployed, Source.Holosmith, BuffClassification.Other, BuffImages.PhotonWall),
         new Buff("Spectrum Shield", SpectrumShieldBuff, Source.Holosmith, BuffClassification.Other, BuffImages.SpectrumShield),
@@ -67,5 +67,5 @@ internal static class HolosmithHelper
         new Buff("0-50 Heat (Photon Forge)", PhotonForgeAbove0Heat, Source.Holosmith, BuffClassification.Other, BuffImages.Heat1),
         new Buff("50-100 Heat (Photon Forge)", PhotonForgeAbove50Heat, Source.Holosmith, BuffClassification.Other, BuffImages.Heat2),
         new Buff("100-150 Heat (Photon Forge)", PhotonForgeAbove100Heat, Source.Holosmith, BuffClassification.Other, BuffImages.Heat3),
-    };
+    ];
 }

@@ -16,8 +16,8 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class HarvestTemple : EndOfDragonsStrike
 {
 
-    private static readonly Point3D GrandStrikeChestPosition = new Point3D(605.31f, -20400.5f, -15420.1f);
-    private IReadOnlyList<AbstractSingleActor> FirstAwareSortedTargets { get; set; }
+    private static readonly Point3D GrandStrikeChestPosition = new(605.31f, -20400.5f, -15420.1f);
+    private IReadOnlyList<AbstractSingleActor> FirstAwareSortedTargets;
     public HarvestTemple(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>
@@ -230,9 +230,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return new List<int>
-        {
-        };
+        return [];
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)

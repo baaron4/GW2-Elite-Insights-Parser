@@ -142,7 +142,7 @@ public class MechanicData
     public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
     {
         ProcessMechanics(log);
-        return _mechanicLogs.TryGetValue(mech, out var list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : new List<MechanicEvent>();
+        return _mechanicLogs.TryGetValue(mech, out var list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : [];
     }
 
     public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, AbstractSingleActor actor, long start, long end)

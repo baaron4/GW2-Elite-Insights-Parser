@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class MesmerHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffLossCastFinder(SignetOfMidnightSkill, SignetOfMidnightBuff)
             .UsingChecker((brae, combatData, agentData, skillData) => {
                  return combatData.HasGainedBuff(HideInShadows, brae.To, brae.Time, 2000, brae.To);
@@ -47,18 +47,18 @@ internal static class MesmerHelper
             .UsingNotAccurate(true),
         // Shatters
         new EffectCastFinder(MindWrack, EffectGUIDs.MesmerDistortionOrMindWrack)
-            .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+            .UsingSrcSpecsChecker([Spec.Mirage, Spec.Mesmer])
             .UsingChecker((evt, combatData, agentData, skillData) => !combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time)),
         new EffectCastFinder(CryOfFrustration, EffectGUIDs.MesmerCryOfFrustration)
-            .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer}),
+            .UsingSrcSpecsChecker([Spec.Mirage, Spec.Mesmer]),
         new EffectCastFinder(Diversion, EffectGUIDs.MesmerDiversion)
-            .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer}),
+            .UsingSrcSpecsChecker([Spec.Mirage, Spec.Mesmer]),
         new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack)
-            .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer})
+            .UsingSrcSpecsChecker([Spec.Mirage, Spec.Mesmer])
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
         new EffectCastFinder(DistortionSkill, EffectGUIDs.MesmerDistortionOrMindWrack)
-            .UsingSrcSpecsChecker(new HashSet<Spec> { Spec.Mirage, Spec.Mesmer, Spec.Chronomancer})
+            .UsingSrcSpecsChecker([Spec.Mirage, Spec.Mesmer, Spec.Chronomancer])
             .UsingChecker((evt, combatData, agentData, skillData) => combatData.HasGainedBuff(DistortionBuff, evt.Src, evt.Time))
             .WithBuilds(GW2Builds.October2022Balance),
         // Mantras        
@@ -79,11 +79,11 @@ internal static class MesmerHelper
         new BuffGiveCastFinder(DimensionalApertureSkill, DimensionalAperturePortalBuff),
         new EffectCastFinder(Abstraction, EffectGUIDs.MesmerRifleAbstraction)
             .UsingSrcBaseSpecChecker(Spec.Mesmer),
-    };
+    ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Domination
         // Empowered illusions require knowing all illusion species ID
         // We need illusion species ID to enable Vicious Expression on All
@@ -133,16 +133,16 @@ internal static class MesmerHelper
         new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
         new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.January2024Balance),
         new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new CounterOnActorDamageModifier(DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         // Signets
         new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfTheEther),
         new Buff("Signet of Domination", SignetOfDomination, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfDomination),
@@ -175,10 +175,10 @@ internal static class MesmerHelper
         new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
         // Spear
         new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, BuffImages.Clarity),
-    };
+    ];
 
-    private static readonly HashSet<int> _cloneIDs = new HashSet<int>()
-    {
+    private static readonly HashSet<int> _cloneIDs =
+    [
         (int)MinionID.CloneSword,
         (int)MinionID.CloneScepter,
         (int)MinionID.CloneAxe,
@@ -216,7 +216,7 @@ internal static class MesmerHelper
         (int)MinionID.CloneDaggerFocus,
         (int)MinionID.CloneDaggerTorch,
         (int)MinionID.CloneDaggerSword,
-    };
+    ];
 
     internal static void AdjustMinionName(AgentItem minion)
     {
@@ -297,8 +297,8 @@ internal static class MesmerHelper
         return _cloneIDs.Contains(id);
     }
 
-    private static HashSet<int> NonCloneMinions = new HashSet<int>()
-    {
+    private static HashSet<int> NonCloneMinions =
+    [
         (int)MinionID.IllusionaryWarlock,
         (int)MinionID.IllusionaryWarden,
         (int)MinionID.IllusionarySwordsman,
@@ -312,7 +312,7 @@ internal static class MesmerHelper
         (int)MinionID.IllusionaryWhaler,
         (int)MinionID.IllusionaryAvenger,
         (int)MinionID.IllusionarySharpShooter,
-    };
+    ];
 
     internal static bool IsKnownMinionID(int id)
     {

@@ -24,13 +24,13 @@ public abstract class OperationController : ParserController
             LogEnd = log.LogData.LogEndStd;
         }
 
-        public string FightDuration { get; }
-        public string FightName { get; }
+        public readonly string FightDuration;
+        public readonly string FightName;
         public bool FightSuccess { get; set; }
-        public EncounterCategory FightCategory { get; }
-        public string Icon { get; }
-        public string LogStart { get; }
-        public string LogEnd { get; }
+        public readonly EncounterCategory FightCategory;
+        public readonly string Icon;
+        public readonly string LogStart;
+        public readonly string LogEnd;
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public abstract class OperationController : ParserController
     /// <summary>
     /// Location of the file being parsed
     /// </summary>
-    public string InputFile { get; }
+    public readonly string InputFile;
     /// <summary>
     /// Location of the output
     /// </summary>
@@ -70,7 +70,7 @@ public abstract class OperationController : ParserController
     public string Elapsed { get; private set; } = "";
 
 
-    private readonly Stopwatch _stopWatch = new Stopwatch();
+    private readonly Stopwatch _stopWatch = new();
 
     protected OperationController(string location, string status)
     {

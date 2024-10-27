@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class MinionCastCastFinder : CheckedCastFinder<AnimatedCastEvent>
 {
-    protected long MinionSkillID { get; }
+    protected readonly long MinionSkillID;
 
     public MinionCastCastFinder(long skillID, long minionSkillID) : base(skillID)
     {

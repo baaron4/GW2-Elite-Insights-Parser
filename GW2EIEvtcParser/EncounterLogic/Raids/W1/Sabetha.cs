@@ -136,13 +136,13 @@ internal class Sabetha : SpiritVale
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Sabetha,
             (int)ArcDPSEnums.TrashID.Kernan,
             (int)ArcDPSEnums.TrashID.Knuckles,
             (int)ArcDPSEnums.TrashID.Karde,
-        };
+        ];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -218,12 +218,12 @@ internal class Sabetha : SpiritVale
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.BanditSapper,
             ArcDPSEnums.TrashID.BanditThug,
             ArcDPSEnums.TrashID.BanditArsonist
-        };
+        ];
     }
 
     internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
@@ -248,13 +248,13 @@ internal class Sabetha : SpiritVale
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Sabetha,
             (int)ArcDPSEnums.TrashID.Kernan,
             (int)ArcDPSEnums.TrashID.Karde,
             (int)ArcDPSEnums.TrashID.Knuckles,
-        };
+        ];
     }
 
     private readonly IReadOnlyDictionary<int, string> PhaseNames = new Dictionary<int, string>()

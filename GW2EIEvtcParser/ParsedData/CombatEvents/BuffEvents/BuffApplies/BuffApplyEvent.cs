@@ -5,13 +5,13 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class BuffApplyEvent : AbstractBuffApplyEvent
 {
-    public bool Initial { get; }
-    public int OriginalAppliedDuration { get; }
-    public int AppliedDuration { get; }
+    public readonly bool Initial;
+    public readonly int OriginalAppliedDuration;
+    public readonly int AppliedDuration;
 
-    public uint OverridenDuration { get; }
-    internal uint OverridenDurationInternal { get; set; }
-    internal uint OverridenInstance { get; set; }
+    public readonly uint OverridenDuration;
+    internal uint OverridenDurationInternal;
+    internal uint OverridenInstance;
     private readonly bool _addedActive;
 
     internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData, skillData)

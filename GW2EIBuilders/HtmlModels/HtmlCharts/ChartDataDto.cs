@@ -18,11 +18,11 @@ internal class ChartDataDto
     {
         if (!segments.Any())
         {
-            return nullable ? null : new List<object[]>()
-            {
+            return nullable ? null :
+            [
                 new object[] { 0.0, defaultState},
                 new object[] { Math.Round(phase.DurationInMS/1000.0, 3), defaultState},
-            };
+            ];
         }
         var subSegments = segments.Where(x => x.End >= phase.Start && x.Start <= phase.End).ToList();
         return subSegments.ToObjectList(phase.Start, phase.End);

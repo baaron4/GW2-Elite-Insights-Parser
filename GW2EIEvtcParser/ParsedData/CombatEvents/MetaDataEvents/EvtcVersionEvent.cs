@@ -5,8 +5,8 @@ namespace GW2EIEvtcParser.ParsedData;
 
 public class EvtcVersionEvent : AbstractMetaDataEvent
 {
-    public int Build { get; }
-    public int Revision { get; } = -1;
+    public readonly int Build;
+    public readonly int Revision = -1;
     internal EvtcVersionEvent(CombatItem evtcItem) : base(evtcItem)
     {
         var bytes = new ByteBuffer(stackalloc byte[48]);

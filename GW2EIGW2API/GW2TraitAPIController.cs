@@ -11,7 +11,7 @@ internal class GW2TraitAPIController
     private const string APIPath = "/v2/traits";
 
 
-    private GW2APIUtilities.APIItems<GW2APITrait> _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>();
+    private GW2APIUtilities.APIItems<GW2APITrait> _apiTraits = new();
     private static List<GW2APITrait> GetGW2APITraits()
     {
         Console.WriteLine("Getting traits from API");

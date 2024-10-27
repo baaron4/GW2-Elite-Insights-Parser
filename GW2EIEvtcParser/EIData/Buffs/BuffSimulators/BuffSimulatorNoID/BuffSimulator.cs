@@ -8,15 +8,15 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal abstract class BuffSimulator : AbstractBuffSimulator
 {
-    protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
-    private StackingLogic _logic { get; }
+    protected List<BuffStackItem> BuffStack = new();
+    private readonly StackingLogic _logic;
 
     private readonly int _capacity;
 
-    private static readonly QueueLogic _queueLogic = new QueueLogic();
-    private static readonly HealingLogic _healingLogic = new HealingLogic();
-    private static readonly ForceOverrideLogic _forceOverrideLogic = new ForceOverrideLogic();
-    private static readonly OverrideLogic _overrideLogic = new OverrideLogic();
+    private static readonly QueueLogic _queueLogic = new();
+    private static readonly HealingLogic _healingLogic = new();
+    private static readonly ForceOverrideLogic _forceOverrideLogic = new();
+    private static readonly OverrideLogic _overrideLogic = new();
     //private static readonly CappedDurationLogic _cappedDurationLogic = new CappedDurationLogic();
 
     // Constructor

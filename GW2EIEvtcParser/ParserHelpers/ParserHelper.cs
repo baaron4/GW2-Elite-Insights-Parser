@@ -12,7 +12,7 @@ namespace GW2EIEvtcParser;
 public static class ParserHelper
 {
 
-    internal static readonly AgentItem _unknownAgent = new AgentItem();
+    internal static readonly AgentItem _unknownAgent = new();
 
     public const int CombatReplayPollingRate = 300;
     internal const uint CombatReplaySkillDefaultSizeInPixel = 22;
@@ -147,10 +147,10 @@ public static class ParserHelper
             }
             else
             {
-                groupByTime[c.Time] = new List<T>
-                        {
+                groupByTime[c.Time] =
+                        [
                             c
-                        };
+                        ];
             }
         }
         return groupByTime;
@@ -419,7 +419,7 @@ public static class ParserHelper
     /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
     /// <param name="to">AgentItem the events need to be redirected to</param>
     /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-    internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection extraRedirections = null)
+    internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection? extraRedirections = null)
     {
         // Redirect combat events
         foreach (CombatItem evt in combatData)
@@ -449,7 +449,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the <see cref="Spec"/> Specialization / Profession given a <see cref="string"/> as reference.
     /// </summary>
-    private static IReadOnlyDictionary<string, Spec> ProfToSpecDictionary { get; set; } = new Dictionary<string, Spec>()
+    private static IReadOnlyDictionary<string, Spec> ProfToSpecDictionary = new Dictionary<string, Spec>()
     {
         { "NPC", Spec.NPC },
         { "GDG", Spec.Gadget },
@@ -500,7 +500,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the base <see cref="Spec"/> Profession given a <see cref="Spec"/> Elite Specialization.
     /// </summary>
-    private static IReadOnlyDictionary<Spec, Spec> SpecToBaseProfDictionary { get; set; } = new Dictionary<Spec, Spec>()
+    private static IReadOnlyDictionary<Spec, Spec> SpecToBaseProfDictionary = new Dictionary<Spec, Spec>()
     {
         { Spec.Untamed, Spec.Ranger },
         { Spec.Soulbeast, Spec.Ranger },
@@ -548,7 +548,7 @@ public static class ParserHelper
     /// <summary>
     /// Dictionary to find the <see cref="Source"/> given a specific <see cref="Spec"/>.
     /// </summary>
-    private static IReadOnlyDictionary<Spec, List<Source>> SpecToSourcesDictionary { get; set; } = new Dictionary<Spec, List<Source>>()
+    private static IReadOnlyDictionary<Spec, List<Source>> SpecToSourcesDictionary = new Dictionary<Spec, List<Source>>()
     {
         { Spec.Untamed, new List<Source> { Source.Ranger, Source.Untamed } },
         { Spec.Soulbeast, new List<Source> { Source.Ranger, Source.Soulbeast } },
@@ -845,10 +845,10 @@ public static class ParserHelper
         }
         else
         {
-            dict[key] = new List<TValue>()
-            {
+            dict[key] =
+            [
                 evt
-            };
+            ];
         }
     }
     public static void Add<TKey, TValue>(Dictionary<TKey, HashSet<TValue>> dict, TKey key, TValue evt)
@@ -859,10 +859,10 @@ public static class ParserHelper
         }
         else
         {
-            dict[key] = new HashSet<TValue>()
-            {
+            dict[key] =
+            [
                 evt
-            };
+            ];
         }
     }
 

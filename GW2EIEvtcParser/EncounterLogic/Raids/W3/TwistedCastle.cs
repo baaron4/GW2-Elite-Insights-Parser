@@ -88,15 +88,15 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
            ArcDPSEnums.TrashID.HauntingStatue,
            //ParseEnum.TrashIDS.CastleFountain
-        };
+        ];
     }
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>();
+        return [];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC npc, ParsedEvtcLog log, CombatReplay replay)

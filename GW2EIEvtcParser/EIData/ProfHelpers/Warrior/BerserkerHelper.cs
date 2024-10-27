@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class BerserkerHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new DamageCastFinder(KingOfFires, KingOfFires)
             .WithBuilds(GW2Builds.July2019Balance)
             .UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
@@ -20,10 +20,10 @@ internal static class BerserkerHelper
         new BuffLossCastFinder(BerserkEndSkill, BerserkBuff),
         new BuffGainCastFinder(BerserkSkill, BerserkBuff)
             .WithBuilds(GW2Builds.October2022Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(AlwaysAngry, "Always Angry", "7% per stack", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, ByPresence, BuffImages.AlwaysAngry, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2019Balance),
@@ -34,15 +34,15 @@ internal static class BerserkerHelper
         new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "15% while in berserk", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2022Balance),
         new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2022Balance),
 
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new CounterOnActorDamageModifier(FeelNoPainSavageInstinct, "Feel No Pain", "-100%", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, BuffImages.SavageInstinct, DamageModifierMode.All)
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Berserk", BerserkBuff, Source.Berserker, BuffClassification.Other, BuffImages.Berserk),
         new Buff("Flames of War", FlamesOfWar, Source.Berserker, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
         new Buff("Blood Reckoning", BloodReckoning , Source.Berserker, BuffClassification.Other, BuffImages.BloodReckoning).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
@@ -51,6 +51,6 @@ internal static class BerserkerHelper
         new Buff("Feel No Pain (Savage Instinct)", FeelNoPainSavageInstinct, Source.Berserker, BuffClassification.Other, BuffImages.SavageInstinct).WithBuilds(GW2Builds.April2019Balance),
         new Buff("Always Angry", AlwaysAngry, Source.Berserker, BuffClassification.Other, BuffImages.AlwaysAngry).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
         new Buff("Heat the Soul", HeatTheSoulBuff, Source.Berserker, BuffClassification.Other, BuffImages.HeatTheSoul),
-    };
+    ];
 
 }

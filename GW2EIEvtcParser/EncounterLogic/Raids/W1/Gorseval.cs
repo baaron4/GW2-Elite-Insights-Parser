@@ -45,10 +45,10 @@ internal class Gorseval : SpiritVale
     }
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(HauntingAura, HauntingAura),
-        };
+        ];
     }
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -83,12 +83,13 @@ internal class Gorseval : SpiritVale
     }
 
     // note: 2nd split spawn locations are further out
-    static readonly List<(string, Point3D)> SoulLocations = new List<(string, Point3D)> {
+    static readonly List<(string, Point3D)> SoulLocations =
+    [
         ("NE", new Point3D(2523.4495f, -3665.1294f)),
         ("NW", new Point3D(842.77686f, -3657.2395f)),
         ("SW", new Point3D(866.719f, -5306.719f)),
         ("SE", new Point3D(2470.5596f, -5194.389f)),
-    };
+    ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
     {
@@ -111,20 +112,20 @@ internal class Gorseval : SpiritVale
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Gorseval,
             (int)ArcDPSEnums.TrashID.ChargedSoul
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.EnragedSpirit,
             ArcDPSEnums.TrashID.AngeredSpirit
-        };
+        ];
     }
 
     internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
@@ -192,41 +193,41 @@ internal class Gorseval : SpiritVale
                         switch (phaseIndex)
                         {
                             case 1:
-                                patterns = new List<byte>
-                                {
+                                patterns =
+                                [
                                     second | third | fifth,
                                     second | third | fourth,
                                     first | fourth | fifth,
                                     first | second | fifth,
                                     first | third | fifth,
                                     full
-                                };
+                                ];
                                 break;
                             case 2:
-                                patterns = new List<byte>
-                                {
+                                patterns =
+                                [
                                     second | third | fourth,
                                     first | fourth | fifth,
                                     first | third | fourth,
                                     first | second | fifth,
                                     first | second | third,
                                     full
-                                };
+                                ];
                                 break;
                             case 3:
-                                patterns = new List<byte>
-                                {
+                                patterns =
+                                [
                                     first | fourth | fifth,
                                     first | second | fifth,
                                     second | third | fifth,
                                     third | fourth | fifth,
                                     third | fourth | fifth,
                                     full
-                                };
+                                ];
                                 break;
                             default:
                                 // no reason to stop parsing because of CR, worst case, no rampage
-                                patterns = new List<byte>();
+                                patterns = [];
                                 ticks = 0;
                                 break;
                                 //throw new EIException("Gorseval cast rampage during a split phase");

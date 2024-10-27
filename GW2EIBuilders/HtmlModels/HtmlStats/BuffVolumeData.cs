@@ -33,19 +33,19 @@ internal class BuffVolumeData
         {
             if (buffVolumes.TryGetValue(buff.ID, out FinalBuffVolumesDictionary toUse) && toUse.IncomingBy.ContainsKey(actor))
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         toUse.IncomingBy[actor],
                         toUse.IncomingByExtensionBy[actor],
-                    });
+                    ]);
             }
             else
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         0,
                         0,
-                    });
+                    ]);
             }
         }
     }
@@ -56,19 +56,19 @@ internal class BuffVolumeData
         {
             if (volumes.TryGetValue(buff.ID, out FinalActorBuffVolumes volume))
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         volume.Outgoing,
                         volume.OutgoingByExtension,
-                    });
+                    ]);
             }
             else
             {
-                Data.Add(new List<object>()
-                    {
+                Data.Add(
+                    [
                         0,
                         0,
-                    });
+                    ]);
             }
         }
     }

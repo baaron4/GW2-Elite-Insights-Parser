@@ -13,8 +13,8 @@ namespace GW2EIEvtcParser.EIData;
 internal static class ProfHelper
 {
 
-    private static readonly List<InstantCastFinder> _genericInstantCastFinders = new List<InstantCastFinder>()
-    {
+    private static readonly List<InstantCastFinder> _genericInstantCastFinders =
+    [
         // Sigils
         new DamageCastFinder(RingOfEarth_MinorSigilOfGeomancy, RingOfEarth_MinorSigilOfGeomancy)
             .UsingICD(500)
@@ -180,7 +180,7 @@ internal static class ProfHelper
         new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),
         new EffectCastFinder(SkyscaleBlastSkill, EffectGUIDs.SkyscaleBlast1)
             .UsingSecondaryEffectChecker(EffectGUIDs.SkyscaleBlast2),
-    };
+    ];
 
     internal static void AttachMasterToGadgetByCastData(CombatData combatData, IReadOnlyCollection<AgentItem> gadgets, IReadOnlyList<long> castIDS, long castEndThreshold)
     {
@@ -580,25 +580,25 @@ internal static class ProfHelper
         CombatReplay.DebugEffects(p, log, replay, knownEffects);
     }
 
-    private static readonly HashSet<Spec> _canSummonClones = new HashSet<Spec>()
-    {
+    private static readonly HashSet<Spec> _canSummonClones =
+    [
         Spec.Mesmer,
         Spec.Chronomancer,
         Spec.Mirage
-    };
+    ];
 
     internal static bool CanSummonClones(Spec spec)
     {
         return _canSummonClones.Contains(spec);
     }
 
-    private static readonly HashSet<Spec> _canUseRangerPets = new HashSet<Spec>()
-    {
+    private static readonly HashSet<Spec> _canUseRangerPets =
+    [
         Spec.Ranger,
         Spec.Druid,
         Spec.Soulbeast,
         Spec.Untamed,
-    };
+    ];
 
     internal static bool CanUseRangerPets(Spec spec)
     {
@@ -608,8 +608,8 @@ internal static class ProfHelper
     /// <summary>
     /// Minions that aren't profession-specific bound.
     /// </summary>
-    private static readonly HashSet<int> CommonMinions = new HashSet<int>()
-    {
+    private static readonly HashSet<int> CommonMinions =
+    [
         // Racial Summons
         (int)ArcDPSEnums.MinionID.HoundOfBalthazar,
         (int)ArcDPSEnums.MinionID.SnowWurm,
@@ -636,7 +636,7 @@ internal static class ProfHelper
         (int)ArcDPSEnums.MinionID.SousChef,
         (int)ArcDPSEnums.MinionID.SunspearParagonSupport,
         (int)ArcDPSEnums.MinionID.RavenSpiritShadow,
-    };
+    ];
 
     internal static bool IsKnownMinionID(int id)
     {
@@ -674,7 +674,7 @@ internal static class ProfHelper
     /// <param name="startOffset">offset to be applied to the time value of the effect</param>
     /// <param name="castDuration"></param>
     /// <returns></returns>
-    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillID, string effectGUID, long startOffset, long castDuration, EffectCastEventsChecker checker = null)
+    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillID, string effectGUID, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
     {
         var res = new List<AnimatedCastEvent>();
         if (combatData.GetAnimatedCastData(skillID).Count > 0)

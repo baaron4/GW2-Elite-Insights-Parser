@@ -9,7 +9,7 @@ public class AngleInterpolationConnector : RotationConnector
     /// <summary>
     /// Points for angles, in degrees, around Z axis
     /// </summary>
-    protected IReadOnlyList<ParametricPoint1D> Angles { get; set; }
+    protected IReadOnlyList<ParametricPoint1D> Angles;
 
     private readonly InterpolationMethod _method;
 

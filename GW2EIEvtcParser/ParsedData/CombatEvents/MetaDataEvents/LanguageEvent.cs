@@ -13,7 +13,7 @@ public class LanguageEvent : AbstractMetaDataEvent
         Unknown = 6
     }
 
-    public LanguageEnum Language { get; }
+    public readonly LanguageEnum Language;
 
     internal LanguageEvent(CombatItem evtcItem) : base(evtcItem)
     {

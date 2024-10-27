@@ -90,27 +90,27 @@ internal class Qadim : MythwrightGambit
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Qadim,
             (int)TrashID.AncientInvokedHydra,
             (int)TrashID.ApocalypseBringer,
             (int)TrashID.WyvernMatriarch,
             (int)TrashID.WyvernPatriarch,
             (int)TrashID.QadimLamp,
-        };
+        ];
     }
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)TargetID.Qadim,
             (int)TrashID.AncientInvokedHydra,
             (int)TrashID.ApocalypseBringer,
             (int)TrashID.WyvernMatriarch,
             (int)TrashID.WyvernPatriarch
-        };
+        ];
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -151,9 +151,9 @@ internal class Qadim : MythwrightGambit
             refresh = refresh || any;
         }
         // Pyres
-        var protectPyrePositions = new List<Point3D> { new Point3D(-8947, 14728), new Point3D(-10834, 12477) };
-        var stabilityPyrePositions = new List<Point3D> { new Point3D(-4356, 12076), new Point3D(-5889, 14723), new Point3D(-7851, 13550) };
-        var resolutionRetaliationPyrePositions = new List<Point3D> { new Point3D(-8951, 9429), new Point3D(-5716, 9325), new Point3D(-7846, 10612) };
+        var protectPyrePositions = new List<Point3D> { new(-8947, 14728), new(-10834, 12477) };
+        var stabilityPyrePositions = new List<Point3D> { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
+        var resolutionRetaliationPyrePositions = new List<Point3D> { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
         foreach (AgentItem pyre in pyres)
         {
             CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
@@ -749,7 +749,7 @@ internal class Qadim : MythwrightGambit
                 const float visibleOpacity = 1f;
                 const float noOpacity = -1f;
                 var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
-                var opacities = new List<ParametricPoint1D> { new ParametricPoint1D(visibleOpacity, target.FirstAware) };
+                var opacities = new List<ParametricPoint1D> { new(visibleOpacity, target.FirstAware) };
                 int velocityIndex = 0;
                 AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
                 HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);

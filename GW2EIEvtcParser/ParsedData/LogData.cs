@@ -11,14 +11,14 @@ public class LogData
     private const string DefaultTimeValue = "MISSING";
 
     // Fields
-    public string ArcVersion { get; }
-    public string ArcVersionBuild { get; }
-    public int EvtcBuild { get; }
-    public int EvtcRevision { get; }
-    public string Language { get; } = "N/A";
-    public LanguageEvent.LanguageEnum LanguageID { get; }
+    public readonly string ArcVersion;
+    public readonly string ArcVersionBuild;
+    public readonly int EvtcBuild;
+    public readonly int EvtcRevision;
+    public readonly string Language = "N/A";
+    public readonly LanguageEvent.LanguageEnum LanguageID;
     public ulong GW2Build { get; private set; } = 0;
-    public AgentItem PoV { get; private set; } = null;
+    public AgentItem? PoV { get; private set; } = null;
     public string PoVAccount { get; private set; } = "N/A";
     public string PoVName { get; private set; } = "N/A";
     private readonly string _dateFormat = "yyyy-MM-dd HH:mm:ss zz";
@@ -26,14 +26,14 @@ public class LogData
     public string LogStart { get; private set; } = DefaultTimeValue;
     public string LogEnd { get; private set; } = DefaultTimeValue;
     public string LogStartStd { get; private set; } = DefaultTimeValue;
-    public string LogInstanceStartStd { get; private set; } = null;
+    public string? LogInstanceStartStd { get; private set; } = null;
     public string LogEndStd { get; private set; } = DefaultTimeValue;
-    public string LogInstanceIP { get; } = null;
+    public readonly string? LogInstanceIP = null;
 
-    public IReadOnlyList<AbstractExtensionHandler> UsedExtensions { get; }
+    public readonly IReadOnlyList<AbstractExtensionHandler> UsedExtensions;
 
     public IReadOnlyList<string> LogErrors => _logErrors;
-    private readonly List<string> _logErrors = new List<string>();
+    private readonly List<string> _logErrors = new();
 
     // Constructors
     internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)

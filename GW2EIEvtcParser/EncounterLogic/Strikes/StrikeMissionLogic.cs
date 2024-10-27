@@ -35,9 +35,9 @@ internal abstract class StrikeMissionLogic : FightLogic
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             GenericTriggerID
-        };
+        ];
     }
 }

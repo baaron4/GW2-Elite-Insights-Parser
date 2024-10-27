@@ -12,9 +12,9 @@ namespace GW2EIEvtcParser.EIData;
 public class BuffsContainer
 {
 
-    public IReadOnlyDictionary<long, Buff> BuffsByIds { get; }
-    public IReadOnlyDictionary<BuffClassification, IReadOnlyList<Buff>> BuffsByClassification { get; }
-    public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource { get; }
+    public readonly IReadOnlyDictionary<long, Buff> BuffsByIds;
+    public readonly IReadOnlyDictionary<BuffClassification, IReadOnlyList<Buff>> BuffsByClassification;
+    public readonly IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<Buff>> BuffsBySource;
     private readonly Dictionary<string, Buff> _buffsByName;
 
     private readonly BuffSourceFinder _buffSourceFinder;

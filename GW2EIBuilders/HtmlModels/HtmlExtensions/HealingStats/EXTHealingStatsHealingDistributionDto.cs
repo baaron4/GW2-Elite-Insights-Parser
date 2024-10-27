@@ -15,7 +15,7 @@ internal class EXTHealingStatsHealingDistributionDto
     public long ContributedDownedHealing { get; set; }
     public long TotalHealing { get; set; }
     public long TotalCasting { get; set; }
-    public List<object[]> Distribution { get; set; }
+    public List<object[]>? Distribution { get; set; }
 
     private static object[] GetHealingToItem(SkillItem skill, IEnumerable<EXTAbstractHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<AbstractCastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
     {

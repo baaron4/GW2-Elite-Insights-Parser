@@ -2,8 +2,8 @@
 
 public class TickRateEvent : AbstractMetaDataEvent
 {
-    public long Time { get; }
-    public ulong TickRate { get; }
+    public readonly long Time;
+    public readonly ulong TickRate;
     internal TickRateEvent(CombatItem evtcItem) : base(evtcItem)
     {
         Time = evtcItem.Time;

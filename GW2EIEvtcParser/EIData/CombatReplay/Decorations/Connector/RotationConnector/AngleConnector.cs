@@ -7,12 +7,12 @@ public class AngleConnector : RotationConnector
     /// <summary>
     /// Angle around Z axis in degrees
     /// </summary>
-    protected float StartAngle { get; set; }
+    protected float StartAngle;
 
     /// <summary>
     /// Angle speed around Z axis in degrees
     /// </summary>
-    protected float SpinAngle { get; set; }
+    protected float SpinAngle;
 
     public AngleConnector(float startAngle)
     {

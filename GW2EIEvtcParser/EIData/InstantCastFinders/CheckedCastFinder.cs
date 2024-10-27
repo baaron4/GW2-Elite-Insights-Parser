@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class CheckedCastFinder<Event> : InstantCastFinder
 {
     public delegate bool Checker(Event evt, CombatData combatData, AgentData agentData, SkillData skillData);
-    protected List<Checker> _checkers { get; set; }
+    protected List<Checker> _checkers;
 
     protected CheckedCastFinder(long skillID) : base(skillID)
     {

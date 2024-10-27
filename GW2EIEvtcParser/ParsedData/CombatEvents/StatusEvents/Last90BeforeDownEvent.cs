@@ -2,7 +2,7 @@
 
 public class Last90BeforeDownEvent : AbstractStatusEvent
 {
-    public long TimeSinceLast90 { get; }
+    public readonly long TimeSinceLast90;
     internal Last90BeforeDownEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
         TimeSinceLast90 = (long)evtcItem.DstAgent;

@@ -56,5 +56,5 @@ public class JsonPlayerBuffsGeneration
     /// Length == # of phases
     /// </summary>
     /// <seealso cref="JsonBuffsGenerationData"/>
-    public IReadOnlyList<JsonBuffsGenerationData> BuffData;
+    public IReadOnlyList<JsonBuffsGenerationData>? BuffData;
 }

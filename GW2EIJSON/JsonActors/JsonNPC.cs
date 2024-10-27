@@ -47,12 +47,12 @@ public class JsonNPC : JsonActor
     /// List of buff status
     /// </summary>
     /// <seealso cref="JsonBuffsUptime"/>
-    public IReadOnlyList<JsonBuffsUptime> Buffs;
+    public IReadOnlyList<JsonBuffsUptime>? Buffs;
     /// <summary>
     /// List of buff volumes
     /// </summary>
     /// <seealso cref="JsonBuffVolumes"/>
-    public IReadOnlyList<JsonBuffVolumes> BuffVolumes;
+    public IReadOnlyList<JsonBuffVolumes>? BuffVolumes;
 
     /// <summary>
     /// Indicates that the JsonNPC is actually an enemy player

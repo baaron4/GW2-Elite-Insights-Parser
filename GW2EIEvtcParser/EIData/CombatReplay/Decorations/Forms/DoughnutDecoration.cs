@@ -8,8 +8,8 @@ public class DoughnutDecoration : FormDecoration
 {
     internal class DoughnutDecorationMetadata : FormDecorationMetadata
     {
-        public uint OuterRadius { get; }
-        public uint InnerRadius { get; }
+        public readonly uint OuterRadius;
+        public readonly uint InnerRadius;
 
         public DoughnutDecorationMetadata(string color, uint innerRadius, uint outerRadius) : base(color)
         {
@@ -55,12 +55,12 @@ public class DoughnutDecoration : FormDecoration
     public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(innerRadius, outerRadius, lifespan, color.WithAlpha(opacity).ToString(true), connector)
     {
     }
-    public override FormDecoration Copy(string color = null)
+    public override FormDecoration Copy(string? color = null)
     {
         return (FormDecoration)new DoughnutDecoration(InnerRadius, OuterRadius, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
     }
 
-    public override FormDecoration GetBorderDecoration(string borderColor = null)
+    public override FormDecoration GetBorderDecoration(string? borderColor = null)
     {
         if (!Filled)
         {

@@ -68,7 +68,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         {
             if (Skip(_trackerSource, bgmsSource, _gainComputerSource))
             {
-                return new List<DamageModifierEvent>();
+                return [];
             }
         }
         var res = new List<DamageModifierEvent>();

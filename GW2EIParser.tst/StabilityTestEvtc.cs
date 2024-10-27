@@ -20,7 +20,7 @@ public class StabilityTestEvtc
 {
     internal class EVTCTestItem
     {
-        public string File { get; }
+        public readonly string File;
         public bool Failed { get; private set; }
         public string FailedMessage { get; private set; }
         public EVTCTestItem(string file)

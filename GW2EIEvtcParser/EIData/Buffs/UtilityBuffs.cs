@@ -9,8 +9,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class UtilityBuffs
 {
-    internal static readonly List<Buff> Utilities = new List<Buff>
-    {     
+    internal static readonly List<Buff> Utilities =
+    [     
         // UTILITIES 
         // 1h versions have the same ID as 30 min versions 
         new Buff("Diminished",Diminished, Source.Item, BuffClassification.Enhancement, BuffImages.Diminished),
@@ -62,10 +62,10 @@ internal static class UtilityBuffs
         new Buff("Flask of Pumpkin Oil", FlaskOfPumpkinOil, Source.Item, BuffClassification.Enhancement, BuffImages.FlaskOfPumpkinOil),
         new Buff("Lump of Crystallized Nougat", LumpOfCrystallizedNougat, Source.Item, BuffClassification.Enhancement, BuffImages.LumpOfCrystallizedNougat),
         new Buff("Decade Enhancement", DecadeEnhancement, Source.Item, BuffClassification.Enhancement, BuffImages.DecadeEnhancement),
-    };
+    ];
 
-    internal static readonly List<Buff> OtherConsumables = new List<Buff>
-    {       
+    internal static readonly List<Buff> OtherConsumables =
+    [       
         // Reinforce Armor Canister / Anvil
         new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor).WithBuilds(GW2Builds.June2022Balance),
         // Boosters
@@ -86,10 +86,10 @@ internal static class UtilityBuffs
         new Buff("Swift Moa Feather", SwiftMoaFeather, Source.Item, BuffClassification.OtherConsumable, BuffImages.SwiftMoaFeather),
         new Buff("Fool's Dog Treat", FoolsDogTreat, Source.Item, BuffClassification.OtherConsumable, BuffImages.FoolsDogTreat),
         new Buff("Chatoyant Elixir", ChatoyantElixir, Source.Item, BuffClassification.OtherConsumable, BuffImages.PowerfulPotionOfDredgeSlaying),
-    };
+    ];
 
-    internal static readonly List<Buff> Writs = new List<Buff>
-    {
+    internal static readonly List<Buff> Writs =
+    [
         new Buff("Writ of Basic Strength", WritOfBasicStrength, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfBasicStrength),
         new Buff("Writ of Strength", WritOfStrength, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfStrength),
         new Buff("Writ of Studied Strength", WritOfStudiedStrength, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfStudiedStrength),
@@ -111,10 +111,10 @@ internal static class UtilityBuffs
         new Buff("Writ of Basic Speed", WritOfBasicSpeed, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfBasicSpeed),
         new Buff("Writ of Studied Speed", WritOfStudiedSpeed, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfStudiedSpeed),
         new Buff("Writ of Masterful Speed", WritOfMasterfulSpeed, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfMasterfulSpeed),
-    };
+    ];
 
-    internal static readonly List<Buff> SlayingPotions = new List<Buff>
-    {
+    internal static readonly List<Buff> SlayingPotions =
+    [
         // Branded
         new Buff("Minor Potion of Branded Slaying", MinorPotionOfBrandedSlaying, Source.Item, BuffClassification.Enhancement, BuffImages.MinorPotionOfBrandedSlaying),
         new Buff("Powerful Potion of Branded Slaying", PowerfulPotionOfBrandedSlaying, Source.Item, BuffClassification.Enhancement, BuffImages.MinorPotionOfBrandedSlaying),
@@ -243,13 +243,13 @@ internal static class UtilityBuffs
         // Mordrem
         new Buff("Minor Potion of Mordrem Slaying", MinorPotionOfMordremSlaying, Source.Item, BuffClassification.Enhancement, BuffImages.MinorPotionOfMordremSlaying),
         new Buff("Powerful Potion of Mordrem Slaying", PowerfulPotionOfMordremSlaying, Source.Item, BuffClassification.Enhancement, BuffImages.PowerfulPotionOfMordremSlaying),
-    };
+    ];
 
-    internal static readonly List<Buff> UtilityProcs = new List<Buff>
-    {
+    internal static readonly List<Buff> UtilityProcs =
+    [
         // Buffs on revival
         new Buff("Ghoul's Grasp", GhoulsGrasp, Source.Item, BuffClassification.Support, BuffImages.GhoulsGrasp),
         new Buff("Feline Fury", FelineFury, Source.Item, BuffClassification.Support, BuffImages.FelineFury),
         new Buff("Pumpkin Prowess", PumpkinProwess, Source.Item, BuffClassification.Support, BuffImages.PumpkinProwess),
-    };
+    ];
 }

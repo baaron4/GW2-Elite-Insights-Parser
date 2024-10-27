@@ -48,18 +48,16 @@ internal class Artsariiv : ShatteredObservatory
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
-        };
+        return [];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>()
-        {
+        return
+        [
             (int)TargetID.Artsariiv,
             (int)TrashID.CloneArtsariiv
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()
@@ -108,7 +106,8 @@ internal class Artsariiv : ShatteredObservatory
         return phases;
     }
 
-    static readonly List<(string, Point3D)> CloneLocations = new List<(string, Point3D)> {
+    static readonly List<(string, Point3D)> CloneLocations =
+    [
         ("M", new Point3D(10357.898f, 1466.580f)),
         ("NE", new Point3D(11431.998f, 2529.760f)),
         ("NW", new Point3D(9286.878f, 2512.429f)),
@@ -118,7 +117,7 @@ internal class Artsariiv : ShatteredObservatory
         ("E", new Point3D(11_432.598f, 1460.400f)),
         ("S", new Point3D(10_388.698f, 390.419f)),
         ("W", new Point3D(9295.668f, 1450.060f)),
-    };
+    ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
     {

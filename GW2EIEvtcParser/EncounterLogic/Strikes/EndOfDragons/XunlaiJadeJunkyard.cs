@@ -144,20 +144,20 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Ankka,
-        };
+        ];
     }
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Ankka,
             (int)ArcDPSEnums.TrashID.ReanimatedAntipathy,
             (int)ArcDPSEnums.TrashID.ReanimatedSpite,
-        };
+        ];
     }
 
     protected override Dictionary<int, int> GetTargetsSortIDs()
@@ -172,8 +172,8 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.Ankka,
             ArcDPSEnums.TrashID.ReanimatedMalice1,
             ArcDPSEnums.TrashID.ReanimatedMalice2,
@@ -184,7 +184,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             ArcDPSEnums.TrashID.QuaggansHallucinationNM,
             ArcDPSEnums.TrashID.QuaggansHallucinationCM,
             ArcDPSEnums.TrashID.SanctuaryPrism,
-        };
+        ];
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

@@ -8,7 +8,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
 internal class BuffDto : AbstractSkillDto
 {
-    public string Description { get; set; } = null;
+    public string? Description { get; set; } = null;
     public bool Stacking { get; set; }
     public bool Consumable { get; set; }
     public bool FightSpecific { get; set; }

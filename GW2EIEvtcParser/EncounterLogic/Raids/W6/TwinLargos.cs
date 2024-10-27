@@ -55,35 +55,35 @@ internal class TwinLargos : MythwrightGambit
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Nikare,
             (int)ArcDPSEnums.TargetID.Kenut
-        };
+        ];
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(NikareAquaticAura, NikareAquaticAura),
             new DamageCastFinder(KenutAquaticAura, KenutAquaticAura),
-        };
+        ];
     }
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Nikare,
             (int)ArcDPSEnums.TargetID.Kenut
-        };
+        ];
     }
 
     internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
         NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem).ToList());
-        return new List<AbstractHealthDamageEvent>();
+        return [];
     }
 
     private static List<PhaseData> GetTargetPhases(ParsedEvtcLog log, AbstractSingleActor target, string baseName)
@@ -130,11 +130,11 @@ internal class TwinLargos : MythwrightGambit
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.Kenut,
             (int)ArcDPSEnums.TargetID.Nikare
-        };
+        ];
     }
 
     private static void FallBackPhases(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log, bool firstPhaseAt0)

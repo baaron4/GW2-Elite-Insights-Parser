@@ -9,17 +9,17 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// <summary>
     /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
     /// </summary>
-    public long EffectID { get; }
+    public readonly long EffectID;
 
     /// <summary>
     /// GUID event of the effect
     /// </summary>
-    public EffectGUIDEvent GUIDEvent { get; private set; }
+    public EffectGUIDEvent? GUIDEvent { get; private set; }
 
     /// <summary>
     /// End of the effect, provided by an <see cref="EffectEndEvent"/>
     /// </summary>
-    internal long DynamicEndTime { get; private set; } = long.MinValue;
+    internal long DynamicEndTime = long.MinValue;
 
     internal bool HasDynamicEndTime => DynamicEndTime != long.MinValue;
 
@@ -59,7 +59,7 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// Afterwards the effect duration is used, if greater 0 and less than max duration.
     /// Finally, it defaults to max duration.
     /// </summary>
-    protected virtual long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
+    protected virtual long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem? agent = null, long? associatedBuff = null)
     {
         if (HasDynamicEndTime)
         {
@@ -88,7 +88,7 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// Will use default duration if all other methods fail
     /// See <see cref="ComputeEndTime"/> for information about computed end times.
     /// </summary>
-    public (long start, long end) ComputeLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+    public (long start, long end) ComputeLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem? agent = null, long? associatedBuff = null)
     {
         long start = Time;
         long end = ComputeEndTime(log, defaultDuration, agent, associatedBuff);
@@ -102,7 +102,7 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// This method is to be used when the duration of the effect may not be static (ex: a trap AoE getting triggered or when a trait can modify the duration of a skill).
     /// See <see cref="ComputeEndTime"/> for information about computed end times.
     /// </summary>
-    public virtual (long start, long end) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+    public virtual (long start, long end) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem? agent = null, long? associatedBuff = null)
     {
         long durationToUse = defaultDuration;
         long start = Time;

@@ -12,34 +12,34 @@ public class CombatItem
     public ulong SrcAgent { get; private set; }
     public ulong DstAgent { get; private set; }
     public int Value { get; private set; }
-    public int BuffDmg { get; }
-    public uint OverstackValue { get; }
+    public readonly int BuffDmg;
+    public readonly uint OverstackValue;
     public uint SkillID { get; private set; }
-    public ushort SrcInstid { get; }
-    public ushort DstInstid { get; }
-    public ushort SrcMasterInstid { get; }
-    public ushort DstMasterInstid { get; }
-    public byte IFFByte { get; }
-    public ArcDPSEnums.IFF IFF { get; }
-    public byte IsBuff { get; }
-    public byte Result { get; }
-    public byte IsActivationByte { get; }
-    public ArcDPSEnums.Activation IsActivation { get; }
-    public byte IsBuffRemoveByte { get; }
-    public ArcDPSEnums.BuffRemove IsBuffRemove { get; }
-    public byte IsNinety { get; }
-    public byte IsFifty { get; }
-    public byte IsMoving { get; }
-    public ArcDPSEnums.StateChange IsStateChange { get; }
-    public byte IsFlanking { get; }
-    public byte IsShields { get; }
-    public byte IsOffcycle { get; }
+    public readonly ushort SrcInstid;
+    public readonly ushort DstInstid;
+    public readonly ushort SrcMasterInstid;
+    public readonly ushort DstMasterInstid;
+    public readonly byte IFFByte;
+    public readonly ArcDPSEnums.IFF IFF;
+    public readonly byte IsBuff;
+    public readonly byte Result;
+    public readonly byte IsActivationByte;
+    public readonly ArcDPSEnums.Activation IsActivation;
+    public readonly byte IsBuffRemoveByte;
+    public readonly ArcDPSEnums.BuffRemove IsBuffRemove;
+    public readonly byte IsNinety;
+    public readonly byte IsFifty;
+    public readonly byte IsMoving;
+    public readonly ArcDPSEnums.StateChange IsStateChange;
+    public readonly byte IsFlanking;
+    public readonly byte IsShields;
+    public readonly byte IsOffcycle;
 
-    public uint Pad { get; }
-    public byte Pad1 { get; }
-    public byte Pad2 { get; }
-    public byte Pad3 { get; }
-    public byte Pad4 { get; }
+    public readonly uint Pad;
+    public readonly byte Pad1;
+    public readonly byte Pad2;
+    public readonly byte Pad3;
+    public readonly byte Pad4;
 
     public bool IsExtension => IsStateChange == ArcDPSEnums.StateChange.Extension || IsStateChange == ArcDPSEnums.StateChange.ExtensionCombat;
 

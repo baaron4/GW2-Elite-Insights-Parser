@@ -21,7 +21,7 @@ internal class UnknownFightLogic : FightLogic
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>();
+        return [];
     }
 
     internal override void UpdatePlayersSpecAndGroup(IReadOnlyList<Player> players, CombatData combatData, FightData fightData)

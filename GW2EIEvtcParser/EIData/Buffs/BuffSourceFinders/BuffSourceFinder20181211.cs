@@ -8,12 +8,12 @@ internal class BuffSourceFinder20181211 : BuffSourceFinder
 
     public BuffSourceFinder20181211(HashSet<long> boonIds) : base(boonIds)
     {
-        ExtensionIDS = new HashSet<long>()
-        {
+        ExtensionIDS =
+        [
             SignetOfInspirationSkill,
             TrueNatureDragon,
             SandSquall
-        };
+        ];
         DurationToIDs = new Dictionary<long, HashSet<long>>
         {
             {5000, new HashSet<long> { SignetOfInspirationSkill } }, // SoI

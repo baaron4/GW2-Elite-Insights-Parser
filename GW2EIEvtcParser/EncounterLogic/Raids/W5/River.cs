@@ -15,7 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class River : HallOfChains
 {
-    private static readonly Point3D ChestOfSoulsPosition = new Point3D(7906.54f, 2147.48f, -5746.19f);
+    private static readonly Point3D ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
     public River(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>

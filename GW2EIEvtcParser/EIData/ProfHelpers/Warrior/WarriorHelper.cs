@@ -14,8 +14,8 @@ namespace GW2EIEvtcParser.EIData;
 internal static class WarriorHelper
 {
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new DamageCastFinder(RecklessImpact, RecklessImpact).WithBuilds(GW2Builds.December2017Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGainCastFinder(BerserkersStanceSkill, BerserkersStanceBuff),
         new BuffGainCastFinder(BalancedStanceSill, BalancedStanceBuff),
@@ -25,7 +25,7 @@ internal static class WarriorHelper
         new EffectCastFinderByDst(SignetOfStaminaSkill, EffectGUIDs.WarriorSignetOfStamina).UsingDstBaseSpecChecker(Spec.Warrior),
         new EffectCastFinderByDst(DolyakSignetSkill, EffectGUIDs.WarriorDolyakSignet).UsingDstBaseSpecChecker(Spec.Warrior),
         new EXTHealingCastFinder(MendingMight, MendingMight).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
-    };
+    ];
 
     private static HashSet<AgentItem> GetBannerAgents(CombatData combatData, long id, HashSet<AgentItem> playerAgents)
     {
@@ -33,8 +33,8 @@ internal static class WarriorHelper
     }
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Peak Performance
         new BuffOnActorDamageModifier(PeakPerformance, "Peak Performance", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.PeakPerformace, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(PeakPerformance, "Peak Performance", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.PeakPerformace, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
@@ -75,19 +75,19 @@ internal static class WarriorHelper
         //
         new BuffOnFoeDamageModifier(NumberOfBoons, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByMultipliyingStack, BuffImages.DestructionOfTheEmpowered, DamageModifierMode.All),
 
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new CounterOnActorDamageModifier(EnduringPainBuff, "Endure Pain", "-100%", DamageSource.NoPets, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.EndurePain, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Resolution, "Hardened Armor", "-10% under resolution", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.HardenedArmor, DamageModifierMode.All).WithBuilds(GW2Builds.March2020Balance),
         new BuffOnActorDamageModifier(Rampage, "Rampage", "-25%", DamageSource.NoPets, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Rampage, "Rampage", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(DolyakSignetBuff, "Dolyak Signet", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.DolyakSignet, DamageModifierMode.All).WithBuilds(GW2Builds.October2024Balance),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         // Skills
         new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),
         new Buff("Impaled", Impaled, Source.Warrior, BuffClassification.Debuff, BuffImages.ImpaleWarriorSword),
@@ -124,7 +124,7 @@ internal static class WarriorHelper
         new Buff("Signet of Ferocity", SignetOfFerocity, Source.Warrior, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.SignetMastery),
         new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 3, BuffClassification.Other, BuffImages.AdrenalHealth).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
         new Buff("Adrenal Health", AdrenalHealth, Source.Warrior, BuffStackType.Stacking, 4, BuffClassification.Other, BuffImages.AdrenalHealth).WithBuilds(GW2Builds.October2022Balance),
-    };
+    ];
 
 
     /*private static HashSet<AgentItem> FindBattleStandards(Dictionary<long, List<AbstractBuffEvent>> buffData, HashSet<AgentItem> playerAgents)

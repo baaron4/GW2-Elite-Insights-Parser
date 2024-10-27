@@ -5,10 +5,10 @@ namespace GW2EIEvtcParser.ParsedData;
 public abstract class IDToGUIDEvent : AbstractMetaDataEvent
 {
 
-    public string HexContentGUID { get; }
-    public string Base64ContentGUID { get; }
+    public readonly string HexContentGUID;
+    public readonly string Base64ContentGUID;
 
-    public long ContentID { get; }
+    public readonly long ContentID;
 
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {

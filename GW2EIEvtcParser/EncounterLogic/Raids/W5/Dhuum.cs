@@ -98,8 +98,8 @@ internal class Dhuum : HallOfChains
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(DeathlyAura, DeathlyAura),
             new BuffLossCastFinder(ExpelEnergySAK, ArcingAffliction).UsingChecker((brae, combatData, agentData, skillData) =>
             {
@@ -116,7 +116,7 @@ internal class Dhuum : HallOfChains
                 }
                 return state;
             }),
-        };
+        ];
     }
 
     //TODO(Rennorb) @perf
@@ -240,23 +240,23 @@ internal class Dhuum : HallOfChains
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)TargetID.Dhuum,
             (int)TrashID.Echo,
             (int)TrashID.Enforcer,
             (int)TrashID.UnderworldReaper,
-        };
+        ];
     }
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        return new List<TrashID>
-        {
+        return
+        [
             TrashID.Messenger,
             TrashID.Deathling,
             TrashID.DhuumDesmina
-        };
+        ];
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
@@ -329,7 +329,7 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    private static readonly Dictionary<Point3D, int> ReapersToGreen = new Dictionary<Point3D, int>
+    private static readonly Dictionary<Point3D, int> ReapersToGreen = new()
     {
         { new Point3D(16897, 1225, -6215), 0 },
         { new Point3D(16853, 65, -6215), 1 },

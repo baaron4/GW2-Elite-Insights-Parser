@@ -17,12 +17,12 @@ public abstract class AbstractEffectEvent : AbstractStatusEvent
     /// The effect's rotation around each axis in <b>degrees</b>.
     /// Like <see cref="Orientation"/> but using degrees.
     /// </summary>
-    public Point3D Rotation => new Point3D(RadianToDegreeF(Orientation.X), RadianToDegreeF(Orientation.Y), RadianToDegreeF(Orientation.Z));
+    public Point3D Rotation => new(RadianToDegreeF(Orientation.X), RadianToDegreeF(Orientation.Y), RadianToDegreeF(Orientation.Z));
 
     /// <summary>
     /// The effect's position in the game's coordinate system, if <see cref="IsAroundDst"/> is <c>false</c>.
     /// </summary>
-    public Point3D Position { get; } = new Point3D(0, 0, 0);
+    public readonly Point3D Position = new(0, 0, 0);
 
     /// <summary>
     /// Whether the effect location is following <see cref="Dst"/> or located at <see cref="Position"/>.
@@ -31,12 +31,12 @@ public abstract class AbstractEffectEvent : AbstractStatusEvent
     /// <summary>
     /// The agent the effect is located at, if <see cref="IsAroundDst"/> is <c>true</c>.
     /// </summary>
-    public AgentItem Dst { get; } = null;
+    public readonly AgentItem? Dst = null;
 
     /// <summary>
     /// Unique id for tracking a created effect.
     /// </summary>
-    protected long TrackingID { get; set; }
+    protected long TrackingID;
 
     internal AbstractEffectEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

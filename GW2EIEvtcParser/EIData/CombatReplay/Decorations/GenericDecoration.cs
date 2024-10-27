@@ -44,7 +44,7 @@ public abstract class GenericDecoration
     [JsonDerivedType(typeof(DoughnutDecoration.DoughnutDecorationRenderingData))]
     internal abstract class GenericDecorationRenderingData
     {
-        public (int start, int end) Lifespan { get; }
+        public readonly (int start, int end) Lifespan;
 
         protected GenericDecorationRenderingData((long start, long end) lifespan)
         {
@@ -53,8 +53,8 @@ public abstract class GenericDecoration
         public abstract GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature);
     }
 
-    internal GenericDecorationMetadata DecorationMetadata { get; }
-    internal GenericDecorationRenderingData DecorationRenderingData { get; }
+    internal readonly GenericDecorationMetadata DecorationMetadata;
+    internal readonly GenericDecorationRenderingData DecorationRenderingData;
 
     public (int start, int end) Lifespan => DecorationRenderingData.Lifespan;
     internal GenericDecoration(GenericDecorationMetadata metaData, GenericDecorationRenderingData renderingData)
@@ -62,9 +62,4 @@ public abstract class GenericDecoration
         DecorationMetadata = metaData;
         DecorationRenderingData = renderingData;
     }
-    protected GenericDecoration()
-    {
-    }
-    //
-
 }

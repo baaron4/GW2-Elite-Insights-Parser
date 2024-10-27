@@ -2,7 +2,7 @@
 
 public class GW2BuildEvent : AbstractMetaDataEvent
 {
-    public ulong Build { get; }
+    public readonly ulong Build;
 
     internal GW2BuildEvent(CombatItem evtcItem) : base(evtcItem)
     {

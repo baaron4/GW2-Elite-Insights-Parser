@@ -16,8 +16,8 @@ namespace GW2EIEvtcParser.EIData;
 internal static class ElementalistHelper
 {
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(FireAttunementSkill, FireAttunementBuff),
         new BuffGainCastFinder(WaterAttunementSkill, WaterAttunementBuff),
         new BuffGainCastFinder(AirAttunementSkill, AirAttunementBuff),
@@ -73,10 +73,10 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         // Spear
         new BuffGainCastFinder(EnergizeSkill, EnergizeBuff),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Fire
         new BuffOnActorDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2020Balance),
@@ -135,10 +135,10 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.November2023Balance),
         new BuffOnActorDamageModifier(RagingRichochetBuff, "Raging Ricochet", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.RagingRicochet, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
         new BuffOnActorDamageModifier([EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.StoneFlesh, DamageModifierMode.All),
         new DamageLogDamageModifier("Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) =>
@@ -151,11 +151,11 @@ internal static class ElementalistHelper
             }
             return currentPosition.DistanceToPoint(currentTargetPosition) <= 360.0;
         }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {       
+    internal static readonly List<Buff> Buffs =
+    [       
         // Signets
         new Buff("Signet of Restoration", SignetOfRestoration, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfRestoration),
         new Buff("Signet of Air", SignetOfAirBuff, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfAir),
@@ -247,13 +247,13 @@ internal static class ElementalistHelper
         new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Other, BuffImages.Energize),
         new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, BuffImages.Fulgor),
         new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Other, BuffImages.Harden),
-    };
+    ];
 
 
-    private static readonly HashSet<long> _elementalSwaps = new HashSet<long>
-    {
+    private static readonly HashSet<long> _elementalSwaps =
+    [
         FireAttunementSkill,WaterAttunementSkill,AirAttunementSkill, EarthAttunementSkill, DualFireAttunement, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, WaterFireAttunement, DualWaterAttunement, WaterAirAttunement, WaterEarthAttunement, AirFireAttunement, AirWaterAttunement, DualAirAttunement, AirEarthAttunement, EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement
-    };
+    ];
 
     public static bool IsElementalSwap(long id)
     {
@@ -281,8 +281,8 @@ internal static class ElementalistHelper
         }
     }
 
-    private static HashSet<int> Minions = new HashSet<int>()
-    {
+    private static HashSet<int> Minions =
+    [
         (int)MinionID.LesserAirElemental,
         (int)MinionID.LesserEarthElemental,
         (int)MinionID.LesserFireElemental,
@@ -291,7 +291,7 @@ internal static class ElementalistHelper
         (int)MinionID.EarthElemental,
         (int)MinionID.FireElemental,
         (int)MinionID.IceElemental,
-    };
+    ];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

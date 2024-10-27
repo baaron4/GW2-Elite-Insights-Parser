@@ -9,8 +9,8 @@ internal class WeaponDescriptor
 {
     public enum Hand { MainHand, TwoHand, OffHand, Dual }
 
-    public bool IsLand { get; }
-    public Hand WeaponSlot { get; }
+    public readonly bool IsLand;
+    public readonly Hand WeaponSlot;
 
     public WeaponDescriptor(GW2APISkill apiSkill)
     {

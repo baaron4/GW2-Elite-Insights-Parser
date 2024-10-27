@@ -12,7 +12,7 @@ public abstract class AbstractCastEvent : AbstractTimeCombatEvent
     // start item
     public SkillItem Skill { get; protected set; }
     public long SkillId => Skill.ID;
-    public AgentItem Caster { get; }
+    public readonly AgentItem Caster;
 
     public AnimationStatus Status { get; protected set; } = AnimationStatus.Unknown;
     public int SavedDuration { get; protected set; }

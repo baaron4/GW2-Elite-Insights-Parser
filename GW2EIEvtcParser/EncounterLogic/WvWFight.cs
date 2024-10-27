@@ -16,8 +16,8 @@ internal class WvWFight : FightLogic
 {
     private readonly string _defaultName;
     private readonly bool _detailed;
-    private bool _foundSkillMode { get; set; }
-    private bool _isGuildHall { get; set; }
+    private bool _foundSkillMode;
+    private bool _isGuildHall;
     public WvWFight(int triggerID, bool detailed) : base(triggerID)
     {
         ParseMode = ParseModeEnum.WvW;
@@ -45,7 +45,7 @@ internal class WvWFight : FightLogic
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>();
+        return [];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

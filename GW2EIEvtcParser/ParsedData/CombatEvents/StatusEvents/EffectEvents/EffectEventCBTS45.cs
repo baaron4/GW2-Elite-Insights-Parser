@@ -28,7 +28,7 @@ public class EffectEventCBTS45 : EffectEvent
         Orientation = ReadOrientation(evtcItem);
     }
 
-    protected override long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
+    protected override long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem? agent = null, long? associatedBuff = null)
     {
         if (associatedBuff != null)
         {
@@ -43,7 +43,7 @@ public class EffectEventCBTS45 : EffectEvent
         return Time + maxDuration;
     }
 
-    public override (long, long) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
+    public override (long, long) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem? agent = null, long? associatedBuff = null)
     {
         return base.ComputeDynamicLifespan(log, 0, agent, associatedBuff);
     }

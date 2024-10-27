@@ -2,9 +2,9 @@
 
 public class TeamChangeEvent : AbstractStatusEvent
 {
-    public ulong TeamIDComingFrom { get; }
+    public readonly ulong TeamIDComingFrom;
 
-    public ulong TeamIDInto { get; }
+    public readonly ulong TeamIDInto;
 
     internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData)
     {

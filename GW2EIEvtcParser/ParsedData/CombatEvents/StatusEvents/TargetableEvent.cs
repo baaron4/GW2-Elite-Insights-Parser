@@ -2,7 +2,7 @@
 
 public class TargetableEvent : AbstractStatusEvent
 {
-    public bool Targetable { get; }
+    public readonly bool Targetable;
 
     internal TargetableEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

@@ -45,14 +45,14 @@ internal class Sabir : TheKeyOfAhdashim
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>()
-        {
+        return
+        [
             ArcDPSEnums.TrashID.ParalyzingWisp,
             ArcDPSEnums.TrashID.VoltaicWisp,
             ArcDPSEnums.TrashID.SmallKillerTornado,
             ArcDPSEnums.TrashID.SmallJumpyTornado,
             ArcDPSEnums.TrashID.BigKillerTornado
-        };
+        ];
     }
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
@@ -71,8 +71,8 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(BoltBreakSabir, BoltBreakSabir),
             new EffectCastFinder(FlashDischargeSAK, EffectGUIDs.SabirFlashDischarge)
                 .UsingChecker((effect, combatData, agentData, skillData) =>
@@ -82,13 +82,13 @@ internal class Sabir : TheKeyOfAhdashim
                         .FirstOrDefault();
                     return buffRemove != null;
                 }),
-        };
+        ];
     }
 
     internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
         NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem).ToList());
-        return new List<AbstractHealthDamageEvent>();
+        return [];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

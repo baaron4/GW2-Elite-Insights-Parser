@@ -62,10 +62,10 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new EffectCastFinder(InterventionSAK, EffectGUIDs.XeraIntervention1),
-        };
+        ];
     }
 
     internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
@@ -287,20 +287,20 @@ internal class Xera : StrongholdOfTheFaithful
 
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int> {
+        return [
             (int)ArcDPSEnums.TargetID.Xera,
             (int)ArcDPSEnums.TargetID.DummyTarget,
             (int)ArcDPSEnums.TrashID.BloodstoneShardMainFight,
             (int)ArcDPSEnums.TrashID.BloodstoneShardRift,
             (int)ArcDPSEnums.TrashID.BloodstoneShardButton,
             (int)ArcDPSEnums.TrashID.ChargedBloodstone,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.WhiteMantleSeeker1,
             ArcDPSEnums.TrashID.WhiteMantleSeeker2,
             ArcDPSEnums.TrashID.WhiteMantleKnight1,
@@ -310,7 +310,7 @@ internal class Xera : StrongholdOfTheFaithful
             ArcDPSEnums.TrashID.BloodstoneFragment,
             ArcDPSEnums.TrashID.ExquisiteConjunction,
             ArcDPSEnums.TrashID.XerasPhantasm,
-        };
+        ];
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

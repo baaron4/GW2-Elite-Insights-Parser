@@ -11,7 +11,7 @@ public class IconDecoration : GenericIconDecoration
 {
     internal class IconDecorationMetadata : GenericIconDecorationMetadata
     {
-        public float Opacity { get; }
+        public readonly float Opacity;
 
 
         public IconDecorationMetadata(string icon, uint pixelSize, uint worldSize, float opacity) : base(icon, pixelSize, worldSize)

@@ -11,7 +11,7 @@ public class SquadMarkerEvent : AbstractStatusEvent
     internal bool IsEnd => Position.Length() == float.PositiveInfinity;
     public long EndTime { get; protected set; } = int.MaxValue;
 
-    public SquadMarkerIndex MarkerIndex { get; }
+    public readonly SquadMarkerIndex MarkerIndex;
 
     private readonly uint _markerIndex;
     internal bool EndNotSet => EndTime == int.MaxValue;

@@ -11,17 +11,17 @@ using Segment = GenericSegment<double>;
 
 public class Minions : AbstractActor
 {
-    private List<NPC> _minionList { get; }
+    private readonly List<NPC> _minionList;
     public AgentItem ReferenceAgentItem => AgentItem;
 
     public IReadOnlyList<NPC> MinionList => _minionList;
-    public AbstractSingleActor Master { get; }
-    public EXTMinionsHealingHelper EXTHealing { get; }
-    public EXTMinionsBarrierHelper EXTBarrier { get; }
+    public readonly AbstractSingleActor Master;
+    public readonly EXTMinionsHealingHelper EXTHealing;
+    public readonly EXTMinionsBarrierHelper EXTBarrier;
 
     internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
     {
-        _minionList = new List<NPC> { firstMinion };
+        _minionList = [firstMinion];
         Master = master;
         EXTHealing = new EXTMinionsHealingHelper(this);
         EXTBarrier = new EXTMinionsBarrierHelper(this);

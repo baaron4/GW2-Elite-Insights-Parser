@@ -8,7 +8,7 @@ internal class DamageModifierEvent : AbstractTimeCombatEvent
     private readonly AbstractHealthDamageEvent _evt;
     public AgentItem Src => _evt.From;
     public AgentItem Dst => _evt.To;
-    public double DamageGain { get; }
+    public readonly double DamageGain;
 
     internal DamageModifierEvent(AbstractHealthDamageEvent evt, DamageModifier damageModifier, double damageGain) : base(evt.Time)
     {

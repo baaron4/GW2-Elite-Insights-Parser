@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class SoulbeastHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         // Beastmode
         new BuffGainCastFinder(EnterBeastMode, Stout),
         new BuffLossCastFinder(ExitBeastMode, Stout),
@@ -32,10 +32,10 @@ internal static class SoulbeastHelper
         new EffectCastFinder(EternalBondSkill, EffectGUIDs.SoulbeastEternalBond)
             .UsingSrcSpecChecker(Spec.Soulbeast)
             .WithBuilds(GW2Builds.October2022Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(TwiceAsVicious, "Twice as Vicious", "5% (4s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(TwiceAsVicious, "Twice as Vicious", "10% (10s) after disabling foe", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance),
@@ -57,19 +57,19 @@ internal static class SoulbeastHelper
             return selfHP > dstHP;
         }, DamageModifierMode.All ).UsingApproximate(true),
         new SkillDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.OneWolfPack, DamageModifierMode.All),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Protection, "Second Skin", "-20% under protection", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2024Balance),
         new BuffOnActorDamageModifier(Protection, "Second Skin", "-25% under protection", DamageSource.NoPets, -25.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.October2024Balance),
         new BuffOnActorDamageModifier(DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.DolyakStance, DamageModifierMode.All),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Dolyak Stance", DolyakStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.DolyakStance),
         new Buff("Griffon Stance", GriffonStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.GriffonStance),
         new Buff("Moa Stance", MoaStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.MoaStance),
@@ -85,6 +85,6 @@ internal static class SoulbeastHelper
         new Buff("Twice as Vicious", TwiceAsVicious, Source.Soulbeast, BuffClassification.Other, BuffImages.TwiceAsVicious),
         new Buff("Unflinching Fortitude", UnflinchingFortitudeBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.UnflinchingFortitude),
         new Buff("Defy Pain", DefyPainSoulbeastBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.DefyPain),
-    };
+    ];
 
 }

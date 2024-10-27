@@ -12,8 +12,8 @@ namespace GW2EIEvtcParser.EIData;
 internal static class CatalystHelper
 {
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(FlameWheelSkill, FlameWheelBuff)
             .UsingChecker((ba, combatData, agentData, skillData) => !combatData.IsCasting(GrandFinale, ba.To, ba.Time))
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.SOTOBetaAndSilentSurfNM),
@@ -36,11 +36,11 @@ internal static class CatalystHelper
             .UsingSrcSpecChecker(Spec.Catalyst),
         new EffectCastFinder(DeployJadeSphereEarth, EffectGUIDs.CatalystDeployEarthJadeSphere)
             .UsingSrcSpecChecker(Spec.Catalyst)
-    };
+    ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance2),
         new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
@@ -59,16 +59,16 @@ internal static class CatalystHelper
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
             .WithBuilds(GW2Builds.September2023Balance),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.NoPets, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, BuffImages.HardenedAuras, DamageModifierMode.All),// TODO Check if strike only
-    };
+    ];
 
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Flame Wheel", FlameWheelBuff, Source.Catalyst, BuffClassification.Other, BuffImages.FlameWheel)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
         new Buff("Icy Coil", IcyCoilBuff, Source.Catalyst, BuffClassification.Other, BuffImages.IcyCoil)
@@ -87,7 +87,7 @@ internal static class CatalystHelper
         new Buff("Elemental Empowerment", ElementalEmpowerment, Source.Catalyst, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElementalEmpowerment),
         new Buff("Empowering Auras", EmpoweringAuras, Source.Catalyst, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.EmpoweringAuras),
         new Buff("Hardened Auras", HardenedAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.HardenedAuras),
-    };
+    ];
 
     internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
     {

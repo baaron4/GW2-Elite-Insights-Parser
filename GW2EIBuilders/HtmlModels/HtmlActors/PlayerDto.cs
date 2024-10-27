@@ -9,23 +9,23 @@ namespace GW2EIBuilders.HtmlModels.HTMLActors;
 
 internal class PlayerDto : ActorDto
 {
-    public int Group { get; set; }
-    public string Acc { get; set; }
-    public string Profession { get; set; }
+    public int Group;
+    public string Acc;
+    public string Profession;
 
-    public bool IsPoV { get; set; }
+    public bool IsPoV;
 
-    public bool IsCommander { get; set; }
-    public List<string[]> CommanderStates { get; set; }
-    public List<string> L1Set { get; } = new List<string>();
-    public List<string> L2Set { get; } = new List<string>();
-    public List<string> A1Set { get; } = new List<string>();
-    public List<string> A2Set { get; } = new List<string>();
-    public string ColTarget { get; set; }
-    public string ColCleave { get; set; }
-    public string ColTotal { get; set; }
-    public bool IsFake { get; set; }
-    public bool NotInSquad { get; set; }
+    public bool IsCommander;
+    public List<string[]>? CommanderStates;
+    public readonly List<string> L1Set = new();
+    public readonly List<string> L2Set = new();
+    public readonly List<string> A1Set = new();
+    public readonly List<string> A2Set = new();
+    public string ColTarget;
+    public string ColCleave;
+    public string ColTotal;
+    public bool IsFake;
+    public bool NotInSquad;
 
     private static (string, string, string) GetSpecGraphColor(ParserHelper.Spec baseSpec)
     {

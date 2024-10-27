@@ -64,23 +64,23 @@ internal class Slothasor : SalvationPass
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>
-        {
+        return
+        [
             ArcDPSEnums.TrashID.Slubling1,
             ArcDPSEnums.TrashID.Slubling2,
             ArcDPSEnums.TrashID.Slubling3,
             ArcDPSEnums.TrashID.Slubling4,
             ArcDPSEnums.TrashID.PoisonMushroom
-        };
+        ];
     }
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new DamageCastFinder(VolatileAura, VolatileAura),
             new BuffLossCastFinder(PurgeSlothasor, VolatilePoisonBuff),
-        };
+        ];
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

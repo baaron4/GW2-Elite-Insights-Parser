@@ -3,11 +3,11 @@
 public class SkillTiming
 {
 
-    public byte ActionByte { get; }
+    public readonly byte ActionByte;
 
-    public ArcDPSEnums.SkillAction Action { get; }
+    public readonly ArcDPSEnums.SkillAction Action;
 
-    public ulong AtMillisecond { get; }
+    public readonly ulong AtMillisecond;
 
     internal SkillTiming(CombatItem evtcItem)
     {

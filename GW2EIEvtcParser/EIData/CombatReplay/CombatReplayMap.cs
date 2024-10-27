@@ -9,13 +9,13 @@ public class CombatReplayMap
 
     public class MapItem
     {
-        public string Link { get; internal set; }
+        public string? Link { get; internal set; }
         public long Start { get; internal set; }
         public long End { get; internal set; }
     }
 
     public IReadOnlyList<MapItem> Maps => _maps;
-    private readonly List<MapItem> _maps = new List<MapItem>();
+    private readonly List<MapItem> _maps = new();
     private (int width, int height) _urlPixelSize;
     private (double topX, double topY, double bottomX, double bottomY) _rectInMap;
     //private (int topX, int topY, int bottomX, int bottomY) _fullRect;

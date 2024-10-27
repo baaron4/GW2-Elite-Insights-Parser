@@ -10,8 +10,8 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class HeraldHelper
 {
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffGainCastFinder(LegendaryDragonStanceSkill, LegendaryDragonStanceBuff),
         new BuffGainCastFinder(FacetOfNatureSkill, FacetOfNatureBuff),
         new BuffGainCastFinder(FacetOfDarknessSkill, FacetOfDarknessBuff),
@@ -19,10 +19,10 @@ internal static class HeraldHelper
         new BuffGainCastFinder(FacetOfStrengthSkill, FacetOfStrengthBuff),
         new BuffGainCastFinder(FacetOfChaosSkill, FacetOfChaosBuff),
         new DamageCastFinder(CallOfTheDragon, CallOfTheDragon),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.EnvoyOfSustenance, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(NumberOfBoons, "Reinforced Potency", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.EnvoyOfSustenance, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance, GW2Builds.June2024Balance),
         new BuffOnActorDamageModifier(NumberOfBoons, "Reinforced Potency", "1.5% per boon", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.EnvoyOfSustenance, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.June2024Balance),
@@ -42,17 +42,17 @@ internal static class HeraldHelper
         new BuffOnActorDamageModifier([FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff], "Forceful Persistence (Facets)", "5% per active Facet", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.November2023Balance),
         new BuffOnActorDamageModifier([FacetOfChaosBuff, FacetOfDarknessBuff, FacetOfElementsBuff, FacetOfNatureBuff, FacetOfStrengthBuff, FacetOfLightBuff], "Forceful Persistence (Facets)", "7% per active Facet", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Herald, ByMultiPresence, BuffImages.ForcefulPersistence, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2023Balance),
         //new BuffDamageModifier(new long[] { 27273, 27581, 28001}, "Forceful Persistence", "13% if active upkeep", DamageSource.NoPets, 13.0, DamageType.Power, DamageType.All, Source.Herald, ByPresence, BuffImages.ForcefulPersistence, GW2Builds.August2018Balance, DamageModifierMode.All), // Hammers, Embrace, Impossible Odds but how to track Protective Solace?
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(FacetOfNatureDwarf, "Facet of Nature - Dwarf", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FacetOfNatureDwarf, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance),
         new BuffOnActorDamageModifier(HardeningPersistence, "Hardening Persistence", "-1% per stack", DamageSource.NoPets, -1.0, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.August2018Balance, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.NoPets, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {         
+    internal static readonly List<Buff> Buffs =
+    [         
         // Skills
         new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
         // Facets
@@ -80,5 +80,5 @@ internal static class HeraldHelper
         new Buff("Soothing Bastion", SoothingBastion, Source.Herald, BuffClassification.Other, BuffImages.SoothingBastion),
         new Buff("Burst of Strength", BurstOfStrength, Source.Herald, BuffClassification.Other, BuffImages.BurstOfStrength),
         new Buff("Rising Momentum", RisingMomentum, Source.Herald, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.RisingMomentum),
-    };
+    ];
 }

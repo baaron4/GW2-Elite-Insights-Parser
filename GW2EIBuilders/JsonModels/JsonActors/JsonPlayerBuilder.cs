@@ -281,10 +281,10 @@ internal static class JsonPlayerBuilder
                     }
                     else
                     {
-                        personalBuffs[player.Spec.ToString()] = new HashSet<long>()
-                            {
+                        personalBuffs[player.Spec.ToString()] =
+                            [
                                 pair.Key
-                            };
+                            ];
                     }
                 }
             }
@@ -375,10 +375,10 @@ internal static class JsonPlayerBuilder
                     }
                     else
                     {
-                        personalBuffs[player.Spec.ToString()] = new HashSet<long>()
-                            {
+                        personalBuffs[player.Spec.ToString()] =
+                            [
                                 pair.Key
-                            };
+                            ];
                     }
                 }
             }

@@ -17,7 +17,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Escort : StrongholdOfTheFaithful
 {
-    private static readonly Point3D SiegeChestPosition = new Point3D(-3815.47f, 16688.5f, -5322.35f);
+    private static readonly Point3D SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
     private bool _hasPreEvent = false;
     public Escort(int triggerID) : base(triggerID)
     {
@@ -231,27 +231,27 @@ internal class Escort : StrongholdOfTheFaithful
 
     protected override HashSet<int> GetUniqueNPCIDs()
     {
-        return new HashSet<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.McLeodTheSilent,
             (int)ArcDPSEnums.TrashID.Glenna
-        };
+        ];
     }
     protected override List<int> GetTargetsIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TargetID.McLeodTheSilent,
             (int)ArcDPSEnums.TrashID.RadiantMcLeod,
             (int)ArcDPSEnums.TrashID.CrimsonMcLeod,
             (int)ArcDPSEnums.TrashID.WargBloodhound,
             (int)ArcDPSEnums.TargetID.DummyTarget,
-        };
+        ];
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
-        return new List<ArcDPSEnums.TrashID>() {
+        return [
             ArcDPSEnums.TrashID.MushroomCharger,
             ArcDPSEnums.TrashID.MushroomKing,
             ArcDPSEnums.TrashID.MushroomSpikeThrower,
@@ -266,15 +266,15 @@ internal class Escort : StrongholdOfTheFaithful
             ArcDPSEnums.TrashID.WhiteMantleBattleSeeker1,
             ArcDPSEnums.TrashID.WhiteMantleBattleSeeker2,
             ArcDPSEnums.TrashID.Mine,
-        };
+        ];
     }
 
     protected override List<int> GetFriendlyNPCIDs()
     {
-        return new List<int>
-        {
+        return
+        [
             (int)ArcDPSEnums.TrashID.Glenna
-        };
+        ];
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
@@ -308,10 +308,10 @@ internal class Escort : StrongholdOfTheFaithful
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return new List<InstantCastFinder>()
-        {
+        return
+        [
             new EffectCastFinder(OverHere, EffectGUIDs.EscortOverHere),
-        };
+        ];
     }
 }
 

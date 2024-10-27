@@ -8,11 +8,11 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
 internal class MechanicChartDataDto
 {
-    public string Symbol { get; }
-    public int Size { get; }
-    public string Color { get; }
-    public List<List<List<object>>> Points { get; }
-    public bool Visible { get; }
+    public readonly string Symbol;
+    public readonly int Size;
+    public readonly string Color;
+    public readonly List<List<List<object>>> Points;
+    public readonly bool Visible;
 
     private MechanicChartDataDto(ParsedEvtcLog log, Mechanic mech)
     {

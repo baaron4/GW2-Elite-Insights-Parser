@@ -7,10 +7,10 @@ namespace GW2EIBuilders.HtmlModels.EXTHealing;
 
 internal class EXTHealingStatsPlayerDetailsDto
 {
-    public List<EXTHealingStatsHealingDistributionDto> HealingDistributions { get; set; }
-    public List<List<EXTHealingStatsHealingDistributionDto>> HealingDistributionsTargets { get; set; }
-    public List<EXTHealingStatsHealingDistributionDto> IncomingHealingDistributions { get; set; }
-    public List<EXTHealingStatsPlayerDetailsDto> Minions { get; set; }
+    public List<EXTHealingStatsHealingDistributionDto>? HealingDistributions { get; set; }
+    public List<List<EXTHealingStatsHealingDistributionDto>>? HealingDistributionsTargets { get; set; }
+    public List<EXTHealingStatsHealingDistributionDto>? IncomingHealingDistributions { get; set; }
+    public List<EXTHealingStatsPlayerDetailsDto>? Minions { get; set; }
 
     // helpers
 

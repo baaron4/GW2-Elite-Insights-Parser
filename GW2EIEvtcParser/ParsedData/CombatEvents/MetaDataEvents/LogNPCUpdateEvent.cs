@@ -2,13 +2,13 @@
 
 public class LogNPCUpdateEvent : LogDateEvent
 {
-    public int AgentID { get; }
+    public readonly int AgentID;
 
-    public long Time { get; }
+    public readonly long Time;
 
-    public AgentItem TriggerAgent { get; } = ParserHelper._unknownAgent;
+    public readonly AgentItem TriggerAgent = ParserHelper._unknownAgent;
 
-    public bool TriggerIsGadget { get; }
+    public readonly bool TriggerIsGadget;
 
     internal LogNPCUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem)
     {

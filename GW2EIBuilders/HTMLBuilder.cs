@@ -47,7 +47,7 @@ partial class LogDataDtoSerializerContext : JsonSerializerContext {  }
 
 public class HTMLBuilder
 {
-    private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+    private static readonly UTF8Encoding NoBOMEncodingUTF8 = new(false);
 
     private readonly string _eiJS;
     private readonly string _eiCRJS;

@@ -8,8 +8,8 @@ public class RectangleDecoration : FormDecoration
 {
     internal class RectangleDecorationMetadata : FormDecorationMetadata
     {
-        public uint Height { get; }
-        public uint Width { get; }
+        public readonly uint Height;
+        public readonly uint Width;
 
         public RectangleDecorationMetadata(string color, uint width, uint height) : base(color)
         {
@@ -51,12 +51,12 @@ public class RectangleDecoration : FormDecoration
     public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, Color color, double opacity, GeographicalConnector connector) : this(width, height, lifespan, color.WithAlpha(opacity).ToString(true), connector)
     {
     }
-    public override FormDecoration Copy(string color = null)
+    public override FormDecoration Copy(string? color = null)
     {
         return (FormDecoration)new RectangleDecoration(Width, Height, Lifespan, color ?? Color, ConnectedTo).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
     }
 
-    public override FormDecoration GetBorderDecoration(string borderColor = null)
+    public override FormDecoration GetBorderDecoration(string? borderColor = null)
     {
         if (!Filled)
         {

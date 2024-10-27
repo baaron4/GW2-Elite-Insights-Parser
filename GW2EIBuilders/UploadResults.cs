@@ -3,8 +3,8 @@
 public class UploadResults
 {
 
-    public string DPSReportEILink { get; }
-    public string RaidarLink { get; }
+    public readonly string DPSReportEILink;
+    public readonly string RaidarLink;
 
     public UploadResults()
     {
