@@ -34,11 +34,6 @@ public class MovingPlatformDecorationRenderingDescription : BackgroundDecoration
         {
             throw new NotSupportedException();
         }
-
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof(Position);
-        }
     }
 
     [JsonConverter(typeof(PositionConverter))]
