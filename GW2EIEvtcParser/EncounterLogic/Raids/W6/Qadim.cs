@@ -461,7 +461,7 @@ internal class Qadim : MythwrightGambit
         }
 
         // Incineration Orbs - Pyres
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPyresIncinerationOrbs, out IReadOnlyList<EffectEvent> pyreOrbs))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPyresIncinerationOrbs, out var pyreOrbs))
         {
             foreach (EffectEvent effect in pyreOrbs)
             {
@@ -475,7 +475,7 @@ internal class Qadim : MythwrightGambit
         }
 
         // Bouncing blue orbs
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimJumpingBlueOrbs, out IReadOnlyList<EffectEvent> blueOrbEvents))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimJumpingBlueOrbs, out var blueOrbEvents))
         {
             foreach (EffectEvent effect in blueOrbEvents)
             {
@@ -487,7 +487,7 @@ internal class Qadim : MythwrightGambit
 
         // Inferno - Qadim's AoEs on every platform
         // ! Disabled until we have a working solution for effects on moving platforms
-        /*if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimInfernoAoEs, out IReadOnlyList<EffectEvent> infernoAoEs))
+        /*if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimInfernoAoEs, out var infernoAoEs))
         {
             foreach (EffectEvent effect in infernoAoEs)
             {

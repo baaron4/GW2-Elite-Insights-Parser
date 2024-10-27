@@ -434,7 +434,7 @@ internal class Dhuum : HallOfChains
                 }
                 else
                 {
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumConeSlash, out IReadOnlyList<EffectEvent> coneSlashes))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumConeSlash, out var coneSlashes))
                     {
                         foreach (EffectEvent effect in coneSlashes)
                         {
@@ -472,7 +472,7 @@ internal class Dhuum : HallOfChains
                     var nextSwing = i < scytheSwing.Count - 1 ? scytheSwing[i + 1].Time : log.FightData.FightEnd;
 
                     // AoE Indicator
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out IReadOnlyList<EffectEvent> scytheSwingIndicators))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingIndicator, out var scytheSwingIndicators))
                     {
                         uint radius = 45;
                         uint radiusIncrease = 5;
@@ -487,7 +487,7 @@ internal class Dhuum : HallOfChains
                     }
 
                     // Brief damage indicator
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingDamage, out IReadOnlyList<EffectEvent> scytheSwingDamage))
+                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumScytheSwingDamage, out var scytheSwingDamage))
                     {
                         uint radius = 45;
                         uint radiusIncrease = 5;
@@ -664,7 +664,7 @@ internal class Dhuum : HallOfChains
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Death Mark - First Warning (2 seconds)
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkFirstIndicator, out IReadOnlyList<EffectEvent> deathMarkFirstIndicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkFirstIndicator, out var deathMarkFirstIndicators))
         {
             foreach (EffectEvent effect in deathMarkFirstIndicators)
             {
@@ -678,7 +678,7 @@ internal class Dhuum : HallOfChains
         }
 
         // Death Mark - Death Zone
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkDeathZone, out IReadOnlyList<EffectEvent> deathMarkDeathZones))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumDeathMarkDeathZone, out var deathMarkDeathZones))
         {
             foreach (EffectEvent effect in deathMarkDeathZones)
             {
@@ -701,7 +701,7 @@ internal class Dhuum : HallOfChains
         }
 
         // Cull - Circle orange AoE indicator
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullAoEIndicator, out IReadOnlyList<EffectEvent> cullingAoEs))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullAoEIndicator, out var cullingAoEs))
         {
             foreach (EffectEvent effect in cullingAoEs)
             {
@@ -715,7 +715,7 @@ internal class Dhuum : HallOfChains
         }
 
         // Cull - Black cracks spawning indicator
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullCracksIndicator, out IReadOnlyList<EffectEvent> cullingCracksIndicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullCracksIndicator, out var cullingCracksIndicators))
         {
             foreach (EffectEvent effect in cullingCracksIndicators)
             {
@@ -728,7 +728,7 @@ internal class Dhuum : HallOfChains
         }
 
         // Cull - Cracks explosion
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullCracksDamage, out IReadOnlyList<EffectEvent> cullingCracksDamage))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumCullCracksDamage, out var cullingCracksDamage))
         {
             foreach (EffectEvent effect in cullingCracksDamage)
             {
@@ -743,7 +743,7 @@ internal class Dhuum : HallOfChains
         }
 
         // Superspeed Orbs
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumSuperspeedOrb, out IReadOnlyList<EffectEvent> superspeedOrbs))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.DhuumSuperspeedOrb, out var superspeedOrbs))
         {
             foreach (EffectEvent effect in superspeedOrbs)
             {

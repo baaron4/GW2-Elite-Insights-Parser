@@ -114,7 +114,7 @@ internal class StatueOfIce : HallOfChains
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Numbing Breach - Cracks - White smoke indicator
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachIndicator, out IReadOnlyList<EffectEvent> cracksIndicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachIndicator, out var cracksIndicators))
         {
             foreach (EffectEvent effect in cracksIndicators)
             {
@@ -126,7 +126,7 @@ internal class StatueOfIce : HallOfChains
         }
 
         // Numbing Breach - Cracks - Damage zone
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachDamage, out IReadOnlyList<EffectEvent> cracks))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingNumbingBreachDamage, out var cracks))
         {
             foreach (EffectEvent effect in cracks)
             {
@@ -139,14 +139,14 @@ internal class StatueOfIce : HallOfChains
         }
 
         // Hailstorm - Greens
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingHailstormGreen, out IReadOnlyList<EffectEvent> greens))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingHailstormGreen, out var greens))
         {
             foreach (EffectEvent green in greens)
             {
                 Color color = Colors.DarkGreen;
 
                 // Ice Breaker - Failed Greens
-                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out IReadOnlyList<EffectEvent> failedGreens))
+                if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out var failedGreens))
                 {
                     EffectEvent failedGreen = failedGreens.FirstOrDefault(x => x.Position.Distance2DToPoint(green.Position) < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
                     if (failedGreen != null)

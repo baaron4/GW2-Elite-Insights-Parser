@@ -55,7 +55,7 @@ public class PhaseData
         return minEnd - maxStart > 0;
     }
 
-    internal void AddTarget(AbstractSingleActor target)
+    internal void AddTarget(AbstractSingleActor? target)
     {
         if (target == null || _targets.Contains(target))
         {

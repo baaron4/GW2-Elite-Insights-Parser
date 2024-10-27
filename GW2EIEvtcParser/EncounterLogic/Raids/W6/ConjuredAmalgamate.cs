@@ -256,7 +256,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    private static List<long> GetTargetableTimes(ParsedEvtcLog log, AbstractSingleActor target)
+    private static List<long> GetTargetableTimes(ParsedEvtcLog log, AbstractSingleActor? target)
     {
         if (target == null)
         {
@@ -357,7 +357,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             int start = (int)c.Time;
             int duration = 10000;
             uint radius = 300;
-            Point3D position = p.GetCurrentInterpolatedPosition(log, start);
+            var position = p.GetCurrentInterpolatedPosition(log, start);
             if (position != null)
             {
                 var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
