@@ -40,7 +40,7 @@ public abstract class OperationController : ParserController
     /// <summary>
     /// Location of the file being parsed
     /// </summary>
-    public readonly string InputFile;
+    public string InputFile { get; }
     /// <summary>
     /// Location of the output
     /// </summary>
