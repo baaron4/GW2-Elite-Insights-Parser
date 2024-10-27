@@ -18,8 +18,8 @@ public class DamageModifiersContainer
 
     internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
-        var AllOutgoingDamageModifiers = new List<List<DamageModifierDescriptor>>
-        {
+        IEnumerable<List<DamageModifierDescriptor>> allOutgoingDamageModifiers = 
+        [
             ItemDamageModifiers.OutgoingDamageModifiers,
             EncounterDamageModifiers.OutgoingDamageModifiers,
             GearDamageModifiers.OutgoingDamageModifiers,
@@ -69,9 +69,9 @@ public class DamageModifiersContainer
             TempestHelper.OutgoingDamageModifiers,
             WeaverHelper.OutgoingDamageModifiers,
             CatalystHelper.OutgoingDamageModifiers,
-        };
-        var currentOutgoingDamageMods = new List<OutgoingDamageModifier>(AllOutgoingDamageModifiers.Count);
-        foreach (List<DamageModifierDescriptor> modifierDescriptor in AllOutgoingDamageModifiers)
+        ];
+        var currentOutgoingDamageMods = new List<OutgoingDamageModifier>(10);
+        foreach (var modifierDescriptor in allOutgoingDamageModifiers)
         {
             currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
         }
@@ -84,8 +84,8 @@ public class DamageModifiersContainer
             return first;
         });
         //
-        var AllIncomingDamageModifiers = new List<List<DamageModifierDescriptor>>
-        {
+        IEnumerable<List<DamageModifierDescriptor>> allIncomingDamageModifiers =
+        [
             ItemDamageModifiers.IncomingDamageModifiers,
             EncounterDamageModifiers.IncomingDamageModifiers,
             GearDamageModifiers.IncomingDamageModifiers,
@@ -135,9 +135,9 @@ public class DamageModifiersContainer
             TempestHelper.IncomingDamageModifiers,
             WeaverHelper.IncomingDamageModifiers,
             CatalystHelper.IncomingDamageModifiers,
-        };
-        var currentIncomingDamageMods = new List<IncomingDamageModifier>();
-        foreach (List<DamageModifierDescriptor> boons in AllIncomingDamageModifiers)
+        ];
+        var currentIncomingDamageMods = new List<IncomingDamageModifier>(20);
+        foreach (var boons in allIncomingDamageModifiers)
         {
             currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
         }
@@ -151,10 +151,10 @@ public class DamageModifiersContainer
         });
     }
 
-    public IReadOnlyList<OutgoingDamageModifier> GetOutgoingModifiersPerSpec(ParserHelper.Spec spec)
+    public List<OutgoingDamageModifier> GetOutgoingModifiersPerSpec(ParserHelper.Spec spec)
     {
-        var res = new List<OutgoingDamageModifier>();
-        IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
+        var srcs = ParserHelper.SpecToSources(spec);
+        var res = new List<OutgoingDamageModifier>(srcs.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (ParserHelper.Source src in srcs)
         {
             if (OutgoingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<OutgoingDamageModifier> list))
@@ -165,10 +165,10 @@ public class DamageModifiersContainer
         return res;
     }
 
-    public IReadOnlyList<IncomingDamageModifier> GetIncomingModifiersPerSpec(ParserHelper.Spec spec)
+    public List<IncomingDamageModifier> GetIncomingModifiersPerSpec(ParserHelper.Spec spec)
     {
-        var res = new List<IncomingDamageModifier>();
-        IReadOnlyList<ParserHelper.Source> srcs = ParserHelper.SpecToSources(spec);
+        var srcs = ParserHelper.SpecToSources(spec);
+        var res = new List<IncomingDamageModifier>(srcs.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (ParserHelper.Source src in srcs)
         {
             if (IncomingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<IncomingDamageModifier> list))

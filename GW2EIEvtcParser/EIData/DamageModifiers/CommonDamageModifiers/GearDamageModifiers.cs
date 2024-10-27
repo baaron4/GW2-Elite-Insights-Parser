@@ -41,7 +41,7 @@ internal static class GearDamageModifiers
         new BuffOnFoeDamageModifier(Daze, "Rune of the Mesmer", "10% on dazed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheMesmer, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         // Sigils
-        new BuffOnFoeDamageModifier(new long[] { Stun, Knockdown }, "Impact Sigil", "7% on stunned or knocked-down target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorSigilOfImpact, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier([Stun, Knockdown], "Impact Sigil", "7% on stunned or knocked-down target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorSigilOfImpact, DamageModifierMode.All),
         // Relics
         new BuffOnFoeDamageModifier(RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter", "10% after trap hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheDragonhunter, DamageModifierMode.All).UsingChecker((x, log) =>
         {

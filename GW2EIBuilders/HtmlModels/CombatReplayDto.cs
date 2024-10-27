@@ -23,7 +23,7 @@ internal class CombatReplayDto
         (Actors, DecorationRenderings, DecorationMetadata) = log.GetCombatReplayDescriptions(usedSkills, usedBuffs);
         Maps = map.Maps;
         (int width, int height) = map.GetPixelMapSize();
-        Sizes = new int[2] { width, height };
+        Sizes = [width, height];
         InchToPixel = map.GetInchToPixel();
         MaxTime = log.PlayerList.First().GetCombatReplayPolledPositions(log).Last().Time;
         PollingRate = ParserHelper.CombatReplayPollingRate;

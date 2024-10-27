@@ -64,7 +64,7 @@ internal static class NecromancerHelper
         // Soul Reaping
         new BuffOnActorDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(SoulBarbs, "Soul Barbs", "10% after entering or exiting shroud", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Necromancer, ByPresence, BuffImages.SoulBarbs, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(new long[] { DeathShroud, ReapersShroud, HarbingerShroud }, "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathPerception, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.June2022Balance), // no tracked for Scourge
+        new BuffOnActorDamageModifier([DeathShroud, ReapersShroud, HarbingerShroud], "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathPerception, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.June2022Balance), // no tracked for Scourge
     };
 
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
@@ -200,10 +200,10 @@ internal static class NecromancerHelper
             }
         }
         // Plaguelands
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] {
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, [
                         EffectGUIDs.NecromancerPlaguelandsPulse1,
                         EffectGUIDs.NecromancerPlaguelandsPulse2,EffectGUIDs.NecromancerPlaguelandsPulse3
-                        }, out var plaguelandPulses))
+                        ], out var plaguelandPulses))
         {
             var skill = new SkillModeDescriptor(player, Spec.Necromancer, Plaguelands);
             foreach (EffectEvent effect in plaguelandPulses)

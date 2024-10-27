@@ -27,7 +27,7 @@ internal class CounterOnActorDamageModifier : BuffOnActorDamageModifier
     {
     }
 
-    internal CounterOnActorDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
+    internal CounterOnActorDamageModifier(HashSet<long> ids, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
     {
     }
     internal override DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)

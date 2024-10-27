@@ -26,7 +26,7 @@ internal static class JsonActorCombatReplayDataBuilder
             var jsonPositions = new List<float[]>();
             for (int i = 0; i < description.Positions.Count; i += 2)
             {
-                jsonPositions.Add(new float[2] { description.Positions[i], description.Positions[i + 1] });
+                jsonPositions.Add([description.Positions[i], description.Positions[i + 1]]);
             }
             actorCombatReplayData.Positions = jsonPositions;
             //
@@ -35,7 +35,7 @@ internal static class JsonActorCombatReplayDataBuilder
                 var jsonDeads = new List<long[]>();
                 for (int i = 0; i < description.Dead.Count; i += 2)
                 {
-                    jsonDeads.Add(new long[2] { description.Dead[i], description.Dead[i + 1] });
+                    jsonDeads.Add([description.Dead[i], description.Dead[i + 1]]);
                 }
                 actorCombatReplayData.Dead = jsonDeads;
             }
@@ -44,7 +44,7 @@ internal static class JsonActorCombatReplayDataBuilder
                 var jsonDcs = new List<long[]>();
                 for (int i = 0; i < description.Dc.Count; i += 2)
                 {
-                    jsonDcs.Add(new long[2] { description.Dc[i], description.Dc[i + 1] });
+                    jsonDcs.Add([description.Dc[i], description.Dc[i + 1]]);
                 }
                 actorCombatReplayData.Dc = jsonDcs;
             }
@@ -53,7 +53,7 @@ internal static class JsonActorCombatReplayDataBuilder
                 var jsonDowns = new List<long[]>();
                 for (int i = 0; i < description.Down.Count; i += 2)
                 {
-                    jsonDowns.Add(new long[2] { description.Down[i], description.Down[i + 1] });
+                    jsonDowns.Add([description.Down[i], description.Down[i + 1]]);
                 }
                 actorCombatReplayData.Down = jsonDowns;
             }

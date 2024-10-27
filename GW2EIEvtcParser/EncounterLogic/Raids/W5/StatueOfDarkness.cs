@@ -27,8 +27,8 @@ internal class StatueOfDarkness : HallOfChains
         new PlayerCastStartMechanic(Flare, "Flare", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Detonate","Flare (detonate light orb to incapacitate eye)", "Detonate orb",0).UsingChecker( (evt, log) => evt.Status != AbstractCastEvent.AnimationStatus.Interrupted),
         new PlayerDstHitMechanic(PiercingShadow, "Piercing Shadow", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Spin","Piercing Shadow (damaging spin to all players in sight)", "Eye Spin",0),
         new PlayerDstHitMechanic(DeepAbyss, "Deep Abyss", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Beam","Deep Abyss (ticking eye beam)", "Eye Beam",0),
-        new PlayerSrcBuffApplyMechanic(new long[] { Daze, Fear, Knockdown }, "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied Daze/Fear/Knockdown on Eye of Fate", "CC Fate",50).UsingChecker((ba, log) => ba.To.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate)),
-        new PlayerSrcBuffApplyMechanic(new long[] { Daze, Fear, Knockdown }, "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied Daze/Fear/Knockdown on Eye of Judgement", "CC Judge",50).UsingChecker((ba, log) => ba.To.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement)),
+        new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], "Hard CC Eye of Fate", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.Red), "Hard CC Fate","Applied Daze/Fear/Knockdown on Eye of Fate", "CC Fate",50).UsingChecker((ba, log) => ba.To.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate)),
+        new PlayerSrcBuffApplyMechanic([Daze, Fear, Knockdown], "Hard CC Eye of Judge", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Hard CC Judge","Applied Daze/Fear/Knockdown on Eye of Judgement", "CC Judge",50).UsingChecker((ba, log) => ba.To.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement)),
         //47857 <- teleport + fear skill? 
         }
         );

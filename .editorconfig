@@ -195,7 +195,7 @@ dotnet_diagnostic.CA1724.severity = silent
 # CA1054: Uri parameters should not be strings
 dotnet_diagnostic.CA1054.severity = suggestion
 
-dotnet_diagnostic.CA1002.severity = suggestion
+dotnet_diagnostic.CA1002.severity = none
 
 dotnet_diagnostic.CA1711.severity = none
 

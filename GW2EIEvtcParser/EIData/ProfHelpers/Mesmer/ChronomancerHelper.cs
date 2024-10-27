@@ -122,7 +122,7 @@ internal static class ChronomancerHelper
             }
         }
         // Well of Calamity - Pulses
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfCalamityPulse, EffectGUIDs.ChronomancerWellOfCalamityExplosion }, out var wellsOfCalamityPulses))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, [EffectGUIDs.ChronomancerWellOfCalamityPulse, EffectGUIDs.ChronomancerWellOfCalamityExplosion], out var wellsOfCalamityPulses))
         {
             var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfCalamity);
             foreach (EffectEvent effect in wellsOfCalamityPulses)
@@ -145,7 +145,7 @@ internal static class ChronomancerHelper
             }
         }
         // Well of Precognition - Pulses
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerWellOfPrecognitionPulse, EffectGUIDs.ChronomancerWellOfPrecognitionExplosion }, out var wellsOfPrecognitionPulses))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, [EffectGUIDs.ChronomancerWellOfPrecognitionPulse, EffectGUIDs.ChronomancerWellOfPrecognitionExplosion], out var wellsOfPrecognitionPulses))
         {
             var skill = new SkillModeDescriptor(player, Spec.Chronomancer, WellOfPrecognition, SkillModeCategory.ImportantBuffs);
             foreach (EffectEvent effect in wellsOfPrecognitionPulses)
@@ -202,7 +202,7 @@ internal static class ChronomancerHelper
             }
         }
         // Gravity Well - Pulses
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, new string[] { EffectGUIDs.ChronomancerGravityWellPulse, EffectGUIDs.ChronomancerGravityWellExplosion }, out var gravityWellPulses))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, [EffectGUIDs.ChronomancerGravityWellPulse, EffectGUIDs.ChronomancerGravityWellExplosion], out var gravityWellPulses))
         {
             var skill = new SkillModeDescriptor(player, Spec.Chronomancer, GravityWell, SkillModeCategory.CC);
             foreach (EffectEvent effect in gravityWellPulses)

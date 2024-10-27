@@ -154,7 +154,7 @@ internal static class JsonLogBuilder
                 {
                     presentFractalInstabilities.Add(instanceBuff.ID);
                 }
-                presentInstanceBuffs.Add(new long[] { instanceBuff.ID, stack });
+                presentInstanceBuffs.Add([instanceBuff.ID, stack]);
             }
             jsonLog.PresentFractalInstabilities = presentFractalInstabilities;
             jsonLog.PresentInstanceBuffs = presentInstanceBuffs;

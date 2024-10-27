@@ -12,16 +12,16 @@ internal static class DamageModifiersUtils
 
     internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
-    internal static readonly GainComputerByPresence ByPresence = new GainComputerByPresence();
-    internal static readonly GainComputerByMultiPresence ByMultiPresence = new GainComputerByMultiPresence();
-    internal static readonly GainComputerByStack ByStack = new GainComputerByStack();
-    internal static readonly GainComputerByMultiplyingStack ByMultipliyingStack = new GainComputerByMultiplyingStack();
-    internal static readonly GainComputerByAbsence ByAbsence = new GainComputerByAbsence();
+    internal static readonly GainComputerByPresence ByPresence = new();
+    internal static readonly GainComputerByMultiPresence ByMultiPresence = new();
+    internal static readonly GainComputerByStack ByStack = new();
+    internal static readonly GainComputerByMultiplyingStack ByMultipliyingStack = new();
+    internal static readonly GainComputerByAbsence ByAbsence = new();
 
     internal static double VulnerabilityAdjuster(AbstractHealthDamageEvent dl, ParsedEvtcLog log)
     {
-        AbstractSingleActor target = log.FindActor(dl.To);
-        IReadOnlyDictionary<long, BuffsGraphModel> bgms = target.GetBuffGraphs(log);
+        var target = log.FindActor(dl.To);
+        var bgms = target.GetBuffGraphs(log);
         if (bgms.TryGetValue(Vulnerability, out BuffsGraphModel bgm))
         {
             return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));
@@ -31,7 +31,7 @@ internal static class DamageModifiersUtils
 
     internal static bool VulnerabilityAdditiveChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log, long buffID, double gainPerStack)
     {
-        AbstractSingleActor target = log.FindActor(dl.To);
+        var target = log.FindActor(dl.To);
         var buffSegment = target.GetBuffStatus(log, buffID, dl.Time);
         var vulnSegment = target.GetBuffStatus(log, Vulnerability, dl.Time);
         double gain = buffSegment.Value * gainPerStack - vulnSegment.Value;

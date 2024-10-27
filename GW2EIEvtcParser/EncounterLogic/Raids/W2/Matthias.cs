@@ -19,11 +19,11 @@ internal class Matthias : SalvationPass
         MechanicList.AddRange(new List<Mechanic>
         {
 
-        new PlayerDstHitMechanic(new long[]{ OppressiveGazeHuman, OppressiveGazeAbomination }, "Oppressive Gaze", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),
-        new PlayerDstHitMechanic(new long[]{ BloodShardsHuman, BloodShardsAbomination }, "Blood Shards", new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Magenta), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire",0),
-        new PlayerSrcHitMechanic(new long[]{ BloodShardsHuman, BloodShardsAbomination }, "Blood Shards", new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Green), "Refl.Shards","Blood Shard projectiles reflected during bubble", "Reflected Rapid Fire",0),
-        new PlayerDstHitMechanic(new long[]{ ShardsOfRageHuman, ShardsOfRageAbomination }, "Shards of Rage", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),
-        new PlayerSrcHitMechanic(new long[]{ ShardsOfRageHuman, ShardsOfRageAbomination }, "Shards of Rage", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Red), "Refl.Jump Shards","Rflected Shards of Rage (Jump)", "Reflected Jump Shards",1000),
+        new PlayerDstHitMechanic([OppressiveGazeHuman, OppressiveGazeAbomination], "Oppressive Gaze", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Red), "Hadouken","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),
+        new PlayerDstHitMechanic([BloodShardsHuman, BloodShardsAbomination], "Blood Shards", new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Magenta), "Shoot Shards","Blood Shard projectiles during bubble", "Rapid Fire",0),
+        new PlayerSrcHitMechanic([BloodShardsHuman, BloodShardsAbomination], "Blood Shards", new MechanicPlotlySetting(Symbols.DiamondWideOpen,Colors.Green), "Refl.Shards","Blood Shard projectiles reflected during bubble", "Reflected Rapid Fire",0),
+        new PlayerDstHitMechanic([ShardsOfRageHuman, ShardsOfRageAbomination], "Shards of Rage", new MechanicPlotlySetting(Symbols.StarDiamond,Colors.Red), "Jump Shards","Shards of Rage (Jump)", "Jump Shards",1000),
+        new PlayerSrcHitMechanic([ShardsOfRageHuman, ShardsOfRageAbomination], "Shards of Rage", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Red), "Refl.Jump Shards","Rflected Shards of Rage (Jump)", "Reflected Jump Shards",1000),
         new PlayerDstHitMechanic(FieryVortex, "Fiery Vortex", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
         new PlayerDstHitMechanic(Thunder, "Thunder", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.Teal), "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
         new PlayerDstBuffApplyMechanic(UnstableBloodMagic, "Unstable Blood Magic", new MechanicPlotlySetting(Symbols.Diamond,Colors.Red), "Well","Unstable Blood Magic application", "Well",0),
@@ -38,9 +38,9 @@ internal class Matthias : SalvationPass
         //new Mechanic(Unbalanced, "Unbalanced", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,"rgb(0,140,0)"), "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
         //new Mechanic(BloodFueled, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,Color.Red), "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
         //new Mechanic(BloodFueledAbo, "Blood Fueled", ParseEnum.BossIDS.Matthias, new MechanicPlotlySetting(Symbols.Square,Color.Red), "Ate Reflects(good)",0),//abom
-        new EnemyDstBuffApplyMechanic(new long[]{ BloodShield, BloodShieldAbo }, "Blood Shield", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Bubble","Blood Shield (protective bubble)", "Bubble",100).UsingChecker((ba, log) => !ba.To.HasBuff(log, BloodShield, ba.Time - 100) && !ba.To.HasBuff(log, BloodShieldAbo, ba.Time - 100)),
-        new EnemyDstBuffRemoveMechanic(new long[]{ BloodShield, BloodShieldAbo }, "Lost Blood Shield", new MechanicPlotlySetting(Symbols.Octagon,Colors.Green), "Lost Bubble","Lost Blood Shield (protective bubble)", "Lost Bubble",100),
-        new PlayerSrcBuffRemoveSingleFromMechanic(new long[]{ BloodShield, BloodShieldAbo }, "Removed a blood shield stack", new MechanicPlotlySetting(Symbols.Octagon,Colors.Blue), "Rmv.Sh.Stck","Removed Blood Shield (protective bubble) Stack", "Removed Bubble Stack"),
+        new EnemyDstBuffApplyMechanic([BloodShield, BloodShieldAbo], "Blood Shield", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Bubble","Blood Shield (protective bubble)", "Bubble",100).UsingChecker((ba, log) => !ba.To.HasBuff(log, BloodShield, ba.Time - 100) && !ba.To.HasBuff(log, BloodShieldAbo, ba.Time - 100)),
+        new EnemyDstBuffRemoveMechanic([BloodShield, BloodShieldAbo], "Lost Blood Shield", new MechanicPlotlySetting(Symbols.Octagon,Colors.Green), "Lost Bubble","Lost Blood Shield (protective bubble)", "Lost Bubble",100),
+        new PlayerSrcBuffRemoveSingleFromMechanic([BloodShield, BloodShieldAbo], "Removed a blood shield stack", new MechanicPlotlySetting(Symbols.Octagon,Colors.Blue), "Rmv.Sh.Stck","Removed Blood Shield (protective bubble) Stack", "Removed Bubble Stack"),
         new PlayerDstBuffApplyMechanic(ZealousBenediction, "Zealous Benediction", new MechanicPlotlySetting(Symbols.Circle,Colors.Yellow), "Bombs","Zealous Benediction (Expanding bombs)","Bomb",0),
         new PlayerDstBuffApplyMechanic(Slow, "Icy Patch", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0).UsingChecker((br,log) => br.AppliedDuration == 10000 && !br.To.HasBuff(log, Stability, br.Time - ParserHelper.ServerDelayConstant)),
         new PlayerDstHitMechanic(Surrender, "Surrender", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Spirit","Surrender (hit by walking Spirit)", "Spirit hit",0)
@@ -145,7 +145,7 @@ internal class Matthias : SalvationPass
         {
             phases.Add(new PhaseData(log.FightData.FightStart, fightEnd));
         }
-        string[] namesMat = new[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
+        string[] namesMat = ["Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase"];
         for (int i = 1; i < phases.Count; i++)
         {
             phases[i].Name = namesMat[i - 1];
@@ -314,7 +314,7 @@ internal class Matthias : SalvationPass
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Corruption
-        var corruptedMatthias = p.GetBuffStatus(log, new long[] { Corruption1, Corruption2 }, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+        var corruptedMatthias = p.GetBuffStatus(log, [Corruption1, Corruption2], log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in corruptedMatthias)
         {
             int corruptedMatthiasEnd = (int)seg.End;

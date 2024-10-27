@@ -20,7 +20,7 @@ internal class ValeGuardian : SpiritVale
         {
         new PlayerDstHitMechanic(GreenGuardianUnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
         new PlayerDstHitMechanic(UnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP","Unstable Magic Spike (Boss Teleport)", "Boss TP",500),
-        new PlayerDstHitMechanic(new long[] {DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen }, "Distributed Magic", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
+        new PlayerDstHitMechanic([DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen], "Distributed Magic", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
         new EnemyCastStartMechanic(DistributedMagicBlue, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue) , "Green Cast B","Distributed Magic (Green Field appeared in Blue Sector)", "Green in Blue",0),
         new EnemyCastStartMechanic(DistributedMagicRed, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Green Cast R","Distributed Magic (Green Field appeared in Red Sector)", "Green in Red",0),
         new EnemyCastStartMechanic(DistributedMagicGreen, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green Cast G","Distributed Magic (Green Field appeared in Green Sector)", "Green in Green",0),

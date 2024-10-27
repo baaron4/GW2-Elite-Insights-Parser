@@ -8,13 +8,13 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
 {
-    private BuffsTracker _trackerSource { get; set; } = null;
-    private GainComputer _gainComputerSource { get; set; } = null;
+    private BuffsTracker? _trackerSource = null;
+    private GainComputer? _gainComputerSource = null;
     internal BuffOnFoeDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
 
-    internal BuffOnFoeDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
+    internal BuffOnFoeDamageModifier(HashSet<long> ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
 
@@ -25,9 +25,9 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingActorCheckerByAbsence(long[] activatorIDs)
+    internal BuffOnFoeDamageModifier UsingActorCheckerByAbsence(HashSet<long> activatorIDs)
     {
-        _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
+        _trackerSource = new BuffsTrackerMulti(activatorIDs);
         _gainComputerSource = ByAbsence;
         return this;
     }
@@ -39,9 +39,9 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         return this;
     }
 
-    internal BuffOnFoeDamageModifier UsingActorCheckerByPresence(long[] activatorIDs)
+    internal BuffOnFoeDamageModifier UsingActorCheckerByPresence(HashSet<long> activatorIDs)
     {
-        _trackerSource = new BuffsTrackerMulti(new List<long>(activatorIDs));
+        _trackerSource = new BuffsTrackerMulti(activatorIDs);
         _gainComputerSource = ByPresence;
         return this;
     }

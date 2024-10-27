@@ -22,12 +22,12 @@ internal class Skorvald : ShatteredObservatory
     {
         MechanicList.AddRange(new List<Mechanic>
         {
-        new PlayerDstHitMechanic(new long[]{ CombustionRush1, CombustionRush2, CombustionRush3 }, "Combustion Rush", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge","Combustion Rush", "Charge",0),
-        new PlayerDstHitMechanic(new long[] { PunishingKickAnomaly, PunishingKickSkorvald }, "Punishing Kick", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
-        new PlayerDstHitMechanic(new long[] { CranialCascadeAnomaly,CranialCascade2 }, "Cranial Cascade", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
-        new PlayerDstHitMechanic(new long[] { RadiantFurySkorvald, RadiantFury2 }, "Radiant Fury", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
+        new PlayerDstHitMechanic([CombustionRush1, CombustionRush2, CombustionRush3], "Combustion Rush", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Magenta), "Charge","Combustion Rush", "Charge",0),
+        new PlayerDstHitMechanic([PunishingKickAnomaly, PunishingKickSkorvald], "Punishing Kick", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Magenta), "Add Kick","Punishing Kick (Single purple Line, Add)", "Kick (Add)",0),
+        new PlayerDstHitMechanic([CranialCascadeAnomaly,CranialCascade2], "Cranial Cascade", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Yellow), "Add Cone KB","Cranial Cascade (3 purple Line Knockback, Add)", "Small Cone KB (Add)",0),
+        new PlayerDstHitMechanic([RadiantFurySkorvald, RadiantFury2], "Radiant Fury", new MechanicPlotlySetting(Symbols.Octagon,Colors.Red), "Burn Circle","Radiant Fury (expanding burn circles)", "Expanding Circles",0),
         new PlayerDstHitMechanic(FocusedAnger, "Focused Anger", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Orange), "Large Cone KB","Focused Anger (Large Cone Overhead Crosshair Knockback)", "Large Cone Knockback",0),
-        new PlayerDstHitMechanic(new long[] { HorizonStrikeSkorvald1, HorizonStrikeSkorvald2 }, "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
+        new PlayerDstHitMechanic([HorizonStrikeSkorvald1, HorizonStrikeSkorvald2], "Horizon Strike", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Horizon Strike","Horizon Strike (turning pizza slices)", "Horizon Strike",0), // 
         new PlayerDstHitMechanic(CrimsonDawn, "Crimson Dawn", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkRed), "Horizon Strike End","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
         new PlayerDstHitMechanic(SolarCyclone, "Solar Cyclone", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.DarkMagenta), "Cyclone","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
         new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
@@ -138,7 +138,7 @@ internal class Skorvald : ShatteredObservatory
             // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
         }
 
-        int[] nameCount = new[] { 0, 0, 0, 0 };
+        int[] nameCount = [0, 0, 0, 0];
         foreach (NPC target in _targets)
         {
             switch (target.ID)
@@ -553,7 +553,7 @@ internal class Skorvald : ShatteredObservatory
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixations
-        var fixations = p.GetBuffStatus(log, new long[] { FixatedBloom1, SkorvaldsIre }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var fixations = p.GetBuffStatus(log, [FixatedBloom1, SkorvaldsIre], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
     }
 

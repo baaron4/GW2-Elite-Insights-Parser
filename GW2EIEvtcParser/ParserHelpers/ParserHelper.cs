@@ -590,7 +590,7 @@ public static class ParserHelper
 
     public static IReadOnlyList<Source> SpecToSources(Spec spec)
     {
-        return SpecToSourcesDictionary.TryGetValue(spec, out List<Source> list) ? list : new List<Source> { };
+        return SpecToSourcesDictionary.TryGetValue(spec, out List<Source> list) ? list : [ ];
     }
 
     internal static string GetHighResolutionProfIcon(Spec spec)

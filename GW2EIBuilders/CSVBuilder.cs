@@ -75,15 +75,15 @@ public class CSVBuilder
         _sw = sw;
         //header
         _log.UpdateProgressWithCancellationCheck("CSV: Building Meta Data");
-        WriteLine(new[] { "Elite Insights", _parserVersion.ToString() });
-        WriteLine(new[] { "ARC Version", _log.LogData.ArcVersion });
-        WriteLine(new[] { "Fight ID", _log.FightData.TriggerID.ToString() });
-        WriteLine(new[] { "Recorded By", _log.LogData.PoVName });
-        WriteLine(new[] { "Time Start", _log.LogData.LogStartStd });
-        WriteLine(new[] { "Time End", _log.LogData.LogEndStd });
+        WriteLine(["Elite Insights", _parserVersion.ToString()]);
+        WriteLine(["ARC Version", _log.LogData.ArcVersion]);
+        WriteLine(["Fight ID", _log.FightData.TriggerID.ToString()]);
+        WriteLine(["Recorded By", _log.LogData.PoVName]);
+        WriteLine(["Time Start", _log.LogData.LogStartStd]);
+        WriteLine(["Time End", _log.LogData.LogEndStd]);
         if (_uploadResult.Any(x => x != null && x.Length > 0))
         {
-            WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1] });
+            WriteLine(["Links", _uploadResult[0], _uploadResult[1]]);
         }
         else
         {
@@ -93,16 +93,16 @@ public class CSVBuilder
         NewLine();
         NewLine();
         //Boss card
-        WriteLine(new[] { "Boss", _log.FightData.FightName });
-        WriteLine(new[] { "Success", _log.FightData.Success.ToString() });
-        WriteLine(new[] { "Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString() });
+        WriteLine(["Boss", _log.FightData.FightName]);
+        WriteLine(["Success", _log.FightData.Success.ToString()]);
+        WriteLine(["Total Boss Health", _legacyTarget.GetHealth(_log.CombatData).ToString()]);
         IReadOnlyList<HealthUpdateEvent> hpUpdates = _log.CombatData.GetHealthUpdateEvents(_legacyTarget.AgentItem);
         double hpLeft = hpUpdates.Count > 0
             ? hpUpdates.Last().HealthPercent
             : 100.0;
-        WriteLine(new[] { "Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString() });
-        WriteLine(new[] { "Boss Health Burned %", (100.0 - hpLeft).ToString() });
-        WriteLine(new[] { "Duration", _log.FightData.DurationString });
+        WriteLine(["Final Boss Health", (_legacyTarget.GetHealth(_log.CombatData) * hpLeft).ToString()]);
+        WriteLine(["Boss Health Burned %", (100.0 - hpLeft).ToString()]);
+        WriteLine(["Duration", _log.FightData.DurationString]);
 
         //DPSStats
         _log.UpdateProgressWithCancellationCheck("CSV: Building DPS Data");
@@ -193,10 +193,10 @@ public class CSVBuilder
     private void CreateDPSTable(int phaseIndex)
     {
         PhaseData phase = _phases[phaseIndex];
-        WriteLine(new[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
+        WriteLine([ "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
             "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
             "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
-            "Times Downed", "Time Died","Percent Alive"});
+            "Times Downed", "Time Died","Percent Alive"]);
 
         int count = 0;
         foreach (Player player in _log.PlayerList)
@@ -229,10 +229,10 @@ public class CSVBuilder
             {
                 build += " Toughness:" + player.Toughness;
             }
-            WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(),build,player.Character, player.Account ,wep[0],wep[1],wep[2],wep[3],
+            WriteLine([ player.Group.ToString(), player.Spec.ToString(),build,player.Character, player.Account ,wep[0],wep[1],wep[2],wep[3],
             dpsBoss.Dps.ToString(),dpsBoss.Damage.ToString(),dpsBoss.PowerDps.ToString(),dpsBoss.PowerDamage.ToString(),dpsBoss.CondiDps.ToString(),dpsBoss.CondiDamage.ToString(),
             dps.Dps.ToString(),dps.Damage.ToString(),dps.PowerDps.ToString(),dps.PowerDamage.ToString(),dps.CondiDps.ToString(),dps.CondiDamage.ToString(),
-            defense.DownCount.ToString(), deathString, deadthTooltip});
+            defense.DownCount.ToString(), deathString, deadthTooltip]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -244,7 +244,7 @@ public class CSVBuilder
     private void CreateBossDMGStatsTable(int phaseIndex)
     {
         //generate dmgstats table=
-        WriteLine(new[] { "Sub Group", "Profession", "Name" ,
+        WriteLine([ "Sub Group", "Profession", "Name" ,
             "Critical%","Critical hits","Critical DMG",
             "Scholar%","Scholar hits","Scholar DMG","Scholar % increase",
             "Moving%","Moving Hits","Moving DMG","Moving % increase",
@@ -252,7 +252,7 @@ public class CSVBuilder
             "Glancing%","Glancing Hits",
             "Blind%","Blind Hits",
             "Total Hits",
-            "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
+            "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"]);
         int count = 0;
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
@@ -271,7 +271,7 @@ public class CSVBuilder
                 moving = moveDict;
             }
 
-            WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
+            WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
             Math.Round((double)(statsBoss.CriticalCount) / statsBoss.CritableDirectDamageCount * 100,1).ToString(), statsBoss.CriticalCount.ToString(),statsBoss.CriticalDmg.ToString(),
             Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
             Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
@@ -279,7 +279,7 @@ public class CSVBuilder
             Math.Round(statsBoss.GlanceCount / (double)statsBoss.ConnectedDirectDamageCount * 100,1).ToString(),statsBoss.GlanceCount.ToString(),
             Math.Round(statsBoss.Missed / (double)statsBoss.DirectDamageCount * 100,1).ToString(),statsBoss.Missed.ToString(),
             statsBoss.DirectDamageCount.ToString(),
-            statsBoss.Interrupts.ToString(),statsBoss.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
+            statsBoss.Interrupts.ToString(),statsBoss.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() ]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -291,7 +291,7 @@ public class CSVBuilder
     private void CreateDmgStatsTable(int phaseIndex)
     {
         //generate dmgstats table
-        WriteLine(new[] { "Sub Group", "Profession", "Name" ,
+        WriteLine([ "Sub Group", "Profession", "Name" ,
             "Critical%","Critical hits","Critical DMG",
             "Scholar%","Scholar hits","Scholar DMG","Scholar % increase",
             "Moving%","Moving Hits","Moving DMG","Moving % increase",
@@ -299,7 +299,7 @@ public class CSVBuilder
             "Glancing%","Glancing Hits",
             "Blind%","Blind Hits",
             "Total Hits",
-            "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
+            "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"]);
         int count = 0;
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
@@ -318,7 +318,7 @@ public class CSVBuilder
                 moving = moveDict;
             }
 
-            WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
+            WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
             Math.Round((double)(offStats.CriticalCount) / offStats.CritableDirectDamageCount * 100,1).ToString(), offStats.CriticalCount.ToString(),offStats.CriticalDmg.ToString(),
             Math.Round((double)(scholar.HitCount) / scholar.TotalHitCount * 100,1).ToString(),scholar.HitCount.ToString(),scholar.DamageGain.ToString(),Math.Round(100.0 * (scholar.TotalDamage / (scholar.TotalDamage - scholar.DamageGain) - 1.0), 3).ToString(),
             Math.Round((double)(moving.HitCount) / moving.TotalHitCount * 100,1).ToString(),moving.HitCount.ToString(),moving.DamageGain.ToString(),Math.Round(100.0 * (moving.TotalDamage / (moving.TotalDamage - moving.DamageGain) - 1.0), 3).ToString(),
@@ -326,7 +326,7 @@ public class CSVBuilder
             Math.Round(offStats.GlanceCount / (double)offStats.ConnectedDirectDamageCount * 100,1).ToString(),offStats.GlanceCount.ToString(),
             Math.Round(offStats.Missed / (double)offStats.DirectDamageCount * 100,1).ToString(),offStats.Missed.ToString(),
             offStats.DirectDamageCount.ToString(),
-            offStats.Interrupts.ToString(),offStats.Invulned.ToString(),gameplayStats.TimeWasted.ToString(),gameplayStats.TimeSaved.ToString(),gameplayStats.SwapCount.ToString() });
+            offStats.Interrupts.ToString(),offStats.Invulned.ToString(),gameplayStats.TimeWasted.ToString(),gameplayStats.TimeSaved.ToString(),gameplayStats.SwapCount.ToString() ]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -338,16 +338,16 @@ public class CSVBuilder
     private void CreateDefTable(int phaseIndex)
     {
         //generate defstats table
-        WriteLine(new[] { "Sub Group", "Profession", "Name" ,
-            "DMG Taken","DMG Barrier","Blocked","Invulned","Evaded","Dodges" });
+        WriteLine([ "Sub Group", "Profession", "Name" ,
+            "DMG Taken","DMG Barrier","Blocked","Invulned","Evaded","Dodges" ]);
         int count = 0;
         PhaseData phase = _phases[phaseIndex];
         foreach (Player player in _noFakePlayers)
         {
             FinalDefensesAll defenses = player.GetDefenseStats(_log, phase.Start, phase.End);
 
-            WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
-            defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() });
+            WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
+            defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),defenses.DodgeCount.ToString() ]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -360,15 +360,15 @@ public class CSVBuilder
     {
         PhaseData phase = _phases[phaseIndex];
         //generate supstats table
-        WriteLine(new[] { "Sub Group", "Profession", "Name" ,
-            "Condi Cleanse","Condi Cleanse time", "Condi Cleanse Self","Condi Cleanse time self", "Boon Strips","Boon Strips time","Resurrects","Time Resurecting" });
+        WriteLine([ "Sub Group", "Profession", "Name" ,
+            "Condi Cleanse","Condi Cleanse time", "Condi Cleanse Self","Condi Cleanse time self", "Boon Strips","Boon Strips time","Resurrects","Time Resurecting" ]);
         int count = 0;
         foreach (Player player in _noFakePlayers)
         {
             FinalToPlayersSupport support = player.GetToPlayerSupportStats(_log, phase.Start, phase.End);
 
-            WriteLine(new[] { player.Group.ToString(), player.Spec.ToString(), player.Character,
-            support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() });
+            WriteLine([ player.Group.ToString(), player.Spec.ToString(), player.Character,
+            support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(), support.CondiCleanseSelf.ToString(), support.CondiCleanseTimeSelf.ToString(), support.BoonStrips.ToString(), support.BoonStripsTime.ToString(), support.Resurrects.ToString(),support.ResurrectTime.ToString() ]);
             count++;
         }
         while (count < 15)//so each graph has equal spacing
@@ -381,7 +381,7 @@ public class CSVBuilder
     {
         //generate Uptime Table table
 
-        WriteCells(new[] { "Name", "Avg Boons" });
+        WriteCells(["Name", "Avg Boons"]);
         foreach (Buff boon in listToUse)
         {
             WriteCell(boon.Name);

@@ -159,7 +159,7 @@ public class WeaponSets
         }
     }
 
-    public string[] ToArray() => new string[] { LandMH1, LandOH1, LandMH2, LandOH2, WaterMH1, WaterOH1, WaterMH2, WaterOH2 };
+    public string[] ToArray() => [LandMH1, LandOH1, LandMH2, LandOH2, WaterMH1, WaterOH1, WaterMH2, WaterOH2];
 
     public (string MH, string OH) LandSet1 => (LandMH1, LandOH1);
     public bool IsLand1TwoHand => LandOH1 == TwoHand;

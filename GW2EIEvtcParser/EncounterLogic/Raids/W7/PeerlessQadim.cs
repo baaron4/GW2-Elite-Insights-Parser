@@ -175,7 +175,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         {
             return phases;
         }
-        string[] intermissionNames = { "Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon" };
+        string[] intermissionNames = ["Magma Drop 1", "Magma Drop 2", "North Pylon", "SouthWest Pylon", "SouthEast Pylon"];
         bool skipNames = intermissionNames.Length < phaseEnds.Count - 1;
         for (int i = 0; i < phaseEnds.Count - 1; i++)
         {

@@ -143,7 +143,7 @@ internal class DmgDistributionDto
 
         double breakbarDamage = breakbarLogsBySkill.Remove(skill, out var brList) ? Math.Round(brList.Sum(x => x.BreakbarDamage), 1) : 0;
 
-        object[] skillItem = {
+        object[] skillItem = [
             IsIndirectDamage,
             skill.ID,
             totaldamage,
@@ -166,7 +166,7 @@ internal class DmgDistributionDto
             IsIndirectDamage ? 0 : maxTimeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : timeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : numberOfCastNoInterrupt,
-        };
+        ];
         return skillItem;
     }
 
@@ -213,7 +213,7 @@ internal class DmgDistributionDto
 
             (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) = GetCastValues(pair.Value, phase);
 
-            object[] skillData = {
+            object[] skillData = [
                 false,
                 pair.Key.ID,
                 0,
@@ -236,7 +236,7 @@ internal class DmgDistributionDto
                 maxTimeSpentCastingNoInterrupt,
                 timeSpentCastingNoInterrupt,
                 numberOfCastNoInterrupt,
-            };
+            ];
             list.Add(skillData);
         }
         // breakbar only
@@ -248,7 +248,7 @@ internal class DmgDistributionDto
             }
             double breakbarDamage = Math.Round(events.Sum(x => x.BreakbarDamage), 1);
 
-            object[] skillData = {
+            object[] skillData = [
                 false,
                 skill.ID,
                 0,
@@ -267,7 +267,7 @@ internal class DmgDistributionDto
                 0,
                 0,
                 breakbarDamage
-            };
+            ];
             list.Add(skillData);
         }
         return list;

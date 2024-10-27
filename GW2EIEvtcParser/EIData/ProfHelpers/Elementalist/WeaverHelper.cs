@@ -234,15 +234,15 @@ internal static class WeaverHelper
         new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave (Condition)", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
         new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave (Strike)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance),
-        new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier([Swiftness, Superspeed], "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
+        new BuffOnActorDamageModifier([Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "15% under swiftness/superspeed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier([Swiftness, Superspeed], "Swift Revenge", "15% under swiftness/superspeed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier([Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(new long[] { Swiftness, Superspeed}, "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
+        new BuffOnActorDamageModifier([Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance)
     };
 

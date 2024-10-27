@@ -128,7 +128,7 @@ internal class Golem : FightLogic
         if (hpUpdates.Count > 0)
         {
             var thresholds = new List<double> { 80, 60, 40, 20, 0 };
-            string[] numberNames = new string[] { "First Number", "Second Number", "Third Number", "Fourth Number" };
+            string[] numberNames = ["First Number", "Second Number", "Third Number", "Fourth Number"];
             // Fifth number would the equivalent of full fight phase
             for (int j = 0; j < thresholds.Count - 1; j++)
             {

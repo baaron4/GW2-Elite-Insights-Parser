@@ -26,6 +26,6 @@ public class UploadResults
 
     internal string[] ToArray()
     {
-        return new string[] { DPSReportEILink, RaidarLink };
+        return [DPSReportEILink, RaidarLink];
     }
 }

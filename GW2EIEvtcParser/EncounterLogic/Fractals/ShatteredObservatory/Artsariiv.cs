@@ -27,7 +27,7 @@ internal class Artsariiv : ShatteredObservatory
         new PlayerDstHitMechanic(SlamArtsariiv, "Slam", new MechanicPlotlySetting(Symbols.Circle,Colors.LightOrange), "Slam","Slam (Vault) from Boss", "Vault (Arts)",0),
         new PlayerDstHitMechanic(TeleportLunge, "Teleport Lunge", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen,Colors.LightOrange), "3 Jump","Triple Jump Mid->Edge", "Triple Jump",0),
         new PlayerDstHitMechanic(AstralSurge, "Astral Surge", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Floor Circle","Different sized spiraling circles", "1000 Circles",0),
-        new PlayerDstHitMechanic(new long[] { RedMarble1, RedMarble2 }, "Red Marble", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble","Red KD Marble after Jump", "Red Marble",0),
+        new PlayerDstHitMechanic([RedMarble1, RedMarble2], "Red Marble", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Marble","Red KD Marble after Jump", "Red Marble",0),
         new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0).UsingChecker((ba, log) => ba.AppliedDuration == 3000), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
         new SpawnMechanic((int)TrashID.Spark, "Spark", new MechanicPlotlySetting(Symbols.Star,Colors.Teal),"Spark","Spawned a Spark (missed marble)", "Spark",0),
         });
@@ -219,14 +219,14 @@ internal class Artsariiv : ShatteredObservatory
                                 int castStart = (int)cast.Time;
                                 int castEnd = castStart + 3160;
                                 replay.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), Colors.Orange, 0.2, new AgentConnector(target)), castEnd);
-                                (float, float)[][] positions = {
+                                (float, float)[][] positions = [
                                 // positions taken from effects
-                               new [] { (9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f) },
-                               new [] { (10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f) },
-                               new [] { (10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f) },
-                               new [] { (10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f) },
-                            };
-                                uint[] radius = { 400, 290, 180, 70 };
+                               [(9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f)],
+                               [(10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f)],
+                               [(10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f)],
+                               [(10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f)],
+                            ];
+                                uint[] radius = [400, 290, 180, 70];
                                 long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
                                 for (int i = 0; i < 4; i++)
                                 {

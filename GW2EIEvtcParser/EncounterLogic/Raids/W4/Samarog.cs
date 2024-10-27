@@ -34,7 +34,7 @@ internal class Samarog : BastionOfThePenitent
         new EnemyDstBuffApplyMechanic(StrengthenedBondGuldhem, "Strengthened Bond: Guldhem", new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Orange), "G.Str","Strengthened Bond: Guldhem", "Strengthened: Guldhem",0),
         new EnemyDstBuffApplyMechanic(StrengthenedBondRigom, "Strengthened Bond: Rigom", new MechanicPlotlySetting(Symbols.TriangleNE,Colors.Red), "R.Str","Strengthened Bond: Rigom", "Strengthened: Rigom",0),
         new PlayerDstHitMechanic(SpearReturn, "Spear Return", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Red), "S.Rt","Hit by Spear Return", "Spear Return",0),
-        new PlayerDstHitMechanic(new long[] {InevitableBetrayalFailSmall, InevitableBetrayalFailBig}, "Inevitable Betrayal", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl","Inevitable Betrayal (failed Green)", "Failed Green",0),
+        new PlayerDstHitMechanic([InevitableBetrayalFailSmall, InevitableBetrayalFailBig], "Inevitable Betrayal", new MechanicPlotlySetting(Symbols.Circle,Colors.Red), "Gr.Fl","Inevitable Betrayal (failed Green)", "Failed Green",0),
         new PlayerDstHitMechanic(EffigyPulse, "Effigy Pulse", new MechanicPlotlySetting(Symbols.TriangleDownOpen,Colors.Red), "S.Pls","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
         new PlayerDstHitMechanic(SpearImpact, "Spear Impact", new MechanicPlotlySetting(Symbols.TriangleDown,Colors.Red), "S.Spwn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0),
         new PlayerDstBuffApplyMechanic(BrutalizeBuff, "Brutalized", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Magenta),"Brtlzd","Brutalized (jumped upon by Samarog->Breakbar)", "Brutalized",0),

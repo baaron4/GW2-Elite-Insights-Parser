@@ -408,7 +408,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        int[] curTormenteds = new[] { 1, 1, 1, 1 };
+        int[] curTormenteds = [1, 1, 1, 1];
         foreach (AbstractSingleActor target in Targets)
         {
             switch (target.ID)

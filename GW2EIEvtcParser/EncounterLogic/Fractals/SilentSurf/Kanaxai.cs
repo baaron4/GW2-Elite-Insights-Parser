@@ -25,7 +25,7 @@ internal class Kanaxai : SilentSurf
         MechanicList.AddRange(new List<Mechanic>
         {
             new PlayerDstHitMechanic(RendingStormSkill, "Rending Storm", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Red), "RendStm.H", "Hit by Rending Storm (Axe AoE)", "Rending Storm Hit", 0),
-            new PlayerDstHitMechanic(new long [] { HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment }, "Harrowshot", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
+            new PlayerDstHitMechanic([HarrowshotDeath, HarrowshotExposure, HarrowshotFear, HarrowshotLethargy, HarrowshotTorment], "Harrowshot", new MechanicPlotlySetting(Symbols.Circle, Colors.Orange), "Harrowshot.H", "Harrowshot (Lost all boons)", "Harrowshot (Boonstrip)", 0),
             new PlayerDstBuffApplyMechanic(ExtremeVulnerability, "Extreme Vulnerability", new MechanicPlotlySetting(Symbols.X, Colors.DarkRed), "ExtVuln.A", "Applied Extreme Vulnerability", "Extreme Vulnerability Application", 150),
             new PlayerDstBuffApplyMechanic(ExposedPlayer, "Exposed", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Pink), "Expo.A", "Applied Exposed", "Exposed Application (Player)", 0),
             new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Yellow), "Fear.A", "Fear Applied", "Fear Application", 150),
@@ -69,7 +69,7 @@ internal class Kanaxai : SilentSurf
                             return diff > -ServerDelayConstant && diff <= 1000;
                         });
                 }),
-            new PlayerDstBuffApplyMechanic(new long [] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, "Rending Storm Target", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targetted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
+            new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], "Rending Storm Target", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targetted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
         });
         Extension = "kanaxai";
         Icon = EncounterIconKanaxai;
@@ -302,7 +302,7 @@ internal class Kanaxai : SilentSurf
         replay.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
 
         // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
-        IEnumerable<Segment> axes = player.GetBuffStatus(log, new long[] { RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2 }, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        IEnumerable<Segment> axes = player.GetBuffStatus(log, [RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (Segment segment in axes)
         {
             replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);

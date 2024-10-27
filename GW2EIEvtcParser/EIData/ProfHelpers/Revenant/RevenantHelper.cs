@@ -319,7 +319,7 @@ internal static class RevenantHelper
 
         // Coalescence of Ruin
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem,
-            new string[] { EffectGUIDs.RevenantCoalescenceOfRuin, EffectGUIDs.RevenantCoalescenceOfRuinLast }, out var coalescenceOfRuin))
+            [EffectGUIDs.RevenantCoalescenceOfRuin, EffectGUIDs.RevenantCoalescenceOfRuinLast], out var coalescenceOfRuin))
         {
             var skill = new SkillModeDescriptor(player, Spec.Revenant, CoalescenceOfRuin);
             foreach (EffectEvent effect in coalescenceOfRuin)

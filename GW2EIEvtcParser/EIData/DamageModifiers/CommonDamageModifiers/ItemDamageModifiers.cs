@@ -23,19 +23,17 @@ internal static class ItemDamageModifiers
         // Regroup consumables that reduce inc damage by their reduction instead of adding one modifier per consumable to reduce cluttering
         new BuffOnActorDamageModifier(CanOfStewedOysters, "Food: -8%", "-8%", DamageSource.All, -8.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
         new BuffOnActorDamageModifier(
-            new long[]
-            {
+            [
                 PlateOfPeppercornSpicedCoqAuVin, MistsInfusedPeppercornCrustedSousVideSteak, PeppercornCrustedSousVideSteak, PlateOfPepperedClearTruffleRavioli,
                 PlateOfPeppercornSpicedBeefCarpaccio, PlateOfPeppercornSpicedPoultryAspic, PeppercornSpicedEggsBenedict, SpicedPepperCremeBrulee,
                 SpicedPeppercornCheesecake, PepperedCuredMeatFlatbread, PeppercornAndVeggieFlatbread, BowlOfSpicedFruitSalad,
                 SpherifiedPeppercornSpicedOysterSoup, MistsInfusedSpherifiedPeppercornSpicedOysterSoup,
-            }, "Ascended Food: -10%", "-10% Multiplicative", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
+            ], "Ascended Food: -10%", "-10% Multiplicative", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
         new BuffOnActorDamageModifier(
-            new long[]
-            {
+            [
                 FriedOysters, FriedOysterSandwich, OystersWithCocktailSauce, BowlOfLemongrassMusselPasta, BowlOfMusselSoup, PlateOfMusselsGnashblade,
                 OystersWithSpicySauce, OystersGnashblade, OystersWithZestySauce, OystersWithPestoSauce, BowlOfCurryMusselSoup, WeightOfTheWorld,
-            }, "Food: -10%", "-10% Additive", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
+            ], "Food: -10%", "-10% Additive", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Item, ByPresence, BuffImages.NourishmentFood, DamageModifierMode.PvEWvW),
     };
 
 }

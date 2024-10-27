@@ -50,7 +50,7 @@ internal class Deimos : BastionOfThePenitent
         new EnemyCastStartMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkTeal), "Thief CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
         new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.Red), "Thief CC Fail","Failed Boon Thief CC", "Failed CC (Thief)",0).UsingChecker((ce,log) => ce.ActualDuration >= 4400),
         new EnemyCastEndMechanic(BoonThief, "Boon Thief", new MechanicPlotlySetting(Symbols.DiamondWide,Colors.DarkGreen), "Thief CCed","Boon Thief CCed", "CCed (Thief)",0).UsingChecker((ce, log) => ce.ActualDuration < 4400),
-        new PlayerDstHitMechanic(new long[] {Annihilate2, Annihilate1 }, "Annihilate", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+        new PlayerDstHitMechanic([Annihilate2, Annihilate1], "Annihilate", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Yellow), "Pizza","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
         new PlayerDstHitMechanic(DemonicShockWaveRight, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "10% RSmash","Knockback (right hand) in 10% Phase", "10% Right Smash",0),
         new PlayerDstHitMechanic(DemonicShockWaveLeft, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.Red), "10% LSmash","Knockback (left hand) in 10% Phase", "10% Left Smash",0),
         new PlayerDstHitMechanic(DemonicShockWaveCenter, "Demonic Shock Wave", new MechanicPlotlySetting(Symbols.Bowtie,Colors.Red), "10% DSmash","Knockback (both hands) in 10% Phase", "10% Double Smash",0),

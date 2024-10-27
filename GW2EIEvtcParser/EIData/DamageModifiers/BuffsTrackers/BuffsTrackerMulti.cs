@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace GW2EIEvtcParser.EIData;
 
-internal class BuffsTrackerMulti : BuffsTracker
+internal class BuffsTrackerMulti(HashSet<long> buffsIds) : BuffsTracker
 {
-    private readonly HashSet<long> _ids;
-
-    public BuffsTrackerMulti(List<long> buffsIds)
-    {
-        _ids = new HashSet<long>(buffsIds);
-    }
+    private readonly HashSet<long> _ids = buffsIds;
 
     public override int GetStack(IReadOnlyDictionary<long, BuffsGraphModel> bgms, long time)
     {

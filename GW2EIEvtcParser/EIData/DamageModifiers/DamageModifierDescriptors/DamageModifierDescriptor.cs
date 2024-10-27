@@ -12,26 +12,25 @@ namespace GW2EIEvtcParser.EIData;
 
 internal abstract class DamageModifierDescriptor : IVersionable
 {
-
-    public DamageType CompareType { get; }
-    public DamageType SrcType { get; }
-    internal DamageSource DmgSrc { get; }
-    protected double GainPerStack { get; }
-    internal GainComputer GainComputer { get; }
-    private ulong _minBuild { get; set; } = GW2Builds.StartOfLife;
-    private ulong _maxBuild { get; set; } = GW2Builds.EndOfLife;
-    private int _minEvtcBuild { get; set; } = ArcDPSBuilds.StartOfLife;
-    private int _maxEvtcBuild { get; set; } = ArcDPSBuilds.EndOfLife;
+    public readonly DamageType CompareType;
+    public readonly DamageType SrcType;
+    internal readonly DamageSource DmgSrc;
+    protected readonly double GainPerStack;
+    internal readonly GainComputer GainComputer;
+    private ulong _minBuild = GW2Builds.StartOfLife;
+    private ulong _maxBuild = GW2Builds.EndOfLife;
+    private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
+    private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
     public bool Multiplier => GainComputer.Multiplier;
     public bool SkillBased => GainComputer.SkillBased;
 
     public bool Approximate { get; protected set; } = false;
-    public ParserHelper.Source Src { get; }
-    public string Icon { get; }
-    public string Name { get; }
+    public readonly ParserHelper.Source Src;
+    public readonly string Icon;
+    public readonly string Name;
     public string InitialTooltip { get; protected set; }
 
-    internal DamageModifierMode Mode { get; } = DamageModifierMode.All;
+    internal readonly DamageModifierMode Mode = DamageModifierMode.All;
     private List<DamageLogChecker> _dlCheckers { get; set; }
 
     internal DamageModifierDescriptor(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)

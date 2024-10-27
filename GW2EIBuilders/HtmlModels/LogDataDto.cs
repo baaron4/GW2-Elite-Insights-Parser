@@ -294,7 +294,7 @@ internal class LogDataDto
         }
         foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
         {
-            InstanceBuffs.Add(new object[] { instanceBuff.ID, stack });
+            InstanceBuffs.Add([instanceBuff.ID, stack]);
             usedBuffs[instanceBuff.ID] = instanceBuff;
         }
     }

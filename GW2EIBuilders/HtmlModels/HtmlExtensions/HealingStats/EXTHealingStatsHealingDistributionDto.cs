@@ -76,7 +76,7 @@ internal class EXTHealingStatsHealingDistributionDto
         {
             (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
         }
-        object[] skillItem = {
+        object[] skillItem = [
                 isIndirectHealing,
                 skill.ID,
                 totalhealing,
@@ -92,7 +92,7 @@ internal class EXTHealingStatsHealingDistributionDto
                 isIndirectHealing ? 0 : maxTimeSpentCasting,
                 isIndirectHealing ? 0 : timeSpentCastingNoInterrupt,
                 isIndirectHealing ? 0 : numberOfCastNoInterrupt,
-            };
+            ];
         return skillItem;
     }
 

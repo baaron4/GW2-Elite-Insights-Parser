@@ -30,7 +30,7 @@ internal class Slothasor : SalvationPass
         new PlayerDstBuffApplyMechanic(MagicTransformation, "Magic Transformation", new MechanicPlotlySetting(Symbols.Hexagram,Colors.Teal), "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
         //new Mechanic(Nauseated, "Nauseated", ParseEnum.BossIDS.Slothasor, new MechanicPlotlySetting("diamond-tall-open",Colors.LightPurple), "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
         new PlayerDstBuffApplyMechanic(FixatedSlothasor, "Fixated", new MechanicPlotlySetting(Symbols.Star,Colors.Magenta), "Fixate","Fixated by Slothasor", "Fixated",0),
-        new PlayerDstHitMechanic(new long[] { ToxicCloud1, ToxicCloud2 }, "Toxic Cloud", new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
+        new PlayerDstHitMechanic([ToxicCloud1, ToxicCloud2], "Toxic Cloud", new MechanicPlotlySetting(Symbols.PentagonOpen,Colors.DarkGreen), "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
         new PlayerDstBuffApplyMechanic(Fear, "Fear", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Fear","Hit by fear after breakbar", "Feared",0).UsingChecker((ba,log) => ba.AppliedDuration == 8000),
         new EnemyDstBuffApplyMechanic(NarcolepsyBuff, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Narcolepsy (Breakbar)", "Breakbar",0),
         new EnemyDstBuffRemoveMechanic(NarcolepsyBuff, "Narcolepsy", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Narcolepsy (Failed CC)", "CC Fail",0).UsingChecker((br,log) => br.RemovedDuration > 120000),

@@ -91,11 +91,11 @@ public static class SegmentExt {
         foreach (Segment seg in segments)
         {
             double segStart = Math.Round(Math.Max(seg.Start - start, 0) / 1000.0, ParserHelper.TimeDigit);
-            res.Add(new object[] { segStart, seg.Value });
+            res.Add([segStart, seg.Value]);
         }
         Segment lastSeg = segments.Last();
         double segEnd = Math.Round(Math.Min(lastSeg.End - start, end - start) / 1000.0, ParserHelper.TimeDigit);
-        res.Add(new object[] { segEnd, lastSeg.Value });
+        res.Add([segEnd, lastSeg.Value]);
         return res;
     }
 

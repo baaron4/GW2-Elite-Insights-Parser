@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class BuffRemoveMechanic<T> : IDBasedMechanic<T> where T : AbstractBuffRemoveEvent
 {
 
-    public BuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this(new long[] { mechanicID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public BuffRemoveMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 

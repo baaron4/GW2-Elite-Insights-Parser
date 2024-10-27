@@ -35,8 +35,8 @@ internal static class EngineerHelper
         }
     }
 
-    private static readonly HashSet<long> _engineerKit = new HashSet<long>
-    {
+    private static readonly HashSet<long> _engineerKit =
+    [
         BombKit,
         ElixirGun,
         Flamethrower,
@@ -44,7 +44,7 @@ internal static class EngineerHelper
         MedKitSkill,
         ToolKit,
         EliteMortarKit,
-    };
+    ];
 
     public static bool IsEngineerKit(long id)
     {
@@ -67,8 +67,8 @@ internal static class EngineerHelper
         return !ifFound;
     }
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new List<InstantCastFinder>()
-    {
+    internal static readonly List<InstantCastFinder> InstantCastFinder =
+    [
         new BuffLossCastFinder(ExplosiveEntranceSkill, ExplosiveEntranceBuff)
             .WithBuilds(GW2Builds.February2020Balance).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
         new BuffGainCastFinder(ElixirSSkill, ElixirSBuff),
@@ -95,28 +95,28 @@ internal static class EngineerHelper
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // If Throw Mine and Mine Field are precasted out of combat, there won't be an DynamicEffectEnd event so we use the custom ID
-                return MineDetonationInstantCastChecker(effect, combatData, false, new string [] { EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 });
+                return MineDetonationInstantCastChecker(effect, combatData, false, [ EffectGUIDs.EngineerMineField, EffectGUIDs.EngineerThrowMineInactive1 ]);
             }),
         new EffectCastFinder(DetonateMineField, EffectGUIDs.EngineerMineExplosion1)
             .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // Find the DynamicEffectEnd of Mine Field at the time of the explosion effects.
-                return MineDetonationInstantCastChecker(effect, combatData, true, new string [] { EffectGUIDs.EngineerMineField });
+                return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerMineField ]);
             }),
          new EffectCastFinder(DetonateThrowMine, EffectGUIDs.EngineerMineExplosion1)
             .UsingSecondaryEffectChecker(EffectGUIDs.EngineerMineExplosion2)
             .UsingChecker((effect, combatData, agentData, skillData) =>
             {
                 // Find the DynamicEffectEnd of Throw Mine at the time of the explosion effects.
-                return MineDetonationInstantCastChecker(effect, combatData, true, new string [] { EffectGUIDs.EngineerThrowMineInactive1 });
+                return MineDetonationInstantCastChecker(effect, combatData, true, [ EffectGUIDs.EngineerThrowMineInactive1 ]);
             }),
          new DamageCastFinder(FocusedDevastation, FocusedDevastation)
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    [
         // Explosives
         new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
@@ -179,16 +179,16 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.August2024JWRelease),
         // Tools
         new BuffOnActorDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
-    };
+    ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new List<DamageModifierDescriptor>
-    {
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    [
         new BuffOnActorDamageModifier(Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
         new BuffOnActorDamageModifier(IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.NoPets, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, BuffImages.IronBlooded, DamageModifierMode.All),
-    };
+    ];
 
-    internal static readonly List<Buff> Buffs = new List<Buff>
-    {
+    internal static readonly List<Buff> Buffs =
+    [
         new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, BuffImages.StaticShield),
         new Buff("Absorb", Absorb, Source.Engineer, BuffClassification.Other, BuffImages.Absorb),
         new Buff("A.E.D.", AED, Source.Engineer, BuffClassification.Other, BuffImages.AED),
@@ -223,7 +223,7 @@ internal static class EngineerHelper
         new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, BuffImages.ElectricArtillery),
         new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Focused),
         new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, BuffImages.LightningRod),
-    };
+    ];
 
     public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
     {
@@ -273,7 +273,7 @@ internal static class EngineerHelper
         }
     }
 
-    private static HashSet<int> Minions = new HashSet<int>();
+    private static HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

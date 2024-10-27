@@ -16,14 +16,14 @@ internal class DeathRecapDto
         var data = new List<object[]>(list.Count);
         foreach (DeathRecap.DeathRecapDamageItem item in list)
         {
-            data.Add(new object[]
-            {
+            data.Add(
+            [
                     item.Time,
                     item.ID,
                     item.Damage,
                     item.Src,
                     item.IndirectDamage
-            });
+            ]);
         }
         return data;
     }

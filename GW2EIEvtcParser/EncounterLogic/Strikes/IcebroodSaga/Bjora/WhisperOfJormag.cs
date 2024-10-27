@@ -22,7 +22,7 @@ internal class WhisperOfJormag : Bjora
             new PlayerDstHitMechanic(IcySlice, "Icy Slice", new MechanicPlotlySetting(Symbols.Hexagram, Colors.Orange), "I.Slice", "Hit by Icy Slice", "Icy Slice", 50),
             new PlayerDstHitMechanic(IceTempest, "Ice Tempest", new MechanicPlotlySetting(Symbols.Square, Colors.Orange), "I.Tornado", "Hit by Ice Tempest (Tornadoes)", "Ice Tempest", 50),
             new PlayerDstHitMechanic(FrigidVortexDamage, "Frigid Vortex", new MechanicPlotlySetting(Symbols.Star, Colors.Pink), "FrigVor.H", "Hit by Frigid Vortex", "Frigid Vortex Hit", 50),
-            new PlayerDstHitMechanic(new long[] { IceShatterWhisper4, IceShatterWhisper2, IceShatterWhisper1, IceShatterWhisper3 }, "Ice Shatter", new MechanicPlotlySetting(Symbols.Circle, Colors.Teal), "IceShatt.H", "Hit by Ice Shatter (Large AoEs)", "Ice Shatter", 150),
+            new PlayerDstHitMechanic([IceShatterWhisper4, IceShatterWhisper2, IceShatterWhisper1, IceShatterWhisper3], "Ice Shatter", new MechanicPlotlySetting(Symbols.Circle, Colors.Teal), "IceShatt.H", "Hit by Ice Shatter (Large AoEs)", "Ice Shatter", 150),
             new PlayerDstBuffApplyMechanic(ChainsOfFrostApplication, "Chains of Frost", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.LightRed), "F.Chains", "Selected for Chains of Frost", "Chains of Frost", 500),
             new PlayerDstBuffApplyMechanic(LethalCoalescenceBuff, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Green), "LethalCoa.A", "Selected for Lethal Coalescence (Green)", "Lethal Coalescence", 500),
             new PlayerDstBuffApplyMechanic(FrigidVortexBuff, "Frigid Vortex", new MechanicPlotlySetting(Symbols.Star, Colors.LightBlue), "FrigVor.A", "Frigid Vortex Applied", "Frigid Vortex Buff", 0),
@@ -32,7 +32,7 @@ internal class WhisperOfJormag : Bjora
             new EnemyCastStartMechanic(ChainsOfFrostHit, "Chains of Frost", new MechanicPlotlySetting(Symbols.Hexagram, Colors.LightRed), "F.Chains.C", "Cast Chains of Frost", "Cast Chains of Frost", 0),
             new EnemyCastStartMechanic(FrigidVortexSkill, "Frigid Vortex", new MechanicPlotlySetting(Symbols.Star, Colors.Magenta), "Frigid Vortex", "Cast Frigid Vortex", "Cast Frigid Vortex", 50),
             new EnemyCastStartMechanic(LethalCoalescenceSoaked, "Lethal Coalescence", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "Lethal Coalescence", "Cast Lethal Coalescence", "Cast Lethal Coalescence", 50),
-            new EnemyCastStartMechanic(new long[] { ViciousSlam1, ViciousSlam2 }, "Vicious Slam",  new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Vicious Slam", "Cast Vicious Slam (Launch)", "Vicious Slam (Launch)", 150),
+            new EnemyCastStartMechanic([ViciousSlam1, ViciousSlam2], "Vicious Slam",  new MechanicPlotlySetting(Symbols.TriangleUp, Colors.White), "Vicious Slam", "Cast Vicious Slam (Launch)", "Vicious Slam (Launch)", 150),
         }
         );
         Extension = "woj";

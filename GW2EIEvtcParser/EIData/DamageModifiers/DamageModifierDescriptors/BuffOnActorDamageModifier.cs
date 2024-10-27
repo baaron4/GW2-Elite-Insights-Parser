@@ -9,17 +9,17 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
 {
     internal delegate double DamageGainAdjuster(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
 
-    internal BuffsTracker Tracker { get; }
-    internal DamageGainAdjuster GainAdjuster { get; private set; }
+    internal BuffsTracker Tracker;
+    internal DamageGainAdjuster? GainAdjuster;
 
     internal BuffOnActorDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
     {
         Tracker = new BuffsTrackerSingle(id);
     }
 
-    internal BuffOnActorDamageModifier(long[] ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
+    internal BuffOnActorDamageModifier(HashSet<long> ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
     {
-        Tracker = new BuffsTrackerMulti(new List<long>(ids));
+        Tracker = new BuffsTrackerMulti(ids);
     }
 
     internal virtual DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)
@@ -50,7 +50,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         IReadOnlyDictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
         if (Skip(Tracker, bgms, GainComputer))
         {
-            return new List<DamageModifierEvent>();
+            return new();
         }
         var res = new List<DamageModifierEvent>();
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);

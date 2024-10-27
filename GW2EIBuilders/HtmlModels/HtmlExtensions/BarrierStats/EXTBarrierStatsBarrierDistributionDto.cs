@@ -68,7 +68,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
             (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
         }
 
-        object[] skillItem = {
+        object[] skillItem = [
                 isIndirectBarrier,
                 skill.ID,
                 totalbarrier,
@@ -83,7 +83,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
                 isIndirectBarrier ? 0 : maxTimeSpentCasting,
                 isIndirectBarrier ? 0 : timeSpentCastingNoInterrupt,
                 isIndirectBarrier ? 0 : numberOfCastNoInterrupt,
-            };
+            ];
         return skillItem;
     }
 
