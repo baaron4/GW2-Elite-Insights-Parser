@@ -601,7 +601,7 @@ public static unsafe class StableSort<T> where T : class
                 break;
             case 3:
                 if (cmp(array[pt2 - 1], array[pt2]) <= 0) { return; }
-                array[..block_x_2].CopyTo(swap);
+                array[..(block_x_2 * 2)].CopyTo(swap);
                 break;
         }
         cross_merge(array, 0, swap, 0, block_x_2, block_x_2, cmp);

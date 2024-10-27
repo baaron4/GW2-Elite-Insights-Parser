@@ -10,6 +10,9 @@ public class BuffRemoveSingleEvent : AbstractBuffRemoveEvent
     private readonly bool _byShouldntBeUnknown;
     internal bool OverstackOrNaturalEnd => (IFF == IFF.Unknown && CreditedBy == ParserHelper._unknownAgent && !_byShouldntBeUnknown);
 
+    [System.Obsolete("Don't use this.")] //TODO(Rennorb) @cleanup @dbg
+    public BuffRemoveSingleEvent(long t) : base(t) { }
+
     internal BuffRemoveSingleEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
     {
         // Sometimes there is a dstAgent value but the agent itself is not in the pool, such cases should not trigger _overstackOrNaturalEnd
