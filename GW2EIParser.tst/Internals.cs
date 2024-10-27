@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using static GW2EIEvtcParser.ParsedData.tst.Internals;
 
 namespace GW2EIEvtcParser.ParsedData.tst;
 
@@ -12,6 +13,13 @@ class Internals
         public int Order = order;
 
         public override string ToString() => $"({Time} {Order})";
+
+
+        public class Comparer : IComparer
+        {
+            public static readonly Comparer Instance = new();
+            public int Compare(object x, object y) => (int)(((Internals.TestEvent)x).Time - ((Internals.TestEvent)y).Time);
+        }
     }
 
     [Test]
@@ -133,10 +141,11 @@ class Internals
     }
 
     [Test]
-    public void AAAA()
+    public void Branch3()
     {
         //TODO(Rennorb) make more minimal
         var list = new List<AbstractBuffEvent>() {
+            #region unhinged test
             new BuffApplyEvent(1),
             new BuffApplyEvent(1),
             new BuffApplyEvent(1),
@@ -857,10 +866,28 @@ class Internals
             new BuffApplyEvent(148873),
             new BuffRemoveSingleEvent(164825),
             new BuffRemoveSingleEvent(164825),
-
+            #endregion
         };
 
         list.SortByTime();
+
+    }
+
+    //TODO(Rennorb) @cleanup: this might need to run multiple tiems because the branch depends a bit on the data
+    [Test]
+    public void Branch2()
+    {
+        //  260031, 116634, 261071
+        var r = new Random();
+        int len = 3000;
+        var list = new List<Internals.TestEvent>(len);
+        for(int i = 0; i < len; i++)
+        {
+            list.Add(new(r.Next(), i));
+        }
+        list.SortByTime();
+
+        CollectionAssert.IsOrdered(list, TestEvent.Comparer.Instance);
     }
 }
 
@@ -882,12 +909,6 @@ class Sort_Generated
         }
     }
 
-    public class Order : IComparer
-    {
-        public static readonly Order Instance = new();
-        public int Compare(object x, object y) => (int)(((Internals.TestEvent)x).Time - ((Internals.TestEvent)y).Time);
-    }
-
 
     List<Internals.TestEvent> data;
     public Sort_Generated(List<Internals.TestEvent> data) => this.data = data;
@@ -897,42 +918,6 @@ class Sort_Generated
     {
         data.SortByTime();
 
-        CollectionAssert.IsOrdered(data, Order.Instance, $"{data.Count} failed");
-    }
-}
-
-[TestFixtureSource(typeof(Sort_Generated_Subtypes), nameof(Sort_Generated_Subtypes.GenerateTests))]
-class Sort_Generated_Subtypes
-{
-    public static IEnumerable GenerateTests
-    {
-        get
-        {
-            var r = new Random();
-            var list = new List<AbstractBuffEvent>(1000);
-            for(int i = 0; i < 1000; i++)
-            {
-                list.Add(r.NextSingle() < 0.5 ? new BuffApplyEvent(r.Next()) : new BuffRemoveSingleEvent(r.Next()));
-                yield return new TestFixtureData(new List<AbstractBuffEvent>(list)); // clone so every list has to be sorted
-            }
-        }
-    }
-
-    public class Order : IComparer
-    {
-        public static readonly Order Instance = new();
-        public int Compare(object x, object y) => (int)(((AbstractBuffEvent)x).Time - ((AbstractBuffEvent)y).Time);
-    }
-
-
-    List<AbstractBuffEvent> data;
-    public Sort_Generated_Subtypes(List<AbstractBuffEvent> data) => this.data = data;
-
-    [Test]
-    public void IsSorted()
-    {
-        data.SortByTime();
-
-        CollectionAssert.IsOrdered(data, Order.Instance, $"{data.Count} failed");
+        CollectionAssert.IsOrdered(data, TestEvent.Comparer.Instance, $"{data.Count} failed");
     }
 }

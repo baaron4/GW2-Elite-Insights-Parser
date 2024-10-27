@@ -1437,7 +1437,7 @@ public static unsafe class StableSort<T> where T : class
 
         div = nmemb / cbrt;
 
-        pta = (int)(long) &div / 16 % div; // for a non-deterministic offset
+        pta = (int)((ulong)&div / 16 % (ulong)div); // for a non-deterministic offset
         pts = ptx == array ? swap : array;
 
         for (cnt = 0 ; cnt < cbrt ; cnt++)
