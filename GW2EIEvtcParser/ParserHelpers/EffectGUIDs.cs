@@ -717,6 +717,30 @@
         public const string HarvestTempleVoidObliteratorFirebomb = "D2E7228A6225FB44911507A45EF2CCEC"; // duration 21000
         public const string HarvestTempleVoidObliteratorShockwave = "4254DCF4AF72FF4A83847908DA98E427"; // duration 0, should probably be 2900
         // Old Lion's Court
+        public const string OldLionsCourtExhaustPlumeAoE = "E273E005F90E3041939C6235FF9CADBA"; // All Knights Src - Duration 5000 - AoE
+        public const string OldLionsCourtBoilingAetherExpanding = "CBD8C6AE14B69A43A9596B94C402B9F3"; // All Knights Src - Duration 10000
+        public const string OldLionsCourtBoilingAetherFullyExpanded1 = "77D73A835CEE5446ACD9D8C5BDF99BB0"; // All Knights Src - Duration 590000 - Has End Event
+        public const string OldLionsCourtBoilingAetherFullyExpanded2 = "6BA3A84984190042A31400D52637B141"; // All Knights Src - Duration 590000 - Has End Event
+        public const string OldLionsCourtSpaghettificationDoughnutStart = "40A9EFF40B532140A615020A6419EBE4"; // Red Knight Src - Duration 1500 or 30000 - Doughnut AoE - Has End Event if 30000
+        public const string OldLionsCourtSpaghettificationCircleFlipped = "9306700A06F4B14EBC91318C24535280"; // Red Knight Src - Duration 1500 or 30000 - Circle AoE - Has End Event if 30000
+        public const string OldLionsCourtSpaghettificationCircleDetonation = "549A02C94E642B45BF35EBEE84CF72CC"; // Red Knight Src - Duration 1500 - Circle AoE - Has End Event
+        public const string OldLionsCourtSpaghettificationDoughnutDetonation = "B7FB4A5607D3284EBAA649A39861EE5C"; // Red Knight Src - Duration 0 - Doughnut AoE
+        public const string OldLionsCourtSpaghettificationSafeZoneSemiCircle = "A9544AB8A84EED468817138BAFB79551"; // Red Knight Src - Duration 30000 - Safe Zone Semi Circle AoE - Has End Event
+        public const string OldLionsCourtSpaghettificationSafeZoneFullCircle = "5718748DF0A13B438ACBBD156BADCFEE"; // Red Knight Src - Duration 30000 - Safe Zone FUll Circle AoE - Has End Event
+        public const string OldLionsCourtDualHorizonOrange = "533D8FC0542C2F41ADC6515141E38501"; // Red Knight Src - Duration 4100 - AoE Doughnut
+        public const string OldLionsCourtDualHorizonWhiteOuter = "182666D5B4B6E64AAE8423D76012E9B0"; // Red Knight Src - Duration 4000 - White Outer
+        public const string OldLionsCourtDualHorizonWhiteInner = "F51B10029E0537488BAE346558A22F02"; // Red Knight Src - Duration 4000 - White Inner
+        public const string OldLionsCourtThunderingUltimatumFrontalCone = "687C781108ED664DB17B7B501C942ADC"; // Blue Knight Src - Duration 1500 or 30000 - Frontal Cone AoE - Has End Event if 30000
+        public const string OldLionsCourtThunderingUltimatumFlipCone = "DFD5DF9B331D9C45A5E592EA2E39695D"; // Blue Knight Src - Duration 1500 or 30000 - Flip Cone AoE - Has End Event if 30000
+        public const string OldLionsCourtThunderingUltimatumDetonation = "676C0B284588FC40829C2F09F07BCDFD"; // Blue Knight Src - Duration 0 - Detonation AoE
+        public const string OldLionsCourtThunderingUltimatumSafeZone = "8119770118A16243BAE86724E575753A"; // Blue Knight Src - Duration 30000 - Safe Zone AoE - Has End Event
+        public const string OldLionsCourtDysapoptosisIndicator = "49BD1C09B29DEC49AFE85E15D070108F"; // Green Knight Src - Duration 1500 or 30000 - Incorrect logged position - Has End Event if 30000
+        public const string OldLionsCourtDysapoptosisDetonation = "909CBB96C7FA0A47A7AFB7764457786F"; // Green Knight Src - Duration 0 - Semi Circle AoE
+        public const string OldLionsCourtTriBoltSpread = "740D0839AD1AD749A92B06E40765BBF2"; // Blue Knight Src - Player Dst - Duration 2000 - Triple Spread AoE
+        public const string OldLionsCourtTribocharge = "CB4C61AE8EF4FC468B185E126FD42C81"; // Tribocharge Src - No Dst - Duration 5000
+        public const string OldLionsCourtGravitationalWave = "B329CFB6B354C148A537E114DC14CED6"; // Red Knight Src - No Dst - Duration 0 - Safe effect as Harvest Temple Orb Explosion
+        public const string OldLionsCourtGravityHammer = "D11320204E28E643A48469AA8E4845BA"; // Red Knight Src - Duration 1000 - Third Autoattack Indicator AoE
+        public const string OldLionsCourtBoilingAetherSpawnIndicator = "34724E94CD4E974C95A8D9D1D1162658"; // Red Knight Src - Duration 1190
         // Cosmic Observatory
         public const string CosmicObservatoryDemonicBlastSliceIndicator = "A21A92783688A847963B86E96B8CC9BE";
         public const string CosmicObservatoryDemonicBlastDagdaEffect1 = "D03CDF37E0AC8246ABD4E741ADD61427"; // 0 duration no effect end

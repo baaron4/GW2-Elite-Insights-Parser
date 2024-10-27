@@ -990,6 +990,8 @@ namespace GW2EIEvtcParser
             TheMindbladeCM = 25280,
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
+            // Old Lion's Court
+            Tribocharge = 25424,
             // Cosmic Observatory
             TheTormented = 26016,
             VeteranTheTormented = 25829,

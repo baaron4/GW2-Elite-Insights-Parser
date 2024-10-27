@@ -3947,6 +3947,7 @@
         public const long TidalTorment = 68330;
         public const long TidalTormentCM = 68332;
         public const long DualHorizon = 68336;
+        public const long TribochargePlayerToNPCBuff = 68342;
         public const long NoxiousVaporBlade = 68346;
         public const long GravitationalWaveCM = 68352;
         public const long GravitationalWave = 68354;

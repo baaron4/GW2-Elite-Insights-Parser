@@ -600,6 +600,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Malfunctioning Ley-Woven Shielding", MalfunctioningLeyWovenShielding, Source.FightSpecific, BuffClassification.Other, BuffImages.Unblockable),
             new Buff("Power Transfer", PowerTransfer, Source.FightSpecific, BuffStackType.Queue, 99, BuffClassification.Other, BuffImages.SpiritEnergyTracker),
             new Buff("Empowered (Watchknight Triumverate)", EmpoweredWatchknightTriumverate, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ChargingEnergies),
+            new Buff("Tribocharge", TribochargePlayerToNPCBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             new Buff("Achievement Eligibility: Aether Aversion", AchievementEligibilityAetherAversion, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Fear Not This Knight", AchievementEligibilityFearNotThisKnight, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Static-Dynamic Synergy", AchievementEligibilityStaticDynamicSynergy, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
