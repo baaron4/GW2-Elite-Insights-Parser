@@ -202,7 +202,7 @@ partial class AbstractSingleActor
         damageModifierEvents.SortByTime();
 
         var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
-        _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
+        _incomingDamageModifierEventsPerTargets!.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
 
         foreach (var eventsByTarget in damageModifierEvents.GroupBy(x => x.Src))
         {

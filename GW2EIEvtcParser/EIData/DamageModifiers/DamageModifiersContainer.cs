@@ -8,13 +8,12 @@ namespace GW2EIEvtcParser.EIData;
 
 public class DamageModifiersContainer
 {
+    public readonly IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<OutgoingDamageModifier>> OutgoingDamageModifiersPerSource;
 
-    public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<OutgoingDamageModifier>> OutgoingDamageModifiersPerSource { get; }
+    public readonly IReadOnlyDictionary<string, OutgoingDamageModifier> OutgoingDamageModifiersByName;
+    public readonly IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<IncomingDamageModifier>> IncomingDamageModifiersPerSource;
 
-    public IReadOnlyDictionary<string, OutgoingDamageModifier> OutgoingDamageModifiersByName { get; }
-    public IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<IncomingDamageModifier>> IncomingDamageModifiersPerSource { get; }
-
-    public IReadOnlyDictionary<string, IncomingDamageModifier> IncomingDamageModifiersByName { get; }
+    public readonly IReadOnlyDictionary<string, IncomingDamageModifier> IncomingDamageModifiersByName;
 
     internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
