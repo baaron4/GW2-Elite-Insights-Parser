@@ -644,6 +644,32 @@ namespace GW2EIEvtcParser.EIData
                 Hidden.Add(new Segment(segment));
             }
         }
+
+        /// <summary>
+        /// Adds concentric doughnuts.
+        /// </summary>
+        /// <param name="minRadius">Starting radius.</param>
+        /// <param name="radiusIncrease">Radius increase for each concentric ring.</param>
+        /// <param name="lifespan">Lifespan of the decoration.</param>
+        /// <param name="position">Starting position.</param>
+        /// <param name="color">Color of the rings.</param>
+        /// <param name="initialOpacity">Starting opacity of the rings' color.</param>
+        /// <param name="rings">Total number of rings.</param>
+        /// <param name="inverted">Inverts the opacity direction.</param>
+        internal void AddContrenticRings(uint minRadius, uint radiusIncrease, (long, long) lifespan, Point3D position, Color color, float initialOpacity = 0.5f, int rings = 8, bool inverted = false)
+        {
+            var positionConnector = new PositionConnector(position);
+
+            for (int i = 1; i <= rings; i++)
+            {
+                uint maxRadius = minRadius + radiusIncrease;
+                float opacity = inverted ? initialOpacity * i : initialOpacity / i;
+                var circle = new DoughnutDecoration(minRadius, maxRadius, lifespan, color, opacity, positionConnector);
+                AddDecorationWithBorder(circle, color, 0.2);
+                minRadius = maxRadius;
+            }
+            
+        }
     }
 }
 

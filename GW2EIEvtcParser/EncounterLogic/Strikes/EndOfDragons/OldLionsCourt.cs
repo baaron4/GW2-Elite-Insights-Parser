@@ -491,6 +491,48 @@ namespace GW2EIEvtcParser.EncounterLogic
                         }
                     }
 
+                    // Pernicious Vortex - First Indicator - Orange Doughnuts
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning1, out IReadOnlyList<EffectEvent> vortexWarnings1))
+                    {
+                        foreach (EffectEvent effect in vortexWarnings1)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                            replay.AddContrenticRings(0, 120, lifespan, effect.Position, Colors.LightOrange);
+                        }
+                    }
+                    // Pernicious Vortex - Second Indicator - Red Ring
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning2, out IReadOnlyList<EffectEvent> vortexWarnings2))
+                    {
+                        foreach (EffectEvent effect in vortexWarnings2)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                            var circle = (CircleDecoration)new CircleDecoration(300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position)).UsingFilled(false);
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Pernicious Vortex - Damage Indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexActive, out IReadOnlyList<EffectEvent> vortexDamage))
+                    {
+                        foreach (EffectEvent effect in vortexDamage)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                            var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Rupture
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtRuptureIndicator, out IReadOnlyList<EffectEvent> ruptures))
+                    {
+                        foreach (EffectEvent effect in ruptures)
+                        {
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 2000);
+                            var circle = new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.AddDecorationWithGrowing(circle, lifespan.end);
+                        }
+                    }
+
                     // Hide when inactive
                     replay.AddHideByBuff(target, log, Determined762);
                     break;
@@ -561,6 +603,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var rotation = new AngleConnector(effect.Rotation.Z + 90);
                             var pie = (PieDecoration)new PieDecoration(3000, 120, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
                             replay.Decorations.Add(pie);
+                        }
+                    }
+
+                    // Crackling Wind
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtCracklingWindIndicator, out IReadOnlyList<EffectEvent> crackingWind))
+                    {
+                        foreach (EffectEvent effect in crackingWind)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                            replay.AddContrenticRings(0, 140, lifespan, effect.Position, Colors.LightOrange, 0.01f, 8, true);
+                            // Add bigger doughnut past 1120 radius (140 * 8)
+                            var doughnut = new DoughnutDecoration(1120, 2500, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(doughnut);
                         }
                     }
 

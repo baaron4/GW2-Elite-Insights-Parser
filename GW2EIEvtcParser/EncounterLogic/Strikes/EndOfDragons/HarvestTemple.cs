@@ -1347,20 +1347,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in gravityCrushIndicators)
                         {
-                            uint minRadius = 0;
-                            uint radiusIncrease = 40;
-                            float initialOpacity = 0.5f;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1600);
-                            var positionConnector = new PositionConnector(effect.Position);
-                            // The indicator has 8 circles
-                            for (int i = 1; i <= 8; i++)
-                            {
-                                uint maxRadius = minRadius + radiusIncrease;
-                                float opacity = initialOpacity / i;
-                                var circle = new CircleDecoration(maxRadius, minRadius, lifespan, Colors.Orange, opacity, positionConnector);
-                                replay.AddDecorationWithBorder(circle, Colors.Orange, 0.2);
-                                minRadius = maxRadius;
-                            }
+                            replay.AddContrenticRings(0, 40, lifespan, effect.Position, Colors.Orange);
                         }
                     }
                     // Nightmare Epoch - AoEs

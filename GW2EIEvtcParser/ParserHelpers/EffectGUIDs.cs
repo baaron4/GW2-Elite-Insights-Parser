@@ -741,6 +741,11 @@
         public const string OldLionsCourtGravitationalWave = "B329CFB6B354C148A537E114DC14CED6"; // Red Knight Src - No Dst - Duration 0 - Safe effect as Harvest Temple Orb Explosion
         public const string OldLionsCourtGravityHammer = "D11320204E28E643A48469AA8E4845BA"; // Red Knight Src - Duration 1000 - Third Autoattack Indicator AoE
         public const string OldLionsCourtBoilingAetherSpawnIndicator = "34724E94CD4E974C95A8D9D1D1162658"; // Red Knight Src - Duration 1190
+        public const string OldLionsCourtPerniciousVortexWarning1 = "6BDC9DB69C2BD643828419CB58957901"; // Green Knight Src - Duration 4000
+        public const string OldLionsCourtPerniciousVortexWarning2 = "E10DD1D759499749B880B99945C823B5"; // Green Knight Src - Duration 4000
+        public const string OldLionsCourtPerniciousVortexActive = "A4F4B2C3DA211040B9BFAAA8DA801807"; // Green Knight Src - Duration 5000
+        public const string OldLionsCourtCracklingWindIndicator = "4B569B684D489B4592AF8285A3A4B401"; // Blue Knight Src - Duration 4000
+        public const string OldLionsCourtRuptureIndicator = "2A42D5E57617DF46A22B34485D6F3831"; // Green Knight Src - Duration 2000
         // Cosmic Observatory
         public const string CosmicObservatoryDemonicBlastSliceIndicator = "A21A92783688A847963B86E96B8CC9BE";
         public const string CosmicObservatoryDemonicBlastDagdaEffect1 = "D03CDF37E0AC8246ABD4E741ADD61427"; // 0 duration no effect end
