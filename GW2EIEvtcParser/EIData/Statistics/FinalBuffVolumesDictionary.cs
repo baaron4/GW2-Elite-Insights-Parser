@@ -5,79 +5,77 @@ using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class FinalBuffVolumesDictionary
 {
-    public class FinalBuffVolumesDictionary
+    private Dictionary<AbstractSingleActor, double> _incomingBy = new();
+    public IReadOnlyDictionary<AbstractSingleActor, double> IncomingBy => _incomingBy;
+    private Dictionary<AbstractSingleActor, double> _incomingByExtensionBy = new();
+    public IReadOnlyDictionary<AbstractSingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
+
+
+    internal static (FinalBuffVolumesDictionary, FinalBuffVolumesDictionary) GetFinalBuffVolumesDictionary(ParsedEvtcLog log, Buff buff, AbstractSingleActor dstActor, long start, long end)
     {
-        private Dictionary<AbstractSingleActor, double> _incomingBy = new();
-        public IReadOnlyDictionary<AbstractSingleActor, double> IncomingBy => _incomingBy;
-        private Dictionary<AbstractSingleActor, double> _incomingByExtensionBy = new();
-        public IReadOnlyDictionary<AbstractSingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
+        long phaseDuration = end - start;
+        long activePhaseDuration = dstActor.GetActiveDuration(log, start, end);
 
+        var buffs = new FinalBuffVolumesDictionary();
+        var buffsActive = new FinalBuffVolumesDictionary();
 
-        internal static (FinalBuffVolumesDictionary, FinalBuffVolumesDictionary) GetFinalBuffVolumesDictionary(ParsedEvtcLog log, Buff buff, AbstractSingleActor dstActor, long start, long end)
+        var applies = log.CombatData.GetBuffDataByIDByDst(buff.ID, dstActor.AgentItem).OfType<AbstractBuffApplyEvent>().ToList();
+        applies.ForEach(x => x.TryFindSrc(log)); //TODO(Rennorb) @perf
+        var appliesBySrc = applies.GroupBy(x => x.CreditedBy);
+        foreach (var group in appliesBySrc)
         {
-            long phaseDuration = end - start;
-            long activePhaseDuration = dstActor.GetActiveDuration(log, start, end);
-
-            var buffs = new FinalBuffVolumesDictionary();
-            var buffsActive = new FinalBuffVolumesDictionary();
-
-            var applies = log.CombatData.GetBuffDataByIDByDst(buff.ID, dstActor.AgentItem).OfType<AbstractBuffApplyEvent>().ToList();
-            applies.ForEach(x => x.TryFindSrc(log)); //TODO(Rennorb) @perf
-            var appliesBySrc = applies.GroupBy(x => x.CreditedBy);
-            foreach (var group in appliesBySrc)
+            AbstractSingleActor? actor = log.FindActor(group.Key);
+            double incoming = 0;
+            double incomingByExtension = 0;
+            foreach (AbstractBuffApplyEvent abae in group)
             {
-                AbstractSingleActor? actor = log.FindActor(group.Key);
-                double incoming = 0;
-                double incomingByExtension = 0;
-                foreach (AbstractBuffApplyEvent abae in group)
+                if (abae.Time >= start && abae.Time <= end)
                 {
-                    if (abae.Time >= start && abae.Time <= end)
+                    if (abae is BuffApplyEvent bae)
                     {
-                        if (abae is BuffApplyEvent bae)
+                        // We ignore infinite duration buffs
+                        if (bae.AppliedDuration >= int.MaxValue)
                         {
-                            // We ignore infinite duration buffs
-                            if (bae.AppliedDuration >= int.MaxValue)
-                            {
-                                continue;
-                            }
-                            incoming += bae.AppliedDuration;
+                            continue;
                         }
-                        if (abae is BuffExtensionEvent bee)
+                        incoming += bae.AppliedDuration;
+                    }
+                    if (abae is BuffExtensionEvent bee)
+                    {
+                        incomingByExtension += bee.ExtendedDuration;
+                        if (activePhaseDuration > 0)
                         {
                             incomingByExtension += bee.ExtendedDuration;
-                            if (activePhaseDuration > 0)
-                            {
-                                incomingByExtension += bee.ExtendedDuration;
-                            }
                         }
                     }
+                }
 
-                }
-                incoming += incomingByExtension;
-
-                if (buff.Type == BuffType.Duration)
-                {
-                    incoming *= 100.0;
-                    incomingByExtension *= 100.0;
-                }
-                buffs._incomingBy[actor] = Math.Round(incoming / phaseDuration, ParserHelper.BuffDigit);
-                buffs._incomingByExtensionBy[actor] = Math.Round(incomingByExtension / phaseDuration, ParserHelper.BuffDigit);
-                if (activePhaseDuration > 0)
-                {
-                    buffsActive._incomingBy[actor] = Math.Round(incoming / activePhaseDuration, ParserHelper.BuffDigit);
-                    buffsActive._incomingByExtensionBy[actor] = Math.Round(incomingByExtension / activePhaseDuration, ParserHelper.BuffDigit);
-                }
-                else
-                {
-                    buffsActive._incomingBy[actor] = 0.0;
-                    buffsActive._incomingByExtensionBy[actor] = 0.0;
-                }
             }
-            return (buffs, buffsActive);
-        }
+            incoming += incomingByExtension;
 
+            if (buff.Type == BuffType.Duration)
+            {
+                incoming *= 100.0;
+                incomingByExtension *= 100.0;
+            }
+            buffs._incomingBy[actor] = Math.Round(incoming / phaseDuration, ParserHelper.BuffDigit);
+            buffs._incomingByExtensionBy[actor] = Math.Round(incomingByExtension / phaseDuration, ParserHelper.BuffDigit);
+            if (activePhaseDuration > 0)
+            {
+                buffsActive._incomingBy[actor] = Math.Round(incoming / activePhaseDuration, ParserHelper.BuffDigit);
+                buffsActive._incomingByExtensionBy[actor] = Math.Round(incomingByExtension / activePhaseDuration, ParserHelper.BuffDigit);
+            }
+            else
+            {
+                buffsActive._incomingBy[actor] = 0.0;
+                buffsActive._incomingByExtensionBy[actor] = 0.0;
+            }
+        }
+        return (buffs, buffsActive);
     }
 
 }

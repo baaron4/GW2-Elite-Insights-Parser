@@ -10,257 +10,256 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.SkillIDs;
 
-namespace GW2EIEvtcParser.EncounterLogic
+namespace GW2EIEvtcParser.EncounterLogic;
+
+internal class ValeGuardian : SpiritVale
 {
-    internal class ValeGuardian : SpiritVale
+    public ValeGuardian(int triggerID) : base(triggerID)
     {
-        public ValeGuardian(int triggerID) : base(triggerID)
+        MechanicList.AddRange(new List<Mechanic>
         {
-            MechanicList.AddRange(new List<Mechanic>
-            {
-            new PlayerDstHitMechanic(GreenGuardianUnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
-            new PlayerDstHitMechanic(UnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP","Unstable Magic Spike (Boss Teleport)", "Boss TP",500),
-            new PlayerDstHitMechanic(new long[] {DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen }, "Distributed Magic", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
-            new EnemyCastStartMechanic(DistributedMagicBlue, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue) , "Green Cast B","Distributed Magic (Green Field appeared in Blue Sector)", "Green in Blue",0),
-            new EnemyCastStartMechanic(DistributedMagicRed, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Green Cast R","Distributed Magic (Green Field appeared in Red Sector)", "Green in Red",0),
-            new EnemyCastStartMechanic(DistributedMagicGreen, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green Cast G","Distributed Magic (Green Field appeared in Green Sector)", "Green in Green",0),
-            new PlayerDstHitMechanic(MagicPulse, "Magic Pulse", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Seeker","Magic Pulse (Hit by Seeker)", "Seeker",0),
-            new PlayerDstBuffApplyMechanic(PylonAttunementRed, "Pylon Attunement: Red", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Attune R","Pylon Attunement: Red", "Red Attuned",0),
-            new PlayerDstBuffApplyMechanic(PylonAttunementBlue, "Pylon Attunement: Blue", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Attune B","Pylon Attunement: Blue", "Blue Attuned",0),
-            new PlayerDstBuffApplyMechanic(PylonAttunementGreen, "Pylon Attunement: Green", new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "Attune G","Pylon Attunement: Green", "Green Attuned",0),
-            new EnemyDstBuffRemoveMechanic(BluePylonPower, "Blue Pylon Power", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Invuln Strip","Blue Guard Invuln was stripped", "Blue Invuln Strip",0),
-            new PlayerDstHitMechanic(UnstablePylonRed, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Red), "Floor R","Unstable Pylon (Red Floor dmg)", "Floor dmg",0),
-            new PlayerDstHitMechanic(UnstablePylonBlue, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
-            new PlayerDstHitMechanic(UnstablePylonGreen, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
-            new EnemyCastStartMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Magic Storm (Breakbar)","Breakbar",0),
-            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Magic Storm (Breakbar broken) ", "CCed",0).UsingChecker((c, log) => c.ActualDuration <= 8544),
-            new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0).UsingChecker((c, log) => c.ActualDuration > 8544),
-            });
-            Extension = "vg";
-            Icon = EncounterIconValeGuardian;
-            EncounterCategoryInformation.InSubCategoryOrder = 0;
-            EncounterID |= 0x000001;
-        }
+        new PlayerDstHitMechanic(GreenGuardianUnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Blue), "Split TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
+        new PlayerDstHitMechanic(UnstableMagicSpike, "Unstable Magic Spike", new MechanicPlotlySetting(Symbols.Circle,Colors.Blue), "Boss TP","Unstable Magic Spike (Boss Teleport)", "Boss TP",500),
+        new PlayerDstHitMechanic(new long[] {DistributedMagicBlue, DistributedMagicRed, DistributedMagic, DistributedMagicGreen }, "Distributed Magic", new MechanicPlotlySetting(Symbols.Circle,Colors.DarkGreen), "Green","Distributed Magic (Stood in Green)", "Green Team",0),
+        new EnemyCastStartMechanic(DistributedMagicBlue, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.LightBlue) , "Green Cast B","Distributed Magic (Green Field appeared in Blue Sector)", "Green in Blue",0),
+        new EnemyCastStartMechanic(DistributedMagicRed, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Orange), "Green Cast R","Distributed Magic (Green Field appeared in Red Sector)", "Green in Red",0),
+        new EnemyCastStartMechanic(DistributedMagicGreen, "Distributed Magic", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Green), "Green Cast G","Distributed Magic (Green Field appeared in Green Sector)", "Green in Green",0),
+        new PlayerDstHitMechanic(MagicPulse, "Magic Pulse", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Seeker","Magic Pulse (Hit by Seeker)", "Seeker",0),
+        new PlayerDstBuffApplyMechanic(PylonAttunementRed, "Pylon Attunement: Red", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Attune R","Pylon Attunement: Red", "Red Attuned",0),
+        new PlayerDstBuffApplyMechanic(PylonAttunementBlue, "Pylon Attunement: Blue", new MechanicPlotlySetting(Symbols.Square,Colors.Blue), "Attune B","Pylon Attunement: Blue", "Blue Attuned",0),
+        new PlayerDstBuffApplyMechanic(PylonAttunementGreen, "Pylon Attunement: Green", new MechanicPlotlySetting(Symbols.Square,Colors.DarkGreen), "Attune G","Pylon Attunement: Green", "Green Attuned",0),
+        new EnemyDstBuffRemoveMechanic(BluePylonPower, "Blue Pylon Power", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Blue), "Invuln Strip","Blue Guard Invuln was stripped", "Blue Invuln Strip",0),
+        new PlayerDstHitMechanic(UnstablePylonRed, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Red), "Floor R","Unstable Pylon (Red Floor dmg)", "Floor dmg",0),
+        new PlayerDstHitMechanic(UnstablePylonBlue, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.Blue), "Floor B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
+        new PlayerDstHitMechanic(UnstablePylonGreen, "Unstable Pylon", new MechanicPlotlySetting(Symbols.HexagramOpen,Colors.DarkGreen), "Floor G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
+        new EnemyCastStartMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkTeal), "CC","Magic Storm (Breakbar)","Breakbar",0),
+        new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.DarkGreen), "CCed","Magic Storm (Breakbar broken) ", "CCed",0).UsingChecker((c, log) => c.ActualDuration <= 8544),
+        new EnemyCastEndMechanic(MagicStorm, "Magic Storm", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "CC Fail","Magic Storm (Breakbar failed) ", "CC Fail",0).UsingChecker((c, log) => c.ActualDuration > 8544),
+        });
+        Extension = "vg";
+        Icon = EncounterIconValeGuardian;
+        EncounterCategoryInformation.InSubCategoryOrder = 0;
+        EncounterID |= 0x000001;
+    }
 
-        protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    {
+        return new CombatReplayMap(CombatReplayValeGuardian,
+                        (889, 889),
+                        (-6365, -22213, -3150, -18999)/*,
+                        (-15360, -36864, 15360, 39936),
+                        (3456, 11012, 4736, 14212)*/);
+    }
+    internal override List<InstantCastFinder> GetInstantCastFinders()
+    {
+        return new List<InstantCastFinder>()
         {
-            return new CombatReplayMap(CombatReplayValeGuardian,
-                            (889, 889),
-                            (-6365, -22213, -3150, -18999)/*,
-                            (-15360, -36864, 15360, 39936),
-                            (3456, 11012, 4736, 14212)*/);
-        }
-        internal override List<InstantCastFinder> GetInstantCastFinders()
-        {
-            return new List<InstantCastFinder>()
-            {
-                new DamageCastFinder(MagicAuraValeGuardian, MagicAuraValeGuardian),
-                new DamageCastFinder(MagicAuraRedGuardian, MagicAuraRedGuardian),
-                new DamageCastFinder(MagicAuraBlueGuardian, MagicAuraBlueGuardian),
-                new DamageCastFinder(MagicAuraGreenGuardian, MagicAuraGreenGuardian),
-            };
-        }
+            new DamageCastFinder(MagicAuraValeGuardian, MagicAuraValeGuardian),
+            new DamageCastFinder(MagicAuraRedGuardian, MagicAuraRedGuardian),
+            new DamageCastFinder(MagicAuraBlueGuardian, MagicAuraBlueGuardian),
+            new DamageCastFinder(MagicAuraGreenGuardian, MagicAuraGreenGuardian),
+        };
+    }
 
-        protected override List<int> GetTargetsIDs()
+    protected override List<int> GetTargetsIDs()
+    {
+        return new List<int>
         {
-            return new List<int>
-            {
-                (int)ArcDPSEnums.TargetID.ValeGuardian,
-                (int)ArcDPSEnums.TrashID.RedGuardian,
-                (int)ArcDPSEnums.TrashID.BlueGuardian,
-                (int)ArcDPSEnums.TrashID.GreenGuardian
-            };
-        }
-        protected override Dictionary<int, int> GetTargetsSortIDs()
+            (int)ArcDPSEnums.TargetID.ValeGuardian,
+            (int)ArcDPSEnums.TrashID.RedGuardian,
+            (int)ArcDPSEnums.TrashID.BlueGuardian,
+            (int)ArcDPSEnums.TrashID.GreenGuardian
+        };
+    }
+    protected override Dictionary<int, int> GetTargetsSortIDs()
+    {
+        return new Dictionary<int, int>()
         {
-            return new Dictionary<int, int>()
-            {
-                {(int)ArcDPSEnums.TargetID.ValeGuardian, 0 },
-                {(int)ArcDPSEnums.TrashID.RedGuardian, 1 },
-                {(int)ArcDPSEnums.TrashID.BlueGuardian, 1 },
-                {(int)ArcDPSEnums.TrashID.GreenGuardian, 1 },
-            };
-        }
+            {(int)ArcDPSEnums.TargetID.ValeGuardian, 0 },
+            {(int)ArcDPSEnums.TrashID.RedGuardian, 1 },
+            {(int)ArcDPSEnums.TrashID.BlueGuardian, 1 },
+            {(int)ArcDPSEnums.TrashID.GreenGuardian, 1 },
+        };
+    }
 
-        internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
+    {
+        List<PhaseData> phases = GetInitialPhase(log);
+        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
+        phases[0].AddTarget(mainTarget);
+        var splitGuardianIds = new List<int>
         {
-            List<PhaseData> phases = GetInitialPhase(log);
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
-            phases[0].AddTarget(mainTarget);
-            var splitGuardianIds = new List<int>
-            {
-                (int) ArcDPSEnums.TrashID.BlueGuardian,
-                (int) ArcDPSEnums.TrashID.GreenGuardian,
-                (int) ArcDPSEnums.TrashID.RedGuardian
-            };
-            phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)));
-            if (!requirePhases)
-            {
-                return phases;
-            }
-            // Invul check
-            phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, true, true));
-            for (int i = 1; i < phases.Count; i++)
-            {
-                PhaseData phase = phases[i];
-                if (i % 2 == 0)
-                {
-                    phase.Name = "Split " + (i) / 2;
-                    AddTargetsToPhaseAndFit(phase, splitGuardianIds, log);
-                }
-                else
-                {
-                    phase.Name = "Phase " + (i + 1) / 2;
-                    phase.AddTarget(mainTarget);
-                }
-            }
+            (int) ArcDPSEnums.TrashID.BlueGuardian,
+            (int) ArcDPSEnums.TrashID.GreenGuardian,
+            (int) ArcDPSEnums.TrashID.RedGuardian
+        };
+        phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(splitGuardianIds)));
+        if (!requirePhases)
+        {
             return phases;
         }
-
-        internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        // Invul check
+        phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, true, true));
+        for (int i = 1; i < phases.Count; i++)
         {
-            base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-            int curRed = 1;
-            int curBlue = 1;
-            int curGreen = 1;
-            foreach (AbstractSingleActor target in Targets)
+            PhaseData phase = phases[i];
+            if (i % 2 == 0)
             {
-                if (target.IsSpecies(ArcDPSEnums.TrashID.RedGuardian))
-                {
-                    target.OverrideName(target.Character + " " + curRed++);
-                }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.BlueGuardian))
-                {
-                    target.OverrideName(target.Character + " " + curBlue++);
-                }
-                if (target.IsSpecies(ArcDPSEnums.TrashID.GreenGuardian))
-                {
-                    target.OverrideName(target.Character + " " + curGreen++);
-                }
+                phase.Name = "Split " + (i) / 2;
+                AddTargetsToPhaseAndFit(phase, splitGuardianIds, log);
+            }
+            else
+            {
+                phase.Name = "Phase " + (i + 1) / 2;
+                phase.AddTarget(mainTarget);
             }
         }
+        return phases;
+    }
 
-        protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    {
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
+        int curRed = 1;
+        int curBlue = 1;
+        int curGreen = 1;
+        foreach (AbstractSingleActor target in Targets)
         {
-            return new List<ArcDPSEnums.TrashID>
+            if (target.IsSpecies(ArcDPSEnums.TrashID.RedGuardian))
             {
-               ArcDPSEnums.TrashID.Seekers
-            };
-        }
-
-        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
-        {
-            base.ComputeEnvironmentCombatReplayDecorations(log);
-
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out IReadOnlyList<EffectEvent> distributedMagicEvents))
-            {
-                int distributedMagicDuration = 6700;
-                //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
-                foreach (EffectEvent distributedMagic in distributedMagicEvents)
-                {
-                    int start = (int)distributedMagic.Time;
-                    int expectedEnd = start + distributedMagicDuration;
-                    int end = Math.Min(expectedEnd, (int)distributedMagic.Src.LastAware);
-                    var circle = new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(distributedMagic.Position));
-                    EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(expectedEnd));
-                }
+                target.OverrideName(target.Character + " " + curRed++);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out IReadOnlyList<EffectEvent> magicSpikeEvents))
+            if (target.IsSpecies(ArcDPSEnums.TrashID.BlueGuardian))
             {
-                //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
-                foreach (EffectEvent magicSpike in magicSpikeEvents)
-                {
-                    int start = (int)magicSpike.Time;
-                    int end = start + 2000;
-                    var circle = new CircleDecoration(90, (start, end), Colors.Blue, 0.2, new PositionConnector(magicSpike.Position));
-                    EnvironmentDecorations.Add(circle);
-                    EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
-                }
+                target.OverrideName(target.Character + " " + curBlue++);
+            }
+            if (target.IsSpecies(ArcDPSEnums.TrashID.GreenGuardian))
+            {
+                target.OverrideName(target.Character + " " + curGreen++);
             }
         }
+    }
 
-        internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    {
+        return new List<ArcDPSEnums.TrashID>
         {
-            var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
-            //var knownEffectsIDs = new HashSet<long>();
-            switch (target.ID)
+           ArcDPSEnums.TrashID.Seekers
+        };
+    }
+
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out IReadOnlyList<EffectEvent> distributedMagicEvents))
+        {
+            int distributedMagicDuration = 6700;
+            //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
+            foreach (EffectEvent distributedMagic in distributedMagicEvents)
             {
-                case (int)ArcDPSEnums.TargetID.ValeGuardian:
-                    var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
-                    var magicStorms = cls.Where(x => x.SkillId == MagicStorm);
-                    foreach (AbstractCastEvent c in magicStorms)
+                int start = (int)distributedMagic.Time;
+                int expectedEnd = start + distributedMagicDuration;
+                int end = Math.Min(expectedEnd, (int)distributedMagic.Src.LastAware);
+                var circle = new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(distributedMagic.Position));
+                EnvironmentDecorations.Add(circle);
+                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(expectedEnd));
+            }
+        }
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out IReadOnlyList<EffectEvent> magicSpikeEvents))
+        {
+            //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
+            foreach (EffectEvent magicSpike in magicSpikeEvents)
+            {
+                int start = (int)magicSpike.Time;
+                int end = start + 2000;
+                var circle = new CircleDecoration(90, (start, end), Colors.Blue, 0.2, new PositionConnector(magicSpike.Position));
+                EnvironmentDecorations.Add(circle);
+                EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(end));
+            }
+        }
+    }
+
+    internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+        //var knownEffectsIDs = new HashSet<long>();
+        switch (target.ID)
+        {
+            case (int)ArcDPSEnums.TargetID.ValeGuardian:
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var magicStorms = cls.Where(x => x.SkillId == MagicStorm);
+                foreach (AbstractCastEvent c in magicStorms)
+                {
+                    int start = (int)c.Time;
+                    int end = (int)c.EndTime;
+                    replay.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)), start + c.ExpectedDuration);
+                }
+                if (!log.CombatData.HasEffectData)
+                {
+                    int distributedMagicDuration = 6700;
+                    int impactDuration = 110;
+                    uint arenaRadius = 1600;
+                    var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen);
+                    foreach (AbstractCastEvent c in distributedMagicGreen)
                     {
                         int start = (int)c.Time;
-                        int end = (int)c.EndTime;
-                        replay.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)), start + c.ExpectedDuration);
+                        int end = start + distributedMagicDuration;
+                        var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
+                        var rotationConnector = new AngleConnector(151);
+                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f))));
                     }
-                    if (!log.CombatData.HasEffectData)
+                    var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue);
+                    foreach (AbstractCastEvent c in distributedMagicBlue)
                     {
-                        int distributedMagicDuration = 6700;
-                        int impactDuration = 110;
-                        uint arenaRadius = 1600;
-                        var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen);
-                        foreach (AbstractCastEvent c in distributedMagicGreen)
-                        {
-                            int start = (int)c.Time;
-                            int end = start + distributedMagicDuration;
-                            var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
-                            var rotationConnector = new AngleConnector(151);
-                            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f))));
-                        }
-                        var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue);
-                        foreach (AbstractCastEvent c in distributedMagicBlue)
-                        {
-                            int start = (int)c.Time;
-                            int end = start + distributedMagicDuration;
-                            var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
-                            var rotationConnector = new AngleConnector(31);
-                            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f))));
-                        }
-                        var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed);
-                        foreach (AbstractCastEvent c in distributedMagicRed)
-                        {
-                            int start = (int)c.Time;
-                            int end = start + distributedMagicDuration;
-                            var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
-                            var rotationConnector = new AngleConnector(271);
-                            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                            replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
-                        }
+                        int start = (int)c.Time;
+                        int end = start + distributedMagicDuration;
+                        var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
+                        var rotationConnector = new AngleConnector(31);
+                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f))));
                     }
-                    //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
-                    //CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
-                    break;
-                case (int)ArcDPSEnums.TrashID.BlueGuardian:
-                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Blue, 0.5, new AgentConnector(target)).UsingFilled(false));
-                    break;
-                case (int)ArcDPSEnums.TrashID.GreenGuardian:
-                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Green, 0.5, new AgentConnector(target)).UsingFilled(false));
-                    break;
-                case (int)ArcDPSEnums.TrashID.RedGuardian:
-                    replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
-                    break;
-                case (int)ArcDPSEnums.TrashID.Seekers:
-                    replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
-                    break;
-                default:
-                    break;
-            }
+                    var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed);
+                    foreach (AbstractCastEvent c in distributedMagicRed)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + distributedMagicDuration;
+                        var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
+                        var rotationConnector = new AngleConnector(271);
+                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
+                    }
+                }
+                //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
+                //CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
+                break;
+            case (int)ArcDPSEnums.TrashID.BlueGuardian:
+                replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Blue, 0.5, new AgentConnector(target)).UsingFilled(false));
+                break;
+            case (int)ArcDPSEnums.TrashID.GreenGuardian:
+                replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Green, 0.5, new AgentConnector(target)).UsingFilled(false));
+                break;
+            case (int)ArcDPSEnums.TrashID.RedGuardian:
+                replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
+                break;
+            case (int)ArcDPSEnums.TrashID.Seekers:
+                replay.Decorations.Add(new CircleDecoration(180, lifespan, Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
+                break;
+            default:
+                break;
         }
+    }
 
-        internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
-        {
-            base.ComputePlayerCombatReplayActors(p, log, replay);
-            // Attunements Overhead
-            replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
-            replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
-            replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
-        }
+    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    {
+        base.ComputePlayerCombatReplayActors(p, log, replay);
+        // Attunements Overhead
+        replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
+        replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
+        replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
     }
 }

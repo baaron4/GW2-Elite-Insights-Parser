@@ -1,14 +1,13 @@
 ﻿
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
-namespace GW2EIEvtcParser.EncounterLogic
+namespace GW2EIEvtcParser.EncounterLogic;
+
+internal abstract class StrongholdOfTheFaithful : RaidLogic
 {
-    internal abstract class StrongholdOfTheFaithful : RaidLogic
+    public StrongholdOfTheFaithful(int triggerID) : base(triggerID)
     {
-        public StrongholdOfTheFaithful(int triggerID) : base(triggerID)
-        {
-            EncounterCategoryInformation.SubCategory = SubFightCategory.StrongholdOfTheFaithful;
-            EncounterID |= EncounterIDs.RaidWingMasks.StrongholdOfTheFaithfulMask;
-        }
+        EncounterCategoryInformation.SubCategory = SubFightCategory.StrongholdOfTheFaithful;
+        EncounterID |= EncounterIDs.RaidWingMasks.StrongholdOfTheFaithfulMask;
     }
 }

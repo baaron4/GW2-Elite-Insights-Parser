@@ -9,207 +9,206 @@ using GW2EIJSON;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
-namespace GW2EIParser.tst
+namespace GW2EIParser.tst;
+
+public static class TestHelper
 {
-    public static class TestHelper
+    internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
+    internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
     {
-        internal static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
-        internal static readonly DefaultContractResolver DefaultJsonContractResolver = new DefaultContractResolver
+        NamingStrategy = new CamelCaseNamingStrategy()
+    };
+    private static readonly Version Version = new Version(1, 0);
+    private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, false, true, true, true, 2200, true);
+    private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
+    private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
+    private static readonly CSVSettings csvSettings = new CSVSettings(",");
+    private static readonly HTMLAssets htmlAssets = new HTMLAssets();
+
+    internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
+    internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
+    internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
+
+    internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
+
+    private class TestOperationController : ParserController
+    {
+        public TestOperationController()
         {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        };
-        private static readonly Version Version = new Version(1, 0);
-        private static readonly EvtcParserSettings parserSettings = new EvtcParserSettings(false, false, true, true, true, 2200, true);
-        private static readonly HTMLSettings htmlSettings = new HTMLSettings(false, false);
-        private static readonly RawFormatSettings rawSettings = new RawFormatSettings(true);
-        private static readonly CSVSettings csvSettings = new CSVSettings(",");
-        private static readonly HTMLAssets htmlAssets = new HTMLAssets();
 
-        internal static readonly string SkillAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SkillList.json";
-        internal static readonly string SpecAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/SpecList.json";
-        internal static readonly string TraitAPICacheLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Content/TraitList.json";
+        }
 
-        internal static readonly GW2APIController APIController = new GW2APIController(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
-
-        private class TestOperationController : ParserController
+        public override void UpdateProgressWithCancellationCheck(string status)
         {
-            public TestOperationController()
+        }
+    }
+
+    public static ParsedEvtcLog ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
+    {
+        var parser = new EvtcParser(parserSettings, apiController);
+
+        var fInfo = new FileInfo(location);
+        ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, false);
+        if (failureReason != null)
+        {
+            failureReason.Throw();
+        }
+        return parsedLog;
+    }
+
+    public static string JsonString(ParsedEvtcLog log)
+    {
+        var ms = new MemoryStream();
+        var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
+
+        builder.CreateJSON(ms, false);
+
+        return Encoding.UTF8.GetString(ms.ToArray());
+    }
+
+    public static string CsvString(ParsedEvtcLog log)
+    {
+        var ms = new MemoryStream();
+        var sw = new StreamWriter(ms);
+        var builder = new CSVBuilder(log, csvSettings, Version, new UploadResults());
+
+        builder.CreateCSV(sw);
+        sw.Close();
+
+        return sw.ToString();
+    }
+
+    public static string HtmlString(ParsedEvtcLog log)
+    {
+        var ms = new MemoryStream();
+        var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
+        var builder = new HTMLBuilder(log, htmlSettings, htmlAssets, Version, new UploadResults());
+
+        builder.CreateHTML(sw, null);
+        sw.Close();
+
+        return Encoding.UTF8.GetString(ms.ToArray());
+    }
+
+    public static JsonLog JsonLog(ParsedEvtcLog log)
+    {
+        var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
+        return builder.GetJson();
+    }
+
+    ///////////////////////////////////////
+    ///
+
+    //https://stackoverflow.com/questions/24876082/find-and-return-json-differences-using-newtonsoft-in-c
+
+    /// <summary>
+    /// Deep compare two NewtonSoft JObjects. If they don't match, returns text diffs
+    /// </summary>
+    /// <param name="source">The expected results</param>
+    /// <param name="target">The actual results</param>
+    /// <returns>Text string</returns>
+
+    public static StringBuilder CompareObjects(JObject source, JObject target)
+    {
+        var returnString = new StringBuilder();
+        foreach (KeyValuePair<string, JToken> sourcePair in source)
+        {
+            if (sourcePair.Value.Type == JTokenType.Object)
             {
-
-            }
-
-            public override void UpdateProgressWithCancellationCheck(string status)
-            {
-            }
-        }
-
-        public static ParsedEvtcLog ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
-        {
-            var parser = new EvtcParser(parserSettings, apiController);
-
-            var fInfo = new FileInfo(location);
-            ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, false);
-            if (failureReason != null)
-            {
-                failureReason.Throw();
-            }
-            return parsedLog;
-        }
-
-        public static string JsonString(ParsedEvtcLog log)
-        {
-            var ms = new MemoryStream();
-            var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
-
-            builder.CreateJSON(ms, false);
-
-            return Encoding.UTF8.GetString(ms.ToArray());
-        }
-
-        public static string CsvString(ParsedEvtcLog log)
-        {
-            var ms = new MemoryStream();
-            var sw = new StreamWriter(ms);
-            var builder = new CSVBuilder(log, csvSettings, Version, new UploadResults());
-
-            builder.CreateCSV(sw);
-            sw.Close();
-
-            return sw.ToString();
-        }
-
-        public static string HtmlString(ParsedEvtcLog log)
-        {
-            var ms = new MemoryStream();
-            var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-            var builder = new HTMLBuilder(log, htmlSettings, htmlAssets, Version, new UploadResults());
-
-            builder.CreateHTML(sw, null);
-            sw.Close();
-
-            return Encoding.UTF8.GetString(ms.ToArray());
-        }
-
-        public static JsonLog JsonLog(ParsedEvtcLog log)
-        {
-            var builder = new RawFormatBuilder(log, rawSettings, Version, new UploadResults());
-            return builder.GetJson();
-        }
-
-        ///////////////////////////////////////
-        ///
-
-        //https://stackoverflow.com/questions/24876082/find-and-return-json-differences-using-newtonsoft-in-c
-
-        /// <summary>
-        /// Deep compare two NewtonSoft JObjects. If they don't match, returns text diffs
-        /// </summary>
-        /// <param name="source">The expected results</param>
-        /// <param name="target">The actual results</param>
-        /// <returns>Text string</returns>
-
-        public static StringBuilder CompareObjects(JObject source, JObject target)
-        {
-            var returnString = new StringBuilder();
-            foreach (KeyValuePair<string, JToken> sourcePair in source)
-            {
-                if (sourcePair.Value.Type == JTokenType.Object)
+                if (target.GetValue(sourcePair.Key) == null)
                 {
-                    if (target.GetValue(sourcePair.Key) == null)
-                    {
-                        returnString.Append("Key " + sourcePair.Key
-                                            + " not found" + Environment.NewLine);
-                    }
-                    else if (target.GetValue(sourcePair.Key).Type != JTokenType.Object)
-                    {
-                        returnString.Append("Key " + sourcePair.Key
-                                            + " is not an object in target" + Environment.NewLine);
-                    }
-                    else
-                    {
-                        returnString.Append(CompareObjects(sourcePair.Value.ToObject<JObject>(),
-                            target.GetValue(sourcePair.Key).ToObject<JObject>()));
-                    }
+                    returnString.Append("Key " + sourcePair.Key
+                                        + " not found" + Environment.NewLine);
                 }
-                else if (sourcePair.Value.Type == JTokenType.Array)
+                else if (target.GetValue(sourcePair.Key).Type != JTokenType.Object)
                 {
-                    if (target.GetValue(sourcePair.Key) == null)
-                    {
-                        returnString.Append("Key " + sourcePair.Key
-                                            + " not found" + Environment.NewLine);
-                    }
-                    else
-                    {
-                        returnString.Append(CompareArrays(sourcePair.Value.ToObject<JArray>(),
-                            target.GetValue(sourcePair.Key).ToObject<JArray>(), sourcePair.Key));
-                    }
+                    returnString.Append("Key " + sourcePair.Key
+                                        + " is not an object in target" + Environment.NewLine);
                 }
                 else
                 {
-                    JToken expected = sourcePair.Value;
-                    JToken actual = target.SelectToken("['" + sourcePair.Key + "']");
-                    if (actual == null)
-                    {
-                        returnString.Append("Key " + sourcePair.Key
-                                            + " not found" + Environment.NewLine);
-                    }
-                    else
-                    {
-                        if (!JToken.DeepEquals(expected, actual))
-                        {
-                            returnString.Append("Key " + sourcePair.Key + ": "
-                                                + sourcePair.Value + " !=  "
-                                                + target.Property(sourcePair.Key).Value
-                                                + Environment.NewLine);
-                        }
-                    }
+                    returnString.Append(CompareObjects(sourcePair.Value.ToObject<JObject>(),
+                        target.GetValue(sourcePair.Key).ToObject<JObject>()));
                 }
             }
-            return returnString;
-        }
-
-        /// <summary>
-        /// Deep compare two NewtonSoft JArrays. If they don't match, returns text diffs
-        /// </summary>
-        /// <param name="source">The expected results</param>
-        /// <param name="target">The actual results</param>
-        /// <param name="arrayName">The name of the array to use in the text diff</param>
-        /// <returns>Text string</returns>
-        public static StringBuilder CompareArrays(JArray source, JArray target, string arrayName = "")
-        {
-            var returnString = new StringBuilder();
-            for (int index = 0; index < source.Count; index++)
+            else if (sourcePair.Value.Type == JTokenType.Array)
             {
-
-                JToken expected = source[index];
-                if (expected.Type == JTokenType.Object)
+                if (target.GetValue(sourcePair.Key) == null)
                 {
-                    JToken actual = (index >= target.Count) ? new JObject() : target[index];
-                    returnString.Append(CompareObjects(expected.ToObject<JObject>(),
-                        actual.ToObject<JObject>()));
+                    returnString.Append("Key " + sourcePair.Key
+                                        + " not found" + Environment.NewLine);
                 }
                 else
                 {
-
-                    JToken actual = (index >= target.Count) ? "" : target[index];
+                    returnString.Append(CompareArrays(sourcePair.Value.ToObject<JArray>(),
+                        target.GetValue(sourcePair.Key).ToObject<JArray>(), sourcePair.Key));
+                }
+            }
+            else
+            {
+                JToken expected = sourcePair.Value;
+                JToken actual = target.SelectToken("['" + sourcePair.Key + "']");
+                if (actual == null)
+                {
+                    returnString.Append("Key " + sourcePair.Key
+                                        + " not found" + Environment.NewLine);
+                }
+                else
+                {
                     if (!JToken.DeepEquals(expected, actual))
                     {
-                        if (string.IsNullOrEmpty(arrayName))
-                        {
-                            returnString.Append("Index " + index + ": " + expected
-                                                + " != " + actual + Environment.NewLine);
-                        }
-                        else
-                        {
-                            returnString.Append("Key " + arrayName
-                                                + "[" + index + "]: " + expected
-                                                + " != " + actual + Environment.NewLine);
-                        }
+                        returnString.Append("Key " + sourcePair.Key + ": "
+                                            + sourcePair.Value + " !=  "
+                                            + target.Property(sourcePair.Key).Value
+                                            + Environment.NewLine);
                     }
                 }
             }
-            return returnString;
         }
-
+        return returnString;
     }
+
+    /// <summary>
+    /// Deep compare two NewtonSoft JArrays. If they don't match, returns text diffs
+    /// </summary>
+    /// <param name="source">The expected results</param>
+    /// <param name="target">The actual results</param>
+    /// <param name="arrayName">The name of the array to use in the text diff</param>
+    /// <returns>Text string</returns>
+    public static StringBuilder CompareArrays(JArray source, JArray target, string arrayName = "")
+    {
+        var returnString = new StringBuilder();
+        for (int index = 0; index < source.Count; index++)
+        {
+
+            JToken expected = source[index];
+            if (expected.Type == JTokenType.Object)
+            {
+                JToken actual = (index >= target.Count) ? new JObject() : target[index];
+                returnString.Append(CompareObjects(expected.ToObject<JObject>(),
+                    actual.ToObject<JObject>()));
+            }
+            else
+            {
+
+                JToken actual = (index >= target.Count) ? "" : target[index];
+                if (!JToken.DeepEquals(expected, actual))
+                {
+                    if (string.IsNullOrEmpty(arrayName))
+                    {
+                        returnString.Append("Index " + index + ": " + expected
+                                            + " != " + actual + Environment.NewLine);
+                    }
+                    else
+                    {
+                        returnString.Append("Key " + arrayName
+                                            + "[" + index + "]: " + expected
+                                            + " != " + actual + Environment.NewLine);
+                    }
+                }
+            }
+        }
+        return returnString;
+    }
+
 }

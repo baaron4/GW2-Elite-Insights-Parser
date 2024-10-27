@@ -2,58 +2,57 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+internal class MinionSpawnCastFinder : CheckedCastFinder<SpawnEvent>
 {
-    internal class MinionSpawnCastFinder : CheckedCastFinder<SpawnEvent>
+    protected List<int> SpeciesIDs { get; }
+
+    public MinionSpawnCastFinder(long skillID, int speciesID) : base(skillID)
     {
-        protected List<int> SpeciesIDs { get; }
+        SpeciesIDs = new List<int> { speciesID };
+    }
 
-        public MinionSpawnCastFinder(long skillID, int speciesID) : base(skillID)
+    public MinionSpawnCastFinder(long skillID, IList<int> speciesIDs) : base(skillID)
+    {
+        SpeciesIDs = new List<int>(speciesIDs);
+    }
+
+    public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
+    {
+        //TODO(Rennorb) @perf <ComputeInstanceCast result>
+        var result = new List<InstantCastEvent>(10);
+        //TODO(Rennorb) @perf <ComputeInstanceCast minions>
+        var minions = new List<AgentItem>(10);
+        foreach (int id in SpeciesIDs)
         {
-            SpeciesIDs = new List<int> { speciesID };
+            minions.AddRange(agentData.GetNPCsByID(id).Where(m => m.Master != null));
         }
+        Tracing.Trace.TrackAverageStat("minions", minions.Count);
+        minions.Sort((a, b) => (int)(a.FirstAware - b.FirstAware));
 
-        public MinionSpawnCastFinder(long skillID, IList<int> speciesIDs) : base(skillID)
+        foreach (var minionsByMaster in minions.GroupBy(x => x.GetFinalMaster()))
         {
-            SpeciesIDs = new List<int>(speciesIDs);
-        }
-
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            //TODO(Rennorb) @perf <ComputeInstanceCast result>
-            var result = new List<InstantCastEvent>(10);
-            //TODO(Rennorb) @perf <ComputeInstanceCast minions>
-            var minions = new List<AgentItem>(10);
-            foreach (int id in SpeciesIDs)
+            long lastTime = int.MinValue;
+            foreach (AgentItem minion in minionsByMaster)
             {
-                minions.AddRange(agentData.GetNPCsByID(id).Where(m => m.Master != null));
-            }
-            Tracing.Trace.TrackAverageStat("minions", minions.Count);
-            minions.Sort((a, b) => (int)(a.FirstAware - b.FirstAware));
-
-            foreach (var minionsByMaster in minions.GroupBy(x => x.GetFinalMaster()))
-            {
-                long lastTime = int.MinValue;
-                foreach (AgentItem minion in minionsByMaster)
+                foreach (SpawnEvent spawn in combatData.GetSpawnEvents(minion))
                 {
-                    foreach (SpawnEvent spawn in combatData.GetSpawnEvents(minion))
+                    if (CheckCondition(spawn, combatData, agentData, skillData))
                     {
-                        if (CheckCondition(spawn, combatData, agentData, skillData))
+                        if (spawn.Time - lastTime < ICD)
                         {
-                            if (spawn.Time - lastTime < ICD)
-                            {
-                                lastTime = spawn.Time;
-                                continue;
-                            }
                             lastTime = spawn.Time;
-                            result.Add(new InstantCastEvent(spawn.Time, skillData.Get(SkillID), minionsByMaster.Key));
+                            continue;
                         }
+                        lastTime = spawn.Time;
+                        result.Add(new InstantCastEvent(spawn.Time, skillData.Get(SkillID), minionsByMaster.Key));
                     }
                 }
             }
-
-            Tracing.Trace.TrackAverageStat("result", result.Count);
-            return result;
         }
+
+        Tracing.Trace.TrackAverageStat("result", result.Count);
+        return result;
     }
 }

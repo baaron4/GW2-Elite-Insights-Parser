@@ -1,10 +1,9 @@
-﻿namespace GW2EIBuilders.HtmlModels.HTMLCharts
+﻿namespace GW2EIBuilders.HtmlModels.HTMLCharts;
+
+internal class AreaLabelDto
 {
-    internal class AreaLabelDto
-    {
-        public double Start;
-        public double End;
-        public string? Label;
-        public bool Highlight;
-    }
+    public double Start;
+    public double End;
+    public string? Label;
+    public bool Highlight;
 }

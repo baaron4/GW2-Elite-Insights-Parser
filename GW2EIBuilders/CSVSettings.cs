@@ -1,11 +1,10 @@
-﻿namespace GW2EIBuilders
+﻿namespace GW2EIBuilders;
+
+public class CSVSettings
 {
-    public class CSVSettings
+    public string Delimiter { get; }
+    public CSVSettings(string delimiter)
     {
-        public string Delimiter { get; }
-        public CSVSettings(string delimiter)
-        {
-            Delimiter = delimiter;
-        }
+        Delimiter = delimiter;
     }
 }

@@ -1,14 +1,12 @@
 ﻿using static GW2EIEvtcParser.EIData.IconOverheadDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class IconOverheadDecorationMetadataDescription : IconDecorationMetadataDescription
 {
-    public class IconOverheadDecorationMetadataDescription : IconDecorationMetadataDescription
+
+    internal IconOverheadDecorationMetadataDescription(IconOverheadDecorationMetadata decoration) : base(decoration)
     {
-
-        internal IconOverheadDecorationMetadataDescription(IconOverheadDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "IconOverheadDecoration";
-        }
+        Type = "IconOverheadDecoration";
     }
-
 }

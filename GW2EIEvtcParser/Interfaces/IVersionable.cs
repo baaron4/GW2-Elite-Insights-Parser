@@ -1,9 +1,8 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.Interfaces
+namespace GW2EIEvtcParser.Interfaces;
+
+internal interface IVersionable
 {
-    internal interface IVersionable
-    {
-        bool Available(CombatData combatData);
-    }
+    bool Available(CombatData combatData);
 }

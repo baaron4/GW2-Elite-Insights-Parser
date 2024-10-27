@@ -1,16 +1,15 @@
 ﻿using static GW2EIEvtcParser.EIData.PieDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class PieDecorationMetadataDescription : CircleDecorationMetadataDescription
 {
-    public class PieDecorationMetadataDescription : CircleDecorationMetadataDescription
+    public float OpeningAngle { get; set; }
+
+    internal PieDecorationMetadataDescription(PieDecorationMetadata decoration) : base(decoration)
     {
-        public float OpeningAngle { get; set; }
-
-        internal PieDecorationMetadataDescription(PieDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "Pie";
-            OpeningAngle = decoration.OpeningAngle;
-        }
-
+        Type = "Pie";
+        OpeningAngle = decoration.OpeningAngle;
     }
+
 }

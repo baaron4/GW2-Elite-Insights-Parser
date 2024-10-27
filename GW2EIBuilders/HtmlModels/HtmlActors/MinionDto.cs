@@ -1,8 +1,7 @@
-﻿namespace GW2EIBuilders.HtmlModels.HTMLActors
+﻿namespace GW2EIBuilders.HtmlModels.HTMLActors;
+
+internal class MinionDto
 {
-    internal class MinionDto
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-    }
+    public long Id { get; set; }
+    public string Name { get; set; }
 }

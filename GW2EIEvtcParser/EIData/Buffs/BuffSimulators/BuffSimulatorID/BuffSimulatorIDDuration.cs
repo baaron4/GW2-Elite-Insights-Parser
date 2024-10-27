@@ -3,77 +3,76 @@ using System.Linq;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData.BuffSimulators
+namespace GW2EIEvtcParser.EIData.BuffSimulators;
+
+internal class BuffSimulatorIDDuration : BuffSimulatorID
 {
-    internal class BuffSimulatorIDDuration : BuffSimulatorID
+    private BuffStackItemID _activeStack;
+
+    // Constructor
+    public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff) : base(log, buff)
     {
-        private BuffStackItemID _activeStack;
+    }
 
-        // Constructor
-        public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff) : base(log, buff)
-        {
-        }
+    public override void Activate(uint stackID)
+    {
+        _activeStack?.Disable();
+        
+        _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
+        Debug.Assert(_activeStack != null, $"Activate has failed: could not find stack id {stackID}");
 
-        public override void Activate(uint stackID)
+        _activeStack.Activate();
+    }
+
+    public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
+    {
+        var toAdd = new BuffStackItemID(start, duration, src, addedActive, stackID);
+        BuffStack.Add(toAdd);
+        if (addedActive)
         {
             _activeStack?.Disable();
-            
-            _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-            Debug.Assert(_activeStack != null, $"Activate has failed: could not find stack id {stackID}");
-
-            _activeStack.Activate();
+            _activeStack = toAdd;
         }
+    }
 
-        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
+    protected override void Update(long timePassed)
+    {
+        if (BuffStack.Count == 0 || timePassed <= 0)
         {
-            var toAdd = new BuffStackItemID(start, duration, src, addedActive, stackID);
-            BuffStack.Add(toAdd);
-            if (addedActive)
-            {
-                _activeStack?.Disable();
-                _activeStack = toAdd;
-            }
+            return;
         }
 
-        protected override void Update(long timePassed)
+        long diff = timePassed;
+        long leftOver = 0;
+        if (_activeStack != null && _activeStack.Duration > 0)
         {
-            if (BuffStack.Count == 0 || timePassed <= 0)
+            var toAdd = new BuffSimulationItemDuration(BuffStack);
+            GenerationSimulation.Add(toAdd);
+            long timeDiff = _activeStack.Duration - timePassed;
+            if (timeDiff < 0)
             {
-                return;
+                diff = _activeStack.Duration;
+                leftOver = timePassed - diff;
             }
 
-            long diff = timePassed;
-            long leftOver = 0;
-            if (_activeStack != null && _activeStack.Duration > 0)
+            if (toAdd.End > toAdd.Start + diff)
             {
-                var toAdd = new BuffSimulationItemDuration(BuffStack);
-                GenerationSimulation.Add(toAdd);
-                long timeDiff = _activeStack.Duration - timePassed;
-                if (timeDiff < 0)
-                {
-                    diff = _activeStack.Duration;
-                    leftOver = timePassed - diff;
-                }
-
-                if (toAdd.End > toAdd.Start + diff)
-                {
-                    toAdd.OverrideEnd(toAdd.Start + diff);
-                }
-                _activeStack.Shift(0, diff);
-
-                // keep current stack alive while waiting for stack active/ stack remove to arrive
-                if (_activeStack.Duration == 0 && leftOver > 0 && leftOver < ParserHelper.BuffSimulatorStackActiveDelayConstant)
-                {
-                    _activeStack.Shift(0, -leftOver);
-                }
+                toAdd.OverrideEnd(toAdd.Start + diff);
             }
+            _activeStack.Shift(0, diff);
 
-            foreach (BuffStackItemID buffStackItem in BuffStack)
+            // keep current stack alive while waiting for stack active/ stack remove to arrive
+            if (_activeStack.Duration == 0 && leftOver > 0 && leftOver < ParserHelper.BuffSimulatorStackActiveDelayConstant)
             {
-                buffStackItem.Shift(diff, 0);
+                _activeStack.Shift(0, -leftOver);
             }
-            Update(leftOver);
         }
+
+        foreach (BuffStackItemID buffStackItem in BuffStack)
+        {
+            buffStackItem.Shift(diff, 0);
+        }
+        Update(leftOver);
     }
 }
 

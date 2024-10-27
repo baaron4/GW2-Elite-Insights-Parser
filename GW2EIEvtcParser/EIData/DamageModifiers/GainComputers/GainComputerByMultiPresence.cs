@@ -1,10 +1,9 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿namespace GW2EIEvtcParser.EIData;
+
+internal class GainComputerByMultiPresence : GainComputerByStack
 {
-    internal class GainComputerByMultiPresence : GainComputerByStack
+    public GainComputerByMultiPresence()
     {
-        public GainComputerByMultiPresence()
-        {
-            Multiplier = true;
-        }
+        Multiplier = true;
     }
 }

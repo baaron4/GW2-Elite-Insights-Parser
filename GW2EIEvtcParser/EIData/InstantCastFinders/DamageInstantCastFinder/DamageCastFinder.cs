@@ -2,39 +2,38 @@
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
-{
-    internal class DamageCastFinder : CheckedCastFinder<AbstractHealthDamageEvent>
-    {
-        private readonly long _damageSkillID;
-        public DamageCastFinder(long skillID, long damageSkillID) : base(skillID)
-        {
-            UsingNotAccurate(true);
-            _damageSkillID = damageSkillID;
-        }
+namespace GW2EIEvtcParser.EIData;
 
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
+internal class DamageCastFinder : CheckedCastFinder<AbstractHealthDamageEvent>
+{
+    private readonly long _damageSkillID;
+    public DamageCastFinder(long skillID, long damageSkillID) : base(skillID)
+    {
+        UsingNotAccurate(true);
+        _damageSkillID = damageSkillID;
+    }
+
+    public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
+    {
+        var res = new List<InstantCastEvent>();
+        var damages = combatData.GetDamageData(_damageSkillID).GroupBy(x => x.From);
+        foreach (var group in damages)
         {
-            var res = new List<InstantCastEvent>();
-            var damages = combatData.GetDamageData(_damageSkillID).GroupBy(x => x.From);
-            foreach (var group in damages)
+            long lastTime = int.MinValue;
+            foreach (AbstractHealthDamageEvent de in group)
             {
-                long lastTime = int.MinValue;
-                foreach (AbstractHealthDamageEvent de in group)
+                if (CheckCondition(de, combatData, agentData, skillData))
                 {
-                    if (CheckCondition(de, combatData, agentData, skillData))
+                    if (de.Time - lastTime < ICD)
                     {
-                        if (de.Time - lastTime < ICD)
-                        {
-                            lastTime = de.Time;
-                            continue;
-                        }
                         lastTime = de.Time;
-                        res.Add(new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From));
+                        continue;
                     }
+                    lastTime = de.Time;
+                    res.Add(new InstantCastEvent(GetTime(de, de.From, combatData), skillData.Get(SkillID), de.From));
                 }
             }
-            return res;
         }
+        return res;
     }
 }

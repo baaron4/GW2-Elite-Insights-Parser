@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public abstract class IDBasedMechanic<Checkable> : CheckedMechanic<Checkable>
 {
-    public abstract class IDBasedMechanic<Checkable> : CheckedMechanic<Checkable>
+
+    protected HashSet<long> MechanicIDs { get; } = new HashSet<long>();
+
+    protected IDBasedMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
-
-        protected HashSet<long> MechanicIDs { get; } = new HashSet<long>();
-
-        protected IDBasedMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
-        {
-            MechanicIDs.Add(mechanicID);
-        }
-
-        //TODO(Rennorb) @perf
-        protected IDBasedMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
-        {
-            MechanicIDs.UnionWith(mechanicIDs);
-        }
-
+        MechanicIDs.Add(mechanicID);
     }
+
+    //TODO(Rennorb) @perf
+    protected IDBasedMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    {
+        MechanicIDs.UnionWith(mechanicIDs);
+    }
+
 }

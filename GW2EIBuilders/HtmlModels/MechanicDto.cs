@@ -3,94 +3,93 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIBuilders.HtmlModels
+namespace GW2EIBuilders.HtmlModels;
+
+internal class MechanicDto
 {
-    internal class MechanicDto
+    public string Name { get; set; }
+
+    public int Icd { get; set; }
+    public string ShortName { get; set; }
+    public string Description { get; set; }
+    public bool EnemyMech { get; set; }
+    public bool PlayerMech { get; set; }
+    public bool IsAchievementEligibility { get; set; }
+
+    private static List<(int, int)> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
     {
-        public string Name { get; set; }
+        var res = new List<(int, int)>(presMech.Count);
 
-        public int Icd { get; set; }
-        public string ShortName { get; set; }
-        public string Description { get; set; }
-        public bool EnemyMech { get; set; }
-        public bool PlayerMech { get; set; }
-        public bool IsAchievementEligibility { get; set; }
-
-        private static List<(int, int)> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
+        foreach (Mechanic mech in presMech)
         {
-            var res = new List<(int, int)>(presMech.Count);
-
-            foreach (Mechanic mech in presMech)
+            int filterCount = 0;
+            int count = 0;
+            if (mech.InternalCooldown > 0)
             {
-                int filterCount = 0;
-                int count = 0;
-                if (mech.InternalCooldown > 0)
+                long timeFilter = 0;
+                IReadOnlyList<MechanicEvent> mls = log.MechanicData.GetMechanicLogs(log, mech, actor, log.FightData.FightStart, log.FightData.FightEnd);
+                foreach (MechanicEvent ml in mls)
                 {
-                    long timeFilter = 0;
-                    IReadOnlyList<MechanicEvent> mls = log.MechanicData.GetMechanicLogs(log, mech, actor, log.FightData.FightStart, log.FightData.FightEnd);
-                    foreach (MechanicEvent ml in mls)
+                    bool inInterval = phase.InInterval(ml.Time);
+                    if (ml.Time - timeFilter < mech.InternalCooldown)//ICD check
                     {
-                        bool inInterval = phase.InInterval(ml.Time);
-                        if (ml.Time - timeFilter < mech.InternalCooldown)//ICD check
-                        {
-                            if (inInterval)
-                            {
-                                filterCount++;
-                            }
-                        }
-                        timeFilter = ml.Time;
                         if (inInterval)
                         {
-                            count++;
+                            filterCount++;
                         }
                     }
+                    timeFilter = ml.Time;
+                    if (inInterval)
+                    {
+                        count++;
+                    }
                 }
-                else
-                {
-                    count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;
-                }
-                res.Add((count - filterCount, count));
             }
-            return res;
-        }
-
-        public static void BuildMechanics(IReadOnlyCollection<Mechanic> mechs, List<MechanicDto> mechsDtos)
-        {
-            foreach (Mechanic mech in mechs)
+            else
             {
-                var dto = new MechanicDto
-                {
-                    Name = mech.FullName,
-                    ShortName = mech.ShortName,
-                    Description = mech.Description,
-                    PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
-                    EnemyMech = mech.IsEnemyMechanic,
-                    IsAchievementEligibility = mech.IsAchievementEligibility,
-                    Icd = mech.InternalCooldown
-                };
-                mechsDtos.Add(dto);
+                count = log.MechanicData.GetMechanicLogs(log, mech, actor, phase.Start, phase.End).Count;
             }
+            res.Add((count - filterCount, count));
         }
+        return res;
+    }
 
-        public static List<List<(int, int)>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
+    public static void BuildMechanics(IReadOnlyCollection<Mechanic> mechs, List<MechanicDto> mechsDtos)
+    {
+        foreach (Mechanic mech in mechs)
         {
-            var list = new List<List<(int, int)>>(log.Friendlies.Count);
-            foreach (AbstractSingleActor actor in log.Friendlies)
+            var dto = new MechanicDto
             {
-                list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, actor, phase));
-            }
-            return list;
+                Name = mech.FullName,
+                ShortName = mech.ShortName,
+                Description = mech.Description,
+                PlayerMech = mech.ShowOnTable && !mech.IsEnemyMechanic,
+                EnemyMech = mech.IsEnemyMechanic,
+                IsAchievementEligibility = mech.IsAchievementEligibility,
+                Icd = mech.InternalCooldown
+            };
+            mechsDtos.Add(dto);
         }
+    }
 
-        public static List<List<(int, int)>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
+    public static List<List<(int, int)>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
+    {
+        var list = new List<List<(int, int)>>(log.Friendlies.Count);
+        foreach (AbstractSingleActor actor in log.Friendlies)
         {
-            var enemies = log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd);
-            var list = new List<List<(int, int)>>(enemies.Count);
-            foreach (AbstractSingleActor enemy in enemies)
-            {
-                list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, enemy, phase));
-            }
-            return list;
+            list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, actor, phase));
         }
+        return list;
+    }
+
+    public static List<List<(int, int)>> BuildEnemyMechanicData(ParsedEvtcLog log, PhaseData phase)
+    {
+        var enemies = log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var list = new List<List<(int, int)>>(enemies.Count);
+        foreach (AbstractSingleActor enemy in enemies)
+        {
+            list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, enemy, phase));
+        }
+        return list;
     }
 }

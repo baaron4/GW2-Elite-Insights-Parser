@@ -1,14 +1,12 @@
 ﻿using static GW2EIEvtcParser.EIData.LineDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class LineDecorationMetadataDescription : FormDecorationMetadataDescription
 {
-    public class LineDecorationMetadataDescription : FormDecorationMetadataDescription
+
+    internal LineDecorationMetadataDescription(LineDecorationMetadata decoration) : base(decoration)
     {
-
-        internal LineDecorationMetadataDescription(LineDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "Line";
-        }
+        Type = "Line";
     }
-
 }

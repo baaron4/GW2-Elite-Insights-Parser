@@ -1,34 +1,33 @@
 ﻿using System.Collections.Generic;
 using GW2EIEvtcParser.EIData;
 
-namespace GW2EIBuilders.HtmlModels.HTMLMetaData
-{
-    internal class DamageModDto
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
-        public string Tooltip { get; set; }
-        public bool NonMultiplier { get; set; }
-        public bool SkillBased { get; set; }
-        public bool Approximate { get; set; }
+namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
-        public static void AssembleDamageModifiers(IReadOnlyCollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
+internal class DamageModDto
+{
+    public long Id { get; set; }
+    public string Name { get; set; }
+    public string Icon { get; set; }
+    public string Tooltip { get; set; }
+    public bool NonMultiplier { get; set; }
+    public bool SkillBased { get; set; }
+    public bool Approximate { get; set; }
+
+    public static void AssembleDamageModifiers(IReadOnlyCollection<DamageModifier> damageMods, Dictionary<string, DamageModDto> dict)
+    {
+        foreach (DamageModifier mod in damageMods)
         {
-            foreach (DamageModifier mod in damageMods)
+            int id = mod.ID;
+            dict["d" + id] = new DamageModDto()
             {
-                int id = mod.ID;
-                dict["d" + id] = new DamageModDto()
-                {
-                    Id = id,
-                    Name = mod.Name,
-                    Icon = mod.Icon,
-                    Tooltip = mod.Tooltip,
-                    NonMultiplier = !mod.Multiplier,
-                    SkillBased = mod.SkillBased,
-                    Approximate = mod.Approximate
-                };
-            }
+                Id = id,
+                Name = mod.Name,
+                Icon = mod.Icon,
+                Tooltip = mod.Tooltip,
+                NonMultiplier = !mod.Multiplier,
+                SkillBased = mod.SkillBased,
+                Approximate = mod.Approximate
+            };
         }
     }
 }
