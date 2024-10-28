@@ -3944,6 +3944,7 @@
         public const long ToxicSlice = 68308;
         public const long TriBoltCM = 68318;
         public const long NakedSingularity = 68319;
+        public const long PerniciousVortexSkillNM = 68326;
         public const long TidalTorment = 68330;
         public const long TidalTormentCM = 68332;
         public const long DualHorizon = 68336;
@@ -3957,11 +3958,14 @@
         public const long AchievementEligibilityFearNotThisKnight = 68378;
         public const long NoxiousReturn = 68382;
         public const long ThunderingUltimatum = 68393;
+        public const long NoxiousVaporBladeTargetBuff = 68401;
         public const long MassDriver = 68402;
+        public const long PerniciousVortexSkillCM = 68407;
         public const long AchievementEligibilityAetherAversion = 68412;
         public const long NoxiousVaporBladeCM = 68414;
         public const long GravityHammer = 68415;
         public const long ExhaustPlume = 68316;
+        public const long CracklingWindSkillCM = 68419;
         public const long Rupture = 68420;
         public const long NoxiousReturnCM = 68425;
         public const long DualHorizonCM = 68435;
@@ -3987,6 +3991,7 @@
         public const long Relapse = 68544;
         public const long ErgoShear = 68546;
         public const long GravityHammerCM = 68556;
+        public const long CracklingWindSkillNM = 68560;
         public const long FixatedOldLionsCourt = 68562;
         public const long BoilingAetherRedBlueCM = 68580;
         public const long DormantCourage = 68585;
