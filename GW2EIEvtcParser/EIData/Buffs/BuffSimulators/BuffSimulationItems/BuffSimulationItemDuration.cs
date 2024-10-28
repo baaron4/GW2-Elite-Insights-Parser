@@ -4,16 +4,12 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal class BuffSimulationItemDuration : BuffSimulationItemStack
+internal class BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) : BuffSimulationItemStack(stacks)
 {
-    public BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) : base(stacks)
-    {
-    }
-
     public override void OverrideEnd(long end)
     {
         Stacks[0].OverrideEnd(end);
-        Duration = Stacks[0].Duration;
+        this.End = end;
     }
 
     public override int GetActiveStacks()

@@ -145,6 +145,7 @@ class Internals
     {
         //TODO(Rennorb) make more minimal
         var list = new List<AbstractBuffEvent>() {
+            #pragma warning disable CS0618 // Type or member is obsolete
             #region unhinged test
             new BuffApplyEvent(1),
             new BuffApplyEvent(1),
@@ -867,6 +868,7 @@ class Internals
             new BuffRemoveSingleEvent(164825),
             new BuffRemoveSingleEvent(164825),
             #endregion
+            #pragma warning restore CS0618 // Type or member is obsolete
         };
 
         list.SortByTime();

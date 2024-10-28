@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
@@ -9,18 +11,24 @@ using Segment = GenericSegment<double>;
 
 internal abstract class BuffSimulationItem : AbstractSimulationItem
 {
-    public long Duration { get; protected set; }
+    //NOTE(Rennorb): I changed the element to have start + end instead of start + duration to fix a bug. 
+    // Apparently the original arc events have start + duration, so there might be value in returning it to the previous state.
+    // Apart form the bug there doesn't seem to be a performance penalty either way,
+    // however I did not investigate what penalty a fix for tat bug would incur (probably quite minor, something like one clamp).
     public readonly long Start;
-    public long End => Start + Duration;
+    public long End;
+    public long Duration  => End - Start;
 
-    protected BuffSimulationItem(long start, long duration)
+    public BuffSimulationItem(long start, long end)
     {
-        Start = start;
-        Duration = duration;
+        Debug.Assert(start <= end);
+        this.Start = start;
+        this.End = end;
     }
 
     public long GetClampedDuration(long start, long end)
     {
+        Debug.Assert(this.Start <= this.End);
         return Math.Max(0, Math.Clamp(this.End, start, end) - Math.Clamp(this.Start, start, end));
     }
 

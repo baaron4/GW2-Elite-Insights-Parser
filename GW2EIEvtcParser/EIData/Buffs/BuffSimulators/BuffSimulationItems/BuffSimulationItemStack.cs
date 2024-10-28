@@ -10,7 +10,7 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
     private AgentItem[]? _sources;
     private Dictionary<AgentItem, int>? _stacksPerSource;
 
-    public BuffSimulationItemStack(IReadOnlyList<BuffStackItem> stacks) : base(stacks.First().Start, stacks.First().Duration)
+    public BuffSimulationItemStack(IReadOnlyList<BuffStackItem> stacks) : base(stacks[0].Start, stacks[0].Start + stacks[0].Duration)
     {
         int count = stacks.Count;
         if (count > 0)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -10,7 +11,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
     internal readonly BuffStackItem _buffStackItem;
     internal readonly long _totalDuration;
 
-    protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Duration)
+    protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Start + buffStackItem.Duration)
     {
         _buffStackItem = buffStackItem;
         _totalDuration = buffStackItem.TotalDuration;
@@ -18,7 +19,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
 
     public override void OverrideEnd(long end)
     {
-        Duration = Math.Clamp(end - Start, 0, Duration);
+        this.End = end;
     }
 
     public override int GetActiveStacks()

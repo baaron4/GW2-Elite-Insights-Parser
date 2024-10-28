@@ -8,7 +8,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
 {
     public BuffSimulationItemIntensity(IReadOnlyList<BuffStackItem> stacks) : base(stacks)
     {
-        Duration = Stacks.Max(x => x.Duration);
+        this.End = this.Start + Stacks.Max(x => x.Duration);
     }
 
     public override void OverrideEnd(long end)
@@ -20,7 +20,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
 
             if(stack.Duration > maxDur) { maxDur = stack.Duration; }
         }
-        Duration = maxDur;
+        this.End = this.Start + maxDur;
     }
 
     public override int GetActiveStacks()
