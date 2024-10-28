@@ -15,7 +15,11 @@ namespace GW2EIEvtcParser.ParsedData
             (HexContentGUID, Base64ContentGUID) = UnpackGUID(evtcItem.SrcAgent, evtcItem.DstAgent);
             ContentID = evtcItem.SkillID;
         }
-
+        internal IDToGUIDEvent() : base()
+        {
+            (HexContentGUID, Base64ContentGUID) = ("", "");
+            ContentID = -1;
+        }
         internal static (string hex, string base64) UnpackGUID(ulong first8, ulong last8)
         {
             byte[] guid = new byte[16];

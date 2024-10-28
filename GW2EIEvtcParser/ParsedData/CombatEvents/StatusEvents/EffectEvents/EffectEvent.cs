@@ -10,7 +10,9 @@ namespace GW2EIEvtcParser.ParsedData
         /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
         /// </summary>
         public long EffectID { get; }
-
+        /// <summary>
+        /// GUID event of the effect, can not be null
+        /// </summary>
         public EffectGUIDEvent GUIDEvent { get; private set; }
 
         /// <summary>

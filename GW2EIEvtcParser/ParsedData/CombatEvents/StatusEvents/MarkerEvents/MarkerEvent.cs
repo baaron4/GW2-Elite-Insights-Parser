@@ -2,8 +2,17 @@
 {
     public class MarkerEvent : AbstractStatusEvent
     {
+        /// <summary>
+        /// ID of the marker. Match to stable GUID with <see cref="MarkerGUIDEvent"/>.
+        /// </summary>
         public int MarkerID { get; }
+        /// <summary>
+        /// GUID event of the effect, can not be null
+        /// </summary>
         public MarkerGUIDEvent GUIDEvent { get; private set; }
+        /// <summary>
+        /// Time at which marker has been removed.
+        /// </summary>
         public long EndTime { get; protected set; } = int.MaxValue;
 
         internal bool IsEnd => MarkerID == 0;

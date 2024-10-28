@@ -1590,7 +1590,7 @@ namespace GW2EIEvtcParser.ParsedData
                 throw new EvtcCombatEventException("Missing GUID event for effect " + effectID);
             }
 #endif
-            return null;
+            return EffectGUIDEvent.DummyEffectGUID;
         }
 
         /// <summary>
@@ -1618,7 +1618,7 @@ namespace GW2EIEvtcParser.ParsedData
             {
                 return evt;
             }
-            return null;
+            return MarkerGUIDEvent.DummyMarkerGUID;
         }
 
         public IReadOnlyList<GliderEvent> GetGliderEvents(AgentItem src)
