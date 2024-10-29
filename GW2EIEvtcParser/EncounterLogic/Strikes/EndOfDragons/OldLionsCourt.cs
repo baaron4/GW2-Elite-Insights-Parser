@@ -402,19 +402,19 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var orangeDoughnut = new DoughnutDecoration(340, 440, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(orangeDoughnut);
                         }
-                        if (log.CombatData.TryGetEffectEventsByGUIDs(new[] { EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter, EffectGUIDs.OldLionsCourtDualHorizonWhiteInner }, out IReadOnlyList<EffectEvent> horizonWhite  ))
+                        if (log.CombatData.TryGetEffectEventsByGUIDs(new[] { EffectGUIDs.OldLionsCourtDualHorizonWhiteInner, EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter }, out IReadOnlyList<EffectEvent> horizonWhite  ))
                         {
                             foreach (EffectEvent effect in horizonWhite)
                             {
                                 (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
                                 FormDecoration white;
-                                if (effect.GUIDEvent.HexContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter)
+                                if (effect.GUIDEvent.HexContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteInner)
                                 {
                                     white = new DoughnutDecoration(300, 340, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
                                 } 
                                 else
                                 {
-                                    white = new DoughnutDecoration(440, 550, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
+                                    white = new DoughnutDecoration(440, 500, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
                                 }
                                 replay.Decorations.Add(white);
                             }

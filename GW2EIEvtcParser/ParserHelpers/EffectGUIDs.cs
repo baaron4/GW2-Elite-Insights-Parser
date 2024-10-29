@@ -728,8 +728,8 @@
         public const string OldLionsCourtSpaghettificationSafeZoneSemiCircle = "A9544AB8A84EED468817138BAFB79551"; // Red Knight Src - Duration 30000 - Safe Zone Semi Circle AoE - Has End Event
         public const string OldLionsCourtSpaghettificationSafeZoneFullCircle = "5718748DF0A13B438ACBBD156BADCFEE"; // Red Knight Src - Duration 30000 - Safe Zone FUll Circle AoE - Has End Event
         public const string OldLionsCourtDualHorizonOrange = "533D8FC0542C2F41ADC6515141E38501"; // Red Knight Src - Duration 4100 - AoE Doughnut
-        public const string OldLionsCourtDualHorizonWhiteOuter = "182666D5B4B6E64AAE8423D76012E9B0"; // Red Knight Src - Duration 4000 - White Outer
-        public const string OldLionsCourtDualHorizonWhiteInner = "F51B10029E0537488BAE346558A22F02"; // Red Knight Src - Duration 4000 - White Inner
+        public const string OldLionsCourtDualHorizonWhiteInner = "182666D5B4B6E64AAE8423D76012E9B0"; // Red Knight Src - Duration 4000 - White Outer
+        public const string OldLionsCourtDualHorizonWhiteOuter = "F51B10029E0537488BAE346558A22F02"; // Red Knight Src - Duration 4000 - White Inner
         public const string OldLionsCourtThunderingUltimatumFrontalCone = "687C781108ED664DB17B7B501C942ADC"; // Blue Knight Src - Duration 1500 or 30000 - Frontal Cone AoE - Has End Event if 30000
         public const string OldLionsCourtThunderingUltimatumFlipCone = "DFD5DF9B331D9C45A5E592EA2E39695D"; // Blue Knight Src - Duration 1500 or 30000 - Flip Cone AoE - Has End Event if 30000
         public const string OldLionsCourtThunderingUltimatumDetonation = "676C0B284588FC40829C2F09F07BCDFD"; // Blue Knight Src - Duration 0 - Detonation AoE
