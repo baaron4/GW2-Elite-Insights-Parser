@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using GW2EIEvtcParser.ParsedData;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
