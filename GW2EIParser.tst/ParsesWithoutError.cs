@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser;
+using GW2EIEvtcParser.ParserHelpers;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace GW2EIParser.tst;
 [TestFixtureSource(typeof(ParsesSuccessfully), nameof(ParsesSuccessfully.GenerateTests))]
 public class ParsesSuccessfully
 {
-    public static IEnumerable GenerateTests => EnumerateRecursively("TestInput/ShouldParse");
+    public static IEnumerable GenerateTests => EnumerateRecursively("F:\\tmp\\eliphas_logs\\0 (2)");
 
     static IEnumerable<string> EnumerateRecursively(string path)
     {
@@ -19,7 +20,8 @@ public class ParsesSuccessfully
             {
                 foreach(var innerEntry in EnumerateRecursively(entry))
                 {
-                    if(entry.EndsWith("evtc", System.StringComparison.InvariantCulture))
+                    
+                    if(SupportedFileFormats.IsSupportedFormat(entry))
                     {
                         yield return innerEntry;
                     }
@@ -27,7 +29,7 @@ public class ParsesSuccessfully
             }
             else
             {
-                if(entry.EndsWith("evtc", System.StringComparison.InvariantCulture))
+                if(SupportedFileFormats.IsSupportedFormat(entry))
                 {
                     yield return entry;
                 }
