@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -49,12 +50,13 @@ public static partial class ListExt
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByTimeThenNegatedSwap<T>(this List<T> list)  where T : AbstractCastEvent
     {
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => (int)(a.Time - b.Time) * 2 + (Convert.ToInt32(b.Skill.IsSwap) - Convert.ToInt32(a.Skill.IsSwap)));
+        var str = string.Join(",", list.Select(x => x.Time));
+        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(b.Skill.IsSwap) - Convert.ToInt32(a.Skill.IsSwap)));
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByTimeThenSwap<T>(this List<T> list)  where T : AbstractCastEvent
     {
         true.CompareTo(false);
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => (int)(a.Time - b.Time) * 2 + (Convert.ToInt32(a.Skill.IsSwap) - Convert.ToInt32(b.Skill.IsSwap)));
+        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(a.Skill.IsSwap) - Convert.ToInt32(b.Skill.IsSwap)));
     }
 }

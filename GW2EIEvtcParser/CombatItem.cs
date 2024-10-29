@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.Extensions;
@@ -361,6 +362,7 @@ public static partial class ListExt
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByTime<T>(this List<T> list)  where T : CombatItem
     {
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => (int)(a.Time - b.Time));
+        var str = string.Join(",", list.Select(x => x.Time));
+        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.Time.CompareTo(b.Time));
     }
 }

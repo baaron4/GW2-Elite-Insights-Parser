@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser;
 // https://github.com/scandum/fluxsort
 // UNLICENSE
 
-public static unsafe class StableSort<T> where T : class
+public static unsafe class StableSort<T>
 {
     // quadsort 1.2.1.3 - Igor van den Hoven ivdhoven@gmail.com
 
@@ -1619,6 +1619,7 @@ public static unsafe class StableSort<T> where T : class
         }
     }
 
+    /// The cmp function must be a complete compare operation. (int)(A - B) is not enough (that might overflow and violate transitivity).
     public static void fluxsort(Span<T> array, Func<T, T, int> cmp)
     {
         if (array.Length <= 132)
