@@ -45,6 +45,6 @@ public class ParsesSuccessfully
         var parser = new EvtcParser(TestHelper.ParserSettings, TestHelper.APIController);
 
         _ = parser.ParseLog(new TestHelper.TestOperationController(), new FileInfo(this.path), out var failureReason, false);
-        Assert.Null(failureReason, $"Expected no error to occur, but was\n\n{failureReason?.Reason}");
+        Assert.Null(failureReason, Path.GetFileName(path));
     }
 }

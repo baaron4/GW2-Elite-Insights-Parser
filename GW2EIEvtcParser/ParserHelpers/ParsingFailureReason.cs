@@ -42,4 +42,6 @@ public class ParsingFailureReason
         }
     }
 
+    public override string ToString() => _reason.Message;
+
 }
