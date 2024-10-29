@@ -10,7 +10,7 @@ namespace GW2EIParser.tst;
 [TestFixtureSource(typeof(ParsesSuccessfully), nameof(ParsesSuccessfully.GenerateTests))]
 public class ParsesSuccessfully
 {
-    public static IEnumerable GenerateTests => EnumerateRecursively("F:\\tmp\\eliphas_logs\\0 (2)");
+    public static IEnumerable GenerateTests => EnumerateRecursively("TestInput/ShouldParse");
 
     static IEnumerable<string> EnumerateRecursively(string path)
     {
