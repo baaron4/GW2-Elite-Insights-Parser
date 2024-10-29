@@ -305,6 +305,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
+
             // Fixation
             IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffDataByIDByDst(FixatedOldLionsCourt, p.AgentItem);
             IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM }));
@@ -314,6 +315,13 @@ namespace GW2EIEvtcParser.EncounterLogic
             AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
             AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);
             AddFixatedDecorations(p, log, replay, fixatedIndigo, ParserIcons.FixationBlueOverhead);
+
+            // Noxious Vapor Blade
+            // The buff is applied from Arsenite to Player, lasts 2000ms.
+            // In game, the green tether lasts for the entire duration of the blade, meanwhile the buff on the player displays the green border overlay and is hidden.
+            // In the log, the tether effect can't be found, so this decoration is only indicative of who has been targetted, the duration is not correct.
+            List<AbstractBuffEvent> noxiousBlade = GetFilteredList(log.CombatData, NoxiousVaporBladeTargetBuff, p, true, true);
+            replay.AddTether(noxiousBlade, Colors.Green, 0.5);
 
             // Tri-Bolt
             if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.OldLionsCourtTriBoltSpread, out IReadOnlyList<EffectEvent> tribolt))
