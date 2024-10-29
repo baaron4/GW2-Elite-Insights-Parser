@@ -19,12 +19,18 @@ public class ParsesSuccessfully
             {
                 foreach(var innerEntry in EnumerateRecursively(entry))
                 {
-                    yield return innerEntry;
+                    if(entry.EndsWith("evtc", System.StringComparison.InvariantCulture))
+                    {
+                        yield return innerEntry;
+                    }
                 }
             }
             else
             {
-                yield return entry;
+                if(entry.EndsWith("evtc", System.StringComparison.InvariantCulture))
+                {
+                    yield return entry;
+                }
             }
         }
     }
