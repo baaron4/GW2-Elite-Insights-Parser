@@ -399,6 +399,7 @@ namespace GW2EIEvtcParser.ParserHelpers
         private const string TrashAngeredSpirit = "https://i.imgur.com/5cjAJN8.png";
         private const string TrashEnragedSpirit = "https://i.imgur.com/6gbEvy3.png";
         private const string TrashDerangedSpirit = "https://i.imgur.com/lLx4SGw.png";
+        private const string TrashTribocharge = "https://i.imgur.com/6RAiqQT.png";
         #endregion
 
         #region Minion
@@ -1272,6 +1273,7 @@ namespace GW2EIEvtcParser.ParserHelpers
             { TrashID.EnragedSpiritSR, TrashEnragedSpirit },
             { TrashID.DerangedSpiritSR, TrashDerangedSpirit },
             { TrashID.DerangedSpiritSR2, TrashDerangedSpirit },
+            { TrashID.Tribocharge, TrashTribocharge },
         };
 
         /// <summary>

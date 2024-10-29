@@ -27,26 +27,29 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new long [] { NoxiousVaporBlade, NoxiousVaporBladeCM }, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Green), "BladeOut.H", "Hit by Noxious Vapor Blade (to player)", "Noxious Vapor Blade Hit", 150),
                 new PlayerDstHitMechanic(new long [] { NoxiousReturn, NoxiousReturnCM }, "Noxious Return", new MechanicPlotlySetting(Symbols.CircleX, Colors.Green), "BladeBack.H", "Hit by Noxious Return (to Arsenite)", "Noxious Return Hit", 150),
                 new PlayerDstHitMechanic(new long [] { BoilingAetherRedBlueNM, BoilingAetherRedBlueCM, BoilingAetherGreenNM, BoilingAetherGreenCM }, "Boiling Aether", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "AethAver.Achiv", "Achievement Eligibility: Aether Aversion", "Achiv Aether Aversion", 150).UsingAchievementEligibility(true),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })),
-                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
+                new PlayerDstHitMechanic(new long [] { PerniciousVortex, PerniciousVortexCM }, "Pernicious Vortex", new MechanicPlotlySetting(Symbols.CircleX, Colors.DarkGreen), "PernVort.H", "Hit by Pernicious Vortex (Pull)", "Pernicious Vortex Hit", 0),
+                new PlayerDstHitMechanic(new long [] { CracklingWind, CracklingWindCM }, "Crackling Wind", new MechanicPlotlySetting(Symbols.Hexagon, Colors.CobaltBlue), "CrackWind.H", "Hit by Crackling Wind (Push)", "Crackling Wind Hit", 0),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "VermFall.H", "Hit by Exhaust Plume (Vermilion Fall)", "Exhaust Plume Hit (Vermilion)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "ArseFall.H", "Hit by Exhaust Plume (Arsenite Fall)", "Exhaust Plume Hit (Arsenite)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })),
+                new PlayerDstSkillMechanic(ExhaustPlume, "Exhaust Plume", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "IndiFall.H", "Hit by Exhaust Plume (Indigo Fall)", "Exhaust Plume Hit (Indigo)", 150).UsingChecker((de, log) => de.CreditedFrom.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
                 new PlayerDstBuffApplyMechanic(Spaghettification, "Spaghettification", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkRed), "Spgt.H", "Hit by Spaghettification", "Spaghettification Hit", 0),
                 new PlayerDstBuffApplyMechanic(Dysapoptosis, "Dysapoptosis", new MechanicPlotlySetting(Symbols.BowtieOpen, Colors.DarkRed), "Dysp.H", "Hit by Dysapoptosis", "Dysapoptosis Hit", 0),
                 new PlayerDstBuffApplyMechanic(ThunderingUltimatum, "Thundering Ultimatum", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkRed), "ThunUlti.H", "Hit by Thundering Ultimatum", "Thunderin gUltimatum Hit", 0),
                 new PlayerDstBuffApplyMechanic(new long [] { TidalTorment, TidalTormentCM }, "Tidal Torment", new MechanicPlotlySetting(Symbols.Star, Colors.Red), "TidTorm.A", "Tidal Torment Applied", "Tidal Torment Applied", 0),
                 new PlayerDstBuffApplyMechanic(new long [] { ErgoShear, ErgoShearCM }, "Ergo Shear", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "ErgShr.A", "Ergo Shear Applied", "Ergo Shear Applied", 0),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })),
-                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM })),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM })),
+                new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM })),
+                new PlayerDstBuffApplyMechanic(NoxiousVaporBladeTargetBuff, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Blade.A", "Targetted for Noxious Vapor Blade", "Noxious Vapor Blade Target", 0),
                 new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, "Empowered", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
                 new EnemyDstBuffApplyMechanic(PowerTransfer, "Power Transfer", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
                 new EnemyDstBuffApplyMechanic(LeyWovenShielding, "Ley-Woven Shielding", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),
                 new EnemyDstBuffApplyMechanic(MalfunctioningLeyWovenShielding, "Malfunctioning Ley-Woven Shielding", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.DarkTeal), "MalfWovShld.A", "Knight gained Malfunctioning Ley-Woven Shielding", "Malfunctioning Ley-Woven Shielding Applied", 0),
                 new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed (Knight)", new MechanicPlotlySetting(Symbols.HexagonOpen, Colors.Purple), "Expo.A", "Exposed Applied to Knight", "Exposed Applied to Knight", 0),
                 new EnemyCastStartMechanic(new long [] { DualHorizon, DualHorizonCM }, "Dual Horizon", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Red), "DualHrz.C", "Casted Dual Horizon", "Dual Horizon Cast", 0),
-                //new EnemyCastStartMechanic(new long [] { GravitationalWave, GravitationalWaveCM }, "Gravitational Wave", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "GravWave.C", "Casted Gravitational Wave", "Gravitational Wave", 0), // TODO: Find effect event
-                //new EnemyCastStartMechanic(new long [] { PerniciousVortex, PerniciousVortexCM }, "Pernicious Vortex", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "PrnVrx.C", "Casted Pernicious Vortex", "Pernicious Vortex Cast", 0), // TODO: Find effect event
-                //new EnemyCastStartMechanic(new long [] { CracklingWind, CracklingWindCM }, "Crackling Wind", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "CrckWind.C", "Casted Crackling Wind", "Cracking Wind Cast", 0), // TODO: Find effect event
+                new EnemyCastStartMechanic(new long [] { PerniciousVortexSkillNM, PerniciousVortexSkillCM }, "Pernicious Vortex", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Green), "PrnVrx.C", "Casted Pernicious Vortex", "Pernicious Vortex Cast", 0),
+                new EnemyCastStartMechanic(new long [] { CracklingWindSkillNM, CracklingWindSkillCM }, "Crackling Wind", new MechanicPlotlySetting(Symbols.Star, Colors.Blue), "CrckWind.C", "Casted Crackling Wind", "Cracking Wind Cast", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.OldLionsCourtGravitationalWave, "Gravitational Wave", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Red), "GravWave.C", "Casted Gravitational Wave", "Gravitational Wave", 0),
             }
             );
             Icon = EncounterIconOldLionsCourt;
@@ -71,6 +74,14 @@ namespace GW2EIEvtcParser.EncounterLogic
                 (int)TargetID.PrototypeVermilionCM,
                 (int)TargetID.PrototypeIndigoCM,
                 (int)TargetID.PrototypeArseniteCM,
+            };
+        }
+
+        protected override List<TrashID> GetTrashMobsIDs()
+        {
+            return new List<TrashID>
+            {
+                TrashID.Tribocharge,
             };
         }
 
@@ -296,13 +307,23 @@ namespace GW2EIEvtcParser.EncounterLogic
             base.ComputePlayerCombatReplayActors(p, log, replay);
             // Fixation
             IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffDataByIDByDst(FixatedOldLionsCourt, p.AgentItem);
-            IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM }));
-            IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM }));
-            IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<ArcDPSEnums.TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM }));
+            IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM }));
+            IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM }));
+            IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM }));
 
             AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
             AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);
             AddFixatedDecorations(p, log, replay, fixatedIndigo, ParserIcons.FixationBlueOverhead);
+
+            // Tri-Bolt
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.OldLionsCourtTriBoltSpread, out IReadOnlyList<EffectEvent> tribolt))
+            {
+                foreach (EffectEvent effect in tribolt)
+                {
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.2, new AgentConnector(effect.Dst)), lifespan.end);
+                }
+            }
         }
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -310,23 +331,380 @@ namespace GW2EIEvtcParser.EncounterLogic
             switch (target.ID)
             {
                 case (int)TargetID.PrototypeVermilion:
-                    replay.AddHideByBuff(target, log, Determined762);
-                    break;
                 case (int)TargetID.PrototypeVermilionCM:
+                    // Spaghettification Start - Doughnut
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart, out IReadOnlyList<EffectEvent> spaghettificationStart))
+                    {
+                        foreach (EffectEvent effect in spaghettificationStart)
+                        {
+                            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
+                            var doughnut = new DoughnutDecoration(600, 2000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(doughnut);
+                        }
+                    }
+
+                    // Spaghettification Flip - Cicle
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationCircleFlipped, out IReadOnlyList<EffectEvent> spaghettificationFlipped))
+                    {
+                        foreach (EffectEvent effect in spaghettificationFlipped)
+                        {
+                            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
+                            var circle = new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Spaghettification Detonation - Doughnut
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation, out IReadOnlyList<EffectEvent> doughnutDetonation))
+                    {
+                        foreach (EffectEvent effect in doughnutDetonation)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration
+                            var doughnut = new DoughnutDecoration(600, 2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(doughnut);
+                        }
+                    }
+
+                    // Spaghettification Detonation - Circle
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationCircleDetonation, out IReadOnlyList<EffectEvent> circleDetonation))
+                    {
+                        foreach (EffectEvent effect in circleDetonation)
+                        {
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 1500);
+                            var circle = new CircleDecoration(600, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Safe Zone - Semi Circle
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationSafeZoneSemiCircle, out IReadOnlyList<EffectEvent> safeZoneSemiCircle))
+                    {
+                        foreach (EffectEvent effect in safeZoneSemiCircle)
+                        {
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 30000);
+                            var rotation = new AngleConnector(effect.Rotation.Z + 90);
+                            var circle = (PieDecoration)new PieDecoration(600, 180, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Safe Zone - Full Circle
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationSafeZoneFullCircle, out IReadOnlyList<EffectEvent> safeZoneFullCircle))
+                    {
+                        foreach (EffectEvent effect in safeZoneFullCircle)
+                        {
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 30000);
+                            var circle = new CircleDecoration(600, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Dual Horizon - Orange Doughnut
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDualHorizonOrange, out IReadOnlyList<EffectEvent> dualHorizons))
+                    {
+                        foreach (EffectEvent effect in dualHorizons)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 4100);
+                            var orangeDoughnut = new DoughnutDecoration(340, 440, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(orangeDoughnut);
+                        }
+                        // White Outer
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter, out IReadOnlyList<EffectEvent> outer))
+                        {
+                            foreach (EffectEvent effect in outer)
+                            {
+                                (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                                var innerWhite = new DoughnutDecoration(300, 340, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
+                                replay.Decorations.Add(innerWhite);
+                            }
+                        }
+                        // White Inner
+                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtDualHorizonWhiteInner, out IReadOnlyList<EffectEvent> inner))
+                        {
+                            foreach (EffectEvent effect in inner)
+                            {
+                                (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                                var outerWhite = new DoughnutDecoration(440, 500, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
+                                replay.Decorations.Add(outerWhite);
+                            }
+                        }
+                    }
+
+                    // Gravity Hammer
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtGravityHammer, out IReadOnlyList<EffectEvent> gravityHammer))
+                    {
+                        foreach (EffectEvent effect in gravityHammer)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 1000);
+                            var circle = new CircleDecoration(400, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Gravitational Wave
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtGravitationalWave, out IReadOnlyList<EffectEvent> gravitationalWaves))
+                    {
+                        foreach (EffectEvent effect in gravitationalWaves)
+                        {
+                            int duration = 3000; // Logged duration of 0
+                            (long start, long end) lifespan = (effect.Time, effect.Time + duration);
+                            uint radius = 3000; // Radius is an estimate
+                            replay.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.White, 0.3, radius);
+                        }
+                    }
+
+                    // Boiling Aether Spawn Indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtBoilingAetherSpawnIndicator, out IReadOnlyList<EffectEvent> boilingAetherIndicators))
+                    {
+                        foreach (EffectEvent effect in boilingAetherIndicators)
+                        {
+                            uint radius = 100; // The diameter is the size of the Knight's hitbox, which is 200.
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 1190);
+                            var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.AddDecorationWithGrowing(circle, lifespan.end);
+                        }
+                    }
+
+                    // Hide when inactive
                     replay.AddHideByBuff(target, log, Determined762);
                     break;
                 case (int)TargetID.PrototypeArsenite:
-                    replay.AddHideByBuff(target, log, Determined762);
-                    break;
                 case (int)TargetID.PrototypeArseniteCM:
+                    // Dysapoptosis Indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDysapoptosisIndicator, out IReadOnlyList<EffectEvent> leftSemiCircle))
+                    {
+                        foreach (EffectEvent effect in leftSemiCircle)
+                        {
+                            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
+                            var rotation = new AngleConnector(effect.Rotation.Z); // Position incorrect
+                            var pie = (PieDecoration)new PieDecoration(3000, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            //replay.Decorations.Add(pie);
+                        }
+                    }
+
+                    // Dysapoptosis Detonation
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtDysapoptosisDetonation, out IReadOnlyList<EffectEvent> detonation))
+                    {
+                        foreach (EffectEvent effect in detonation)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override
+                            var rotation = new AngleConnector(effect.Rotation.Z - 180);
+                            var pie = (PieDecoration)new PieDecoration(3000, 180, lifespan, Colors.DarkGreen, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            replay.Decorations.Add(pie);
+                        }
+                    }
+
+                    // Pernicious Vortex - First Indicator - Orange Doughnuts
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning1, out IReadOnlyList<EffectEvent> vortexWarnings1))
+                    {
+                        foreach (EffectEvent effect in vortexWarnings1)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                            replay.AddContrenticRings(0, 120, lifespan, effect.Position, Colors.LightOrange);
+                        }
+                    }
+                    
+                    // Pernicious Vortex - Second Indicator - Red Ring
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexWarning2, out IReadOnlyList<EffectEvent> vortexWarnings2))
+                    {
+                        foreach (EffectEvent effect in vortexWarnings2)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                            var circle = (CircleDecoration)new CircleDecoration(300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position)).UsingFilled(false);
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Pernicious Vortex - Damage Indicator
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtPerniciousVortexActive, out IReadOnlyList<EffectEvent> vortexDamage))
+                    {
+                        foreach (EffectEvent effect in vortexDamage)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                            var circle = new CircleDecoration(300, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(circle);
+                        }
+                    }
+
+                    // Rupture
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtRuptureIndicator, out IReadOnlyList<EffectEvent> ruptures))
+                    {
+                        foreach (EffectEvent effect in ruptures)
+                        {
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 2000);
+                            var circle = new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.AddDecorationWithGrowing(circle, lifespan.end);
+                        }
+                    }
+
+                    // Hide when inactive
                     replay.AddHideByBuff(target, log, Determined762);
                     break;
                 case (int)TargetID.PrototypeIndigo:
-                    replay.AddHideByBuff(target, log, Determined762);
-                    break;
                 case (int)TargetID.PrototypeIndigoCM:
+                    // Thundering Ultimatum - Frontal Cone - 240°
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, out IReadOnlyList<EffectEvent> frontalCone))
+                    {
+                        foreach (EffectEvent effect in frontalCone)
+                        {
+                            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
+                            var rotation = new AngleConnector(effect.Rotation.Z - 90);
+                            var pie = (PieDecoration)new PieDecoration(3000, 240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            replay.Decorations.Add(pie);
+                        }
+                    }
+
+                    // Thundering Ultimatum - Flip Cone - 120°
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone, out IReadOnlyList<EffectEvent> flipCone))
+                    {
+                        foreach (EffectEvent effect in flipCone)
+                        {
+                            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
+                            var rotation = new AngleConnector(effect.Rotation.Z - 90);
+                            var pie = (PieDecoration)new PieDecoration(3000, 120, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            replay.Decorations.Add(pie);
+                        }
+                    }
+
+                    // Thundering Ultimatum - Detonation
+                    // How do i distinguish between frontal and flip detonation?
+                    // The effect can play twice with different rotation
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumDetonation, out IReadOnlyList<EffectEvent> ultimatumDetonation))
+                    {
+                        foreach (EffectEvent effect in ultimatumDetonation)
+                        {
+                            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone, out IReadOnlyList<EffectEvent> flipped))
+                            {
+                                // Has been flipped
+                                if (flipped.FirstOrDefault(x => x.Time < effect.Time) != null)
+                                {
+                                    (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration to 1500
+                                    var rotation = new AngleConnector(effect.Rotation.Z + 90);
+                                    var pie = (PieDecoration)new PieDecoration(3000, 120, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                                    //replay.Decorations.Add(pie);
+                                }
+                            }
+                            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, out IReadOnlyList<EffectEvent> front))
+                            {
+                                if (front.FirstOrDefault(x => x.Time < effect.Time) != null)
+                                {
+                                    // Not flipped
+                                    (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration to 1500
+                                    var rotation = new AngleConnector(effect.Rotation.Z - 90);
+                                    var pie = (PieDecoration)new PieDecoration(3000, 240, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                                    //replay.Decorations.Add(pie);
+                                }
+                            }
+                        }
+                    }
+
+                    // Safe Zone - 120°
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumSafeZone, out IReadOnlyList<EffectEvent> safeZone))
+                    {
+                        foreach (EffectEvent effect in safeZone)
+                        {
+                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 30000);
+                            var rotation = new AngleConnector(effect.Rotation.Z + 90);
+                            var pie = (PieDecoration)new PieDecoration(3000, 120, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            replay.Decorations.Add(pie);
+                        }
+                    }
+
+                    // Crackling Wind
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtCracklingWindIndicator, out IReadOnlyList<EffectEvent> crackingWind))
+                    {
+                        foreach (EffectEvent effect in crackingWind)
+                        {
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
+                            replay.AddContrenticRings(0, 140, lifespan, effect.Position, Colors.LightOrange, 0.01f, 8, true);
+                            // Add bigger doughnut past 1120 radius (140 * 8)
+                            var doughnut = new DoughnutDecoration(1120, 2500, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            replay.Decorations.Add(doughnut);
+                        }
+                    }
+
+                    // Hide when inactive
                     replay.AddHideByBuff(target, log, Determined762);
                     break;
+                case (int)TrashID.Tribocharge:
+                    // Tribocharge AoE on Player
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtTribocharge, out IReadOnlyList<EffectEvent> tribocharge))
+                    {
+                        foreach (EffectEvent effect in tribocharge)
+                        {
+                            // Effect has no Src - Override it to the minion's Master.
+                            // Effect spawns 2 seconds after the NPC, overriding start time to FirstAware and end time to the 5000 ms duration.
+                            uint radius = 100; // Approximated value
+                            (long start, long end) lifespan = (target.FirstAware, target.FirstAware + 5000);
+                            replay.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem.Master)), lifespan.end);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+        {
+            base.ComputeEnvironmentCombatReplayDecorations(log);
+
+            // Exhaust Plume - Knight Fall AoE
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtExhaustPlumeAoE, out IReadOnlyList<EffectEvent> exhaustPlume))
+            {
+                foreach (EffectEvent effect in exhaustPlume)
+                {
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
+                    var circle = new CircleDecoration(200, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                    EnvironmentDecorations.Add(circle.Copy().UsingFilled(true).UsingGrowingEnd(lifespan.end));
+                }
+            }
+
+            // Boiling Aether - Expanding AoE
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherExpanding, out IReadOnlyList<EffectEvent> boilingAetherExpanding))
+            {
+                // Minimum Radius: 100 (Knight's Half Hitbox)
+                // Maximum Radius: 320 (Normal Mode)
+                // Maximum Radius: 400 (Challenge Mode)
+                // Radius Expansion: 11 (Normal Mode)
+                // Radius Expansion: 15 (Challenge Mode)
+                // Expansion Timer: 500ms
+                uint initialRadius = 100;
+                uint timeInterval = 500;
+                uint radiusIncreasePerInterval = (uint)(log.FightData.IsCM ? 15 : 11);
+
+                foreach (EffectEvent effect in boilingAetherExpanding)
+                {
+                    uint currentRadius = initialRadius;
+                    long totalIntervals = effect.Duration / timeInterval;
+                    (long start, long end) lifespan = (effect.Time, effect.Time + timeInterval);
+
+                    for (int i = 0; i < totalIntervals; i++)
+                    {
+                        var circle = new CircleDecoration(currentRadius, lifespan, Colors.LightGrey, 0.2, new PositionConnector(effect.Position));
+                        var border = (CircleDecoration)new CircleDecoration(currentRadius, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingFilled(false);
+                        currentRadius += radiusIncreasePerInterval;
+                        lifespan = (lifespan.end, lifespan.end + timeInterval);
+                        EnvironmentDecorations.Add(circle);
+                        EnvironmentDecorations.Add(border);
+                    }
+                }
+            }
+
+            // Boiling Aether - Fully Expanded
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtBoilingAetherFullyExpanded1, out IReadOnlyList<EffectEvent> boilingAetherExpanded))
+            {
+                // Maximum Radius: 320 (Normal Mode)
+                // Maximum Radius: 400 (Challenge Mode)
+                uint radius = (uint)(log.FightData.IsCM ? 400 : 320);
+
+                foreach (EffectEvent effect in boilingAetherExpanded)
+                {
+                    (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 590000);
+                    var circle = new CircleDecoration(radius, lifespan, Colors.Red, 0.3, new PositionConnector(effect.Position));
+                    EnvironmentDecorations.Add(circle);
+                }
             }
         }
 
