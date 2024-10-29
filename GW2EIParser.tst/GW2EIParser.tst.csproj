@@ -48,4 +48,7 @@
         <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
         <ProjectReference Include="..\GW2EIParserCommons\GW2EIParserCommons.csproj" />
     </ItemGroup>
+    <ItemGroup>
+        <None Include="TestInput\**" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
 </Project>

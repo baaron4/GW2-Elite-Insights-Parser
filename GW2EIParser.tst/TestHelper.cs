@@ -19,7 +19,7 @@ public static class TestHelper
         NamingStrategy = new CamelCaseNamingStrategy()
     };
     private static readonly Version Version = new(1, 0);
-    private static readonly EvtcParserSettings parserSettings = new(false, false, true, true, true, 2200, true);
+    public static readonly EvtcParserSettings ParserSettings = new(false, false, true, true, true, 2200, true);
     private static readonly HTMLSettings htmlSettings = new(false, false);
     private static readonly RawFormatSettings rawSettings = new(true);
     private static readonly CSVSettings csvSettings = new(",");
@@ -31,7 +31,7 @@ public static class TestHelper
 
     internal static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
-    private class TestOperationController : ParserController
+    public class TestOperationController : ParserController
     {
         public TestOperationController()
         {
@@ -45,7 +45,7 @@ public static class TestHelper
 
     public static ParsedEvtcLog ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
     {
-        var parser = new EvtcParser(parserSettings, apiController);
+        var parser = new EvtcParser(ParserSettings, apiController);
 
         var fInfo = new FileInfo(location);
         ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, false);

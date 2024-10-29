@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GW2EIEvtcParser.ParsedData.tst;
+namespace GW2EIEvtcParser.Internals.tst;
 
 class Sorting
 {
