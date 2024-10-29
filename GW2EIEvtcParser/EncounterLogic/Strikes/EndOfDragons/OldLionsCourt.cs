@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -332,47 +333,40 @@ namespace GW2EIEvtcParser.EncounterLogic
             {
                 case (int)TargetID.PrototypeVermilion:
                 case (int)TargetID.PrototypeVermilionCM:
-                    // Spaghettification Start - Doughnut
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart, out IReadOnlyList<EffectEvent> spaghettificationStart))
+                    // Spaghettification Start
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart , EffectGUIDs.OldLionsCourtSpaghettificationCircleFlipped }, out IReadOnlyList<EffectEvent> spaghettificationStart))
                     {
+
                         foreach (EffectEvent effect in spaghettificationStart)
                         {
                             (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
-                            var doughnut = new DoughnutDecoration(600, 2000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(doughnut);
+                            FormDecoration decoration;
+                            if (effect.GUIDEvent.HexContentGUID == EffectGUIDs.OldLionsCourtSpaghettificationDoughnutStart)
+                            {
+                                decoration = new DoughnutDecoration(600, 2000, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            } 
+                            else
+                            {
+                                decoration = new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                            }
+                            replay.Decorations.Add(decoration);
                         }
                     }
-
-                    // Spaghettification Flip - Cicle
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationCircleFlipped, out IReadOnlyList<EffectEvent> spaghettificationFlipped))
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation, EffectGUIDs.OldLionsCourtSpaghettificationCircleDetonation }, out IReadOnlyList<EffectEvent> spaghettificationDetonation))
                     {
-                        foreach (EffectEvent effect in spaghettificationFlipped)
-                        {
-                            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
-                            var circle = new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(circle);
-                        }
-                    }
-
-                    // Spaghettification Detonation - Doughnut
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation, out IReadOnlyList<EffectEvent> doughnutDetonation))
-                    {
-                        foreach (EffectEvent effect in doughnutDetonation)
+                        foreach (EffectEvent effect in spaghettificationDetonation)
                         {
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration
-                            var doughnut = new DoughnutDecoration(600, 2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(doughnut);
-                        }
-                    }
-
-                    // Spaghettification Detonation - Circle
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtSpaghettificationCircleDetonation, out IReadOnlyList<EffectEvent> circleDetonation))
-                    {
-                        foreach (EffectEvent effect in circleDetonation)
-                        {
-                            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 1500);
-                            var circle = new CircleDecoration(600, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                            replay.Decorations.Add(circle);
+                            FormDecoration decoration;
+                            if (effect.GUIDEvent.HexContentGUID == EffectGUIDs.OldLionsCourtSpaghettificationDoughnutDetonation)
+                            {
+                                decoration = new DoughnutDecoration(600, 2000, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                            }
+                            else
+                            {
+                                decoration = new CircleDecoration(600, lifespan, Colors.Red, 0.2, new PositionConnector(effect.Position));
+                            }
+                            replay.Decorations.Add(decoration);
                         }
                     }
 
@@ -408,24 +402,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                             var orangeDoughnut = new DoughnutDecoration(340, 440, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position));
                             replay.Decorations.Add(orangeDoughnut);
                         }
-                        // White Outer
-                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter, out IReadOnlyList<EffectEvent> outer))
+                        if (log.CombatData.TryGetEffectEventsByGUIDs(new[] { EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter, EffectGUIDs.OldLionsCourtDualHorizonWhiteInner }, out IReadOnlyList<EffectEvent> horizonWhite  ))
                         {
-                            foreach (EffectEvent effect in outer)
+                            foreach (EffectEvent effect in horizonWhite)
                             {
                                 (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                                var innerWhite = new DoughnutDecoration(300, 340, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
-                                replay.Decorations.Add(innerWhite);
-                            }
-                        }
-                        // White Inner
-                        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.OldLionsCourtDualHorizonWhiteInner, out IReadOnlyList<EffectEvent> inner))
-                        {
-                            foreach (EffectEvent effect in inner)
-                            {
-                                (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                                var outerWhite = new DoughnutDecoration(440, 500, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
-                                replay.Decorations.Add(outerWhite);
+                                FormDecoration white;
+                                if (effect.GUIDEvent.HexContentGUID == EffectGUIDs.OldLionsCourtDualHorizonWhiteOuter)
+                                {
+                                    white = new DoughnutDecoration(300, 340, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
+                                } 
+                                else
+                                {
+                                    white = new DoughnutDecoration(440, 550, lifespan, Colors.White, 0.2, new PositionConnector(effect.Position));
+                                }
+                                replay.Decorations.Add(white);
                             }
                         }
                     }
@@ -476,9 +467,13 @@ namespace GW2EIEvtcParser.EncounterLogic
                         foreach (EffectEvent effect in leftSemiCircle)
                         {
                             (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
-                            var rotation = new AngleConnector(effect.Rotation.Z); // Position incorrect
-                            var pie = (PieDecoration)new PieDecoration(3000, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                            //replay.Decorations.Add(pie);
+                            var rotation = new AngleConnector(effect.Rotation.Z + 90); // Position incorrect, get Arsenite's position
+                            Point3D position = target.GetCurrentPosition(log, effect.Time);
+                            if (position != null)
+                            {
+                                var pie = (PieDecoration)new PieDecoration(3000, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(position)).UsingRotationConnector(rotation);
+                                replay.Decorations.Add(pie);
+                            }
                         }
                     }
 
@@ -542,58 +537,41 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)TargetID.PrototypeIndigo:
                 case (int)TargetID.PrototypeIndigoCM:
-                    // Thundering Ultimatum - Frontal Cone - 240°
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, out IReadOnlyList<EffectEvent> frontalCone))
+                    // Thundering Ultimatum - Indicators
+                    bool hasUltimatumIndicators = false;
+                    if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, new[] { EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone }, out IReadOnlyList<EffectEvent> ultimatumIndicators))
                     {
-                        foreach (EffectEvent effect in frontalCone)
+                        hasUltimatumIndicators = true;
+                        foreach (EffectEvent effect in ultimatumIndicators)
                         {
+                            var flipped = effect.GUIDEvent.HexContentGUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
                             (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
-                            var rotation = new AngleConnector(effect.Rotation.Z - 90);
-                            var pie = (PieDecoration)new PieDecoration(3000, 240, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                            replay.Decorations.Add(pie);
-                        }
-                    }
-
-                    // Thundering Ultimatum - Flip Cone - 120°
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone, out IReadOnlyList<EffectEvent> flipCone))
-                    {
-                        foreach (EffectEvent effect in flipCone)
-                        {
-                            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
-                            var rotation = new AngleConnector(effect.Rotation.Z - 90);
-                            var pie = (PieDecoration)new PieDecoration(3000, 120, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                            var rotation = new AngleConnector(effect.Rotation.Z - (flipped ? 270 : 90));
+                            int openingAngle = flipped ? 120 : 240;
+                            var pie = (PieDecoration)new PieDecoration(3000, openingAngle, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
                             replay.Decorations.Add(pie);
                         }
                     }
 
                     // Thundering Ultimatum - Detonation
-                    // How do i distinguish between frontal and flip detonation?
                     // The effect can play twice with different rotation
-                    if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumDetonation, out IReadOnlyList<EffectEvent> ultimatumDetonation))
+                    if (hasUltimatumIndicators && log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumDetonation, out IReadOnlyList<IReadOnlyList<EffectEvent>> groupedUltimatumDetonation))
                     {
-                        foreach (EffectEvent effect in ultimatumDetonation)
+                        foreach (IReadOnlyList<EffectEvent> ultimatumDetonation in groupedUltimatumDetonation)
                         {
-                            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone, out IReadOnlyList<EffectEvent> flipped))
+                            // We only keep the first
+                            EffectEvent effect = ultimatumDetonation[0];
+                            (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration to 1500
+                            Point3D currentRotation = target.GetCurrentRotation(log, effect.Time);
+                            EffectEvent previousIndicator = ultimatumIndicators.LastOrDefault(x => x.Time <= effect.Time);
+                            if (currentRotation != null && previousIndicator != null)
                             {
-                                // Has been flipped
-                                if (flipped.FirstOrDefault(x => x.Time < effect.Time) != null)
-                                {
-                                    (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration to 1500
-                                    var rotation = new AngleConnector(effect.Rotation.Z + 90);
-                                    var pie = (PieDecoration)new PieDecoration(3000, 120, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                                    //replay.Decorations.Add(pie);
-                                }
-                            }
-                            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.OldLionsCourtThunderingUltimatumFrontalCone, out IReadOnlyList<EffectEvent> front))
-                            {
-                                if (front.FirstOrDefault(x => x.Time < effect.Time) != null)
-                                {
-                                    // Not flipped
-                                    (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration to 1500
-                                    var rotation = new AngleConnector(effect.Rotation.Z - 90);
-                                    var pie = (PieDecoration)new PieDecoration(3000, 240, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                                    //replay.Decorations.Add(pie);
-                                }
+                                var flipped = previousIndicator.GUIDEvent.HexContentGUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
+                                var rotationOffset = flipped ? 180 : 0;
+                                var rotation = new AngleConnector(Point3D.GetZRotationFromFacing(currentRotation) + rotationOffset);
+                                var openingAngle = flipped ? 120 : 240;
+                                var pie = (PieDecoration)new PieDecoration(3000, openingAngle, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                                replay.Decorations.Add(pie);
                             }
                         }
                     }
