@@ -86,7 +86,6 @@ public class Player : AbstractPlayer
     /// <summary>
     /// Checks if the player has a Commander Tag GUID.
     /// </summary>
-    /// <param name="log"></param>
     /// <returns><see langword="true"/> if a GUID was found, otherwise <see langword="false"/></returns>
     public bool IsCommander(ParsedEvtcLog log)
     {
@@ -96,9 +95,9 @@ public class Player : AbstractPlayer
     /// <summary>
     /// Return commander status list, the value of the segment is currently active commander tag ID.
     /// Player had said tag between every segment.Start and segment.End.
+    /// 
+    /// The value of the segment is the hex GUID of the specific commander tag.
     /// </summary>
-    /// <param name="log"></param>
-    /// <returns></returns>
     public IReadOnlyList<GenericSegment<string>> GetCommanderStates(ParsedEvtcLog log)
     {
         if (CommanderStates == null)

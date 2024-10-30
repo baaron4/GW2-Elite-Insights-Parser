@@ -12,6 +12,7 @@ public abstract class IDToGUIDEvent : AbstractMetaDataEvent
 
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
+        //TODO(Rennorb) @explain: Why do the source and destination get packed here?
         (HexContentGUID, Base64ContentGUID) = UnpackGUID(evtcItem.SrcAgent, evtcItem.DstAgent);
         ContentID = evtcItem.SkillID;
     }
