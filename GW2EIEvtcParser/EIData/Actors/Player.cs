@@ -171,9 +171,7 @@ public class Player : AbstractPlayer
                     lastSegment = seg;
                 }
             }
-
-            //TODO(Rennorb) @perf @mem: find average complexity, maybe this is not required
-            if(CommanderStates.Count < (int)(CommanderStates.Capacity * 0.25f)) { CommanderStates.TrimExcess(); }
+            if(lastPlayer == this) { CommanderStates.Add(lastSegment); }
         }
         return CommanderStates;
     }
