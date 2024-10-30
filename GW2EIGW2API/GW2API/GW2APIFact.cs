@@ -1,6 +1,10 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace GW2EIGW2API.GW2API;
 
+[JsonPolymorphic(UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization)]
+[JsonDerivedType(typeof(GW2APITraitedFact))]
 public class GW2APIFact
 {
     public string Text;
