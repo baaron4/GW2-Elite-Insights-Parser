@@ -229,11 +229,12 @@ public class StatisticsHelper
     [MemberNotNull(nameof(_stackCommanderPositions))]
     private void SetStackCommanderPositions(ParsedEvtcLog log)
     {
+        //TODO(Rennorb) @perf
         _stackCommanderPositions = new List<ParametricPoint3D?>();
         if (log.CombatData.HasMovementData)
         {
             //TODO(Rennorb) @perf: find average complexity
-            var states = new List<(Player p, GenericSegment<string> seg)>(log.PlayerList.Count);
+            var states = new List<(Player p, GenericSegment<GUID> seg)>(log.PlayerList.Count);
             foreach (Player player in log.PlayerList)
             {
                 var newStates = player.GetCommanderStates(log);
@@ -245,7 +246,7 @@ public class StatisticsHelper
             states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
 
             long start = long.MinValue;
-            foreach ((Player p, GenericSegment<string> seg) in states)
+            foreach ((Player p, GenericSegment<GUID> seg) in states)
             {
                 IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
                 //TODO(Rennorb) @perf @correctness: This feels like it might just be wrong.

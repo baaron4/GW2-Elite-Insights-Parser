@@ -14,7 +14,7 @@ internal static class RenegadeHelper
 {
     private class BandTogetherCastFinder : EffectCastFinder
     {
-        public BandTogetherCastFinder(long baseSkillID, long enhancedSkill, string effect) : base(enhancedSkill, effect)
+        public BandTogetherCastFinder(long baseSkillID, long enhancedSkill, GUID effect) : base(enhancedSkill, effect)
         {
             UsingSrcSpecChecker(Spec.Renegade);
             UsingChecker((evt, combatData, agentData, skillData) => !combatData.IsCasting(baseSkillID, evt.Src, evt.Time));

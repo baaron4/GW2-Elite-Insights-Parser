@@ -99,15 +99,15 @@ internal static class CatalystHelper
         AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployEarthJadeSphere, DeployJadeSphereEarth, ParserIcons.EffectDeployJadeSphereEarth);
     }
 
-    internal static void AddJadeSphereDecoration(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, Color color, string effectGUID, long skillId, string icon)
+    internal static void AddJadeSphereDecoration(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, Color color, GUID effect, long skillId, string icon)
     {
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effectGUID, out var jadeSphere))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effect, out var events))
         {
             var skill = new SkillModeDescriptor(player, Spec.Catalyst, skillId);
-            foreach (EffectEvent effect in jadeSphere)
+            foreach (EffectEvent @event in events)
             {
-                (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                var connector = new PositionConnector(effect.Position);
+                (long, long) lifespan = @event.ComputeLifespan(log, 5000);
+                var connector = new PositionConnector(@event.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                 replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.3, connector).UsingFilled(false).UsingSkillMode(skill));
                 replay.Decorations.Add(new IconDecoration(icon, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));

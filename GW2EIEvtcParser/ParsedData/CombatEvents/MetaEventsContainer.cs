@@ -22,7 +22,7 @@ internal class MetaEventsContainer
     public readonly Dictionary<long, SkillInfoEvent> SkillInfoEvents = new();
     public readonly List<ErrorEvent> ErrorEvents = new();
     public readonly Dictionary<long, EffectGUIDEvent> EffectGUIDEventsByEffectID = new();
-    public readonly Dictionary<string, EffectGUIDEvent> EffectGUIDEventsByGUID = new();
+    public readonly Dictionary<GUID, EffectGUIDEvent> EffectGUIDEventsByGUID = new();
     public readonly Dictionary<long, MarkerGUIDEvent> MarkerGUIDEventsByMarkerID = new();
-    public readonly Dictionary<string, MarkerGUIDEvent> MarkerGUIDEventsByGUID = new();
+    public readonly Dictionary<GUID, MarkerGUIDEvent> MarkerGUIDEventsByGUID = new();
 }

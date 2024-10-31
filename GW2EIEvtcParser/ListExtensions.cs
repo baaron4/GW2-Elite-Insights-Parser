@@ -135,6 +135,13 @@ public static partial class ListExt
         }
     }
 
+    /// Reserves space at least 'count' additional elements in the list should they not fit already.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ReserveAdditional<T>(this HashSet<T> set, int count)
+    {
+        set.EnsureCapacity(set.Count + count);
+    }
+
     //TODO(Rennorb) @cleanup @unstable
     public static Span<T> AsSpan<T>(this List<T> list)
     {

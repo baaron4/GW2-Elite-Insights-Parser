@@ -76,7 +76,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
         HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
     }
 
-    public override IEnumerable<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<EXTAbstractHealingEvent> GetIncomingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (HealReceivedEvents == null)
         {

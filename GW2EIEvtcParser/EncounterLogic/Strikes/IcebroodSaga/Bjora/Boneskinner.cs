@@ -202,7 +202,7 @@ internal class Boneskinner : Bjora
         }
     }
 
-    private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, string guid, uint width, uint height)
+    private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, GUID guid, uint width, uint height)
     {
         if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rectangularIndicators))
         {

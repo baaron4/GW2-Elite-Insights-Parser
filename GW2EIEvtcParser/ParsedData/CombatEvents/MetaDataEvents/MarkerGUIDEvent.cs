@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -6,10 +6,11 @@ public class MarkerGUIDEvent : IDToGUIDEvent
 {
     internal static MarkerGUIDEvent DummyMarkerGUID = new MarkerGUIDEvent();
 
-    public bool IsCommanderTag { get; }
+    public readonly bool IsCommanderTag;
 internal MarkerGUIDEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {
-        IsCommanderTag = MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(HexContentGUID);
+        IsCommanderTag = MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(ContentGUID);
+
         if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.ExtraDataInGUIDEvents)
         {
             IsCommanderTag |= evtcItem.SrcInstid == 1;

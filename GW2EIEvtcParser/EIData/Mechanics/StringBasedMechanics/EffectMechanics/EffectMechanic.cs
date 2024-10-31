@@ -11,17 +11,17 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
 
     protected abstract AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData);
 
-    public EffectMechanic(string effectGUID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this(new string[] { effectGUID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public EffectMechanic(GUID effect, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([ effect ], inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 
-    public EffectMechanic(string[] effectGUIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effectGUIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    public EffectMechanic(ReadOnlySpan<GUID> effects, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effects, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
 
     protected void PlayerChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs)
     {
-        foreach (string guid in MechanicIDs)
+        foreach (var guid in MechanicIDs)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> effects))
             {
@@ -39,7 +39,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
 
     protected void EnemyChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
     {
-        foreach (string guid in MechanicIDs)
+        foreach (var guid in MechanicIDs)
         {
             if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> effects))
             {

@@ -112,17 +112,16 @@ public abstract class EffectEvent : AbstractEffectEvent
 
     /// <summary>
     /// Computes the lifespan of an effect.<br></br>
-    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
+    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffect"/> as end.<br></br>
     /// Checks the matching effects Src.
     /// </summary>
-    /// <param name="log">The log.</param>
-    /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
+    /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithSecondaryEffect(ParsedEvtcLog log, string secondaryEffectGUID)
+    public (long start, long end) ComputeLifespanWithSecondaryEffect(ParsedEvtcLog log, GUID secondaryEffect)
     {
         long start = Time;
         long end = start + Duration;
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffectGUID, out var effects))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffect, out var effects))
         {
             EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
             if (firstEffect != null)
@@ -135,16 +134,15 @@ public abstract class EffectEvent : AbstractEffectEvent
 
     /// <summary>
     /// Computes the lifespan of an effect.<br></br>
-    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
+    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffect"/> as end.<br></br>
     /// </summary>
-    /// <param name="log">The log.</param>
-    /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
+    /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithSecondaryEffectNoSrcCheck(ParsedEvtcLog log, string secondaryEffectGUID)
+    public (long start, long end) ComputeLifespanWithSecondaryEffectNoSrcCheck(ParsedEvtcLog log, GUID secondaryEffect)
     {
         long start = Time;
         long end = start + Duration;
-        if (log.CombatData.TryGetEffectEventsByGUID(secondaryEffectGUID, out var effects))
+        if (log.CombatData.TryGetEffectEventsByGUID(secondaryEffect, out var effects))
         {
             EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
             if (firstEffect != null)
@@ -157,17 +155,16 @@ public abstract class EffectEvent : AbstractEffectEvent
 
     /// <summary>
     /// Computes the lifespan of an effect.<br></br>
-    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
+    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffect"/> as end.<br></br>
     /// Checks the matching effects Src and Position.
     /// </summary>
-    /// <param name="log">The log.</param>
-    /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
+    /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, string secondaryEffectGUID, double minDistance = 1e-6)
+    public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, GUID secondaryEffect, double minDistance = 1e-6)
     {
         long start = Time;
         long end = start + Duration;
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffectGUID, out var effects))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffect, out var effects))
         {
             EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !x.IsAroundDst && x.Position.DistanceToPoint(Position) < minDistance);
             if (firstEffect != null)

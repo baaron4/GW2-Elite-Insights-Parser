@@ -522,7 +522,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         // spreads
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiSpreadCircle, out var spreadIndicators))
         {
-            var spreadDetonateGUIDs = new string[] { EffectGUIDs.AiAirDetonate, EffectGUIDs.AiFireDetonate, EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkDetonate };
+            var spreadDetonateGUIDs = new[] { EffectGUIDs.AiAirDetonate, EffectGUIDs.AiFireDetonate, EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkDetonate };
             const float maxDist = 40f;
             const long duration = 5000;
 
@@ -587,7 +587,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             AddScalingCircleDecorations(log, circleDetonate, 300);
         }
         // we need to filter water & dark detonates due to reuse
-        var detonateReusedGUIDs = new string[] { EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkCircleDetonate };
+        var detonateReusedGUIDs = new[] { EffectGUIDs.AiWaterDetonate, EffectGUIDs.AiDarkCircleDetonate };
         if (log.CombatData.TryGetEffectEventsByGUIDs(detonateReusedGUIDs, out var circleDetonateReused))
         {
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiCircleAoEIndicator, out var indicators))

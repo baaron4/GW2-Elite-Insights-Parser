@@ -16,7 +16,7 @@ using Segment = GenericSegment<double>;
 public class Player : AbstractPlayer
 {
 
-    private List<GenericSegment<string>>? CommanderStates = null;
+    private List<GenericSegment<GUID>>? CommanderStates = null;
     // Constructors
     internal Player(AgentItem agent, bool noSquad) : base(agent)
     {
@@ -96,18 +96,18 @@ public class Player : AbstractPlayer
     /// Return commander status list, the value of the segment is currently active commander tag ID.
     /// Player had said tag between every segment.Start and segment.End.
     /// 
-    /// The value of the segment is the hex GUID of the specific commander tag.
+    /// The value of the segment is the GUID of the specific commander tag.
     /// </summary>
-    public IReadOnlyList<GenericSegment<string>> GetCommanderStates(ParsedEvtcLog log)
+    public IReadOnlyList<GenericSegment<GUID>> GetCommanderStates(ParsedEvtcLog log)
     {
         if (CommanderStates == null)
         {
-            var statesByPlayer = new Dictionary<Player, IReadOnlyList<GenericSegment<string>>>(log.PlayerList.Count);
+            var statesByPlayer = new Dictionary<Player, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
             foreach (Player player in log.PlayerList)
             {
                 IReadOnlyList<MarkerEvent> markerEvents = log.CombatData.GetMarkerEvents(player.AgentItem);
                 //TODO(Rennorb) @perf: find average complexity
-                var commanderMarkerStates = new List<GenericSegment<string>>(markerEvents.Count);
+                var commanderMarkerStates = new List<GenericSegment<GUID>>(markerEvents.Count);
                 foreach (MarkerEvent markerEvent in markerEvents)
                 {
                     MarkerGUIDEvent marker = markerEvent.GUIDEvent;
@@ -115,7 +115,7 @@ public class Player : AbstractPlayer
                     {
                         if (marker.IsCommanderTag)
                         {
-                            commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
+                            commanderMarkerStates.Add(new(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.ContentGUID));
                             if (markerEvent.EndNotSet)
                             {
                                 break;
@@ -142,7 +142,7 @@ public class Player : AbstractPlayer
             }
 
             //TODO(Rennorb) @perf: find average complexity
-            var states = new List<(Player p, GenericSegment<string> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
+            var states = new List<(Player p, GenericSegment<GUID> seg)>(statesByPlayer.Count * statesByPlayer.Values.FirstOrDefault()?.Count ?? 1);
             foreach (var (player, state) in statesByPlayer)
             {
                 foreach (var segment in state)
@@ -181,7 +181,7 @@ public class Player : AbstractPlayer
     /// </summary>
     public IReadOnlyList<Segment> GetCommanderStatesNoTagValues(ParsedEvtcLog log)
     {
-        IReadOnlyList<GenericSegment<string>> commanderStates = GetCommanderStates(log);
+        var commanderStates = GetCommanderStates(log);
         if(commanderStates.Count == 0) { return [ ]; }
 
         var result = new List<Segment>();
@@ -205,7 +205,7 @@ public class Player : AbstractPlayer
 
     protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
     {
-        foreach (GenericSegment<string> seg in GetCommanderStates(log))
+        foreach (var seg in GetCommanderStates(log))
         {
             if (ParserIcons.CommanderTagToIcon.TryGetValue(seg.Value, out string icon))
             {

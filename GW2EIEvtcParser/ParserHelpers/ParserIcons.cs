@@ -751,7 +751,7 @@ internal static class ParserIcons
     internal const string NoImage = "";
 
     /// <summary>
-    /// Dictionary matching a <see cref="Spec"/> to their high resolution profession icon.
+    /// Translates a <see cref="Spec"/> to its high resolution profession icon.
     /// </summary>
     internal readonly static IReadOnlyDictionary<Spec, string> HighResProfIcons = new Dictionary<Spec, string>()
     {
@@ -794,7 +794,7 @@ internal static class ParserIcons
     };
 
     /// <summary>
-    /// Dictionary matching a <see cref="Spec"/> to their base resolution profession icon.
+    /// Translates a <see cref="Spec"/> to its base resolution profession icon.
     /// </summary>
     internal readonly static IReadOnlyDictionary<Spec, string> BaseResProfIcons = new Dictionary<Spec, string>()
     {
@@ -837,7 +837,7 @@ internal static class ParserIcons
     };
 
     /// <summary>
-    /// Dictionary matching a <see cref="TargetID"/> to their icon.
+    /// Translates a <see cref="TargetID"/> to the corresponding icon.
     /// </summary>
     internal readonly static IReadOnlyDictionary<TargetID, string> TargetNPCIcons = new Dictionary<ArcDPSEnums.TargetID, string>()
     {
@@ -932,7 +932,7 @@ internal static class ParserIcons
     };
 
     /// <summary>
-    /// Dictionary matching a <see cref="TrashID"/> to their icon.
+    /// Translates a <see cref="TrashID"/> to the corresponding icon.
     /// </summary>
     internal readonly static IReadOnlyDictionary<TrashID, string> TrashNPCIcons = new Dictionary<ArcDPSEnums.TrashID, string>()
     {
@@ -1509,9 +1509,9 @@ internal static class ParserIcons
 
 
     /// <summary>
-    /// Matches the Squad Marker GUIDs to the relative icons.
+    /// Translates a Squad Marker GUID to the corresponding icon.
     /// </summary>
-    public static IReadOnlyDictionary<string, string> SquadMarkerGUIDsToIcon { get; set; } = new Dictionary<string, string>()
+    public static readonly IReadOnlyDictionary<GUID, string> SquadMarkerToIcon = new Dictionary<GUID, string>()
     {
         { MarkerGUIDs.ArrowOverhead, ArrowSquadMarkerOverhead },
         { MarkerGUIDs.CircleOverhead, CircleSquadMarkerOverhead },
@@ -1525,9 +1525,9 @@ internal static class ParserIcons
 
 
     /// <summary>
-    /// Matches the Squad Marker Index to the relative icons.
+    /// Translates a Squad Marker Index to the corresponding icon.
     /// </summary>
-    public static IReadOnlyDictionary<SquadMarkerIndex, string> SquadMarkerIndexToIcon { get; set; } = new Dictionary<SquadMarkerIndex, string>()
+    public static readonly IReadOnlyDictionary<SquadMarkerIndex, string> SquadMarkerIndexToIcon = new Dictionary<SquadMarkerIndex, string>()
     {
         { SquadMarkerIndex.Arrow, ArrowSquadMarkerOverhead },
         { SquadMarkerIndex.Circle, CircleSquadMarkerOverhead },
@@ -1540,9 +1540,9 @@ internal static class ParserIcons
     };
 
     /// <summary>
-    /// Matches the Commander/Catmander Tag GUIDs to the relative icons.
+    /// Translates a Commander/Catmander Tag GUID to the corresponding icon.
     /// </summary>
-    public static IReadOnlyDictionary<string, string> CommanderTagToIcon { get; set; } = new Dictionary<string, string>()
+    public static readonly IReadOnlyDictionary<GUID, string> CommanderTagToIcon = new Dictionary<GUID, string>()
     {
         { MarkerGUIDs.RedCommanderTag, RedCommanderTagOverhead },
         { MarkerGUIDs.OrangeCommanderTag, OrangeCommanderTagOverhead },

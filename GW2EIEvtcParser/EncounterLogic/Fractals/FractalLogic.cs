@@ -22,22 +22,22 @@ internal abstract class FractalLogic : FightLogic
     {
         ParseMode = ParseModeEnum.Instanced5;
         SkillMode = SkillModeEnum.PvE;
-        MechanicList.AddRange(new List<Mechanic>
-        {
-        new PlayerDstBuffApplyMechanic(FluxBombBuff, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
-        new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0), // No longer tracking damage
-        new SpawnMechanic((int)TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
-        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, "Debilitated", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", 0),
-        new PlayerSrcEffectMechanic(new [] { EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator }, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", 0),
-        new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.LightOrange, 10), "ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player", 0).UsingChecker((bae, log) => bae.To.IsPlayer),
-        new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.LightOrange, 10), "ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player", 0).UsingChecker((bae, log) => bae.By.IsPlayer),
-        /* Not trackable due to health % damage for now
-        new PlayerDstHitMechanic(ToxicTrail, "Toxic Trail", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen, 10), "ToxTrail.H", "Hit by Toxic Trail", "Toxic Trail Hit", 0),
-        new PlayerDstHitMechanic(ExplodeLastLaugh, "Explode", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange, 10), "Explode.H", "Hit by Last Laugh Explode", "Last Laugh Hit", 0),
-        new PlayerDstHitMechanic(WeBleedFireBig, "We Bleed Fire", new MechanicPlotlySetting(Symbols.Star, Colors.LightRed, 10), "BleedFireB.H", "Hit by We Bleed Fire (Big)", "Big Bleed Fire Hit", 0),
-        new PlayerDstHitMechanic(WeBleedFireSmall, "We Bleed Fire", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightRed, 10), "BleedFireS.H", "Hit by We Bleed Fire (Small)", "Small Bleed FIre Hit", 0),
-         */
-        });
+        MechanicList.AddRange(
+        [
+            new PlayerDstBuffApplyMechanic(FluxBombBuff, "Flux Bomb", new MechanicPlotlySetting(Symbols.Circle,Colors.Purple,10), "Flux","Flux Bomb application", "Flux Bomb",0),
+            new PlayerDstHitMechanic(FluxBombSkill, "Flux Bomb", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple,10), "Flux dmg","Flux Bomb hit", "Flux Bomb dmg",0), // No longer tracking damage
+            new SpawnMechanic((int)TrashID.FractalVindicator, "Fractal Vindicator", new MechanicPlotlySetting(Symbols.StarDiamondOpen,Colors.Black,10), "Vindicator","Fractal Vindicator spawned", "Vindicator spawn",0),
+            new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, "Debilitated", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Pink, 10), "Debil.A", "Debilitated Application (Toxic Sickness)", "Received Debilitated", 0),
+            new PlayerSrcEffectMechanic([EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator], "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange, 10), "ToxSick.A", "Toxic Sickness Application", "Toxic Sickness Application", 0),
+            new PlayerSrcBuffApplyMechanic(DebilitatedToxicSickness, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleLeftOpen, Colors.LightOrange, 10), "ToxSick.HitTo", "Hit another player with Toxic Sickness", "Toxic Sickness Hit To Player", 0).UsingChecker((bae, log) => bae.To.IsPlayer),
+            new PlayerDstBuffApplyMechanic(DebilitatedToxicSickness, "Toxic Sickness", new MechanicPlotlySetting(Symbols.TriangleRightOpen, Colors.LightOrange, 10), "ToxSick.HitBy", "Got hit by Toxic Sickness", "Toxic Sickness Hit By Player", 0).UsingChecker((bae, log) => bae.By.IsPlayer),
+            /* Not trackable due to health % damage for now
+            new PlayerDstHitMechanic(ToxicTrail, "Toxic Trail", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.DarkGreen, 10), "ToxTrail.H", "Hit by Toxic Trail", "Toxic Trail Hit", 0),
+            new PlayerDstHitMechanic(ExplodeLastLaugh, "Explode", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Orange, 10), "Explode.H", "Hit by Last Laugh Explode", "Last Laugh Hit", 0),
+            new PlayerDstHitMechanic(WeBleedFireBig, "We Bleed Fire", new MechanicPlotlySetting(Symbols.Star, Colors.LightRed, 10), "BleedFireB.H", "Hit by We Bleed Fire (Big)", "Big Bleed Fire Hit", 0),
+            new PlayerDstHitMechanic(WeBleedFireSmall, "We Bleed Fire", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightRed, 10), "BleedFireS.H", "Hit by We Bleed Fire (Small)", "Small Bleed FIre Hit", 0),
+             */
+        ]);
         EncounterCategoryInformation.Category = FightCategory.Fractal;
         EncounterID |= EncounterIDs.EncounterMasks.FractalMask;
     }
@@ -146,8 +146,8 @@ internal abstract class FractalLogic : FightLogic
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Toxic Sickness
-        var toxicSicknessGUIDs = new List<string>() { EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator };
-        foreach (string guid in toxicSicknessGUIDs)
+        var toxicSicknessGUIDs = new List<GUID>() { EffectGUIDs.ToxicSicknessOldIndicator, EffectGUIDs.ToxicSicknessNewIndicator };
+        foreach (var guid in toxicSicknessGUIDs)
         {
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, guid, out var toxicSickenss))
             {
@@ -230,41 +230,41 @@ internal abstract class FractalLogic : FightLogic
     /// </summary>
     /// <param name="log">The log.</param>
     /// <param name="environmentDecorations">The decorations list.</param>
-    /// <param name="effectGUID">The <see cref="EffectGUIDs"/>.</param>
+    /// <param name="effect">The <see cref="EffectGUIDs"/>.</param>
     /// <param name="target">The target casting.</param>
     /// <param name="distanceThreshold">Threshold distance of the effect from the caster.</param>
     /// <param name="onDistanceSuccessDuration">Duration of the AoE effects closer to the caster.</param>
     /// <param name="onDistanceFailDuration">Duration of the AoE effects farther away from the caster.</param>
-    protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, string effectGUID, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
+    protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, GUID effect, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
     {
         if (!log.AgentData.TryGetFirstAgentItem(target, out AgentItem agent))
         {
             return;
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if (log.CombatData.TryGetEffectEventsByGUID(effect, out var events))
         {
-            foreach (EffectEvent effect in effects)
+            foreach (EffectEvent @event in events)
             {
-                (long start, long end) lifespan = (effect.Time, effect.Time + effect.Duration);
+                (long start, long end) lifespan = (@event.Time, @event.Time + @event.Duration);
                 // Correcting the duration of the effects for CTBS 45, based on the distance from the target casting the mechanic.
-                if (effect is EffectEventCBTS45)
+                if (@event is EffectEventCBTS45)
                 {
-                    Point3D agentPos = agent.GetCurrentPosition(log, effect.Time);
+                    Point3D agentPos = agent.GetCurrentPosition(log, @event.Time);
                     if (agentPos == null)
                     {
                         continue;
                     }
-                    var distance = effect.Position.DistanceToPoint(agentPos);
+                    var distance = @event.Position.DistanceToPoint(agentPos);
                     if (distance < distanceThreshold)
                     {
-                        lifespan.end = effect.Time + onDistanceSuccessDuration;
+                        lifespan.end = @event.Time + onDistanceSuccessDuration;
                     }
                     else
                     {
-                        lifespan.end = effect.Time + onDistanceFailDuration;
+                        lifespan.end = @event.Time + onDistanceFailDuration;
                     }
                 }
-                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(effect.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(@event.Position)));
             }
         }
     }

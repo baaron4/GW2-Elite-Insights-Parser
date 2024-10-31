@@ -481,14 +481,14 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Crushing Regret (Green) End
-        var crushingRegretEnds = new List<(string GUID, Color Color)>()
+        var crushingRegretEnds = new List<(GUID GUID, Color Color)>()
         {
             (EffectGUIDs.TempleOfFebeGreenSuccess, Colors.Green),
             (EffectGUIDs.TempleOfFebeGreenFailure, Colors.DarkRed)
         };
-        foreach ((string GUID, Color Color) in crushingRegretEnds)
+        foreach ((GUID guid, Color color) in crushingRegretEnds)
         {
-            if (log.CombatData.TryGetEffectEventsByGUID(GUID, out var crushingRegrets))
+            if (log.CombatData.TryGetEffectEventsByGUID(guid, out var crushingRegrets))
             {
                 foreach (EffectEvent effect in crushingRegrets)
                 {
@@ -501,7 +501,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     uint radius = 175;
                     // Show the state for 500 ms, 250 ms before so that failures are actually visible
                     (long start, long end) lifespan = (effect.Time - 250, effect.Time + 250);
-                    var circle = new CircleDecoration(radius, lifespan, Color, 0.2, new PositionConnector(effect.Position));
+                    var circle = new CircleDecoration(radius, lifespan, color, 0.2, new PositionConnector(effect.Position));
                     EnvironmentDecorations.Add(circle);
                 }
             }

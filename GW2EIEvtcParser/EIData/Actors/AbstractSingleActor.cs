@@ -23,17 +23,17 @@ public abstract partial class AbstractSingleActor : AbstractActor
     public readonly EXTAbstractSingleActorHealingHelper EXTHealing;
     public readonly EXTAbstractSingleActorBarrierHelper EXTBarrier;
     // Minions
-    private Dictionary<long, Minions> _minions;
+    private Dictionary<long, Minions>? _minions;
     // Replay
     private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = new();
-    protected CombatReplay CombatReplay;
+    protected CombatReplay? CombatReplay;
     // Statistics
-    private CachingCollectionWithTarget<FinalDPS> _dpsStats;
-    private CachingCollectionWithTarget<FinalDefenses> _defenseStats;
-    private CachingCollectionWithTarget<FinalOffensiveStats> _offensiveStats;
-    private CachingCollection<FinalGameplayStats> _gameplayStats;
-    private CachingCollectionWithTarget<FinalSupport> _supportStats;
-    private CachingCollection<FinalToPlayersSupport> _toPlayerSupportStats;
+    private CachingCollectionWithTarget<FinalDPS>? _dpsStats;
+    private CachingCollectionWithTarget<FinalDefenses>? _defenseStats;
+    private CachingCollectionWithTarget<FinalOffensiveStats>? _offensiveStats;
+    private CachingCollection<FinalGameplayStats>? _gameplayStats;
+    private CachingCollectionWithTarget<FinalSupport>? _supportStats;
+    private CachingCollection<FinalToPlayersSupport>? _toPlayerSupportStats;
 
     protected AbstractSingleActor(AgentItem agent) : base(agent)
     {
@@ -402,13 +402,13 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
     protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log)
     {
-        foreach (string squadMarkerGUID in MarkerGUIDs.SquadOverheadMarkersHexGUIDs)
+        foreach (var squadMarker in MarkerGUIDs.SquadOverheadMarkersHexGUIDs)
         {
-            if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(AgentItem, squadMarkerGUID, out IReadOnlyList<MarkerEvent> markerEvents))
+            if (log.CombatData.TryGetMarkerEventsBySrcWithGUID(AgentItem, squadMarker, out var markerEvents))
             {
                 foreach (MarkerEvent markerEvent in markerEvents)
                 {
-                    if (ParserIcons.SquadMarkerGUIDsToIcon.TryGetValue(squadMarkerGUID, out string icon))
+                    if (ParserIcons.SquadMarkerToIcon.TryGetValue(squadMarker, out string icon))
                     {
                         CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, icon, 240f, 16, 1);
                     }

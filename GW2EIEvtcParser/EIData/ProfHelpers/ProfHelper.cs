@@ -667,14 +667,8 @@ internal static class ProfHelper
     /// Computes AnimatedCastEvents based on provided effectGUID
     /// </summary>
     /// <param name="actor">actor who is the source of the effect</param>
-    /// <param name="combatData"></param>
-    /// <param name="skillData"></param>
-    /// <param name="skillID"></param>
-    /// <param name="effectGUID"></param>
     /// <param name="startOffset">offset to be applied to the time value of the effect</param>
-    /// <param name="castDuration"></param>
-    /// <returns></returns>
-    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillID, string effectGUID, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
+    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillID, GUID effect, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
     {
         var res = new List<AnimatedCastEvent>();
         if (combatData.GetAnimatedCastData(skillID).Count > 0)
@@ -683,14 +677,14 @@ internal static class ProfHelper
             return res;
         }
         SkillItem skill = skillData.Get(skillID);
-        if (combatData.TryGetEffectEventsBySrcWithGUID(actor.AgentItem, effectGUID, out var effects))
+        if (combatData.TryGetEffectEventsBySrcWithGUID(actor.AgentItem, effect, out var events))
         {
             skillData.NotAccurate.Add(skillID);
-            foreach (EffectEvent effect in effects)
+            foreach (EffectEvent @event in events)
             {
-                if (checker == null || checker(effects, effect, combatData, skillData))
+                if (checker == null || checker(events, @event, combatData, skillData))
                 {
-                    res.Add(new AnimatedCastEvent(actor.AgentItem, skill, effect.Time + startOffset, castDuration));
+                    res.Add(new AnimatedCastEvent(actor.AgentItem, skill, @event.Time + startOffset, castDuration));
                 }
             }
         }

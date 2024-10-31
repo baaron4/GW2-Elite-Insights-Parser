@@ -51,10 +51,10 @@ internal static class EngineerHelper
         return _engineerKit.Contains(id);
     }
 
-    private static bool MineDetonationInstantCastChecker(EffectEvent effect, CombatData combatData, bool ifFound, string[] effectGUIDs)
+    private static bool MineDetonationInstantCastChecker(EffectEvent effect, CombatData combatData, bool ifFound, ReadOnlySpan<GUID> effects)
     {
         // Find the DynamicEffectEnd of mine at the time of the explosion effects.
-        if (combatData.TryGetEffectEventsBySrcWithGUIDs(effect.Src, effectGUIDs, out var mineFields))
+        if (combatData.TryGetEffectEventsBySrcWithGUIDs(effect.Src, effects, out var mineFields))
         {
             foreach (EffectEvent e in mineFields)
             {

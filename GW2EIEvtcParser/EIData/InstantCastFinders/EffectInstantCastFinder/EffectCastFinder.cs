@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 {
     protected bool Minions = false;
-    private readonly string _effectGUID;
+    private readonly GUID _effectGUID;
     private int _speciesId = 0;
 
     public EffectCastFinder WithMinions(bool minions)
@@ -18,17 +18,17 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    protected AgentItem GetAgent(EffectEvent effectEvent)
+    protected AgentItem? GetAgent(EffectEvent effectEvent)
     {
         return Minions ? GetKeyAgent(effectEvent).GetFinalMaster() : GetKeyAgent(effectEvent);
     }
 
-    protected virtual AgentItem GetKeyAgent(EffectEvent effectEvent)
+    protected virtual AgentItem? GetKeyAgent(EffectEvent effectEvent)
     {
         return effectEvent.Src;
     }
 
-    public EffectCastFinder(long skillID, string effectGUID) : base(skillID)
+    public EffectCastFinder(long skillID, GUID effectGUID) : base(skillID)
     {
         UsingNotAccurate(true); // TODO: confirm if culling is server side logic
         UsingEnable((combatData) => combatData.HasEffectData);
@@ -93,11 +93,11 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    internal EffectCastFinder UsingSecondaryEffectChecker(string effectGUID, long timeOffset = 0, long epsilon = ServerDelayConstant)
+    internal EffectCastFinder UsingSecondaryEffectChecker(GUID effect, long timeOffset = 0, long epsilon = ServerDelayConstant)
     {
         UsingChecker((evt, combatData, agentData, skillData) =>
         {
-            if (combatData.TryGetEffectEventsByGUID(effectGUID, out var effectEvents))
+            if (combatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
             {
                 return effectEvents.Any(other => other != evt && GetAgent(other) == GetAgent(evt) && Math.Abs(other.Time - timeOffset - evt.Time) < epsilon);
             }
@@ -109,9 +109,9 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
         var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
-        var testGUIDs = test.Select(x => x.GUIDEvent.HexContentGUID).ToList();
+        var testGUIDs = test.Select(x => x.GUIDEvent.ContentGUID).ToList();
         var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
-        var test2GUIDs = test2.Select(x => x.GUIDEvent.HexContentGUID).ToList();
+        var test2GUIDs = test2.Select(x => x.GUIDEvent.ContentGUID).ToList();
         return true;
     }
 
@@ -130,7 +130,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
     public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
     {
         var res = new List<InstantCastEvent>();
-        EffectGUIDEvent effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
+        var effectGUIDEvent = combatData.GetEffectGUIDEvent(_effectGUID);
         if (effectGUIDEvent != null)
         {
             var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
@@ -151,7 +151,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                             continue;
                         }
                         lastTime = effectEvent.Time;
-                        AgentItem caster = group.Key;
+                        var caster = group.Key;
                         if (_speciesId > 0 && caster.IsUnamedSpecies())
                         {
                             AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);

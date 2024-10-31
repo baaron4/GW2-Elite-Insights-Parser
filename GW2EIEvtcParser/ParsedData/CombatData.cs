@@ -713,12 +713,11 @@ public class CombatData
     /// <summary>
     /// True if marker events of given marker GUID has been found
     /// </summary>
-    /// <param name="markerGUID">marker GUID</param>
+    /// <param name="marker">marker GUID</param>
     /// <param name="markerEvents">Found marker events</param>
-    /// <returns></returns>
-    public bool TryGetMarkerEventsByGUID(string markerGUID, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
+    public bool TryGetMarkerEventsByGUID(GUID marker, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
     {
-        MarkerGUIDEvent markerGUIDEvent = GetMarkerGUIDEvent(markerGUID);
+        var markerGUIDEvent = GetMarkerGUIDEvent(marker);
         if (markerGUIDEvent != null)
         {
             markerEvents = GetMarkerEventsByMarkerID(markerGUIDEvent.ContentID);
@@ -731,12 +730,11 @@ public class CombatData
     /// True if marker events of given marker GUID has been found on given agent
     /// </summary>
     /// <param name="agent">marker owner</param>
-    /// <param name="markerGUID">marker GUID</param>
+    /// <param name="marker">marker GUID</param>
     /// <param name="markerEvents">Found marker events</param>
-    /// <returns></returns>
-    public bool TryGetMarkerEventsBySrcWithGUID(AgentItem agent, string markerGUID, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
+    public bool TryGetMarkerEventsBySrcWithGUID(AgentItem agent, GUID marker, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
     {
-        if (TryGetMarkerEventsByGUID(markerGUID, out IReadOnlyList<MarkerEvent> markers))
+        if (TryGetMarkerEventsByGUID(marker, out IReadOnlyList<MarkerEvent> markers))
         {
             markerEvents = markers.Where(effect => effect.Src == agent).ToList();
             return true;
@@ -1025,15 +1023,10 @@ public class CombatData
         return _statusEvents.EffectEventsByEffectID.GetValueOrEmpty(effectID);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
-    /// <param name="effectEvents"></param>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByGUID(string effectGUID, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsByGUID(GUID effectGUID, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
-        EffectGUIDEvent effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
+        var effectGUIDEvent = GetEffectGUIDEvent(effectGUID);
         if (effectGUIDEvent != null)
         {
             effectEvents = GetEffectEventsByEffectID(effectGUIDEvent.ContentID);
@@ -1046,21 +1039,16 @@ public class CombatData
         return false;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
-    /// <param name="effectEvents"></param>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByGUIDs(Span<string> effectGUIDs, out List<EffectEvent> effectEvents)
+    public bool TryGetEffectEventsByGUIDs(Span<GUID> effects, out List<EffectEvent> effectEvents)
     {
         //TODO(Rennorb) @perf: fid average complexity
-        effectEvents = new(effectGUIDs.Length * 10);
-        foreach (string effectGUID in effectGUIDs)
+        effectEvents = new(effects.Length * 10);
+        foreach (var effectGUID in effects)
         {
-            if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+            if (TryGetEffectEventsByGUID(effectGUID, out var events))
             {
-                effectEvents.AddRange(effects);
+                effectEvents.AddRange(events);
             }
         }
 
@@ -1070,11 +1058,10 @@ public class CombatData
     /// <summary>
     /// Returns effect events by the given agent and effect GUID.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <returns>true on found effect with entries > 0</returns>
-    public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
     {
-        if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if (TryGetEffectEventsByGUID(effect, out var effects))
         {
             var result = effects.Where(effect => effect.Src == agent).ToList();
             if (result.Count > 0)
@@ -1091,10 +1078,9 @@ public class CombatData
     /// <summary>
     /// Appends effect events by the given agent and effect GUID.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
-    public void AppendEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, List<EffectEvent> effectEvents)
+    public void AppendEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, List<EffectEvent> effectEvents)
     {
-        if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if (TryGetEffectEventsByGUID(effect, out var effects))
         {
             effectEvents.AddRange(effects.Where(effect => effect.Src == agent));
         }
@@ -1104,11 +1090,10 @@ public class CombatData
     /// <summary>
     /// Returns effect events on the given agent and effect GUID.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, string effectGUID, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
     {
-        if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if (TryGetEffectEventsByGUID(effect, out var effects))
         {
             var result = effects.Where(effect => effect.Dst == agent).ToList();
             if (result.Count > 0)
@@ -1124,10 +1109,9 @@ public class CombatData
     /// <summary>
     /// Append effect events on the given agent and effect GUID.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
-    public void AppendEffectEventsByDstWithGUID(AgentItem agent, string effectGUID, List<EffectEvent> effectEvents)
+    public void AppendEffectEventsByDstWithGUID(AgentItem agent, GUID effect, List<EffectEvent> effectEvents)
     {
-        if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if (TryGetEffectEventsByGUID(effect, out var effects))
         {
             effectEvents.AddRange(effects.Where(effect => effect.Dst == agent));
         }
@@ -1136,13 +1120,12 @@ public class CombatData
     /// <summary>
     /// Returns effect events by the given agent and effect GUIDs.
     /// </summary>
-    /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, Span<string> effectGUIDs, out List<EffectEvent> effectEvents)
+    public bool TryGetEffectEventsBySrcWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effects, out List<EffectEvent> effectEvents)
     {
         //TODO(Rennorb) @perf: find average complexity
-        effectEvents = new List<EffectEvent>(effectGUIDs.Length * 10);
-        foreach (var effectGUID in effectGUIDs)
+        effectEvents = new List<EffectEvent>(effects.Length * 10);
+        foreach (var effectGUID in effects)
         {
             AppendEffectEventsBySrcWithGUID(agent, effectGUID, effectEvents);
         }
@@ -1152,13 +1135,12 @@ public class CombatData
     /// <summary>
     /// Returns effect events on the given agent and effect GUIDs.
     /// </summary>
-    /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByDstWithGUIDs(AgentItem agent, Span<string> effectGUIDs, out List<EffectEvent> effectEvents)
+    public bool TryGetEffectEventsByDstWithGUIDs(AgentItem agent, ReadOnlySpan<GUID> effects, out List<EffectEvent> effectEvents)
     {
         //TODO(Rennorb) @perf: find average complexity
-        effectEvents = new List<EffectEvent>(effectGUIDs.Length * 10);
-        foreach (var effectGUID in effectGUIDs)
+        effectEvents = new List<EffectEvent>(effects.Length * 10);
+        foreach (var effectGUID in effects)
         {
             AppendEffectEventsByDstWithGUID(agent, effectGUID, effectEvents);
         }
@@ -1169,11 +1151,10 @@ public class CombatData
     /// <summary>
     /// Returns effect events by the given agent <b>including</b> minions and the given effect GUID.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, string effectGUID, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
     {
-        if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if (TryGetEffectEventsByGUID(effect, out var effects))
         {
             var result = effects.Where(effect => effect.Src.GetFinalMaster() == agent).ToList();
             if (result.Count > 0)
@@ -1190,10 +1171,9 @@ public class CombatData
     /// <summary>
     /// Returns effect events by the given agent <b>including</b> minions and the given effect GUID.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
-    public void AppendEffectEventsByMasterWithGUID(AgentItem agent, string effectGUID, List<EffectEvent> effectEvents)
+    public void AppendEffectEventsByMasterWithGUID(AgentItem agent, GUID effect, List<EffectEvent> effectEvents)
     {
-        if (TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if (TryGetEffectEventsByGUID(effect, out var effects))
         {
             effectEvents.AddRange(effects.Where(effect => effect.Src.GetFinalMaster() == agent));
         }
@@ -1202,12 +1182,11 @@ public class CombatData
     /// <summary>
     /// Returns effect events by the given agent <b>including</b> minions and the given effect GUIDs.
     /// </summary>
-    /// <param name="effectGUIDs">Strings in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, Span<string> effectGUIDs, out List<EffectEvent> effectEvents)
+    public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, Span<GUID> effects, out List<EffectEvent> effectEvents)
     {
         effectEvents = new List<EffectEvent>();
-        foreach (string effectGUID in effectGUIDs)
+        foreach (var effectGUID in effects)
         {
             AppendEffectEventsByMasterWithGUID(agent, effectGUID, effectEvents);
         }
@@ -1219,12 +1198,11 @@ public class CombatData
     /// Returns effect events by the given agent and effect GUID.
     /// Effects happening within epsilon milliseconds are grouped together.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <param name="epsilon">Windows size</param>
     /// <returns>true on success</returns>
-    public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, string effectGUID, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
+    public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
     {
-        if(!TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out var effects))
+        if(!TryGetEffectEventsBySrcWithGUID(agent, effect, out var effects))
         {
             groupedEffectEvents = null;
             return false;
@@ -1238,12 +1216,11 @@ public class CombatData
     /// Returns effect events for the given effect GUID.
     /// Effects happening within epsilon milliseconds are grouped together.
     /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
     /// <param name="epsilon">Window size</param>
     /// <returns>true on success</returns>
-    public bool TryGetGroupedEffectEventsByGUID(string effectGUID, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
+    public bool TryGetGroupedEffectEventsByGUID(GUID effect, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
     {
-        if(!TryGetEffectEventsByGUID(effectGUID, out var effects))
+        if(!TryGetEffectEventsByGUID(effect, out var effects))
         {
             groupedEffectEvents = null;
             return false;
@@ -1290,18 +1267,9 @@ public class CombatData
         return _statusEvents.EffectEvents;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="effectGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
-    /// <returns></returns>
-    public EffectGUIDEvent GetEffectGUIDEvent(string effectGUID)
+    public EffectGUIDEvent? GetEffectGUIDEvent(GUID effectGUID)
     {
-        if (_metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out EffectGUIDEvent evt))
-        {
-            return evt;
-        }
-        return null;
+        return _metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out EffectGUIDEvent evt) ? evt : null;
     }
 
     internal EffectGUIDEvent GetEffectGUIDEvent(long effectID)
@@ -1319,45 +1287,24 @@ public class CombatData
         return EffectGUIDEvent.DummyEffectGUID;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="markerGUID">String in hexadecimal (32 characters) or base64 (24 characters)</param>
-    /// <returns></returns>
-    public MarkerGUIDEvent GetMarkerGUIDEvent(string markerGUID)
+    public MarkerGUIDEvent? GetMarkerGUIDEvent(GUID marker)
     {
-        if (_metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(markerGUID, out MarkerGUIDEvent evt))
-        {
-            return evt;
-        }
-        return null;
+        return _metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(marker, out MarkerGUIDEvent evt) ? evt : null;
     }
 
     internal MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
     {
-        if (_metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt))
-        {
-            return evt;
-        }
-        return MarkerGUIDEvent.DummyMarkerGUID;
+        return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
 
     public IReadOnlyList<GliderEvent> GetGliderEvents(AgentItem src)
     {
-        if (_statusEvents.GliderEventsBySrc.TryGetValue(src, out List<GliderEvent> list))
-        {
-            return list;
-        }
-        return new List<GliderEvent>();
+        return _statusEvents.GliderEventsBySrc.GetValueOrEmpty(src);
     }
 
     public IReadOnlyList<StunBreakEvent> GetStunBreakEvents(AgentItem src)
     {
-        if (_statusEvents.StunBreakEventsBySrc.TryGetValue(src, out List<StunBreakEvent> list))
-        {
-            return list;
-        }
-        return new List<StunBreakEvent>();
+        return _statusEvents.StunBreakEventsBySrc.GetValueOrEmpty(src);
     }
 
     /// 
@@ -1421,7 +1368,7 @@ public class CombatData
             .Any();
     }
 
-    public bool HasRelatedEffect(string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+    public bool HasRelatedEffect(GUID effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
         if (TryGetEffectEventsBySrcWithGUID(agent, effectGUID, out var effectEvents))
         {
@@ -1430,7 +1377,7 @@ public class CombatData
         return false;
     }
 
-    public bool HasRelatedEffectDst(string effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
+    public bool HasRelatedEffectDst(GUID effectGUID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
         if (TryGetEffectEventsByDstWithGUID(agent, effectGUID, out var effectEvents))
         {
