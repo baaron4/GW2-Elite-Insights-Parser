@@ -6,9 +6,6 @@ public abstract class AbstractBuffApplyEvent : AbstractBuffEvent
 {
     public readonly uint BuffInstance;
 
-    [System.Obsolete("Don't use this.")] //TODO(Rennorb) @cleanup @dbg
-    public AbstractBuffApplyEvent(long t) : base(t) {}
-
     internal AbstractBuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
     {
         By = agentData.GetAgent(evtcItem.SrcAgent, evtcItem.Time);

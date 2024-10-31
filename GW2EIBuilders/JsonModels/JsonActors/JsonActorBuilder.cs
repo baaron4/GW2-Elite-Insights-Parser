@@ -89,8 +89,8 @@ internal static class JsonActorBuilder
         if (settings.RawFormatTimelineArrays)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
-            jsonActor.BoonsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfBoons]).ToList();
-            jsonActor.ConditionsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfConditions]).ToList();
+            jsonActor.BoonsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfBoons])?.ToList();
+            jsonActor.ConditionsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfConditions])?.ToList();
             if (buffGraphs.TryGetValue(SkillIDs.NumberOfActiveCombatMinions, out BuffsGraphModel states))
             {
                 jsonActor.ActiveCombatMinions = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();

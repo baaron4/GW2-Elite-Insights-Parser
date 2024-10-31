@@ -50,7 +50,7 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
             }
         }
 
-        return _stacksPerSource.TryGetValue(actor.AgentItem, out var stacks) ? stacks : 0;
+        return _stacksPerSource.GetValueOrDefault(actor.AgentItem);
     }
 
     public override IEnumerable<long> GetActualDurationPerStack()

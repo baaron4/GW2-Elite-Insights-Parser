@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW2EIEvtcParser.ParsedData;
 
@@ -8,12 +6,18 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class BuffSimulationItemBase : BuffSimulationItem
 {
+    private readonly AgentItem _src;
     internal readonly BuffStackItem _buffStackItem;
     internal readonly long _totalDuration;
 
     protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Start + buffStackItem.Duration)
     {
         _buffStackItem = buffStackItem;
+        //NOTE(Rennorb): We need to copy the source because for some ungodly reason the value can change after this initializer runs.
+        // this only influences buff uptime values, so it can be difficult to spot.
+        // There is a regression test for this in Tests/Regression.cs:BuffUptime.
+        //TODO(Rennorb) @cleanup
+        _src           = buffStackItem.Src;
         _totalDuration = buffStackItem.TotalDuration;
     }
 
@@ -71,7 +75,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         }
 
         Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
-        AgentItem agent = _buffStackItem.Src;
+        AgentItem agent = _src;
         AgentItem seedAgent = _buffStackItem.SeedSrc;
         if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
         {

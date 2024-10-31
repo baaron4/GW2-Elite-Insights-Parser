@@ -55,27 +55,15 @@ public static partial class ListExt
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void IncrementValue<K>(this Dictionary<K, int> dict, in K key, int value) where K : notnull
+    public static void IncrementValue<K>(this Dictionary<K, int> dict, in K key, int value = 1) where K : notnull
     {
         dict[key] = dict.TryGetValue(key, out var old) ? old + value : value;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void IncrementValue<K>(this Dictionary<K, int> dict, in K key) where K : notnull
-    {
-        dict[key] = dict.TryGetValue(key, out var old) ? old + 1 : 1;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void IncrementValue<K>(this Dictionary<K, long> dict, in K key, long value) where K : notnull
+    public static void IncrementValue<K>(this Dictionary<K, long> dict, in K key, long value = 1) where K : notnull
     {
         dict[key] = dict.TryGetValue(key, out var old) ? old + value : value;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void IncrementValue<K>(this Dictionary<K, long> dict, in K key) where K : notnull
-    {
-        dict[key] = dict.TryGetValue(key, out var old) ? old + 1 : 1;
     }
 
     public static T? FirstOrNull<T>(this IEnumerable<T> enumerable) where T : struct

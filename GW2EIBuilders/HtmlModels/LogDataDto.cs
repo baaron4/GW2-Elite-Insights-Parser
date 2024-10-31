@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using GW2EIBuilders.HtmlModels.EXTBarrier;
 using GW2EIBuilders.HtmlModels.EXTHealing;
 using GW2EIBuilders.HtmlModels.HTMLActors;
@@ -14,6 +15,7 @@ using GW2EIEvtcParser.ParsedData;
 using Tracing;
 using static GW2EIEvtcParser.ParserHelper;
 
+[assembly:InternalsVisibleTo("GW2EIParser.tst")]
 namespace GW2EIBuilders.HtmlModels;
 
 //TODO(Rennorb) @perf

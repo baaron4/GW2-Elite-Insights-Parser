@@ -47,7 +47,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
 
     protected bool IsFull => _logic.IsFull(BuffStack, _capacity);
 
-    protected override void Clear()
+    protected override void AfterSimulate()
     {
         BuffStack.Clear();
     }

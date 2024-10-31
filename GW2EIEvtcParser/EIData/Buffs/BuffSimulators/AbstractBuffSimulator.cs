@@ -59,12 +59,12 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
         }
         Update(fightEnd - timePrev);
 
-        GenerationSimulation.RemoveAll(x => x.Duration <= 0);
-        Clear();
         Trim(fightEnd);
+        GenerationSimulation.RemoveAll(x => x.Duration <= 0);
+        AfterSimulate();
     }
 
-    protected abstract void Clear(); //TODO(Rennorb): rename
+    protected abstract void AfterSimulate();
 
     protected abstract void Update(long timePassed);
 

@@ -7,9 +7,6 @@ public abstract class AbstractBuffRemoveEvent : AbstractBuffEvent
 {
     public int RemovedDuration { get; private set; }
 
-    [System.Obsolete("Don't use this.")] //TODO(Rennorb) @cleanup @dbg
-    public AbstractBuffRemoveEvent(long t) : base(null, t, IFF.Friend) { }
-
     internal AbstractBuffRemoveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, skillData)
     {
         RemovedDuration = evtcItem.Value;

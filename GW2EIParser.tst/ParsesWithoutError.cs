@@ -5,9 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-namespace GW2EIParser.tst;
+namespace GW2EIParser.tst.Generated;
 
-[TestFixtureSource(typeof(ParsesSuccessfully), nameof(ParsesSuccessfully.GenerateTests))]
+[TestFixtureSource(typeof(ParsesSuccessfully), nameof(GenerateTests))]
 public class ParsesSuccessfully
 {
     public static IEnumerable GenerateTests => EnumerateRecursively("TestInput/ShouldParse");

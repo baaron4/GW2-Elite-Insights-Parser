@@ -84,7 +84,7 @@ internal static class JsonDamageDistBuilder
 
         foreach (var pair in dlsByID)
         {
-            if (brlsByID.TryGetValue(pair.Key, out var brls))
+            if (!brlsByID.TryGetValue(pair.Key, out var brls))
             {
                 brls = new();
             }

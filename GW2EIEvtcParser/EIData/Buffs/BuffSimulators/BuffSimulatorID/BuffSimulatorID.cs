@@ -7,7 +7,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal abstract class BuffSimulatorID : AbstractBuffSimulator
+internal abstract class BuffSimulatorID(ParsedEvtcLog log, Buff buff) : AbstractBuffSimulator(log, buff)
 {
     protected class BuffStackItemID : BuffStackItem
     {
@@ -42,12 +42,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
 
     protected readonly List<BuffStackItemID> BuffStack = new();
 
-    // Constructor
-    protected BuffSimulatorID(ParsedEvtcLog log, Buff buff) : base(log, buff)
-    {
-    }
-
-    protected override void Clear()
+    protected override void AfterSimulate()
     {
         BuffStack.Clear();
     }

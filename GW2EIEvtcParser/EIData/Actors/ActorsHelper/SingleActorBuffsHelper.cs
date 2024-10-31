@@ -85,17 +85,17 @@ partial class AbstractSingleActor
         return value;
     }
 
-    private Dictionary<long, long> ComputeBuffPresence(Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
+    private static Dictionary<long, long> ComputeBuffPresence(Dictionary<long, AbstractBuffSimulator> buffSimulators, long start, long end)
     {
         var buffPresence = new Dictionary<long, long>(buffSimulators.Count);
         foreach (KeyValuePair<long, AbstractBuffSimulator> pair in buffSimulators)
         {
             foreach (BuffSimulationItem simul in pair.Value.GenerationSimulation)
             {
-                long value = simul.GetClampedDuration(start, end);
-                if (value != 0)
+                long duration = simul.GetClampedDuration(start, end);
+                if (duration != 0)
                 {
-                    buffPresence.IncrementValue(pair.Key, value);
+                    buffPresence.IncrementValue(pair.Key, duration);
                 }
             }
         }

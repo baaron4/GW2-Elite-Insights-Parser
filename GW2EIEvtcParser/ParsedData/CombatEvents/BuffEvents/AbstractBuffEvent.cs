@@ -20,9 +20,6 @@ public abstract class AbstractBuffEvent : AbstractTimeCombatEvent
 
     internal readonly IFF IFF;
 
-    [System.Obsolete("Don't use this.")] //TODO(Rennorb) @cleanup @dbg
-    public AbstractBuffEvent(long t) : base(t) {}
-
     internal AbstractBuffEvent(CombatItem evtcItem, SkillData skillData) : base(evtcItem.Time)
     {
         BuffSkill = skillData.Get(evtcItem.SkillID);

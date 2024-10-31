@@ -14,9 +14,6 @@ public class BuffApplyEvent : AbstractBuffApplyEvent
     internal uint OverridenInstance;
     private readonly bool _addedActive;
 
-    [System.Obsolete("Don't use this.")] //TODO(Rennorb) @cleanup @dbg
-    public BuffApplyEvent(long t) : base(t) {}
-
     internal BuffApplyEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData, skillData)
     {
         Initial = evtcItem.IsStateChange == StateChange.BuffInitial;
