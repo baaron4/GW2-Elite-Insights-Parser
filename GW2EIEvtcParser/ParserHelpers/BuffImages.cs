@@ -1671,6 +1671,7 @@
         public const string MaraudersResilience = "https://wiki.guildwars2.com/images/5/5c/Marauder%27s_Resilience.png";
         public const string HardenedArmor = "https://wiki.guildwars2.com/images/0/0a/Hardened_Armor.png";
         public const string ImplacableFoe = "https://wiki.guildwars2.com/images/7/79/Implacable_Foe.png";
+        public const string PsychicRiposte = "https://wiki.guildwars2.com/images/1/16/Psychic_Riposte.png";
         #endregion Traits
 
     }
