@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 namespace GW2EIEvtcParser;
 
 [StructLayout(LayoutKind.Sequential, Pack = 8)]
@@ -39,21 +40,30 @@ public readonly struct GUID : IEquatable<GUID>
         0, 10, 11, 12, 13, 14, 15, 16, 0, 0, 0, 0, 0, 0, 0, 0,
         0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
-    /// <remarks>This does not validate its input only contains hex characters. But neither did the previous solution of just using strings.</remarks>
+
     public unsafe GUID(ReadOnlySpan<char> hex)
-	{
+    {
         Debug.Assert(hex.Length >= 32);
-        fixed(UInt64* _ptr = &this.first8)
+        Debug.Assert(ValidateHex(hex));
+        fixed (ulong* _ptr = &first8)
         {
             var ptr = (byte*)_ptr;
-            for(int i = 0; i < 32; i += 2)
+            for (int i = 0; i < 32; i += 2)
             {
-                *ptr++ = (byte)(InverseHexLookup[hex[i] & 127] << 4 | InverseHexLookup[hex[i + 1] & 127]);
+                *ptr++ = (byte)((InverseHexLookup[hex[i] & 127] << 4) | InverseHexLookup[hex[i + 1] & 127]);
             }
         }
     }
 
-	public readonly unsafe string ToHex()
+    /// <summary>
+    /// Validate the <paramref name="hex"/> to be only containing 0-F characters.
+    /// </summary>
+    private static bool ValidateHex(ReadOnlySpan<char> hex)
+    {
+        return Regex.IsMatch(hex.ToString(), @"\A\b[0-9a-fA-F]+\b\Z");
+    }
+
+    public readonly unsafe string ToHex()
     {
         fixed(UInt64* ptr = &this.first8)
         {
