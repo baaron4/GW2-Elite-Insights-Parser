@@ -408,6 +408,7 @@ namespace GW2EIEvtcParser.ParsedData
             { PoisonLeapCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { PoisonBlastCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { PoisonBlastCombo2, "https://i.imgur.com/fmwZ1cP.png" },
+            { PoisonWhirlCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { LightningLeapCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { LightningWhirlCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { DarkWhirlCombo, "https://i.imgur.com/fmwZ1cP.png" },

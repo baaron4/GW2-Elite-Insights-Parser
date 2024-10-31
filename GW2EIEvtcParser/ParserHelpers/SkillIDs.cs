@@ -3575,6 +3575,7 @@
         public const long ExplosiveKnuckle = 63365;
         public const long DischargeArray = 63367;
         public const long OverclockSignetJDrive = 63378;
+        public const long PsychicRiposteBuff = 63395;
         public const long DeployJadeSphereFire2 = 63396;
         public const long DeadlyBlades = 63409;
         public const long DeployJadeSphereWaterUW = 63416;

@@ -59,6 +59,7 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, BuffImages.DeadlyBlades),
             new Buff("Bladeturn", Bladeturn, Source.Virtuoso, BuffClassification.Other, BuffImages.BladeturnRequiem),
             new Buff("Virtuoso Blade", VirtuosoBlades, Source.Virtuoso, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.PowerAttribute),
+            new Buff("Psychic Riposte", PsychicRiposteBuff, Source.Virtuoso, BuffClassification.Other, BuffImages.PsychicRiposte),
         };
 
         public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData, EvtcVersionEvent evtcVersion)
