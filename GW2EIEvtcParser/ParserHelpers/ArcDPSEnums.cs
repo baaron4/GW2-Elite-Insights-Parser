@@ -103,6 +103,7 @@ namespace GW2EIEvtcParser
             internal const int WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents = 20240627;
             internal const int MovementSkillDetection = 20240709;
             internal const int EICanDoManualBuffAttributes = 20240716;
+            internal const int ExtraDataInGUIDEvents = 20241030;
             //
             internal const int EndOfLife = int.MaxValue;
         }

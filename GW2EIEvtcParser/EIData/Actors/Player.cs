@@ -124,7 +124,7 @@ namespace GW2EIEvtcParser.EIData
                         MarkerGUIDEvent marker = markerEvent.GUIDEvent;
                         if (marker.ContentID >= 0)
                         {
-                            if (MarkerGUIDs.CommanderTagMarkersHexGUIDs.Contains(marker.HexContentGUID))
+                            if (marker.IsCommanderTag)
                             {
                                 commanderMarkerStates.Add(new GenericSegment<string>(markerEvent.Time, Math.Min(markerEvent.EndTime, log.FightData.LogEnd), marker.HexContentGUID));
                                 if (markerEvent.EndNotSet)
@@ -210,7 +210,10 @@ namespace GW2EIEvtcParser.EIData
         {
             foreach (GenericSegment<string> seg in GetCommanderStates(log))
             {
-                CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, ParserIcons.CommanderTagToIcon[seg.Value], 180f, 15);
+                if (ParserIcons.CommanderTagToIcon.TryGetValue(seg.Value, out string icon))
+                {
+                    CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, icon, 180f, 15);
+                }
             }
             base.InitAdditionalCombatReplayData(log);
         }
