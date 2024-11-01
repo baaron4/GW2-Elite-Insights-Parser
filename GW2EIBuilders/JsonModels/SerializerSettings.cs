@@ -9,6 +9,7 @@ internal class SerializerSettings
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         IncludeFields = true,
         WriteIndented = false,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
         //NOTE(Rennorb): htmlescapes by default
     };
 

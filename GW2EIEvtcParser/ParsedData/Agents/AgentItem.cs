@@ -21,6 +21,7 @@ public class AgentItem
     // Fields
     public readonly ulong Agent;
     public int ID { get; protected set; } = ArcDPSEnums.NonIdentifiedSpecies;
+    /// <remarks>Nondeterministic.</remarks>
     public readonly int UniqueID;
     public AgentItem? Master { get; protected set; }
     public ushort InstID { get; protected set; }

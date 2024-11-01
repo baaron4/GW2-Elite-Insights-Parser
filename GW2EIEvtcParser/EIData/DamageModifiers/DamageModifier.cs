@@ -19,6 +19,7 @@ public abstract class DamageModifier
     public ParserHelper.Source Src => DamageModDescriptor.Src;
     public string Icon => DamageModDescriptor.Icon;
     public string Name => DamageModDescriptor.Name;
+    /// <remarks>Not stable across restarts because it uses `Name.GetHashCode()`.</remarks>
     public int ID { get; protected set; }
     public string Tooltip { get; protected set; }
 
