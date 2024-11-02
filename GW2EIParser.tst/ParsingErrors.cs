@@ -14,6 +14,8 @@ public class ParsingErrors
     [TestCase("20220719-200758.zevtc", "Unable to read beyond the end of the stream")]
     [TestCase("20230210-223914.zevtc", "No Targets found")]
     [TestCase("20231002-202344.zevtc", "No players found")]
+    [TestCase("20230403-211830.zevtc", "No valid players")]
+    [TestCase("20230130-215041.zevtc", "Enervators not found")]
     [TestCase("20241028-100044.zevtc", "Missing GUID event for effect 12954")]
     public void ReportsError(string logFile, string expectedInErrorMessage)
     {
