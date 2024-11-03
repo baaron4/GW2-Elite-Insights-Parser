@@ -122,7 +122,7 @@ namespace GW2EIEvtcParser.EIData
                     foreach (MarkerEvent markerEvent in markerEvents)
                     {
                         MarkerGUIDEvent marker = markerEvent.GUIDEvent;
-                        if (marker.ContentID >= 0)
+                        if (marker.IsValid)
                         {
                             if (marker.IsCommanderTag)
                             {
