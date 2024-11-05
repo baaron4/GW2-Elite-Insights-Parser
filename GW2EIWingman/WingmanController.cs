@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,10 @@ namespace GW2EIWingman
             NamingStrategy = new CamelCaseNamingStrategy()
         };
         private static readonly UTF8Encoding NoBOMEncodingUTF8 = new UTF8Encoding(false);
-        private static readonly HttpClient HTTPClient = new HttpClient();
+        private static readonly HttpClient HTTPClient = new HttpClient()
+        {
+            Timeout = Timeout.InfiniteTimeSpan
+        };
 
 
         ///////////////// URL Utilities
@@ -266,8 +270,6 @@ namespace GW2EIWingman
                 requestMessage.Headers.ExpectContinue = false;
 
 
-                var forceTimeOutTokenSource = new CancellationTokenSource();
-
                 if (content != null)
                 {
                     requestMessage.Content = content();
@@ -275,9 +277,8 @@ namespace GW2EIWingman
 
                 try
                 {
-                    forceTimeOutTokenSource.CancelAfter(120000);
-                    Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, forceTimeOutTokenSource.Token);
-                    HttpResponseMessage httpResponse = httpRequest.Result;
+                    ConfiguredTaskAwaitable<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
+                    HttpResponseMessage httpResponse = httpRequest.GetAwaiter().GetResult();
                     HttpStatusCode statusCode = httpResponse.StatusCode;
                     HttpContent responseContent = httpResponse.Content;
 
@@ -298,17 +299,9 @@ namespace GW2EIWingman
                 {
                     traceHandler(requestName + " tentative failed");
                     traceHandler("Main reason: " + agg.Message);
-
-                    if (forceTimeOutTokenSource.IsCancellationRequested)
+                    foreach (Exception e in agg.InnerExceptions)
                     {
-                        traceHandler("Sub reason: Process timeout");
-                    }
-                    else
-                    {
-                        foreach (Exception e in agg.InnerExceptions)
-                        {
-                            traceHandler("Sub reason: " + e.Message);
-                        }
+                        traceHandler("Sub reason: " + e.Message);
                     }
                 }
                 catch (Exception e)
@@ -319,7 +312,6 @@ namespace GW2EIWingman
                 finally
                 {
                     requestMessage.Dispose();
-                    forceTimeOutTokenSource.Dispose();
                 }
             }
             return null;

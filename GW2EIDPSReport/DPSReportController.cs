@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using GW2EIDPSReport.DPSReportJsons;
@@ -30,7 +31,10 @@ namespace GW2EIDPSReport
             NamingStrategy = new CamelCaseNamingStrategy()
         };
 
-        private static readonly HttpClient HTTPClient = new HttpClient();
+        private static readonly HttpClient HTTPClient = new HttpClient()
+        {
+            Timeout = Timeout.InfiniteTimeSpan
+        };
 
         private class DPSReportUserTokenResponse
         {
@@ -264,17 +268,14 @@ namespace GW2EIDPSReport
                     var requestMessage = new HttpRequestMessage(HttpMethod.Post, webService);
                     requestMessage.Headers.ExpectContinue = false;
 
-                    var forceTimeOutTokenSource = new CancellationTokenSource();
-
                     if (content != null)
                     {
                         requestMessage.Content = content();
                     }
                     try
                     {
-                        forceTimeOutTokenSource.CancelAfter(120000);
-                        Task<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead, forceTimeOutTokenSource.Token);
-                        HttpResponseMessage httpResponse = httpRequest.Result;
+                        ConfiguredTaskAwaitable<HttpResponseMessage> httpRequest = HTTPClient.SendAsync(requestMessage, HttpCompletionOption.ResponseContentRead).ConfigureAwait(false);
+                        HttpResponseMessage httpResponse = httpRequest.GetAwaiter().GetResult();
                         HttpStatusCode statusCode = httpResponse.StatusCode;
                         HttpContent responseContent = httpResponse.Content;
 
@@ -301,16 +302,9 @@ namespace GW2EIDPSReport
                     {
                         traceHandler(requestName + " tentative failed");
                         traceHandler("Main reason: " + agg.Message);
-                        if (forceTimeOutTokenSource.IsCancellationRequested)
+                        foreach (Exception e in agg.InnerExceptions)
                         {
-                            traceHandler("Sub reason: Process timeout");
-                        } 
-                        else
-                        {
-                            foreach (Exception e in agg.InnerExceptions)
-                            {
-                                traceHandler("Sub reason: " + e.Message);
-                            }
+                            traceHandler("Sub reason: " + e.Message);
                         }
                     }
                     catch (Exception e)
@@ -321,7 +315,6 @@ namespace GW2EIDPSReport
                     finally
                     {
                         requestMessage.Dispose();
-                        forceTimeOutTokenSource.Dispose();
                     }
                 }
             }
