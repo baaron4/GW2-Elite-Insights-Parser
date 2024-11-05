@@ -15,8 +15,8 @@ namespace GW2EIEvtcParser.EIData
             }
             SetBreakbarStatus(log, npc);
             AgentItem master = npc.AgentItem.GetFinalMaster();
-            // Don't put minions of NPC into the minion display system
-            if (master != npc.AgentItem && master.IsPlayer)
+            // Don't put minions of NPC or unknown minions into the minion display system
+            if (master != npc.AgentItem && master.IsPlayer && ParserHelper.IsKnownMinionID(npc.AgentItem, master.Spec))
             {
                 MasterID = master.UniqueID;
             }

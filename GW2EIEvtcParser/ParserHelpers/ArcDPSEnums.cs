@@ -103,6 +103,7 @@ namespace GW2EIEvtcParser
             internal const int WeaponSwapValueIsPrevious_CrowdControlEvents_GliderEvents = 20240627;
             internal const int MovementSkillDetection = 20240709;
             internal const int EICanDoManualBuffAttributes = 20240716;
+            internal const int ExtraDataInGUIDEvents = 20241030;
             //
             internal const int EndOfLife = int.MaxValue;
         }
@@ -990,6 +991,8 @@ namespace GW2EIEvtcParser
             TheMindbladeCM = 25280,
             SpiritOfPain = 23793,
             SpiritOfDestruction = 23961,
+            // Old Lion's Court
+            Tribocharge = 25424,
             // Cosmic Observatory
             TheTormented = 26016,
             VeteranTheTormented = 25829,

@@ -57,6 +57,7 @@
         public const long SuperiorSigilOfLeeching = -38;
         public const long BlitzMinesDrop = -39;
         public const long RelicOfTheClawBuffLoss = -40;
+        public const long BerserkEndSkill = -41;
         #endregion
         #region ArcDPS Hardcoded
         internal const long ArcDPSDodge = 65001;
@@ -1478,7 +1479,7 @@
         public const long SandSquall = 29453;
         public const long BloodReckoning = 29466;
         public const long ForceOfWill = 29485;
-        public const long Berserk = 29502;
+        public const long BerserkBuff = 29502;
         public const long ShieldOfCourage = 29523;
         public const long WellOfPrecognition = 29526;
         public const long SpitefulSpirit = 29560;
@@ -1540,6 +1541,7 @@
         public const long VampiricStrikes = 30398;
         public const long PalmStrike = 30423;
         public const long FencersFinesse = 30426;
+        public const long BerserkSkill = 30435;
         public const long NaturalMender = 30449;
         public const long HeatSync = 30462;
         public const long YourSoulIsMine = 30488;
@@ -3573,6 +3575,7 @@
         public const long ExplosiveKnuckle = 63365;
         public const long DischargeArray = 63367;
         public const long OverclockSignetJDrive = 63378;
+        public const long PsychicRiposteBuff = 63395;
         public const long DeployJadeSphereFire2 = 63396;
         public const long DeadlyBlades = 63409;
         public const long DeployJadeSphereWaterUW = 63416;
@@ -3942,9 +3945,11 @@
         public const long ToxicSlice = 68308;
         public const long TriBoltCM = 68318;
         public const long NakedSingularity = 68319;
+        public const long PerniciousVortexSkillNM = 68326;
         public const long TidalTorment = 68330;
         public const long TidalTormentCM = 68332;
         public const long DualHorizon = 68336;
+        public const long TribochargePlayerToNPCBuff = 68342;
         public const long NoxiousVaporBlade = 68346;
         public const long GravitationalWaveCM = 68352;
         public const long GravitationalWave = 68354;
@@ -3954,11 +3959,14 @@
         public const long AchievementEligibilityFearNotThisKnight = 68378;
         public const long NoxiousReturn = 68382;
         public const long ThunderingUltimatum = 68393;
+        public const long NoxiousVaporBladeTargetBuff = 68401;
         public const long MassDriver = 68402;
+        public const long PerniciousVortexSkillCM = 68407;
         public const long AchievementEligibilityAetherAversion = 68412;
         public const long NoxiousVaporBladeCM = 68414;
         public const long GravityHammer = 68415;
         public const long ExhaustPlume = 68316;
+        public const long CracklingWindSkillCM = 68419;
         public const long Rupture = 68420;
         public const long NoxiousReturnCM = 68425;
         public const long DualHorizonCM = 68435;
@@ -3984,6 +3992,7 @@
         public const long Relapse = 68544;
         public const long ErgoShear = 68546;
         public const long GravityHammerCM = 68556;
+        public const long CracklingWindSkillNM = 68560;
         public const long FixatedOldLionsCourt = 68562;
         public const long BoilingAetherRedBlueCM = 68580;
         public const long DormantCourage = 68585;

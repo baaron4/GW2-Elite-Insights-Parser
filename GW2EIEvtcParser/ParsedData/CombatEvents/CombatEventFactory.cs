@@ -313,13 +313,13 @@ namespace GW2EIEvtcParser.ParsedData
                         switch (GetContentLocal((byte)stateChangeEvent.OverstackValue))
                         {
                             case ContentLocal.Effect:
-                                var effectGUID = new EffectGUIDEvent(stateChangeEvent);
+                                var effectGUID = new EffectGUIDEvent(stateChangeEvent, evtcVersion);
                                 metaDataEvents.EffectGUIDEventsByEffectID[effectGUID.ContentID] = effectGUID;
                                 metaDataEvents.EffectGUIDEventsByGUID[effectGUID.HexContentGUID] = effectGUID;
                                 metaDataEvents.EffectGUIDEventsByGUID[effectGUID.Base64ContentGUID] = effectGUID;
                                 break;
                             case ContentLocal.Marker:
-                                var markerGUID = new MarkerGUIDEvent(stateChangeEvent);
+                                var markerGUID = new MarkerGUIDEvent(stateChangeEvent, evtcVersion);
                                 metaDataEvents.MarkerGUIDEventsByMarkerID[markerGUID.ContentID] = markerGUID;
                                 metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.HexContentGUID] = markerGUID;
                                 metaDataEvents.MarkerGUIDEventsByGUID[markerGUID.Base64ContentGUID] = markerGUID;

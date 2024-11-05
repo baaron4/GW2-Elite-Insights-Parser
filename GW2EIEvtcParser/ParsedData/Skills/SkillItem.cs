@@ -232,6 +232,7 @@ namespace GW2EIEvtcParser.ParsedData
             { HarriersTossAdrenalineLevel1, "Harrier's Toss (Adrenaline Level 1)" },
             { HarriersTossAdrenalineLevel2, "Harrier's Toss (Adrenaline Level 2)" },
             { HarriersTossAdrenalineLevel3, "Harrier's Toss (Adrenaline Level 3)" },
+            { BerserkEndSkill, "Berserk (End)" },
             #endregion Warrior
             // Special Forces Training Area
             { MushroomKingsBlessing, "Mushroom King's Blessing (PoV Only)" },
@@ -407,6 +408,7 @@ namespace GW2EIEvtcParser.ParsedData
             { PoisonLeapCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { PoisonBlastCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { PoisonBlastCombo2, "https://i.imgur.com/fmwZ1cP.png" },
+            { PoisonWhirlCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { LightningLeapCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { LightningWhirlCombo, "https://i.imgur.com/fmwZ1cP.png" },
             { DarkWhirlCombo, "https://i.imgur.com/fmwZ1cP.png" },
@@ -968,6 +970,7 @@ namespace GW2EIEvtcParser.ParsedData
             { WildThrowExtra, "https://wiki.guildwars2.com/images/a/a6/Wild_Throw.png" },
             { SpearmarshalsSupportBombard, "https://wiki.guildwars2.com/images/f/ff/Spearmarshal%27s_Support.png" },
             { ShrugItOffHeal, "https://wiki.guildwars2.com/images/c/c8/Shrug_It_Off.png" },
+            { BerserkEndSkill, "https://i.imgur.com/dnoZYre.png" },
             #endregion WarriorIcons
             #region EncounterIcons
             // Silent Surf Fractal

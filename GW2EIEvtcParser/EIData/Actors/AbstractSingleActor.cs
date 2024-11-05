@@ -656,7 +656,10 @@ namespace GW2EIEvtcParser.EIData
                 {
                     foreach (MarkerEvent markerEvent in markerEvents)
                     {
-                        CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, ParserIcons.SquadMarkerGUIDsToIcon[squadMarkerGUID], 240f, 16, 1);
+                        if (ParserIcons.SquadMarkerGUIDsToIcon.TryGetValue(squadMarkerGUID, out string icon))
+                        {
+                            CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, icon, 240f, 16, 1);
+                        }
                     }
                 }
             }

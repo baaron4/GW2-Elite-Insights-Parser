@@ -843,8 +843,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (long start, long end) lifespan = (orbEffect.Time, orbEffect.Time + duration);
                             // Radius is an estimate - orb exploding on edge doesn't quite cover the entirety of the arena
                             uint radius = 2700;
-                            var circle = (CircleDecoration)new CircleDecoration(radius, lifespan, Colors.White, 0.2, new PositionConnector(orbEffect.Position)).UsingFilled(false);
-                            replay.AddDecorationWithGrowing(circle, lifespan.end);
+                            replay.AddShockwave(new PositionConnector(orbEffect.Position), lifespan, Colors.White, 0.2, radius);
                         }
                     }
                     // Breakbar Active
@@ -1348,20 +1347,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     {
                         foreach (EffectEvent effect in gravityCrushIndicators)
                         {
-                            uint minRadius = 0;
-                            uint radiusIncrease = 40;
-                            float initialOpacity = 0.5f;
                             (long start, long end) lifespan = effect.ComputeLifespan(log, 1600);
-                            var positionConnector = new PositionConnector(effect.Position);
-                            // The indicator has 8 circles
-                            for (int i = 1; i <= 8; i++)
-                            {
-                                uint maxRadius = minRadius + radiusIncrease;
-                                float opacity = initialOpacity / i;
-                                var circle = new CircleDecoration(maxRadius, minRadius, lifespan, Colors.Orange, opacity, positionConnector);
-                                replay.AddDecorationWithBorder(circle, Colors.Orange, 0.2);
-                                minRadius = maxRadius;
-                            }
+                            replay.AddContrenticRings(0, 40, lifespan, effect.Position, Colors.Orange);
                         }
                     }
                     // Nightmare Epoch - AoEs
@@ -1810,8 +1797,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                     continue;
                 }
                 int puddleEnd = Math.Min((int)dragonVoid.LastAware, start + duration);
-                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)).UsingGrowingEnd(start + inactiveDuration));
-                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, puddleEnd), "rgba(250, 0, 0, 0.3)", new PositionConnector(effect.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, puddleEnd), Colors.Red, 0.2, new PositionConnector(effect.Position)).UsingGrowingEnd(start + inactiveDuration));
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, puddleEnd), Colors.Red, 0.2, new PositionConnector(effect.Position)));
             }
         }
 
