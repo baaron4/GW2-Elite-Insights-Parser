@@ -54,7 +54,7 @@ internal class StatueOfDarkness : HallOfChains
     }
 
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -72,7 +72,7 @@ internal class StatueOfDarkness : HallOfChains
         ];
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [

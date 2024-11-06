@@ -50,7 +50,7 @@ internal class TwinLargos : MythwrightGambit
                         (13440, 14336, 15360, 16256)*/);
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -125,7 +125,7 @@ internal class TwinLargos : MythwrightGambit
         return targetPhases;
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [

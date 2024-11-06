@@ -26,7 +26,7 @@ internal class Instance : FightLogic
 
     private void FillSubLogics(AgentData agentData)
     {
-        var allTargetIDs = Enum.GetValues(typeof(ArcDPSEnums.TargetID)).Cast<int>().ToList();
+        var allTargetIDs = Enum.GetValues(typeof(ArcDPSEnums.TargetID)).Cast<int>();
         var blackList = new HashSet<int>()
         {
             (int) ArcDPSEnums.TargetID.Artsariiv,
@@ -38,6 +38,7 @@ internal class Instance : FightLogic
         };
         foreach (int targetID in allTargetIDs)
         {
+            //TODO(Rennorb) @perf: invert this iteration?  make the agentData the outer loop and then just test the enum for isDefined?
             if (agentData.GetNPCsByID(targetID).Any())
             {
                 if (blackList.Contains(targetID))
@@ -260,26 +261,23 @@ internal class Instance : FightLogic
             logic.ComputeNPCCombatReplayActors(target, log, replay);
         }
     }
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         if (_targetIDs.Count != 0)
         {
-            return _targetIDs;
+            return  _targetIDs.AsSpan();
         }
-        return
-        [
-            GenericTriggerID
-        ];
+        return new[] { GenericTriggerID };
     }
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
         return [];
     }
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return [];
     }
-    protected override List<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
     {
         return [];
     }

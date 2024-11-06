@@ -52,7 +52,7 @@ internal class BanditTrio : SalvationPass
         ];
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -62,7 +62,7 @@ internal class BanditTrio : SalvationPass
         ];
     }
 
-    protected override List<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
     {
         return
         [
@@ -209,7 +209,7 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [
@@ -237,7 +237,7 @@ internal class BanditTrio : SalvationPass
         return phases;
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [

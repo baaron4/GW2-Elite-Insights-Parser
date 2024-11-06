@@ -235,7 +235,7 @@ internal class Dhuum : HallOfChains
         return phases;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

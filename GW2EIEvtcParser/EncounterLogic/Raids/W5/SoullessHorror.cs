@@ -67,7 +67,7 @@ internal class SoullessHorror : HallOfChains
                         (19072, 15484, 20992, 16508)*/);
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

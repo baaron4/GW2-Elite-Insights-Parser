@@ -172,7 +172,7 @@ internal class CerusAndDeimos : LonelyTower
         DoFixationTether(log, p, replay, deimos, DeimossFocus, Colors.Red);
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

@@ -435,7 +435,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         }
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

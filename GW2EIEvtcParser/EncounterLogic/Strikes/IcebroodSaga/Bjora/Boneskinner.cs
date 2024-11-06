@@ -51,7 +51,7 @@ internal class Boneskinner : Bjora
         ];
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
         return
         [

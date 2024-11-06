@@ -110,7 +110,7 @@ internal class MAMA : Nightmare
         return phases;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -133,11 +133,8 @@ internal class MAMA : Nightmare
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TrashID>
-        {
-            TrashID.TwistedHorror
-        };
-        trashIDs.AddRange(base.GetTrashMobsIDs());
+        var trashIDs = base.GetTrashMobsIDs();
+        trashIDs.Add(TrashID.TwistedHorror);
         return trashIDs;
     }
 

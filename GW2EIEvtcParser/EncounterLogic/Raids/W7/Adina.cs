@@ -139,7 +139,7 @@ internal class Adina : TheKeyOfAhdashim
         }
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

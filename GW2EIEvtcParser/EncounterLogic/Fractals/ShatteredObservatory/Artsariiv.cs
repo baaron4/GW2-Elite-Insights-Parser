@@ -44,12 +44,12 @@ internal class Artsariiv : ShatteredObservatory
                         (11204, 4414, 13252, 6462)*/);
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return [];
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -60,15 +60,15 @@ internal class Artsariiv : ShatteredObservatory
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TrashID>
-        {
-            TrashID.TemporalAnomalyArtsariiv,
-            TrashID.Spark,
-            TrashID.SmallArtsariiv,
-            TrashID.MediumArtsariiv,
-            TrashID.BigArtsariiv,
-        };
-        trashIDs.AddRange(base.GetTrashMobsIDs());
+        var trashIDs = base.GetTrashMobsIDs();
+        trashIDs.ReserveAdditional(5);
+
+        trashIDs.Add(TrashID.TemporalAnomalyArtsariiv);
+        trashIDs.Add(TrashID.Spark);
+        trashIDs.Add(TrashID.SmallArtsariiv);
+        trashIDs.Add(TrashID.MediumArtsariiv);
+        trashIDs.Add(TrashID.BigArtsariiv);
+        
         return trashIDs;
     }
 

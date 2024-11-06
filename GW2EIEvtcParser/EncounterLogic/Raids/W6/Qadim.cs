@@ -85,7 +85,7 @@ internal class Qadim : MythwrightGambit
     }
 
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -98,7 +98,7 @@ internal class Qadim : MythwrightGambit
         ];
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [
@@ -358,7 +358,7 @@ internal class Qadim : MythwrightGambit
         return phases;
     }
 
-    protected override List<TrashID> GetTrashMobsIDs()
+    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
     {
         return
         [

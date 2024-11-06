@@ -65,19 +65,16 @@ internal class Arkk : ShatteredObservatory
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TrashID>
-        {
-            TrashID.FanaticDagger2,
-            TrashID.FanaticDagger1,
-            TrashID.FanaticBow,
-            TrashID.SolarBloom,
-            TrashID.BLIGHT,
-            TrashID.PLINK,
-            TrashID.DOC,
-            TrashID.CHOP,
-            TrashID.ProjectionArkk
-        };
-        trashIDs.AddRange(base.GetTrashMobsIDs());
+        var trashIDs = base.GetTrashMobsIDs();
+        trashIDs.Add(TrashID.FanaticDagger2);
+        trashIDs.Add(TrashID.FanaticDagger1);
+        trashIDs.Add(TrashID.FanaticBow);
+        trashIDs.Add(TrashID.SolarBloom);
+        trashIDs.Add(TrashID.BLIGHT);
+        trashIDs.Add(TrashID.PLINK);
+        trashIDs.Add(TrashID.DOC);
+        trashIDs.Add(TrashID.CHOP);
+        trashIDs.Add(TrashID.ProjectionArkk);
         return trashIDs;
     }
 
@@ -86,7 +83,7 @@ internal class Arkk : ShatteredObservatory
         return FightData.EncounterMode.CMNoName;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

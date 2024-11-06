@@ -51,7 +51,7 @@ internal class Ensolyss : Nightmare
         return FightData.EncounterMode.CMNoName;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -62,13 +62,10 @@ internal class Ensolyss : Nightmare
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TrashID>
-        {
-            TrashID.NightmareHallucination1,
-            TrashID.NightmareHallucination2,
-            //TrashID.NightmareAltar,
-        };
-        trashIDs.AddRange(base.GetTrashMobsIDs());
+        var trashIDs = base.GetTrashMobsIDs();
+        trashIDs.Add(TrashID.NightmareHallucination1);
+        trashIDs.Add(TrashID.NightmareHallucination2);
+        //trashIDs.Add(TrashID.NightmareAltar);
         return trashIDs;
     }
 

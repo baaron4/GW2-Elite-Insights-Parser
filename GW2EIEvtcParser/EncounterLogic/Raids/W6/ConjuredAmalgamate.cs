@@ -94,7 +94,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -113,7 +113,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    protected override List<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
     {
         return
         [
@@ -168,7 +168,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return res;
     }*/
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [

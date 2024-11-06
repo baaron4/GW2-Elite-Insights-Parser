@@ -17,7 +17,7 @@ internal class UnknownFightLogic : FightLogic
         EncounterCategoryInformation.SubCategory = SubFightCategory.UnknownEncounter;
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return [];
     }

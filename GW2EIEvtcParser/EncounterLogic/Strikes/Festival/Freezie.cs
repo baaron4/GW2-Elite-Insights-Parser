@@ -117,7 +117,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         return FightData.EncounterStartStatus.Normal;
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [
@@ -126,7 +126,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         ];
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

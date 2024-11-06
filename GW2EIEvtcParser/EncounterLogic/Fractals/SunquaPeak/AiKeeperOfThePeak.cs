@@ -105,7 +105,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return res;
     }*/
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -115,26 +115,26 @@ internal class AiKeeperOfThePeak : SunquaPeak
         ];
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<ArcDPSEnums.TrashID>
-        {
-            TrashID.FearDemon,
-            TrashID.GuiltDemon,
-            TrashID.AiDoubtDemon,
-            TrashID.PlayerDoubtDemon,
-            TrashID.EnragedWaterSprite,
-            // Transition sorrow demons
-            TrashID.TransitionSorrowDemon1,
-            TrashID.TransitionSorrowDemon2,
-            TrashID.TransitionSorrowDemon3,
-            TrashID.TransitionSorrowDemon4,
-        };
-        trashIDs.AddRange(base.GetTrashMobsIDs());
+        var trashIDs = base.GetTrashMobsIDs();
+        trashIDs.ReserveAdditional(9);
+        
+        trashIDs.Add(TrashID.FearDemon);
+        trashIDs.Add(TrashID.GuiltDemon);
+        trashIDs.Add(TrashID.AiDoubtDemon);
+        trashIDs.Add(TrashID.PlayerDoubtDemon);
+        trashIDs.Add(TrashID.EnragedWaterSprite);
+        // Transition sorrow demons
+        trashIDs.Add(TrashID.TransitionSorrowDemon1);
+        trashIDs.Add(TrashID.TransitionSorrowDemon2);
+        trashIDs.Add(TrashID.TransitionSorrowDemon3);
+        trashIDs.Add(TrashID.TransitionSorrowDemon4);
+        
         return trashIDs;
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [

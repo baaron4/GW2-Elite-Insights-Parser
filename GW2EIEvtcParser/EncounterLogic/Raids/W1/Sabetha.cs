@@ -132,7 +132,7 @@ internal class Sabetha : SpiritVale
         return phases;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -244,7 +244,7 @@ internal class Sabetha : SpiritVale
         }
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [

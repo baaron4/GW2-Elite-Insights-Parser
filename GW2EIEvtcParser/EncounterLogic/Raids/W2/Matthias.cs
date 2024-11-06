@@ -224,7 +224,7 @@ internal class Matthias : SalvationPass
         }
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

@@ -49,7 +49,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         EncounterID |= 0x000003;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

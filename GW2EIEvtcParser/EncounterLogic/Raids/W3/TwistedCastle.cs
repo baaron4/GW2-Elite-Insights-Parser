@@ -91,7 +91,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
            //ParseEnum.TrashIDS.CastleFountain
         ];
     }
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return [];
     }

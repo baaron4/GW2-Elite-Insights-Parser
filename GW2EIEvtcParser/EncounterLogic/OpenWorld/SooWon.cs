@@ -235,7 +235,7 @@ internal class SooWon : OpenWorldLogic
         }
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [
@@ -249,7 +249,7 @@ internal class SooWon : OpenWorldLogic
         ];
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

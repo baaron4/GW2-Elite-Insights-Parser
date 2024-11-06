@@ -146,28 +146,42 @@ public abstract class FightLogic
         return GenericTriggerID;
     }
 
-    protected virtual List<int> GetTargetsIDs()
+    /// <remarks>Do _NOT_ modify Instance._targetIDs while iterating the result of this function. Appending is allowed.</remarks>
+    protected virtual ReadOnlySpan<int> GetTargetsIDs()
     {
-        return [ GenericTriggerID ];
+        return new[] { GenericTriggerID };
     }
 
     protected virtual Dictionary<int, int> GetTargetsSortIDs()
     {
         var targetsIds = GetTargetsIDs();
-        var res = new Dictionary<int, int>(targetsIds.Count);
-        for (int i = 0; i < targetsIds.Count; i++)
+        var res = new Dictionary<int, int>(targetsIds.Length);
+        for (int i = 0; i < targetsIds.Length; i++)
         {
             res.Add(targetsIds[i], i);
         }
         return res;
     }
 
-    protected virtual List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    //TODO(Rennorb) @cleanup: use readonlyspan? 
+    //NOTE(Rennorb): I purposefully did not change this to a span or array for now, because there are quite a few overrides that take the shape of
+    /*
+    protected virtual List<TrashID> GetTrashMobsIDs()
+    {
+        var trash = new List<>() {A, B};
+        trash.AddRange(base.GetTrashMobsIDs);
+        return trash;
+    }
+    */
+    // changing the return type to a span is still possible, but initialization requires them to be rewritten with manual array indices and sizes.
+    // This is likely to cause issues in the future, because someone _will_ miss updating the indices correctly is something gets added.
+    // On the other hand i don't know how often the lists even change, i would imagine this to not happen very frequently - so it still might be a thing we could do.
+    protected virtual List<TrashID> GetTrashMobsIDs()
     {
         return [ ];
     }
 
-    protected virtual List<int> GetFriendlyNPCIDs()
+    protected virtual ReadOnlySpan<int> GetFriendlyNPCIDs()
     {
         return [ ];
     }
@@ -182,7 +196,7 @@ public abstract class FightLogic
         return target.Character;
     }
 
-    protected abstract HashSet<int> GetUniqueNPCIDs();
+    protected abstract ReadOnlySpan<int> GetUniqueNPCIDs();
 
     internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
     {
@@ -190,8 +204,10 @@ public abstract class FightLogic
         {
             RegroupTargetsByID(id, agentData, combatItems, extensions);
         }
-        //
-        var targetIDs = new HashSet<int>(GetTargetsIDs());
+        
+        //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
+        // to build the hashset and hash the value each time.
+        var targetIDs = GetTargetsIDs();
         foreach (int id in targetIDs)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
@@ -214,10 +230,15 @@ public abstract class FightLogic
             return int.MaxValue;
         }).ToList();
         
-        var trashIDs = new HashSet<TrashID>(GetTrashMobsIDs());
-        if (trashIDs.Any(x => targetIDs.Contains((int)x)))
+        //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
+        // to build the hashset and hash the value each time.
+        var trashIDs = GetTrashMobsIDs();
+        foreach(var trash in trashIDs)
         {
-            throw new InvalidDataException("ID collision between trash and targets");
+            if(targetIDs.IndexOf((int)trash) != -1)
+            {
+                throw new InvalidDataException("ID collision between trash and targets");
+            }
         }
 
         _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).Select(a => new NPC(a)));
@@ -232,9 +253,7 @@ public abstract class FightLogic
 #endif
         _trashMobs.SortByFirstAware();
 
-        //TODO(Rennorb) @perf: Enforce deduplication by the caller.
-        var friendlyNPCIDs = new HashSet<int>(GetFriendlyNPCIDs());
-        foreach (int id in friendlyNPCIDs)
+        foreach (int id in GetFriendlyNPCIDs())
         {
             _nonPlayerFriendlies.AddRange(agentData.GetNPCsByID(id).Select(a => new NPC(a)));
         }

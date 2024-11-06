@@ -58,7 +58,7 @@ internal class ValeGuardian : SpiritVale
         ];
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

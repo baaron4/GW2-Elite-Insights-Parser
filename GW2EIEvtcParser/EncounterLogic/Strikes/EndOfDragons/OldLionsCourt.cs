@@ -62,7 +62,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         (1008, 1008),
                         (-1420, 3010, 1580, 6010));
     }
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -143,7 +143,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return "Old Lion's Court";
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [

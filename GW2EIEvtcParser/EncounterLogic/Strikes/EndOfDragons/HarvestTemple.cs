@@ -251,7 +251,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         return startToUse;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -291,7 +291,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         };
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return [ ];
     }

@@ -200,7 +200,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return phases;
     }
 
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

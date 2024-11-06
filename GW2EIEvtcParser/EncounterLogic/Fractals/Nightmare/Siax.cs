@@ -47,15 +47,12 @@ internal class Siax : Nightmare
 
     protected override List<TrashID> GetTrashMobsIDs()
     {
-        var trashIDs = new List<TrashID>
-        {
-            TrashID.VolatileHallucinationSiax,
-            TrashID.NightmareHallucinationSiax
-        };
-        trashIDs.AddRange(base.GetTrashMobsIDs());
+        var trashIDs = base.GetTrashMobsIDs();
+        trashIDs.Add(TrashID.VolatileHallucinationSiax);
+        trashIDs.Add(TrashID.NightmareHallucinationSiax);
         return trashIDs;
     }
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [

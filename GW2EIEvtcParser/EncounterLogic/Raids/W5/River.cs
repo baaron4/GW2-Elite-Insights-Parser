@@ -52,7 +52,7 @@ internal class River : HallOfChains
         ];
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return
         [
@@ -60,7 +60,7 @@ internal class River : HallOfChains
         ];
     }
 
-    protected override List<int> GetFriendlyNPCIDs()
+    protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
     {
         return
         [

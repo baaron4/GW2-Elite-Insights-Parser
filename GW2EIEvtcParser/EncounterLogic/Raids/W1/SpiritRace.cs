@@ -32,7 +32,7 @@ internal class SpiritRace : SpiritVale
                         (-15360, -36864, 15360, 39936),
                         (3456, 11012, 4736, 14212)*/);
     }
-    protected override List<int> GetTargetsIDs()
+    protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return
         [
@@ -59,7 +59,7 @@ internal class SpiritRace : SpiritVale
         return (int)ArcDPSEnums.TrashID.WallOfGhosts;
     }
 
-    protected override HashSet<int> GetUniqueNPCIDs()
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
     {
         return [];
     }
