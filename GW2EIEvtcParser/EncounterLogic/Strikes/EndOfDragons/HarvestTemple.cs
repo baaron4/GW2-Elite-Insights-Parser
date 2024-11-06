@@ -23,8 +23,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             MechanicList.AddRange(new List<Mechanic>
             {
                 // General
-                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleSpreadNM, EffectGUIDs.HarvestTempleSpreadCM }, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
-                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleSelectCM }, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
+                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleTargetedExpulsionSpreadNM, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadCM }, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
+                new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionNM, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionCM }, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
                 new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidBuff, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
                 new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
                 new PlayerDstHitMechanic(new [] { VoidPoolNM, VoidPoolCM }, "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
@@ -33,8 +33,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                 new PlayerDstHitMechanic(new [] { Shockwave, TsunamiSlam1, TsunamiSlam2 }, "Shockwaves", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Yellow), "NopeRopes.Achiv", "Achievement Elibigility: Jumping the Nope Ropes", "Achiv Jumping Nope Ropes", 150).UsingAchievementEligibility(true),
                 new PlayerDstHitMechanic(new long [] { VoidExplosion, VoidExplosion2, VoidExplosion3 }, "Void Explosion", new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Yellow), "VoidExp.H", "Hit by Void Explosion (Last Laugh)", "Void Explosion", 0),
                 new PlayerDstHitMechanic(MagicDischarge, "Magic Discharge", new MechanicPlotlySetting(Symbols.Octagon, Colors.Grey), "MagicDisc.H", "Hit by Magic Discharge (Orb Explosion Wave)", "Magic Discharge", 0),
-                new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleSuccessGreen, "Success Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
-                new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleFailedGreen, "Failed Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "F.Green", "Green Failed", "Failed Green", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleShareTheVoidSuccessGreen, "Success Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkGreen), "S.Green", "Green Successful", "Success Green", 0),
+                new EnemySrcEffectMechanic(EffectGUIDs.HarvestTempleShareTheVoidFailedGreen, "Failed Green", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkRed), "F.Green", "Green Failed", "Failed Green", 0),
                 // Purification 1
                 new PlayerDstHitMechanic(LightningOfJormag, "Lightning of Jormag", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Ice), "Light.H", "Hit by Lightning of Jormag", "Lightning of Jormag", 0),
                 new PlayerDstHitMechanic(FlamesOfPrimordus, "Flames of Primordus", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.Orange), "Flame.H", "Hit by Flames of Primordus", "Flames of Primordus", 0),
@@ -686,25 +686,25 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputeEnvironmentCombatReplayDecorations(log);
 
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleGreen, out IReadOnlyList<EffectEvent> greenEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleShareTheVoidGreen, out IReadOnlyList<EffectEvent> shareTheVoid))
             {
-                AddBaseShareTheVoidDecoration(log, greenEffects);
+                AddBaseShareTheVoidDecoration(log, shareTheVoid);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleSuccessGreen, out IReadOnlyList<EffectEvent> successGreenEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleShareTheVoidSuccessGreen, out IReadOnlyList<EffectEvent> shareTheVoidSuccess))
             {
-                AddResultShareTheVoidDecoration(successGreenEffects, true);
+                AddResultShareTheVoidDecoration(shareTheVoidSuccess, true);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleFailedGreen, out IReadOnlyList<EffectEvent> failedGreenEffects))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleShareTheVoidFailedGreen, out IReadOnlyList<EffectEvent> shareTheVoidFailed))
             {
-                AddResultShareTheVoidDecoration(failedGreenEffects, false);
+                AddResultShareTheVoidDecoration(shareTheVoidFailed, false);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out IReadOnlyList<EffectEvent> redPuddleEffectsCM))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPoolRedPuddleAoECM, out IReadOnlyList<EffectEvent> voidPoolsCM))
             {
-                AddPlacedVoidPoolDecoration(log, redPuddleEffectsCM, 400, 240000);
+                AddPlacedVoidPoolDecoration(log, voidPoolsCM, 400, 240000);
             }
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleNM, out IReadOnlyList<EffectEvent> redPuddleEffectsNM))
+            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPoolRedPuddleAoENM, out IReadOnlyList<EffectEvent> voidPoolsNM))
             {
-                AddPlacedVoidPoolDecoration(log, redPuddleEffectsNM, 300, 24000);
+                AddPlacedVoidPoolDecoration(log, voidPoolsNM, 300, 24000);
             }
             // Stormseer Ice Spike
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidStormseerIceSpikeIndicator, out IReadOnlyList<EffectEvent> iceSpikes))
@@ -721,7 +721,6 @@ namespace GW2EIEvtcParser.EncounterLogic
 
         internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
         {
-            var knownEffectsIDs = new HashSet<long>();
             IReadOnlyList<AbstractCastEvent> casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
             switch (target.ID)
@@ -1293,7 +1292,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                     break;
                 case (int)ArcDPSEnums.TrashID.VoidWarforged1:
                 case (int)ArcDPSEnums.TrashID.VoidWarforged2:
-                    //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
                     break;
                 case (int)ArcDPSEnums.TrashID.ZhaitansReach:
                     // Thrash - Circle that pulls in
@@ -1701,21 +1699,21 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(p, log, replay);
 
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleSpreadCM, out IReadOnlyList<EffectEvent> spreadEffectsCM))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadCM, out IReadOnlyList<EffectEvent> targetedExpulsionsCM))
             {
-                AddSpreadSelectionDecoration(p, log, replay, spreadEffectsCM, 300);
+                AddTargetedExpulsionSelectionDecoration(p, log, replay, targetedExpulsionsCM, 300);
             }
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleSpreadNM, out IReadOnlyList<EffectEvent> spreadEffectsNM))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadNM, out IReadOnlyList<EffectEvent> targetedExpulsionsNM))
             {
-                AddSpreadSelectionDecoration(p, log, replay, spreadEffectsNM, 240);
+                AddTargetedExpulsionSelectionDecoration(p, log, replay, targetedExpulsionsNM, 240);
             }
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleRedPuddleSelectCM, out IReadOnlyList<EffectEvent> redSelectedEffectsCM))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionCM, out IReadOnlyList<EffectEvent> voidPoolsCM))
             {
-                AddVoidPoolSelectionDecoration(p, log, replay, redSelectedEffectsCM, 400);
+                AddVoidPoolSelectionDecoration(p, log, replay, voidPoolsCM, 400);
             }
-            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleRedPuddleSelectNM, out IReadOnlyList<EffectEvent> redSelectedEffectsNM))
+            if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionNM, out IReadOnlyList<EffectEvent> voidPoolsNM))
             {
-                AddVoidPoolSelectionDecoration(p, log, replay, redSelectedEffectsNM, 300);
+                AddVoidPoolSelectionDecoration(p, log, replay, voidPoolsNM, 300);
             }
         }
 
@@ -1723,15 +1721,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// Void Pools - Red Pool AoE on selected players.<br></br>
         /// Duration logged of 7936, overriding to 7000 for logs without Dynamic End Event.
         /// </summary>
-        /// <remarks>As of EVTC20241030 Effects on players have Dynamic End Time.</remarks>
+        /// <remarks>As of EVTC20241030 effects on players have Dynamic End Time.</remarks>
         /// <param name="p">Selected player.</param>
         /// <param name="log">The log.</param>
         /// <param name="replay">Combat Replay.</param>
-        /// <param name="redSelectedEffects">Effects List.</param>
+        /// <param name="effects">Effects List.</param>
         /// <param name="radius">Radius of the AoE.</param>
-        private void AddVoidPoolSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> redSelectedEffects, uint radius)
+        private void AddVoidPoolSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> effects, uint radius)
         {
-            foreach (EffectEvent effect in redSelectedEffects)
+            foreach (EffectEvent effect in effects)
             {
                 long duration = 7000;
                 (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 7936) : (effect.Time, effect.Time + duration);
@@ -1747,17 +1745,17 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
 
         /// <summary>
-        /// Targeted Expulsion - Spread AoE on players.
+        /// Targeted Expulsion - Spread AoE on selected players.
         /// </summary>
-        /// <remarks>As of EVTC20241030 Effects on players have Dynamic End Time.</remarks>
+        /// <remarks>As of EVTC20241030 effects on players have Dynamic End Time.</remarks>
         /// <param name="p">Selected player.</param>
         /// <param name="log">The log.</param>
         /// <param name="replay">Combat Replay.</param>
-        /// <param name="spreadEffects">Effects List.</param>
+        /// <param name="effects">Effects List.</param>
         /// <param name="radius">Radius of the AoE.</param>
-        private void AddSpreadSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> spreadEffects, uint radius)
+        private void AddTargetedExpulsionSelectionDecoration(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay, IReadOnlyList<EffectEvent> effects, uint radius)
         {
-            foreach (EffectEvent effect in spreadEffects)
+            foreach (EffectEvent effect in effects)
             {
                 long duration = 5000;
                 (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, duration) : effect.ComputeLifespan(log, duration);
@@ -1775,12 +1773,13 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <summary>
         /// Void Pools - Red Pool AoEs placed.
         /// </summary>
-        /// <param name="redPuddleEffects">Effects List.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="effects">Effects List.</param>
         /// <param name="radius">Radius of the AoE.</param>
         /// <param name="duration">Duration of the AoE.</param>
-        private void AddPlacedVoidPoolDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> redPuddleEffects, uint radius, int duration)
+        private void AddPlacedVoidPoolDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> effects, uint radius, int duration)
         {
-            foreach (EffectEvent effect in redPuddleEffects)
+            foreach (EffectEvent effect in effects)
             {
                 long inactiveDuration = 1500;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
@@ -1799,37 +1798,38 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <summary>
         /// Share the Void - Greens in CM, area effect.
         /// </summary>
-        /// <param name="greenEffects">Effects List.</param>
-        private void AddBaseShareTheVoidDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> greenEffects)
+        /// <param name="log">The log.</param>
+        /// <param name="effects">Effects List.</param>
+        private void AddBaseShareTheVoidDecoration(ParsedEvtcLog log, IReadOnlyList<EffectEvent> effects)
         {
-            foreach (EffectEvent green in greenEffects)
+            foreach (EffectEvent effect in effects)
             {
                 long duration = 6250;
-                (long start, long end) lifespan = green.ComputeDynamicLifespan(log, duration);
-                long growing = green.Time + duration;
-                AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(green.Time);
+                (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
+                long growing = effect.Time + duration;
+                AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
                 if (dragonVoid == null)
                 {
                     continue;
                 }
                 lifespan.end = Math.Min((int)dragonVoid.LastAware, lifespan.end);
-                EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)));
-                EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(green.Position)).UsingGrowingEnd(growing));
+                EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(effect.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, Colors.DarkGreen, 0.4, new PositionConnector(effect.Position)).UsingGrowingEnd(growing));
             }
         }
 
         /// <summary>
         /// Share the Void - Greens in CM, trigger effect.
         /// </summary>
-        /// <param name="greenEffects">Effects List.</param>
+        /// <param name="effects">Effects List.</param>
         /// <param name="isSuccessful">Wether the mechanic was successful or not.</param>
-        private void AddResultShareTheVoidDecoration(IReadOnlyList<EffectEvent> greenEffects, bool isSuccessful)
+        private void AddResultShareTheVoidDecoration(IReadOnlyList<EffectEvent> effects, bool isSuccessful)
         {
-            foreach (EffectEvent green in greenEffects)
+            foreach (EffectEvent effect in effects)
             {
-                (long start, long end) lifespan = (green.Time - 250, green.Time);
+                (long start, long end) lifespan = (effect.Time - 250, effect.Time);
                 Color color = isSuccessful ? Colors.DarkGreen : Colors.DarkRed;
-                EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, color, 0.6, new PositionConnector(green.Position)));
+                EnvironmentDecorations.Add(new CircleDecoration(180, lifespan, color, 0.6, new PositionConnector(effect.Position)));
             }
         }
 
@@ -1857,7 +1857,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
             // fallback for late logs
-            if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleSuccessGreen) != null || agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
+            if (combatData.GetEffectGUIDEvent(EffectGUIDs.HarvestTempleShareTheVoidSuccessGreen) != null || agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidGoliath).Any() || combatData.GetBuffData(VoidEmpowerment).Any())
             {
                 return FightData.EncounterMode.CM;
             }
