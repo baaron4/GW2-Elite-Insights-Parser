@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 public class SkillData
 {

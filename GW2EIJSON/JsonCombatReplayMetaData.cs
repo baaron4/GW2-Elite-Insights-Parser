@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-
-namespace GW2EIJSON;
+﻿namespace GW2EIJSON;
 
 /// <summary>
 /// Combat Replay meta data

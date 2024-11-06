@@ -1,5 +1,4 @@
 ﻿using GW2EIEvtcParser;
-using System.IO;
 using NUnit.Framework;
 
 namespace GW2EIParser.tst;

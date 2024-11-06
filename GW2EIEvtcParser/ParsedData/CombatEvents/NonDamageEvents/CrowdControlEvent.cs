@@ -1,7 +1,4 @@
-﻿using System;
-using GW2EIEvtcParser.EIData;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 public class CrowdControlEvent : AbstractSkillEvent
 {

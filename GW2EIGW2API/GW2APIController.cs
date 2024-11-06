@@ -1,5 +1,4 @@
-﻿using System;
-using GW2EIGW2API.GW2API;
+﻿using GW2EIGW2API.GW2API;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIGW2API;

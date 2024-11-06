@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;

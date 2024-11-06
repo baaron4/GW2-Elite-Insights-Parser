@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace GW2EIEvtcParser; 
+namespace GW2EIEvtcParser;
 
 public static partial class ListExt
 {

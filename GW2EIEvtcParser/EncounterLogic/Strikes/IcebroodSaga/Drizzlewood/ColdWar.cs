@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;

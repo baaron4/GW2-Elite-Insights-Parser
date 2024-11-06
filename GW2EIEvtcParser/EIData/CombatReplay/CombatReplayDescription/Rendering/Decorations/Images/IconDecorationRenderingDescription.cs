@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.IconDecoration;
 
 namespace GW2EIEvtcParser.EIData;

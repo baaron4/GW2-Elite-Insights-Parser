@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using static GW2EIEvtcParser.ArcDPSEnums;
+﻿using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers;

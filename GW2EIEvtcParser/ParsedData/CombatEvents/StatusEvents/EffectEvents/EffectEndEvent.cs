@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 internal abstract class EffectEndEvent : AbstractEffectEvent
 {

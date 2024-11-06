@@ -2,8 +2,6 @@
 using GW2EIEvtcParser.ParserHelpers;
 using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 
 namespace GW2EIParser.tst.Generated;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GW2EIEvtcParser.ParsedData;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
 internal class MetaEventsContainer
 {

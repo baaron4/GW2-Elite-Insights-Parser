@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GW2EIBuilders.HtmlModels.HTMLCharts;
+﻿using GW2EIBuilders.HtmlModels.HTMLCharts;
 using GW2EIBuilders.HtmlModels.HTMLMetaData;
 using GW2EIBuilders.HtmlModels.HTMLStats;
 using GW2EIEvtcParser;

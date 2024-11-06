@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using GW2EIEvtcParser.EIData.BuffSimulators;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;

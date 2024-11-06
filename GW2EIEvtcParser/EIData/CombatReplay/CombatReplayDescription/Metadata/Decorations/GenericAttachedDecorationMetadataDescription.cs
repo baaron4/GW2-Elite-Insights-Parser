@@ -1,7 +1,4 @@
-﻿
-using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.GenericAttachedDecoration;
+﻿using static GW2EIEvtcParser.EIData.GenericAttachedDecoration;
 
 namespace GW2EIEvtcParser.EIData;
 

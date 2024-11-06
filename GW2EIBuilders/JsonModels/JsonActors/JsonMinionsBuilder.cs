@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIBuilders.JsonModels.JsonActorUtilities;
+﻿using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier;
 using GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
 using GW2EIEvtcParser;

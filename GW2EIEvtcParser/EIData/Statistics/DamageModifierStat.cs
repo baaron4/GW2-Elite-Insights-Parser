@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GW2EIEvtcParser.EIData;
+﻿namespace GW2EIEvtcParser.EIData;
 
 public class DamageModifierStat
 {

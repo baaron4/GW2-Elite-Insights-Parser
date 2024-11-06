@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GW2EIEvtcParser.ParserHelpers;
+﻿namespace GW2EIEvtcParser.ParserHelpers;
 
 /// <summary>
 /// Class containing the supported file formats by Elite Insights.

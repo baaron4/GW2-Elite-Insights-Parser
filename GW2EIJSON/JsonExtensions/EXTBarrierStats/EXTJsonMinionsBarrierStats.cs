@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-
-namespace GW2EIJSON;
+﻿namespace GW2EIJSON;
 
 /// <summary>
 /// Class regrouping minion related Barrier statistics

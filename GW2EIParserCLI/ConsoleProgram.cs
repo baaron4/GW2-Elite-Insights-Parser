@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Threading;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
 using Tracing;

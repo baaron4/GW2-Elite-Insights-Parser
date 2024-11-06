@@ -1,5 +1,4 @@
-﻿using System;
-using static GW2EIEvtcParser.ParserHelper;
+﻿using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
+﻿using System.Xml;
 using GW2EIBuilders.JsonModels;
 using GW2EIEvtcParser;
 using GW2EIJSON;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text;
 using GW2EIBuilders.HtmlModels;
 using GW2EIEvtcParser;

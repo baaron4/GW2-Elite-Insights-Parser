@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using GW2EIParserCommons;
+﻿using GW2EIParserCommons;
 using static GW2EIParser.MainForm;
 
 namespace GW2EIParser;

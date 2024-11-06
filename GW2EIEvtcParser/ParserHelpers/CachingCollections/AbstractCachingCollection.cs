@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GW2EIEvtcParser;
+﻿namespace GW2EIEvtcParser;
 
 public abstract class AbstractCachingCollection<T>
 {

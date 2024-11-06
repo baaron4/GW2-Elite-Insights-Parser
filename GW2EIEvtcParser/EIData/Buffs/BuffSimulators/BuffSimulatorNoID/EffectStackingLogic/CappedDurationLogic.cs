@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GW2EIEvtcParser.EIData.BuffSimulators;
+﻿namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class CappedDurationLogic : StackingLogic
 {

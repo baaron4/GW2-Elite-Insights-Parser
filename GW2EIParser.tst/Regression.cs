@@ -1,8 +1,5 @@
 ﻿using GW2EIEvtcParser;
 using NUnit.Framework;
-using System.IO;
-using System;
-using System.Linq;
 
 namespace GW2EIParser.tst;
 [TestFixture]

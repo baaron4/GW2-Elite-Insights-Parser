@@ -1,5 +1,4 @@
-﻿using System;
-using GW2EIEvtcParser;
+﻿using GW2EIEvtcParser;
 
 namespace GW2EIParserCommons;
 

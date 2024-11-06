@@ -1,5 +1,4 @@
-﻿using System;
-using GW2EIEvtcParser.Exceptions;
+﻿using GW2EIEvtcParser.Exceptions;
 
 namespace GW2EIEvtcParser.ParserHelpers;
 

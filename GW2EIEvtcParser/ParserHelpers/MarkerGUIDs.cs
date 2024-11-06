@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GW2EIEvtcParser;
+﻿namespace GW2EIEvtcParser;
 
 public static class MarkerGUIDs
 {

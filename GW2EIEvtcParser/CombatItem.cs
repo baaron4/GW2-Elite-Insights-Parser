@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 

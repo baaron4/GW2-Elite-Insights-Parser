@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GW2EIEvtcParser.EIData;
+﻿namespace GW2EIEvtcParser.EIData;
 
 /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
 using Segment = GenericSegment<double>;

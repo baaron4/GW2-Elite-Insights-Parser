@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIJSON;
 using static GW2EIJSON.JsonDeathRecap;
 

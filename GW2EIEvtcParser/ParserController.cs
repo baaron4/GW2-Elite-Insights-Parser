@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-
-namespace GW2EIEvtcParser;
+﻿namespace GW2EIEvtcParser;
 
 
 public abstract class ParserController

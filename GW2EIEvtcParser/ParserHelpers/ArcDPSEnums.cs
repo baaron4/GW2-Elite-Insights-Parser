@@ -1,7 +1,4 @@
-﻿using System;
-using static GW2EIEvtcParser.ArcDPSEnums;
-
-namespace GW2EIEvtcParser;
+﻿namespace GW2EIEvtcParser;
 
 public static class ArcDPSEnums
 {

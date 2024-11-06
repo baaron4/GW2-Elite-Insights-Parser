@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParserHelpers;
+﻿using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;

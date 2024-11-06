@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums.BuffAttribute;
 using static GW2EIEvtcParser.ParserHelper;

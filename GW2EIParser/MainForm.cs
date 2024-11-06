@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Runtime.Versioning;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Discord;
 using GW2EIDiscord;
 using GW2EIParser.Setting;

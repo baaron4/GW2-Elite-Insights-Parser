@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
+﻿using System.Configuration;
 using GW2EIParserCommons;
 
 namespace GW2EIParser;

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
+﻿using System.IO.Compression;
 using System.Text;
-using System.Threading.Tasks;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;

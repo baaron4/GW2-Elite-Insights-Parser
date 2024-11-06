@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Text;
 using GW2EIParserCommons;
 
 namespace GW2EIParser.Setting;

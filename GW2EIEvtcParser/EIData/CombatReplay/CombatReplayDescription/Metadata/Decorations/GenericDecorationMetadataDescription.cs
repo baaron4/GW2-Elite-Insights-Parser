@@ -1,5 +1,4 @@
-﻿using System;
-using static GW2EIEvtcParser.EIData.GenericDecoration;
+﻿using static GW2EIEvtcParser.EIData.GenericDecoration;
 
 namespace GW2EIEvtcParser.EIData;
 

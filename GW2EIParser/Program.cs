@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GW2EIParserCommons;
-using System.Windows.Forms;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIParser;

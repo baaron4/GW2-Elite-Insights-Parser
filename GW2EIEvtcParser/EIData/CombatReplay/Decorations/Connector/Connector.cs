@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace GW2EIEvtcParser.EIData;
+﻿namespace GW2EIEvtcParser.EIData;
 
 public abstract class Connector
 {

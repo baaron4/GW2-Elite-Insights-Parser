@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.Text;
 using GW2EIBuilders;
 using GW2EIEvtcParser;
 using GW2EIGW2API;

@@ -1,12 +1,8 @@
 ﻿#define EI_TRACING
 #define EI_TRACING_STATS
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace Tracing;
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using static GW2EIEvtcParser.SkillIDs;
+﻿using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 

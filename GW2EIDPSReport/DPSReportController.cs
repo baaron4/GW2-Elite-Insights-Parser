@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 using GW2EIDPSReport.DPSReportJsons;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIDPSReport;

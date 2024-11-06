@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.EncounterLogic;
+﻿using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GW2EIGW2API.GW2API;
+﻿namespace GW2EIGW2API.GW2API;
 
 public class GW2APISkill : GW2APIBaseItem
 {
