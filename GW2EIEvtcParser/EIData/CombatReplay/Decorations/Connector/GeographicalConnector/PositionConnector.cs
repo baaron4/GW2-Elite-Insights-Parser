@@ -15,7 +15,7 @@ public class PositionConnector : GeographicalConnector
         public PositionConnectorDescriptor(PositionConnector connector, CombatReplayMap map) : base(connector, map)
         {
             (float x, float y) = map.GetMapCoord(connector.Position.X, connector.Position.Y);
-            Position = new List<float>() { x, y };
+            Position = new List<float>() { x, y }; //TODO(Rennorb) @perf
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class PieDecoration : CircleDecoration
+internal class PieDecoration : CircleDecoration
 {
     internal class PieDecorationMetadata : CircleDecorationMetadata
     {

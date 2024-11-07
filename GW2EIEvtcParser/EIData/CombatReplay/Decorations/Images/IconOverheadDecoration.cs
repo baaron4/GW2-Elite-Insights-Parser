@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 /// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
 using Segment = GenericSegment<double>;
 
-public class IconOverheadDecoration : IconDecoration
+internal class IconOverheadDecoration : IconDecoration
 {
     internal class IconOverheadDecorationMetadata : IconDecorationMetadata
     {

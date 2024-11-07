@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class MovingPlatformDecoration : BackgroundDecoration
+internal class MovingPlatformDecoration : BackgroundDecoration
 {
     internal class MovingPlatformDecorationMetadata : BackgroundDecorationMetadata
     {

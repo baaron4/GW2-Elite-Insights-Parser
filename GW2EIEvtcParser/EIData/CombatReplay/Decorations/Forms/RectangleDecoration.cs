@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class RectangleDecoration : FormDecoration
+internal class RectangleDecoration : FormDecoration
 {
     internal class RectangleDecorationMetadata : FormDecorationMetadata
     {

@@ -128,14 +128,14 @@ internal static class JsonLogBuilder
         jsonLog.MissingPreEvent = log.FightData.MissingPreEvent;
         jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
         jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
-        var personalBuffs = new Dictionary<string, HashSet<long>>();
-        var personalDamageMods = new Dictionary<string, HashSet<long>>();
-        var skillMap = new Dictionary<long, SkillItem>();
-        var skillDescs = new Dictionary<string, SkillDesc>();
-        var buffMap = new Dictionary<long, Buff>();
-        var buffDescs = new Dictionary<string, BuffDesc>();
-        var damageModMap = new Dictionary<long, DamageModifier>();
-        var damageModDesc = new Dictionary<string, DamageModDesc>();
+        var personalBuffs = new Dictionary<string, HashSet<long>>(); //TODO(Rennorb) @perf
+        var personalDamageMods = new Dictionary<string, HashSet<long>>(); //TODO(Rennorb) @perf
+        var skillMap = new Dictionary<long, SkillItem>(); //TODO(Rennorb) @perf
+        var skillDescs = new Dictionary<string, SkillDesc>(); //TODO(Rennorb) @perf
+        var buffMap = new Dictionary<long, Buff>(); //TODO(Rennorb) @perf
+        var buffDescs = new Dictionary<string, BuffDesc>(); //TODO(Rennorb) @perf
+        var damageModMap = new Dictionary<long, DamageModifier>(); //TODO(Rennorb) @perf
+        var damageModDesc = new Dictionary<string, DamageModDesc>(); //TODO(Rennorb) @perf
 
         if (log.FightData.Logic.GetInstanceBuffs(log).Any())
         {

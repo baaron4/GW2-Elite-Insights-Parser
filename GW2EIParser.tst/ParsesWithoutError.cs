@@ -18,11 +18,7 @@ public class ParsesSuccessfully
             {
                 foreach(var innerEntry in EnumerateRecursively(entry))
                 {
-                    
-                    if(SupportedFileFormats.IsSupportedFormat(entry))
-                    {
-                        yield return innerEntry;
-                    }
+                    yield return innerEntry; // format is already validated by inner recursion
                 }
             }
             else

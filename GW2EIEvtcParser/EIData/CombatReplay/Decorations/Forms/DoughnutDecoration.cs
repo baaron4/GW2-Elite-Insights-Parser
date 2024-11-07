@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class DoughnutDecoration : FormDecoration
+internal class DoughnutDecoration : FormDecoration
 {
     internal class DoughnutDecorationMetadata : FormDecorationMetadata
     {

@@ -33,6 +33,9 @@ class IntTupleArrayConverter : JsonConverter<(int, int)>
     Converters = [ typeof(IntTupleArrayConverter) ]
 )]
 [JsonSerializable(typeof(LogDataDto))]
+//NOTE(Rennorb): The following types need to be manually added to the generator, because they are used as opaque object fields.
+// The generator cannot know the types of those fields, and we want to avoid having to use slow reflection to find out the members of those arbitrary types.
+// Specifying them here tells the generator to generate switches for these specific types whenever an opaque object needs to be serialized.
 [JsonSerializable(typeof(AgentConnector.AgentConnectorDescriptor))]
 [JsonSerializable(typeof(PositionConnector.PositionConnectorDescriptor))]
 [JsonSerializable(typeof(AgentFacingConnector.AgentFacingConnectorDescriptor))]
