@@ -7,8 +7,9 @@ using GW2EIEvtcParser.ParsedData;
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
 
-[JsonConverter(typeof(SkillDataConverter))]
-public struct SkillData2
+/// <summary> A struct holding skill data that gets serialized as an array of numbers. </summary>
+[JsonConverter(typeof(SkillCastDtoConverter))]
+public struct SkillCastDto
 {
     public double Start;
     public long   SkillId;
@@ -17,14 +18,14 @@ public struct SkillData2
     public double Acceleration;
 }
 
-class SkillDataConverter : JsonConverter<SkillData2>
+class SkillCastDtoConverter : JsonConverter<SkillCastDto>
 {
-    public override SkillData2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override SkillCastDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }
 
-    public override void Write(Utf8JsonWriter writer, SkillData2 value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, SkillCastDto value, JsonSerializerOptions options)
     {
         writer.WriteStartArray();
         writer.WriteNumberValue(value.Start);
@@ -57,15 +58,17 @@ internal class SkillDto : AbstractSkillDto
 
     public static void AssembleSkills(ICollection<SkillItem> skills, Dictionary<string, SkillDto> dict, ParsedEvtcLog log)
     {
+        dict.EnsureCapacity(dict.Count + skills.Count);
+
         foreach (SkillItem skill in skills)
         {
             dict["s" + skill.ID] = new SkillDto(skill, log);
         }
     }
 
-    private static SkillData2 GetSkillData(AbstractCastEvent cl, long phaseStart)
+    private static SkillCastDto GetSkillData(AbstractCastEvent cl, long phaseStart)
     {
-        return new SkillData2()
+        return new SkillCastDto()
         {
             Start = (cl.Time - phaseStart) / 1000.0,
             SkillId = cl.SkillId,
@@ -75,9 +78,9 @@ internal class SkillDto : AbstractSkillDto
         };
     }
 
-    public static List<SkillData2> BuildRotationData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
+    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
     {
-        var list = new List<SkillData2>(); //TODO(Rennorb) @perf
+        var list = new List<SkillCastDto>(); //TODO(Rennorb) @perf
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
         foreach (AbstractCastEvent cl in casting)
         {

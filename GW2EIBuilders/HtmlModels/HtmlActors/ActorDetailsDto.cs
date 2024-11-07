@@ -12,7 +12,7 @@ internal class ActorDetailsDto
     public List<DmgDistributionDto>?           DmgDistributions;
     public List<List<DmgDistributionDto>>?     DmgDistributionsTargets;
     public List<DmgDistributionDto>?           DmgDistributionsTaken;
-    public List<List<SkillData2>>?             Rotation;
+    public List<List<SkillCastDto>>?           Rotation;
     public List<List<BuffChartDataDto>>?       BoonGraph;
     public List<List<List<BuffChartDataDto>>>? BoonGraphPerSource;
     public List<FoodDto>?                      Food;
@@ -80,7 +80,7 @@ internal class ActorDetailsDto
     }
 
     static readonly List<List<BuffChartDataDto>> EmptyBuffChartList = new();
-    static readonly List<SkillData2>             EmptyRotationList  = new();
+    static readonly List<SkillCastDto>           EmptyRotationList  = new();
     static readonly List<BuffChartDataDto>       EmptyBoonGraphList = new();
 
     public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, AbstractSingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
