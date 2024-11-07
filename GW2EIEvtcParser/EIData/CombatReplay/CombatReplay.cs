@@ -180,11 +180,15 @@ public class CombatReplay
 
 
     #region DEBUG EFFECTS
+    //NOTE(Rennorb): Methods used for debugging purposes. Keep unused variables.
+    #if DEBUG_EFFECTS
 
     internal static void DebugEffects(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, HashSet<long> knownEffectIDs, long start = long.MinValue, long end = long.MaxValue)
     {
         var effectEventsOnAgent = log.CombatData.GetEffectEventsByDst(actor.AgentItem)
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end);
+        var effectGUIDsOnAgent = effectEventsOnAgent.Select(x => x.GUIDEvent.HexContentGUID).ToList();
+        var effectGUIDsOnAgentDistinct = effectGUIDsOnAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in effectEventsOnAgent)
         {
             (long start, long end) lifeSpan = effectEvt.ComputeDynamicLifespan(log, effectEvt.Duration);
@@ -204,6 +208,8 @@ public class CombatReplay
         }
         var effectEventsByAgent = log.CombatData.GetEffectEventsBySrc(actor.AgentItem)
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end);
+        var effectGUIDsByAgent = effectEventsByAgent.Select(x => x.GUIDEvent.HexContentGUID).ToList();
+        var effectGUIDsByAgentDistinct = effectGUIDsByAgent.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in effectEventsByAgent)
         {
             (long start, long end) lifeSpan = effectEvt.ComputeDynamicLifespan(log, effectEvt.Duration);
@@ -227,6 +233,8 @@ public class CombatReplay
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Src.IsUnamedSpecies() && x.Time >= start && x.Time <= end && x.EffectID > 0);
+        var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent.HexContentGUID).ToList();
+        var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in allEffectEvents)
         {
             (long start, long end) lifeSpan = effectEvt.ComputeDynamicLifespan(log, effectEvt.Duration);
@@ -251,6 +259,8 @@ public class CombatReplay
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && !x.Src.GetFinalMaster().IsPlayer && (!x.IsAroundDst || !x.Dst.GetFinalMaster().IsPlayer) && x.Time >= start && x.Time <= end && x.EffectID > 0);
+        var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent.HexContentGUID).ToList();
+        var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in allEffectEvents)
         {
             (long start, long end) lifeSpan = effectEvt.ComputeDynamicLifespan(log, effectEvt.Duration);
@@ -274,6 +284,8 @@ public class CombatReplay
     {
         var allEffectEvents = log.CombatData.GetEffectEvents()
             .Where(x => !knownEffectIDs.Contains(x.EffectID) && x.Time >= start && x.Time <= end && x.EffectID > 0);
+        var effectGUIDs = allEffectEvents.Select(x => x.GUIDEvent.HexContentGUID).ToList();
+        var effectGUIDsDistinct = effectGUIDs.GroupBy(x => x).ToDictionary(x => x.Key, x => x.ToList().Count);
         foreach (EffectEvent effectEvt in allEffectEvents)
         {
             (long start, long end) lifeSpan = effectEvt.ComputeDynamicLifespan(log, effectEvt.Duration);
@@ -293,6 +305,7 @@ public class CombatReplay
         }
     }
 
+    #endif
     #endregion DEBUG EFFECTS
 
     /// <summary>

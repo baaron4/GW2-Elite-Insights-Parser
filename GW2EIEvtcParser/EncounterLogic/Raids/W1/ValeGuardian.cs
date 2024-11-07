@@ -231,8 +231,10 @@ internal class ValeGuardian : SpiritVale
                         replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
                     }
                 }
-                //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
-                //CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
+                #if DEBUG_EFFECTS
+                    CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
+                    CombatReplay.DebugUnknownEffects(log, replay, knownEffectsIDs, target.FirstAware, target.LastAware);
+                #endif
                 break;
             case (int)ArcDPSEnums.TrashID.BlueGuardian:
                 replay.Decorations.Add(new CircleDecoration(1500, lifespan, Colors.Blue, 0.5, new AgentConnector(target)).UsingFilled(false));

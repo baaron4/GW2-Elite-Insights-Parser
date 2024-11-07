@@ -158,7 +158,9 @@ internal class Cairn : BastionOfThePenitent
                         replay.Decorations.Add(new CircleDecoration(110, (dashGreenEnd - 200, dashGreenEnd), Colors.DarkGreen, 0.4, new PositionConnector(dashGreen.Position)));
                     }
                 }
-                //CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);
+                #if DEBUG_EFFECTS
+                    CombatReplay.DebugAllNPCEffects(log, replay, new HashSet<long>(), 50000, 63000);
+                #endif
                 break;
             default:
                 break;

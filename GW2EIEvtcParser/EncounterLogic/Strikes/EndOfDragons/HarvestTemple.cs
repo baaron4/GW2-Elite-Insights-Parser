@@ -1290,7 +1290,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                 break;
             case (int)ArcDPSEnums.TrashID.VoidWarforged1:
             case (int)ArcDPSEnums.TrashID.VoidWarforged2:
-                //CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
+                #if DEBUG_EFFECTS
+                    CombatReplay.DebugEffects(target, log, replay, knownEffectsIDs, target.FirstAware, target.LastAware, true);
+                #endif
                 break;
             case (int)ArcDPSEnums.TrashID.ZhaitansReach:
                 // Thrash - Circle that pulls in
