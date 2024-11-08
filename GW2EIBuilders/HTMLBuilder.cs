@@ -10,27 +10,13 @@ using GW2EIEvtcParser.EIData;
 [assembly: System.CLSCompliant(false)]
 namespace GW2EIBuilders;
 
-class IntTupleArrayConverter : JsonConverter<(int, int)>
-{
-    public override (int, int) Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Write(Utf8JsonWriter writer, (int, int) value, JsonSerializerOptions options)
-    {
-        writer.WriteStartArray();
-        writer.WriteNumberValue(value.Item1);
-        writer.WriteNumberValue(value.Item2);
-        writer.WriteEndArray();
-    }
-}
-
 // compile-time generated serialization logic
 [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata | JsonSourceGenerationMode.Serialization,
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
-    Converters = [ typeof(IntTupleArrayConverter) ]
+    Converters = [
+        typeof(GW2EIJSON.Tuple2ToArrayConverterFactory),
+    ]
 )]
 [JsonSerializable(typeof(LogDataDto))]
 //NOTE(Rennorb): The following types need to be manually added to the generator, because they are used as opaque object fields.

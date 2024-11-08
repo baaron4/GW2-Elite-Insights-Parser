@@ -1,5 +1,6 @@
 ﻿
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GW2EIBuilders.JsonModels;
 internal class SerializerSettings
@@ -9,8 +10,12 @@ internal class SerializerSettings
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         IncludeFields = true,
         WriteIndented = false,
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
         //NOTE(Rennorb): htmlescapes by default
+        Converters = {
+            GW2EIJSON.Tuple2ToArrayConverterFactory.Instance,
+        }
     };
 
     public static readonly JsonSerializerOptions Indentent = new(Default)

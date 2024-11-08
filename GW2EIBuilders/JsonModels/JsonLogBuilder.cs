@@ -9,9 +9,6 @@ using static GW2EIJSON.JsonLog;
 
 namespace GW2EIBuilders.JsonModels;
 
-/// <summary>
-/// The root of the JSON
-/// </summary>
 internal static class JsonLogBuilder
 {
     private static SkillDesc BuildSkillDesc(SkillItem skill, ParsedEvtcLog log)
@@ -137,11 +134,12 @@ internal static class JsonLogBuilder
         var damageModMap = new Dictionary<long, DamageModifier>(); //TODO(Rennorb) @perf
         var damageModDesc = new Dictionary<string, DamageModDesc>(); //TODO(Rennorb) @perf
 
-        if (log.FightData.Logic.GetInstanceBuffs(log).Any())
+        var instanceBuffs = log.FightData.Logic.GetInstanceBuffs(log);
+        if (instanceBuffs.Any())
         {
-            var presentFractalInstabilities = new List<long>();
-            var presentInstanceBuffs = new List<long[]>();
-            foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
+            var presentFractalInstabilities = new List<long>(); //TODO(Rennorb) @perf
+            var presentInstanceBuffs = new List<(long, int)>(instanceBuffs.Count);
+            foreach ((Buff instanceBuff, int stack) in instanceBuffs)
             {
                 if (!buffMap.ContainsKey(instanceBuff.ID))
                 {
@@ -151,7 +149,7 @@ internal static class JsonLogBuilder
                 {
                     presentFractalInstabilities.Add(instanceBuff.ID);
                 }
-                presentInstanceBuffs.Add([instanceBuff.ID, stack]);
+                presentInstanceBuffs.Add((instanceBuff.ID, stack));
             }
             jsonLog.PresentFractalInstabilities = presentFractalInstabilities;
             jsonLog.PresentInstanceBuffs = presentInstanceBuffs;

@@ -1,9 +1,26 @@
-﻿[assembly: System.CLSCompliant(false)]
+﻿using System.Text.Json.Serialization;
+
+[assembly: System.CLSCompliant(false)]
 namespace GW2EIJSON;
 
+
+// compile-time generated serialization logic
+[JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Metadata | JsonSourceGenerationMode.Serialization,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
+    Converters = [
+        typeof(Tuple2ToArrayConverterFactory),
+    ]
+)]
+[JsonSerializable(typeof(JsonLog))]
+public partial class JsonLogSerializerContext : JsonSerializerContext {  }
+
 /// <summary>
-/// The root of the JSON
+/// The root of the JSON.
 /// </summary>
+/// <remarks>
+/// Use <see cref="JsonLogSerializerContext"/> or manually use an <see cref="Tuple2ToArrayConverterFactory"/> instance with your (de)serializer.
+/// </remarks>
 public class JsonLog
 {
     /// <summary>
@@ -393,7 +410,7 @@ public class JsonLog
     /// List of present instance buffs, values are arrays of 2 elements, value[0] is buff id, value[1] is number of stacks.
     /// </summary>
     /// <seealso cref="BuffMap"/>
-    public IReadOnlyList<long[]>? PresentInstanceBuffs;
+    public IReadOnlyList<(long BuffId, int StackSize)>? PresentInstanceBuffs;
 
     /// <summary>
     /// List of error messages given by ArcDPS

@@ -7,7 +7,7 @@ namespace GW2EIParser.tst;
 public class ParsingErrors
 {
     [TestCase("20231017-143845.zevtc", "Fight is longer than 24h")]
-    [TestCase("20241009-215946.zevtc", "Queue logic based must have a > 1 capacity")]
+    [TestCase("20241009-215946.zevtc", "Queue logic based must have a > 1 capacity")] //TODO(Rennorb) doesn't throw?
     [TestCase("20231214-203704.zevtc", "Fight is too short: 1043 < 2200")]
     [TestCase("20240908-224412.zevtc", "Missing Build Event")]
     [TestCase("20220719-200758.zevtc", "Unable to read beyond the end of the stream")]
@@ -15,7 +15,7 @@ public class ParsingErrors
     [TestCase("20231002-202344.zevtc", "No players found")]
     [TestCase("20230403-211830.zevtc", "No valid players")]
     [TestCase("20230130-215041.zevtc", "Enervators not found")]
-    [TestCase("20241028-100044.zevtc", "Missing GUID event for effect 12954")]
+    [TestCase("20241028-100044.zevtc", "Missing GUID event for effect 12954")] //TODO(Rennorb) doesn't throw?
     public void ReportsError(string logFile, string expectedInErrorMessage)
     {
         var parser = new EvtcParser(TestHelper.ParserSettings, TestHelper.APIController);
