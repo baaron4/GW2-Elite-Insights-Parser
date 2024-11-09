@@ -205,10 +205,7 @@ namespace GW2EIEvtcParser.EIData
 
         public static Point3D ProjectPointOn2DLine(Point3D toProject, Point3D pointOnLine, Point3D directionVector)
         {
-            var pointOnLine2D = new Point2D(pointOnLine);
-            var normalizedDirectionVector = new Point2D(directionVector).Normalize();
-            var vectorToProject = new Point2D(toProject) - pointOnLine2D;
-            return new Point3D(Point2D.ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine2D, pointOnLine.Z);
+            return new Point3D(Point2D.ProjectPointOnLine(new Point2D(toProject), new Point2D(pointOnLine), new Point2D(directionVector)), pointOnLine.Z);
         }
 
         public static float GetZRotationFromFacing(Point3D facing)
