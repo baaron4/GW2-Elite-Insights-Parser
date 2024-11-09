@@ -63,11 +63,34 @@ namespace GW2EIEvtcParser.EIData
             newPt.MultiplyScalar(b);
             return newPt;
         }
+        public static Point2D operator /(Point2D a, Point2D b)
+        {
+            var newPt = new Point2D(a);
+            newPt.Divide(b);
+            return newPt;
+        }
+        public static Point2D operator /(float a, Point2D b)
+        {
+            var newPt = new Point2D(b);
+            newPt.DivideScalar(a);
+            return newPt;
+        }
+        public static Point2D operator /(Point2D a, float b)
+        {
+            var newPt = new Point2D(a);
+            newPt.DivideScalar(b);
+            return newPt;
+        }
         public static Point2D operator -(Point2D a)
         {
             var newPt = new Point2D(a);
             newPt.MultiplyScalar(-1);
             return newPt;
+        }
+
+        public static float ScalarProduct(Point2D pt1, Point2D pt2)
+        {
+            return pt1.X * pt2.X + pt1.Y * pt2.Y;
         }
 
         private void Add(Point2D a)
@@ -90,6 +113,16 @@ namespace GW2EIEvtcParser.EIData
             X *= a;
             Y *= a;
         }
+        private void Divide(Point2D a)
+        {
+            X /= a.X;
+            Y /= a.Y;
+        }
+        private void DivideScalar(float a)
+        {
+            X /= a;
+            Y /= a;
+        }
 
         public float DistanceToPoint(Point2D endPoint)
         {
@@ -101,6 +134,11 @@ namespace GW2EIEvtcParser.EIData
         {
             float length = (float)Math.Sqrt(X * X + Y * Y);
             return length;
+        }
+
+        public Point2D Normalize()
+        {
+            return new Point2D(this) / Length();
         }
 
         public Point2D(float x, float y)
@@ -122,6 +160,13 @@ namespace GW2EIEvtcParser.EIData
         {
             X = Mix(a.X, b.X, ratio);
             Y = Mix(a.Y, b.Y, ratio);
+        }
+
+        public static Point2D ProjectPointOnLine(Point2D toProject,  Point2D pointOnLine, Point2D directionVector)
+        {
+            var normalizedDirectionVector = directionVector.Normalize();
+            var vectorToProject = toProject - pointOnLine;
+            return ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine;
         }
 
         public static float GetZRotationFromFacing(Point2D facing)

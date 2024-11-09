@@ -66,11 +66,33 @@ namespace GW2EIEvtcParser.EIData
             newPt.MultiplyScalar(b);
             return newPt;
         }
+        public static Point3D operator /(Point3D a, Point3D b)
+        {
+            var newPt = new Point3D(a);
+            newPt.Divide(b);
+            return newPt;
+        }
+        public static Point3D operator /(float a, Point3D b)
+        {
+            var newPt = new Point3D(b);
+            newPt.DivideScalar(a);
+            return newPt;
+        }
+        public static Point3D operator /(Point3D a, float b)
+        {
+            var newPt = new Point3D(a);
+            newPt.DivideScalar(b);
+            return newPt;
+        }
         public static Point3D operator -(Point3D a)
         {
             var newPt = new Point3D(a);
             newPt.MultiplyScalar(-1);
             return newPt;
+        }
+        public static float ScalarProduct(Point3D pt1, Point3D pt2)
+        {
+            return pt1.X * pt2.X + pt1.Y * pt2.Y + pt1.Z * pt2.Z;
         }
 
         private void Add(Point3D a)
@@ -91,11 +113,23 @@ namespace GW2EIEvtcParser.EIData
             Y *= a.Y;
             Z *= a.Z;
         }
+        private void Divide(Point3D a)
+        {
+            X /= a.X;
+            Y /= a.Y;
+            Z /= a.Z;
+        }
         private void MultiplyScalar(float a)
         {
             X *= a;
             Y *= a;
             Z *= a;
+        }
+        private void DivideScalar(float a)
+        {
+            X /= a;
+            Y /= a;
+            Z /= a;
         }
 
         public float DistanceToPoint(Point3D endPoint)
@@ -121,6 +155,16 @@ namespace GW2EIEvtcParser.EIData
             return length;
         }
 
+        public Point3D Normalize()
+        {
+            return new Point3D(this) / Length();
+        }
+        public Point2D Normalize2D()
+        {
+            var pt = new Point2D(X, Y);
+            return pt / Length2D();
+        }
+
         public Point3D(float x, float y)
         {
             X = x;
@@ -143,6 +187,21 @@ namespace GW2EIEvtcParser.EIData
             X = Mix(a.X, b.X, ratio);
             Y = Mix(a.Y, b.Y, ratio);
             Z = Mix(a.Z, b.Z, ratio);
+        }
+
+        public static Point3D ProjectPointOnLine(Point3D toProject, Point3D pointOnLine, Point3D directionVector)
+        {
+            var normalizedDirectionVector = directionVector.Normalize();
+            var vectorToProject = toProject - pointOnLine;
+            return ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine;
+        }
+
+        public static Point2D ProjectPointOn2DLine(Point3D toProject, Point3D pointOnLine, Point3D directionVector)
+        {
+            var pointOnLine2D = new Point2D(pointOnLine);
+            var normalizedDirectionVector = new Point2D(directionVector).Normalize();
+            var vectorToProject = new Point2D(toProject) - pointOnLine2D;
+            return Point2D.ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine2D;
         }
 
         public static float GetZRotationFromFacing(Point3D facing)
