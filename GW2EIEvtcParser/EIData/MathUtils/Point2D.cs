@@ -138,7 +138,12 @@ namespace GW2EIEvtcParser.EIData
 
         public Point2D Normalize()
         {
-            return new Point2D(this) / Length();
+            var l = Length();
+            if (l == 0.0f)
+            {
+                return new Point2D(0.0f, 0.0f);
+            }
+            return new Point2D(this) / l;
         }
 
         public Point2D(float x, float y)
