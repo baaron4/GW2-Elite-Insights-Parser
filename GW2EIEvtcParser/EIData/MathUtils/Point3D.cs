@@ -180,6 +180,13 @@ namespace GW2EIEvtcParser.EIData
         public Point3D(Point3D a) : this(a.X, a.Y, a.Z)
         {
         }
+        public Point3D(Point2D a) : this(a, 0)
+        {
+        }
+        public Point3D(Point2D a, float z) : this(a.X, a.Y, z)
+        {
+        }
+
 
 
         public Point3D(Point3D a, Point3D b, float ratio)
@@ -196,12 +203,12 @@ namespace GW2EIEvtcParser.EIData
             return ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine;
         }
 
-        public static Point2D ProjectPointOn2DLine(Point3D toProject, Point3D pointOnLine, Point3D directionVector)
+        public static Point3D ProjectPointOn2DLine(Point3D toProject, Point3D pointOnLine, Point3D directionVector)
         {
             var pointOnLine2D = new Point2D(pointOnLine);
             var normalizedDirectionVector = new Point2D(directionVector).Normalize();
             var vectorToProject = new Point2D(toProject) - pointOnLine2D;
-            return Point2D.ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine2D;
+            return new Point3D(Point2D.ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine2D, pointOnLine.Z);
         }
 
         public static float GetZRotationFromFacing(Point3D facing)
