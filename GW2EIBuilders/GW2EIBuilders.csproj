@@ -27,7 +27,7 @@
         <None Include="Resources\JS\global.js" />
         <None Include="Resources\JS\functions.js" />
         <None Include="Resources\JS\mixins.js" />
-        <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingExtensionView.html"  />
+        <None Include="Resources\htmlHealingExtensionTemplates\tmplHealingExtensionView.html" />
         <None Include="Resources\htmlHealingExtensionTemplates\tmplTargetPlayers.html" />
         <None Include="Resources\htmlHealingExtensionTemplates\tmplIncomingHealingTable.html" />
         <None Include="Resources\htmlHealingExtensionTemplates\tmplOutgoingHealingTable.html" />
@@ -102,6 +102,10 @@
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
         <UserSecretsId>deaea9ef-69e9-4b48-ba82-b2294277674f</UserSecretsId>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />

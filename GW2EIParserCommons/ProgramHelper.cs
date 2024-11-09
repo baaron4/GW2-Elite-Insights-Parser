@@ -454,10 +454,10 @@ namespace GW2EIParserCommons
                     $"{fName}.csv"
                 );
                 operation.AddOpenableFile(outputFile);
+                var builder = new CSVBuilder(log, new CSVSettings(","), ParserVersion, uploadResults);
                 using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                 {
-                    var builder = new CSVBuilder(log, new CSVSettings(","), ParserVersion, uploadResults);
                     builder.CreateCSV(sw);
                 }
                 operation.UpdateProgressWithCancellationCheck("Program: CSV created");

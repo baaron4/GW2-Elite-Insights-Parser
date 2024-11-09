@@ -25,6 +25,7 @@ namespace GW2EIBuilders
 
         public CSVBuilder(ParsedEvtcLog log, CSVSettings settings, Version parserVersion, UploadResults uploadResults)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if (settings == null)
             {
                 throw new InvalidDataException("Missing settings in CSVBuilder");
