@@ -13,7 +13,7 @@ internal class QueueLogic : StackingLogic
     {
         if (stacks.Count <= 1)
         {
-            throw new InvalidDataException("Queue logic based must have a >1 capacity");
+            throw new InvalidDataException("Queue logic based must have a > 1 capacity");
         }
         BuffStackItem first = stacks[0];
         BuffStackItem toRemove = stacks.Where(x => x != first).MinBy(x => x.TotalDuration);

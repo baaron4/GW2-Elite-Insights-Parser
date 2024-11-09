@@ -32,10 +32,10 @@ internal class HealingLogic : QueueLogic
     {
         if (stacks.Count <= 1)
         {
-            throw new InvalidDataException("Queue logic based must have a >1 capacity");
+            throw new InvalidDataException("Queue logic based must have a > 1 capacity");
         }
 
-        BuffStackItem toRemove = null;
+        BuffStackItem? toRemove = null;
         if (overridenStackID > 0)
         {
             toRemove = stacks.FirstOrDefault(x => x.StackID == overridenStackID);

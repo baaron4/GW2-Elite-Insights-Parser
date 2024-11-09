@@ -106,7 +106,7 @@ internal class Golem : FightLogic
     internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-#if DEBUG
+#if DEBUG_EFFECTS
         ProfHelper.DEBUG_ComputeProfessionCombatReplayActors(p, log, replay);
 #endif
     }

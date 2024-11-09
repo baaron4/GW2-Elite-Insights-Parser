@@ -40,12 +40,12 @@ public static class TestHelper
         }
     }
 
-    public static ParsedEvtcLog ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
+    public static ParsedEvtcLog? ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
     {
         var parser = new EvtcParser(ParserSettings, apiController);
 
         var fInfo = new FileInfo(location);
-        ParsedEvtcLog parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, false);
+        ParsedEvtcLog? parsedLog = parser.ParseLog(new TestOperationController(), fInfo, out var failureReason, false);
         if (failureReason != null)
         {
             failureReason.Throw();
