@@ -29,7 +29,7 @@ We suggest following [this guide](https://snowcrows.com/guides/getting-started/a
 
 2. Extract all files anywhere you like.
 
-3. Launch GW2EI.exe (UI or console).
+3. Launch GuildWars2EliteInsights.exe (ui, windows only) or GuildWars2EliteInsights-CLI.exe (console).
 
 NOTE: ArcDPS EVTC log files are located by default at "C:\Users\\\<USERNAME>\\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs".
 
@@ -48,23 +48,16 @@ You can change the settings at any time using the Settings window.
 
 ![how to](https://user-images.githubusercontent.com/30677999/40148954-6ec9215a-5936-11e8-94ad-d2520e7c4539.PNG)
 
-If you want your logs parsed without the GUI, pass the file location of each EVTC file as a string.
-
-Settings can be configured using .conf files (see Settings/sample.conf for an example). You can then use it with -c:
-
-```
-GuildWars2EliteInsights.exe -c [config path] [logs]
-```
-
-To disable windows-specific commandline magic you can use -p:
+Settings can be configured using .conf files (see Settings/sample.conf for an example). You can then use it with -c.
+For console:
 
 ```
-GuildWars2EliteInsights.exe -p [logs]
+GuildWars2EliteInsights-CLI.exe -c [config path] [logs]
 ```
+For UI:
 
-You can also start the application in GUI mode using -ui option:
 ```
-GuildWars2EliteInsights.exe -c [config path] -ui [logs]
+GuildWars2EliteInsight.exe -c [config path] [logs]
 ```
 
 Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
