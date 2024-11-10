@@ -5,7 +5,7 @@
         <LangVersion>10.0</LangVersion>
         <Nullable>disable</Nullable>
         <RootNamespace>GW2EIGW2API</RootNamespace>
-        <Version>2.4.0</Version>
+        <Version>2.4.1</Version>
         <Configurations>Debug;Release;NoRewards</Configurations>
     </PropertyGroup>
 

@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>10.0</LangVersion>
         <Nullable>disable</Nullable>
-        <Version>0.58.2</Version>
+        <Version>0.59.0</Version>
         <Configurations>Debug;Release;NoRewards</Configurations>
     </PropertyGroup>
 
