@@ -332,10 +332,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                     }
                     break;
                 case (int)TrashID.FerrousBomb:
-                    // Flanking Shot - Challenge Mode Puzzle - Rectangular Beams during the bomb puzzle.
-                    AddFlankingShotDecorations(target, log, replay, MaiTrinCMBeamsBombTargetGreen, 30, 120);
-                    AddFlankingShotDecorations(target, log, replay, MaiTrinCMBeamsBombTargetRed, 0, 90);
-                    AddFlankingShotDecorations(target, log, replay, MaiTrinCMBeamsBombTargetBlue, 60, 150);
+                    // Mag Beam - Challenge Mode Puzzle - Rectangular Beams during the bomb puzzle.
+                    AddMagBeamDecorations(target, log, replay, MaiTrinCMBeamsBombTargetGreen, 30, 120);
+                    AddMagBeamDecorations(target, log, replay, MaiTrinCMBeamsBombTargetRed, 0, 90);
+                    AddMagBeamDecorations(target, log, replay, MaiTrinCMBeamsBombTargetBlue, 60, 150);
                     break;
                 default:
                     break;
@@ -346,10 +346,10 @@ namespace GW2EIEvtcParser.EncounterLogic
         {
             base.ComputePlayerCombatReplayActors(player, log, replay);
 
-            // Flanking Shot - Rectangular Beams during the bomb puzzle.
-            AddFlankingShotDecorations(player, log, replay, MaiTrinCMBeamsTargetGreen, 30, 120);
-            AddFlankingShotDecorations(player, log, replay, MaiTrinCMBeamsTargetRed, 0, 90);
-            AddFlankingShotDecorations(player, log, replay, MaiTrinCMBeamsTargetBlue, 60, 150);
+            // Mag Beam - Rectangular Beams during the bomb puzzle.
+            AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetGreen, 30, 120);
+            AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetRed, 0, 90);
+            AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetBlue, 60, 150);
 
             // Ley Breach - Visualizing the blue beam on the targetted player.
             var segments = player.GetBuffStatus(log, LeyBreachTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -455,7 +455,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                 }
             }
 
-            // The 3 rotating circles - Normal Mode
+            // Puzzle Normal Mode - The 3 rotating circles
             if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutPuzzleNormalMode, out IReadOnlyList<EffectEvent> puzzleNM))
             {
                 const uint radiusFromCenter = 375; // Found by calculating distance between detonation effect and echo position, original value is 374.999969
@@ -777,7 +777,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         }
 
         /// <summary>
-        /// Flanking Shot - The Ferrous Bomb puzzle in Challenge Mode.<br></br>
+        /// Mag Beam - The beams during the puzzle in Challenge Mode.<br></br>
         /// </summary>
         /// <param name="actor">Actor with the buff, can be the player or the Ferrous Bomb.</param>
         /// <param name="replay">Combat Replay.</param>
@@ -785,7 +785,7 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <param name="skillId">The buff applied on the player or the Ferrous Bomb.</param>
         /// <param name="angle1">The rotation angle of the first rectangle.</param>
         /// <param name="angle2">The rotation angle of the second rectangle.</param>
-        private static void AddFlankingShotDecorations(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
+        private static void AddMagBeamDecorations(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
         {
             const uint width = 320;
             const uint length = 2000;
