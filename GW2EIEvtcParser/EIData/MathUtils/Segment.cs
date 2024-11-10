@@ -1,8 +1,5 @@
 ﻿namespace GW2EIEvtcParser.EIData;
 
-/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
-using Segment = GenericSegment<double>;
-
 public static class SegmentExt {
     public static double IntersectingArea(this in Segment self, in Segment other) => IntersectingArea(self, other.Start, other.End);
 

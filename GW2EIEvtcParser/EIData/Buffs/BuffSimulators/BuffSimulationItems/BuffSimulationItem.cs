@@ -3,9 +3,6 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
-using Segment = GenericSegment<double>;
-
 internal abstract class BuffSimulationItem : AbstractSimulationItem
 {
     //NOTE(Rennorb): I changed the element to have start + end instead of start + duration to fix a bug. 

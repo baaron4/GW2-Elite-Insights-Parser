@@ -1,4 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+global using Segment = GW2EIEvtcParser.EIData.GenericSegment<double>;
+
+using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser.EIData;
 

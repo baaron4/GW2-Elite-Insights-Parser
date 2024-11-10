@@ -12,9 +12,6 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
-/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
-using Segment = GenericSegment<double>;
-
 internal class SoullessHorror : HallOfChains
 {
     private static readonly Point3D ChestOfDesminaPosition = new(-9349.45f, 258.757f, -807.954f);

@@ -11,9 +11,6 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
-/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
-using Segment = GenericSegment<double>;
-
 internal class ConjuredAmalgamate : MythwrightGambit
 {
     private readonly bool _cn;

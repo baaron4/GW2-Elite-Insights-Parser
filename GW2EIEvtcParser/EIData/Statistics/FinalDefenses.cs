@@ -53,7 +53,7 @@ public class FinalDefenses
         return (strip, stripTime);
     }
 
-    internal FinalDefenses(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from)
+    internal FinalDefenses(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? from)
     {
         var damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
         foreach (AbstractHealthDamageEvent damageEvent in damageLogs)

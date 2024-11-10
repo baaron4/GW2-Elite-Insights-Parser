@@ -3,9 +3,6 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
-/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
-using Segment = GenericSegment<double>;
-
 internal class BuffChartDataDto
 {
     public long Id { get; set; }
@@ -46,7 +43,7 @@ internal class BuffChartDataDto
 
     }
 
-    private BuffChartDataDto(BuffsGraphModel bgm, IReadOnlyList<Segment> bChart, PhaseData phase)
+    private BuffChartDataDto(BuffsGraphModel bgm, IReadOnlyList<GenericSegment<double>> bChart, PhaseData phase)
     {
         Id = bgm.Buff.ID;
         Visible = (bgm.Buff.Name == "Might" || bgm.Buff.Name == "Quickness" || bgm.Buff.Name == "Vulnerability");

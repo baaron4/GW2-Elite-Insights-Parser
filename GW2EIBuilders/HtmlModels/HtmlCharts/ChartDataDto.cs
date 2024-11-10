@@ -3,15 +3,12 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
-/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
-using Segment = GenericSegment<double>;
-
 internal class ChartDataDto
 {
     public readonly List<PhaseChartDataDto> Phases = new();
     public readonly List<MechanicChartDataDto> Mechanics = new();
 
-    private static List<object[]>? BuildGraphStates(IReadOnlyList<Segment> segments, PhaseData phase, bool nullable, double defaultState)
+    private static List<object[]>? BuildGraphStates(IReadOnlyList<GenericSegment<double>> segments, PhaseData phase, bool nullable, double defaultState)
     {
         if (!segments.Any())
         {
@@ -32,7 +29,7 @@ internal class ChartDataDto
 
     public static List<object[]>? BuildBarrierStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
     {
-        var barriers = new List<Segment>(actor.GetBarrierUpdates(log));
+        var barriers = new List<GenericSegment<double>>(actor.GetBarrierUpdates(log));
         if (!barriers.Any(x => x.Value > 0))
         {
             barriers.Clear();
