@@ -39,7 +39,7 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
                 _stacksPerSource = new(10);
                 foreach (var stack in Stacks)
                 {
-                    _stacksPerSource.IncrementValue(stack._buffStackItem.Src);
+                    _stacksPerSource.IncrementValue(stack._src);
                 }
             }
             else
@@ -67,7 +67,7 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
                 _sources = new AgentItem[count];
                 for (int i = 0; i < count; i++)
                 {
-                    _sources[i] = Stacks[i]._buffStackItem.Src;
+                    _sources[i] = Stacks[i]._src;
                 }
             }
             else

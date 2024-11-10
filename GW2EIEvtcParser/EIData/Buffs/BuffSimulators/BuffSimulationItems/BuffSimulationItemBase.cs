@@ -4,19 +4,20 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class BuffSimulationItemBase : BuffSimulationItem
 {
-    private readonly AgentItem _src;
-    internal readonly BuffStackItem _buffStackItem;
+    internal readonly AgentItem _src;
+    internal readonly AgentItem _seedSrc;
     internal readonly long _totalDuration;
+    internal readonly bool _isExtension;
 
     protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Start + buffStackItem.Duration)
     {
-        _buffStackItem = buffStackItem;
-        //NOTE(Rennorb): We need to copy the source because for some ungodly reason the value can change after this initializer runs.
+        //NOTE(Rennorb): We need to copy these because for some ungodly reason buffsStackItems can change after this initializer runs.
         // this only influences buff uptime values, so it can be difficult to spot.
         // There is a regression test for this in Tests/Regression.cs:BuffUptime.
-        //TODO(Rennorb) @cleanup
         _src           = buffStackItem.Src;
+        _seedSrc       = buffStackItem.SeedSrc;
         _totalDuration = buffStackItem.TotalDuration;
+        _isExtension   = buffStackItem.IsExtension;
     }
 
     public override void OverrideEnd(long end)
@@ -56,7 +57,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
 
     public override IEnumerable<AgentItem> GetSources()
     {
-        return [ _buffStackItem.Src ];
+        return [ _src ];
     }
 
     public override IEnumerable<AgentItem> GetActiveSources()
@@ -72,57 +73,55 @@ internal class BuffSimulationItemBase : BuffSimulationItem
             return;
         }
 
-        Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
-        AgentItem agent = _src;
-        AgentItem seedAgent = _buffStackItem.SeedSrc;
-        if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
+        Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
+        if (distribution.TryGetValue(_src, out BuffDistributionItem toModify))
         {
             toModify.IncrementValue(cDur);
         }
         else
         {
-            distrib.Add(agent, new BuffDistributionItem(
+            distribution.Add(_src, new BuffDistributionItem(
                 cDur,
                 0, 0, 0, 0, 0));
         }
 
-        if (_buffStackItem.IsExtension)
+        if (_isExtension)
         {
-            if (distrib.TryGetValue(agent, out toModify))
+            if (distribution.TryGetValue(_src, out toModify))
             {
                 toModify.IncrementExtension(cDur);
             }
             else
             {
-                distrib.Add(agent, new BuffDistributionItem(
+                distribution.Add(_src, new BuffDistributionItem(
                     0,
                     0, 0, 0, cDur, 0));
             }
         }
 
-        if (agent != seedAgent)
+        if (_src != _seedSrc)
         {
-            if (distrib.TryGetValue(seedAgent, out toModify))
+            if (distribution.TryGetValue(_seedSrc, out toModify))
             {
                 toModify.IncrementExtended(cDur);
             }
             else
             {
-                distrib.Add(seedAgent, new BuffDistributionItem(
+                distribution.Add(_seedSrc, new BuffDistributionItem(
                     0,
                     0, 0, 0, 0, cDur));
             }
         }
 
-        if (agent == ParserHelper._unknownAgent)
+        if (_src == ParserHelper._unknownAgent)
         {
-            if (distrib.TryGetValue(seedAgent, out toModify))
+            if (distribution.TryGetValue(_seedSrc, out toModify))
             {
                 toModify.IncrementUnknownExtension(cDur);
             }
             else
             {
-                distrib.Add(seedAgent, new BuffDistributionItem(
+                distribution.Add(_seedSrc, new BuffDistributionItem(
                     0,
                     0, 0, cDur, 0, 0));
             }
