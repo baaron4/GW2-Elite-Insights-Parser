@@ -639,6 +639,8 @@ namespace GW2EIEvtcParser.ParsedData
             { FireJurisdictionLevel3, "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png" },
             { DaybreakingSlashWave, "https://wiki.guildwars2.com/images/1/1f/Daybreaking_Slash.png" },
             { BindingBladeSelf, BuffImages.BindingBlade },
+            { ReceiveTheLightPulse, "https://wiki.guildwars2.com/images/e/eb/%22Receive_the_Light%21%22.png" },
+            { SolarStormIlluminatedHealing, "https://wiki.guildwars2.com/images/f/fd/Solar_Storm.png" },
 #endregion GuardianIcons
             #region MesmerIcons
             { HealingPrism, "https://wiki.guildwars2.com/images/f/f4/Healing_Prism.png" },
@@ -721,6 +723,7 @@ namespace GW2EIEvtcParser.ParsedData
             { BloodBank, "https://wiki.guildwars2.com/images/c/cb/Blood_Bank.png" },
             { ShamblingSlash, "https://wiki.guildwars2.com/images/a/ad/Shambling_Slash.png" },
             { AuguryOfDeath, "https://wiki.guildwars2.com/images/7/77/Augury_of_Death.png" },
+            { SoulSpiralHeal, "https://wiki.guildwars2.com/images/6/66/Soul_Spiral.png" },
 #endregion  NecromancerIcons
             #region RangerIcons
             // Ranger
@@ -924,6 +927,8 @@ namespace GW2EIEvtcParser.ParsedData
             { InfiltratorsStrikeSomething, "https://wiki.guildwars2.com/images/2/2c/Infiltrator%27s_Strike.png" },
             { BarbedSpearRanged, "https://wiki.guildwars2.com/images/a/a4/Barbed_Spear.png" },
             { TraversingDuskHeal, "https://wiki.guildwars2.com/images/1/10/Traversing_Dusk.png" },
+            { DarkSaviorHealing, "https://wiki.guildwars2.com/images/c/cd/Shadow_Savior.png" },
+            { ShieldingRestorationBarrier, "https://wiki.guildwars2.com/images/e/ea/Shielding_Restoration.png" },
             #endregion ThiefIcons
             #region WarriorIcons
             { MendingMight, "https://wiki.guildwars2.com/images/e/e7/Mending_Might.png" },

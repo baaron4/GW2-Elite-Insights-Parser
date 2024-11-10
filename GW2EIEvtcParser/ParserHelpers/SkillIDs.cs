@@ -313,6 +313,7 @@
         public const long RingOfWarding = 9195;
         public const long SymbolOfLight = 9208;
         public const long SignetOfResolve = 9220;
+        public const long ReceiveTheLightPulse = 9221;
         public const long BindingBladeSelf = 9225;
         public const long MercifulInterventionTargetBuff = 9231;
         public const long MercifulAndJudgesInterventionSelfBuff = 9235; // applied by judges intervention and merciful intervention
@@ -1553,6 +1554,7 @@
         public const long FragmentsOfFaith = 30553;
         public const long SoothingDetonation = 30564;
         public const long RapidRegeneration = 30581;
+        public const long SoulSpiralHeal = 30591;
         public const long Vault = 30597;
         public const long HuntersWard = 30628;
         public const long FeelTheBurn = 30662;
@@ -3056,6 +3058,7 @@
         public const long ThousandNeedlesArmedBuff = 56912;
         public const long SealAreaArmedBuff = 56917;
         public const long FunctionGyro = 56920;
+        public const long DarkSaviorHealing = 56922;
         public const long SicEmPvPBuff = 56923;
         public const long PitfallPreparedBuff = 56924;
         public const long Rewinder = 56928;
@@ -3919,6 +3922,7 @@
         public const long PurifyingEssenceHeal = 68063;
         public const long Tranquil = 68065;
         public const long AchievementEligibilityVoidwalker = 68066;
+        public const long ShieldingRestorationBarrier = 68070;
         public const long VoidDischarge = 68071;
         public const long RifleBurstGrenadeSkill = 68079;
         public const long VoidEmpowerment = 68083;
@@ -4485,6 +4489,7 @@
         public const long ImaginaryInversion = 73152;
         public const long Psycut = 73154;
         public const long GreersVirulence = 73181;
+        public const long SolarStormIlluminatedHealing = 73199;
         public const long RelicOfTheStormsingerBuff = 73455;
         public const long HuntersProwess = 73541;
         public const long RelicOfSorrowHeal = 73714;
