@@ -226,8 +226,12 @@ namespace GW2EIEvtcParser.EIData
 
         public static Point2D RotatePointAroundPoint(Point2D centralPoint, Point2D rotationPoint, double angle)
         {
-            double x = (rotationPoint.X - centralPoint.X) * Math.Cos(angle) - (rotationPoint.Y - centralPoint.Y) * Math.Sin(angle) + centralPoint.X;
-            double y = (rotationPoint.X - centralPoint.X) * Math.Sin(angle) + (rotationPoint.Y - centralPoint.Y) * Math.Cos(angle) + centralPoint.Y;
+            double sin = Math.Sin(angle);
+            double cos = Math.Cos(angle);
+            double deltaX = rotationPoint.X - centralPoint.X;
+            double deltaY = rotationPoint.Y - centralPoint.Y;
+            double x = deltaX * cos - deltaY * sin + centralPoint.X;
+            double y = deltaX * sin + deltaY * cos + centralPoint.Y;
             return new Point2D((float)x, (float)y);
         }
     }

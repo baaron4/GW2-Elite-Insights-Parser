@@ -292,14 +292,9 @@ namespace GW2EIEvtcParser.EIData
             return new Point3D(sumX / points.Count, sumY / points.Count, sumZ / points.Count);
         }
 
-        public Point2D To2D()
-        {
-            return new Point2D(X, Y);
-        }
-
         public static Point3D RotatePointAroundPoint(Point3D pivotPoint, Point3D rotationPoint, double angle)
         {
-            return new Point3D(Point2D.RotatePointAroundPoint(pivotPoint.To2D(), rotationPoint.To2D(), angle), 0);
+            return new Point3D(Point2D.RotatePointAroundPoint(new Point2D(pivotPoint), new Point2D(rotationPoint), angle), 0);
         }
     }
 }
