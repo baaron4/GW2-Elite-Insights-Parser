@@ -135,7 +135,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
-                throw new InvalidOperationException("Buff id must be simulated");
+                throw new InvalidOperationException($"Buff id {buffId} must be simulated");
             }
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
@@ -160,7 +160,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
-                throw new InvalidOperationException("Buff id must be simulated");
+                throw new InvalidOperationException($"Buff id { buffId } must be simulated");
             }
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = GetBuffGraphs(log, by);
             if (bgms.TryGetValue(buffId, out BuffsGraphModel bgm))
@@ -191,7 +191,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
-                throw new InvalidOperationException("Buff id must be simulated");
+                throw new InvalidOperationException($"Buff id {buffId} must be simulated");
             }
             return GetBuffStatus(buffId, time, GetBuffGraphs(log));
         }
@@ -200,7 +200,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
-                throw new InvalidOperationException("Buff id must be simulated");
+                throw new InvalidOperationException($"Buff id {buffId} must be simulated");
             }
             return GetBuffStatus(buffId, time, GetBuffGraphs(log, by));
         }
@@ -224,7 +224,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
-                throw new InvalidOperationException("Buff id must be simulated");
+                throw new InvalidOperationException($"Buff id { buffId } must be simulated");
             }
             return GetBuffStatus(buffId, start, end, GetBuffGraphs(log));
         }
@@ -233,7 +233,7 @@ namespace GW2EIEvtcParser.EIData
         {
             if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
             {
-                throw new InvalidOperationException("Buff id must be simulated");
+                throw new InvalidOperationException($"Buff id {buffId} must be simulated");
             }
             return GetBuffStatus(buffId, start, end, GetBuffGraphs(log, by));
         }

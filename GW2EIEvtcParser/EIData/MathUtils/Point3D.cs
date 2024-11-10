@@ -66,11 +66,33 @@ namespace GW2EIEvtcParser.EIData
             newPt.MultiplyScalar(b);
             return newPt;
         }
+        public static Point3D operator /(Point3D a, Point3D b)
+        {
+            var newPt = new Point3D(a);
+            newPt.Divide(b);
+            return newPt;
+        }
+        public static Point3D operator /(float a, Point3D b)
+        {
+            var newPt = new Point3D(b);
+            newPt.DivideScalar(a);
+            return newPt;
+        }
+        public static Point3D operator /(Point3D a, float b)
+        {
+            var newPt = new Point3D(a);
+            newPt.DivideScalar(b);
+            return newPt;
+        }
         public static Point3D operator -(Point3D a)
         {
             var newPt = new Point3D(a);
             newPt.MultiplyScalar(-1);
             return newPt;
+        }
+        public static float ScalarProduct(Point3D pt1, Point3D pt2)
+        {
+            return pt1.X * pt2.X + pt1.Y * pt2.Y + pt1.Z * pt2.Z;
         }
 
         private void Add(Point3D a)
@@ -91,11 +113,23 @@ namespace GW2EIEvtcParser.EIData
             Y *= a.Y;
             Z *= a.Z;
         }
+        private void Divide(Point3D a)
+        {
+            X /= a.X;
+            Y /= a.Y;
+            Z /= a.Z;
+        }
         private void MultiplyScalar(float a)
         {
             X *= a;
             Y *= a;
             Z *= a;
+        }
+        private void DivideScalar(float a)
+        {
+            X /= a;
+            Y /= a;
+            Z /= a;
         }
 
         public float DistanceToPoint(Point3D endPoint)
@@ -121,6 +155,25 @@ namespace GW2EIEvtcParser.EIData
             return length;
         }
 
+        public Point3D Normalize()
+        {
+            var l = Length();
+            if (l ==  0.0f)
+            {
+                return new Point3D(0.0f, 0.0f, 0.0f);
+            }
+            return new Point3D(this) / l;
+        }
+        public Point2D Normalize2D()
+        {
+            var l = Length2D();
+            if (l == 0.0f)
+            {
+                return new Point2D(0.0f, 0.0f);
+            }
+            return new Point2D(X, Y) / Length2D();
+        }
+
         public Point3D(float x, float y)
         {
             X = x;
@@ -136,6 +189,13 @@ namespace GW2EIEvtcParser.EIData
         public Point3D(Point3D a) : this(a.X, a.Y, a.Z)
         {
         }
+        public Point3D(Point2D a) : this(a, 0)
+        {
+        }
+        public Point3D(Point2D a, float z) : this(a.X, a.Y, z)
+        {
+        }
+
 
 
         public Point3D(Point3D a, Point3D b, float ratio)
@@ -143,6 +203,18 @@ namespace GW2EIEvtcParser.EIData
             X = Mix(a.X, b.X, ratio);
             Y = Mix(a.Y, b.Y, ratio);
             Z = Mix(a.Z, b.Z, ratio);
+        }
+
+        public static Point3D ProjectPointOnLine(Point3D toProject, Point3D pointOnLine, Point3D directionVector)
+        {
+            var normalizedDirectionVector = directionVector.Normalize();
+            var vectorToProject = toProject - pointOnLine;
+            return ScalarProduct(vectorToProject, normalizedDirectionVector) * normalizedDirectionVector + pointOnLine;
+        }
+
+        public static Point3D ProjectPointOn2DLine(Point3D toProject, Point3D pointOnLine, Point3D directionVector)
+        {
+            return new Point3D(Point2D.ProjectPointOnLine(new Point2D(toProject), new Point2D(pointOnLine), new Point2D(directionVector)), pointOnLine.Z);
         }
 
         public static float GetZRotationFromFacing(Point3D facing)
@@ -218,6 +290,16 @@ namespace GW2EIEvtcParser.EIData
             float sumY = points.Sum(p => p.Y);
             float sumZ = points.Sum(p => p.Z);
             return new Point3D(sumX / points.Count, sumY / points.Count, sumZ / points.Count);
+        }
+
+        public Point2D To2D()
+        {
+            return new Point2D(X, Y);
+        }
+
+        public static Point3D RotatePointAroundPoint(Point3D pivotPoint, Point3D rotationPoint, double angle)
+        {
+            return new Point3D(Point2D.RotatePointAroundPoint(pivotPoint.To2D(), rotationPoint.To2D(), angle), 0);
         }
     }
 }

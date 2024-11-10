@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using GW2EIEvtcParser.EIData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData
 {
@@ -173,6 +176,35 @@ namespace GW2EIEvtcParser.ParsedData
                 {
                     end = firstEffect.Time;
                 }
+            }
+            return (start, end);
+        }
+
+        /// <summary>
+        /// Computes the lifespan of an effect.<br></br>
+        /// Takes the <see cref="Math.Min(long, long)"/> between <see cref="DeadEvent"/>, <see cref="DespawnEvent"/> or Last Aware of a target as the End Time of the effect.
+        /// </summary>
+        /// <param name="targets">The list of targets to search the events of.</param>
+        /// <param name="species">The type of species of the targets.</param>
+        /// <returns>The computed start and end times.</returns>
+        public (long start, long end) ComputeLifespanWithNPCRemoval(ParsedEvtcLog log, IReadOnlyList<AbstractSingleActor>targets, IReadOnlyList<int>species)
+        {
+            long start = Time;
+            long end = start + Duration;
+
+            foreach (AbstractSingleActor target in targets.Where(x => x.IsAnySpecies(species)))
+            {
+                DeadEvent deadEvent = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+                DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(target.AgentItem).FirstOrDefault();
+                if (deadEvent != null)
+                {
+                    end = Math.Min(deadEvent.Time, end);
+                }
+                if (despawnEvent != null)
+                {
+                    end = Math.Min(despawnEvent.Time, end);
+                }
+                end = Math.Min(target.LastAware, end);
             }
             return (start, end);
         }
