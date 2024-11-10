@@ -1758,7 +1758,7 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (EffectEvent effect in effects)
             {
                 long duration = 5000;
-                (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, duration) : effect.ComputeLifespan(log, duration);
+                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 long growing = lifespan.start + duration;
                 AbstractSingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
                 if (dragonVoid == null)
