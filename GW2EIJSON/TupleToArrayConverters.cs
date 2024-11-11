@@ -36,7 +36,7 @@ public class Tuple2ToArrayConverterFactory : JsonConverterFactory
 
     public override bool CanConvert(Type typeToConvert)
     {
-        return typeToConvert.GetGenericTypeDefinition() == typeof(ValueTuple<,>);
+        return typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(ValueTuple<,>);
     }
 
     public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
