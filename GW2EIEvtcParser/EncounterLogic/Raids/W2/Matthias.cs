@@ -278,10 +278,9 @@ internal class Matthias : SalvationPass
                     int preCastTime = 1000;
                     int duration = 750;
                     uint width = 4000; uint height = 130;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                         var rotationConnextor = new AngleConnector(facing);
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Red, 0.1, positionConnector).UsingRotationConnector(rotationConnextor));
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), Colors.Red, 0.7, positionConnector).UsingRotationConnector(rotationConnextor));
@@ -316,8 +315,7 @@ internal class Matthias : SalvationPass
         {
             int corruptedMatthiasEnd = (int)seg.End;
             replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
-            Point3D position = p.GetCurrentInterpolatedPosition(log, corruptedMatthiasEnd);
-            if (position != null)
+            if (p.TryGetCurrentInterpolatedPosition(log, corruptedMatthiasEnd, out var position))
             {
                 replay.AddDecorationWithGrowing(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), Colors.Black, 0.3, new PositionConnector(position)), corruptedMatthiasEnd + 100000);
             }
@@ -329,23 +327,22 @@ internal class Matthias : SalvationPass
         {
             int wellMatthiasEnd = (int)seg.End;
             replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
-            Point3D position = p.GetCurrentInterpolatedPosition(log, wellMatthiasEnd);
-            if (position != null)
+            if (p.TryGetCurrentInterpolatedPosition(log, wellMatthiasEnd, out var position))
             {
                 replay.Decorations.Add(new CircleDecoration(300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new PositionConnector(position)));
             }
             replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
-        // Sacrifice Selection
+                // Sacrifice Selection
         var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
-        // Sacrifice
+                // Sacrifice
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
         foreach (var seg in sacrificeMatthias)
         {
             replay.AddDecorationWithGrowing(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
         }
-        // Bombs
+                // Bombs
         var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
         foreach (AbstractBuffEvent c in zealousBenediction)
         {
@@ -353,7 +350,7 @@ internal class Matthias : SalvationPass
             int zealousEnd = zealousStart + 5000;
             replay.AddDecorationWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), Colors.Orange, 0.2, new AgentConnector(p)), zealousEnd);
         }
-        // Unbalanced
+                // Unbalanced
         var unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
     }

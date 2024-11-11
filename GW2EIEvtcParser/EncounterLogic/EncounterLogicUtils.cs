@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
@@ -175,29 +176,34 @@ internal static class EncounterLogicUtils
 
     internal delegate bool ChestAgentChecker(AgentItem agent);
 
-    internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Point3D chestPosition, ChestAgentChecker? chestChecker = null)
+    internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
     {
         if (chestID == ArcDPSEnums.ChestID.None)
         {
             return false;
         }
+
         var positions = combatData.Where(evt => {
-            if (evt.IsStateChange == ArcDPSEnums.StateChange.Position)
+            if (evt.IsStateChange != ArcDPSEnums.StateChange.Position)
             {
-                AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
-                if (agent.Type != AgentItem.AgentType.Gadget)
-                {
-                    return false;
-                }
-                Point3D position = AbstractMovementEvent.GetPoint3D(evt);
-                if (position.Distance2DToPoint(chestPosition) < InchDistanceThreshold)
-                {
-                    return true;
-                }
                 return false;
             }
+
+            AgentItem agent = agentData.GetAgent(evt.SrcAgent, evt.Time);
+            if (agent.Type != AgentItem.AgentType.Gadget)
+            {
+                return false;
+            }
+
+            var position = AbstractMovementEvent.GetPoint3D(evt);
+            if ((position - chestPosition).XY().Length() < InchDistanceThreshold)
+            {
+                return true;
+            }
+
             return false;
         }).ToList();
+
         var velocities = combatData.Where(evt => {
             if (evt.IsStateChange == ArcDPSEnums.StateChange.Velocity)
             {
@@ -210,10 +216,11 @@ internal static class EncounterLogicUtils
             }
             return false;
         }).ToList();
+
         var candidates = positions.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
         // Remove all candidates who moved, chests can not move
         candidates.RemoveAll(candidate => velocities.Where(evt => evt.SrcMatchesAgent(candidate)).Any(evt => AbstractMovementEvent.GetPoint3D(evt).Length() >= 1e-6));
-        AgentItem chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
+        var chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
         if (chest != null)
         {
             chest.OverrideID(chestID);
@@ -222,15 +229,15 @@ internal static class EncounterLogicUtils
         return false;
     }
 
-    internal static string AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Point3D)> positionData, float maxDiff = InchDistanceThreshold)
+    internal static string? AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)
     {
-        CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+        var positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
         if (positionEvt != null)
         {
-            Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt);
-            foreach ((string suffix, Point3D expectedPosition) in positionData)
+            var position = AbstractMovementEvent.GetPoint3D(positionEvt).XY();
+            foreach (var (suffix, expectedPosition) in positionData)
             {
-                if (position.Distance2DToPoint(expectedPosition) < maxDiff)
+                if ((position - expectedPosition).Length() < maxDiff)
                 {
                     target.OverrideName(target.Character + " " + suffix);
                     return suffix;
@@ -321,14 +328,14 @@ internal static class EncounterLogicUtils
     /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
     internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
     {
-        var matchedEffects = new List<(EffectEvent, EffectEvent, float)>();
+        var matchedEffects = new List<(EffectEvent, EffectEvent, float)>(); //TODO(Rennorb) @perf
         foreach (EffectEvent startEffect in startEffects)
         {
             var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
             if (candidateEffectEvents.Count != 0)
             {
-                EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => x.Position.Distance2DToPoint(startEffect.Position));
-                float minimalDistance = matchedEffect.Position.Distance2DToPoint(startEffect.Position);
+                EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => (x.Position - startEffect.Position).LengthSquared()); //TODO(Rennorb) @perf
+                float minimalDistance = (matchedEffect.Position - startEffect.Position).Length();
                 matchedEffects.Add((matchedEffect, startEffect, minimalDistance));
             }
         }

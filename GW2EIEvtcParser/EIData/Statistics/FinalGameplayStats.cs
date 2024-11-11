@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData;
@@ -25,7 +26,7 @@ public class FinalGameplayStats
     public readonly double SkillCastUptime;
     public readonly double SkillCastUptimeNoAA;
 
-    private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<Point3D> reference)
+    private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> reference)
     {
         var positions = actor.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
         int offset = actor.GetCombatReplayPolledPositions(log).Count(x => x.Time < start);
@@ -38,7 +39,8 @@ public class FinalGameplayStats
                 {
                     continue;
                 }
-                distances.Add(positions[time].Distance2DToPoint(reference[time + offset]));
+
+                distances.Add((positions[time].ExtractVector() - reference[time + offset]!.ExtractVector()).XY().Length());
             }
             return distances.Count == 0 ? -1 : distances.Sum() / distances.Count;
         }

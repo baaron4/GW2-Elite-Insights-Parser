@@ -13,11 +13,11 @@ public abstract class AbstractSingleActorCombatReplayDescription : AbstractComba
     public readonly int ID;
     public readonly IReadOnlyList<float> Positions;
     public readonly IReadOnlyList<float> Angles;
-    public IReadOnlyList<long> Dead { get; private set; }
-    public IReadOnlyList<long> Down { get; private set; }
-    public IReadOnlyList<long> Dc { get; private set; }
-    public readonly IReadOnlyList<long> Hide;
-    public IReadOnlyList<long> BreakbarActive { get; private set; }
+    public IReadOnlyList<long>? Dead { get; private set; }
+    public IReadOnlyList<long>? Down { get; private set; }
+    public IReadOnlyList<long>? Dc { get; private set; }
+    public readonly IReadOnlyList<long>? Hide;
+    public IReadOnlyList<long>? BreakbarActive { get; private set; }
 
     public readonly long HitboxWidth;
 
@@ -44,25 +44,28 @@ public abstract class AbstractSingleActorCombatReplayDescription : AbstractComba
         End = replay.TimeOffsets.end;
         Img = actor.GetIcon();
         ID = actor.UniqueID;
-        var positions = new List<float>();
-        Positions = positions;
-        var angles = new List<float>();
-        Angles = angles;
         Type = GetActorType(actor, log);
         HitboxWidth = actor.AgentItem.HitboxWidth;
-        foreach (Point3D pos in replay.PolledPositions)
+
+        var positions = new List<float>(replay.PolledPositions.Count * 2);
+        foreach (var pos in replay.PolledPositions)
         {
             (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
             positions.Add(x);
             positions.Add(y);
         }
-        foreach (Point3D facing in replay.PolledRotations)
+        Positions = positions;
+        
+        var angles = new List<float>(replay.PolledRotations.Count);
+        foreach (var facing in replay.PolledRotations)
         {
-            angles.Add(-Point3D.GetZRotationFromFacing(facing));
+            angles.Add(-facing.ExtractVector().GetRoundedZRotationDeg());
         }
+        Angles = angles;
+
         if (replay.Hidden.Count != 0)
         {
-            var hide = new List<long>();
+            var hide = new List<long>(replay.Hidden.Count * 2);
             foreach (Segment seg in replay.Hidden)
             {
                 hide.Add(seg.Start);
@@ -71,6 +74,7 @@ public abstract class AbstractSingleActorCombatReplayDescription : AbstractComba
             Hide = hide;
         }
     }
+
     protected void SetStatus(ParsedEvtcLog log, AbstractSingleActor a)
     {
         var dead = new List<long>();

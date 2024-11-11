@@ -164,8 +164,7 @@ internal class Slothasor : SalvationPass
                     int preCastTime = 1000;
                     int duration = 2000;
                     uint range = 600;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
@@ -210,8 +209,7 @@ internal class Slothasor : SalvationPass
             int toDropEnd = (int)seg.End;
             var circle = new CircleDecoration(180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
             replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
-            Point3D position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
-            if (position != null)
+            if (p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
             {
                 replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
             }

@@ -467,8 +467,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     {
                         (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 30000) : effect.ComputeLifespan(log, 1500);
                         var rotation = new AngleConnector(effect.Rotation.Z + 90); // Position incorrect, get Arsenite's position
-                        Point3D position = target.GetCurrentPosition(log, effect.Time);
-                        if (position != null)
+                        if (target.TryGetCurrentPosition(log, effect.Time, out var position))
                         {
                             var pie = (PieDecoration)new PieDecoration(3000, 180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(position)).UsingRotationConnector(rotation);
                             replay.Decorations.Add(pie);
@@ -561,13 +560,12 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         // We only keep the first
                         EffectEvent effect = ultimatumDetonation[0];
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration to 1500
-                        Point3D currentRotation = target.GetCurrentRotation(log, effect.Time);
                         EffectEvent previousIndicator = ultimatumIndicators.LastOrDefault(x => x.Time <= effect.Time);
-                        if (currentRotation != null && previousIndicator != null)
+                        if (target.TryGetCurrentFacingDirection(log, effect.Time, out var currentRotation) && previousIndicator != null)
                         {
                             var flipped = previousIndicator.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
                             var rotationOffset = flipped ? 180 : 0;
-                            var rotation = new AngleConnector(Point3D.GetZRotationFromFacing(currentRotation) + rotationOffset);
+                            var rotation = new AngleConnector(currentRotation.GetRoundedZRotationDeg() + rotationOffset);
                             var openingAngle = flipped ? 120 : 240;
                             var pie = (PieDecoration)new PieDecoration(3000, openingAngle, lifespan, Colors.CobaltBlue, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
                             replay.Decorations.Add(pie);

@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
@@ -92,11 +93,11 @@ internal class SpiritRace : SpiritVale
         {
             return FightData.EncounterStartStatus.Late;
         }
-        Point3D position = combatData.GetMovementData(wallOfGhosts).Where(x => x is PositionEvent positionEvt).Select(x => x.GetPoint3D()).FirstOrDefault();
-        var initialPosition = new Point3D(-5669.139f, -7814.589f, -1138.749f);
+        var position = combatData.GetMovementData(wallOfGhosts).Where(x => x is PositionEvent positionEvt).FirstOrDefault();
         if (position != null)
         {
-            return position.DistanceToPoint(initialPosition) > 10 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
+            var initialPosition = new Vector3(-5669.139f, -7814.589f, -1138.749f);
+            return (position.GetPoint3D() - initialPosition).Length() > 10 ? FightData.EncounterStartStatus.Late : FightData.EncounterStartStatus.Normal;
         }
         // To investigate
         return FightData.EncounterStartStatus.Late;
@@ -107,10 +108,14 @@ internal class SpiritRace : SpiritVale
         AgentItem wallOfGhosts = agentData.GetNPCsByID(ArcDPSEnums.TrashID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts != null)
         {
-            (Point3D, long Time) firstVelocity = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)).Select(x => (AbstractMovementEvent.GetPoint3D(x), x.Time)).FirstOrDefault(x => x.Item1.Length2D() > 0);
-            if (firstVelocity != default)
+            foreach(var @event in combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
             {
-                return firstVelocity.Time;
+                if(AbstractMovementEvent.GetPointXY(@event) != default)
+                {
+                    //first velocity
+                    return @event.Time;
+                }
+
             }
         }
         return EncounterLogicTimeUtils.GetGenericFightOffset(fightData);
@@ -140,28 +145,28 @@ internal class SpiritRace : SpiritVale
             Targetless = true;
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        var position1 = new Point3D(-7607.929f, -12493.7051f, -1112.468f);
-        var position2 = new Point3D(-8423.886f, -9858.193f, -1335.1134f);
-        var position3 = new Point3D(-9104.786f, -6910.657f, -2405.52222f);
-        var position4 = new Point3D(-8552.994f, -863.6334f, -1416.31714f);
+        var position1 = new Vector2(-7607.929f, -12493.7051f/*, -1112.468f*/);
+        var position2 = new Vector2(-8423.886f, -9858.193f/*, -1335.1134f*/);
+        var position3 = new Vector2(-9104.786f, -6910.657f/*, -2405.52222f*/);
+        var position4 = new Vector2(-8552.994f, -863.6334f/*, -1416.31714f*/);
         foreach (AbstractSingleActor target in Targets)
         {
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.EtherealBarrier:
-                    var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(x => AbstractMovementEvent.GetPoint3D(x)).ToList();
-                    if (posititions.Any(x => x.Distance2DToPoint(position1) < 10)) {
+                    var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(AbstractMovementEvent.GetPointXY).ToList();
+                    if (posititions.Any(x => (x - position1).Length() < 10)) {
                         target.OverrideName(target.Character + " 1" );
                     } 
-                    else if (posititions.Any(x => x.Distance2DToPoint(position2) < 10))
+                    else if (posititions.Any(x => (x - position2).Length() < 10))
                     {
                         target.OverrideName(target.Character + " 2");
                     } 
-                    else if (posititions.Any(x => x.Distance2DToPoint(position3) < 10))
+                    else if (posititions.Any(x => (x - position3).Length() < 10))
                     {
                         target.OverrideName(target.Character + " 3");
                     } 
-                    else if (posititions.Any(x => x.Distance2DToPoint(position4) < 10))
+                    else if (posititions.Any(x => (x - position4).Length() < 10))
                     {
                         target.OverrideName(target.Character + " 4");
                     }
@@ -170,7 +175,7 @@ internal class SpiritRace : SpiritVale
                     break;
             }
         }
-        _targets.Sort((x,y) => x.Character.CompareTo(y.Character));
+        _targets.Sort((x, y) => string.Compare(x.Character, y.Character, StringComparison.Ordinal));
     }
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)

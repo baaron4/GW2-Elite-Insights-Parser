@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -40,13 +41,14 @@ public class AgentFacingConnector : RotationConnector
         OffsetMode = rotationOffsetMode;
     }
 
-    public AgentFacingConnector(AbstractSingleActor agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetZRotationFromFacing(rotationOffset), rotationOffsetMode)
+    public AgentFacingConnector(AbstractSingleActor agent, in Vector3 facingDirection, RotationOffsetMode rotationOffsetMode) : this(agent, facingDirection.GetRoundedZRotationDeg(), rotationOffsetMode)
     {
     }
 
-    public AgentFacingConnector(AgentItem agent, Point3D rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent, Point3D.GetZRotationFromFacing(rotationOffset), rotationOffsetMode)
+    public AgentFacingConnector(AgentItem agent, in Vector3 facingDirection, RotationOffsetMode rotationOffsetMode) : this(agent, facingDirection.GetRoundedZRotationDeg(), rotationOffsetMode)
     {
     }
+
     public class AgentFacingConnectorDescriptor : RotationConnectorDescriptor
     {
         public int MasterId { get; private set; }

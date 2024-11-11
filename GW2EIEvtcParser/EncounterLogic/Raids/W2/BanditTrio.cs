@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -15,27 +16,26 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class BanditTrio : SalvationPass
 {
-    private static readonly Point3D ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
+    private static readonly Vector3 ChestOfPrisonCampPosition = new(-903.703f, -9450.76f, -126.277008f);
     public BanditTrio(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>()
-        {
-        new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (Launched from pad)", "Shell-Shocked", 0),
-        new PlayerDstBuffApplyMechanic(Blind, "Blinded", new MechanicPlotlySetting(Symbols.X, Colors.White), "Blinded", "Blinded by Zane", "Blinded", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Zane)),
-        new PlayerDstBuffApplyMechanic(Burning, "Burning", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Burning", "Burned by Narella", "Burning", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Narella)),
-        new PlayerDstBuffApplyMechanic(SlowBurn, "Slow Burn", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightPurple), "SlowBurn.A", "Received Slow Burn", "Slow Burn Application", 0),
-        new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Pink), "Targeted.B", "Applied Targeted Buff (Berg)", "Targeted Application (Berg)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Berg)),
-        new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Purple), "Targeted.A", "Applied Targeted Buff (Any)", "Targeted Application (Any)", 0),
-        new PlayerSrcBuffApplyMechanic(SapperBombDamageBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Hit Cage", "Hit Cage with Sapper Bomb", "Hit Cage (Sapper Bomb)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.Cage)),
-        new PlayerCastStartMechanic(ThrowOilKeg, "Throw", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightRed), "OilKeg.T", "Threw Oil Keg", "Oil Keg Throw", 0),
-        new PlayerCastStartMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Beehive.T", "Threw Beehive", "Beehive Throw", 0),
-        new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Yellow), "Beehive.H.B", "Beehive Hits (Berg)", "Beehive Hit (Berg)", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Berg)),
-        new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightOrange), "Beehive.H.A", "Beehive Hits (Any)", "Beehive Hit (Any)", 0),
-        new PlayerDstHitMechanic(OverheadSmashBerg, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
-        new PlayerDstHitMechanic(HailOfBulletsZane, "Hail of Bullets", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
-        new PlayerDstHitMechanic(FieryVortexNarella, "Fiery Vortex", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
-        new PlayerDstHitMechanic(FlakShotNarella, "Flak SHot", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
-        });
+        MechanicList.AddRange([
+            new PlayerDstBuffApplyMechanic(ShellShocked, "Shell-Shocked", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.DarkGreen), "Launched", "Shell-Shocked (Launched from pad)", "Shell-Shocked", 0),
+            new PlayerDstBuffApplyMechanic(Blind, "Blinded", new MechanicPlotlySetting(Symbols.X, Colors.White), "Blinded", "Blinded by Zane", "Blinded", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Zane)),
+            new PlayerDstBuffApplyMechanic(Burning, "Burning", new MechanicPlotlySetting(Symbols.StarOpen, Colors.Red), "Burning", "Burned by Narella", "Burning", 0).UsingChecker((bae, log) => bae.CreditedBy.IsSpecies(TargetID.Narella)),
+            new PlayerDstBuffApplyMechanic(SlowBurn, "Slow Burn", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightPurple), "SlowBurn.A", "Received Slow Burn", "Slow Burn Application", 0),
+            new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Pink), "Targeted.B", "Applied Targeted Buff (Berg)", "Targeted Application (Berg)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TargetID.Berg)),
+            new PlayerSrcBuffApplyMechanic(Targeted, "Targeted", new MechanicPlotlySetting(Symbols.StarSquare, Colors.Purple), "Targeted.A", "Applied Targeted Buff (Any)", "Targeted Application (Any)", 0),
+            new PlayerSrcBuffApplyMechanic(SapperBombDamageBuff, "Sapper Bomb", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Hit Cage", "Hit Cage with Sapper Bomb", "Hit Cage (Sapper Bomb)", 0).UsingChecker((bae, log) => bae.To.IsSpecies(TrashID.Cage)),
+            new PlayerCastStartMechanic(ThrowOilKeg, "Throw", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightRed), "OilKeg.T", "Threw Oil Keg", "Oil Keg Throw", 0),
+            new PlayerCastStartMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Yellow), "Beehive.T", "Threw Beehive", "Beehive Throw", 0),
+            new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Yellow), "Beehive.H.B", "Beehive Hits (Berg)", "Beehive Hit (Berg)", 0).UsingChecker((ahde, log) => ahde.To.IsSpecies(TargetID.Berg)),
+            new PlayerSrcHitMechanic(Beehive, "Beehive", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightOrange), "Beehive.H.A", "Beehive Hits (Any)", "Beehive Hit (Any)", 0),
+            new PlayerDstHitMechanic(OverheadSmashBerg, "Overhead Smash", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.Orange), "Smash","Overhead Smash (CC Attack Berg)", "CC Smash",0),
+            new PlayerDstHitMechanic(HailOfBulletsZane, "Hail of Bullets", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.Red), "Zane Cone","Hail of Bullets (Zane Cone Shot)", "Hail of Bullets",0),
+            new PlayerDstHitMechanic(FieryVortexNarella, "Fiery Vortex", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Tornado","Fiery Vortex (Tornado)", "Tornado",250),
+            new PlayerDstHitMechanic(FlakShotNarella, "Flak SHot", new MechanicPlotlySetting(Symbols.Diamond, Colors.LightRed), "Flak", "Flak Shot (Narella)", "Flak Shot Hit", 0),
+        ]);
         Extension = "trio";
         GenericFallBackMethod = FallBackMethod.ChestGadget;
         ChestID = ChestID.ChestOfPrisonCamp;
@@ -46,10 +46,7 @@ internal class BanditTrio : SalvationPass
 
     protected override List<int> GetSuccessCheckIDs()
     {
-        return
-        [
-            (int)TargetID.Narella
-        ];
+        return [ (int)TargetID.Narella ];
     }
 
     protected override ReadOnlySpan<int> GetTargetsIDs()
@@ -64,10 +61,7 @@ internal class BanditTrio : SalvationPass
 
     protected override ReadOnlySpan<int> GetFriendlyNPCIDs()
     {
-        return
-        [
-            (int)TrashID.Cage
-        ];
+        return [ (int)TrashID.Cage ];
     }
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
@@ -90,20 +84,23 @@ internal class BanditTrio : SalvationPass
             {
                 throw new MissingKeyActorsException("Berg not found");
             }
+            
             startToUse = Math.Min(berg.FirstAware, startToUse);
             if (!agentData.TryGetFirstAgentItem(TargetID.Zane, out AgentItem zane))
             {
                 throw new MissingKeyActorsException("Zane not found");
             }
+            
             startToUse = Math.Min(zane.FirstAware, startToUse);
             if (!agentData.TryGetFirstAgentItem(TargetID.Narella, out AgentItem narella))
             {
                 throw new MissingKeyActorsException("Narella not found");
             }
+            
             startToUse = Math.Min(narella.FirstAware, startToUse);
             // Thrash mob start check
-            var boxStart = new Point2D(-2200, -11300);
-            var boxEnd = new Point2D(1000, -7200);
+            var boxStart = new Vector2(-2200, -11300);
+            var boxEnd = new Vector2(1000, -7200);
             var trashMobsToCheck = new HashSet<TrashID>()
             {
                 TrashID.BanditAssassin,
@@ -120,8 +117,11 @@ internal class BanditTrio : SalvationPass
                 TrashID.BanditBombardier,
                 TrashID.BanditSniper,
             };
-            var banditSniperPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck)).Select(x => new PositionEvent(x, agentData)).ToList();
-            var banditsInBox = new HashSet<AgentItem>(banditSniperPositions.Where(x => x.Time < startToUse + 10000 && Point3D.IsInBox2D(x.GetPoint3D(), boxStart, boxEnd)).Select(x => x.Src));
+            var banditSniperPositions = combatData.Where(x => x.IsStateChange == StateChange.Position && agentData.GetAgent(x.SrcAgent, x.Time).IsAnySpecies(trashMobsToCheck))
+                .Select(x => new PositionEvent(x, agentData));
+            var banditsInBox = banditSniperPositions.Where(x => x.Time < startToUse + 10000 && x.GetPointXY().IsInBoundingBox(boxStart, boxEnd))
+                .Select(x => x.Src)
+                .ToHashSet();
             if (banditsInBox.Count > 0)
             {
                 startToUse = Math.Min(banditsInBox.Min(x => x.FirstAware), startToUse);
@@ -282,14 +282,13 @@ internal class BanditTrio : SalvationPass
                 {
                     uint radius = 550;
                     int angle = 80;
-                    (long, long) lifespan = (c.Time, c.Time + c.ActualDuration);
-                    Point3D facing = target.GetCurrentRotation(log, lifespan.Item1 + 600, lifespan.Item2);
-                    if (facing != null)
+                    (long, long End) lifespan = (c.Time, c.Time + c.ActualDuration);
+                    if (target.TryGetCurrentFacingDirection(log, lifespan.Item1 + 600, out var facing, lifespan.End))
                     {
                         var rotationConnector = new AngleConnector(facing);
                         var agentConnector = new AgentConnector(target);
                         var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
-                        replay.AddDecorationWithGrowing(cone, lifespan.Item2);
+                        replay.AddDecorationWithGrowing(cone, lifespan.End);
                     }
                 }
             } break;
@@ -306,8 +305,7 @@ internal class BanditTrio : SalvationPass
                     long secondConeEnd = secondConeStart + 400;
                     long thirdConeEnd = thirdConeStart + 400;
                     uint radius = 1500;
-                    Point3D facing = target.GetCurrentRotation(log, start);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);

@@ -156,15 +156,15 @@ internal class Sabetha : SpiritVale
                     int preCastTime = 2800;
                     int duration = 10000;
                     uint width = 1300; uint height = 60;
-                    Point3D? facing = target.GetCurrentRotation(log, start);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(facing)));
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(facing, 360)));
                     }
                 }
                 break;
+
             case (int)ArcDPSEnums.TrashID.Kernan:
                 var bulletHail = cls.Where(x => x.SkillId == BulletHail);
                 foreach (AbstractCastEvent c in bulletHail)
@@ -177,8 +177,7 @@ internal class Sabetha : SpiritVale
                     int secondConeEnd = secondConeStart + 400;
                     int thirdConeEnd = thirdConeStart + 400;
                     uint radius = 1500;
-                    Point3D? facing = target.GetCurrentRotation(log, start);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
@@ -188,6 +187,7 @@ internal class Sabetha : SpiritVale
                     }
                 }
                 break;
+
             case (int)ArcDPSEnums.TrashID.Knuckles:
                 var breakbar = cls.Where(x => x.SkillId == PlatformQuake);
                 foreach (AbstractCastEvent c in breakbar)
@@ -195,6 +195,7 @@ internal class Sabetha : SpiritVale
                     replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
                 break;
+
             case (int)ArcDPSEnums.TrashID.Karde:
                 var flameBlast = cls.Where(x => x.SkillId == FlameBlast);
                 foreach (AbstractCastEvent c in flameBlast)
@@ -202,13 +203,13 @@ internal class Sabetha : SpiritVale
                     int start = (int)c.Time;
                     int end = start + 4000;
                     uint radius = 600;
-                    Point3D? facing = target.GetCurrentRotation(log, start);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
                         replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), Colors.Yellow, 0.5, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                     }
                 }
                 break;
+
             default:
                 break;
         }
@@ -227,7 +228,7 @@ internal class Sabetha : SpiritVale
     internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        // timed bombs
+                // timed bombs
         var timedBombs = log.CombatData.GetBuffDataByIDByDst(TimeBomb, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
         foreach (AbstractBuffEvent c in timedBombs)
         {
@@ -235,7 +236,7 @@ internal class Sabetha : SpiritVale
             int end = start + 3000;
             replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(280, (start, end), Colors.LightOrange, 0.5, new AgentConnector(p)).UsingFilled(false), true, end);
         }
-        // Sapper bombs
+                // Sapper bombs
         var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
         foreach (var seg in sapperBombs)
         {

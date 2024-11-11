@@ -19,6 +19,7 @@ public static class ParserHelper
 
     public const int MinionLimit = 1500;
 
+    //TODO(Rennorb) @cleanup: Rename this whole block. These are rounding precisions, maybe 'digits' if im being generous.
     internal const int BuffDigit = 3;
     internal const int DamageModGainDigit = 3;
     internal const int AccelerationDigit = 3;

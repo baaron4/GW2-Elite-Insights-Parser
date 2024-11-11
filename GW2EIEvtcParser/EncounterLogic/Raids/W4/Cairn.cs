@@ -118,10 +118,9 @@ internal class Cairn : BastionOfThePenitent
                     int initialHitDuration = 850;
                     int sweepDuration = 1100;
                     uint width = 1400; uint height = 80;
-                    Point3D? facing = target.GetCurrentRotation(log, start);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                         var rotationConnector = new AngleConnector(facing);
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Purple, 0.1, positionConnector).UsingRotationConnector(rotationConnector));
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + preCastTime + initialHitDuration), Colors.DarkPurple, 0.5, positionConnector).UsingRotationConnector(rotationConnector));

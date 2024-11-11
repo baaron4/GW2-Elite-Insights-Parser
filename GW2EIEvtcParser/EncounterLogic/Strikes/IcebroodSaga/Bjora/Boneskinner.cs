@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -108,7 +109,7 @@ internal class Boneskinner : Bjora
                     if (lastDirection != null)
                     {
                         var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(lastDirection);
+                        var rotationConnector = new AngleConnector(lastDirection.ExtractVector());
                         // Growing Decoration
                         var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
                         replay.AddDecorationWithGrowing(pie, endHitTime);
@@ -116,6 +117,7 @@ internal class Boneskinner : Bjora
                         replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
                     }
                 }
+
                 // Crushing Cruelty
                 var crushingCruelty = casts.Where(x => x.SkillId == CrushingCruelty);
                 foreach (AbstractCastEvent c in crushingCruelty)
@@ -125,10 +127,11 @@ internal class Boneskinner : Bjora
                     long endTime = c.Time + hitTime;
 
                     // Position of the jump back
-                    var jumpPosition = new Point3D((float)613.054, (float)-85.3458, (float)-7075.265);
+                    var jumpPosition = new Vector3(613.054f, -85.3458f, -7075.265f);
                     var circle = new CircleDecoration(radius, (c.Time, endTime), Colors.LightOrange, 0.1, new PositionConnector(jumpPosition));
                     replay.AddDecorationWithGrowing(circle, endTime);
                 }
+
                 // Douse in Darkness
                 var douseInDarkness = casts.Where(x => x.SkillId == DouseInDarkness).ToList();
                 foreach (AbstractCastEvent c in douseInDarkness)
@@ -210,8 +213,7 @@ internal class Boneskinner : Bjora
                 int start = (int)indicator.Time;
                 int end = (int)indicator.Time + duration;
 
-                Point3D? rotation = actor.GetCurrentRotation(log, start, duration);
-                if (rotation != null)
+                if (actor.TryGetCurrentFacingDirection(log, start, out var rotation, duration))
                 {
                     var connector = new PositionConnector(indicator.Position);
                     var rotationConnector = new AngleConnector(rotation);

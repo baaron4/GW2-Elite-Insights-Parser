@@ -81,7 +81,7 @@ public class CombatReplayMap
                 {
                     continue;
                 }
-                IReadOnlyList<Point3D> pos = p.GetCombatReplayPolledPositions(log);
+                var pos = p.GetCombatReplayPolledPositions(log);
                 _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.X)) - 250, _rectInMap.topX);
                 _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Y)) - 250, _rectInMap.topY);
                 _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.X)) + 250, _rectInMap.bottomX);

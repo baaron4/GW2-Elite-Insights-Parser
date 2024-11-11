@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
@@ -13,15 +14,14 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class HarvestTemple : EndOfDragonsStrike
 {
 
-    private static readonly Point3D GrandStrikeChestPosition = new(605.31f, -20400.5f, -15420.1f);
-    private IReadOnlyList<AbstractSingleActor> FirstAwareSortedTargets;
+    private static readonly Vector3 GrandStrikeChestPosition = new(605.31f, -20400.5f, -15420.1f);
+    private IReadOnlyList<AbstractSingleActor>? FirstAwareSortedTargets;
     public HarvestTemple(int triggerID) : base(triggerID)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
+        MechanicList.AddRange([
             // General
-            new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleSpreadNM, EffectGUIDs.HarvestTempleSpreadCM }, "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
-            new PlayerDstEffectMechanic(new [] { EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleSelectCM }, "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
+            new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleSpreadNM, EffectGUIDs.HarvestTempleSpreadCM], "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
+            new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleSelectCM], "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
             new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidBuff, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
             new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
             new PlayerDstHitMechanic([VoidPoolNM, VoidPoolCM], "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
@@ -90,8 +90,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             // Goliath
             new PlayerDstHitMechanic(GlacialSlam, "Glacial Slam", new MechanicPlotlySetting(Symbols.CircleX, Colors.Ice), "GlaSlam.H", "Hit by Glacial Slam", "Glacial Slam Hit", 0),
             new PlayerDstHitMechanic(GlacialSlam, "Glacial Slam", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Ice), "GlaSlam.CC", "CC'd by Glacial Slam", "Glacial Slam CC", 0).UsingChecker((ahde, log) => !ahde.To.HasBuff(log, Stability, ahde.Time - ServerDelayConstant)),
-        }
-        );
+        ]);
         Icon = EncounterIconHarvestTemple;
         ChestID = ArcDPSEnums.ChestID.GrandStrikeChest;
         Extension = "harvsttmpl";
@@ -501,7 +500,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src).ToList();
                 var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
                 const int referenceLength = 200;
-                var gravityBalls_ = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPoint3D(y).Length2D() - referenceLength) < 10));
+                var gravityBalls_ = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(AbstractMovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
                 foreach (AgentItem ball in gravityBalls_)
                 {
                     ball.OverrideType(AgentItem.AgentType.NPC);
@@ -517,7 +516,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                     .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
                     .Distinct()
-                    .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPoint3D(evt).Length2D() > 0) > 2)
+                    .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && AbstractMovementEvent.GetPointXY(evt) != default) > 2)
                     .ToList();
                 foreach (AgentItem frostBeam in frostBeams)
                 {
@@ -773,7 +772,8 @@ internal class HarvestTemple : EndOfDragonsStrike
                         (long start, long end) lifespanIndicator = (fireBallEffect.Time - 2000, fireBallEffect.Time);
                         (long start, long end) lifespanFlame = fireBallEffect.ComputeLifespan(log, 2300);
                         var circle = new CircleDecoration(200, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(fireBallEffect.Position));
-                        replay.AddProjectile(target.GetCurrentPosition(log, lifespanIndicator.start), fireBallEffect.Position, lifespanIndicator, Colors.Yellow, 0.2);
+                        target.TryGetCurrentPosition(log, lifespanIndicator.start, out var primordusPos);
+                        replay.AddProjectile(primordusPos, fireBallEffect.Position, lifespanIndicator, Colors.Yellow, 0.2);
                         replay.AddDecorationWithGrowing(circle, lifespanIndicator.end);
                         replay.Decorations.Add(new CircleDecoration(200, lifespanFlame, Colors.Red, 0.2, new PositionConnector(fireBallEffect.Position)));
                     }
@@ -797,14 +797,14 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         int start = (int)beeLaunchEffect.Time;
                         int end = start + 3000;
-                        replay.Decorations.Add(new RectangleDecoration(380, 30, (start, end), Colors.Red, 0.4, new PositionConnector(beeLaunchEffect.Position).WithOffset(new Point3D(190, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z - 90)));
+                        replay.Decorations.Add(new RectangleDecoration(380, 30, (start, end), Colors.Red, 0.4, new PositionConnector(beeLaunchEffect.Position).WithOffset(new(190, 0, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z - 90)));
                         var circle = new CircleDecoration(280, (start, end), Colors.LightOrange, 0.2, new PositionConnector(beeLaunchEffect.Position));
                         replay.AddDecorationWithGrowing(circle, end);
                         var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                         int velocity = 210;
                         int lifespan = 15000;
-                        var finalPosition = new ParametricPoint3D(initialPosition + (velocity * lifespan / 1000.0f) * new Point3D((float)Math.Cos(beeLaunchEffect.Orientation.Z - Math.PI / 2), (float)Math.Sin(beeLaunchEffect.Orientation.Z - Math.PI / 2)), end + lifespan);
-                        replay.Decorations.Add(new CircleDecoration(280, (end, end + lifespan), Colors.Red, 0.4, new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition })));
+                        var finalPosition = new ParametricPoint3D(beeLaunchEffect.Position + (velocity * lifespan / 1000.0f) * new Vector3((float)Math.Cos(beeLaunchEffect.Orientation.Z - Math.PI / 2), (float)Math.Sin(beeLaunchEffect.Orientation.Z - Math.PI / 2), 0), end + lifespan);
+                        replay.Decorations.Add(new CircleDecoration(280, (end, end + lifespan), Colors.Red, 0.4, new InterpolationConnector([initialPosition, finalPosition])));
                     }
                 }
                 // Zhaitan - Pool of Undeath
@@ -918,7 +918,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 // 1: When the instance is bugged from a previous wipe, the orange warning indicator is not present but the red damage field is always visible.
                 // 2: The red damage field is not in the same position of the orange warning indicator, rending the indicator inaccurate.
 
-                var jawsOfDestructionPosition = new Point3D(591.0542f, -21528.8555f, -15418.3f);
+                var jawsOfDestructionPosition = new Vector3(591.0542f, -21528.8555f, -15418.3f);
                 var jawsOfDestructionConnector = new PositionConnector(jawsOfDestructionPosition);
                 int jawsOfDestructionIndicatorDuration = 6950;
 
@@ -985,7 +985,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         {
                             foreach (EffectEvent indicator in aoeIndicator.Where(x => Math.Abs(x.Time - impactEffect.Time) < 5000 && impactEffect.Time > x.Time))
                             {
-                                if (impactEffect.Position.Distance2DToPoint(indicator.Position) < 60)
+                                if ((impactEffect.Position - indicator.Position).XY().Length() < 60)
                                 {
                                     uint radius = 320;
                                     (long start, long end) lifespan = (indicator.Time, indicator.Time + (impactEffect.Time - indicator.Time));
@@ -1176,7 +1176,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                             {
                                 foreach (ParametricPoint3D point in positions)
                                 {
-                                    if (aoe.Position.Distance2DToPoint(point) < 0.5)
+                                    if ((aoe.Position - point.ExtractVector()).XY().Length() < 0.5)
                                     {
                                         lifespanAoE.end = lifespanAoE.start + point.Time;
                                         break;
@@ -1202,11 +1202,13 @@ internal class HarvestTemple : EndOfDragonsStrike
                                     {
                                         break;
                                     }
-                                    if (endingAoEDuration == 0 && endingAoE.Position.Distance2DToPoint(point) < 0.5)
+                                    
+                                    if (endingAoEDuration == 0 && (endingAoE.Position - point.ExtractVector()).XY().Length() < 0.5)
                                     {
                                         endingAoEDuration = point.Time;
                                     }
-                                    if (startingAoEDuration == 0 && startingAoE.Position.Distance2DToPoint(point) < 0.5)
+
+                                    if (startingAoEDuration == 0 && (startingAoE.Position - point.ExtractVector()).XY().Length() < 0.5)
                                     {
                                         startingAoEDuration = point.Time;
                                     }
@@ -1322,8 +1324,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         int castDuration = 2500;
                         EffectEvent brandedArtilleryAoE = brandedArtilleryAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration + 100);
-                        Point3D? brandbomberPosition = target.GetCurrentPosition(log, c.Time, 1000);
-                        if (brandedArtilleryAoE != null && brandbomberPosition != null)
+                        if (brandedArtilleryAoE != null && target.TryGetCurrentPosition(log, c.Time, out var brandbomberPosition, 1000))
                         {
                             // Shooting animation
                             long animationDuration = brandedArtilleryAoE.Time - c.Time;
@@ -1557,11 +1558,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                     long castDuration = 1000;
                     long supposedEndCast = c.Time + castDuration;
                     long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
-                    Point3D? facing = target.GetCurrentRotation(log, c.Time + castDuration);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
                     {
                         (long start, long end) lifespan = (c.Time, actualEndCast);
-                        var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(length / 2, 0), true);
+                        var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(length / 2, 0, 0), true);
                         var rotation = new AngleConnector(facing);
                         var rectangle = (RectangleDecoration)new RectangleDecoration(length, width, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotation);
                         replay.AddDecorationWithGrowing(rectangle, supposedEndCast);
@@ -1577,8 +1577,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     long castDuration = 3400;
                     long supposedEndCast = c.Time + castDuration;
                     long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration);
-                    Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
                     {
                         (long start, long end) lifespan = (c.Time, actualEndCast);
                         var agentConnector = new AgentConnector(target);
@@ -1630,8 +1629,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         long castDuration = 1500;
                         EffectEvent bombAoE = firebombAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration);
-                        Point3D? obliteratorPosition = target.GetCurrentPosition(log, c.Time);
-                        if (bombAoE != null && obliteratorPosition != null)
+                        if (bombAoE != null && target.TryGetCurrentPosition(log, c.Time, out var obliteratorPosition))
                         {
                             // Shooting animation
                             long animationDuration = bombAoE.Time - c.Time;

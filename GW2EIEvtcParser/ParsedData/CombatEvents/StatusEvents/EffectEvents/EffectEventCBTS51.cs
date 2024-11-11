@@ -1,4 +1,4 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -7,7 +7,8 @@ public class EffectEventCBTS51 : EffectEvent
 {
     const float OrientationConvertConstant = 1f / 1000.0f;
 
-    internal static Point3D ReadOrientation(CombatItem evtcItem)
+    //TODO(Rennorb) @cleanup: replace with union
+    internal static Vector3 ReadOrientation(CombatItem evtcItem)
     {
         var orientationBytes = new byte[3 * sizeof(short)];
         int offset = 0;
@@ -22,7 +23,7 @@ public class EffectEventCBTS51 : EffectEvent
         var orientationInt = new short[3];
         Buffer.BlockCopy(orientationBytes, 0, orientationInt, 0, orientationBytes.Length);
 
-        return new Point3D(orientationInt[0], orientationInt[1], -orientationInt[2]) * OrientationConvertConstant;
+        return new Vector3(orientationInt[0], orientationInt[1], -orientationInt[2]) * OrientationConvertConstant;
     }
 
     private static uint ReadDuration(CombatItem evtcItem)

@@ -165,84 +165,42 @@ internal static class RangerHelper
             return false;
         }).WithBuilds(GW2Builds.May2021Balance),
         // Marksmanship
-        new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) => {
-            if (!x.Skill.IsWeaponSkill)
-            {
-                return false;
-            }
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
-        }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) => {
-            if (!x.Skill.IsWeaponSkill)
-            {
-                return false;
-            }
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
-        }, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) => {
-            if (!x.Skill.IsWeaponSkill)
-            {
-                return false;
-            }
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
-        }, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) => {
-            if (!x.Skill.IsWeaponSkill)
-            {
-                return false;
-            }
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) > 600.0;
-        }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) => {
-            if (!x.Skill.IsWeaponSkill)
-            {
-                return false;
-            }
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) > 600.0;
-        }, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) => {
-            if (!x.Skill.IsWeaponSkill)
-            {
-                return false;
-            }
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) > 600.0;
-        }, DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+        new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+                x.Skill.IsWeaponSkill 
+                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() <= 600
+            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
+        new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+                x.Skill.IsWeaponSkill
+                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() <= 600
+            , DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+        new DamageLogDamageModifier("Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+                x.Skill.IsWeaponSkill
+                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() <= 600
+            , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+        new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+            x.Skill.IsWeaponSkill
+                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() > 600
+            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
+        new DamageLogDamageModifier("Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+                x.Skill.IsWeaponSkill
+                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() > 600
+            , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
+        new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+                x.Skill.IsWeaponSkill
+                && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() > 600
+            , DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
         new BuffOnFoeDamageModifier([Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.PredatorsOnslaught, DamageModifierMode.All).UsingApproximate(true),
         // Skirmishing
         new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),

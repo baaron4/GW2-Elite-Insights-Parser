@@ -489,7 +489,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 1800);
                 var rotation = new AngleConnector(effect.Rotation.Z);
-                GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 0.5f * length), true);
+                GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0f, 0.5f * length, 0), true);
                 EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Orange, 0.15, position).UsingRotationConnector(rotation));
             }
         }
@@ -533,8 +533,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 EnvironmentDecorations.Add(new CircleDecoration(600, (start, end), Colors.Orange, 0.15, position).UsingGrowingEnd(end));
                 if (hasDetonates)
                 {
-                    Point3D endPos = effect.Dst.GetCurrentPosition(log, end);
-                    EffectEvent detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && x.Position.Distance2DToPoint(endPos) < maxDist);
+                    effect.Dst.TryGetCurrentPosition(log, end, out var endPos);
+                    EffectEvent detonate = detonates.FirstOrDefault(x => Math.Abs(x.Time - end) < ServerDelayConstant && (x.Position - endPos).XY().Length() < maxDist);
                     if (detonate != null)
                     {
                         EnvironmentDecorations.Add(new CircleDecoration(600, (detonate.Time, detonate.Time + 300), Colors.Red, 0.15, new PositionConnector(detonate.Position)));
@@ -594,7 +594,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     return indicators.Any(indicator =>
                     {
                         long timeDifference = detonate.Time - indicator.Time;
-                        return timeDifference > 0 && timeDifference < 4000 && detonate.Position.Distance2DToPoint(indicator.Position) < 1.0f;
+                        return timeDifference > 0 && timeDifference < 4000 && (detonate.Position - indicator.Position).LengthSquared() < 1.0f;
                     });
                 });
                 AddScalingCircleDecorations(log, filteredCircles, 300);
@@ -652,7 +652,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 long start = effect.Time;
                 long end = start + 1800;
                 var position = new PositionConnector(effect.Position);
-                GeographicalConnector offset = new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 0.5f * directionLength), true);
+                GeographicalConnector offset = new PositionConnector(effect.Position).WithOffset(new(0f, 0.5f * directionLength, 0), true);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 EnvironmentDecorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.15, position));
                 EnvironmentDecorations.Add(new RectangleDecoration(80, directionLength, (start, end), Colors.Orange, 0.15, offset).UsingRotationConnector(rotation));
@@ -671,8 +671,8 @@ internal class AiKeeperOfThePeak : SunquaPeak
             long end = effect.Time;
 
             AgentItem ai = GetAiAgentAt(effect.Time);
-            Point3D aiPos = ai.GetCurrentPosition(log, start);
-            float dist = aiPos.Distance2DToPoint(effect.Position);
+            ai.TryGetCurrentPosition(log, start, out var aiPos);
+            float dist = (aiPos - effect.Position).XY().Length();
 
             // actual distances are 400, 670, 1080, 1630
             uint radius;

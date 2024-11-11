@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -323,15 +324,15 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    private static readonly Dictionary<Point3D, int> ReapersToGreen = new()
+    private static readonly List<(Vector3 Position, int Index)> ReapersToGreen = new()
     {
-        { new Point3D(16897, 1225, -6215), 0 },
-        { new Point3D(16853, 65, -6215), 1 },
-        { new Point3D(15935, -614, -6215), 2 },
-        { new Point3D(14830, -294, -6215), 3 },
-        { new Point3D(14408, 764, -6215), 4 },
-        { new Point3D(14929, 1762, -6215), 5 },
-        { new Point3D(16062, 1991, -6215), 6 },
+        { (new(16897, 1225, -6215), 0) },
+        { (new(16853, 65, -6215), 1) },
+        { (new(15935, -614, -6215), 2) },
+        { (new(14830, -294, -6215), 3) },
+        { (new(14408, 764, -6215), 4) },
+        { (new(14929, 1762, -6215), 5) },
+        { (new(16062, 1991, -6215), 6) },
     };
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -371,11 +372,14 @@ internal class Dhuum : HallOfChains
                             zoneDeadly = Math.Min(zoneDeadly, (int)majorSplit.Time);
                         }
                         int spellCenterDistance = 200; //hitbox radius
-                        Point3D? facing = target.GetCurrentRotation(log, start + castDuration);
-                        Point3D? targetPosition = target.GetCurrentPosition(log, start + castDuration);
-                        if (facing != null && targetPosition != null)
+                        if (target.TryGetCurrentFacingDirection(log, start + castDuration, out var facing)
+                            && target.TryGetCurrentPosition(log, start + castDuration, out var targetPosition))
                         {
-                            var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
+                            var position = new Vector3(
+                                targetPosition.X + (facing.X * spellCenterDistance),
+                                targetPosition.Y + (facing.Y * spellCenterDistance),
+                                targetPosition.Z
+                            );
                             var positionConnector = new PositionConnector(position);
 
                             (long, long) lifespanWarning = (start, zoneActive);
@@ -418,8 +422,7 @@ internal class Dhuum : HallOfChains
                         start = (int)c.Time;
                         end = (int)c.EndTime;
                         // Get Dhuum's rotation with 200 ms delay and a 200ms forward time window.
-                        Point3D? facing = target.GetCurrentRotation(log, start + 200, 200);
-                        if (facing == null)
+                        if (target.TryGetCurrentFacingDirection(log, start + 200, out var facing, 200))
                         {
                             continue;
                         }
@@ -514,8 +517,7 @@ internal class Dhuum : HallOfChains
                 {
                     long castDuration = 667;
                     (long, long) lifespan = (c.Time, c.Time + castDuration);
-                    Point3D? facing = target.GetCurrentRotation(log, c.Time, 200);
-                    if (facing == null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time, out var facing, 200))
                     {
                         continue;
                     }
@@ -553,35 +555,43 @@ internal class Dhuum : HallOfChains
                             _greenStart = 30600;
                         }
                     }
-                    Point3D pos = replay.Positions.FirstOrDefault();
+                    
+                    var pos = replay.Positions.FirstOrDefault();
                     if (replay.Positions.Count > 1)
                     {
                         replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
                     }
+                    
                     if (pos == null)
                     {
                         break;
                     }
-                    int reaper = -1;
-                    foreach (KeyValuePair<Point3D, int> pair in ReapersToGreen)
+
+                    var posVec = pos.ExtractVector();
+
+                    int reaperIndex = -1;
+                    foreach (var reaper in ReapersToGreen)
                     {
-                        if (pair.Key.DistanceToPoint(pos) < 10)
+                        if ((reaper.Position - posVec).Length() < 10)
                         {
-                            reaper = pair.Value;
+                            reaperIndex = reaper.Index;
                             break;
                         }
                     }
-                    if (reaper == -1)
+
+                    if (reaperIndex == -1)
                     {
                         break;
                     }
+
                     int multiplier = 210000;
-                    int gStart = _greenStart + reaper * 30000;
+                    int gStart = _greenStart + reaperIndex * 30000;
                     var greens = new List<int>() {
                         gStart,
                         gStart + multiplier,
                         gStart + 2 * multiplier
                     };
+
                     foreach (int gstart in greens)
                     {
                         int gend = gstart + 5000;
@@ -644,9 +654,8 @@ internal class Dhuum : HallOfChains
         // check Hastened Demise
         foreach (AgentItem soul in souls)
         {
-            Segment? hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrNull((in Segment x) => x.Value == 1);
-            Point3D soulPosition = soul.GetCurrentPosition(log, soul.FirstAware, 1000);
-            if (hastenedDemise != null && soulPosition != null)
+            Segment? hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrNull(static (in Segment x) => x.Value == 1);
+            if (hastenedDemise != null && soul.TryGetCurrentPosition(log, soul.FirstAware, out var soulPosition, 1000))
             {
                 AddSoulSplitDecorations(p, replay, soul, hastenedDemise.Value, soulPosition);
             }
@@ -714,7 +723,7 @@ internal class Dhuum : HallOfChains
             foreach (EffectEvent effect in cullingCracksIndicators)
             {
                 (long, long) lifespan = (effect.Time, effect.Time + effect.Duration);
-                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(230 / 2, 0), true);
+                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new(230 / 2, 0, 0), true);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z - 90);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, Colors.Black, 0.3, connector).UsingRotationConnector(rotationConnector);
                 EnvironmentDecorations.Add(rectangle);
@@ -728,7 +737,7 @@ internal class Dhuum : HallOfChains
             {
                 // Effect duration is 0, using it as a wind-up to the hit by 500ms
                 (long, long) lifespan = (effect.Time - 500, effect.Time);
-                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(230 / 2, 0), true);
+                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new(230 / 2, 0, 0), true);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z - 90);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(220, 40, lifespan, "rgba(173, 255, 225, 0.4)", connector).UsingRotationConnector(rotationConnector);
                 EnvironmentDecorations.Add(rectangle);
@@ -765,7 +774,7 @@ internal class Dhuum : HallOfChains
     /// <param name="soul">The Soul to tether to the player.</param>
     /// <param name="hastenedDemise">The segment of the buff on the player.</param>
     /// <param name="soulPosition">The position of the Soul.</param>
-    private static void AddSoulSplitDecorations(AbstractPlayer p, CombatReplay replay, AgentItem soul, Segment hastenedDemise, Point3D soulPosition)
+    private static void AddSoulSplitDecorations(AbstractPlayer p, CombatReplay replay, AgentItem soul, in Segment hastenedDemise, in Vector3 soulPosition)
     {
         (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
         long soulSplitDeathTime = hastenedDemise.Start + 10000;

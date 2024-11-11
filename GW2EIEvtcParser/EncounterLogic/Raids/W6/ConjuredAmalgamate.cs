@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -14,25 +15,24 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal class ConjuredAmalgamate : MythwrightGambit
 {
     private readonly bool _cn;
-    private static readonly Point3D CAChestPosition = new(-4594f, -13004f, -2063.04f);
+    private static readonly Vector3 CAChestPosition = new(-4594f, -13004f, -2063.04f);
     public ConjuredAmalgamate(int triggerID) : base((int)ArcDPSEnums.TargetID.ConjuredAmalgamate)
     {
-        MechanicList.AddRange(new List<Mechanic>
-        {
-        new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-        new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0).UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
-        new PlayerDstHitMechanic(JunkAbsorption, "Junk Absorption", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
-        new PlayerDstHitMechanic([JunkFall1, JunkFall2], "Junk Fall", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
-        new PlayerDstHitMechanic(RupturedGround, "Ruptured Ground", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0).UsingChecker((de,log) => de.HealthDamage > 0),
-        new PlayerDstHitMechanic(Tremor, "Tremor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0).UsingChecker((de,log) => de.HealthDamage > 0),
-        new PlayerDstHitMechanic(JunkTorrent, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0).UsingChecker((de,log) => de.HealthDamage > 0),
-        new PlayerCastStartMechanic(ConjuredSlashSAK, "Conjured Slash", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
-        new PlayerCastStartMechanic(ConjuredProtectionSAK, "Conjured Protection", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
-        new PlayerDstBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
-        new PlayerDstBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
-        new EnemyDstBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
-        new EnemyDstBuffApplyMechanic(ShieldedCA, "Shielded", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
-        });
+        MechanicList.AddRange([
+            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.Square,Colors.LightOrange), "Arm Slam","Pulverize (Arm Slam)", "Arm Slam",0).UsingChecker((de, log) => !de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(Pulverize, "Pulverize", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.LightOrange), "Stab.Slam","Pulverize (Arm Slam) while affected by stability", "Stabilized Arm Slam",0).UsingChecker((de, log) => de.To.HasBuff(log, Stability, de.Time - ParserHelper.ServerDelayConstant)),
+            new PlayerDstHitMechanic(JunkAbsorption, "Junk Absorption", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Purple), "Balls","Junk Absorption (Purple Balls during collect)", "Purple Balls",0),
+            new PlayerDstHitMechanic([JunkFall1, JunkFall2], "Junk Fall", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Pink), "Junk","Junk Fall (Falling Debris)", "Junk Fall",0),
+            new PlayerDstHitMechanic(RupturedGround, "Ruptured Ground", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Teal), "Ground","Ruptured Ground (Relics after Junk Wall)", "Ruptured Ground",0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(Tremor, "Tremor", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Tremor","Tremor (Field adjacent to Arm Slam)", "Near Arm Slam",0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerDstHitMechanic(JunkTorrent, "Junk Torrent", new MechanicPlotlySetting(Symbols.SquareOpen,Colors.Red), "Wall","Junk Torrent (Moving Wall)", "Junk Torrent (Wall)",0).UsingChecker((de,log) => de.HealthDamage > 0),
+            new PlayerCastStartMechanic(ConjuredSlashSAK, "Conjured Slash", new MechanicPlotlySetting(Symbols.Square,Colors.Red), "Sword.Cst","Conjured Slash (Special action sword)", "Sword Cast",0),
+            new PlayerCastStartMechanic(ConjuredProtectionSAK, "Conjured Protection", new MechanicPlotlySetting(Symbols.Square,Colors.Green), "Shield.Cst","Conjured Protection (Special action shield)", "Shield Cast",0),
+            new PlayerDstBuffApplyMechanic(GreatswordPower, "Greatsword Power", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Red), "Sword.C","Collected Sword", "Sword Collect",50),
+            new PlayerDstBuffApplyMechanic(ConjuredShield, "Conjured Shield", new MechanicPlotlySetting(Symbols.DiamondTall,Colors.Green), "Shield.C","Collected Shield", "Shield Collect",50),
+            new EnemyDstBuffApplyMechanic(AugmentedPower, "Augmented Power", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Red), "Augmented Power","Augmented Power", "Augmented Power",50),
+            new EnemyDstBuffApplyMechanic(ShieldedCA, "Shielded", new MechanicPlotlySetting(Symbols.BowtieOpen,Colors.Green), "Shielded","Shielded", "Shielded",50),
+        ]);
         _cn = triggerID != (int)ArcDPSEnums.TargetID.ConjuredAmalgamate;
         Extension = "ca";
         GenericFallBackMethod = FallBackMethod.ChestGadget;
@@ -352,8 +352,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             int start = (int)c.Time;
             int duration = 10000;
             uint radius = 300;
-            var position = p.GetCurrentInterpolatedPosition(log, start);
-            if (position != null)
+            if (p.TryGetCurrentInterpolatedPosition(log, start, out var position))
             {
                 var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
                 replay.AddDecorationWithBorder(circle);

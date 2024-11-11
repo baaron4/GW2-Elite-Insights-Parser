@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+
+namespace GW2EIEvtcParser.EIData;
 
 public class AngleConnector : RotationConnector
 {
@@ -18,9 +20,9 @@ public class AngleConnector : RotationConnector
         SpinAngle = 0;
     }
 
-    public AngleConnector(Point3D rotationVector)
+    public AngleConnector(in Vector3 facingDirection)
     {
-        StartAngle = Point3D.GetZRotationFromFacing(rotationVector);
+        StartAngle = facingDirection.GetRoundedZRotationDeg();
         SpinAngle = 0;
     }
 
@@ -29,20 +31,20 @@ public class AngleConnector : RotationConnector
         SpinAngle = spinAngle;
     }
 
-    public AngleConnector(Point3D rotationVector, float spinAngle) : this(rotationVector)
+    public AngleConnector(in Vector3 facingDirection, float spinAngle) : this(facingDirection)
     {
         SpinAngle = spinAngle;
     }
 
     public class AngleConnectorDescriptor : RotationConnectorDescriptor
     {
-        public IReadOnlyList<float> Angles { get; private set; }
+        public readonly IReadOnlyList<float> Angles;
         public AngleConnectorDescriptor(AngleConnector connector, CombatReplayMap map) : base(connector, map)
         {
-            Angles = new List<float>() {
+            Angles = [
                 -connector.StartAngle,
                 -connector.SpinAngle,
-            };
+            ];
         }
     }
 

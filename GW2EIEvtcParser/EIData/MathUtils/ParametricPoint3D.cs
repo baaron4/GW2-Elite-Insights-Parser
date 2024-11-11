@@ -1,26 +1,26 @@
-﻿namespace GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 
-public class ParametricPoint3D : Point3D
+namespace GW2EIEvtcParser.EIData;
+
+//TODO i assume this is serialized, add note 
+public class ParametricPoint3D(float x, float y, float z, long time)
 {
-    public readonly long Time;
+    public readonly float X = x, Y = y, Z = z;
+    public readonly long Time = time;
 
-
-    public ParametricPoint3D(float x, float y, float z, long time) : base(x, y, z)
-    {
-        Time = time;
-    }
-
-    public ParametricPoint3D(ParametricPoint3D a) : this(a.X, a.Y, a.Z, a.Time)
+    public ParametricPoint3D(ParametricPoint3D a) : this(a.X, a.Y, a.Z, a.Time) //TODO(Rennorb) 
     {
     }
 
-    public ParametricPoint3D(Point3D a, long time) : base(a)
+    public ParametricPoint3D(in Vector3 a, long time) : this(a.X, a.Y, a.Z, time)
     {
-        Time = time;
     }
 
-    public ParametricPoint3D(Point3D a, Point3D b, float ratio, long time) : base(a, b, ratio)
+    public ParametricPoint3D(in Vector3 a, in Vector3 b, float ratio, long time) : this(Vector3.Lerp(a, b, ratio), time)
     {
-        Time = time;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Vector3 ExtractVector() => new(X, Y, Z); //TODO(Rennorb) use a vector field and use a custom serilizer
 }

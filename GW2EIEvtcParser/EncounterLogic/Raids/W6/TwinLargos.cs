@@ -336,10 +336,9 @@ internal class TwinLargos : MythwrightGambit
                     int duration = 500;
                     uint width = 500;
                     uint height = 250;
-                    Point3D? facing = target.GetCurrentRotation(log, start);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                         var rotationConnextor = new AngleConnector(facing);
                         replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), Colors.LightOrange, 0.4, positionConnector).UsingRotationConnector(rotationConnextor));
                     }
@@ -364,8 +363,7 @@ internal class TwinLargos : MythwrightGambit
             int toDropStart = (int)seg.Start;
             int toDropEnd = (int)seg.End;
             replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, Colors.Orange, 0.4, new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
-            Point3D? position = p.GetCurrentInterpolatedPosition(log, toDropEnd);
-            if (position != null)
+            if (p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
             {
                 replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), Colors.DarkWhite, 0.5, new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
             }

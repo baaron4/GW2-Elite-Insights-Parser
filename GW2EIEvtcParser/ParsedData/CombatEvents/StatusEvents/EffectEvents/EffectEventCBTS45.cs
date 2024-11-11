@@ -1,11 +1,12 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
 
 namespace GW2EIEvtcParser.ParsedData;
 
 public class EffectEventCBTS45 : EffectEvent
 {
 
-    private static unsafe Point3D ReadOrientation(CombatItem evtcItem)
+    //TODO(Rennorb) @cleanup: replace with union
+    private static unsafe Vector3 ReadOrientation(CombatItem evtcItem)
     {
         var orientationBytes = stackalloc byte[2 * sizeof(float)];
         orientationBytes[0] = evtcItem.IFFByte;
@@ -18,7 +19,7 @@ public class EffectEventCBTS45 : EffectEvent
         orientationBytes[7] = evtcItem.IsMoving;
 
         var orientationFloats = (float*)orientationBytes;
-        return new Point3D(orientationFloats[0], orientationFloats[1], -BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Pad), 0));
+        return new(orientationFloats[0], orientationFloats[1], -BitConverter.ToSingle(BitConverter.GetBytes(evtcItem.Pad), 0));
     }
 
     internal EffectEventCBTS45(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)

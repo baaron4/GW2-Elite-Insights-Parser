@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -10,18 +11,18 @@ public abstract class AbstractEffectEvent : AbstractStatusEvent
     /// The effect's rotation around each axis in <b>radians</b>.
     /// Use <see cref="Rotation"/> for degrees.
     /// </summary>
-    public Point3D Orientation { get; protected set; }
+    public Vector3 Orientation { get; protected set; }
 
     /// <summary>
     /// The effect's rotation around each axis in <b>degrees</b>.
     /// Like <see cref="Orientation"/> but using degrees.
     /// </summary>
-    public Point3D Rotation => new(RadianToDegreeF(Orientation.X), RadianToDegreeF(Orientation.Y), RadianToDegreeF(Orientation.Z));
+    public Vector3 Rotation => new(RadianToDegreeF(Orientation.X), RadianToDegreeF(Orientation.Y), RadianToDegreeF(Orientation.Z));
 
     /// <summary>
     /// The effect's position in the game's coordinate system, if <see cref="IsAroundDst"/> is <c>false</c>.
     /// </summary>
-    public readonly Point3D Position = new(0, 0, 0);
+    public readonly Vector3 Position = new(0, 0, 0);
 
     /// <summary>
     /// Whether the effect location is following <see cref="Dst"/> or located at <see cref="Position"/>.
@@ -45,11 +46,11 @@ public abstract class AbstractEffectEvent : AbstractStatusEvent
         }
         else
         {
-            Position = new Point3D(
+            Position = new(
                 BitConverter.Int32BitsToSingle(evtcItem.Value),
                 BitConverter.Int32BitsToSingle(evtcItem.BuffDmg),
                 BitConverter.Int32BitsToSingle(unchecked((int)evtcItem.OverstackValue))
-           );
+            );
         }
     }
 }

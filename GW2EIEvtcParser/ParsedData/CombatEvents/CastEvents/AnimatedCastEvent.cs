@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -7,7 +8,7 @@ public class AnimatedCastEvent : AbstractCastEvent
     private readonly int _scaledActualDuration;
     //private readonly int _effectHappenedDuration;
 
-    public readonly Point3D? EffectPosition;
+    public readonly Vector3? EffectPosition;
 
     public bool HasEffectPosition => EffectPosition != null;
 
@@ -25,7 +26,7 @@ public class AnimatedCastEvent : AbstractCastEvent
             var x = *(float*)&xyBits;
             var y = *((float*)&xyBits + 1);
             var z = BitConverter.Int32BitsToSingle(unchecked((int)startItem.OverstackValue));
-            EffectPosition = new Point3D(x, y, z);
+            EffectPosition = new(x, y, z);
         }}
         //_effectHappenedDuration = startItem.Value;
     }

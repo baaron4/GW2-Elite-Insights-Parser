@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -95,16 +96,16 @@ internal class Siax : Nightmare
         return phases;
     }
 
-    static readonly List<(string, Point3D)> EchoLocations =
+    static readonly List<(string, Vector2)> EchoLocations =
     [
-        ("N", new Point3D(1870.630f, -2205.379f)),
-        ("E", new Point3D(2500.260f, -3288.280f)),
-        ("S", new Point3D(1572.040f, -3992.580f)),
-        ("W", new Point3D(907.199f, -2976.850f)),
-        ("NW", new Point3D(1036.980f, -2237.050f)),
-        ("NE", new Point3D(2556.450f, -2628.590f)),
-        ("SE", new Point3D(2293.149f, -3912.510f)),
-        ("SW", new Point3D(891.370f, -3722.450f)),
+        ("N" , new(1870.630f, -2205.379f)),
+        ("E" , new(2500.260f, -3288.280f)),
+        ("S" , new(1572.040f, -3992.580f)),
+        ("W" , new(907.199f, -2976.850f)),
+        ("NW", new(1036.980f, -2237.050f)),
+        ("NE", new(2556.450f, -2628.590f)),
+        ("SE", new(2293.149f, -3912.510f)),
+        ("SW", new(891.370f, -3722.450f)),
     ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -147,8 +148,7 @@ internal class Siax : Nightmare
                 {
                     int castDuration = 1550;
                     (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                    Point3D? facing = target.GetCurrentRotation(log, c.Time + castDuration);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
                     {
                         var rotation = new AngleConnector(facing);
                         replay.Decorations.Add(new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation));

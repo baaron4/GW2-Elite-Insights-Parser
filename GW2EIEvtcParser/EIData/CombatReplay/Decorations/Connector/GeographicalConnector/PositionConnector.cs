@@ -1,13 +1,10 @@
-﻿namespace GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
 
-public class PositionConnector : GeographicalConnector
+namespace GW2EIEvtcParser.EIData;
+
+public class PositionConnector(in Vector3 position) : GeographicalConnector
 {
-    protected Point3D Position;
-
-    public PositionConnector(Point3D position)
-    {
-        Position = position;
-    }
+    protected Vector3 Position = position;
 
     public class PositionConnectorDescriptor : GeographicalConnectorDescriptor
     {

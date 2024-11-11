@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -53,12 +54,12 @@ internal class Adina : TheKeyOfAhdashim
     }
 
     // note: these are the attack target not gadget locations
-    static readonly List<(string, Point3D)> HandLocations =
+    static readonly List<(string, Vector2)> HandLocations =
     [
-        ("NW", new Point3D(14359.6f, -789.288f)), // erosion
-        ("NE", new Point3D(15502.5f, -841.978f)), // eruption
-        ("SW", new Point3D(14316.6f, -2080.17f)), // eruption
-        ("SE", new Point3D(15478.0f, -2156.67f)), // erosion
+        ("NW", new(14359.6f, -789.288f)), // erosion
+        ("NE", new(15502.5f, -841.978f)), // eruption
+        ("SW", new(14316.6f, -2080.17f)), // eruption
+        ("SE", new(15478.0f, -2156.67f)), // erosion
     ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -82,7 +83,7 @@ internal class Adina : TheKeyOfAhdashim
         })
             .ToList(); //NOTE(Rennorb): Unfortunate ToList because we have to insert into the collection we iterate. 
         long final = fightData.FightEnd;
-        var handOfEruptionPositions = new List<Point3D> { new(15570.5f, -693.117f), new(14277.2f, -2202.52f) }; // gadget locations
+        var handOfEruptionPositions = new Vector2[] { new(15570.5f, -693.117f), new(14277.2f, -2202.52f) }; // gadget locations
         var processedAttackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
         {
@@ -91,6 +92,7 @@ internal class Adina : TheKeyOfAhdashim
             {
                 continue;
             }
+
             processedAttackTargets.Add(atAgent);
             AgentItem hand = attackTargetEvent.Src;
             var copyEventsFrom = new List<AgentItem>() { hand };
@@ -100,12 +102,13 @@ internal class Adina : TheKeyOfAhdashim
             ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
             if (posEvt != null)
             {
-                Point3D pos = AbstractMovementEvent.GetPoint3D(posEvt);
-                if (handOfEruptionPositions.Any(x => x.Distance2DToPoint(pos) < InchDistanceThreshold))
+                var pos = AbstractMovementEvent.GetPoint3D(posEvt);
+                if (handOfEruptionPositions.Any(x => (x - pos.XY()).Length() < InchDistanceThreshold))
                 {
                     id = ArcDPSEnums.TrashID.HandOfEruption;
                 }
             }
+
             foreach (TargetableEvent targetableEvent in attackOns)
             {
                 long start = targetableEvent.Time;
@@ -126,7 +129,7 @@ internal class Adina : TheKeyOfAhdashim
         {
             if (target.IsAnySpecies(new [] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption }))
             {
-                string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, HandLocations);
+                string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, HandLocations);
                 if (suffix != null && nameCount.ContainsKey(suffix))
                 {
                     // deduplicate name
@@ -184,7 +187,7 @@ internal class Adina : TheKeyOfAhdashim
                     uint width = 1100; uint height = 60;
                     foreach (int angle in new List<int> { 90, 270 })
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                     }
@@ -199,7 +202,7 @@ internal class Adina : TheKeyOfAhdashim
                     uint width = 1100; uint height = 60;
                     foreach (int angle in new List<int> { 30, 150, 270 })
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start, start + preCastTime), Colors.Orange, 0.2, positionConnector).UsingRotationConnector(new AngleConnector(angle)));
                         replay.Decorations.Add(new RectangleDecoration(width, height, (start + preCastTime, start + duration), Colors.Red, 0.5, positionConnector).UsingRotationConnector(new AngleConnector(angle, 360)));
                     }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -145,26 +146,26 @@ internal class Qadim : MythwrightGambit
             refresh = refresh || any;
         }
         // Pyres
-        var protectPyrePositions = new List<Point3D> { new(-8947, 14728), new(-10834, 12477) };
-        var stabilityPyrePositions = new List<Point3D> { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
-        var resolutionRetaliationPyrePositions = new List<Point3D> { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
+        var protectPyrePositions = new Vector2[] { new(-8947, 14728), new(-10834, 12477) };
+        var stabilityPyrePositions = new Vector2[] { new(-4356, 12076), new(-5889, 14723), new(-7851, 13550) };
+        var resolutionRetaliationPyrePositions = new Vector2[] { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
         foreach (AgentItem pyre in pyres)
         {
             CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
             if (positionEvt != null)
             {
-                Point3D position = AbstractMovementEvent.GetPoint3D(positionEvt);
-                if (protectPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
+                var position = AbstractMovementEvent.GetPoint3D(positionEvt).XY();
+                if (protectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
                     pyre.OverrideID(TrashID.PyreGuardianProtect);
                     refresh = true;
                 }
-                else if (stabilityPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
+                else if (stabilityPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
                     pyre.OverrideID(TrashID.PyreGuardianStab);
                     refresh = true;
                 }
-                else if (resolutionRetaliationPyrePositions.Any(x => x.Distance2DToPoint(position) < InchDistanceThreshold))
+                else if (resolutionRetaliationPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
                     pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TrashID.PyreGuardianResolution : TrashID.PyreGuardianRetal);
                     refresh = true;
@@ -231,9 +232,9 @@ internal class Qadim : MythwrightGambit
         }
         if (combatData.HasMovementData)
         {
-            var qadimAroundInitialPosition = new Point3D(-9742.406f, 12075.2627f, -4731.031f);
-            var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D());
-            if (!positions.Any(x => x.Distance2DToPoint(qadimAroundInitialPosition) < 150))
+            var qadimInitialPosition = new Vector3(-9742.406f, 12075.2627f, -4731.031f);
+            var positions = combatData.GetMovementData(qadim).Where(x => x is PositionEvent pe && pe.Time < qadim.FirstAware + MinimumInCombatDuration).Select(x => x.GetPoint3D());
+            if (!positions.Any(x => (x - qadimInitialPosition).XY().Length() < 150))
             {
                 return FightData.EncounterStartStatus.Late;
             }
@@ -436,9 +437,9 @@ internal class Qadim : MythwrightGambit
         {
             foreach (var orbs in cmOrbs)
             {
-                var positions = orbs.Select(x => x.Position).ToList();
-                Point3D middle = positions.FirstOrDefault(x => Point3D.IsInTriangle2D(x, positions.Where(y => y != x).ToList()));
-                EffectEvent middleEvent = orbs.FirstOrDefault(x => x.Position == middle);
+                var positions = orbs.Select(x => x.Position.XY()).ToList();
+                var middle = positions.FirstOrDefault(x => x.IsInTriangle(positions.Where(y => y != x).ToList()));
+                EffectEvent middleEvent = orbs.FirstOrDefault(x => x.Position.XY() == middle);
                 if (middleEvent != null)
                 {
                     foreach (EffectEvent effect in orbs)
@@ -525,11 +526,10 @@ internal class Qadim : MythwrightGambit
                     uint radius = 2000;
                     uint impactRadius = 40;
                     int spellCenterDistance = 300;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    Point3D? targetPosition = target.GetCurrentPosition(log, start + 1000);
-                    if (facing != null && targetPosition != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) 
+                        && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
                     {
-                        var position = new Point3D(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
+                        var position = new Vector3(targetPosition.X + (facing.X * spellCenterDistance), targetPosition.Y + (facing.Y * spellCenterDistance), targetPosition.Z);
                         (long, long) lifespanShockwave = (start + delay, start + delay + duration);
                         GeographicalConnector connector = new PositionConnector(position);
                         replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, connector));
@@ -553,8 +553,7 @@ internal class Qadim : MythwrightGambit
                     int delay = 2600;
                     int duration = 1000;
                     int openingAngle = 70;
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
                         replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.LightOrange, 0.3, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facing)));
                     }
@@ -568,12 +567,11 @@ internal class Qadim : MythwrightGambit
                     int start = (int)c.Time;
                     int preCast = Math.Min(3500, c.ActualDuration);
                     int duration = Math.Min(6500, c.ActualDuration);
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
                     uint range = 2800;
                     uint span = 2400;
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
-                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(range / 2, 0), true);
+                        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(range / 2, 0, 0), true);
                         var rotationConnextor = new AngleConnector(facing);
                         replay.Decorations.Add(new RectangleDecoration(range, span, (start, start + preCast), Colors.LightBlue, 0.2, positionConnector).UsingRotationConnector(rotationConnextor));
                         replay.Decorations.Add(new RectangleDecoration(range, span, (start + preCast, start + duration), Colors.LightBlue, 0.5, positionConnector).UsingRotationConnector(rotationConnextor));
@@ -589,9 +587,7 @@ internal class Qadim : MythwrightGambit
                     int duration = 3000;
                     int openingAngle = 70;
                     int fieldDuration = 10000;
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                    Point3D pos = target.GetCurrentPosition(log, start + 1000);
-                    if (facing != null && pos != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var pos))
                     {
                         var rotationConnector = new AngleConnector(facing);
                         replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
@@ -609,10 +605,9 @@ internal class Qadim : MythwrightGambit
                     int openingAngle = 59;
                     int angleIncrement = 60;
                     int coneAmount = 4;
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
-                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
+                        float initialAngle = facing.GetRoundedZRotationDeg();
                         var connector = new AgentConnector(target);
                         for (uint i = 0; i < coneAmount; i++)
                         {
@@ -640,9 +635,7 @@ internal class Qadim : MythwrightGambit
                     int duration = 3000;
                     int openingAngle = 60;
                     int fieldDuration = 10000;
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                    Point3D pos = target.GetCurrentPosition(log, start + 1000);
-                    if (facing != null && pos != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var pos))
                     {
                         var rotationConnector = new AngleConnector(facing);
                         replay.Decorations.Add(new PieDecoration(radius, openingAngle, (start + delay, start + delay + duration), Colors.Yellow, 0.3, new AgentConnector(target)).UsingRotationConnector(rotationConnector));
@@ -660,10 +653,9 @@ internal class Qadim : MythwrightGambit
                     int openingAngle = 59;
                     int angleIncrement = 60;
                     int coneAmount = 4;
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
-                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
+                        float initialAngle = facing.GetRoundedZRotationDeg();
                         var connector = new AgentConnector(target);
                         for (uint i = 0; i < coneAmount; i++)
                         {
@@ -694,11 +686,9 @@ internal class Qadim : MythwrightGambit
                     uint maxRadius = 2000;
                     uint impactRadius = 500;
                     int spellCenterDistance = 270; //hitbox radius
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                    Point3D targetPosition = target.GetCurrentPosition(log, start + 1000);
-                    if (facing != null && targetPosition != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing) && target.TryGetCurrentPosition(log, start + 1000, out var targetPosition))
                     {
-                        var position = new Point3D(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z);
+                        var position = new Vector3(targetPosition.X + facing.X * spellCenterDistance, targetPosition.Y + facing.Y * spellCenterDistance, targetPosition.Z);
                         replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.1, new PositionConnector(position)));
                         replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, new PositionConnector(position)));
                         replay.Decorations.Add(new CircleDecoration(maxRadius, (start + delay, start + delay + duration), Colors.Yellow, 0.5, new PositionConnector(position)).UsingFilled(false).UsingGrowingEnd(start + delay + duration));
@@ -721,10 +711,9 @@ internal class Qadim : MythwrightGambit
                     int openingAngle = 44;
                     int angleIncrement = 45;
                     int coneAmount = 3;
-                    Point3D facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
-                        float initialAngle = Point3D.GetZRotationFromFacing(facing);
+                        float initialAngle = facing.GetRoundedZRotationDeg();
                         var connector = new AgentConnector(target);
                         for (uint i = 0; i < coneAmount; i++)
                         {
@@ -753,17 +742,17 @@ internal class Qadim : MythwrightGambit
                 {
                     case "00":
                     case "0":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-76.52588f, 44.1894531f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-76.52588f, 44.1894531f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                             }
                         }
                         break;
                     case "01":
                     case "1":
-                        ParametricPoint3D found = replay.Velocities.FirstOrDefault(x => new Point3D(-28.3569336f, -49.2431641f, 90.90576f).DistanceToPoint(x) < threshold);
+                        var found = replay.Velocities.FirstOrDefault(x => (new Vector3(-28.3569336f, -49.2431641f, 90.90576f) - x.ExtractVector()).Length() < threshold);
                         if (found != null)
                         {
                             opacities.Add(new ParametricPoint1D(hiddenOpacity, found.Time));
@@ -771,51 +760,51 @@ internal class Qadim : MythwrightGambit
                         break;
                     case "02":
                     case "2":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.122070313f, 77.88086f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-0.122070313f, 77.88086f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.0361328f, -13.94043f, -22.7294922f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(37.0361328f, -13.94043f, -22.7294922f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(153.723145f, -110.742188f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(153.723145f, -110.742188f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                                 }
                             }
                         }
                         break;
                     case "03":
                     case "3":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(348.474121f, -123.4375f, 10.9130859f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(348.474121f, -123.4375f, 10.9130859f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                         }
                         break;
                     case "04":
                     case "4":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(37.20703f, 13.94043f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-0.29296875f, -59.6923828f, -13.6352539f), visibleOpacity, velocityIndex, out velocityIndex, 10000, 0, hiddenOpacity))
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(357.592773f, -294.018555f, 13.6352539f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(357.592773f, -294.018555f, 13.6352539f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                                 }
                             }
                         }
                         break;
                     case "05":
                     case "5":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                         }
                         break;
                     case "06":
                     case "6":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(182.8125f, -80.15137f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(182.8125f, -80.15137f, 22.7294922f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
                                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out var blueOrbs))
                                     {
@@ -835,30 +824,30 @@ internal class Qadim : MythwrightGambit
                         break;
                     case "07":
                     case "7":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-98.53516f, 49.2919922f, -19.0917969f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-98.53516f, 49.2919922f, -19.0917969f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(46.75293f, 0, -6.35986328f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
+                                    AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
                                 }
                             }
                         }
                         break;
                     case "08":
                     case "8":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(37.20703f, -14.0136719f, 18.17627f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(37.20703f, -14.0136719f, 18.17627f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(15.234375f, 31.9580078f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(15.234375f, 31.9580078f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(87.25586f, -70.87402f, 4.54101563f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(87.25586f, -70.87402f, 4.54101563f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
-                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                         {
-                                            AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                                         }
                                     }
                                 }
@@ -867,30 +856,30 @@ internal class Qadim : MythwrightGambit
                         break;
                     case "09":
                     case "9":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(50.7568359f, 69.3847656f, -6.35986328f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(50.7568359f, 69.3847656f, -6.35986328f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                         }
                         break;
                     case "10":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-0.122070313f, -77.92969f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-0.122070313f, -77.92969f, 4.54101563f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                             {
-                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(-51.3793945f, 110.473633f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                     {
-                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                                     }
                                 }
                             }
                         }
                         break;
                     case "11":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(143.493652f, 114.282227f, 17.27295f), noOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(143.493652f, 114.282227f, 17.27295f), noOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
                         {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new Point3D(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), noOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
                         }
                         break;
                     default:
@@ -912,27 +901,26 @@ internal class Qadim : MythwrightGambit
     /// <param name="opacities">Opacities of the platform, will be filled</param>
     /// <param name="referenceVelocity">Velocity to find</param>
     /// <param name="opacity">Opacity to add, won't be added if <0</param>
-    /// <param name="startIndex"></param>
-    /// <param name="foundIndexPlusOne"></param>
     /// <param name="timeOffset">Time to be added to found velocity time</param>
     /// <param name="forceHideTime">If > 0, forces the addition of a hidden opacity at given time</param>
     /// <param name="hiddenOpacity">Hidden opacity value</param>
-    /// <returns></returns>
-    private static bool AddOpacityUsingVelocity(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, Point3D referenceVelocity, float opacity, int startIndex, out int foundIndexPlusOne, long timeOffset, long forceHideTime, float hiddenOpacity)
+    private static bool AddOpacityUsingVelocity(IReadOnlyList<ParametricPoint3D> velocities, List<ParametricPoint1D> opacities, in Vector3 referenceVelocity, float opacity, int startIndex, out int foundIndexPlusOne, long timeOffset, long forceHideTime, float hiddenOpacity)
     {
         float threshold = 1f;
         for (int velocityIndex = startIndex; velocityIndex < velocities.Count; velocityIndex++)
         {
-            if (referenceVelocity.DistanceToPoint(velocities[velocityIndex]) < threshold)
+            if ((referenceVelocity - velocities[velocityIndex].ExtractVector()).Length() < threshold)
             {
                 if (opacity >= 0)
                 {
                     opacities.Add(new ParametricPoint1D(opacity, velocities[velocityIndex].Time + timeOffset));
                 }
+
                 if (forceHideTime > 0 && opacity != hiddenOpacity)
                 {
                     opacities.Add(new ParametricPoint1D(hiddenOpacity, forceHideTime));
                 }
+                
                 foundIndexPlusOne = velocityIndex + 1;
                 return true;
             }
@@ -1372,7 +1360,6 @@ internal class Qadim : MythwrightGambit
     /// <summary>
     /// Check the player positions for the achievement eligiblity.<br></br>
     /// </summary>
-    /// <param name="log"></param>
     /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
     private static bool CustomCheckTakingTurns(ParsedEvtcLog log)
     {
@@ -1420,7 +1407,6 @@ internal class Qadim : MythwrightGambit
     /// <summary>
     /// Check the NPC positions for the achievement eligiblity.<br></br>
     /// </summary>
-    /// <param name="log"></param>
     /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
     private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
     {
@@ -1444,9 +1430,6 @@ internal class Qadim : MythwrightGambit
     /// <summary>
     /// Find out if the distance points between <paramref name="qadim"/> and an <paramref name="add"/> goes under 2000 range.
     /// </summary>
-    /// <param name="log"></param>
-    /// <param name="qadim"></param>
-    /// <param name="add"></param>
     /// <returns><see langword="true"/> if distance goes under 2000, otherwise <see langword="false"/>.</returns>
     private static bool DistanceCheck(ParsedEvtcLog log, AbstractSingleActor qadim, AbstractSingleActor add)
     {
@@ -1456,6 +1439,7 @@ internal class Qadim : MythwrightGambit
         {
             return true;
         }
+        
         // Get positions of Qadim during the times of the adds being present
         var qadimPositions = qadim.GetCombatReplayPolledPositions(log).Where(x => x.Time >= addPositions.First().Time && x.Time <= addPositions.Last().Time).ToList();
         if (qadimPositions.Count == 0)
@@ -1466,7 +1450,7 @@ internal class Qadim : MythwrightGambit
         // For each matching position polled, check if the distance between points is under 2000
         for (int i = 0; i < Math.Min(addPositions.Count, qadimPositions.Count); i++)
         {
-            if (qadimPositions[i].DistanceToPoint(addPositions[i]) < 2000)
+            if ((qadimPositions[i].ExtractVector() - addPositions[i].ExtractVector()).Length() < 2000)
             {
                 return true;
             }

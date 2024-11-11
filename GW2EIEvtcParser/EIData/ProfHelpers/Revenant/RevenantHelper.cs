@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.Extensions;
+﻿using System.Numerics;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -93,32 +94,14 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(ViciousLacerations, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.ViciousLacerations, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(ViciousLacerations, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.ViciousLacerations, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         new DamageLogDamageModifier("Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
-        {
-            double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (foeHP < 0.0)
-            {
-                return false;
-            }
-            return foeHP > 80.0;
-        }, DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix),
+                x.To.GetCurrentHealthPercent(log, x.Time) > 80
+            , DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix),
         new DamageLogDamageModifier("Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
-        {
-            double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (foeHP < 0.0)
-            {
-                return false;
-            }
-            return foeHP > 80.0;
-        }, DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.May2021BalanceHotFix),
+                x.To.GetCurrentHealthPercent(log, x.Time) > 80
+            , DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.May2021BalanceHotFix),
         new DamageLogDamageModifier("Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
-        {
-            double foeHP = x.To.GetCurrentHealthPercent(log, x.Time);
-            if (foeHP < 0.0)
-            {
-                return false;
-            }
-            return foeHP > 80.0;
-        }, DamageModifierMode.sPvPWvW ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
+                x.To.GetCurrentHealthPercent(log, x.Time) > 80
+            , DamageModifierMode.sPvPWvW ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.TargetedDestruction, DamageModifierMode.All).WithBuilds(GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
@@ -136,15 +119,11 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(Resistance, "Demonic Resistance", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DemonicResistance, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DemonicResistance, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
         new DamageLogDamageModifier("Close Quarters", "10% from foes beyond 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.CloseQuarters, (x,log) =>
-        {
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) >= 360.0;
-        }, DamageModifierMode.All).UsingApproximate(true),
+                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() >= 360
+            , DamageModifierMode.All)
+            .UsingApproximate(true),
         new BuffOnActorDamageModifier(Stability, "Determined Resolution", "-15% under stability", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DeterminedResolution, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(Vigor, "Determined Resolution", "-15 under vigor%", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DeterminedResolution, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Resolution, "Determined Resolution", "-15% under resolution", DamageSource.All, -15.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DeterminedResolution, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
@@ -261,7 +240,7 @@ internal static class RevenantHelper
             foreach (EffectEvent effect in inspiringReinforcements)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0, -420.0f), true); // 900 units in front, 60 behind
+                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new(0, -420.0f, 0), true); // 900 units in front, 60 behind
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 replay.Decorations.Add(new RectangleDecoration(240, 960, lifespan, color, 0.5, connector)
                     .UsingFilled(false)
@@ -296,7 +275,7 @@ internal static class RevenantHelper
             {
                 foreach (EffectEvent effect in eternitysRequiem)
                 {
-                    var positions = new List<Point3D>();
+                    var positions = new List<Vector3>();
                     foreach (EffectEvent hitEffect in eternitysRequiemHits.Where(x => x.Time >= effect.Time && x.Time <= effect.Time + 2800 && x.Dst == null))
                     {
                         positions.Add(hitEffect.Position);
@@ -305,8 +284,7 @@ internal static class RevenantHelper
                         replay.Decorations.Add(new CircleDecoration(120, lifespanHit, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     }
                     (long, long) lifespan = (effect.Time, effect.Time + 2800);
-                    var centralPosition = Point3D.FindCentralPoint(positions);
-                    var centralConnector = new PositionConnector(centralPosition);
+                    var centralConnector = new PositionConnector(positions.Average());
                     replay.Decorations.Add(new IconDecoration(ParserIcons.EffectEternitysRequiem, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector).UsingSkillMode(skill));
                     // TODO: Find a way to tell the user that the circle is approximative.
                     //replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));

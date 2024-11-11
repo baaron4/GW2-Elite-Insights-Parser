@@ -35,15 +35,10 @@ internal static class VirtuosoHelper
     internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new DamageLogDamageModifier("Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, BuffImages.MentalFocus, (x,log) =>
-        {
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 600;
-        }, DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
+                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() <= 600
+            , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
         new BuffOnActorDamageModifier(DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
     ];
 
@@ -131,7 +126,7 @@ internal static class VirtuosoHelper
             foreach (EffectEvent effect in thousandCuts)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new Point3D(0f, 600.0f), true);
+                var connector = (PositionConnector)new PositionConnector(effect.Position).WithOffset(new(0f, 600.0f, 0), true);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 // 30 units width is a guess
                 replay.Decorations.Add(new RectangleDecoration(30, 1200, lifespan, color, 0.5, connector)

@@ -681,8 +681,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             long indicatorDuration = 1500;
             (long start, long end) lifespanIndicator = (cast.Time, cast.Time + indicatorDuration);
             long growing = lifespanIndicator.end;
-            Point3D? facing = target.GetCurrentRotation(log, lifespanIndicator.end);
-            if (facing != null)
+            if (target.TryGetCurrentFacingDirection(log, lifespanIndicator.end, out var facing))
             {
                 // Indicator
                 // Check if quickness is still applied from a previous steal
@@ -696,13 +695,13 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
 
                 // Frontal indicator
                 var rotation = new AngleConnector(facing);
-                var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(width / 2, 0), true);
+                var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(rotation);
                 replay.AddDecorationWithGrowing(rectangle, growing);
                 if (isEmpowered)
                 {
                     // Opposite Indicator
-                    var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(-(width / 2), 0), true);
+                    var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
                     var oppositeRectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation);
                     replay.AddDecorationWithGrowing(oppositeRectangle, growing);
                 }
@@ -732,7 +731,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     double millisecondsPerDegreeOpposite = (double)(lifespanDamageOpposite.end - lifespanDamageOpposite.start) / 360;
                     double degreedRotatedOpposite = (lifespanDamageOppositeCancelled.end - lifespanDamageOppositeCancelled.start) / millisecondsPerDegreeOpposite;
                     var rotation3 = new AngleConnector(facing, (float)degreedRotatedOpposite);
-                    var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(-(width / 2), 0), true);
+                    var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
                     var rectangle3 = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanDamageOppositeCancelled, Colors.Red, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation3);
                     replay.Decorations.Add(rectangle3);
                 }

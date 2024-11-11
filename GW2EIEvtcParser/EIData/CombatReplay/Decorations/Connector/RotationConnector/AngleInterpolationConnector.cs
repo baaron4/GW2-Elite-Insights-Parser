@@ -28,6 +28,7 @@ public class AngleInterpolationConnector : RotationConnector
         {
             throw new InvalidOperationException("Must at least have one point");
         }
+
         var angles = new List<ParametricPoint1D>();
         for (int i = 0; i < Math.Min(originPoints.Count, destinationPoints.Count); i++)
         {
@@ -36,8 +37,9 @@ public class AngleInterpolationConnector : RotationConnector
             {
                 throw new InvalidOperationException("Origin and Destination points must have the same timestamp");
             }
-            Point3D vector = destinationPoints[i] - originPoints[i];
-            float angle = Point3D.GetZRotationFromFacing(vector);
+
+            var facing = destinationPoints[i].ExtractVector() - originPoints[i].ExtractVector();
+            float angle = facing.GetRoundedZRotationDeg();
             angles.Add(new ParametricPoint1D(angle, time));
         }
         Angles = angles;

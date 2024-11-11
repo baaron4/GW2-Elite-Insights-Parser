@@ -1,11 +1,12 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics;
+using System.Numerics;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
 public class SquadMarkerEvent : AbstractStatusEvent
 {
-    public Point3D Position { get; protected set; } = new Point3D(0, 0, 0);
+    public Vector3 Position { get; protected set; } = Vector3.Zero;
 
     internal bool IsEnd => Position.Length() == float.PositiveInfinity;
     public long EndTime { get; protected set; } = int.MaxValue;
@@ -14,13 +15,13 @@ public class SquadMarkerEvent : AbstractStatusEvent
 
     private readonly uint _markerIndex;
     internal bool EndNotSet => EndTime == int.MaxValue;
-    internal static unsafe Point3D ReadPosition(CombatItem evtcItem)
+
+    //TODO(Rennorb) @cleanup: replace with union
+    internal static unsafe Vector3 ReadPosition(CombatItem evtcItem)
     {
-        // 8 
         var srcAgent = evtcItem.SrcAgent;
-        // 8 
         var dstAgent = evtcItem.DstAgent;
-        return new Point3D(*(float*)&srcAgent, *((float*)&srcAgent + 1), *(float*)&dstAgent);
+        return new(*(float*)&srcAgent, *((float*)&srcAgent + 1), *(float*)&dstAgent);
     }
 
     internal SquadMarkerEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
@@ -30,13 +31,16 @@ public class SquadMarkerEvent : AbstractStatusEvent
         MarkerIndex = GetSquadMarkerIndex((byte)evtcItem.SkillID);
         Position = ReadPosition(evtcItem);
     }
+
     internal void SetEndTime(long endTime)
     {
-        // Sanity check
-        if (!EndNotSet)
+        //Debug.Assert(!EndNotSet); TODO(Rennorb): this trips 20240609-201008.zevtc 20240609-203221.zevtc, keep the check below
+        if(!EndNotSet)
         {
             return;
         }
+
+
         EndTime = endTime;
     }
 

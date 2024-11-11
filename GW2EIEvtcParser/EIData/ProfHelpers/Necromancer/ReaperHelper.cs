@@ -33,15 +33,10 @@ internal static class ReaperHelper
         new BuffOnFoeDamageModifier(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
         new DamageLogDamageModifier("Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, BuffImages.SoulEater, (x,log) =>
-        {
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 300.0;
-        }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
+                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() >= 300.0
+            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
     ];
 
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =

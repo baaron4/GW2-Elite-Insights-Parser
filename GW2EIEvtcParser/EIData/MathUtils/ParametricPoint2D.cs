@@ -1,26 +1,22 @@
-﻿namespace GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
 
-public class ParametricPoint2D : Point2D
+namespace GW2EIEvtcParser.EIData;
+
+public class ParametricPoint2D(float x, float y, long time)
 {
-    public readonly long Time;
+    public readonly float X = x, Y = y;
+    public readonly long Time = time;
 
-
-    public ParametricPoint2D(float x, float y, long time) : base(x, y)
-    {
-        Time = time;
-    }
 
     public ParametricPoint2D(ParametricPoint2D a) : this(a.X, a.Y, a.Time)
     {
     }
 
-    public ParametricPoint2D(Point2D a, long time) : base(a)
+    public ParametricPoint2D(in Vector2 a, long time) : this(a.X, a.Y, time)
     {
-        Time = time;
     }
 
-    public ParametricPoint2D(Point2D a, Point2D b, float ratio, long time) : base(a, b, ratio)
+    public ParametricPoint2D(in Vector2 a, in Vector2 b, float ratio, long time) : this(Vector2.Lerp(a, b, ratio), time)
     {
-        Time = time;
     }
 }

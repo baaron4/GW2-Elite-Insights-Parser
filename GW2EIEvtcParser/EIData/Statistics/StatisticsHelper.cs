@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.Buff;
 
@@ -130,15 +131,11 @@ public class StatisticsHelper
 
     public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(AbstractSingleActor actor)
     {
-        if (!(actor is Player p))
-        {
-            return new HashSet<Buff>();
-        }
-        if (_presentRemainingBuffsPerPlayer.TryGetValue(p, out HashSet<Buff> buffs))
+        if (actor is Player p && _presentRemainingBuffsPerPlayer.TryGetValue(p, out var buffs))
         {
             return buffs;
         }
-        return new HashSet<Buff>();
+        return [ ];
     }
 
     //
@@ -157,10 +154,11 @@ public class StatisticsHelper
 
 
     //Positions for group
-    private List<ParametricPoint3D>? _stackCenterPositions = null;
+    private List<ParametricPoint3D?>? _stackCenterPositions = null;
     private List<ParametricPoint3D?>? _stackCommanderPositions = null;
 
-    public IReadOnlyList<ParametricPoint3D> GetStackCenterPositions(ParsedEvtcLog log)
+    //TODO(Rennorb) @explain: When are entries null here?
+    public IReadOnlyList<ParametricPoint3D?> GetStackCenterPositions(ParsedEvtcLog log)
     {
         if (_stackCenterPositions == null)
         {
@@ -169,7 +167,8 @@ public class StatisticsHelper
         return _stackCenterPositions;
     }
 
-    public IReadOnlyList<ParametricPoint3D> GetStackCommanderPositions(ParsedEvtcLog log)
+    //TODO(Rennorb) @explain: When are entries null here?
+    public IReadOnlyList<ParametricPoint3D?> GetStackCommanderPositions(ParsedEvtcLog log)
     {
         if (_stackCommanderPositions == null)
         {
@@ -178,30 +177,38 @@ public class StatisticsHelper
         return _stackCommanderPositions;
     }
 
+    [MemberNotNull(nameof(_stackCenterPositions))]
     private void SetStackCenterPositions(ParsedEvtcLog log)
     {
-        _stackCenterPositions = new List<ParametricPoint3D>();
-        if (log.CombatData.HasMovementData)
+        if (!log.CombatData.HasMovementData)
         {
-            var GroupsPosList = new List<IReadOnlyList<Point3D>>();
-            foreach (Player player in log.PlayerList)
+            _stackCenterPositions = [ ];
+            return;
+        }
+
+        var GroupsPosList = new List<List<ParametricPoint3D?>>(log.PlayerList.Count);
+        foreach (Player player in log.PlayerList)
+        {
+            GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
+        }
+
+        _stackCenterPositions = new List<ParametricPoint3D?>(GroupsPosList[0].Count);
+        for (int time = 0; time < GroupsPosList[0].Count; time++)
+        {
+            int activePlayers = GroupsPosList.Count;
+            if (activePlayers == 0)
             {
-                GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
+                _stackCenterPositions.Add(null);
             }
-            for (int time = 0; time < GroupsPosList[0].Count; time++)
+            else
             {
-                float x = 0;
-                float y = 0;
-                float z = 0;
-                int activePlayers = GroupsPosList.Count;
-                foreach (IReadOnlyList<Point3D> points in GroupsPosList)
+                var position = Vector3.Zero;
+                foreach (var points in GroupsPosList)
                 {
-                    Point3D point = points[time];
+                    var point = points[time];
                     if (point != null)
                     {
-                        x += point.X;
-                        y += point.Y;
-                        z += point.Z;
+                        position += point.ExtractVector();
                     }
                     else
                     {
@@ -209,17 +216,9 @@ public class StatisticsHelper
                     }
 
                 }
-                if (activePlayers == 0)
-                {
-                    _stackCenterPositions.Add(null);
-                }
-                else
-                {
-                    x /= activePlayers;
-                    y /= activePlayers;
-                    z /= activePlayers;
-                    _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
-                }
+                position /= activePlayers;
+
+                _stackCenterPositions.Add(new ParametricPoint3D(position, ParserHelper.CombatReplayPollingRate * time));
             }
         }
     }
@@ -227,43 +226,45 @@ public class StatisticsHelper
     [MemberNotNull(nameof(_stackCommanderPositions))]
     private void SetStackCommanderPositions(ParsedEvtcLog log)
     {
-        //TODO(Rennorb) @perf
-        _stackCommanderPositions = new List<ParametricPoint3D?>();
-        if (log.CombatData.HasMovementData)
+        if (!log.CombatData.HasMovementData)
         {
-            //TODO(Rennorb) @perf: find average complexity
-            var states = new List<(Player p, GenericSegment<GUID> seg)>(log.PlayerList.Count);
-            foreach (Player player in log.PlayerList)
+            _stackCommanderPositions = [ ];
+            return;
+        }
+
+        //TODO(Rennorb) @perf: find average complexity
+        var states = new List<(Player p, GenericSegment<GUID> seg)>(log.PlayerList.Count);
+        foreach (Player player in log.PlayerList)
+        {
+            var newStates = player.GetCommanderStates(log);
+            foreach (var state in newStates)
             {
-                var newStates = player.GetCommanderStates(log);
-                foreach (var state in newStates)
+                states.Add((player, state));
+            }
+        }
+        states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
+
+        _stackCommanderPositions = new List<ParametricPoint3D?>(states.Count); //TODO(Rennorb) @perf
+        long start = long.MinValue;
+        foreach ((Player p, GenericSegment<GUID> seg) in states)
+        {
+            IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
+            //TODO(Rennorb) @perf @correctness: This feels like it might just be wrong.
+            var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList<ParametricPoint3D?>();
+            for (int i = 0; i < toAdd.Count; i++)
+            {
+                if (toAdd[i]!.Time < seg.Start)
                 {
-                    states.Add((player, state));
+                    toAdd[i] = null;
+                }
+                else
+                {
+                    break;
                 }
             }
-            states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
+            _stackCommanderPositions.AddRange(toAdd);
 
-            long start = long.MinValue;
-            foreach ((Player p, GenericSegment<GUID> seg) in states)
-            {
-                IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
-                //TODO(Rennorb) @perf @correctness: This feels like it might just be wrong.
-                var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList<ParametricPoint3D?>();
-                for (int i = 0; i < toAdd.Count; i++)
-                {
-                    if (toAdd[i]!.Time < seg.Start)
-                    {
-                        toAdd[i] = null;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                _stackCommanderPositions.AddRange(toAdd);
-
-                start = seg.End;
-            }
+            start = seg.End;
         }
     }
 

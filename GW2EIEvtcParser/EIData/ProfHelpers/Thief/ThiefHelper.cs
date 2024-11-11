@@ -63,15 +63,10 @@ internal static class ThiefHelper
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new DamageLogDamageModifier("Marauder's Resilience", "-10% from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.MaraudersResilience, (x,log) =>
-        {
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 360.0;
-        }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.April2019Balance)
+                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() >= 360
+            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.April2019Balance)
     ];
 
 

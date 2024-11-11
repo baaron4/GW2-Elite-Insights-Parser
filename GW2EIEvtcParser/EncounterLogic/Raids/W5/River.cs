@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -12,7 +13,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class River : HallOfChains
 {
-    private static readonly Point3D ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
+    private static readonly Vector3 ChestOfSoulsPosition = new(7906.54f, 2147.48f, -5746.19f);
     public River(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>
@@ -96,8 +97,8 @@ internal class River : HallOfChains
         }
         if (combatData.HasMovementData)
         {
-            var desminaEncounterStartPosition = new Point3D(-9239.706f, 635.445435f, -813.8115f);
-            var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D()).ToList();
+            var desminaEncounterStartPosition = new Vector2(-9239.706f, 635.445435f/*, -813.8115f*/);
+            var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D());
             if (!positions.Any(x => x.X < desminaEncounterStartPosition.X + 100 && x.X > desminaEncounterStartPosition.X - 1300))
             {
                 return FightData.EncounterStartStatus.Late;
@@ -161,7 +162,7 @@ internal class River : HallOfChains
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.HollowedBomber:
-                ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
+                ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.ExtractVector() != default);
                 if (firstBomberMovement != null)
                 {
                     replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
@@ -177,7 +178,7 @@ internal class River : HallOfChains
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.RiverOfSouls:
-                ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Length() != 0);
+                ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.ExtractVector() != default);
                 if (firstRiverMovement != null)
                 {
                     replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);

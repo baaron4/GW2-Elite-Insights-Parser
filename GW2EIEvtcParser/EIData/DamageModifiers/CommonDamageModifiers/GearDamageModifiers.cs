@@ -80,15 +80,10 @@ internal static class GearDamageModifiers
         new DamageLogDamageModifier("Rune of Mercy", "-20%", DamageSource.NoPets, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfMercy, (x, log) => log.CombatData.GetAnimatedCastData(Resurrect).Any(y => y.Caster == x.To && x.Time >= y.Time && x.Time <= y.EndTime), DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         new DamageLogDamageModifier("Rune of the Scrapper", "-10% condition damamge", DamageSource.NoPets, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfTheScrapper, (x,log) =>
-        {
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 600.0;
-        }, DamageModifierMode.PvEWvW)
+                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() >= 600.0
+            , DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnFoeDamageModifier(Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         // Relics

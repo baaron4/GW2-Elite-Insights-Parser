@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
@@ -93,7 +94,7 @@ internal class Ensolyss : Nightmare
         return phases;
     }
 
-    private static void AddTormentingBlastDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, Point3D point, int quarterAoE, int quarterHit)
+    private static void AddTormentingBlastDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, in Vector3 point, int quarterAoE, int quarterHit)
     {
         long startQuarter = lifespan.start + quarterAoE;
         long endQuarter = lifespan.start + quarterHit;
@@ -110,11 +111,11 @@ internal class Ensolyss : Nightmare
         }
     }
 
-    private static void AddCausticExplosionDecoration(CombatReplay replay, AbstractSingleActor target, Point3D point, long attackEnd, (long start, long end) lifespan, long growing)
+    private static void AddCausticExplosionDecoration(CombatReplay replay, AbstractSingleActor target, in Vector3 point, long attackEnd, (long start, long end) lifespan, long growing)
     {
         if (attackEnd >= lifespan.end) // If the attack started
         {
-            Point3D flipPoint = -1 * point;
+            var flipPoint = -1 * point;
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(point);
             var flippedRotationConnector = new AngleConnector(flipPoint);
@@ -243,8 +244,7 @@ internal class Ensolyss : Nightmare
                     int castDuration = 1550;
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
                     {
                         var rotation = new AngleConnector(facing);
                         var cone = (PieDecoration)new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation);
@@ -264,12 +264,11 @@ internal class Ensolyss : Nightmare
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
 
                     // Facing point
-                    Point3D facingDirection = target.GetCurrentRotation(log, c.Time, castDuration);
-                    if (facingDirection != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time, out var facingDirection, castDuration))
                     {
                         // Calculated points
-                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
-                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
+                        var frontalPoint = new Vector3(facingDirection.X, facingDirection.Y, 0);
+                        var leftPoint = new Vector3(facingDirection.Y * -1, facingDirection.X, 0);
 
                         AddTormentingBlastDecoration(replay, target, lifespan, frontalPoint, firstQuarterAoe, firstQuarterHit); // Frontal
                         AddTormentingBlastDecoration(replay, target, lifespan, leftPoint, secondQuarterAoe, secondQuarterHit); // Left of frontal
@@ -319,12 +318,11 @@ internal class Ensolyss : Nightmare
                     }
 
                     // Initial facing point
-                    Point3D facingDirection = target.GetCurrentRotation(log, c.Time, castDuration);
-                    if (facingDirection != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time, out var facingDirection, castDuration))
                     {
                         // Calculated other quarters from initial point
-                        var frontalPoint = new Point3D(facingDirection.X, facingDirection.Y);
-                        var leftPoint = new Point3D(facingDirection.Y * -1, facingDirection.X);
+                        var frontalPoint = new Vector3(facingDirection.X, facingDirection.Y, 0);
+                        var leftPoint = new Vector3(facingDirection.Y * -1, facingDirection.X, 0);
                         int initialDelay = 1500;
 
                         // First quarters
@@ -351,12 +349,11 @@ internal class Ensolyss : Nightmare
                 foreach (AbstractCastEvent c in lungeEnso)
                 {
                     int castDuration = 1000;
-                    Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
                     {
                         var rotation = new AngleConnector(facing);
                         (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                        replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(rotation));
+                        replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new Vector3(850, 0, 0), true)).UsingRotationConnector(rotation));
                     }
                 }
 
@@ -389,7 +386,7 @@ internal class Ensolyss : Nightmare
                             {
                                 (long start, long end) lifespanArrow = (effect.Time, effect.Time + effect.Duration);
                                 var rotation = new AngleConnector(effect.Rotation.Z);
-                                var arrow = (RectangleDecoration)new RectangleDecoration(30, 600, lifespanArrow, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(new Point3D(0, 300), true)).UsingRotationConnector(rotation);
+                                var arrow = (RectangleDecoration)new RectangleDecoration(30, 600, lifespanArrow, Colors.LightOrange, 0.2, new PositionConnector(effect.Position).WithOffset(new(0, 300, 0), true)).UsingRotationConnector(rotation);
                                 replay.Decorations.Add(arrow);
                             }
                         }
@@ -402,12 +399,11 @@ internal class Ensolyss : Nightmare
                 foreach (AbstractCastEvent c in lungeHallu)
                 {
                     int castDuration = 1000;
-                    Point3D facing = target.GetCurrentRotation(log, c.Time + castDuration);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
                     {
                         var rotation = new AngleConnector(facing);
                         (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                        replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new Point3D(850, 0), true)).UsingRotationConnector(rotation));
+                        replay.Decorations.Add(new RectangleDecoration(1700, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(new(850, 0, 0), true)).UsingRotationConnector(rotation));
                     }
                 }
 

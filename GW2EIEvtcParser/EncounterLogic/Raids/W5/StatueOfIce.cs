@@ -86,15 +86,16 @@ internal class StatueOfIce : HallOfChains
                 var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards).ToList();
                 foreach (AbstractCastEvent c in Cone)
                 {
-                    int start = (int)c.Time;
-                    int end = (int)c.EndTime;
-                    uint range = 450;
-                    int angle = 100;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing == null)
+                    var start = c.Time;
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
                         continue;
                     }
+
+                    var end = c.EndTime;
+                    uint range = 450;
+                    int angle = 100;
+                    
                     var connector = new AgentConnector(target);
                     var rotationConnector = new AngleConnector(facing);
                     replay.Decorations.Add(new PieDecoration(range, angle, (start, end), Colors.LightBlue, 0.2, connector).UsingRotationConnector(rotationConnector));
@@ -145,7 +146,7 @@ internal class StatueOfIce : HallOfChains
                 // Ice Breaker - Failed Greens
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out var failedGreens))
                 {
-                    EffectEvent failedGreen = failedGreens.FirstOrDefault(x => x.Position.Distance2DToPoint(green.Position) < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
+                    EffectEvent failedGreen = failedGreens.FirstOrDefault(x => (x.Position - green.Position).XY().Length() < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
                     if (failedGreen != null)
                     {
                         color = Colors.DarkRed;

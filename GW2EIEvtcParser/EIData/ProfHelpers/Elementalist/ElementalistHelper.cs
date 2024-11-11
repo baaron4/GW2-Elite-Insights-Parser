@@ -138,16 +138,11 @@ internal static class ElementalistHelper
     [
         new BuffOnActorDamageModifier(SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
         new BuffOnActorDamageModifier([EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.StoneFlesh, DamageModifierMode.All),
-        new DamageLogDamageModifier("Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) =>
-        {
-            Point3D currentPosition = x.From.GetCurrentPosition(log, x.Time);
-            Point3D currentTargetPosition = x.To.GetCurrentPosition(log, x.Time);
-            if (currentPosition == null || currentTargetPosition == null)
-            {
-                return false;
-            }
-            return currentPosition.DistanceToPoint(currentTargetPosition) <= 360.0;
-        }, DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
+        new DamageLogDamageModifier("Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) => 
+                x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
+                && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
+                && (currentPosition - currentTargetPosition).Length() <= 360.0
+            , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
     ];
 
 

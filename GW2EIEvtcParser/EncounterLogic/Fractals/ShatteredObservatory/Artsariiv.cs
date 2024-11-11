@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -101,17 +102,17 @@ internal class Artsariiv : ShatteredObservatory
         return phases;
     }
 
-    static readonly List<(string, Point3D)> CloneLocations =
+    static readonly (string, Vector2)[] CloneLocations =
     [
-        ("M", new Point3D(10357.898f, 1466.580f)),
-        ("NE", new Point3D(11431.998f, 2529.760f)),
-        ("NW", new Point3D(9286.878f, 2512.429f)),
-        ("SW", new Point3D(9284.729f, 392.916f)),
-        ("SE", new Point3D(11422.698f, 401.501f)),
-        ("N", new Point3D(10369.498f, 2529.010f)),
-        ("E", new Point3D(11_432.598f, 1460.400f)),
-        ("S", new Point3D(10_388.698f, 390.419f)),
-        ("W", new Point3D(9295.668f, 1450.060f)),
+        ("M" , new(10357.898f, 1466.580f)),
+        ("NE", new(11431.998f, 2529.760f)),
+        ("NW", new(9286.878f, 2512.429f)),
+        ("SW", new(9284.729f, 392.916f)),
+        ("SE", new(11422.698f, 401.501f)),
+        ("N" , new(10369.498f, 2529.010f)),
+        ("E" , new(11_432.598f, 1460.400f)),
+        ("S" , new(10_388.698f, 390.419f)),
+        ("W" , new(9295.668f, 1450.060f)),
     ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -137,7 +138,7 @@ internal class Artsariiv : ShatteredObservatory
             {
                 trashMob.OverrideName("Small " + trashMob.Character);
             }
-            if (trashMob.IsSpecies(TrashID.MediumArtsariiv))
+                        if (trashMob.IsSpecies(TrashID.MediumArtsariiv))
             {
                 trashMob.OverrideName("Medium " + trashMob.Character);
             }
@@ -151,11 +152,12 @@ internal class Artsariiv : ShatteredObservatory
                 { "M", 1 }, { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 }, // both split clones start at 1
                 { "N", 2 }, { "E", 2 }, { "S", 2 }, { "W", 2 }, // second split clones start at 2
         };
-        foreach (NPC target in _targets)
+
+        foreach (var target in _targets)
         {
             if (target.IsSpecies(TrashID.CloneArtsariiv))
             {
-                string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, CloneLocations);
+                string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, CloneLocations);
                 if (suffix != null && nameCount.ContainsKey(suffix))
                 {
                     // deduplicate name
@@ -214,12 +216,12 @@ internal class Artsariiv : ShatteredObservatory
                                 int castEnd = castStart + 3160;
                                 replay.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), Colors.Orange, 0.2, new AgentConnector(target)), castEnd);
                                 (float, float)[][] positions = [
-                                // positions taken from effects
-                               [(9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f)],
-                               [(10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f)],
-                               [(10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f)],
-                               [(10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f)],
-                            ];
+                                   // positions taken from effects
+                                   [(9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f)],
+                                   [(10941.61f, 2044.3567f), (10934.861f, 889.46716f), (9772.5205f, 880.9314f), (9780.549f, 2030.362f)],
+                                   [(10116.815f, 1701.9971f), (10104.783f, 1213.3477f), (10602.564f, 1221.8499f), (10607.577f, 1713.7196f)],
+                                   [(10281.519f, 1390.1648f), (10429.899f, 1537.8489f), (10425.812f, 1398.6493f), (10295.681f, 1527.335f)],
+                                ];
                                 uint[] radius = [400, 290, 180, 70];
                                 long nextInvul = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time >= cast.Time)?.Time ?? log.FightData.FightEnd;
                                 for (int i = 0; i < 4; i++)
@@ -232,7 +234,7 @@ internal class Artsariiv : ShatteredObservatory
                                     }
                                     foreach ((float x, float y) in positions[i])
                                     {
-                                        var position = new PositionConnector(new Point3D(x, y));
+                                        var position = new PositionConnector(new(x, y, 0));
                                         replay.AddDecorationWithGrowing(new CircleDecoration(radius[i], (start, end), Colors.Orange, 0.2, position), end);
                                     }
                                 }
@@ -277,7 +279,7 @@ internal class Artsariiv : ShatteredObservatory
         const int hitbox = 360;
         const int offset = 60;
         var rotation = new AngleConnector(effect.Rotation.Z);
-        GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, length / 2.0f + offset), true);
+        GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, length / 2.0f + offset, 0), true);
         EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, opacity, position).UsingRotationConnector(rotation));
     }
 

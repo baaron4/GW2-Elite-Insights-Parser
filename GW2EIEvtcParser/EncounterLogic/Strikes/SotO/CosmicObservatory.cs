@@ -77,7 +77,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                         continue;
                     }
                     // Hardcoded positional value, Dagda isn't in the center but the AoE is
-                    var connector = new PositionConnector(new Point3D(305.26892f, 920.6105f, -5961.992f));
+                    var connector = new PositionConnector(new(305.26892f, 920.6105f, -5961.992f));
                     var circle = new CircleDecoration(800, (cast.Time, phaseBuff.Value.End), Colors.Red, 0.4, connector);
                     replay.Decorations.Add(circle);
                 }
@@ -120,7 +120,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     if (player != null)
                     {
                         var rotation = new AgentFacingAgentConnector(target, player);
-                        var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(length / 2, 0), true);
+                        var connector = (AgentConnector)new AgentConnector(target).WithOffset(new(length / 2, 0, 0), true);
                         replay.Decorations.Add(new RectangleDecoration(length, width, lifespan, Colors.DarkGreen, 0.4, connector).UsingRotationConnector(rotation));
                     }
                 }

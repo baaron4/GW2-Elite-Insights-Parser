@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -413,93 +414,113 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
     public abstract AbstractSingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log);
 
-    private static Point3D? GetCurrentPoint(IReadOnlyList<ParametricPoint3D> points, long time, long forwardWindow = 0)
+    private static bool TryGetCurrentPoint(IReadOnlyList<ParametricPoint3D> points, long time, [NotNullWhen(true)] out Vector3 point, long forwardWindow = 0)
     {
         if (forwardWindow != 0)
         {
-            return points.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? points.LastOrDefault(x => x.Time <= time);
+            var parametric = points.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? points.LastOrDefault(x => x.Time <= time);
+            if(parametric != null)
+            {
+                point = parametric.ExtractVector();
+                return true;
+            }
+
+            point = default;
+            return false;
         }
+
         int foundIndex = BinarySearchRecursive(points, time, 0, points.Count - 1);
         if (foundIndex < 0)
         {
-            return null;
+            point = default;
+            return false;
         }
+        
         ParametricPoint3D position = points[foundIndex];
         if (position.Time > time)
         {
-            return null;
+            point = default;
+            return false;
         }
-        return points[foundIndex];
+        
+        point = points[foundIndex].ExtractVector();
+        return true;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="log"></param>
-    /// <param name="time"></param>
     /// <param name="forwardWindow">Position will be looked up to time + forwardWindow if given</param>
-    /// <returns></returns>
-    public Point3D? GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
+    public bool TryGetCurrentPosition(ParsedEvtcLog log, long time, [NotNullWhen(true)] out Vector3 position, long forwardWindow = 0)
     {
         if (!HasCombatReplayPositions(log))
         {
             if (HasPositions(log))
             {
-                return GetCurrentPoint(GetCombatReplayNonPolledPositions(log), time, forwardWindow);
+                return TryGetCurrentPoint(GetCombatReplayNonPolledPositions(log), time, out position, forwardWindow);
             }
-            return null;
+
+            position = default;
+            return false;
         }
-        return GetCurrentPoint(GetCombatReplayPolledPositions(log), time, forwardWindow);
+        return TryGetCurrentPoint(GetCombatReplayPolledPositions(log), time, out position, forwardWindow);
     }
 
-    public Point3D? GetCurrentInterpolatedPosition(ParsedEvtcLog log, long time)
+    public bool TryGetCurrentInterpolatedPosition(ParsedEvtcLog log, long time, [NotNullWhen(true)] out Vector3 position)
     {
         if (!HasCombatReplayPositions(log))
         {
-            return null;
+            position = default;
+            return false;
         }
+
         IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
         ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
         ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
-        Point3D? res;
         if (prev != null && next != null)
         {
             long denom = next.Time - prev.Time;
             if (denom == 0)
             {
-                res = prev;
+                position = prev.ExtractVector();
             }
             else
             {
                 float ratio = (float)(time - prev.Time) / denom;
-                res = new Point3D(prev, next, ratio);
+                position = Vector3.Lerp(prev.ExtractVector(), next.ExtractVector(), ratio);
             }
+            return true;
         }
         else
         {
-            res = prev ?? next;
+            var parametric = prev ?? next;
+            if(parametric != null)
+            {
+                position = parametric.ExtractVector();
+                return true;
+            }
+            else
+            {
+                position = default;
+                return false;
+            }
         }
-        return res;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="log"></param>
-    /// <param name="time"></param>
+    //TODO(Rennorb) @cleanup: There is an argument to be made here that in all the places where this is used you probably want to add a decoration either way, regardless if this fails or not.
+    //Something to look into.
     /// <param name="forwardWindow">Rotation will be looked up to time + forwardWindow if given</param>
-    /// <returns></returns>
-    public Point3D? GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
+    public bool TryGetCurrentFacingDirection(ParsedEvtcLog log, long time, [NotNullWhen(true)] out Vector3 rotation, long forwardWindow = 0) 
     {
         if (!HasCombatReplayRotations(log))
         {
             if (HasRotations(log))
             {
-                return GetCurrentPoint(GetCombatReplayNonPolledRotations(log), time, forwardWindow);
+                return TryGetCurrentPoint(GetCombatReplayNonPolledRotations(log), time, out rotation, forwardWindow);
             }
-            return null;
+
+            rotation = default;
+            return false;
         }
-        return GetCurrentPoint(GetCombatReplayPolledRotations(log), time, forwardWindow);
+
+        return TryGetCurrentPoint(GetCombatReplayPolledRotations(log), time, out rotation, forwardWindow);
     }
 
     #endregion COMBAT REPLAY
@@ -858,14 +879,17 @@ public abstract partial class AbstractSingleActor : AbstractActor
         {
             return -1;
         }
+
         if (position[minIndex].Time > time)
         {
             return minIndex - 1;
         }
+
         if (position[maxIndex].Time < time)
         {
             return maxIndex;
         }
+
         if (minIndex > maxIndex)
         {
             return minIndex - 1;

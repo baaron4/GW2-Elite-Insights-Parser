@@ -202,33 +202,33 @@ internal class ValeGuardian : SpiritVale
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
-                        var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
+                        var positionConnector = new PositionConnector(new(-4749.838867f, -20607.296875f, 0.0f));
                         var rotationConnector = new AngleConnector(151);
                         replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
                         replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-5449.0f, -20219.0f, 0.0f))));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-5449.0f, -20219.0f, 0.0f))));
                     }
                     var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue);
                     foreach (AbstractCastEvent c in distributedMagicBlue)
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
-                        var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
+                        var positionConnector = new PositionConnector(new(-4749.838867f, -20607.296875f, 0.0f));
                         var rotationConnector = new AngleConnector(31);
                         replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
                         replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4063.0f, -20195.0f, 0.0f))));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-4063.0f, -20195.0f, 0.0f))));
                     }
                     var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed);
                     foreach (AbstractCastEvent c in distributedMagicRed)
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
-                        var positionConnector = new PositionConnector(new Point3D(-4749.838867f, -20607.296875f, 0.0f));
+                        var positionConnector = new PositionConnector(new(-4749.838867f, -20607.296875f, 0.0f));
                         var rotationConnector = new AngleConnector(271);
                         replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (start, end), Colors.Green, 0.1, positionConnector).UsingGrowingEnd(start + distributedMagicDuration).UsingRotationConnector(rotationConnector));
                         replay.Decorations.Add(new PieDecoration(arenaRadius, 120, (end, end + impactDuration), Colors.Green, 0.3, positionConnector).UsingRotationConnector(rotationConnector));
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new Point3D(-4735.0f, -21407.0f, 0.0f))));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-4735.0f, -21407.0f, 0.0f))));
                     }
                 }
                 #if DEBUG_EFFECTS

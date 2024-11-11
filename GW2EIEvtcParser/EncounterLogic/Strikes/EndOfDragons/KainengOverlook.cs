@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
@@ -188,8 +189,8 @@ internal class KainengOverlook : EndOfDragonsStrike
         // when wiped during a split phase, Li's LastAware is well before fight end
         subPhases.RemoveAll(x => (x.End + x.Start) / 2 > ministerLi.LastAware + ServerDelayConstant);
         phases.AddRange(subPhases);
-        AddSplitPhase(phases, new List<AbstractSingleActor>() { enforcer, mindblade, ritualist }, ministerLi, log, 1);
-        AddSplitPhase(phases, new List<AbstractSingleActor>() { mechRider, sniper }, ministerLi, log, 2);
+        AddSplitPhase(phases, [enforcer, mindblade, ritualist], ministerLi, log, 1);
+        AddSplitPhase(phases, [mechRider, sniper], ministerLi, log, 2);
         return phases;
     }
 
@@ -349,6 +350,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                     }
                 }
             } break;
+
             case (int)ArcDPSEnums.TrashID.TheMechRider:
             case (int)ArcDPSEnums.TrashID.TheMechRiderCM: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
@@ -373,7 +375,8 @@ internal class KainengOverlook : EndOfDragonsStrike
                 // Jade Buster Cannon
                 var cannon = casts.Where(x => x.SkillId == JadeBusterCannonMechRider);
                 int warningDuration = 2800;
-                var offset = new Point3D(0, -1400);
+                var offset = new Vector3(0, -1400, 0);
+
                 // Warning decoration
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KainengOverlookJadeBusterCannonWarning, out var warningRectangle))
                 {
@@ -572,8 +575,8 @@ internal class KainengOverlook : EndOfDragonsStrike
                 int velocity = 85; // Approximation
                 int stormDuration = 15000; // Approximation - Attack disappears when off the edge of the platform
                 (long, long) lifespanAnimation = (lifespanIndicator.Item2, lifespanIndicator.Item2 + stormDuration);
-                var finalPosition = new ParametricPoint3D(initialPosition + (velocity * stormDuration / 1000.0f) * new Point3D((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2)), lifespanIndicator.Item2 + stormDuration);
-                var animatedCircle = new CircleDecoration(200, lifespanAnimation, "rgba(200, 60, 150, 0.2)", new InterpolationConnector(new List<ParametricPoint3D>() { initialPosition, finalPosition }));
+                var finalPosition = new ParametricPoint3D(initialPosition.ExtractVector() + (velocity * stormDuration / 1000.0f) * new Vector3((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2), 0), lifespanIndicator.Item2 + stormDuration);
+                var animatedCircle = new CircleDecoration(200, lifespanAnimation, "rgba(200, 60, 150, 0.2)", new InterpolationConnector([initialPosition, finalPosition]));
                 EnvironmentDecorations.Add(animatedCircle);
                 EnvironmentDecorations.Add(animatedCircle.GetBorderDecoration(Colors.Red, 0.2));
             }
@@ -582,11 +585,11 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     internal static void AddFallOfTheAxeDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration, int angle)
     {
-        Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-        if (facingDirection == null)
+        if (target.TryGetCurrentFacingDirection(log, lifespan.Item1 + 100, out var facingDirection, duration))
         {
             return;
         }
+
         var connector = new AgentConnector(target);
         var rotationConnector = new AngleConnector(facingDirection);
         var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
@@ -596,11 +599,11 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     private static void AddDragonSlashWaveDecoration(ParsedEvtcLog log, NPC target, CombatReplay replay, (long, long) lifespan, int duration)
     {
-        Point3D facingDirection = target.GetCurrentRotation(log, lifespan.Item1 + 100, duration);
-        if (facingDirection == null)
+        if (target.TryGetCurrentFacingDirection(log, lifespan.Item1 + 100, out var facingDirection, duration))
         {
             return;
         }
+
         var connector = new AgentConnector(target);
         var rotationConnector = new AngleConnector(facingDirection);
         var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);

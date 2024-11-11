@@ -168,9 +168,9 @@ internal class FraenirOfJormag : Bjora
                     CombatItem itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                     if (itemBound != null && itemElem != null)
                     {
-                        Point3D bound3D = AbstractMovementEvent.GetPoint3D(itemBound);
-                        Point3D elem3D = AbstractMovementEvent.GetPoint3D(itemElem);
-                        if (bound3D.Distance2DToPoint(elem3D) < 1)
+                        var bound3D = AbstractMovementEvent.GetPoint3D(itemBound);
+                        var elem3D = AbstractMovementEvent.GetPoint3D(itemElem);
+                        if ((bound3D - elem3D).XY().LengthSquared() < 1)
                         {
                             long firstAwareBound = combatData.Where(x => x.SrcMatchesAgent(boundElemental)).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToList().FirstOrDefault().FirstAware;
                             boundElemental.OverrideAwareTimes(firstAwareBound, spawnedElemental.FirstAware);

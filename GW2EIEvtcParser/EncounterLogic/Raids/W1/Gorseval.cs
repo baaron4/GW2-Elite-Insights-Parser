@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.SkillIDs;
+using System.Numerics;
 
 namespace GW2EIEvtcParser.EncounterLogic;
 
@@ -80,12 +81,12 @@ internal class Gorseval : SpiritVale
     }
 
     // note: 2nd split spawn locations are further out
-    static readonly List<(string, Point3D)> SoulLocations =
+    static readonly List<(string, Vector2)> SoulLocations =
     [
-        ("NE", new Point3D(2523.4495f, -3665.1294f)),
-        ("NW", new Point3D(842.77686f, -3657.2395f)),
-        ("SW", new Point3D(866.719f, -5306.719f)),
-        ("SE", new Point3D(2470.5596f, -5194.389f)),
+        ("NE", new(2523.4495f, -3665.1294f)),
+        ("NW", new(842.77686f, -3657.2395f)),
+        ("SW", new(866.719f, -5306.719f)),
+        ("SE", new(2470.5596f, -5194.389f)),
     ];
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
@@ -97,7 +98,7 @@ internal class Gorseval : SpiritVale
             if (target.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul))
             {
                 // 2nd split souls spawn further out, check in larger radius
-                string suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, SoulLocations, 300);
+                string? suffix = AddNameSuffixBasedOnInitialPosition(target, combatData, SoulLocations, 300);
                 if (suffix != null && nameCount.ContainsKey(suffix))
                 {
                     // deduplicate name
@@ -164,7 +165,7 @@ internal class Gorseval : SpiritVale
                     const byte fifth = 1 << 4;
                     const byte full = 1 << 5;
 
-                    Point3D pos = replay.PolledPositions.First();
+                    var pos = replay.PolledPositions.First().ExtractVector();
                     foreach (AbstractCastEvent c in rampage)
                     {
                         int start = (int)c.Time;

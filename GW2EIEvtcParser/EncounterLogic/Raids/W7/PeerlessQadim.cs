@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -71,18 +72,15 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
     internal override List<InstantCastFinder> GetInstantCastFinders()
     {
-        return
-        [
-            new DamageCastFinder(UnbrearablePower, UnbrearablePower),
-        ];
+        return [ new DamageCastFinder(UnbrearablePower, UnbrearablePower) ];
     }
 
-    private static readonly IReadOnlyList<(string, Point3D)> PylonLocations = new List<(string, Point3D)>()
-    {
-        ("(N)", new Point3D(1632.32837f, 11588.4014f)),
-        ("(SW)", new Point3D(322.5202f, 9321.848f)),
-        ("(SE)", new Point3D(2941.51514f, 9321.848f)),
-    };
+    private static readonly IReadOnlyList<(string, Vector2)> PylonLocations = 
+    [
+        ("(N)", new(1632.32837f, 11588.4014f)),
+        ("(SW)", new(322.5202f, 9321.848f)),
+        ("(SE)", new(2941.51514f, 9321.848f)),
+    ];
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
@@ -203,8 +201,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     uint magmaRadius = 850;
                     start = (int)c.Time;
                     end = (int)c.EndTime;
-                    Point3D? pylonPosition = target.GetCurrentPosition(log, end);
-                    if (pylonPosition == null)
+                    if (target.TryGetCurrentPosition(log, end, out var pylonPosition))
                     {
                         continue;
                     }
@@ -222,15 +219,14 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     start = (int)c.Time;
                     int preCastTime = 1500;
                     int duration = 22500;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    Point3D? position = target.GetCurrentPosition(log, start + 1000);
-                    if (facing != null && position != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing)
+                        && target.TryGetCurrentPosition(log, start + 1000, out var position))
                     {
-                        replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new Point3D(roadLength / 2 + 200, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                        replay.Decorations.Add(new RectangleDecoration(roadLength, roadWidth, (start, start + preCastTime), Colors.Red, 0.1, new PositionConnector(position).WithOffset(new(roadLength / 2 + 200, 0, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                         for (uint i = 0; i < subdivisions; i++)
                         {
                             var translation = (int)((i + 0.5) * roadLength / subdivisions + hitboxOffset);
-                            replay.Decorations.Add(new RectangleDecoration(roadLength / subdivisions, roadWidth, (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new Point3D(translation, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
+                            replay.Decorations.Add(new RectangleDecoration(roadLength / subdivisions, roadWidth, (start + preCastTime + i * (rollOutTime / subdivisions), start + preCastTime + i * (rollOutTime / subdivisions) + duration), "rgba(143, 0, 179, 0.6)", new PositionConnector(position).WithOffset(new(translation, 0, 0), true)).UsingRotationConnector(new AngleConnector(facing)));
                         }
                     }
                 }
@@ -243,8 +239,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     int timeBetweenCascades = 200;
                     int cascades = 5;
                     start = (int)c.Time + 1400;
-                    Point3D? position = target.GetCurrentPosition(log, start + 1000);
-                    if (position != null)
+                    if (target.TryGetCurrentPosition(log, start + 1000, out var position))
                     {
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
                         for (uint i = 0; i < cascades; i++)
@@ -261,8 +256,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     int coneAngle = 60;
                     start = (int)c.Time;
                     end = start + 250;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 300);
-                    if (facing != null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 300, out var facing))
                     {
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
@@ -289,7 +283,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     int aimTime = (int)(c.ExpectedDuration * ratio);
                     if (replay.Rotations.Count != 0)
                     {
-                        var connector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(chaosLength / 2, 0), true);
+                        var connector = (AgentConnector)new AgentConnector(target).WithOffset(new(chaosLength / 2, 0, 0), true);
                         var rotationConnector = new AgentFacingConnector(target);
                         replay.Decorations.Add(new RectangleDecoration(chaosLength, chaosWidth, (start, end), Colors.Orange, 0.3, connector).UsingRotationConnector(rotationConnector));
                         if (end > start + aimTime)
@@ -304,8 +298,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     uint radius = 650;
                     start = (int)c.Time;
                     end = (int)c.EndTime;
-                    Point3D? position = target.GetCurrentPosition(log, start + 1000);
-                    if (position != null)
+                    if (target.TryGetCurrentPosition(log, start + 1000, out var position))
                     {
                         replay.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
 
@@ -325,11 +318,11 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 replay.AddOverheadIcons(stuns, target, BuffImages.Stun);
 
                 // Spawn animation
-                Point3D firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
+                var firstEntropicPosition = replay.PolledPositions.FirstOrDefault();
                 uint radiusAnomaly = target.HitboxWidth / 2;
                 if (firstEntropicPosition != null)
                 {
-                    replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(firstEntropicPosition)), start);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(firstEntropicPosition.ExtractVector())), start);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.BigKillerTornado:
@@ -399,8 +392,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             replay.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
             if (!log.CombatData.HasEffectData)
             {
-                var position = p.GetCurrentInterpolatedPosition(log, magmaDropEnd);
-                if (position != null && !hasPlayerDownedInAir)
+                if (p.TryGetCurrentInterpolatedPosition(log, magmaDropEnd, out var position) && !hasPlayerDownedInAir)
                 {
                     string magmaColor = magmaCounter == 0 ? MagmaColor1 : MagmaColor2;
                     magmaCounter = (magmaCounter + 1) & 1;
@@ -512,7 +504,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 if (landedOrbExplosions != null)
                 {
-                    failedOrb = landedOrbExplosions.Any(x => effect.Position.Distance2DToPoint(x.Position) < 1e-6);
+                    failedOrb = landedOrbExplosions.Any(x => (effect.Position - x.Position).XY().Length() < 1e-6);
                 }
                 if (failedOrb)
                 {

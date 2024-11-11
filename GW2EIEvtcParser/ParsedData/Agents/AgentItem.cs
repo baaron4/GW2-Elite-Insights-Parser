@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData;
@@ -468,14 +469,14 @@ public class AgentItem
         return log.FindActor(this).GetCurrentBarrierPercent(log, time);
     }
 
-    public Point3D GetCurrentPosition(ParsedEvtcLog log, long time, long forwardWindow = 0)
+    public bool TryGetCurrentPosition(ParsedEvtcLog log, long time, out Vector3 position, long forwardWindow = 0)
     {
-        return log.FindActor(this).GetCurrentPosition(log, time, forwardWindow);
+        return log.FindActor(this).TryGetCurrentPosition(log, time, out position, forwardWindow);
     }
 
-    public Point3D GetCurrentRotation(ParsedEvtcLog log, long time, long forwardWindow = 0)
+    public bool TryGetCurrentFacingDirection(ParsedEvtcLog log, long time, out Vector3 facing, long forwardWindow = 0)
     {
-        return log.FindActor(this).GetCurrentRotation(log, time, forwardWindow);
+        return log.FindActor(this).TryGetCurrentFacingDirection(log, time, out facing, forwardWindow);
     }
 
     public ArcDPSEnums.BreakbarState GetCurrentBreakbarState(ParsedEvtcLog log, long time)

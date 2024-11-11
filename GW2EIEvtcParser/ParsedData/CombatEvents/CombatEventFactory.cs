@@ -350,7 +350,7 @@ internal static class CombatEventFactory
                     if (lastSquadMarker != null)
                     {
                         // End previous if position has changed
-                        if (lastSquadMarker.Position.DistanceToPoint(squadMarkerEvent.Position) > 1e-6)
+                        if ((lastSquadMarker.Position - squadMarkerEvent.Position).Length() > 1e-6)
                         {
                             lastSquadMarker.SetEndTime(squadMarkerEvent.Time);
                         }

@@ -289,18 +289,19 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 {
                     replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
                 }
+                
                 var towerDrop = cls.Where(x => x.SkillId == TowerDrop);
                 foreach (AbstractCastEvent c in towerDrop)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
                     int skillCast = end - 1000;
-                    Point3D position = target.GetCurrentInterpolatedPosition(log, end);
-                    if (position != null)
+                    if (target.TryGetCurrentInterpolatedPosition(log, end, out var position))
                     {
                         replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), Colors.LightOrange, 0.5, new PositionConnector(position)).UsingFilled(false), true, skillCast);
                     }
                 }
+               
                 var blades1 = cls.Where(x => x.SkillId == PhantasmalBlades1);
                 var blades2 = cls.Where(x => x.SkillId == PhantasmalBlades2);
                 var blades3 = cls.Where(x => x.SkillId == PhantasmalBlades3);
@@ -312,14 +313,13 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 {
                     int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                     start = (int)c.Time + bladeDelay;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing == null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
                         continue;
                     }
                     var connector = new AgentConnector(target);
                     replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
-                    float initialAngle = Point3D.GetZRotationFromFacing(facing);
+                    float initialAngle = facing.GetRoundedZRotationDeg();
                     replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle))); // First blade lasts twice as long
                     for (int i = 1; i < ticks; i++)
                     {
@@ -327,18 +327,18 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                         replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle))); // First blade lasts longer
                     }
                 }
+
                 foreach (AbstractCastEvent c in blades2)
                 {
                     int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                     start = (int)c.Time + bladeDelay;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing == null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
                         continue;
                     }
                     var connector = new AgentConnector(target);
                     replay.Decorations.Add(new CircleDecoration(200, (start, start + (ticks + 1) * 1000), Colors.Red, 0.4, connector));
-                    float initialAngle1 = Point3D.GetZRotationFromFacing(facing);
+                    float initialAngle1 = facing.GetRoundedZRotationDeg();
                     replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle1))); // First blade lasts twice as long
                     float initialAngle2 = RadianToDegreeF(Math.Atan2(-facing.Y, -facing.X));
                     replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start, start + 2 * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(initialAngle2))); // First blade lasts twice as long
@@ -350,12 +350,12 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                         replay.Decorations.Add(new PieDecoration(bladeRadius, bladeOpeningAngle, (start + 1000 + i * duration, start + 1000 + (i + 1) * duration), Colors.Magenta, 0.5, connector).UsingRotationConnector(new AngleConnector(angle2))); // First blade lasts longer
                     }
                 }
+
                 foreach (AbstractCastEvent c in blades3)
                 {
                     int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                     start = (int)c.Time + bladeDelay;
-                    Point3D? facing = target.GetCurrentRotation(log, start + 1000);
-                    if (facing == null)
+                    if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))
                     {
                         continue;
                     }
@@ -390,10 +390,10 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             case (int)ArcDPSEnums.TrashID.Ianim:
                 replay.Decorations.Add(new CircleDecoration(600, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false));
                 replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
-                Point3D firstPhantasmPosition = replay.PolledPositions.FirstOrDefault();
+                var firstPhantasmPosition = replay.PolledPositions.FirstOrDefault();
                 if (firstPhantasmPosition != null)
                 {
-                    replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(firstPhantasmPosition)), start);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(firstPhantasmPosition.ExtractVector())), start);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.GreenPhantasm:

@@ -208,29 +208,32 @@ public class Player : AbstractPlayer
         base.InitAdditionalCombatReplayData(log);
     }
 
-    public IReadOnlyList<Point3D> GetCombatReplayActivePositions(ParsedEvtcLog log)
+    public List<ParametricPoint3D?> GetCombatReplayActivePositions(ParsedEvtcLog log)
     {
         if (CombatReplay == null)
         {
             InitCombatReplay(log);
         }
-        (IReadOnlyList<Segment> deads, _, IReadOnlyList<Segment> dcs) = GetStatus(log);
-        var activePositions = new List<ParametricPoint3D>(GetCombatReplayPolledPositions(log));
+        var (deads, _, dcs) = GetStatus(log);
+        var activePositions = new List<ParametricPoint3D?>(GetCombatReplayPolledPositions(log));
         for (int i = 0; i < activePositions.Count; i++)
         {
-            ParametricPoint3D cur = activePositions[i];
+            var cur = activePositions[i]!;
             foreach (Segment seg in deads)
             {
                 if (seg.ContainsPoint(cur.Time))
                 {
                     activePositions[i] = null;
+                    break;
                 }
             }
+
             foreach (Segment seg in dcs)
             {
                 if (seg.ContainsPoint(cur.Time))
                 {
                     activePositions[i] = null;
+                    break;
                 }
             }
         }

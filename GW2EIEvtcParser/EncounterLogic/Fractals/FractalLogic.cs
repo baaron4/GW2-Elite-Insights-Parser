@@ -232,6 +232,7 @@ internal abstract class FractalLogic : FightLogic
         {
             return;
         }
+
         if (log.CombatData.TryGetEffectEventsByGUID(effect, out var events))
         {
             foreach (EffectEvent @event in events)
@@ -240,12 +241,12 @@ internal abstract class FractalLogic : FightLogic
                 // Correcting the duration of the effects for CTBS 45, based on the distance from the target casting the mechanic.
                 if (@event is EffectEventCBTS45)
                 {
-                    Point3D agentPos = agent.GetCurrentPosition(log, @event.Time);
-                    if (agentPos == null)
+                    if (!agent.TryGetCurrentPosition(log, @event.Time, out var agentPos))
                     {
                         continue;
                     }
-                    var distance = @event.Position.DistanceToPoint(agentPos);
+
+                    var distance = (@event.Position - agentPos).Length();
                     if (distance < distanceThreshold)
                     {
                         lifespan.end = @event.Time + onDistanceSuccessDuration;

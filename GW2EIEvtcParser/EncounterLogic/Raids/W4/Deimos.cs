@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -537,9 +538,10 @@ internal class Deimos : BastionOfThePenitent
                     replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     if (!log.FightData.IsCM)
                     {
-                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Point3D(-8421.818f, 3091.72949f, -9.818082e8f))));
+                        replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Vector3(-8421.818f, 3091.72949f, -9.818082e8f))));
                     }
                 }
+
                 var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1));
                 foreach (AbstractCastEvent c in annihilate)
                 {
@@ -547,12 +549,12 @@ internal class Deimos : BastionOfThePenitent
                     int delay = 1000;
                     end = start + 2400;
                     int duration = 120;
-                    Point3D facing = target.GetCurrentRotation(log, start);
-                    if (facing == null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing))
                     {
                         continue;
                     }
-                    float initialAngle = Point3D.GetZRotationFromFacing(facing);
+
+                    float initialAngle = facing.GetRoundedZRotationDeg();
                     var connector = new AgentConnector(target);
                     for (int i = 0; i < 6; i++)
                     {
@@ -567,6 +569,7 @@ internal class Deimos : BastionOfThePenitent
                         }
                     }
                 }
+
                 var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in signets)
                 {
@@ -600,13 +603,12 @@ internal class Deimos : BastionOfThePenitent
                 break;
             case (int)ArcDPSEnums.TrashID.DemonicBond:
                 replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
-                var demonicCenter = new Point3D(-8092.57f, 4176.98f);
+                var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
                 replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
                 AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                 if (shackledPrisoner != null)
                 {
-                    Point3D? shackledPos = shackledPrisoner.GetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant);
-                    if (shackledPos != null)
+                    if (shackledPrisoner.TryGetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant, out var shackledPos))
                     {
                         float diffX = 0;
                         float diffY = 0;
@@ -640,7 +642,7 @@ internal class Deimos : BastionOfThePenitent
                                 diffY = -1130;
                             }
                         }
-                        Point3D pos = shackledPos + new Point3D(diffX, diffY);
+                        var pos = shackledPos + new Vector3(diffX, diffY, 0);
                         replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
                     }
                 }

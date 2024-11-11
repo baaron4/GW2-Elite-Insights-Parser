@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -33,7 +34,7 @@ public class CombatReplay
         PolledRotations.RemoveAll(x => x.Time < _start || x.Time > _end);
     }
 
-    private static int UpdateVelocityIndex(List<ParametricPoint3D> velocities, int time, int currentIndex)
+    private static int UpdateVelocityIndex(List<ParametricPoint3D> velocities, long time, int currentIndex)
     {
         if (velocities.Count == 0)
         {
@@ -57,18 +58,19 @@ public class CombatReplay
         List<ParametricPoint3D> positions = Positions;
         if (Positions.Count == 0 && forcePolling)
         {
-            positions =
-            [
-                new(int.MinValue, int.MinValue, 0, 0)
-            ];
-        } else if (Positions.Count == 0)
+            positions = [ new(int.MinValue, int.MinValue, 0, 0) ];
+        }
+        else if (Positions.Count == 0)
         {
             return;
         }
+        
         int positionTablePos = 0;
         int velocityTablePos = 0;
-        //
-        for (int i = (int)Math.Min(0, rate * ((positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
+
+        //TODO(Rennorb) @perf: reserve PolledPositions
+
+        for (long i = Math.Min(0, rate * ((positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
         {
             ParametricPoint3D pt = positions[positionTablePos];
             if (i <= pt.Time)
@@ -93,40 +95,42 @@ public class CombatReplay
                     {
                         ParametricPoint3D last = PolledPositions.Last().Time > pt.Time ? PolledPositions.Last() : pt;
                         velocityTablePos = UpdateVelocityIndex(Velocities, i, velocityTablePos);
-                        ParametricPoint3D velocity = null;
+                        ParametricPoint3D? velocity = null;
                         if (velocityTablePos >= 0 && velocityTablePos < Velocities.Count)
                         {
                             velocity = Velocities[velocityTablePos];
                         }
-                        if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && (velocity == null || velocity.Length() < 1e-3))
+
+                        if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && (velocity == null || velocity.ExtractVector().Length() < 1e-3))
                         {
                             PolledPositions.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
                         }
                         else
                         {
                             float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
-                            PolledPositions.Add(new ParametricPoint3D(last, ptn, ratio, i));
+                            PolledPositions.Add(new ParametricPoint3D(Vector3.Lerp(last.ExtractVector(), ptn.ExtractVector(), ratio), i));
                         }
 
                     }
                 }
             }
         }
-        PolledPositions.RemoveAll(x => x.Time < 0);
+        PolledPositions.RemoveAll(x => x.Time < 0); //TODO(Rennorb) @perf: inline before inserting
     }
+
     /// <summary>
     /// The method exists only to have the same amount of rotation as positions, it's easier to do it here than
     /// in javascript
     /// </summary>
-    /// <param name="rate"></param>
-    /// <param name="fightDuration"></param>
-    /// <param name="forceInterpolate"></param>
     private void RotationPolling(int rate, long fightDuration)
     {
         if (Rotations.Count == 0)
         {
             return;
         }
+
+        //TODO(Rennorb) @perf: reserve PolledPositions
+
         int rotationTablePos = 0;
         for (int i = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); i < fightDuration; i += rate)
         {
@@ -159,14 +163,14 @@ public class CombatReplay
                         else
                         {
                             float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
-                            PolledRotations.Add(new ParametricPoint3D(last, ptn, ratio, i));
+                            PolledRotations.Add(new ParametricPoint3D(Vector3.Lerp(last.ExtractVector(), ptn.ExtractVector(), ratio), i));
                         }
 
                     }
                 }
             }
         }
-        PolledRotations.RemoveAll(x => x.Time < 0);
+        PolledRotations.RemoveAll(x => x.Time < 0); //TODO(Rennorb) @perf: inline before inserting
     }
 
     internal void PollingRate(long fightDuration, bool forcePositionPolling)
@@ -585,7 +589,7 @@ public class CombatReplay
     /// <param name="color">Color of the decoration.</param>
     /// <param name="opacity">Opacity of the color.</param>
     /// <param name="radius">Radius of the circle.</param>
-    internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, uint radius = 50)
+    internal void AddProjectile(in Vector3 startingPoint, in Vector3 endingPoint, (long start, long end) lifespan, Color color, double opacity = 0.2, uint radius = 50)
     {
         AddProjectile(startingPoint, endingPoint, lifespan, color.WithAlpha(opacity).ToString(true), radius);
     }
@@ -598,7 +602,7 @@ public class CombatReplay
     /// <param name="lifespan">Duration of the animation.</param>
     /// <param name="color">Color of the decoration.</param>
     /// <param name="radius">Radius of the circle.</param>
-    internal void AddProjectile(Point3D startingPoint, Point3D endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
+    internal void AddProjectile(in Vector3 startingPoint, in Vector3 endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
     {
         if (startingPoint == null || endingPoint == null)
         {
@@ -606,7 +610,7 @@ public class CombatReplay
         }
         var startPoint = new ParametricPoint3D(startingPoint, lifespan.start);
         var endPoint = new ParametricPoint3D(endingPoint, lifespan.end);
-        var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector(new List<ParametricPoint3D>() { startPoint, endPoint }));
+        var shootingCircle = new CircleDecoration(radius, lifespan, color, new InterpolationConnector([startPoint, endPoint]));
         Decorations.Add(shootingCircle);
     }
 
@@ -640,9 +644,6 @@ public class CombatReplay
     /// <summary>
     /// Add hide based on buff's presence
     /// </summary>
-    /// <param name="actor">Actor to check</param>
-    /// <param name="log"></param>
-    /// <param name="buffID">Buff id</param>
     internal void AddHideByBuff(AbstractSingleActor actor, ParsedEvtcLog log, long buffID)
     {
         Hidden.AddRange(actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0));
@@ -659,7 +660,7 @@ public class CombatReplay
     /// <param name="initialOpacity">Starting opacity of the rings' color.</param>
     /// <param name="rings">Total number of rings.</param>
     /// <param name="inverted">Inverts the opacity direction.</param>
-    internal void AddContrenticRings(uint minRadius, uint radiusIncrease, (long, long) lifespan, Point3D position, Color color, float initialOpacity = 0.5f, int rings = 8, bool inverted = false)
+    internal void AddContrenticRings(uint minRadius, uint radiusIncrease, (long, long) lifespan, in Vector3 position, Color color, float initialOpacity = 0.5f, int rings = 8, bool inverted = false)
     {
         var positionConnector = new PositionConnector(position);
 

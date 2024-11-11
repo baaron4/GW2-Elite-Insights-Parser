@@ -242,7 +242,7 @@ internal class Eparch : LonelyTower
             foreach (EffectEvent effect in fissures)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 24000);
-                GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, 0.5f * length), true);
+                GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, 0.5f * length, 0), true);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 EnvironmentDecorations.Add(new RectangleDecoration(width, length, lifespan, Colors.Red, 0.2, position).UsingRotationConnector(rotation));
             }
@@ -257,7 +257,7 @@ internal class Eparch : LonelyTower
             {
                 (long start, long end)= effect.ComputeLifespan(log, 1500);
                 var rotation = new AngleConnector(effect.Rotation.Z);
-                GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new Point3D(0.0f, 0.5f * length), true);
+                GeographicalConnector position = new PositionConnector(effect.Position).WithOffset(new(0.0f, 0.5f * length, 0), true);
                 EnvironmentDecorations.Add(new RectangleDecoration(width, length, (start, end), Colors.Orange, 0.2, position).UsingRotationConnector(rotation));
                 EnvironmentDecorations.Add(new RectangleDecoration(width, length, (end, end + 300), Colors.Red, 0.2, position).UsingRotationConnector(rotation));
             }
@@ -329,8 +329,7 @@ internal class Eparch : LonelyTower
                     AnimatedCastEvent lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
                     if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out Color color))
                     {
-                        Point3D position = gadget.GetCurrentPosition(log, gadget.LastAware);
-                        if (position != null)
+                        if (gadget.TryGetCurrentPosition(log, gadget.LastAware, out var position))
                         {
                             (long, long) lifespan = (spawn.Time, despawn.Time);
                             EnvironmentDecorations.Add(new CircleDecoration(globuleWidth, lifespan, color, 0.7, new PositionConnector(position)));

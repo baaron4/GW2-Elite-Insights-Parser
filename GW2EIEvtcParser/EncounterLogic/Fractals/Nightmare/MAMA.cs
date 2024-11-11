@@ -179,8 +179,7 @@ internal class MAMA : Nightmare
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
 
                     // Find position at the end of the leap time
-                    Point3D? targetPosition = target.GetCurrentPosition(log, expectedEndCast + 1000);
-                    if (targetPosition != null)
+                    if (target.TryGetCurrentPosition(log, expectedEndCast + 1000, out var targetPosition))
                     {
                         replay.AddDecorationWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), expectedEndCast);
 

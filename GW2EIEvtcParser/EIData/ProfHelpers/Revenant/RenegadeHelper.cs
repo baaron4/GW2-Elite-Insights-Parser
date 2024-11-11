@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
@@ -88,11 +89,10 @@ internal static class RenegadeHelper
             {
                 foreach (EffectEvent effect in citadelBombardment)
                 {
-                    Point3D playerPosition = player.AgentItem.GetCurrentPosition(log, effect.Time);
-                    if (playerPosition != null)
+                    if (player.AgentItem.TryGetCurrentPosition(log, effect.Time, out var playerPosition))
                     {
                         var playerPositionConnector = new PositionConnector(playerPosition);
-                        var positions = new List<Point3D>();
+                        var positions = new List<Vector3>();
                         foreach (EffectEvent hitEffect in citadelBombardmentHits.Where(x => x.Time >= effect.Time && x.Time <= effect.Time + 3000))
                         {
                             positions.Add(hitEffect.Position);
@@ -113,10 +113,10 @@ internal static class RenegadeHelper
                             var connector = new PositionConnector(hitEffect.Position);
                             replay.Decorations.Add(new CircleDecoration(120, lifespanHit, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                         }
+
                         // AoE Radius and icons
                         (long, long) lifespan = (effect.Time, effect.Time + 3000);
-                        var centralPoint = Point3D.FindCentralPoint(positions);
-                        var centralConnector = new PositionConnector(centralPoint);
+                        var centralConnector = new PositionConnector(positions.Average());
                         replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardmentPortal, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, playerPositionConnector)
                             .UsingSkillMode(skill));
                         replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector)

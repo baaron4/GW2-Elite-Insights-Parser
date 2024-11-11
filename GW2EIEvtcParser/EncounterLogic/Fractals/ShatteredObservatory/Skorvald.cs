@@ -273,10 +273,9 @@ internal class Skorvald : ShatteredObservatory
                     (long start, long end) lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                     lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
 
-                    Point3D facingDirection = target.GetCurrentRotation(log, c.Time + 100, castDuration);
-                    if (facingDirection != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var facingDirection, castDuration))
                     {
-                        float degree = Point3D.GetZRotationFromFacing(facingDirection);
+                        float degree = facingDirection.GetRoundedZRotationDeg();
 
                         // Horizon Strike starting at Skorvald's facing point
                         if (c.SkillId == HorizonStrikeSkorvald4)
@@ -315,10 +314,9 @@ internal class Skorvald : ShatteredObservatory
                     (long start, long end) lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                     lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
 
-                    Point3D? facingDirection = target.GetCurrentRotation(log, c.Time + 100, castDuration);
-                    if (facingDirection != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var facingDirection, castDuration))
                     {
-                        float degree = Point3D.GetZRotationFromFacing(facingDirection);
+                        float degree = facingDirection.GetRoundedZRotationDeg();
 
                         if (c.SkillId == CrimsonDawnSkorvaldCM2)
                         {
@@ -344,10 +342,9 @@ internal class Skorvald : ShatteredObservatory
                     lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
                     long expectedEndCast = c.Time + castDuration;
 
-                    Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
-                    if (frontalPoint != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var frontalPoint, castDuration))
                     {
-                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
+                        float rotation = frontalPoint.GetRoundedZRotationDeg();
                         // Frontal
                         AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation);
                     }
@@ -391,10 +388,9 @@ internal class Skorvald : ShatteredObservatory
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                     lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
 
-                    Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
-                    if (frontalPoint != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var frontalPoint, castDuration))
                     {
-                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
+                        float rotation = frontalPoint.GetRoundedZRotationDeg();
 
                         // Frontal
                         AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation);
@@ -432,10 +428,9 @@ internal class Skorvald : ShatteredObservatory
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                    Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
-                    if (frontalPoint != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var frontalPoint, castDuration))
                     {
-                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
+                        float rotation =  frontalPoint.GetRoundedZRotationDeg();
                         // Frontal
                         AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation);
                     }
@@ -450,10 +445,9 @@ internal class Skorvald : ShatteredObservatory
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                    Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
-                    if (frontalPoint != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var frontalPoint, castDuration))
                     {
-                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
+                        float rotation = frontalPoint.GetRoundedZRotationDeg();
 
                         // Left
                         AddKickIndicatorDecoration(replay, target, lifespan, expectedEndCast, rotation - angle);
@@ -484,10 +478,9 @@ internal class Skorvald : ShatteredObservatory
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, expectedEndCast);
 
-                    Point3D? frontalPoint = target.GetCurrentRotation(log, c.Time + 100, castDuration);
-                    if (frontalPoint != null)
+                    if (target.TryGetCurrentFacingDirection(log, c.Time + 100, out var frontalPoint, castDuration))
                     {
-                        float rotation = Point3D.GetZRotationFromFacing(frontalPoint);
+                        float rotation = frontalPoint.GetRoundedZRotationDeg();
 
                         float startingDegree = rotation - angle * 2;
                         for (int i = 0; i < 5; i++)
@@ -586,7 +579,7 @@ internal class Skorvald : ShatteredObservatory
     {
         int translation = 150;
         var rotationConnector = new AngleConnector(rotation);
-        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new Point3D(translation, 0), true);
+        var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(translation, 0, 0), true);
         replay.AddDecorationWithGrowing((RectangleDecoration)new RectangleDecoration(300, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnector), expectedEndCast);
 
         // Cascade count => 4

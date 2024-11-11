@@ -104,9 +104,7 @@ internal class StatueOfDeath : HallOfChains
                     int duration = 15000 + cascading;
                     end = start + duration;
                     uint radius = 900;
-                    var facing = target.GetCurrentRotation(log, start);
-                    var position = target.GetCurrentPosition(log, start);
-                    if (facing != null && position != null)
+                    if (target.TryGetCurrentFacingDirection(log, start, out var facing) && target.TryGetCurrentPosition(log, start, out var position))
                     {
                         replay.Decorations.Add(new PieDecoration(radius, 60, (start, end), Colors.GreenishYellow, 0.5, new PositionConnector(position)).UsingGrowingEnd(start + cascading).UsingRotationConnector(new AngleConnector(facing)));
                     }

@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -14,7 +15,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class Escort : StrongholdOfTheFaithful
 {
-    private static readonly Point3D SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
+    private static readonly Vector3 SiegeChestPosition = new(-3815.47f, 16688.5f, -5322.35f);
     private bool _hasPreEvent = false;
     public Escort(int triggerID) : base(triggerID)
     {
@@ -208,8 +209,8 @@ internal class Escort : StrongholdOfTheFaithful
             }
             if (combatData.HasMovementData)
             {
-                var glennaInitialPosition = new Point3D(9092.697f, 21477.2969f, -2946.81885f);
-                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && pe.GetParametricPoint3D().Distance2DToPoint(glennaInitialPosition) < 100))
+                var glennaInitialPosition = new Vector2(9092.697f, 21477.2969f/*, -2946.81885f*/);
+                if (!combatData.GetMovementData(glenna).Any(x => x is PositionEvent pe && pe.Time < glenna.FirstAware + MinimumInCombatDuration && (pe.GetPointXY() - glennaInitialPosition).Length() < 100))
                 {
                     return FightData.EncounterStartStatus.Late;
                 }
