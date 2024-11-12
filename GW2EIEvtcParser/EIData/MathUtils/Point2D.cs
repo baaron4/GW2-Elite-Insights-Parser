@@ -223,5 +223,16 @@ namespace GW2EIEvtcParser.EIData
             var maxBB = new Point2D(Math.Max(p0.X, p1.X), Math.Max(p0.Y, p1.Y));
             return p >= minBB && p <= maxBB;
         }
+
+        public static Point2D RotatePointAroundPoint(Point2D centralPoint, Point2D rotationPoint, double angle)
+        {
+            double sin = Math.Sin(angle);
+            double cos = Math.Cos(angle);
+            double deltaX = rotationPoint.X - centralPoint.X;
+            double deltaY = rotationPoint.Y - centralPoint.Y;
+            double x = deltaX * cos - deltaY * sin + centralPoint.X;
+            double y = deltaX * sin + deltaY * cos + centralPoint.Y;
+            return new Point2D((float)x, (float)y);
+        }
     }
 }

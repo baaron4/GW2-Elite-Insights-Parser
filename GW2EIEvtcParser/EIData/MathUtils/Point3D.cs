@@ -291,5 +291,10 @@ namespace GW2EIEvtcParser.EIData
             float sumZ = points.Sum(p => p.Z);
             return new Point3D(sumX / points.Count, sumY / points.Count, sumZ / points.Count);
         }
+
+        public static Point3D RotatePointAroundPoint(Point3D pivotPoint, Point3D rotationPoint, double angle)
+        {
+            return new Point3D(Point2D.RotatePointAroundPoint(new Point2D(pivotPoint), new Point2D(rotationPoint), angle), 0);
+        }
     }
 }

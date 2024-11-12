@@ -957,11 +957,11 @@ namespace GW2EIEvtcParser
             JormagMovingFrostBeam = ArcDPSEnums.JormagMovingFrostBeam,
             // Aetherblade Hideout
             MaiTrinStrikeDuringEcho = 23826,
-            ScarletPhantomNormalBeam = 24404,
+            ScarletPhantom = 24404,
             ScarletPhantomBreakbar = 23656,
             ScarletPhantomHP = 24431,
             ScarletPhantomHPCM = 25262,
-            ScarletPhantomConeWaveNM = 24396,
+            ScarletPhantomBeamNM = 24396,
             ScarletPhantomDeathBeamCM = 25284,
             ScarletPhantomDeathBeamCM2 = 25287,
             FerrousBomb = ArcDPSEnums.FerrousBomb,

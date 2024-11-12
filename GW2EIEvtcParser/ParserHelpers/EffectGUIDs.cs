@@ -614,6 +614,22 @@
         public const string CascadeAoEIndicator3 = "89CB4BCA7B012244B0864DFAD7E9F3AC";
         public const string CascadeAoEIndicator4 = "965355FD1C53F24085A9C422B8333780";
         public const string CascadeAoEIndicator5 = "F26A2240C0F1E24E81EAEFDE64EFA3BF";
+        // Aetherblade Hideout
+        public const string AetherbladeHideoutKaleidoscopicChaosNM = "C660211FCC31A54397A8F73BEC25EB73"; // Duration 5000 - Can have End Event
+        public const string AetherbladeHideoutKaleidoscopicChaosCM = "BDF708225224C64183BA3CE2A609D37F"; // Duration 5000 - Can have End Event
+        public const string AetherbladeHideoutFocusedDestructionGreen = "3EEDE16455C8C8449237BCC77F107548"; // Duration 6250 - Can have End Event
+        public const string AetherbladeHideoutTormentingWaveIndicator1 = "E273E005F90E3041939C6235FF9CADBA"; // Duration 3000
+        public const string AetherbladeHideoutTormentingWaveIndicator2 = "BA8AD38816F84246BB6F24203D3843FC"; // Duration 3000
+        public const string AetherbladeHideoutElectricBlastIndicator = "1177BFB7901625428E749D8923ADA1A4"; // Duration 0
+        public const string AetherbladeHideoutElectricBlastDetonation = "5DCCEF82D98807429081E3C647B6E5EE"; // Duration 0
+        public const string AetherbladeHideoutPuzzleCirclesDetonation = "9417F62F39B64C4897B53B53008611B8"; // Duration 0
+        public const string AetherbladeHideoutPuzzleNormalMode = "D4E5ED06119B5B40B74C09240498AF0A"; // Duration 12000 - Has End Event
+        public const string AetherbladeHideoutFissureOfTormentIndicator = "67B2D706779AAB48A01962388DCA2ADB"; // Duration 1300
+        public const string AetherbladeHideoutFissureOfTormentDamage = "2DCB402ABABAD34E87B0A8A8957C8E13"; // Duration 0
+        public const string AetherbladeHideoutLeyBreachIndicator1 = "D4089DD8E0040146B3899EB2955AAE87"; // Duration 2000 - Conflicts with Kaineng Overlook effect
+        public const string AetherbladeHideoutLeyBreachIndicator2 = "27E4543F5DD04844B5D98BC3EAFF9348"; // Duration 2000
+        public const string AetherbladeHideoutLeyBreachRedPuddle = "4B62321544A6314ABEEECA3FF2D96116"; // Duration 30000 - Has End Event
+        public const string AetherbladeHideoutHeartpiercer = "06EA9504DA08A0468E9CAFAA97CD9A36"; // Duration 2000
         // Ankka
         public const string DeathsEmbrace = "4AC57C4159E0804D8DBEB6F0F39F5EF3";
         public const string DeathsHandOnPlayerCM = "9A64DC8F21EEC046BA1D4412863F2940";
