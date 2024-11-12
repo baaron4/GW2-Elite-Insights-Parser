@@ -8,6 +8,8 @@ namespace GW2EIEvtcParser.EIData
         private Point3D Offset { get; set; }
 
         private bool OffsetAfterRotation { get; set; }
+
+        private bool _invertYOffset = false;
         public abstract class GeographicalConnectorDescriptor
         {
             public IReadOnlyList<float> Offset { get; private set; }
@@ -22,7 +24,7 @@ namespace GW2EIEvtcParser.EIData
                     var positions = new List<float>
                     {
                         connector.Offset.X,
-                        connector.Offset.Y
+                        connector._invertYOffset ? -connector.Offset.Y : connector.Offset.Y,
                     };
                     Offset = positions;
                 }
@@ -44,10 +46,11 @@ namespace GW2EIEvtcParser.EIData
         /// <summary>
         /// Adds an offset by the specified Point3D. 
         /// </summary>
-        public GeographicalConnector WithOffset(Point3D offset, bool afterRotation)
+        public GeographicalConnector WithOffset(Point3D offset, bool afterRotation, bool invertY = false)
         {
             Offset = offset;
             OffsetAfterRotation = afterRotation;
+            _invertYOffset = invertY;
             return this;
         }
     }

@@ -257,13 +257,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // The third circle spawns when the second circle has complete a rotation of 240°
                         if (echoPosition != null)
                         {
-                            var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true);
-                            float angleDelta = (float)(4 * Math.PI);
-                            float secondAngleDiff = angleDelta / 3;
-                            float thirdAngleDiff = 2 * angleDelta / 3;
-                            var firstRotationConnector = new AngleConnector(0, RadianToDegreeF(angleDelta));
-                            var secondRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 2.0 / 3.0 + secondAngleDiff), RadianToDegreeF(angleDelta - secondAngleDiff));
-                            var thirdRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 4.0 / 3.0 + thirdAngleDiff) , RadianToDegreeF(angleDelta - thirdAngleDiff));
+                            var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true, true);
+                            var firstRotationConnector = new AngleConnector(0, 360);
+                            var secondRotationConnector = new AngleConnector(0, 240);
+                            var thirdRotationConnector = new AngleConnector(0 , 120);
 
                             var lifespans = new List<(long, long)> {
                                 lifespanFirstCircle,
@@ -440,11 +437,11 @@ namespace GW2EIEvtcParser.EncounterLogic
                 const uint radiusFromCenter = 375; // Found by calculating distance between detonation effect and echo position, original value is 374.999969
                 const uint innerRadius = 160;
                 const uint outerRadius = 480;
+                AbstractSingleActor echo = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM));
                 foreach (EffectEvent effect in puzzleNM)
                 {
                     // The effect position is outside of the arena, take the position of the Echo as central point.
-                    AbstractSingleActor echo = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM));
-                    AbstractSingleActor phantom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.ScarletPhantomBeamNM));
+                    AbstractSingleActor phantom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
                     if (echo != null && phantom != null)
                     {
                         Point3D echoPosition = echo.GetCurrentPosition(log, effect.Time);
@@ -457,10 +454,6 @@ namespace GW2EIEvtcParser.EncounterLogic
                             (long start, long end) lifespanSecondCircle = (lifespanFirstCircle.start + duration * 1 / 3, lifespanFirstCircle.end);
                             (long start, long end) lifespanThirdCircle = (lifespanFirstCircle.start + duration * 2 / 3, lifespanFirstCircle.end);
 
-                            var firstCirclePoints = new List<ParametricPoint3D>();
-                            var secondCirclePoints = new List<ParametricPoint3D>();
-                            var thirdCirclePoints = new List<ParametricPoint3D>();
-
                             // Point on the Phantom facing direction, perpendicular from the Echo.
                             var pointOnLine = Point3D.ProjectPointOn2DLine(echoPosition, phantomPosition, phantomFacing);
                             // Opposite point, our starting position
@@ -469,13 +462,10 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // The 3 circles always spawn in the same location
                             // The second circle spawns when the first circle has complete a rotation of 120°
                             // The third circle spawns when the first circle has complete a rotation of 240° and the second circle 120°
-                            var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true);
-                            var angleDelta = (2 * Math.PI);
-                            var secondAngleDiff = angleDelta / 3;
-                            var thirdAngleDiff = 2 * angleDelta / 3;
-                            var firstRotationConnector = new AngleConnector(0, RadianToDegreeF(angleDelta));
-                            var secondRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 4.0 / 3.0 + secondAngleDiff), RadianToDegreeF(angleDelta - secondAngleDiff));
-                            var thirdRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 2.0 / 3.0 + thirdAngleDiff), RadianToDegreeF(angleDelta - thirdAngleDiff));
+                            var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true, true);
+                            var firstRotationConnector = new AngleConnector(0, 360);
+                            var secondRotationConnector = new AngleConnector(0, 240);
+                            var thirdRotationConnector = new AngleConnector(0, 120);
 
                             var lifespans = new List<(long, long)> {
                                 lifespanFirstCircle,
