@@ -195,32 +195,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var initialPoint = new Point3D(3138.17456f, 1639.60657f, -1852.15894f); // The first cirle always spawns on the bomb on north east.
 
                     // Filted bombs to select only 1 bomb per puzzle, with the max last aware
-                    var bombs = Targets.Where(x => x.IsSpecies(TrashID.FerrousBomb)).ToList();
-                    var filteredBombs = new List<AbstractSingleActor>();
-                    foreach (AbstractSingleActor bomb in bombs)
-                    {
-
-                        if (filteredBombs.Where(x => Math.Abs(x.FirstAware - bomb.FirstAware) < ServerDelayConstant).FirstOrDefault() == null)
-                        {
-                            var check = bombs.Where(x => Math.Abs(x.FirstAware - bomb.FirstAware) < ServerDelayConstant).Max(x => x.LastAware);
-                            filteredBombs.Add(bombs.Where(x => x.LastAware == check).FirstOrDefault());
-                        }
-                    }
+                    var groupedBombs = AgentData.GetGroupedAgentsByTimeCondition(Targets.Where(x => x.IsSpecies(TrashID.FerrousBomb)).Select(x => x.AgentItem), (agent) => agent.FirstAware);
+                    var filteredBombs = groupedBombs.Select(x => x.MaxBy(y => y.LastAware));
 
                     // Filter the detonations, we use them only for the end time
-                    var filteredDetonations = new List<EffectEvent>();
-                    if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutPuzzleCirclesDetonation, out IReadOnlyList<EffectEvent> detonations))
+                    var filteredDetonations = new List<EffectEvent>(2);
+                    if (log.CombatData.TryGetGroupedEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutPuzzleCirclesDetonation, out var groupedDetonations))
                     {
-                        foreach (EffectEvent effect in detonations)
+                        foreach (var effects in groupedDetonations)
                         {
-                            if (filteredDetonations.Where(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant).FirstOrDefault() == null)
-                            {
-                                filteredDetonations.Add(effect);
-                            }
+                            filteredDetonations.Add(effects[0]);
                         }
                     }
 
-                    foreach (AbstractSingleActor bomb in filteredBombs)
+                    foreach (var bomb in filteredBombs)
                     {
                         (long start, long end) lifespanFirstCircle = (0, 0);
 
@@ -269,38 +257,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                         // The third circle spawns when the second circle has complete a rotation of 240°
                         if (echoPosition != null)
                         {
-                            for (int i = 0; i <= duration; i += CombatReplayPollingRate)
-                            {
-                                double angle = (2 * Math.PI) * ((float)i / duration) * 2;
-                                firstCirclePoints.Add(new ParametricPoint3D(Point3D.RotatePointAroundPoint(echoPosition, initialPoint, angle), lifespanFirstCircle.start + i));
+                            var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true);
+                            float angleDelta = (float)(4 * Math.PI);
+                            float secondAngleDiff = angleDelta / 3;
+                            float thirdAngleDiff = 2 * angleDelta / 3;
+                            var firstRotationConnector = new AngleConnector(0, RadianToDegreeF(angleDelta));
+                            var secondRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 2.0 / 3.0 + secondAngleDiff), RadianToDegreeF(angleDelta - secondAngleDiff));
+                            var thirdRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 4.0 / 3.0 + thirdAngleDiff) , RadianToDegreeF(angleDelta - thirdAngleDiff));
 
-                                if (i >= duration * 1 / 3)
-                                {
-                                    double angle2 = angle + (Math.PI * 2.0 / 3.0);
-                                    secondCirclePoints.Add(new ParametricPoint3D(Point3D.RotatePointAroundPoint(echoPosition, initialPoint, angle2), lifespanFirstCircle.start + i));
-                                }
-                                if (i >= duration * 2 / 3)
-                                {
-                                    double angle2 = angle + (2 * Math.PI * 2.0 / 3.0);
-                                    thirdCirclePoints.Add(new ParametricPoint3D(Point3D.RotatePointAroundPoint(echoPosition, initialPoint, angle2), lifespanFirstCircle.start + i));
-                                }
-                            }
-
-                            var lifespans = new Dictionary<uint, (long, long)>()
-                            {
-                                { 0, lifespanFirstCircle },
-                                { 1, lifespanSecondCircle },
-                                { 2, lifespanThirdCircle },
+                            var lifespans = new List<(long, long)> {
+                                lifespanFirstCircle,
+                                lifespanSecondCircle,
+                                lifespanThirdCircle
                             };
 
-                            var points = new Dictionary<uint, List<ParametricPoint3D>>
+                            var rotationConnectors = new List<RotationConnector>()
                             {
-                                { 0, firstCirclePoints },
-                                { 1, secondCirclePoints },
-                                { 2, thirdCirclePoints },
+                                firstRotationConnector,
+                                secondRotationConnector,
+                                thirdRotationConnector,
                             };
 
-                            AddRotatingCirclesDecorations(replay.Decorations, points, lifespans, echoPosition, innerRadius, outerRadius);
+                            AddRotatingCirclesDecorations(replay.Decorations, rotationConnectors, lifespans, positionConnector, echoPosition, innerRadius, outerRadius);
                         }
                     }
                     break;
@@ -358,8 +336,8 @@ namespace GW2EIEvtcParser.EncounterLogic
             foreach (Segment segment in segments)
             {
                 (long start, long end) lifespan = (segment.Start, segment.End);
-                var rectangle = new RectangleDecoration(25, 200, lifespan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem).WithOffset(offset, true));
-                replay.Decorations.Add(rectangle);
+                replay.Decorations.Add(new RectangleDecoration(25, 200, lifespan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem).WithOffset(offset, true)));
+                replay.AddDecorationWithGrowing(new CircleDecoration(80, lifespan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem)), lifespan.end);
             }
 
             // Kaleidoscopic Chaos - Spreads Normal Mode
@@ -491,38 +469,28 @@ namespace GW2EIEvtcParser.EncounterLogic
                             // The 3 circles always spawn in the same location
                             // The second circle spawns when the first circle has complete a rotation of 120°
                             // The third circle spawns when the first circle has complete a rotation of 240° and the second circle 120°
-                            for (int i = 0; i <= duration; i += CombatReplayPollingRate)
-                            {
-                                double angle = (2 * Math.PI) * ((float)i / duration);
-                                firstCirclePoints.Add(new ParametricPoint3D(Point3D.RotatePointAroundPoint(echoPosition, initialPoint, angle), lifespanFirstCircle.start + i));
+                            var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true);
+                            var angleDelta = (2 * Math.PI);
+                            var secondAngleDiff = angleDelta / 3;
+                            var thirdAngleDiff = 2 * angleDelta / 3;
+                            var firstRotationConnector = new AngleConnector(0, RadianToDegreeF(angleDelta));
+                            var secondRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 4.0 / 3.0 + secondAngleDiff), RadianToDegreeF(angleDelta - secondAngleDiff));
+                            var thirdRotationConnector = new AngleConnector(RadianToDegreeF(Math.PI * 2.0 / 3.0 + thirdAngleDiff), RadianToDegreeF(angleDelta - thirdAngleDiff));
 
-                                if (i >= duration * 1 / 3)
-                                {
-                                    double angle2 = (2 * Math.PI * 2.0 / 3.0) + (2 * Math.PI) * ((float)i / duration);
-                                    secondCirclePoints.Add(new ParametricPoint3D(Point3D.RotatePointAroundPoint(echoPosition, initialPoint, angle2), lifespanFirstCircle.start + i));
-                                }
-                                if (i >= duration * 2 / 3)
-                                {
-                                    double angle2 = (2 * Math.PI * 1.0 / 3.0) + (2 * Math.PI) * ((float)i / duration);
-                                    thirdCirclePoints.Add(new ParametricPoint3D(Point3D.RotatePointAroundPoint(echoPosition, initialPoint, angle2), lifespanFirstCircle.start + i));
-                                }
-                            }
-
-                            var lifespans = new Dictionary<uint, (long, long)>()
-                            {
-                                { 0, lifespanFirstCircle },
-                                { 1, lifespanSecondCircle },
-                                { 2, lifespanThirdCircle },
+                            var lifespans = new List<(long, long)> {
+                                lifespanFirstCircle,
+                                lifespanSecondCircle,
+                                lifespanThirdCircle
                             };
 
-                            var points = new Dictionary<uint, List<ParametricPoint3D>>
+                            var rotationConnectors = new List<RotationConnector>()
                             {
-                                { 0, firstCirclePoints },
-                                { 1, secondCirclePoints },
-                                { 2, thirdCirclePoints },
+                                firstRotationConnector,
+                                secondRotationConnector,
+                                thirdRotationConnector,
                             };
 
-                            AddRotatingCirclesDecorations(EnvironmentDecorations, points, lifespans, echoPosition, innerRadius, outerRadius);
+                            AddRotatingCirclesDecorations(EnvironmentDecorations, rotationConnectors, lifespans, positionConnector, echoPosition, innerRadius, outerRadius);
                         }
                     }
                 }
@@ -1031,15 +999,15 @@ namespace GW2EIEvtcParser.EncounterLogic
         /// <summary>
         /// Adds the rotating circles during the Puzzle mechanic.
         /// </summary>
-        private static void AddRotatingCirclesDecorations(CombatReplayDecorationContainer decorations, Dictionary<uint, List<ParametricPoint3D>> points, Dictionary<uint, (long, long)> lifespans, Point3D echoPosition, uint innerRadius, uint outerRadius)
+        private static void AddRotatingCirclesDecorations(CombatReplayDecorationContainer decorations, List<RotationConnector> rotationConnectors, List<(long, long)> lifespans, GeographicalConnector positionConnector, Point3D echoPosition, uint innerRadius, uint outerRadius)
         {
             decorations.Add(new CircleDecoration(1000, lifespans[0], Colors.LightOrange, 0.2, new PositionConnector(echoPosition)));
-            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[0], Colors.LightOrange, 0.2, new InterpolationConnector(points[0])));
-            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[1], Colors.LightOrange, 0.2, new InterpolationConnector(points[1])));
-            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[2], Colors.LightOrange, 0.2, new InterpolationConnector(points[2])));
-            decorations.Add(new CircleDecoration(innerRadius, lifespans[0], Colors.White, 0.5, new InterpolationConnector(points[0])));
-            decorations.Add(new CircleDecoration(innerRadius, lifespans[1], Colors.White, 0.5, new InterpolationConnector(points[1])));
-            decorations.Add(new CircleDecoration(innerRadius, lifespans[2], Colors.White, 0.5, new InterpolationConnector(points[2])));
+            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[0], Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnectors[0]));
+            decorations.Add(new CircleDecoration(innerRadius, lifespans[0], Colors.White, 0.5, positionConnector).UsingRotationConnector(rotationConnectors[0]));
+            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[1], Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnectors[1]));
+            decorations.Add(new CircleDecoration(innerRadius, lifespans[1], Colors.White, 0.5, positionConnector).UsingRotationConnector(rotationConnectors[1]));
+            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[2], Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnectors[2]));
+            decorations.Add(new CircleDecoration(innerRadius, lifespans[2], Colors.White, 0.5, positionConnector).UsingRotationConnector(rotationConnectors[2]));
         }
     }
 }

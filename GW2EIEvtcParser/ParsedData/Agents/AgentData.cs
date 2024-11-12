@@ -309,5 +309,31 @@ namespace GW2EIEvtcParser.ParsedData
             }
             return false;
         }
+
+
+
+        public delegate long AgentGroupingTimeFetchet(AgentItem agentItem);
+
+        public static IEnumerable<IEnumerable<AgentItem>> GetGroupedAgentsByTimeCondition(IEnumerable<AgentItem> agents, AgentGroupingTimeFetchet timeFetcher, long epsilon = ParserHelper.ServerDelayConstant)
+        {
+            var groupedAgents = new List<List<AgentItem>>();
+            var processedTimes = new HashSet<long>();
+            foreach (var agent in agents)
+            {
+                long time = timeFetcher(agent);
+                if (processedTimes.Contains(time))
+                {
+                    continue;
+                }
+                var group = agents.Where(otherAgent => timeFetcher(otherAgent) >= time && timeFetcher(otherAgent) < time + epsilon).ToList();
+                foreach (var groupedAgent in group)
+                {
+                    processedTimes.Add(timeFetcher(groupedAgent));
+                }
+
+                groupedAgents.Add(group);
+            }
+            return groupedAgents;
+        }
     }
 }
