@@ -161,7 +161,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facingDirection = target.GetCurrentRotation(log, lifespan.start + 100, castDuration);
                         if (facingDirection == null)
                         {
-                            return;
+                            break;
                         }
 
                         var indicator = (RectangleDecoration)new RectangleDecoration(range, 50, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(facingDirection));
@@ -286,20 +286,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                             }
 
-                            var background = new CircleDecoration(1000, lifespanFirstCircle, Colors.LightOrange, 0.2, new PositionConnector(echoPosition));
-                            var firstDoughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespanFirstCircle, Colors.LightOrange, 0.2, new InterpolationConnector(firstCirclePoints));
-                            var secondDoughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespanSecondCircle, Colors.LightOrange, 0.2, new InterpolationConnector(secondCirclePoints));
-                            var thirdDoughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespanThirdCircle, Colors.LightOrange, 0.2, new InterpolationConnector(thirdCirclePoints));
-                            var firstInnerCircle = new CircleDecoration(innerRadius, lifespanFirstCircle, Colors.White, 0.5, new InterpolationConnector(firstCirclePoints));
-                            var secondInnerCircle = new CircleDecoration(innerRadius, lifespanSecondCircle, Colors.White, 0.5, new InterpolationConnector(secondCirclePoints));
-                            var thirdInnerCircle = new CircleDecoration(innerRadius, lifespanThirdCircle, Colors.White, 0.5, new InterpolationConnector(thirdCirclePoints));
-                            replay.Decorations.Add(background);
-                            replay.Decorations.Add(firstDoughnut);
-                            replay.Decorations.Add(secondDoughnut);
-                            replay.Decorations.Add(thirdDoughnut);
-                            replay.Decorations.Add(firstInnerCircle);
-                            replay.Decorations.Add(secondInnerCircle);
-                            replay.Decorations.Add(thirdInnerCircle);
+                            var lifespans = new Dictionary<uint, (long, long)>()
+                            {
+                                { 0, lifespanFirstCircle },
+                                { 1, lifespanSecondCircle },
+                                { 2, lifespanThirdCircle },
+                            };
+
+                            var points = new Dictionary<uint, List<ParametricPoint3D>>
+                            {
+                                { 0, firstCirclePoints },
+                                { 1, secondCirclePoints },
+                                { 2, thirdCirclePoints },
+                            };
+
+                            AddRotatingCirclesDecorations(replay.Decorations, points, lifespans, echoPosition, innerRadius, outerRadius);
                         }
                     }
                     break;
@@ -317,7 +318,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                         Point3D facingDirection = target.GetCurrentRotation(log, lifespanDamage.start + 100, duration);
                         if (facingDirection == null)
                         {
-                            return;
+                            break;
                         }
 
                         (long start, long end) lifespanIndicator = (lifespanDamage.start - 1520, lifespanDamage.start);
@@ -507,20 +508,21 @@ namespace GW2EIEvtcParser.EncounterLogic
                                 }
                             }
 
-                            var background = new CircleDecoration(1000, lifespanFirstCircle, Colors.LightOrange, 0.2, new PositionConnector(echoPosition));
-                            var firstDoughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespanFirstCircle, Colors.LightOrange, 0.2, new InterpolationConnector(firstCirclePoints));
-                            var secondDoughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespanSecondCircle, Colors.LightOrange, 0.2, new InterpolationConnector(secondCirclePoints));
-                            var thirdDoughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespanThirdCircle, Colors.LightOrange, 0.2, new InterpolationConnector(thirdCirclePoints));
-                            var firstInnerCircle = new CircleDecoration(innerRadius, lifespanFirstCircle, Colors.White, 0.5, new InterpolationConnector(firstCirclePoints));
-                            var secondInnerCircle = new CircleDecoration(innerRadius, lifespanSecondCircle, Colors.White, 0.5, new InterpolationConnector(secondCirclePoints));
-                            var thirdInnerCircle = new CircleDecoration(innerRadius, lifespanThirdCircle, Colors.White, 0.5, new InterpolationConnector(thirdCirclePoints));
-                            EnvironmentDecorations.Add(background);
-                            EnvironmentDecorations.Add(firstDoughnut);
-                            EnvironmentDecorations.Add(secondDoughnut);
-                            EnvironmentDecorations.Add(thirdDoughnut);
-                            EnvironmentDecorations.Add(firstInnerCircle);
-                            EnvironmentDecorations.Add(secondInnerCircle);
-                            EnvironmentDecorations.Add(thirdInnerCircle);
+                            var lifespans = new Dictionary<uint, (long, long)>()
+                            {
+                                { 0, lifespanFirstCircle },
+                                { 1, lifespanSecondCircle },
+                                { 2, lifespanThirdCircle },
+                            };
+
+                            var points = new Dictionary<uint, List<ParametricPoint3D>>
+                            {
+                                { 0, firstCirclePoints },
+                                { 1, secondCirclePoints },
+                                { 2, thirdCirclePoints },
+                            };
+
+                            AddRotatingCirclesDecorations(EnvironmentDecorations, points, lifespans, echoPosition, innerRadius, outerRadius);
                         }
                     }
                 }
@@ -1024,6 +1026,20 @@ namespace GW2EIEvtcParser.EncounterLogic
                     previousIndex = index;
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds the rotating circles during the Puzzle mechanic.
+        /// </summary>
+        private static void AddRotatingCirclesDecorations(CombatReplayDecorationContainer decorations, Dictionary<uint, List<ParametricPoint3D>> points, Dictionary<uint, (long, long)> lifespans, Point3D echoPosition, uint innerRadius, uint outerRadius)
+        {
+            decorations.Add(new CircleDecoration(1000, lifespans[0], Colors.LightOrange, 0.2, new PositionConnector(echoPosition)));
+            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[0], Colors.LightOrange, 0.2, new InterpolationConnector(points[0])));
+            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[1], Colors.LightOrange, 0.2, new InterpolationConnector(points[1])));
+            decorations.Add(new DoughnutDecoration(innerRadius, outerRadius, lifespans[2], Colors.LightOrange, 0.2, new InterpolationConnector(points[2])));
+            decorations.Add(new CircleDecoration(innerRadius, lifespans[0], Colors.White, 0.5, new InterpolationConnector(points[0])));
+            decorations.Add(new CircleDecoration(innerRadius, lifespans[1], Colors.White, 0.5, new InterpolationConnector(points[1])));
+            decorations.Add(new CircleDecoration(innerRadius, lifespans[2], Colors.White, 0.5, new InterpolationConnector(points[2])));
         }
     }
 }
