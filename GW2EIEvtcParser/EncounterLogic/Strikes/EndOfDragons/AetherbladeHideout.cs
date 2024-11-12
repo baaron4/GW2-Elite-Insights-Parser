@@ -213,8 +213,8 @@ namespace GW2EIEvtcParser.EncounterLogic
                         (long start, long end) lifespanFirstCircle = (0, 0);
 
                         // In normal mode, the Echo gains Determined but in challenge mode it doesn't, we use the HP updates instead.
-                        Segment last60HpUpdate = target.GetHealthUpdates(log).Where(x => x.Value > 58 && x.Value <= 60).MinBy(x => x.Start);
-                        Segment last20HpUpdate = target.GetHealthUpdates(log).Where(x => x.Value > 18 && x.Value <= 20).MinBy(x => x.Start);
+                        Segment last60HpUpdate = target.GetHealthUpdates(log).FirstOrDefault(x => x.Value > 58 && x.Value <= 60);
+                        Segment last20HpUpdate = target.GetHealthUpdates(log).FirstOrDefault(x => x.Value > 18 && x.Value <= 20);
 
                         if (last60HpUpdate != null && Math.Abs(bomb.FirstAware - last60HpUpdate.Start) < threshold)
                         {
