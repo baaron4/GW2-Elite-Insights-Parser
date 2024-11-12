@@ -258,9 +258,9 @@ namespace GW2EIEvtcParser.EncounterLogic
                         if (echoPosition != null)
                         {
                             var positionConnector = new PositionConnector(echoPosition).WithOffset(initialPoint - echoPosition, true, true);
-                            var firstRotationConnector = new AngleConnector(0, 360);
-                            var secondRotationConnector = new AngleConnector(0, 240);
-                            var thirdRotationConnector = new AngleConnector(0 , 120);
+                            var firstRotationConnector = new AngleConnector(0, 720);
+                            var secondRotationConnector = new AngleConnector(0, 480);
+                            var thirdRotationConnector = new AngleConnector(0 , 240);
 
                             var lifespans = new List<(long, long)> {
                                 lifespanFirstCircle,
