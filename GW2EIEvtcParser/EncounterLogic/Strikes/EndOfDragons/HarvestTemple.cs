@@ -1176,7 +1176,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                             {
                                 foreach (ParametricPoint3D point in positions)
                                 {
-                                    if ((aoe.Position - point.ExtractVector()).XY().Length() < 0.5)
+                                    if ((aoe.Position - point.Value).XY().Length() < 0.5)
                                     {
                                         lifespanAoE.end = lifespanAoE.start + point.Time;
                                         break;
@@ -1203,12 +1203,12 @@ internal class HarvestTemple : EndOfDragonsStrike
                                         break;
                                     }
                                     
-                                    if (endingAoEDuration == 0 && (endingAoE.Position - point.ExtractVector()).XY().Length() < 0.5)
+                                    if (endingAoEDuration == 0 && (endingAoE.Position - point.Value).XY().Length() < 0.5)
                                     {
                                         endingAoEDuration = point.Time;
                                     }
 
-                                    if (startingAoEDuration == 0 && (startingAoE.Position - point.ExtractVector()).XY().Length() < 0.5)
+                                    if (startingAoEDuration == 0 && (startingAoE.Position - point.Value).XY().Length() < 0.5)
                                     {
                                         startingAoEDuration = point.Time;
                                     }

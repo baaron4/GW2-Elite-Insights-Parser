@@ -27,7 +27,7 @@ public class EXTFinalOutgoingHealingStat
     public readonly int ActorDownedHps;
     public readonly int ActorDownedHealing;
 
-    internal EXTFinalOutgoingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
+    internal EXTFinalOutgoingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
     {
         (Healing, HealingPowerHealing, ConversionHealing, HybridHealing, DownedHealing) = ComputeHealingFrom(log, actor.EXTHealing.GetOutgoingHealEvents(target, log, start, end));
         (ActorHealing, ActorHealingPowerHealing, ActorConversionHealing, ActorHybridHealing, ActorDownedHealing) = ComputeHealingFrom(log, actor.EXTHealing.GetJustActorOutgoingHealEvents(target, log, start, end));

@@ -9,6 +9,7 @@ namespace GW2EIJSON;
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
     Converters = [
+        //TODO(Rennorb) @perf: Replace with explicit attributes so it doesn't need to be invoked dynamically.
         typeof(Tuple2ToArrayConverterFactory),
     ]
 )]

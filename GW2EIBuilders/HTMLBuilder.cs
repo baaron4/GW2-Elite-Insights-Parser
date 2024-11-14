@@ -15,6 +15,7 @@ namespace GW2EIBuilders;
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
     Converters = [
+        //TODO(Rennorb) @perf: replace with explicit decorators
         typeof(GW2EIJSON.Tuple2ToArrayConverterFactory),
     ]
 )]

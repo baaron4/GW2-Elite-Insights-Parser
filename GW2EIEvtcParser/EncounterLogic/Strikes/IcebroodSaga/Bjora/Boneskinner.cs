@@ -105,11 +105,11 @@ internal class Boneskinner : Bjora
                     int endHitTime = (int)c.Time + hitTime;
                     int endCastTime = (int)c.Time + castTime;
 
-                    ParametricPoint3D lastDirection = replay.PolledRotations.LastOrDefault(x => x.Time > c.Time + 100 && x.Time < c.Time + 100 + castTime);
+                    var lastDirection = replay.PolledRotations.LastOrNull((in ParametricPoint3D x) => x.Time > c.Time + 100 && x.Time < c.Time + 100 + castTime);
                     if (lastDirection != null)
                     {
                         var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(lastDirection.ExtractVector());
+                        var rotationConnector = new AngleConnector(lastDirection.Value.Value);
                         // Growing Decoration
                         var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
                         replay.AddDecorationWithGrowing(pie, endHitTime);

@@ -98,7 +98,7 @@ internal class River : HallOfChains
         if (combatData.HasMovementData)
         {
             var desminaEncounterStartPosition = new Vector2(-9239.706f, 635.445435f/*, -813.8115f*/);
-            var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetParametricPoint3D());
+            var positions = combatData.GetMovementData(desmina).Where(x => x is PositionEvent pe && pe.Time < desmina.FirstAware + MinimumInCombatDuration).Select(x => x.GetPoint3D());
             if (!positions.Any(x => x.X < desminaEncounterStartPosition.X + 100 && x.X > desminaEncounterStartPosition.X - 1300))
             {
                 return FightData.EncounterStartStatus.Late;
@@ -161,12 +161,14 @@ internal class River : HallOfChains
                     replay.Decorations.Add(new CircleDecoration(300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
                 }
                 break;
+
             case (int)ArcDPSEnums.TrashID.HollowedBomber:
-                ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.ExtractVector() != default);
-                if (firstBomberMovement != null)
+                ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Value != default);
+                if (firstBomberMovement.Value != default)
                 {
                     replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                 }
+
                 var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls).ToList();
                 foreach (AbstractCastEvent bomb in bomberman)
                 {
@@ -177,12 +179,14 @@ internal class River : HallOfChains
                     replay.AddDecorationWithGrowing(circle, expectedEnd);
                 }
                 break;
+
             case (int)ArcDPSEnums.TrashID.RiverOfSouls:
-                ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.ExtractVector() != default);
-                if (firstRiverMovement != null)
+                ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Value != default);
+                if (firstRiverMovement.Value != null)
                 {
                     replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
                 }
+
                 if (replay.Rotations.Count != 0)
                 {
                     int start = (int)replay.TimeOffsets.start;
@@ -190,6 +194,7 @@ internal class River : HallOfChains
                     replay.Decorations.Add(new RectangleDecoration(160, 390, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingRotationConnector(new AgentFacingConnector(target)));
                 }
                 break;
+
             case (int)ArcDPSEnums.TrashID.Enervator:
             // TODO Line actor between desmina and enervator. Missing skillID
             case (int)ArcDPSEnums.TrashID.SpiritHorde1:

@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+
+namespace GW2EIEvtcParser.EIData;
 
 public class CombatReplayMap
 {
@@ -82,23 +84,24 @@ public class CombatReplayMap
                     continue;
                 }
                 var pos = p.GetCombatReplayPolledPositions(log);
-                _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.X)) - 250, _rectInMap.topX);
-                _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Y)) - 250, _rectInMap.topY);
-                _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.X)) + 250, _rectInMap.bottomX);
-                _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.Y)) + 250, _rectInMap.bottomY);
+                _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.Value.X)) - 250, _rectInMap.topX);
+                _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Value.Y)) - 250, _rectInMap.topY);
+                _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.Value.X)) + 250, _rectInMap.bottomX);
+                _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.Value.Y)) + 250, _rectInMap.bottomY);
             }
         }
     }
 
-    internal (float x, float y) GetMapCoord(float realX, float realY)
+    internal Vector2 GetMapCoordRounded(float realX, float realY)
     {
-        (int width, int height) = GetPixelMapSize();
+        var (width, height) = GetPixelMapSize();
         double scaleX = (double)width / _urlPixelSize.width;
         double scaleY = (double)height / _urlPixelSize.height;
         double x = (realX - _rectInMap.topX) / (_rectInMap.bottomX - _rectInMap.topX);
         double y = (realY - _rectInMap.topY) / (_rectInMap.bottomY - _rectInMap.topY);
-        return ((float)Math.Round(scaleX * _urlPixelSize.width * x, ParserHelper.CombatReplayDataDigit), (float)Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), ParserHelper.CombatReplayDataDigit));
+        return new((float)Math.Round(scaleX * _urlPixelSize.width * x, ParserHelper.CombatReplayDataDigit), (float)Math.Round(scaleY * (_urlPixelSize.height - _urlPixelSize.height * y), ParserHelper.CombatReplayDataDigit));
     }
+    internal Vector2 GetMapCoordRounded(in Vector2 realPos) => GetMapCoordRounded(realPos.X, realPos.Y);
 
     /// <summary>
     /// This assumes that all urls are of the same size (or at least size ratio) and that they have the same map rectangle

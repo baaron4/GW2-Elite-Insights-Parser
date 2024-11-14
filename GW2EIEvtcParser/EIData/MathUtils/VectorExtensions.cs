@@ -14,8 +14,8 @@ static class Value
 static class Vector
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2 XY(this in Vector3 v)
-        => new(v.X, v.Y);
+    public static unsafe Vector2 XY(this Vector3 v)
+        => *(Vector2*)&v;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Deconstruct(this in Vector2 v, out float x, out float y)

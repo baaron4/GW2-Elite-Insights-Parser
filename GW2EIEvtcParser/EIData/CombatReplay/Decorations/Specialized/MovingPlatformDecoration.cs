@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -25,12 +26,9 @@ internal class MovingPlatformDecoration : BackgroundDecoration
             return new MovingPlatformDecorationMetadataDescription(this);
         }
     }
-    internal class MovingPlatformDecorationRenderingData : BackgroundDecorationRenderingData
+    internal class MovingPlatformDecorationRenderingData((long, long) lifespan) : BackgroundDecorationRenderingData(lifespan)
     {
-        public readonly List<(float x, float y, float z, float angle, float opacity, int time)> Positions = new();
-        public MovingPlatformDecorationRenderingData((long, long) lifespan) : base(lifespan)
-        {
-        }
+        public readonly List<(float x, float y, float z, float angle, float opacity, long time)> Positions = new();
 
         public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
@@ -44,7 +42,7 @@ internal class MovingPlatformDecoration : BackgroundDecoration
     public int Width => DecorationMetadata.Width;
     public int Height => DecorationMetadata.Height;
 
-    public IReadOnlyList<(float x, float y, float z, float angle, float opacity, int time)> Positions => DecorationRenderingData.Positions;
+    public IReadOnlyList<(float x, float y, float z, float angle, float opacity, long time)> Positions => DecorationRenderingData.Positions;
     internal MovingPlatformDecoration(MovingPlatformDecorationMetadata metadata, MovingPlatformDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
     }
@@ -52,8 +50,8 @@ internal class MovingPlatformDecoration : BackgroundDecoration
     {
     }
 
-    public void AddPosition(float x, float y, float z, double angle, double opacity, int time)
+    public void AddPosition(float x, float y, float z, float angle, float opacity, long time)
     {
-        DecorationRenderingData.Positions.Add((x, y, z, (float)angle, (float)opacity, time));
+        DecorationRenderingData.Positions.Add((x ,y , z, angle, opacity, time));
     }
 }

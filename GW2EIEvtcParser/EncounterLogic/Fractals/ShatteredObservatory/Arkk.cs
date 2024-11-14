@@ -278,49 +278,53 @@ internal class Arkk : ShatteredObservatory
                             break;
                         case HorizonStrikeArkk1:
                         case HorizonStrikeArkk2:
-                            if (!log.CombatData.HasEffectData)
+                            if (log.CombatData.HasEffectData)
                             {
-                                int offset = 520; // ~520ms at the start and between
-                                int castDuration = 2600;
-                                var connector = new AgentConnector(target);
-                                ParametricPoint3D rotation = replay.PolledRotations.FirstOrDefault(x => x.Time >= cast.Time);
-                                if (rotation != null)
+                                break;
+                            }
+
+                            int offset = 520; // ~520ms at the start and between
+                            int castDuration = 2600;
+                            var connector = new AgentConnector(target);
+                            var rotation = replay.PolledRotations.FirstOrNull((in ParametricPoint3D x) => x.Time >= cast.Time);
+                            if (!rotation.HasValue)
+                            {
+                                break;
+                            }
+
+                            var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time).ToList();
+                            BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
+                            BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
+                            long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
+                            long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration);
+                            float facing = rotation.Value.Value.GetRoundedZRotationDeg();
+                            for (int i = 0; i < 5; i++)
+                            {
+                                long start = cast.Time + offset * (i + 1);
+                                long end = start + castDuration;
+                                if (cast.SkillId == HorizonStrikeArkk1)
                                 {
-                                    var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time).ToList();
-                                    BuffApplyEvent nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
-                                    BuffApplyEvent nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
-                                    long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
-                                    long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration);
-                                    float facing = rotation.ExtractVector().GetRoundedZRotationDeg();
-                                    for (int i = 0; i < 5; i++)
+                                    float angle = facing + 180 / 5 * i;
+                                    if (start >= cap)
                                     {
-                                        long start = cast.Time + offset * (i + 1);
-                                        long end = start + castDuration;
-                                        if (cast.SkillId == HorizonStrikeArkk1)
-                                        {
-                                            float angle = facing + 180 / 5 * i;
-                                            if (start >= cap)
-                                            {
-                                                break;
-                                            }
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                        }
-                                        else if (cast.SkillId == HorizonStrikeArkk2)
-                                        {
-                                            float angle = facing + 90 - 180 / 5 * i;
-                                            if (start >= cap)
-                                            {
-                                                break;
-                                            }
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                            replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
-                                        }
+                                        break;
                                     }
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                }
+                                else if (cast.SkillId == HorizonStrikeArkk2)
+                                {
+                                    float angle = facing + 90 - 180 / 5 * i;
+                                    if (start >= cap)
+                                    {
+                                        break;
+                                    }
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle)));
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
+                                    replay.Decorations.Add(new PieDecoration(1500, 30, (end, end + 300), Colors.Red, 0.2, connector).UsingRotationConnector(new AngleConnector(angle + 180)));
                                 }
                             }
                             break;

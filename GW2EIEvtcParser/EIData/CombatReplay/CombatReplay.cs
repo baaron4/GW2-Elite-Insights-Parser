@@ -65,50 +65,50 @@ public class CombatReplay
             return;
         }
         
-        int positionTablePos = 0;
-        int velocityTablePos = 0;
+        int positionTableIndex = 0;
+        int velocityTableIndex = 0;
 
         //TODO(Rennorb) @perf: reserve PolledPositions
 
-        for (long i = Math.Min(0, rate * ((positions[0].Time / rate) - 1)); i < fightDuration; i += rate)
+        for (long t = Math.Min(0, rate * ((positions[0].Time / rate) - 1)); t < fightDuration; t += rate)
         {
-            ParametricPoint3D pt = positions[positionTablePos];
-            if (i <= pt.Time)
+            ParametricPoint3D pos = positions[positionTableIndex];
+            if (t <= pos.Time)
             {
-                PolledPositions.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
+                PolledPositions.Add(pos.WithChangedTime(t));
             }
             else
             {
-                if (positionTablePos == positions.Count - 1)
+                if (positionTableIndex == positions.Count - 1)
                 {
-                    PolledPositions.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
+                    PolledPositions.Add(pos.WithChangedTime(t));
                 }
                 else
                 {
-                    ParametricPoint3D ptn = positions[positionTablePos + 1];
-                    if (ptn.Time < i)
+                    ParametricPoint3D nextPos = positions[positionTableIndex + 1];
+                    if (nextPos.Time < t)
                     {
-                        positionTablePos++;
-                        i -= rate;
+                        positionTableIndex++;
+                        t -= rate;
                     }
                     else
                     {
-                        ParametricPoint3D last = PolledPositions.Last().Time > pt.Time ? PolledPositions.Last() : pt;
-                        velocityTablePos = UpdateVelocityIndex(Velocities, i, velocityTablePos);
-                        ParametricPoint3D? velocity = null;
-                        if (velocityTablePos >= 0 && velocityTablePos < Velocities.Count)
+                        ParametricPoint3D last = PolledPositions.Last().Time > pos.Time ? PolledPositions.Last() : pos;
+                        velocityTableIndex = UpdateVelocityIndex(Velocities, t, velocityTableIndex);
+                        ParametricPoint3D velocity = default;
+                        if (velocityTableIndex >= 0 && velocityTableIndex < Velocities.Count)
                         {
-                            velocity = Velocities[velocityTablePos];
+                            velocity = Velocities[velocityTableIndex];
                         }
 
-                        if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && (velocity == null || velocity.ExtractVector().Length() < 1e-3))
+                        if (nextPos.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && velocity.Value.Length() < 1e-3)
                         {
-                            PolledPositions.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
+                            PolledPositions.Add(last.WithChangedTime(t));
                         }
                         else
                         {
-                            float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
-                            PolledPositions.Add(new ParametricPoint3D(Vector3.Lerp(last.ExtractVector(), ptn.ExtractVector(), ratio), i));
+                            float ratio = (float)(t - last.Time) / (nextPos.Time - last.Time);
+                            PolledPositions.Add(new(Vector3.Lerp(last.Value, nextPos.Value, ratio), t));
                         }
 
                     }
@@ -131,39 +131,39 @@ public class CombatReplay
 
         //TODO(Rennorb) @perf: reserve PolledPositions
 
-        int rotationTablePos = 0;
-        for (int i = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); i < fightDuration; i += rate)
+        int rotationTableIndex = 0;
+        for (int t = (int)Math.Min(0, rate * ((Rotations[0].Time / rate) - 1)); t < fightDuration; t += rate)
         {
-            ParametricPoint3D pt = Rotations[rotationTablePos];
-            if (i <= pt.Time)
+            var rot = Rotations[rotationTableIndex];
+            if (t <= rot.Time)
             {
-                PolledRotations.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
+                PolledRotations.Add(rot.WithChangedTime(t));
             }
             else
             {
-                if (rotationTablePos == Rotations.Count - 1)
+                if (rotationTableIndex == Rotations.Count - 1)
                 {
-                    PolledRotations.Add(new ParametricPoint3D(pt.X, pt.Y, pt.Z, i));
+                    PolledRotations.Add(rot.WithChangedTime(t));
                 }
                 else
                 {
-                    ParametricPoint3D ptn = Rotations[rotationTablePos + 1];
-                    if (ptn.Time < i)
+                    ParametricPoint3D nextRot = Rotations[rotationTableIndex + 1];
+                    if (nextRot.Time < t)
                     {
-                        rotationTablePos++;
-                        i -= rate;
+                        rotationTableIndex++;
+                        t -= rate;
                     }
                     else
                     {
-                        ParametricPoint3D last = PolledRotations.Last().Time > pt.Time ? PolledRotations.Last() : pt;
-                        if (ptn.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate)
+                        ParametricPoint3D last = PolledRotations.Last().Time > rot.Time ? PolledRotations.Last() : rot;
+                        if (nextRot.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate)
                         {
-                            PolledRotations.Add(new ParametricPoint3D(last.X, last.Y, last.Z, i));
+                            PolledRotations.Add(last.WithChangedTime(t));
                         }
                         else
                         {
-                            float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
-                            PolledRotations.Add(new ParametricPoint3D(Vector3.Lerp(last.ExtractVector(), ptn.ExtractVector(), ratio), i));
+                            float ratio = (float)(t - last.Time) / (nextRot.Time - last.Time);
+                            PolledRotations.Add(new(Vector3.Lerp(last.Value, nextRot.Value, ratio), t));
                         }
 
                     }

@@ -1,26 +1,64 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GW2EIEvtcParser.EIData;
 
-//TODO i assume this is serialized, add note 
-public class ParametricPoint3D(float x, float y, float z, long time)
+// Serialized as part of several decoration descriptors. Take care when changing shape.
+[JsonConverter(typeof(Converter))]
+public readonly struct ParametricPoint3D(in Vector3 value, long time)
 {
-    public readonly float X = x, Y = y, Z = z;
+    public readonly Vector3 Value = value;
     public readonly long Time = time;
 
-    public ParametricPoint3D(ParametricPoint3D a) : this(a.X, a.Y, a.Z, a.Time) //TODO(Rennorb) 
-    {
-    }
-
-    public ParametricPoint3D(in Vector3 a, long time) : this(a.X, a.Y, a.Z, time)
-    {
-    }
-
-    public ParametricPoint3D(in Vector3 a, in Vector3 b, float ratio, long time) : this(Vector3.Lerp(a, b, ratio), time)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ParametricPoint3D(float x, float y, float z, long time) : this(new(x,y,z), time)
     {
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector3 ExtractVector() => new(X, Y, Z); //TODO(Rennorb) use a vector field and use a custom serilizer
+    public readonly ParametricPoint3D WithChangedTime(long newTime) => new(this.Value, newTime);
+
+    public class Converter : JsonConverter<ParametricPoint3D>
+    {
+        public override ParametricPoint3D Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if(!reader.Read() || reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new JsonException($"Failed to read {nameof(ParametricPoint3D)}");
+            }
+
+            var v = new Vector3();
+            long t = 0;
+
+
+            Span<char> buffer = stackalloc char[8];
+            for(int i = 0; i < 4; i++)
+            {
+                var len = reader.CopyString(buffer);
+                switch(buffer[..len])
+                {
+                    case "X": v.X = reader.GetSingle(); break;
+                    case "Y": v.Y = reader.GetSingle(); break;
+                    case "Z": v.Z = reader.GetSingle(); break;
+                    case "Time": t = reader.GetInt64(); break;
+                }
+            }
+
+            //NOTE(Rennorb): We must not read the object end token of a container! See MS reader spec for more info.
+
+            return new(v, t);
+        }
+
+        public override void Write(Utf8JsonWriter writer, ParametricPoint3D value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteNumber("X", value.Value.X);
+            writer.WriteNumber("Y", value.Value.Y);
+            writer.WriteNumber("Z", value.Value.Z);
+            writer.WriteNumber("Time", value.Time);
+            writer.WriteEndObject();
+        }
+    }
 }

@@ -10,7 +10,7 @@ public struct GenericSegment<T>(long start, long end, T? value)
 {
     public long Start = start;
     public long End   = end;
-    public T?   Value = value;
+    public T?   Value = value; //TODO(Rennorb) @perf @cleanup
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public GenericSegment(long start, long end) : this(start, end, default) { }

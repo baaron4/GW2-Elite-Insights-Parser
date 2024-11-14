@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
 
 namespace GW2EIEvtcParser.EIData;
 
-using Position = (float x, float y, float z, float angle, float opacity, int time);
+using Position = (float x, float y, float z, float Angle, float Opacity, long Time);
 
 public class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
 {
@@ -13,7 +13,7 @@ public class MovingPlatformDecorationRenderingDescription : BackgroundDecoration
         public override void Write(Utf8JsonWriter writer, Position[] positions, JsonSerializerOptions serializer)
         {
             writer.WriteStartArray();
-            foreach ((float x, float y, float z, float angle, float opacity, int time) in positions)
+            foreach (var (x, y, z, angle, opacity, time) in positions)
             {
                 writer.WriteStartArray();
                 writer.WriteNumberValue(x);
@@ -43,7 +43,7 @@ public class MovingPlatformDecorationRenderingDescription : BackgroundDecoration
         Type = "MovingPlatform";
         Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
         {
-            (pos.x, pos.y) = map.GetMapCoord(pos.x, pos.y);
+            (pos.x, pos.y) = map.GetMapCoordRounded(pos.x, pos.y);
             return pos;
         }).ToArray();
     }

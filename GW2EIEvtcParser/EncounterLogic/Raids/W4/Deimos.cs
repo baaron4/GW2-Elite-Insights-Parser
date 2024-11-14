@@ -612,9 +612,10 @@ internal class Deimos : BastionOfThePenitent
                     {
                         float diffX = 0;
                         float diffY = 0;
-                        if (replay.PolledPositions[0].X - demonicCenter.X > 0)
+                        var pos = replay.PolledPositions[0].Value;
+                        if (pos.X > demonicCenter.X)
                         {
-                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                            if (pos.Y > demonicCenter.Y)
                             {
                                 // top
                                 diffX = 55;
@@ -629,7 +630,7 @@ internal class Deimos : BastionOfThePenitent
                         }
                         else
                         {
-                            if (replay.PolledPositions[0].Y - demonicCenter.Y > 0)
+                            if (pos.Y > demonicCenter.Y)
                             {
                                 // left 
                                 diffX = -1100;
@@ -642,8 +643,8 @@ internal class Deimos : BastionOfThePenitent
                                 diffY = -1130;
                             }
                         }
-                        var pos = shackledPos + new Vector3(diffX, diffY, 0);
-                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(pos)));
+                        var finalPos = shackledPos + new Vector3(diffX, diffY, 0);
+                        replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(shackledPrisoner), new PositionConnector(finalPos)));
                     }
                 }
                 break;

@@ -575,7 +575,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 int velocity = 85; // Approximation
                 int stormDuration = 15000; // Approximation - Attack disappears when off the edge of the platform
                 (long, long) lifespanAnimation = (lifespanIndicator.Item2, lifespanIndicator.Item2 + stormDuration);
-                var finalPosition = new ParametricPoint3D(initialPosition.ExtractVector() + (velocity * stormDuration / 1000.0f) * new Vector3((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2), 0), lifespanIndicator.Item2 + stormDuration);
+                var finalPosition = new ParametricPoint3D(initialPosition.Value + (velocity * stormDuration / 1000.0f) * new Vector3((float)Math.Cos(effect.Orientation.Z - Math.PI / 2), (float)Math.Sin(effect.Orientation.Z - Math.PI / 2), 0), lifespanIndicator.Item2 + stormDuration);
                 var animatedCircle = new CircleDecoration(200, lifespanAnimation, "rgba(200, 60, 150, 0.2)", new InterpolationConnector([initialPosition, finalPosition]));
                 EnvironmentDecorations.Add(animatedCircle);
                 EnvironmentDecorations.Add(animatedCircle.GetBorderDecoration(Colors.Red, 0.2));

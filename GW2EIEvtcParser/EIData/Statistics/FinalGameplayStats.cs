@@ -28,11 +28,14 @@ public class FinalGameplayStats
 
     private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> reference)
     {
+
         var positions = actor.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
         int offset = actor.GetCombatReplayPolledPositions(log).Count(x => x.Time < start);
         if (positions.Count > 1 && reference.Count > 0)
         {
             var distances = new List<float>();
+            //TODO(Rennorb) @cleanup: Dual indexing requires us to generate sparse lists with the same amount of entries and null values. 
+            // These are already parametric points and they are sorted, we don't need to fill up the list to equal lengths. Investigate perf. 
             for (int time = 0; time < positions.Count; time++)
             {
                 if (time + offset >= reference.Count || reference[time + offset] == null)
@@ -40,7 +43,7 @@ public class FinalGameplayStats
                     continue;
                 }
 
-                distances.Add((positions[time].ExtractVector() - reference[time + offset]!.ExtractVector()).XY().Length());
+                distances.Add((positions[time].Value - reference[time + offset]!.Value.Value).XY().Length());
             }
             return distances.Count == 0 ? -1 : distances.Sum() / distances.Count;
         }

@@ -59,7 +59,7 @@ public abstract class EXTActorHealingHelper
         return dls;
     }
 
-    public IReadOnlyList<EXTAbstractHealingEvent> GetTypedIncomingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
+    public IReadOnlyList<EXTAbstractHealingEvent> GetTypedIncomingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
     {
         if (!_typedIncomingHealEvents.TryGetValue(healingType, out CachingCollectionWithTarget<List<EXTAbstractHealingEvent>> healEventsPerPhasePerTarget))
         {

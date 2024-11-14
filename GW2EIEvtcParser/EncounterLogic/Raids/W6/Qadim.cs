@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -731,7 +732,7 @@ internal class Qadim : MythwrightGambit
                 const float hiddenOpacity = 0.1f;
                 const float visibleOpacity = 1f;
                 const float noOpacity = -1f;
-                var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Z, x.Time)).ToList();
+                var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Value.Z, x.Time)).ToList();
                 var opacities = new List<ParametricPoint1D> { new(visibleOpacity, target.FirstAware) };
                 int velocityIndex = 0;
                 AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
@@ -752,10 +753,12 @@ internal class Qadim : MythwrightGambit
                         break;
                     case "01":
                     case "1":
-                        var found = replay.Velocities.FirstOrDefault(x => (new Vector3(-28.3569336f, -49.2431641f, 90.90576f) - x.ExtractVector()).Length() < threshold);
-                        if (found != null)
+                        foreach(var velocity in replay.Velocities)
                         {
-                            opacities.Add(new ParametricPoint1D(hiddenOpacity, found.Time));
+                            if((velocity.Value  - new Vector3(-28.3569336f, -49.2431641f, 90.90576f)).Length() < threshold) {
+                                opacities.Add(new ParametricPoint1D(hiddenOpacity, velocity.Time));
+                                break;
+                            }
                         }
                         break;
                     case "02":
@@ -909,7 +912,7 @@ internal class Qadim : MythwrightGambit
         float threshold = 1f;
         for (int velocityIndex = startIndex; velocityIndex < velocities.Count; velocityIndex++)
         {
-            if ((referenceVelocity - velocities[velocityIndex].ExtractVector()).Length() < threshold)
+            if ((referenceVelocity - velocities[velocityIndex].Value).Length() < threshold)
             {
                 if (opacity >= 0)
                 {
@@ -945,216 +948,209 @@ internal class Qadim : MythwrightGambit
         // and it would double the amount of work.
 
         const string platformImageUrl = ParserIcons.QadimPlatform;
-        const double hiddenOpacity = 0.1;
+        const float hiddenOpacity = 0.1f;
 
         bool isCM = log.FightData.IsCM;
 
-        const int xLeft = -7975;
-        const int xLeftLeft = -8537;
-        const int xLeftLeftLeft = -9661;
-        const int xRight = -6851;
-        const int xRightRight = -6289;
-        const int xRightRightRight = -5165;
-        const int yMid = 12077;
-        const int yUp = 13050;
-        const int yUpUp = 14023;
-        const int yDown = 11104;
-        const int yDownDown = 10131;
-        const int xGapsLeft = -8018;
-        const int xGapsLeftLeft = -8618;
-        const int xGapsLeftLeftLeft = -9822;
-        const int xGapsRight = -6815;
-        const int xGapsRightRight = -6215;
-        const int xGapsRightRightRight = -5011;
-        const int yGapsUp = 13118;
-        const int yGapsUpUp = 14161;
-        const int yGapsDown = 11037;
-        const int yGapsDownDown = 9993;
+        const float xLeft = -7975;
+        const float xLeftLeft = -8537;
+        const float xLeftLeftLeft = -9661;
+        const float xRight = -6851;
+        const float xRightRight = -6289;
+        const float xRightRightRight = -5165;
+        const float yMid = 12077;
+        const float yUp = 13050;
+        const float yUpUp = 14023;
+        const float yDown = 11104;
+        const float yDownDown = 10131;
+        const float xGapsLeft = -8018;
+        const float xGapsLeftLeft = -8618;
+        const float xGapsLeftLeftLeft = -9822;
+        const float xGapsRight = -6815;
+        const float xGapsRightRight = -6215;
+        const float xGapsRightRightRight = -5011;
+        const float yGapsUp = 13118;
+        const float yGapsUpUp = 14161;
+        const float yGapsDown = 11037;
+        const float yGapsDownDown = 9993;
 
-        const int xDestroyerLeftLeftLeft = -9732;
-        const int xDestroyerLeftLeft = xGapsLeftLeft + 5;
-        const int xDestroyerLeft = -8047;
-        const int xDestroyerRight = -6778;
-        const int xDestroyerRightRight = xGapsRightRight - 5;
-        const int xDestroyerRightRightRight = -5101;
+        const float xDestroyerLeftLeftLeft = -9732;
+        const float xDestroyerLeftLeft = xGapsLeftLeft + 5;
+        const float xDestroyerLeft = -8047;
+        const float xDestroyerRight = -6778;
+        const float xDestroyerRightRight = xGapsRightRight - 5;
+        const float xDestroyerRightRightRight = -5101;
 
-        (int x, int y) retaliationPyre1 = (-8951, 9429);
-        (int x, int y) protectionPyre1 = (-8947, 14728);
-        (int x, int y) stabilityPyre1 = (-4356, yMid);
+        var retaliationPyre1 = new Vector2(-8951, 9429);
+        var protectionPyre1 = new Vector2(-8947, 14728);
+        var stabilityPyre1 = new Vector2(-4356, yMid);
 
-        (int x, int y) retaliationPyre2 = (-5717, 9325);
-        (int x, int y) protectionPyre2 = (-10834, 12477);
-        (int x, int y) stabilityPyre2 = (-5889, 14723);
+        var retaliationPyre2 = new Vector2(-5717, 9325);
+        var protectionPyre2 = new Vector2(-10834, 12477);
+        var stabilityPyre2 = new Vector2(-5889, 14723);
 
-        const double wyvernPhaseMiddleRotation = 0.34;
+        const float wyvernPhaseMiddleRotation = 0.34f;
 
-        const int yJumpingPuzzleOffset1 = 12077 - 11073; // Easternmost two platforms
-        const int yJumpingPuzzleOffset2 = 12077 - 10612; // Two platforms on each side, including pyres
-        const int yJumpingPuzzleOffset3 = 12077 - 10056; // Northernmost and southernmost rotating platforms
-        const int xJumpingPuzzleQadim = -10237; // Qadim's platform
-        const int xJumpingPuzzlePreQadim = -8808;
-        const int xJumpingPuzzlePyres = -7851;
-        const int xJumpingPuzzlePrePyres = -6289;
-        const int xJumpingPuzzleRotatingPrePyres = -5736;
-        const int xJumpingPuzzleFirstRotating = -5736;
-        const int xJumpingPuzzleFirstPlatform = -4146;
+        const float yJumpingPuzzleOffset1 = 12077 - 11073; // Easternmost two platforms
+        const float yJumpingPuzzleOffset2 = 12077 - 10612; // Two platforms on each side, including pyres
+        const float yJumpingPuzzleOffset3 = 12077 - 10056; // Northernmost and southernmost rotating platforms
+        const float xJumpingPuzzleQadim = -10237; // Qadim's platform
+        const float xJumpingPuzzlePreQadim = -8808;
+        const float xJumpingPuzzlePyres = -7851;
+        const float xJumpingPuzzlePrePyres = -6289;
+        const float xJumpingPuzzleRotatingPrePyres = -5736;
+        const float xJumpingPuzzleFirstRotating = -5736;
+        const float xJumpingPuzzleFirstPlatform = -4146;
 
-        const double jumpingPuzzleRotationRate = 2 * Math.PI / 30; // rad/sec, TODO: Not perfect, it's a bit off
+        const float jumpingPuzzleRotationRate = 2 * MathF.PI / 30; // rad/sec, TODO: Not perfect, it's a bit off
 
-        const int xFinalPlatform = -8297;
-        const int qadimFinalX = -7356;
-        const int qadimFinalY = 12077;
+        const float xFinalPlatform = -8297;
+        var qadimFinalXY = new Vector2(-7356, 12077);
 
-        const int zDefault = -4731;
-        const int zJumpingPuzzlePyres = -4871;
-        const int zJumpingPuzzlePrePyres = -4801;
-        const int zJumpingPuzzlePreQadim = -4941;
-        const int zJumpingPuzzleFirstPlatform = -4591; // The first platform Zommoros visits
-        const int zJumpingPuzzleSecondPlatform = -4661; // The second platform Zommoros visits
-        const int zFinalPlatforms = -5011;
+        const float zDefault = -4731;
+        const float zJumpingPuzzlePyres = -4871;
+        const float zJumpingPuzzlePrePyres = -4801;
+        const float zJumpingPuzzlePreQadim = -4941;
+        const float zJumpingPuzzleFirstPlatform = -4591; // The first platform Zommoros visits
+        const float zJumpingPuzzleSecondPlatform = -4661; // The second platform Zommoros visits
+        const float zFinalPlatforms = -5011;
 
-        const int timeAfterPhase2 = 4000;
-        const int timeAfterWyvernPhase = 25000;
-        const int jumpingPuzzleShuffleDuration = 11000;
-        const int lastPhasePreparationDuration = 13000;
+        const long timeAfterPhase2 = 4000;
+        const long timeAfterWyvernPhase = 25000;
+        const long jumpingPuzzleShuffleDuration = 11000;
+        const long lastPhasePreparationDuration = 13000;
 
         // If phase data is not calculated, only the first layout is used
         var phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
 
-        int qadimPhase1Time = (int)(phases.Count > 1 ? phases[1].End : int.MaxValue);
-        int destroyerPhaseTime = (int)(phases.Count > 2 ? phases[2].End : int.MaxValue);
-        int qadimPhase2Time = (int)(phases.Count > 3 ? phases[3].End : int.MaxValue);
-        int wyvernPhaseTime = (int)(phases.Count > 4 ? phases[4].End + timeAfterPhase2 : int.MaxValue);
-        int jumpingPuzzleTime = (int)(phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : int.MaxValue);
-        int finalPhaseTime = int.MaxValue;
+        long qadimPhase1Time = phases.Count > 1 ? phases[1].End : long.MaxValue;
+        long destroyerPhaseTime = phases.Count > 2 ? phases[2].End : long.MaxValue;
+        long qadimPhase2Time = phases.Count > 3 ? phases[3].End : long.MaxValue;
+        long wyvernPhaseTime = phases.Count > 4 ? phases[4].End + timeAfterPhase2 : long.MaxValue;
+        long jumpingPuzzleTime = phases.Count > 5 ? phases[5].End + timeAfterWyvernPhase : long.MaxValue;
+        long finalPhaseTime = int.MaxValue;
         if (phases.Count > 6)
         {
-            PhaseData lastPhase = phases[6];
-
-            IReadOnlyList<ParametricPoint3D> qadimMovement = qadim.GetCombatReplayNonPolledPositions(log);
-
-            ParametricPoint3D lastMove = qadimMovement.FirstOrDefault(
-                pt =>
-                {
-                    return Math.Abs(pt.X - qadimFinalX) < 5 && Math.Abs(pt.Y - qadimFinalY) < 5;
-                });
-
-            if (lastMove != null)
+            //TODO(Rennorb) @perf: Why was there an unused reference to last phase here?
+            foreach(var pos in qadim.GetCombatReplayNonPolledPositions(log))
             {
-                finalPhaseTime = (int)lastMove.Time;
+                if((pos.Value.XY() - qadimFinalXY).LengthSquared() < 25)
+                {
+                    finalPhaseTime = (int)pos.Time;
+                }
             }
         }
 
-        int jumpingPuzzleDuration = finalPhaseTime - lastPhasePreparationDuration - jumpingPuzzleShuffleDuration - jumpingPuzzleTime;
+        long jumpingPuzzleDuration = finalPhaseTime - lastPhasePreparationDuration - jumpingPuzzleShuffleDuration - jumpingPuzzleTime;
 
         const int platformCount = 12;
 
         // The following monstrosity is needed to avoid the final platform rotating all the way back
         // must be an odd multiple of PI
         int finalPlatformHalfRotationCount =
-            (int)Math.Round((Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate) / Math.PI);
+            (int)MathF.Round((MathF.PI + jumpingPuzzleDuration / 1000.0f * jumpingPuzzleRotationRate) / MathF.PI);
         if (finalPlatformHalfRotationCount % 2 == 0)
         {
             finalPlatformHalfRotationCount++;
         }
-        double finalPlatformRotation = Math.PI * finalPlatformHalfRotationCount;
+        float finalPlatformRotation = MathF.PI * finalPlatformHalfRotationCount;
 
 
         // Proper skipping of phases (if even possible) is not implemented.
         // Right now transitioning to another state while still moving behaves weirdly.
         // Interpolating to find the position to stop in would be necessary.
-        int startOffset = -(int)log.FightData.FightStartOffset;
-        (int start, int duration, (int x, int y, int z, double angle, double opacity)[] platforms)[] movements =
+        long startOffset = -log.FightData.FightStartOffset;
+        (long start, long duration, (float x, float y, float z, float angle, float opacity)[] platforms)[] movements =
         [
             (
                 // Initial position, all platforms tightly packed
 
                 startOffset, 0, new[]
                 {
-                    (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
-                    (xLeftLeft, yUpUp, zDefault, Math.PI, 1.0),
-                    (xRightRight, yUpUp, zDefault, 0.0, 1.0),
-                    (xRightRightRight, yMid, zDefault, Math.PI, 1.0),
-                    (xRightRight, yDownDown, zDefault, 0.0, 1.0),
-                    (xLeftLeft, yDownDown, zDefault, Math.PI, 1.0),
-                    (xLeftLeft, yMid, zDefault, Math.PI, 1.0),
-                    (xLeft, yUp, zDefault, 0.0, 1.0),
-                    (xRight, yUp, zDefault, Math.PI, 1.0),
-                    (xRightRight, yMid, zDefault, 0.0, 1.0),
-                    (xRight, yDown, zDefault, Math.PI, 1.0),
-                    (xLeft, yDown, zDefault, 0.0, 1.0),
+                    (xLeftLeftLeft, yMid, zDefault, 0, 1f),
+                    (xLeftLeft, yUpUp, zDefault, MathF.PI, 1f),
+                    (xRightRight, yUpUp, zDefault, 0, 1f),
+                    (xRightRightRight, yMid, zDefault, MathF.PI, 1f),
+                    (xRightRight, yDownDown, zDefault, 0, 1f),
+                    (xLeftLeft, yDownDown, zDefault, MathF.PI, 1f),
+                    (xLeftLeft, yMid, zDefault, MathF.PI, 1f),
+                    (xLeft, yUp, zDefault, 0, 1f),
+                    (xRight, yUp, zDefault, MathF.PI, 1f),
+                    (xRightRight, yMid, zDefault, 0, 1f),
+                    (xRight, yDown, zDefault, MathF.PI, 1f),
+                    (xLeft, yDown, zDefault, 0, 1f),
                 }
             ),
             (
                 // Hydra phase, all platforms have a small gap between them
                 startOffset, 12000, new[]
                 {
-                    (xGapsLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
-                    (xGapsLeftLeft, yGapsUpUp, zDefault, Math.PI, 1.0),
-                    (xGapsRightRight, yGapsUpUp, zDefault, 0.0, 1.0),
-                    (xGapsRightRightRight, yMid, zDefault, Math.PI, 1.0),
-                    (xGapsRightRight, yGapsDownDown, zDefault, 0.0, 1.0),
-                    (xGapsLeftLeft, yGapsDownDown, zDefault, Math.PI, 1.0),
-                    (xGapsLeftLeft, yMid, zDefault, Math.PI, 1.0),
-                    (xGapsLeft, yGapsUp, zDefault, 0.0, 1.0),
-                    (xGapsRight, yGapsUp, zDefault, Math.PI, 1.0),
-                    (xGapsRightRight, yMid, zDefault, 0.0, 1.0),
-                    (xGapsRight, yGapsDown, zDefault, Math.PI, 1.0),
-                    (xGapsLeft, yGapsDown, zDefault, 0.0, 1.0),
+                    (xGapsLeftLeftLeft, yMid, zDefault, 0, 1f),
+                    (xGapsLeftLeft, yGapsUpUp, zDefault, MathF.PI, 1f),
+                    (xGapsRightRight, yGapsUpUp, zDefault, 0, 1f),
+                    (xGapsRightRightRight, yMid, zDefault, MathF.PI, 1f),
+                    (xGapsRightRight, yGapsDownDown, zDefault, 0, 1f),
+                    (xGapsLeftLeft, yGapsDownDown, zDefault, MathF.PI, 1f),
+                    (xGapsLeftLeft, yMid, zDefault, MathF.PI, 1f),
+                    (xGapsLeft, yGapsUp, zDefault, 0, 1f),
+                    (xGapsRight, yGapsUp, zDefault, MathF.PI, 1f),
+                    (xGapsRightRight, yMid, zDefault, 0, 1f),
+                    (xGapsRight, yGapsDown, zDefault, MathF.PI, 1f),
+                    (xGapsLeft, yGapsDown, zDefault, 0, 1f),
                 }
             ),
             (
                 // First Qadim phase, packed together except for pyre platforms
                 qadimPhase1Time, 10000, new[]
                 {
-                    (xLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
-                    (protectionPyre1.x, protectionPyre1.y, zDefault, Math.PI, 1.0),
-                    (xRightRight, yUpUp, zDefault, 0.0, 1.0),
-                    (stabilityPyre1.x, stabilityPyre1.y, zDefault, Math.PI, 1.0),
-                    (xRightRight, yDownDown, zDefault, 0.0, 1.0),
-                    (retaliationPyre1.x, retaliationPyre1.y, zDefault, Math.PI, 1.0),
-                    (xLeftLeft, yMid, zDefault, Math.PI, 1.0),
-                    (xLeft, yUp, zDefault, 0.0, 1.0),
-                    (xRight, yUp, zDefault, Math.PI, 1.0),
-                    (xRightRight, yMid, zDefault, 0.0, 1.0),
-                    (xRight, yDown, zDefault, Math.PI, 1.0),
-                    (xLeft, yDown, zDefault, 0.0, 1.0),
+                    (xLeftLeftLeft, yMid, zDefault, 0, 1f),
+                    (protectionPyre1.X, protectionPyre1.Y, zDefault, MathF.PI, 1f),
+                    (xRightRight, yUpUp, zDefault, 0, 1f),
+                    (stabilityPyre1.X, stabilityPyre1.Y, zDefault, MathF.PI, 1f),
+                    (xRightRight, yDownDown, zDefault, 0, 1f),
+                    (retaliationPyre1.X, retaliationPyre1.Y, zDefault, MathF.PI, 1f),
+                    (xLeftLeft, yMid, zDefault, MathF.PI, 1f),
+                    (xLeft, yUp, zDefault, 0, 1f),
+                    (xRight, yUp, zDefault, MathF.PI, 1f),
+                    (xRightRight, yMid, zDefault, 0, 1f),
+                    (xRight, yDown, zDefault, MathF.PI, 1f),
+                    (xLeft, yDown, zDefault, 0, 1f),
                 }
             ),
             (
                 // Destroyer phase, packed together, bigger vertical gap in the middle, 4 platforms hidden
                 destroyerPhaseTime, 15000, new[]
                 {
-                    (xDestroyerLeftLeftLeft, yMid, zDefault, 0.0, 1.0),
-                    (xGapsLeftLeft, yGapsUpUp, zDefault, Math.PI, hiddenOpacity), // TODO: Unknown position while hidden
-                    (xGapsRightRight, yGapsUpUp, zDefault, 0.0, hiddenOpacity), // TODO: Unknown position while hidden
-                    (xDestroyerRightRightRight, yMid, zDefault, Math.PI, 1.0),
-                    (xGapsRightRight, yGapsDownDown, zDefault, 0.0, hiddenOpacity), // TODO: Unknown position while hidden
-                    (xGapsLeftLeft, yGapsDownDown, zDefault, Math.PI, hiddenOpacity), // TODO: Unknown position while hidden
-                    (xDestroyerLeftLeft, yMid, zDefault, Math.PI, 1.0),
-                    (xDestroyerLeft, yUp, zDefault, 0.0, isCM ? hiddenOpacity : 1.0),
-                    (xDestroyerRight, yUp, zDefault, Math.PI, 1.0),
-                    (xDestroyerRightRight, yMid, zDefault, 0.0, 1.0),
-                    (xDestroyerRight, yDown, zDefault, Math.PI, 1.0),
-                    (xDestroyerLeft, yDown, zDefault, 0.0, 1.0),
+                    (xDestroyerLeftLeftLeft, yMid, zDefault, 0, 1f),
+                    (xGapsLeftLeft, yGapsUpUp, zDefault, MathF.PI, hiddenOpacity), // TODO: Unknown position while hidden
+                    (xGapsRightRight, yGapsUpUp, zDefault, 0, hiddenOpacity), // TODO: Unknown position while hidden
+                    (xDestroyerRightRightRight, yMid, zDefault, MathF.PI, 1f),
+                    (xGapsRightRight, yGapsDownDown, zDefault, 0, hiddenOpacity), // TODO: Unknown position while hidden
+                    (xGapsLeftLeft, yGapsDownDown, zDefault, MathF.PI, hiddenOpacity), // TODO: Unknown position while hidden
+                    (xDestroyerLeftLeft, yMid, zDefault, MathF.PI, 1f),
+                    (xDestroyerLeft, yUp, zDefault, 0, isCM ? hiddenOpacity : 1f),
+                    (xDestroyerRight, yUp, zDefault, MathF.PI, 1f),
+                    (xDestroyerRightRight, yMid, zDefault, 0, 1f),
+                    (xDestroyerRight, yDown, zDefault, MathF.PI, 1f),
+                    (xDestroyerLeft, yDown, zDefault, 0, 1f),
                 }
             ),
             (
                 // Second Qadim phase
                 qadimPhase2Time, 10000, new[]
                 {
-                    (protectionPyre2.x, protectionPyre2.y, zDefault, 0.0, 1.0),
-                    (-8540, 14222, zDefault, Math.PI, 1.0),
-                    (stabilityPyre2.x, stabilityPyre2.y, zDefault, 0.0, 1.0),
-                    (-5160, yMid, zDefault, Math.PI, 1.0),
-                    (retaliationPyre2.x, retaliationPyre2.y, zDefault, 0.0, 1.0),
-                    (-8369, 9640, zDefault, Math.PI, 1.0),
-                    (protectionPyre2.x + 1939, protectionPyre2.y, zDefault, Math.PI, 1.0),
-                    (-7978, 13249, zDefault, 0.0, 1.0),
-                    (-6846, 13050, zDefault, Math.PI, 1.0),
-                    (-6284, yMid, zDefault, 0.0, 1.0),
-                    (retaliationPyre2.x - 1931 / 2, retaliationPyre2.y + 1672, zDefault, Math.PI, 1.0),
-                    (-7807, 10613, zDefault, 0.0, 1.0),
+                    (protectionPyre2.X, protectionPyre2.Y, zDefault, 0, 1f),
+                    (-8540, 14222, zDefault, MathF.PI, 1f),
+                    (stabilityPyre2.X, stabilityPyre2.Y, zDefault, 0, 1f),
+                    (-5160, yMid, zDefault, MathF.PI, 1f),
+                    (retaliationPyre2.X, retaliationPyre2.Y, zDefault, 0, 1f),
+                    (-8369, 9640, zDefault, MathF.PI, 1f),
+                    (protectionPyre2.X + 1939, protectionPyre2.Y, zDefault, MathF.PI, 1f),
+                    (-7978, 13249, zDefault, 0, 1f),
+                    (-6846, 13050, zDefault, MathF.PI, 1f),
+                    (-6284, yMid, zDefault, 0, 1f),
+                    (retaliationPyre2.X - 1931 / 2, retaliationPyre2.Y + 1672, zDefault, MathF.PI, 1f),
+                    (-7807, 10613, zDefault, 0, 1f),
                 }
             ),
             (
@@ -1162,72 +1158,72 @@ internal class Qadim : MythwrightGambit
                 // Wyvern phase
                 wyvernPhaseTime, 11000, new[]
                 {
-                    (protectionPyre2.x, protectionPyre2.y, zDefault, 0.0, hiddenOpacity), // TODO: Unknown position while hidden
-                    (-9704, 15323, zDefault, Math.PI, 1.0),
-                    (-7425, 15312, zDefault, 0.0, 1.0),
-                    (-5160, yMid, zDefault, Math.PI, hiddenOpacity), // TODO: Unknown position while hidden
-                    (-5169, 8846, zDefault, 0.0, isCM ? hiddenOpacity : 1.0),
-                    (-7414, 8846, zDefault, Math.PI, hiddenOpacity),
-                    (-7728, 11535, zDefault, Math.PI + wyvernPhaseMiddleRotation, 1.0),
-                    (-9108, 14335, zDefault, 0.0, 1.0),
-                    (-7987, 14336, zDefault, Math.PI, 1.0),
-                    (-7106, 12619, zDefault, wyvernPhaseMiddleRotation, 1.0),
-                    (-5729, 9821, zDefault, Math.PI, 1.0),
-                    (-6854, 9821, zDefault, 0.0, 1.0),
+                    (protectionPyre2.X, protectionPyre2.Y, zDefault, 0f, hiddenOpacity), // TODO: Unknown position while hidden
+                    (-9704, 15323, zDefault, MathF.PI, 1f),
+                    (-7425, 15312, zDefault, 0, 1f),
+                    (-5160, yMid, zDefault, MathF.PI, hiddenOpacity), // TODO: Unknown position while hidden
+                    (-5169, 8846, zDefault, 0, isCM ? hiddenOpacity : 1f),
+                    (-7414, 8846, zDefault, MathF.PI, hiddenOpacity),
+                    (-7728, 11535, zDefault, MathF.PI + wyvernPhaseMiddleRotation, 1f),
+                    (-9108, 14335, zDefault, 0, 1f),
+                    (-7987, 14336, zDefault, MathF.PI, 1f),
+                    (-7106, 12619, zDefault, wyvernPhaseMiddleRotation, 1f),
+                    (-5729, 9821, zDefault, MathF.PI, 1f),
+                    (-6854, 9821, zDefault, 0, 1f),
                 }
             ),
             (
                 // Jumping puzzle preparation, platforms hide
                 jumpingPuzzleTime - 500, 0, new[]
                 {
-                    (protectionPyre2.x, protectionPyre2.y, zDefault, 0.0, hiddenOpacity),
-                    (-9704, 15323, zDefault, Math.PI, hiddenOpacity),
-                    (-7425, 15312, zDefault, 0.0, hiddenOpacity),
-                    (-5160, yMid, zDefault, Math.PI, hiddenOpacity),
-                    (-5169, 8846, zDefault, 0.0, hiddenOpacity),
-                    (-7414, 8846, zDefault, Math.PI, hiddenOpacity),
-                    (-7728, 11535, zDefault, Math.PI + wyvernPhaseMiddleRotation, hiddenOpacity),
-                    (-9108, 14335, zDefault, 0.0, hiddenOpacity),
-                    (-7987, 14336, zDefault, Math.PI, hiddenOpacity),
+                    (protectionPyre2.X, protectionPyre2.Y, zDefault, 0, hiddenOpacity),
+                    (-9704f, 15323f, zDefault, MathF.PI, hiddenOpacity),
+                    (-7425, 15312, zDefault, 0, hiddenOpacity),
+                    (-5160, yMid, zDefault, MathF.PI, hiddenOpacity),
+                    (-5169, 8846, zDefault, 0, hiddenOpacity),
+                    (-7414, 8846, zDefault, MathF.PI, hiddenOpacity),
+                    (-7728, 11535, zDefault, MathF.PI + wyvernPhaseMiddleRotation, hiddenOpacity),
+                    (-9108, 14335, zDefault, 0, hiddenOpacity),
+                    (-7987, 14336, zDefault, MathF.PI, hiddenOpacity),
                     (-7106, 12619, zDefault, wyvernPhaseMiddleRotation, hiddenOpacity),
-                    (-5729, 9821, zDefault, Math.PI, 1.0),
-                    (-6854, 9821, zDefault, 0.0, hiddenOpacity),
+                    (-5729, 9821, zDefault, MathF.PI, 1f),
+                    (-6854, 9821, zDefault, 0, hiddenOpacity),
                 }
             ),
             (
                 // Jumping puzzle, platforms move
                 jumpingPuzzleTime, jumpingPuzzleShuffleDuration - 1, new[]
                 {
-                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0.0, hiddenOpacity),
-                    (xJumpingPuzzleFirstRotating, yMid, zDefault, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0.0, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0.0, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePreQadim, yMid, zJumpingPuzzlePreQadim, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, Math.PI, 1.0),
-                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
+                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, hiddenOpacity),
+                    (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePreQadim, yMid, zJumpingPuzzlePreQadim, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, 1f),
+                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
                 }
             ),
             (
                 // Jumping puzzle, platforms appear
                 jumpingPuzzleTime + jumpingPuzzleShuffleDuration - 1, 1, new[]
                 {
-                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0.0, 1.0),
-                    (xJumpingPuzzleFirstRotating, yMid, zDefault, Math.PI, 1.0),
-                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0.0, 1.0),
-                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, 1.0),
-                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0.0, 1.0),
-                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, 1.0),
-                    (xJumpingPuzzlePreQadim, yMid, zJumpingPuzzlePreQadim, Math.PI, 1.0),
-                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, 1.0),
-                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, Math.PI, 1.0),
-                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, Math.PI, 1.0),
-                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, 1.0),
+                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, 1f),
+                    (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI, 1f),
+                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0, 1f),
+                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, 1f),
+                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, 0, 1f),
+                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, 1f),
+                    (xJumpingPuzzlePreQadim, yMid, zJumpingPuzzlePreQadim, MathF.PI, 1f),
+                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, 1f),
+                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, MathF.PI, 1f),
+                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, 1f),
+                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, 1f),
                 }
             ),
             (
@@ -1235,72 +1231,72 @@ internal class Qadim : MythwrightGambit
                 // Jumping puzzle platform breaks are not shown for now because their timing is rather tricky.
                 jumpingPuzzleTime + jumpingPuzzleShuffleDuration, jumpingPuzzleDuration, new[]
                 {
-                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0.0, 1.0),
-                    (xJumpingPuzzleFirstRotating, yMid, zDefault, Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, 1.0),
-                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, 1.0),
-                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, 1.0),
-                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, 1.0),
-                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, 1.0),
-                    (xJumpingPuzzlePreQadim, yMid, zJumpingPuzzlePreQadim, Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, 1.0),
-                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, 1.0),
-                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, Math.PI, 1.0),
-                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, Math.PI, 1.0),
-                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, 1.0),
+                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0f, 1f),
+                    (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, 1f),
+                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, 1f),
+                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, 1f),
+                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, 1f),
+                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, 1f),
+                    (xJumpingPuzzlePreQadim, yMid, zJumpingPuzzlePreQadim, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, 1f),
+                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, 1f),
+                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, MathF.PI, 1f),
+                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, 1f),
+                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, 1f),
                 }
             ),
             (
                 // Final phase preparation.
                 finalPhaseTime - lastPhasePreparationDuration, lastPhasePreparationDuration, new[]
                 {
-                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0.0, 1.0),
-                    (xJumpingPuzzleFirstRotating, yMid, zDefault, Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
+                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, 1f),
+                    (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
                     (xFinalPlatform, yMid, zJumpingPuzzlePreQadim, finalPlatformRotation, hiddenOpacity),
-                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
+                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
                 }
             ),
             (
                 // Final phase.
                 finalPhaseTime, 0, new[]
                 {
-                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0.0, 1.0),
-                    (xJumpingPuzzleFirstRotating, yMid, zDefault, Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xFinalPlatform, yMid, zJumpingPuzzlePreQadim, finalPlatformRotation, 1.0),
-                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
+                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, 1f),
+                    (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xFinalPlatform, yMid, zJumpingPuzzlePreQadim, finalPlatformRotation, 1f),
+                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
                 }
             ),
             (
                 // Second to last platform is destroyed
                 finalPhaseTime, 7000, new[]
                 {
-                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0.0, hiddenOpacity),
-                    (xJumpingPuzzleFirstRotating, yMid, zDefault, Math.PI + jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000.0 * jumpingPuzzleRotationRate, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xFinalPlatform, yMid, zJumpingPuzzlePreQadim, finalPlatformRotation, 1.0),
-                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, Math.PI, hiddenOpacity),
-                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, Math.PI, hiddenOpacity),
+                    (xJumpingPuzzleQadim, yMid, zFinalPlatforms, 0, hiddenOpacity),
+                    (xJumpingPuzzleFirstRotating, yMid, zDefault, MathF.PI + jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid + yJumpingPuzzleOffset3, zJumpingPuzzlePyres, -jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleRotatingPrePyres, yMid - yJumpingPuzzleOffset3, zJumpingPuzzlePyres, jumpingPuzzleDuration / 1000f * jumpingPuzzleRotationRate, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xFinalPlatform, yMid, zJumpingPuzzlePreQadim, finalPlatformRotation, 1f),
+                    (xJumpingPuzzlePrePyres, yMid + yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid + yJumpingPuzzleOffset1, zJumpingPuzzleSecondPlatform, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePyres, yMid, zJumpingPuzzlePyres, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzleFirstPlatform, yMid - yJumpingPuzzleOffset1, zJumpingPuzzleFirstPlatform, MathF.PI, hiddenOpacity),
+                    (xJumpingPuzzlePrePyres, yMid - yJumpingPuzzleOffset2, zJumpingPuzzlePrePyres, MathF.PI, hiddenOpacity),
                 }
             ),
         ];
@@ -1319,13 +1315,12 @@ internal class Qadim : MythwrightGambit
         // This approach requires one extra movement at the start for initial positions (should be of duration 0)
         for (int i = 0; i < movements.Length; i++)
         {
-            (int start, int duration, (int x, int y, int z, double angle, double opacity)[] platforms) movement = movements[i];
-            (int x, int y, int z, double angle, double opacity)[] positions = movement.platforms;
+            var movement = movements[i];
 
             for (int platformIndex = 0; platformIndex < platformCount; platformIndex++)
             {
-                MovingPlatformDecoration platform = platforms[platformIndex];
-                (int x, int y, int z, double angle, double opacity) = positions[platformIndex];
+                var platform = platforms[platformIndex];
+                var (x, y, z, angle, opacity) = movement.platforms[platformIndex];
 
                 // Add a keyframe for movement end.
                 platform.AddPosition(x, y, z, angle, opacity, movement.start + movement.duration);
@@ -1384,7 +1379,7 @@ internal class Qadim : MythwrightGambit
 
             for (int i = 0; i < lamps.Count; i++)
             {
-                if (positions.Any(x => x.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
+                if (positions.Any(x => x.Value.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
                 {
                     entered++;
                 }
@@ -1450,7 +1445,7 @@ internal class Qadim : MythwrightGambit
         // For each matching position polled, check if the distance between points is under 2000
         for (int i = 0; i < Math.Min(addPositions.Count, qadimPositions.Count); i++)
         {
-            if ((qadimPositions[i].ExtractVector() - addPositions[i].ExtractVector()).Length() < 2000)
+            if ((qadimPositions[i].Value - addPositions[i].Value).Length() < 2000)
             {
                 return true;
             }

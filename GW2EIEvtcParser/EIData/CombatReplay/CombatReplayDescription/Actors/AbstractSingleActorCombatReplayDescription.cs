@@ -50,7 +50,7 @@ public abstract class AbstractSingleActorCombatReplayDescription : AbstractComba
         var positions = new List<float>(replay.PolledPositions.Count * 2);
         foreach (var pos in replay.PolledPositions)
         {
-            (float x, float y) = map.GetMapCoord(pos.X, pos.Y);
+            (float x, float y) = map.GetMapCoordRounded(pos.Value.XY());
             positions.Add(x);
             positions.Add(y);
         }
@@ -59,7 +59,7 @@ public abstract class AbstractSingleActorCombatReplayDescription : AbstractComba
         var angles = new List<float>(replay.PolledRotations.Count);
         foreach (var facing in replay.PolledRotations)
         {
-            angles.Add(-facing.ExtractVector().GetRoundedZRotationDeg());
+            angles.Add(-facing.Value.GetRoundedZRotationDeg());
         }
         Angles = angles;
 

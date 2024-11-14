@@ -81,6 +81,24 @@ public static partial class ListExt
         }
         return null;
     }
+    public static T? FirstOrNull<T>(this IReadOnlyList<T> list, FoNPredicate<T> predicate) where T : struct
+    {
+        for(int i = 0; i < list.Count; i++)
+        {
+            var v = list[i];
+            if(predicate(in v)) { return v; }
+        }
+        return null;
+    }
+    public static T? LastOrNull<T>(this IReadOnlyList<T> list, FoNPredicate<T> predicate) where T : struct
+    {
+        for(int i = list.Count - 1; i >= 0; i--)
+        {
+            var v = list[i];
+            if(predicate(in v)) { return v; }
+        }
+        return null;
+    }
 
     public static T? LastOrNull<T>(this IReadOnlyList<T> list) where T : struct
     {

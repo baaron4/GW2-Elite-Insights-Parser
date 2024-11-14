@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Numerics;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -418,12 +419,13 @@ public abstract partial class AbstractSingleActor : AbstractActor
     {
         if (forwardWindow != 0)
         {
-            var parametric = points.FirstOrDefault(x => x.Time >= time && x.Time <= time + forwardWindow) ?? points.LastOrDefault(x => x.Time <= time);
-            if(parametric != null)
-            {
-                point = parametric.ExtractVector();
+           var parametric = points.FirstOrNull((in ParametricPoint3D x) => x.Time >= time && x.Time <= time + forwardWindow)
+                ?? points.LastOrNull((in ParametricPoint3D x) => x.Time <= time);
+           if(parametric.HasValue)
+           {
+                point = parametric.Value.Value;
                 return true;
-            }
+           }
 
             point = default;
             return false;
@@ -443,7 +445,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
             return false;
         }
         
-        point = points[foundIndex].ExtractVector();
+        point = position.Value;
         return true;
     }
 
@@ -472,19 +474,19 @@ public abstract partial class AbstractSingleActor : AbstractActor
         }
 
         IReadOnlyList<ParametricPoint3D> positions = GetCombatReplayPolledPositions(log);
-        ParametricPoint3D next = positions.FirstOrDefault(x => x.Time >= time);
-        ParametricPoint3D prev = positions.LastOrDefault(x => x.Time <= time);
-        if (prev != null && next != null)
+        var next = positions.FirstOrNull((in ParametricPoint3D x) => x.Time >= time);
+        var prev = positions.LastOrNull((in ParametricPoint3D x) => x.Time <= time);
+        if (prev.HasValue && next.HasValue)
         {
-            long denom = next.Time - prev.Time;
+            long denom = next.Value.Time - prev.Value.Time;
             if (denom == 0)
             {
-                position = prev.ExtractVector();
+                position = prev.Value.Value;
             }
             else
             {
-                float ratio = (float)(time - prev.Time) / denom;
-                position = Vector3.Lerp(prev.ExtractVector(), next.ExtractVector(), ratio);
+                float ratio = (float)(time - prev.Value.Time) / denom;
+                position = Vector3.Lerp(prev.Value.Value, next.Value.Value, ratio);
             }
             return true;
         }
@@ -493,7 +495,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
             var parametric = prev ?? next;
             if(parametric != null)
             {
-                position = parametric.ExtractVector();
+                position = parametric.Value.Value;
                 return true;
             }
             else

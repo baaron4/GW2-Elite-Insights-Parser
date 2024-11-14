@@ -298,35 +298,41 @@ internal class SoullessHorror : HallOfChains
 
                 }
                 break;
+
             case (int)TrashID.Scythe:
                 replay.Decorations.Add(new CircleDecoration(80, (start, end), Colors.Red, 0.5, new AgentConnector(target)));
                 break;
+
             case (int)TrashID.TormentedDead:
                 if (replay.Positions.Count == 0)
                 {
                     break;
                 }
-                replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().ExtractVector())));
+                replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().Value)));
                 break;
+
             case (int)TrashID.SurgingSoul:
-                List<ParametricPoint3D> positions = replay.Positions;
-                if (positions.Count < 2)
+                if (replay.Positions.Count < 2)
                 {
                     break;
                 }
-                if (positions[0].X < -12000 || positions[0].X > -9250)
+
+                var firstPos = replay.Positions[0].Value;
+                if (firstPos.X < -12000 || firstPos.X > -9250)
                 {
                     replay.Decorations.Add(new RectangleDecoration(240, 660, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                     break;
                 }
-                else if (positions[0].Y < -525 || positions[0].Y > 2275)
+                else if (firstPos.Y < -525 || firstPos.Y > 2275)
                 {
                     replay.Decorations.Add(new RectangleDecoration(645, 238, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                     break;
                 }
                 break;
+
             case (int)TrashID.FleshWurm:
                 break;
+
             default:
                 break;
         }

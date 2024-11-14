@@ -11,7 +11,7 @@ namespace GW2EIBuilders.HtmlModels;
 // If this is reasonably possible it should give time savings around 20-30%
 internal class PhaseDto
 {
-    public string Name;
+    public string? Name;
     public long Duration;
     public double Start;
     public double End;

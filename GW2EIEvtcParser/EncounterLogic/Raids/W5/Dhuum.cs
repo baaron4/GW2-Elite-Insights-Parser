@@ -556,23 +556,24 @@ internal class Dhuum : HallOfChains
                         }
                     }
                     
-                    var pos = replay.Positions.FirstOrDefault();
-                    if (replay.Positions.Count > 1)
-                    {
-                        replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                    ParametricPoint3D pos;
+                    if (replay.Positions.Count > 0) {
+                        pos = replay.Positions[0];
+
+                        if (replay.Positions.Count > 1)
+                        {
+                            replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                        }
                     }
-                    
-                    if (pos == null)
+                    else
                     {
                         break;
                     }
 
-                    var posVec = pos.ExtractVector();
-
                     int reaperIndex = -1;
                     foreach (var reaper in ReapersToGreen)
                     {
-                        if ((reaper.Position - posVec).Length() < 10)
+                        if ((reaper.Position - pos.Value).Length() < 10)
                         {
                             reaperIndex = reaper.Index;
                             break;

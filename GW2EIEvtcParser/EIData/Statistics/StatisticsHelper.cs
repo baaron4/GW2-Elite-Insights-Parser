@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
+using Tracing;
 using static GW2EIEvtcParser.EIData.Buff;
 
 namespace GW2EIEvtcParser.EIData;
@@ -157,115 +158,119 @@ public class StatisticsHelper
     private List<ParametricPoint3D?>? _stackCenterPositions = null;
     private List<ParametricPoint3D?>? _stackCommanderPositions = null;
 
-    //TODO(Rennorb) @explain: When are entries null here?
+    //TODO(Rennorb) @cleanup: So ... why are these parametric points, but we still add null values between them?
+    // Since they already have a time component we don't need the "gaps", or if we just have one value per sample we don't need parametric points.
+
+    /// <summary> Returns a list of center positions of the squad which are null in places where all players are dead or disconnected. One entry for each polling. </summary>
     public IReadOnlyList<ParametricPoint3D?> GetStackCenterPositions(ParsedEvtcLog log)
     {
-        if (_stackCenterPositions == null)
-        {
-            SetStackCenterPositions(log);
-        }
+        _stackCenterPositions ??= CalculateStackCenterPositions(log);
         return _stackCenterPositions;
     }
 
-    //TODO(Rennorb) @explain: When are entries null here?
+    /// <summary> Returns a list of commander positions for the squad which are null in places where there is no commander. One entry for each polling. </summary>
     public IReadOnlyList<ParametricPoint3D?> GetStackCommanderPositions(ParsedEvtcLog log)
     {
-        if (_stackCommanderPositions == null)
-        {
-            SetStackCommanderPositions(log);
-        }
+        _stackCommanderPositions ??= CalculateStackCommanderPositions(log);
         return _stackCommanderPositions;
     }
 
-    [MemberNotNull(nameof(_stackCenterPositions))]
-    private void SetStackCenterPositions(ParsedEvtcLog log)
+    /// <summary> Calculates a list of center positions of the squad which are null in places where all players are dead or disconnected. </summary>
+    private static List<ParametricPoint3D?> CalculateStackCenterPositions(ParsedEvtcLog log)
     {
         if (!log.CombatData.HasMovementData)
         {
-            _stackCenterPositions = [ ];
-            return;
+            return [ ];
         }
 
-        var GroupsPosList = new List<List<ParametricPoint3D?>>(log.PlayerList.Count);
+        var positionsPerPlayer = new List<List<ParametricPoint3D?>>(log.PlayerList.Count);
         foreach (Player player in log.PlayerList)
         {
-            GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
+            positionsPerPlayer.Add(player.GetCombatReplayActivePositions(log));
         }
 
-        _stackCenterPositions = new List<ParametricPoint3D?>(GroupsPosList[0].Count);
-        for (int time = 0; time < GroupsPosList[0].Count; time++)
+        var sampleCount = positionsPerPlayer[0].Count;
+
+        var centerPositions = new List<ParametricPoint3D?>(sampleCount);
+        for (int t = 0; t < sampleCount; t++)
         {
-            int activePlayers = GroupsPosList.Count;
-            if (activePlayers == 0)
+            int activePlayersThisSample = log.PlayerList.Count;
+            
+            var position = Vector3.Zero;
+            foreach (var positions in positionsPerPlayer)
             {
-                _stackCenterPositions.Add(null);
-            }
-            else
-            {
-                var position = Vector3.Zero;
-                foreach (var points in GroupsPosList)
+                var pos = positions[t];
+                if (pos != null)
                 {
-                    var point = points[time];
-                    if (point != null)
-                    {
-                        position += point.ExtractVector();
-                    }
-                    else
-                    {
-                        activePlayers--;
-                    }
-
-                }
-                position /= activePlayers;
-
-                _stackCenterPositions.Add(new ParametricPoint3D(position, ParserHelper.CombatReplayPollingRate * time));
-            }
-        }
-    }
-
-    [MemberNotNull(nameof(_stackCommanderPositions))]
-    private void SetStackCommanderPositions(ParsedEvtcLog log)
-    {
-        if (!log.CombatData.HasMovementData)
-        {
-            _stackCommanderPositions = [ ];
-            return;
-        }
-
-        //TODO(Rennorb) @perf: find average complexity
-        var states = new List<(Player p, GenericSegment<GUID> seg)>(log.PlayerList.Count);
-        foreach (Player player in log.PlayerList)
-        {
-            var newStates = player.GetCommanderStates(log);
-            foreach (var state in newStates)
-            {
-                states.Add((player, state));
-            }
-        }
-        states.Sort((a, b) => (int)(a.seg.Start - b.seg.Start));
-
-        _stackCommanderPositions = new List<ParametricPoint3D?>(states.Count); //TODO(Rennorb) @perf
-        long start = long.MinValue;
-        foreach ((Player p, GenericSegment<GUID> seg) in states)
-        {
-            IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
-            //TODO(Rennorb) @perf @correctness: This feels like it might just be wrong.
-            var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList<ParametricPoint3D?>();
-            for (int i = 0; i < toAdd.Count; i++)
-            {
-                if (toAdd[i]!.Time < seg.Start)
-                {
-                    toAdd[i] = null;
+                    position += pos.Value.Value;
                 }
                 else
                 {
-                    break;
+                    activePlayersThisSample--;
+                }
+
+            }
+
+            if (activePlayersThisSample == 0)
+            {
+                centerPositions.Add(null);
+            }
+            else
+            {
+                position /= activePlayersThisSample;
+                centerPositions.Add(new ParametricPoint3D(position, ParserHelper.CombatReplayPollingRate * t));
+            }
+        }
+
+        return centerPositions;
+    }
+
+    /// <summary> Calculates a list of commander positions for the squad which are null in places where there is no commander. </summary>
+    private static List<ParametricPoint3D?> CalculateStackCommanderPositions(ParsedEvtcLog log)
+    {
+        if (!log.CombatData.HasMovementData)
+        {
+            return [ ];
+        }
+
+        var commanders = new List<GenericSegment<Player>>(log.PlayerList.Count); //TODO(Rennorb) @perf: find average complexity
+        foreach (Player player in log.PlayerList)
+        {
+            var newStates = player.GetCommanderStates(log);
+            commanders.ReserveAdditional(newStates.Count);
+            foreach (var state in newStates)
+            {
+                commanders.Add(state.WithOtherType(player));
+            }
+        }
+        commanders.Sort((a, b) => a.Start.CompareTo(b.Start));
+
+        var commanderPositions = new List<ParametricPoint3D?>((int)(log.FightData.FightDuration / ParserHelper.CombatReplayPollingRate));
+        long start = long.MinValue;
+        foreach (var commanderSegment in commanders) // don't deconstruct, guids are large
+        {
+            var polledPositions = commanderSegment.Value!.GetCombatReplayPolledPositions(log);
+            foreach(var pos in polledPositions)
+            {
+                if(pos.Time < start) { continue; }
+                if(pos.Time >= commanderSegment.End) { break; }
+
+                if(pos.Time < commanderSegment.Start)
+                {
+                    //NOTE(Rennorb): This means we are between the end of the last, and teh beginning of the current segment,
+                    // which in turn means there is no commander right now.
+                    commanderPositions.Add(null);
+                }
+                else
+                {
+                    commanderPositions.Add(pos);
                 }
             }
-            _stackCommanderPositions.AddRange(toAdd);
 
-            start = seg.End;
+            start = commanderSegment.End;
         }
+
+        return commanderPositions;
     }
 
 }

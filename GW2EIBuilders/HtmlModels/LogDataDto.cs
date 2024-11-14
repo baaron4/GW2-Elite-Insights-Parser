@@ -64,11 +64,11 @@ internal class LogDataDto
     public bool NoMechanics;
     public bool SingleGroup;
     public bool HasBreakbarDamage;
-    public List<string> LogErrors;
+    public List<string>? LogErrors;
     public string EncounterStart;
     public string EncounterEnd;
-    public string InstanceStart;
-    public string InstanceIP;
+    public string? InstanceStart;
+    public string? InstanceIP;
     public string ArcVersion;
     public long EvtcBuild;
     public ulong Gw2Build;
@@ -79,8 +79,8 @@ internal class LogDataDto
     public string RecordedAccountBy;
     public int FractalScale;
     public List<string> UploadLinks;
-    public List<string> UsedExtensions;
-    public List<List<string>> PlayersRunningExtensions;
+    public List<string>? UsedExtensions;
+    public List<List<string>>? PlayersRunningExtensions;
     //
     private LogDataDto(ParsedEvtcLog log, bool light, Version parserVersion, string[] uploadLinks)
     {

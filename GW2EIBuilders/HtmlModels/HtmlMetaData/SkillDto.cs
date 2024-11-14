@@ -8,7 +8,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
 
 /// <summary> A struct holding skill data that gets serialized as an array of numbers. </summary>
-[JsonConverter(typeof(SkillCastDtoConverter))]
+[JsonConverter(typeof(Converter))]
 public struct SkillCastDto
 {
     public double Start;
@@ -16,27 +16,26 @@ public struct SkillCastDto
     public int    ActualDuration;
     public int    Status;
     public double Acceleration;
-}
 
-class SkillCastDtoConverter : JsonConverter<SkillCastDto>
-{
-    public override SkillCastDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public class Converter : JsonConverter<SkillCastDto>
     {
-        throw new NotImplementedException();
-    }
+        public override SkillCastDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
 
-    public override void Write(Utf8JsonWriter writer, SkillCastDto value, JsonSerializerOptions options)
-    {
-        writer.WriteStartArray();
-        writer.WriteNumberValue(value.Start);
-        writer.WriteNumberValue(value.SkillId);
-        writer.WriteNumberValue(value.ActualDuration);
-        writer.WriteNumberValue(value.Status);
-        writer.WriteNumberValue(value.Acceleration);
-        writer.WriteEndArray();
+        public override void Write(Utf8JsonWriter writer, SkillCastDto value, JsonSerializerOptions options)
+        {
+            writer.WriteStartArray();
+            writer.WriteNumberValue(value.Start);
+            writer.WriteNumberValue(value.SkillId);
+            writer.WriteNumberValue(value.ActualDuration);
+            writer.WriteNumberValue(value.Status);
+            writer.WriteNumberValue(value.Acceleration);
+            writer.WriteEndArray();
+        }
     }
 }
-
 
 
 internal class SkillDto : AbstractSkillDto

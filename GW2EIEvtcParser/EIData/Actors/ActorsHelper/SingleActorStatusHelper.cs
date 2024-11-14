@@ -31,7 +31,7 @@ partial class AbstractSingleActor
             _dcs = [];
             AgentItem.GetAgentStatus(_deads, _downs, _dcs, log.CombatData);
         }
-        return (_deads, _downs, _dcs);
+        return (_deads, _downs!, _dcs!);
     }
 
     public (IReadOnlyList<Segment> breakbarNones, IReadOnlyList<Segment> breakbarActives, IReadOnlyList<Segment> breakbarImmunes, IReadOnlyList<Segment> breakbarRecoverings) GetBreakbarStatus(ParsedEvtcLog log)
@@ -44,7 +44,7 @@ partial class AbstractSingleActor
             _breakbarRecoverings = [];
             AgentItem.GetAgentBreakbarStatus(_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings, log.CombatData);
         }
-        return (_breakbarNones, _breakbarActives, _breakbarImmunes, _breakbarRecoverings);
+        return (_breakbarNones, _breakbarActives!, _breakbarImmunes!, _breakbarRecoverings!);
     }
 
     public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)

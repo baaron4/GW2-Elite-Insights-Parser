@@ -132,7 +132,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (HealReceivedEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
             }
@@ -156,7 +156,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
     }
 
 
-    public IEnumerable<EXTAbstractHealingEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public IEnumerable<EXTAbstractHealingEvent> GetJustActorOutgoingHealEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         return GetOutgoingHealEvents(target, log, start, end).Where(x => x.From == _actor.AgentItem);
     }
@@ -237,7 +237,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
         return graph;
     }
 
-    public EXTFinalOutgoingHealingStat GetOutgoingHealStats(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public EXTFinalOutgoingHealingStat GetOutgoingHealStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         _outgoingHealStats ??= new CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>(log);
         if (!_outgoingHealStats.TryGetValue(start, end, target, out var value))

@@ -208,23 +208,26 @@ public class Player : AbstractPlayer
         base.InitAdditionalCombatReplayData(log);
     }
 
+    /// <summary> Calculates a list of positions of the player which are null in places where the player is dead or disconnected. </summary>
     public List<ParametricPoint3D?> GetCombatReplayActivePositions(ParsedEvtcLog log)
     {
         if (CombatReplay == null)
         {
-            InitCombatReplay(log);
+            this.InitCombatReplay(log);
         }
-        var (deads, _, dcs) = GetStatus(log);
-        var activePositions = new List<ParametricPoint3D?>(GetCombatReplayPolledPositions(log));
-        for (int i = 0; i < activePositions.Count; i++)
+
+        var (deads, _, dcs) = this.GetStatus(log);
+        var positions = this.GetCombatReplayPolledPositions(log);
+        var activePositions = new List<ParametricPoint3D?>(positions.Count);
+        for (int i = 0; i < positions.Count; i++)
         {
-            var cur = activePositions[i]!;
+            var cur = positions[i]!;
             foreach (Segment seg in deads)
             {
                 if (seg.ContainsPoint(cur.Time))
                 {
-                    activePositions[i] = null;
-                    break;
+                    activePositions.Add(null);
+                    goto double_break;
                 }
             }
 
@@ -232,10 +235,13 @@ public class Player : AbstractPlayer
             {
                 if (seg.ContainsPoint(cur.Time))
                 {
-                    activePositions[i] = null;
-                    break;
+                    activePositions.Add(null);
+                    goto double_break;
                 }
             }
+
+            activePositions.Add(positions[i]);
+            double_break:;
         }
         return activePositions;
     }

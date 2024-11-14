@@ -9,6 +9,7 @@ public class RotationEvent : AbstractMovementEvent
     {
     }
 
+    //TODO(Rennorb) @cleanup: hoist upwards or rename
     internal override void AddPoint3D(CombatReplay replay)
     {
         replay.Rotations.Add(GetParametricPoint3D());

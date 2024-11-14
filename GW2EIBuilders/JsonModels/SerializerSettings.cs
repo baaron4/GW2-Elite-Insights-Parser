@@ -14,6 +14,7 @@ internal class SerializerSettings
         NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
         //NOTE(Rennorb): htmlescapes by default
         Converters = {
+            //TODO(Rennorb) @perf: Replace with explicit attributes so it doesn't need to be invoked dynamically.
             GW2EIJSON.Tuple2ToArrayConverterFactory.Instance,
         }
     };
