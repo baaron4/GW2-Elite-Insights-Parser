@@ -264,12 +264,13 @@ namespace GW2EIEvtcParser.EIData
             }
 
             // Signet of Mercy
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSignetOfMercyEnd, out IReadOnlyList<EffectEvent> signetOfMercy))
+            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSignetOfMercyLightTray, out IReadOnlyList<EffectEvent> signetOfMercy))
             {
                 var skill = new SkillModeDescriptor(player, Spec.Guardian, SignetOfMercySkill, SkillModeCategory.Heal);
                 foreach (EffectEvent effect in signetOfMercy)
                 {
-                    (long, long) lifespan = (effect.Time, effect.Time + 500);
+                    // Only displays if fully channeled.
+                    (long start, long end) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.GuardianGenericLightEffect, effect.Duration);
                     AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSignetOfMercy);
                 }
             }

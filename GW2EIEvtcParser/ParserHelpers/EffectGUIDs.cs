@@ -253,6 +253,7 @@
         public const string GuardianGenericFlames = "EA98C3533AA46E4A9B550929356B7277"; // used e.g. with judges intervention, signet of judgment
         public const string GuardianGenericTeleport = "61C193EBA6526143BE01B80FF7C52217"; // usd e.g. with judges intervention, merciful intervention
         public const string GuardianGenericTeleport2 = "5E1717FB11CE1D44B59B36B6AD83B9CC"; // delayed, when reaching target? used with e.g. judges intervention, symbol of blades
+        public const string GuardianGenericLightEffect = "61ED02C4AA44C0429790A79E8EFCA7CC"; // Duration 0 - Used by Signet of Mercy, Empower
         public const string GuardianRingOfWarding = "5A54592448836A46B30BC93A544A0E47";
         public const string GuardianLineOfWarding = "F8BE013B34366E458640B47BF43F257D";
         public const string GuardianWallOfReflection = "70FABE08FFCFEE48A7160A4D479E3F8B";
@@ -267,7 +268,6 @@
         public const string GuardianSignetOfJudgement2 = "5EAC13DB0953EF4C9C5BCC10DB13C9C8";
         public const string GuardianShieldOfTheAvenger = "0885D553A0A0A341B4C31B7964243407";
         public const string GuardianSignetOfMercyLightTray = "E9D10435E997D846B736B62EDCC6B4BD"; // Duration 2000 - light ray at the start of the cast
-        public const string GuardianSignetOfMercyEnd = "61ED02C4AA44C0429790A79E8EFCA7CC"; // Duration 0 - end cast
         public const string GuardianSymbolOfPunishment1 = "D20225BED809BE4D86FFE87D6C5AD2B0"; // duration 5000
         public const string GuardianSymbolOfPunishment2 = "5F56361FEE7463448CA988CE773F4F63"; // duration 6000 - has effect end after 5000
         public const string GuardianSymbolOfPunishmentOrb = "A8C650860481DD48B1B41F76B3054576"; // duration 500
@@ -284,6 +284,8 @@
         public const string GuardianSolarStormSpearProjectile = "7ACBDCFF4A1FAC4E9D3221D946E49658"; // duration 0 - player src
         public const string GuardianSolarStormAerealEffect = "23D4642E4DC66548A7FC8214C73FA3CD"; // duration 0 - player src
         public const string GuardianSolarStormSpearImpact = "928509D0D350234EA86589063083FEB0"; // duration 0 - player src
+        public const string GuardianEmpower1 = "124CBEBD2272D04999CEACBA67FD9A6B"; // Duration 5000 - Around Dst - Starts on cast time
+        public const string GuardianEmpower2 = "44CFDE741F85CB47A88529C0F547400E"; // Duration 0 - Around Dst - Pulsing effect
         public const string FirebrandValiantBulwark = "1430A107F74F164387668DE2744A1528";
         public const string FirebrandStalwartStand1 = "E20B6672FDCE57409B229DB152BF2286"; // duration 4000
         public const string FirebrandStalwartStand2 = "CA4F198982BFD44180D63EB043F9F710"; // duration 4000
