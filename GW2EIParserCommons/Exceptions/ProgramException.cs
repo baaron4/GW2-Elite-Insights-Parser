@@ -1,13 +1,11 @@
-﻿using System;
-using GW2EIEvtcParser;
+﻿using GW2EIEvtcParser;
 
-namespace GW2EIParserCommons.Exceptions
+namespace GW2EIParserCommons.Exceptions;
+
+public class ProgramException : Exception
 {
-    public class ProgramException : Exception
-    {
 
-        internal ProgramException(Exception ex) : base("Operation aborted", ParserHelper.GetFinalException(ex))
-        {
-        }
+    internal ProgramException(Exception ex) : base("Operation aborted", ParserHelper.GetFinalException(ex))
+    {
     }
 }

@@ -1,13 +1,12 @@
 ﻿
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
-namespace GW2EIEvtcParser.EncounterLogic
+namespace GW2EIEvtcParser.EncounterLogic;
+
+internal abstract class Bjora : IcebroodSagaStrike
 {
-    internal abstract class Bjora : IcebroodSagaStrike
+    public Bjora(int triggerID) : base(triggerID)
     {
-        public Bjora(int triggerID) : base(triggerID)
-        {
-            EncounterCategoryInformation.SubCategory = SubFightCategory.Bjora;
-        }
+        EncounterCategoryInformation.SubCategory = SubFightCategory.Bjora;
     }
 }

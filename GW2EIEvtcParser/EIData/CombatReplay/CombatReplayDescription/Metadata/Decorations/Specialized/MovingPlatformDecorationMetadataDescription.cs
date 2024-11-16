@@ -1,28 +1,18 @@
-﻿using System;
-using System.Linq;
-using Newtonsoft.Json;
-using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
+﻿using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class MovingPlatformDecorationMetadataDescription : BackgroundDecorationMetadataDescription
 {
-    internal class MovingPlatformDecorationMetadataDescription : BackgroundDecorationMetadataDescription
+    public readonly string Image;
+    public readonly int Height;
+    public readonly int Width;
+
+    internal MovingPlatformDecorationMetadataDescription(MovingPlatformDecorationMetadata decoration) : base(decoration)
     {
-
-
-        public string Image { get; }
-        public int Height { get; }
-        public int Width { get; }
-
-
-
-        internal MovingPlatformDecorationMetadataDescription(MovingPlatformDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "MovingPlatform";
-            Image = decoration.Image;
-            Width = decoration.Width;
-            Height = decoration.Height;
-        }
-
+        Type = "MovingPlatform";
+        Image = decoration.Image;
+        Width = decoration.Width;
+        Height = decoration.Height;
     }
-
 }

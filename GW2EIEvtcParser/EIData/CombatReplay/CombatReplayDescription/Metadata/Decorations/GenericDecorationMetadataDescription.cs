@@ -1,15 +1,13 @@
-﻿using System;
-using static GW2EIEvtcParser.EIData.GenericDecoration;
+﻿using static GW2EIEvtcParser.EIData.GenericDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public abstract class GenericDecorationMetadataDescription : AbstractCombatReplayDecorationMetadataDescription
 {
-    public abstract class GenericDecorationMetadataDescription : AbstractCombatReplayDecorationMetadataDescription
-    {
 
-        public string Signature { get; private set; }
-        internal GenericDecorationMetadataDescription(GenericDecorationMetadata decoration) : base()
-        {
-            Signature = decoration.GetSignature();
-        }
+    public string Signature { get; private set; }
+    internal GenericDecorationMetadataDescription(GenericDecorationMetadata decoration) : base()
+    {
+        Signature = decoration.GetSignature();
     }
 }

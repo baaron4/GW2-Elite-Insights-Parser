@@ -1,15 +1,14 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData;
+
+public abstract class AbstractMetaDataEvent
 {
-    public abstract class AbstractMetaDataEvent
+    internal AbstractMetaDataEvent(CombatItem evtcItem)
     {
-        internal AbstractMetaDataEvent(CombatItem evtcItem)
-        {
-        }
+    }
 
-        internal AbstractMetaDataEvent()
-        {
-
-        }
+    internal AbstractMetaDataEvent()
+    {
 
     }
+
 }

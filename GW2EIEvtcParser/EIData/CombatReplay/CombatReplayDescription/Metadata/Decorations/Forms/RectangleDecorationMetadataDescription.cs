@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.RectangleDecoration;
+﻿using static GW2EIEvtcParser.EIData.RectangleDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class RectangleDecorationMetadataDescription : FormDecorationMetadataDescription
 {
-    internal class RectangleDecorationMetadataDescription : FormDecorationMetadataDescription
-    {
-        public uint Height { get; }
-        public uint Width { get; }
+    public readonly uint Height;
+    public readonly uint Width;
 
-        internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "Rectangle";
-            Width = decoration.Width;
-            Height = decoration.Height;
-        }
+    internal RectangleDecorationMetadataDescription(RectangleDecorationMetadata decoration) : base(decoration)
+    {
+        Type = "Rectangle";
+        Width = decoration.Width;
+        Height = decoration.Height;
     }
 }

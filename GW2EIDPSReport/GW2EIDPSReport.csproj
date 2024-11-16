@@ -4,6 +4,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>10.0</LangVersion>
         <Nullable>disable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;Release;NoRewards</Configurations>
     </PropertyGroup>
 
@@ -25,7 +26,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
 </Project>

@@ -1,185 +1,178 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿namespace GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.ParsedData
+public abstract class EffectEvent : AbstractEffectEvent
 {
-    public abstract class EffectEvent : AbstractEffectEvent
+
+    /// <summary>
+    /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
+    /// </summary>
+    public readonly long EffectID;
+
+    /// <summary>
+    /// GUID event of the effect
+    /// </summary>
+    public EffectGUIDEvent GUIDEvent { get; private set; } = EffectGUIDEvent.DummyEffectGUID;
+
+    /// <summary>
+    /// End of the effect, provided by an <see cref="EffectEndEvent"/>
+    /// </summary>
+    internal long DynamicEndTime = long.MinValue;
+
+    internal bool HasDynamicEndTime => DynamicEndTime != long.MinValue;
+
+    /// <summary>
+    /// Duration of the effect in milliseconds.
+    /// </summary>
+    public long Duration { get; protected set; }
+
+    /// <summary>
+    /// If true, effect is on a moving platform
+    /// </summary>
+    public bool OnNonStaticPlatform { get; protected set; }
+
+    internal EffectEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
+        EffectID = evtcItem.SkillID;
+    }
 
-        /// <summary>
-        /// Id of the created visual effect. Match to stable GUID with <see cref="EffectGUIDEvent"/>.
-        /// </summary>
-        public long EffectID { get; }
-        /// <summary>
-        /// GUID event of the effect, can not be null
-        /// </summary>
-        public EffectGUIDEvent GUIDEvent { get; private set; }
-
-        /// <summary>
-        /// End of the effect, provided by an <see cref="EffectEndEvent"/>
-        /// </summary>
-        internal long DynamicEndTime { get; private set; } = long.MinValue;
-
-        internal bool HasDynamicEndTime => DynamicEndTime != long.MinValue;
-
-        /// <summary>
-        /// Duration of the effect in milliseconds.
-        /// </summary>
-        public long Duration { get; protected set; }
-
-        /// <summary>
-        /// If true, effect is on a moving platform
-        /// </summary>
-        public bool OnNonStaticPlatform { get; protected set; }
-
-        internal EffectEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+    internal void SetDynamicEndTime(EffectEndEvent endEvent)
+    {
+        // Security check
+        if (TrackingID == 0)
         {
-            EffectID = evtcItem.SkillID;
+            return;
         }
-
-        internal void SetDynamicEndTime(EffectEndEvent endEvent)
+        // We can only set the EndEventOnce
+        if (!HasDynamicEndTime)
         {
-            // Security check
-            if (TrackingID == 0)
+            DynamicEndTime = endEvent.Time;
+        }
+    }
+
+    /// <summary>
+    /// Computes the end time of an effect.
+    /// <br/>
+    /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first.
+    /// Afterwards the effect duration is used, if greater 0 and less than max duration.
+    /// Finally, it defaults to max duration.
+    /// </summary>
+    protected virtual long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem? agent = null, long? associatedBuff = null)
+    {
+        if (HasDynamicEndTime)
+        {
+            return DynamicEndTime;
+        }
+        if (associatedBuff != null)
+        {
+            BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent!)
+                .OfType<BuffRemoveAllEvent>()
+                .FirstOrDefault(x => x.Time >= Time);
+            if (remove != null)
             {
-                return;
-            }
-            // We can only set the EndEventOnce
-            if (!HasDynamicEndTime)
-            {
-                DynamicEndTime = endEvent.Time;
+                return remove.Time;
             }
         }
-
-        /// <summary>
-        /// Computes the end time of an effect.
-        /// <br/>
-        /// When no end event is present, it falls back to buff remove all of associated buff (if passed) first.
-        /// Afterwards the effect duration is used, if greater 0 and less than max duration.
-        /// Finally, it defaults to max duration.
-        /// </summary>
-        protected virtual long ComputeEndTime(ParsedEvtcLog log, long maxDuration, AgentItem agent = null, long? associatedBuff = null)
+        if (Duration > 0 && Duration <= maxDuration)
         {
-            if (HasDynamicEndTime)
+            return Time + Duration;
+        }
+        return Time + maxDuration;
+    }
+
+
+    /// <summary>
+    /// Computes the lifespan of an effect.
+    /// Will use default duration if all other methods fail
+    /// See <see cref="ComputeEndTime"/> for information about computed end times.
+    /// </summary>
+    public (long start, long end) ComputeLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem? agent = null, long? associatedBuff = null)
+    {
+        long start = Time;
+        long end = ComputeEndTime(log, defaultDuration, agent, associatedBuff);
+        return (start, end);
+    }
+
+    /// <summary>
+    /// Computes the lifespan of an effect.
+    /// Will use default duration if all other methods fail
+    /// defaultDuration is ignored for <see cref="EffectEventCBTS45"/> and considered as 0.
+    /// This method is to be used when the duration of the effect may not be static (ex: a trap AoE getting triggered or when a trait can modify the duration of a skill).
+    /// See <see cref="ComputeEndTime"/> for information about computed end times.
+    /// </summary>
+    public virtual (long start, long end) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem? agent = null, long? associatedBuff = null)
+    {
+        long durationToUse = defaultDuration;
+        long start = Time;
+        long end = ComputeEndTime(log, durationToUse, agent, associatedBuff);
+        return (start, end);
+    }
+
+    /// <summary>
+    /// Computes the lifespan of an effect.<br></br>
+    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffect"/> as end.<br></br>
+    /// Checks the matching effects Src.
+    /// </summary>
+    /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
+    /// <returns>The computed start and end times.</returns>
+    public (long start, long end) ComputeLifespanWithSecondaryEffect(ParsedEvtcLog log, GUID secondaryEffect)
+    {
+        long start = Time;
+        long end = start + Duration;
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffect, out var effects))
+        {
+            EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
+            if (firstEffect != null)
             {
-                return DynamicEndTime;
+                end = firstEffect.Time;
             }
-            if (associatedBuff != null)
+        }
+        return (start, end);
+    }
+
+    /// <summary>
+    /// Computes the lifespan of an effect.<br></br>
+    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffect"/> as end.<br></br>
+    /// </summary>
+    /// <param name="secondaryEffect"><see cref="EffectGUIDs"/> of the secondary effect.</param>
+    /// <returns>The computed start and end times.</returns>
+    public (long start, long end) ComputeLifespanWithSecondaryEffectNoSrcCheck(ParsedEvtcLog log, GUID secondaryEffect)
+    {
+        long start = Time;
+        long end = start + Duration;
+        if (log.CombatData.TryGetEffectEventsByGUID(secondaryEffect, out var effects))
+        {
+            EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
+            if (firstEffect != null)
             {
-                BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent)
-                    .OfType<BuffRemoveAllEvent>()
-                    .FirstOrDefault(x => x.Time >= Time);
-                if (remove != null)
-                {
-                    return remove.Time;
-                }
+                end = firstEffect.Time;
             }
-            if (Duration > 0 && Duration <= maxDuration)
+        }
+        return (start, end);
+    }
+
+    /// <summary>
+    /// Computes the lifespan of an effect.<br></br>
+    /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffect"/> as end.<br></br>
+    /// Checks the matching effects Src and Position.
+    /// </summary>
+    /// <returns>The computed start and end times.</returns>
+    public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, GUID secondaryEffect, double minDistance = 1e-6)
+    {
+        long start = Time;
+        long end = start + Duration;
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffect, out var effects))
+        {
+            EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !x.IsAroundDst && (x.Position - Position).Length() < minDistance);
+            if (firstEffect != null)
             {
-                return Time + Duration;
+                end = firstEffect.Time;
             }
-            return Time + maxDuration;
         }
+        return (start, end);
+    }
 
-
-        /// <summary>
-        /// Computes the lifespan of an effect.
-        /// Will use default duration if all other methods fail
-        /// See <see cref="ComputeEndTime"/> for information about computed end times.
-        /// </summary>
-        public (long start, long end) ComputeLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
-        {
-            long start = Time;
-            long end = ComputeEndTime(log, defaultDuration, agent, associatedBuff);
-            return (start, end);
-        }
-
-        /// <summary>
-        /// Computes the lifespan of an effect.
-        /// Will use default duration if all other methods fail
-        /// defaultDuration is ignored for <see cref="EffectEventCBTS45"/> and considered as 0.
-        /// This method is to be used when the duration of the effect may not be static (ex: a trap AoE getting triggered or when a trait can modify the duration of a skill).
-        /// See <see cref="ComputeEndTime"/> for information about computed end times.
-        /// </summary>
-        public virtual (long start, long end) ComputeDynamicLifespan(ParsedEvtcLog log, long defaultDuration, AgentItem agent = null, long? associatedBuff = null)
-        {
-            long durationToUse = defaultDuration;
-            long start = Time;
-            long end = ComputeEndTime(log, durationToUse, agent, associatedBuff);
-            return (start, end);
-        }
-
-        /// <summary>
-        /// Computes the lifespan of an effect.<br></br>
-        /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
-        /// Checks the matching effects Src.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
-        /// <returns>The computed start and end times.</returns>
-        public (long start, long end) ComputeLifespanWithSecondaryEffect(ParsedEvtcLog log, string secondaryEffectGUID)
-        {
-            long start = Time;
-            long end = start + Duration;
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
-            {
-                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
-                if (firstEffect != null)
-                {
-                    end = firstEffect.Time;
-                }
-            }
-            return (start, end);
-        }
-
-        /// <summary>
-        /// Computes the lifespan of an effect.<br></br>
-        /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
-        /// <returns>The computed start and end times.</returns>
-        public (long start, long end) ComputeLifespanWithSecondaryEffectNoSrcCheck(ParsedEvtcLog log, string secondaryEffectGUID)
-        {
-            long start = Time;
-            long end = start + Duration;
-            if (log.CombatData.TryGetEffectEventsByGUID(secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
-            {
-                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
-                if (firstEffect != null)
-                {
-                    end = firstEffect.Time;
-                }
-            }
-            return (start, end);
-        }
-
-        /// <summary>
-        /// Computes the lifespan of an effect.<br></br>
-        /// Takes the <see cref="Time"/> of the main effect as start and the <see cref="Time"/> of the <paramref name="secondaryEffectGUID"/> as end.<br></br>
-        /// Checks the matching effects Src and Position.
-        /// </summary>
-        /// <param name="log">The log.</param>
-        /// <param name="secondaryEffectGUID"><see cref="EffectGUIDs"/> of the secondary effect.</param>
-        /// <returns>The computed start and end times.</returns>
-        public (long start, long end) ComputeLifespanWithSecondaryEffectAndPosition(ParsedEvtcLog log, string secondaryEffectGUID, double minDistance = 1e-6)
-        {
-            long start = Time;
-            long end = start + Duration;
-            if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffectGUID, out IReadOnlyList<EffectEvent> effects))
-            {
-                EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !x.IsAroundDst && x.Position.DistanceToPoint(Position) < minDistance);
-                if (firstEffect != null)
-                {
-                    end = firstEffect.Time;
-                }
-            }
-            return (start, end);
-        }
-
-        internal void SetGUIDEvent(CombatData combatData)
-        {
-            GUIDEvent = combatData.GetEffectGUIDEvent(EffectID);
-        }
+    internal void SetGUIDEvent(CombatData combatData)
+    {
+        GUIDEvent = combatData.GetEffectGUIDEvent(EffectID);
     }
 }

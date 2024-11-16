@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace GW2EIWingman.WingmanUploadJsons
+namespace GW2EIWingman.WingmanUploadJsons;
+
+public class WingmanCheckLogQueuedOrDBObject : WingmanCheckLogQueuedObject
 {
-    public class WingmanCheckLogQueuedOrDBObject : WingmanCheckLogQueuedObject
-    {
-        [JsonProperty]
-        public bool InDB { get; internal set; }
-    }
+    [JsonProperty]
+    public bool InDB { get; internal set; }
 }

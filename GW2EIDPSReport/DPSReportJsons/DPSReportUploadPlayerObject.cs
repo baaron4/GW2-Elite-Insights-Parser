@@ -1,16 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
-namespace GW2EIDPSReport.DPSReportJsons
+namespace GW2EIDPSReport.DPSReportJsons;
+
+public class DPSReportUploadPlayerObject
 {
-    public class DPSReportUploadPlayerObject
-    {
-        [JsonProperty(PropertyName = "display_name")]
-        public string DisplayName { get; internal set; }
-        [JsonProperty(PropertyName = "character_name")]
-        public string CharacterName { get; internal set; }
-        [JsonProperty]
-        public int Profession { get; internal set; }
-        [JsonProperty(PropertyName = "elite_spec")]
-        public int EliteSpec { get; internal set; }
-    }
+    //NOTE(Rennorb): This apparently diverges from the usual camel case used elsewhere for dps.report.
+
+    [JsonPropertyName("display_name")]
+    public string DisplayName;
+    [JsonPropertyName("character_name")]
+    public string CharacterName;
+    [JsonPropertyName("profession")]
+    public int Profession;
+    [JsonPropertyName("elite_spec")]
+    public int EliteSpec;
 }

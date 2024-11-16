@@ -105,7 +105,7 @@
                         var points = pointsArray[playerI];
                         var player = logData.players[playerI];
                         for (var i = 0; i < points.length; i++) {
-                            var time = points[i] * 1000; // when mechanic occured in seconds
+                            var time = points[i][0] * 1000; // when mechanic occured in seconds
                             if (icd === 0 || (time - lastTime > icd)) {
                                 mechanicEvents.push({
                                     time: time,

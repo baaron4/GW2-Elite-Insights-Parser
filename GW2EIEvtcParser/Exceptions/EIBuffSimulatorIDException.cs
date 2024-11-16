@@ -1,12 +1,9 @@
-﻿using System;
+﻿namespace GW2EIEvtcParser.Exceptions;
 
-namespace GW2EIEvtcParser.Exceptions
+public class EIBuffSimulatorIDException : Exception
 {
-    public class EIBuffSimulatorIDException : Exception
+    internal EIBuffSimulatorIDException(string message) : base(message)
     {
-        internal EIBuffSimulatorIDException(string message) : base(message)
-        {
-        }
-
     }
+
 }

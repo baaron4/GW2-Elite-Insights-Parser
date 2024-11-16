@@ -1,18 +1,15 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.LineDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class LineDecorationRenderingDescription : FormDecorationRenderingDescription
 {
-    internal class LineDecorationRenderingDescription : FormDecorationRenderingDescription
+    public readonly object ConnectedFrom;
+
+    internal LineDecorationRenderingDescription(ParsedEvtcLog log, LineDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
-        public object ConnectedFrom { get; }
-
-        internal LineDecorationRenderingDescription(ParsedEvtcLog log, LineDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
-        {
-            Type = "Line";
-            ConnectedFrom = decoration.ConnectedFrom.GetConnectedTo(map, log);
-        }
+        Type = "Line";
+        ConnectedFrom = decoration.ConnectedFrom.GetConnectedTo(map, log);
     }
-
 }

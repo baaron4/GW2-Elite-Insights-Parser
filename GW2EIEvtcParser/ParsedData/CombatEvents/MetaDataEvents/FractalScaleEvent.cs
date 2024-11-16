@@ -1,13 +1,12 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData;
+
+public class FractalScaleEvent : AbstractMetaDataEvent
 {
-    public class FractalScaleEvent : AbstractMetaDataEvent
+    public readonly byte Scale;
+
+    internal FractalScaleEvent(CombatItem evtcItem) : base(evtcItem)
     {
-        public byte Scale { get; }
-
-        internal FractalScaleEvent(CombatItem evtcItem) : base(evtcItem)
-        {
-            Scale = (byte)evtcItem.SrcAgent;
-        }
-
+        Scale = (byte)evtcItem.SrcAgent;
     }
+
 }
