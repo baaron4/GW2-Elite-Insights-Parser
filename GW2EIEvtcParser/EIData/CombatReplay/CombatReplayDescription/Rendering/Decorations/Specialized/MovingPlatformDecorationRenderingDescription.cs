@@ -1,64 +1,51 @@
-﻿using System;
-using System.Linq;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using static GW2EIEvtcParser.EIData.MovingPlatformDecoration;
 
-namespace GW2EIEvtcParser.EIData
-{
-    internal class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
-    {
-        private class PositionConverter : JsonConverter
-        {
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                var positions = ((float x, float y, float z, float angle, float opacity, int time)[])value;
-                writer.WriteStartArray();
-                foreach ((float x, float y, float z, float angle, float opacity, int time) in positions)
-                {
-                    writer.WriteStartArray();
-                    writer.WriteValue(x);
-                    writer.WriteValue(y);
-                    writer.WriteValue(z);
-                    writer.WriteValue(angle);
-                    writer.WriteValue(opacity);
-                    writer.WriteValue(time);
-                    writer.WriteEndArray();
-                }
+namespace GW2EIEvtcParser.EIData;
 
+using Position = (float x, float y, float z, float Angle, float Opacity, long Time);
+
+public class MovingPlatformDecorationRenderingDescription : BackgroundDecorationRenderingDescription
+{
+    public class PositionConverter : JsonConverter<Position[]>
+    {
+        public override void Write(Utf8JsonWriter writer, Position[] positions, JsonSerializerOptions serializer)
+        {
+            writer.WriteStartArray();
+            foreach (var (x, y, z, angle, opacity, time) in positions)
+            {
+                writer.WriteStartArray();
+                writer.WriteNumberValue(x);
+                writer.WriteNumberValue(y);
+                writer.WriteNumberValue(z);
+                writer.WriteNumberValue(angle);
+                writer.WriteNumberValue(opacity);
+                writer.WriteNumberValue(time);
                 writer.WriteEndArray();
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-                JsonSerializer serializer)
-            {
-                throw new NotSupportedException();
-            }
-
-            public override bool CanRead => false;
-
-            public override bool CanConvert(Type objectType)
-            {
-                return objectType == typeof((float x, float y, float z, float angle, float opacity, int time));
-            }
+            writer.WriteEndArray();
         }
 
-        [JsonConverter(typeof(PositionConverter))]
-        public (float x, float y, float z, float angle, float opacity, int time)[] Positions { get; set; }
-
-
-        internal MovingPlatformDecorationRenderingDescription(MovingPlatformDecorationRenderingData decoration, CombatReplayMap map, string metadataSignature) : base(decoration, metadataSignature)
+        public override Position[] Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions serializer)
         {
-            Type = "MovingPlatform";
-            Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
-            {
-                (float mapX, float mapY) = map.GetMapCoord((float)pos.x, (float)pos.y);
-                pos.x = mapX;
-                pos.y = mapY;
-
-                return pos;
-            }).ToArray();
+            throw new NotSupportedException();
         }
+    }
 
+    [JsonConverter(typeof(PositionConverter))]
+    public Position[] Positions { get; set; }
+
+
+    internal MovingPlatformDecorationRenderingDescription(MovingPlatformDecorationRenderingData decoration, CombatReplayMap map, string metadataSignature) : base(decoration, metadataSignature)
+    {
+        Type = "MovingPlatform";
+        Positions = decoration.Positions.OrderBy(x => x.time).Select(pos =>
+        {
+            (pos.x, pos.y) = map.GetMapCoordRounded(pos.x, pos.y);
+            return pos;
+        }).ToArray();
     }
 
 }

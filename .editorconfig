@@ -75,7 +75,7 @@ dotnet_diagnostic.CA1416.severity = suggestion
 # var preferences 
 csharp_style_var_for_built_in_types = false:silent
 csharp_style_var_when_type_is_apparent = true:warning
-csharp_style_var_elsewhere = false:warning
+csharp_style_var_elsewhere = false:silent
 # Expression-bodied members 
 csharp_style_expression_bodied_methods = false:silent
 csharp_style_expression_bodied_constructors = false:silent
@@ -197,7 +197,7 @@ dotnet_diagnostic.CA1724.severity = silent
 # CA1054: Uri parameters should not be strings
 dotnet_diagnostic.CA1054.severity = suggestion
 
-dotnet_diagnostic.CA1002.severity = suggestion
+dotnet_diagnostic.CA1002.severity = none
 
 dotnet_diagnostic.CA1711.severity = none
 
@@ -207,7 +207,7 @@ dotnet_diagnostic.CA5394.severity = none
 
 dotnet_diagnostic.CA5392.severity = suggestion
 
-dotnet_diagnostic.CA1024.severity = suggestion
+dotnet_diagnostic.CA1024.severity = none
 
 dotnet_diagnostic.CA1310.severity = suggestion
 
@@ -224,9 +224,12 @@ dotnet_diagnostic.CA2225.severity = none
 
 dotnet_diagnostic.CA1014.severity = suggestion
 
+
+dotnet_diagnostic.CS8618.severity = suggestion
+
 csharp_using_directive_placement = outside_namespace:silent
 csharp_prefer_simple_using_statement = true:suggestion
-csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_namespace_declarations = file_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_top_level_statements = true:silent
 csharp_style_expression_bodied_lambdas = true:silent
@@ -234,6 +237,7 @@ csharp_style_expression_bodied_local_functions = false:silent
 
 # IDE0002: Simplify Member Access
 dotnet_diagnostic.IDE0002.severity = warning
+dotnet_diagnostic.IDE0305.severity = silent
 csharp_style_prefer_primary_constructors = true:suggestion
 
 [*.vb] 

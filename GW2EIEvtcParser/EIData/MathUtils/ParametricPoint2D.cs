@@ -1,27 +1,56 @@
-﻿namespace GW2EIEvtcParser.EIData
+﻿using System.Numerics;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+
+namespace GW2EIEvtcParser.EIData;
+
+[JsonConverter(typeof(Converter))]
+public class ParametricPoint2D(in Vector2 vector, long time)
 {
-    public class ParametricPoint2D : Point2D
+    public readonly Vector2 Vector = vector;
+    public readonly long Time = time;
+
+    public ParametricPoint2D(in Vector2 a, in Vector2 b, float ratio, long time) : this(Vector2.Lerp(a, b, ratio), time)
     {
-        public long Time { get; }
+    }
 
-
-        public ParametricPoint2D(float x, float y, long time) : base(x, y)
+    public class Converter : JsonConverter<ParametricPoint2D>
+    {
+        public override ParametricPoint2D? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            Time = time;
+            if(!reader.Read() || reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new JsonException($"Failed to read {nameof(ParametricPoint2D)}");
+            }
+
+            var v = new Vector2();
+            long t = 0;
+
+
+            Span<char> buffer = stackalloc char[8];
+            for(int i = 0; i < 4; i++)
+            {
+                var len = reader.CopyString(buffer);
+                switch(buffer[..len])
+                {
+                    case "X": v.X = reader.GetSingle(); break;
+                    case "Y": v.Y = reader.GetSingle(); break;
+                    case "Time": t = reader.GetInt64(); break;
+                }
+            }
+
+            //NOTE(Rennorb): We must not read the object end token of a container! See MS reader spec for more info.
+
+            return new(in v, t);
         }
 
-        public ParametricPoint2D(ParametricPoint2D a) : this(a.X, a.Y, a.Time)
+        public override void Write(Utf8JsonWriter writer, ParametricPoint2D value, JsonSerializerOptions options)
         {
-        }
-
-        public ParametricPoint2D(Point2D a, long time) : base(a)
-        {
-            Time = time;
-        }
-
-        public ParametricPoint2D(Point2D a, Point2D b, float ratio, long time) : base(a, b, ratio)
-        {
-            Time = time;
+            writer.WriteStartObject();
+            writer.WriteNumber("X", value.Vector.X);
+            writer.WriteNumber("Y", value.Vector.Y);
+            writer.WriteNumber("Time", value.Time);
+            writer.WriteEndObject();
         }
     }
 }

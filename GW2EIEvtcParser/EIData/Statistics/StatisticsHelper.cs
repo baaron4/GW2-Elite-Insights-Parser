@@ -1,265 +1,273 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using GW2EIEvtcParser.ParsedData;
+using Tracing;
 using static GW2EIEvtcParser.EIData.Buff;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+/// <summary>
+/// Passes statistical information
+/// </summary>
+public class StatisticsHelper
 {
-    /// <summary>
-    /// Passes statistical information
-    /// </summary>
-    public class StatisticsHelper
+    internal StatisticsHelper(CombatData combatData, IReadOnlyList<Player> players, BuffsContainer buffs)
     {
-        internal StatisticsHelper(CombatData combatData, IReadOnlyList<Player> players, BuffsContainer buffs)
+        IReadOnlyCollection<long> skillIDs = combatData.GetSkills();
+        // Main boons
+        foreach (Buff boon in buffs.BuffsByClassification[BuffClassification.Boon])
         {
-            IReadOnlyCollection<long> skillIDs = combatData.GetSkills();
-            // Main boons
-            foreach (Buff boon in buffs.BuffsByClassification[BuffClassification.Boon])
+            if (skillIDs.Contains(boon.ID))
             {
-                if (skillIDs.Contains(boon.ID))
-                {
-                    _presentBoons.Add(boon);
-                }
+                _presentBoons.Add(boon);
             }
-            // Main Conditions
-            foreach (Buff condition in buffs.BuffsByClassification[BuffClassification.Condition])
+        }
+        // Main Conditions
+        foreach (Buff condition in buffs.BuffsByClassification[BuffClassification.Condition])
+        {
+            if (skillIDs.Contains(condition.ID))
             {
-                if (skillIDs.Contains(condition.ID))
-                {
-                    _presentConditions.Add(condition);
-                }
-            }
-
-            // Important class specific boons
-            foreach (Buff offensiveBuff in buffs.BuffsByClassification[BuffClassification.Offensive])
-            {
-                if (skillIDs.Contains(offensiveBuff.ID))
-                {
-                    _presentOffbuffs.Add(offensiveBuff);
-                }
-            }
-
-            foreach (Buff supportBuff in buffs.BuffsByClassification[BuffClassification.Support])
-            {
-                if (skillIDs.Contains(supportBuff.ID))
-                {
-                    _presentSupbuffs.Add(supportBuff);
-                }
-            }
-
-            foreach (Buff defensiveBuff in buffs.BuffsByClassification[BuffClassification.Defensive])
-            {
-                if (skillIDs.Contains(defensiveBuff.ID))
-                {
-                    _presentDefbuffs.Add(defensiveBuff);
-                }
-
-            }
-
-            foreach (Buff gearBuff in buffs.BuffsByClassification[BuffClassification.Gear])
-            {
-                if (skillIDs.Contains(gearBuff.ID))
-                {
-                    _presentGearbuffs.Add(gearBuff);
-                }
-
-            }
-
-            foreach (Buff debuff in buffs.BuffsByClassification[BuffClassification.Debuff])
-            {
-                if (skillIDs.Contains(debuff.ID))
-                {
-                    _presentDebuffs.Add(debuff);
-                }
-
-            }
-
-            foreach (Buff nourishment in buffs.BuffsByClassification[BuffClassification.Nourishment])
-            {
-                if (skillIDs.Contains(nourishment.ID))
-                {
-                    _presentNourishments.Add(nourishment);
-                }
-
-            }
-
-            foreach (Buff enhancement in buffs.BuffsByClassification[BuffClassification.Enhancement])
-            {
-                if (skillIDs.Contains(enhancement.ID))
-                {
-                    _presentEnhancements.Add(enhancement);
-                }
-
-            }
-
-            foreach (Buff otherConsumable in buffs.BuffsByClassification[BuffClassification.OtherConsumable])
-            {
-                if (skillIDs.Contains(otherConsumable.ID))
-                {
-                    _presentOtherConsumables.Add(otherConsumable);
-                }
-
-            }
-
-            // All class specific boons
-            var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList().FirstOrDefault());
-            foreach (Player player in players)
-            {
-                _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
-                foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
-                {
-                    if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
-                    {
-                        _presentRemainingBuffsPerPlayer[player].Add(boon);
-                    }
-                }
+                _presentConditions.Add(condition);
             }
         }
 
-
-        // present buff
-        public IReadOnlyList<Buff> PresentBoons => _presentBoons;//Used only for Boon tables
-        public IReadOnlyList<Buff> PresentConditions => _presentConditions;//Used only for Condition tables
-        public IReadOnlyList<Buff> PresentOffbuffs => _presentOffbuffs;//Used only for Off Buff tables
-        public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;//Used only for Off Buff tables
-        public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
-        public IReadOnlyList<Buff> PresentDebuffs => _presentDebuffs;//Used only for Debuff tables
-        public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
-        public IReadOnlyList<Buff> PresentNourishements => _presentNourishments;
-        public IReadOnlyList<Buff> PresentEnhancements => _presentEnhancements;
-        public IReadOnlyList<Buff> PresentOtherConsumables => _presentOtherConsumables;
-
-        public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(AbstractSingleActor actor)
+        // Important class specific boons
+        foreach (Buff offensiveBuff in buffs.BuffsByClassification[BuffClassification.Offensive])
         {
-            if (!(actor is Player p))
+            if (skillIDs.Contains(offensiveBuff.ID))
             {
-                return new HashSet<Buff>();
+                _presentOffbuffs.Add(offensiveBuff);
             }
-            if (_presentRemainingBuffsPerPlayer.TryGetValue(p, out HashSet<Buff> buffs))
-            {
-                return buffs;
-            }
-            return new HashSet<Buff>();
         }
 
-        //
-
-        private readonly List<Buff> _presentBoons = new List<Buff>();//Used only for Boon tables
-        private readonly List<Buff> _presentConditions = new List<Buff>();//Used only for Condition tables
-        private readonly List<Buff> _presentOffbuffs = new List<Buff>();//Used only for Off Buff tables
-        private readonly List<Buff> _presentSupbuffs = new List<Buff>();//Used only for Off Buff tables
-        private readonly List<Buff> _presentDefbuffs = new List<Buff>();//Used only for Def Buff tables
-        private readonly List<Buff> _presentDebuffs = new List<Buff>();//Used only for Debuff tables
-        private readonly List<Buff> _presentGearbuffs = new List<Buff>();//Used only for Gear Buff tables
-        private readonly List<Buff> _presentNourishments = new List<Buff>();
-        private readonly List<Buff> _presentEnhancements = new List<Buff>();
-        private readonly List<Buff> _presentOtherConsumables = new List<Buff>();
-        private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer = new Dictionary<Player, HashSet<Buff>>();
-
-
-        //Positions for group
-        private List<ParametricPoint3D> _stackCenterPositions = null;
-        private List<ParametricPoint3D> _stackCommanderPositions = null;
-
-        public IReadOnlyList<ParametricPoint3D> GetStackCenterPositions(ParsedEvtcLog log)
+        foreach (Buff supportBuff in buffs.BuffsByClassification[BuffClassification.Support])
         {
-            if (_stackCenterPositions == null)
+            if (skillIDs.Contains(supportBuff.ID))
             {
-                SetStackCenterPositions(log);
+                _presentSupbuffs.Add(supportBuff);
             }
-            return _stackCenterPositions;
         }
 
-        public IReadOnlyList<ParametricPoint3D> GetStackCommanderPositions(ParsedEvtcLog log)
+        foreach (Buff defensiveBuff in buffs.BuffsByClassification[BuffClassification.Defensive])
         {
-            if (_stackCommanderPositions == null)
+            if (skillIDs.Contains(defensiveBuff.ID))
             {
-                SetStackCommanderPositions(log);
+                _presentDefbuffs.Add(defensiveBuff);
             }
-            return _stackCommanderPositions;
+
         }
 
-        private void SetStackCenterPositions(ParsedEvtcLog log)
+        foreach (Buff gearBuff in buffs.BuffsByClassification[BuffClassification.Gear])
         {
-            _stackCenterPositions = new List<ParametricPoint3D>();
-            if (log.CombatData.HasMovementData)
+            if (skillIDs.Contains(gearBuff.ID))
             {
-                var GroupsPosList = new List<IReadOnlyList<Point3D>>();
-                foreach (Player player in log.PlayerList)
+                _presentGearbuffs.Add(gearBuff);
+            }
+
+        }
+
+        foreach (Buff debuff in buffs.BuffsByClassification[BuffClassification.Debuff])
+        {
+            if (skillIDs.Contains(debuff.ID))
+            {
+                _presentDebuffs.Add(debuff);
+            }
+
+        }
+
+        foreach (Buff nourishment in buffs.BuffsByClassification[BuffClassification.Nourishment])
+        {
+            if (skillIDs.Contains(nourishment.ID))
+            {
+                _presentNourishments.Add(nourishment);
+            }
+
+        }
+
+        foreach (Buff enhancement in buffs.BuffsByClassification[BuffClassification.Enhancement])
+        {
+            if (skillIDs.Contains(enhancement.ID))
+            {
+                _presentEnhancements.Add(enhancement);
+            }
+
+        }
+
+        foreach (Buff otherConsumable in buffs.BuffsByClassification[BuffClassification.OtherConsumable])
+        {
+            if (skillIDs.Contains(otherConsumable.ID))
+            {
+                _presentOtherConsumables.Add(otherConsumable);
+            }
+
+        }
+
+        // All class specific boons
+        var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault());
+        foreach (Player player in players)
+        {
+            _presentRemainingBuffsPerPlayer[player] = [];
+            foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
+            {
+                if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                 {
-                    GroupsPosList.Add(player.GetCombatReplayActivePositions(log));
-                }
-                for (int time = 0; time < GroupsPosList[0].Count; time++)
-                {
-                    float x = 0;
-                    float y = 0;
-                    float z = 0;
-                    int activePlayers = GroupsPosList.Count;
-                    foreach (IReadOnlyList<Point3D> points in GroupsPosList)
-                    {
-                        Point3D point = points[time];
-                        if (point != null)
-                        {
-                            x += point.X;
-                            y += point.Y;
-                            z += point.Z;
-                        }
-                        else
-                        {
-                            activePlayers--;
-                        }
-
-                    }
-                    if (activePlayers == 0)
-                    {
-                        _stackCenterPositions.Add(null);
-                    }
-                    else
-                    {
-                        x /= activePlayers;
-                        y /= activePlayers;
-                        z /= activePlayers;
-                        _stackCenterPositions.Add(new ParametricPoint3D(x, y, z, ParserHelper.CombatReplayPollingRate * time));
-                    }
+                    _presentRemainingBuffsPerPlayer[player].Add(boon);
                 }
             }
         }
-        private void SetStackCommanderPositions(ParsedEvtcLog log)
-        {
-            _stackCommanderPositions = new List<ParametricPoint3D>();
-            if (log.CombatData.HasMovementData)
-            {
-                var states = new List<(Player p, GenericSegment<string> seg)>();
-                foreach (Player p in log.PlayerList)
-                {
-                    foreach (GenericSegment<string> seg in p.GetCommanderStates(log))
-                    {
-                        states.Add((p, seg));
-                    }
-                }
-                states = states.OrderBy(x => x.seg.Start).ToList();
-                GenericSegment<string> last = null;
-                foreach ((Player p, GenericSegment<string> seg) in states)
-                {
-                    IReadOnlyList<ParametricPoint3D> polledPositions = p.GetCombatReplayPolledPositions(log);
-                    long start = last == null ? long.MinValue : last.End;
-                    var toAdd = polledPositions.Where(x => x.Time >= start && x.Time < seg.End).ToList();
-                    for (int i = 0; i < toAdd.Count; i++)
-                    {
-                        if (toAdd[i].Time < seg.Start)
-                        {
-                            toAdd[i] = null;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    last = seg;
-                    _stackCommanderPositions.AddRange(toAdd);
-                }
-            }
-        }
-
     }
+
+
+    // present buff
+    public IReadOnlyList<Buff> PresentBoons => _presentBoons;//Used only for Boon tables
+    public IReadOnlyList<Buff> PresentConditions => _presentConditions;//Used only for Condition tables
+    public IReadOnlyList<Buff> PresentOffbuffs => _presentOffbuffs;//Used only for Off Buff tables
+    public IReadOnlyList<Buff> PresentSupbuffs => _presentSupbuffs;//Used only for Off Buff tables
+    public IReadOnlyList<Buff> PresentDefbuffs => _presentDefbuffs;//Used only for Def Buff tables
+    public IReadOnlyList<Buff> PresentDebuffs => _presentDebuffs;//Used only for Debuff tables
+    public IReadOnlyList<Buff> PresentGearbuffs => _presentGearbuffs;//Used only for Gear Buff tables
+    public IReadOnlyList<Buff> PresentNourishements => _presentNourishments;
+    public IReadOnlyList<Buff> PresentEnhancements => _presentEnhancements;
+    public IReadOnlyList<Buff> PresentOtherConsumables => _presentOtherConsumables;
+
+    public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(AbstractSingleActor actor)
+    {
+        if (actor is Player p && _presentRemainingBuffsPerPlayer.TryGetValue(p, out var buffs))
+        {
+            return buffs;
+        }
+        return [ ];
+    }
+
+    //
+
+    private readonly List<Buff> _presentBoons = [];//Used only for Boon tables
+    private readonly List<Buff> _presentConditions = [];//Used only for Condition tables
+    private readonly List<Buff> _presentOffbuffs = [];//Used only for Off Buff tables
+    private readonly List<Buff> _presentSupbuffs = [];//Used only for Off Buff tables
+    private readonly List<Buff> _presentDefbuffs = [];//Used only for Def Buff tables
+    private readonly List<Buff> _presentDebuffs = [];//Used only for Debuff tables
+    private readonly List<Buff> _presentGearbuffs = [];//Used only for Gear Buff tables
+    private readonly List<Buff> _presentNourishments = [];
+    private readonly List<Buff> _presentEnhancements = [];
+    private readonly List<Buff> _presentOtherConsumables = [];
+    private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer = [];
+
+
+    //Positions for group
+    private List<ParametricPoint3D?>? _stackCenterPositions = null;
+    private List<ParametricPoint3D?>? _stackCommanderPositions = null;
+
+    /// <summary> Returns a list of center positions of the squad which are null in places where all players are dead or disconnected. One entry for each polling. </summary>
+    public IReadOnlyList<ParametricPoint3D?> GetStackCenterPositions(ParsedEvtcLog log)
+    {
+        _stackCenterPositions ??= CalculateStackCenterPositions(log);
+        return _stackCenterPositions;
+    }
+
+    /// <summary> Returns a list of commander positions for the squad which are null in places where there is no commander. One entry for each polling. </summary>
+    public IReadOnlyList<ParametricPoint3D?> GetStackCommanderPositions(ParsedEvtcLog log)
+    {
+        _stackCommanderPositions ??= CalculateStackCommanderPositions(log);
+        return _stackCommanderPositions;
+    }
+
+    /// <summary> Calculates a list of center positions of the squad which are null in places where all players are dead or disconnected. </summary>
+    private static List<ParametricPoint3D?> CalculateStackCenterPositions(ParsedEvtcLog log)
+    {
+        if (!log.CombatData.HasMovementData)
+        {
+            return [ ];
+        }
+
+        var positionsPerPlayer = new List<List<ParametricPoint3D?>>(log.PlayerList.Count);
+        foreach (Player player in log.PlayerList)
+        {
+            positionsPerPlayer.Add(player.GetCombatReplayActivePositions(log));
+        }
+
+        var sampleCount = positionsPerPlayer[0].Count;
+
+        var centerPositions = new List<ParametricPoint3D?>(sampleCount);
+        for (int t = 0; t < sampleCount; t++)
+        {
+            int activePlayersThisSample = log.PlayerList.Count;
+            
+            var position = Vector3.Zero;
+            foreach (var positions in positionsPerPlayer)
+            {
+                var pos = positions[t];
+                if (pos != null)
+                {
+                    position += pos.Value.Value;
+                }
+                else
+                {
+                    activePlayersThisSample--;
+                }
+
+            }
+
+            if (activePlayersThisSample == 0)
+            {
+                centerPositions.Add(null);
+            }
+            else
+            {
+                position /= activePlayersThisSample;
+                centerPositions.Add(new ParametricPoint3D(position, ParserHelper.CombatReplayPollingRate * t));
+            }
+        }
+
+        return centerPositions;
+    }
+
+    /// <summary> Calculates a list of commander positions for the squad which are null in places where there is no commander. </summary>
+    private static List<ParametricPoint3D?> CalculateStackCommanderPositions(ParsedEvtcLog log)
+    {
+        if (!log.CombatData.HasMovementData)
+        {
+            return [ ];
+        }
+
+        var commanders = new List<GenericSegment<Player>>(log.PlayerList.Count); //TODO(Rennorb) @perf: find average complexity
+        foreach (Player player in log.PlayerList)
+        {
+            var newStates = player.GetCommanderStates(log);
+            commanders.ReserveAdditional(newStates.Count);
+            foreach (var state in newStates)
+            {
+                commanders.Add(state.WithOtherType(player));
+            }
+        }
+        commanders.Sort((a, b) => a.Start.CompareTo(b.Start));
+
+        var commanderPositions = new List<ParametricPoint3D?>((int)(log.FightData.FightDuration / ParserHelper.CombatReplayPollingRate));
+        long start = long.MinValue;
+        foreach (var commanderSegment in commanders) // don't deconstruct, guids are large
+        {
+            var polledPositions = commanderSegment.Value!.GetCombatReplayPolledPositions(log);
+            foreach(var pos in polledPositions)
+            {
+                if(pos.Time < start) { continue; }
+                if(pos.Time >= commanderSegment.End) { break; }
+
+                if(pos.Time < commanderSegment.Start)
+                {
+                    //NOTE(Rennorb): This means we are between the end of the last, and teh beginning of the current segment,
+                    // which in turn means there is no commander right now.
+                    commanderPositions.Add(null);
+                }
+                else
+                {
+                    commanderPositions.Add(pos);
+                }
+            }
+
+            start = commanderSegment.End;
+        }
+
+        return commanderPositions;
+    }
+
 }

@@ -1,11 +1,11 @@
-﻿namespace GW2EIEvtcParser.EIData
-{
-    public abstract class AbstractCombatReplayDescription
-    {
-        public string Type { get; protected set; }
+﻿namespace GW2EIEvtcParser.EIData;
 
-        protected AbstractCombatReplayDescription()
-        {
-        }
+public abstract class AbstractCombatReplayDescription
+{
+    //TODO(Rennorb) use enum
+    public string Type { get; protected set; }
+
+    protected AbstractCombatReplayDescription()
+    {
     }
 }

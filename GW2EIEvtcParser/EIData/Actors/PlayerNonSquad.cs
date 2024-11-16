@@ -1,27 +1,25 @@
-﻿using System.IO;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class PlayerNonSquad : AbstractPlayer
 {
-    public class PlayerNonSquad : AbstractPlayer
+
+    private static int NonSquadPlayers = 0;
+    // Constructors
+    internal PlayerNonSquad(AgentItem agent) : base(agent)
     {
-
-        private static int NonSquadPlayers = 0;
-        // Constructors
-        internal PlayerNonSquad(AgentItem agent) : base(agent)
+        if (agent.Type == AgentItem.AgentType.Player)
         {
-            if (agent.Type == AgentItem.AgentType.Player)
-            {
-                throw new InvalidDataException("Agent is not a squad Player");
-            }
-            Character = Spec.ToString() + " pl-" + AgentItem.InstID;
-            Account = "Non Squad Player " + (++NonSquadPlayers);
+            throw new InvalidDataException("Agent is not a squad Player");
         }
-        protected override void TrimCombatReplay(ParsedEvtcLog log)
-        {
-            // Down, Dead, Alive, Spawn and Despawn events are not reliable
-            CombatReplay.Trim(FirstAware, LastAware);
-        }
-
+        Character = Spec.ToString() + " pl-" + AgentItem.InstID;
+        Account = "Non Squad Player " + (++NonSquadPlayers);
     }
+    protected override void TrimCombatReplay(ParsedEvtcLog log)
+    {
+        // Down, Dead, Alive, Spawn and Despawn events are not reliable
+        CombatReplay.Trim(FirstAware, LastAware);
+    }
+
 }

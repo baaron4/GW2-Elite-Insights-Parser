@@ -1,27 +1,24 @@
-﻿using System;
+﻿namespace GW2EIEvtcParser;
 
-namespace GW2EIEvtcParser
+public abstract class AbstractCachingCollection<T>
 {
-    public abstract class AbstractCachingCollection<T>
+
+    private readonly long _start;
+    private readonly long _end;
+
+    protected AbstractCachingCollection(ParsedEvtcLog log)
     {
-
-        private readonly long _start;
-        private readonly long _end;
-
-        protected AbstractCachingCollection(ParsedEvtcLog log)
-        {
-            _start = log.FightData.LogStart;
-            _end = log.FightData.LogEnd;
-        }
-
-        protected (long, long) SanitizeTimes(long start, long end)
-        {
-            long newStart = Math.Max(start, _start);
-            long newEnd = Math.Max(newStart, Math.Min(end, _end));
-            return (newStart, newEnd);
-        }
-
-        public abstract void Clear();
-
+        _start = log.FightData.LogStart;
+        _end = log.FightData.LogEnd;
     }
+
+    protected (long, long) SanitizeTimes(long start, long end)
+    {
+        long newStart = Math.Max(start, _start);
+        long newEnd = Math.Max(newStart, Math.Min(end, _end));
+        return (newStart, newEnd);
+    }
+
+    public abstract void Clear();
+
 }

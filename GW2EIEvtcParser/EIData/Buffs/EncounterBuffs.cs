@@ -1,62 +1,61 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParserHelpers;
+﻿using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+internal static class EncounterBuffs
 {
-    internal static class EncounterBuffs
-    {
 
 
-        internal static readonly List<Buff> FractalInstabilities = new List<Buff>()
-        {
-            // Legacy
-            new Buff("Mistlock Instability: Fleeting Precision", MistlockInstabilityFleetingPrecision, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Impaired Immunity", MistlockInstabilityImpairedImmunity, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Losing Control", MistlockInstabilityLosingControl, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Mist Stalker", MistlockInstabilityMistStalker, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Slippery Slope 1", MistlockInstabilitySlipperySlope1, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySlipperySlope),
-            new Buff("Mistlock Instability: Slippery Slope 2", MistlockInstabilitySlipperySlope2, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySlipperySlope),
-            new Buff("Mistlock Instability: Stormy Weather", MistlockInstabilityStormyWeather, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Birds", MistlockInstabilityBirds, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityBirds),
-            new Buff("Mistlock Instability: Tainted Renewal", MistlockInstabilityTaintedRenewal, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Stamina", MistlockInstabilityStamina, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Playing Favorites", MistlockInstabilityPlayingFavorites, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Overextended", MistlockInstabilityOverextended, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Keep Them in Line", MistlockInstabilityKeepTheminLine, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Ill and Chill", MistlockInstabilityIllAndChill, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Frosty", MistlockInstabilityFrosty, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Bloodlust", MistlockInstabilityBloodlust, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Antielitism", MistlockInstabilityAntielitism, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            new Buff("Mistlock Instability: Agonizing Expedition", MistlockInstabilityAgonizingExpedition, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
-            // Current
-            new Buff("Mistlock Instability: Adrenaline Rush", MistlockInstabilityAdrenalineRush, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityAdrenalineRush),
-            new Buff("Mistlock Instability: Afflicted", MistlockInstabilityAfflicted, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityAfflicted),
-            new Buff("Mistlock Instability: Boon Overload", MistlockInstabilityBoonOverload, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityBoonOverload),
-            new Buff("Mistlock Instability: Flux Bomb", MistlockInstabilityFluxBomb, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
-            new Buff("Mistlock Instability: Fractal Vindicators", MistlockInstabilityFractalVindicators, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityFractalVindicator),
-            new Buff("Mistlock Instability: Frailty", MistlockInstabilityFrailty, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityFrailty),
-            new Buff("Mistlock Instability: Hamstrung", MistlockInstabilityHamstrung, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityHamstrung),
-            new Buff("Mistlock Instability: Last Laugh", MistlockInstabilityLastLaugh, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityLastLaugh),
-            new Buff("Mistlock Instability: Mists Convergence", MistlockInstabilityMistsConvergence, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityMistsConvergence),
-            new Buff("Mistlock Instability: No Pain, No Gain", MistlockInstabilityNoPainNoGain, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityNoPainNoGain),
-            new Buff("Mistlock Instability: Outflanked", MistlockInstabilityOutflanked, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityOutflanked),
-            new Buff("Mistlock Instability: Social Awkwardness", MistlockInstabilitySocialAwkwardness, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySocialAwkwardness),
-            new Buff("Mistlock Instability: Stick Together", MistlockInstabilityStickTogether, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityStickTogether),
-            new Buff("Mistlock Instability: Sugar Rush", MistlockInstabilitySugarRush, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySugarRush),
-            new Buff("Mistlock Instability: Toxic Trail", MistlockInstabilityToxicTrail, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityToxicTrail),
-            new Buff("Mistlock Instability: Vengeance", MistlockInstabilityVengeance, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityVengeance),
-            new Buff("Mistlock Instability: We Bleed Fire", MistlockInstabilityWeBleedFire, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityWeBleedFire),
-            new Buff("Mistlock Instability: Toxic Sickness", MistlockInstabilityToxicSickness, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityToxicSickness),
-            // Related buffs
-            new Buff("Flux Bomb Target", FluxBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
-        };
+    internal static readonly List<Buff> FractalInstabilities =
+    [
+        // Legacy
+        new Buff("Mistlock Instability: Fleeting Precision", MistlockInstabilityFleetingPrecision, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Impaired Immunity", MistlockInstabilityImpairedImmunity, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Losing Control", MistlockInstabilityLosingControl, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Mist Stalker", MistlockInstabilityMistStalker, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Slippery Slope 1", MistlockInstabilitySlipperySlope1, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySlipperySlope),
+        new Buff("Mistlock Instability: Slippery Slope 2", MistlockInstabilitySlipperySlope2, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySlipperySlope),
+        new Buff("Mistlock Instability: Stormy Weather", MistlockInstabilityStormyWeather, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Birds", MistlockInstabilityBirds, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityBirds),
+        new Buff("Mistlock Instability: Tainted Renewal", MistlockInstabilityTaintedRenewal, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Stamina", MistlockInstabilityStamina, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Playing Favorites", MistlockInstabilityPlayingFavorites, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Overextended", MistlockInstabilityOverextended, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Keep Them in Line", MistlockInstabilityKeepTheminLine, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Ill and Chill", MistlockInstabilityIllAndChill, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Frosty", MistlockInstabilityFrosty, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Bloodlust", MistlockInstabilityBloodlust, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Antielitism", MistlockInstabilityAntielitism, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        new Buff("Mistlock Instability: Agonizing Expedition", MistlockInstabilityAgonizingExpedition, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
+        // Current
+        new Buff("Mistlock Instability: Adrenaline Rush", MistlockInstabilityAdrenalineRush, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityAdrenalineRush),
+        new Buff("Mistlock Instability: Afflicted", MistlockInstabilityAfflicted, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityAfflicted),
+        new Buff("Mistlock Instability: Boon Overload", MistlockInstabilityBoonOverload, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityBoonOverload),
+        new Buff("Mistlock Instability: Flux Bomb", MistlockInstabilityFluxBomb, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
+        new Buff("Mistlock Instability: Fractal Vindicators", MistlockInstabilityFractalVindicators, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityFractalVindicator),
+        new Buff("Mistlock Instability: Frailty", MistlockInstabilityFrailty, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityFrailty),
+        new Buff("Mistlock Instability: Hamstrung", MistlockInstabilityHamstrung, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityHamstrung),
+        new Buff("Mistlock Instability: Last Laugh", MistlockInstabilityLastLaugh, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityLastLaugh),
+        new Buff("Mistlock Instability: Mists Convergence", MistlockInstabilityMistsConvergence, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityMistsConvergence),
+        new Buff("Mistlock Instability: No Pain, No Gain", MistlockInstabilityNoPainNoGain, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityNoPainNoGain),
+        new Buff("Mistlock Instability: Outflanked", MistlockInstabilityOutflanked, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityOutflanked),
+        new Buff("Mistlock Instability: Social Awkwardness", MistlockInstabilitySocialAwkwardness, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySocialAwkwardness),
+        new Buff("Mistlock Instability: Stick Together", MistlockInstabilityStickTogether, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityStickTogether),
+        new Buff("Mistlock Instability: Sugar Rush", MistlockInstabilitySugarRush, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilitySugarRush),
+        new Buff("Mistlock Instability: Toxic Trail", MistlockInstabilityToxicTrail, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityToxicTrail),
+        new Buff("Mistlock Instability: Vengeance", MistlockInstabilityVengeance, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityVengeance),
+        new Buff("Mistlock Instability: We Bleed Fire", MistlockInstabilityWeBleedFire, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityWeBleedFire),
+        new Buff("Mistlock Instability: Toxic Sickness", MistlockInstabilityToxicSickness, Source.FractalInstability, BuffClassification.Other, BuffImages.InstabilityToxicSickness),
+        // Related buffs
+        new Buff("Flux Bomb Target", FluxBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
+    ];
 
-        internal static readonly List<Buff> FightSpecific = new List<Buff>
-        {
+    internal static readonly List<Buff> FightSpecific =
+        [
             // Generic
             new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, BuffImages.Emboldened),
             new Buff("Spectral Agony", SpectralAgony, Source.FightSpecific,BuffStackType.Stacking, 25, BuffClassification.Debuff, BuffImages.SpectralAgony),
@@ -669,7 +668,6 @@ namespace GW2EIEvtcParser.EIData
             new Buff("Achievement Eligibility: The Floor Is Void", AchievementEligibilityTheFloorIsVoid, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: True Ending", AchievementEligibilityTrueEnding, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             new Buff("Achievement Eligibility: Untarnished Spirits", AchievementEligibilityUntarnishedSpirits, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
-        };
+        ];
 
-    }
 }

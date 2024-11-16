@@ -1,19 +1,14 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.IconDecoration;
+﻿using static GW2EIEvtcParser.EIData.IconDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class IconDecorationMetadataDescription : GenericIconDecorationMetadataDescription
 {
-    internal class IconDecorationMetadataDescription : GenericIconDecorationMetadataDescription
+    public readonly float Opacity;
+
+    internal IconDecorationMetadataDescription(IconDecorationMetadata decoration) : base(decoration)
     {
-        public float Opacity { get; }
-
-        internal IconDecorationMetadataDescription(IconDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "IconDecoration";
-            Opacity = decoration.Opacity;
-        }
+        Type = "IconDecoration";
+        Opacity = decoration.Opacity;
     }
-
 }

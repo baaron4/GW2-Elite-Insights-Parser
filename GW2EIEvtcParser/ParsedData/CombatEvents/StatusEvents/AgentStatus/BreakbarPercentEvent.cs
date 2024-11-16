@@ -1,31 +1,23 @@
-﻿using System;
-using GW2EIEvtcParser.Interfaces;
+﻿using GW2EIEvtcParser.Interfaces;
 
-namespace GW2EIEvtcParser.ParsedData
+namespace GW2EIEvtcParser.ParsedData;
+
+public class BreakbarPercentEvent : AbstractStatusEvent, IStateable
 {
-    public class BreakbarPercentEvent : AbstractStatusEvent, IStateable
+    public readonly double BreakbarPercent;
+
+    internal BreakbarPercentEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
-        public double BreakbarPercent { get; }
-
-        internal BreakbarPercentEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
+        // 4 bytes
+        BreakbarPercent = Math.Round(100.0 * BitConverter.Int32BitsToSingle(evtcItem.Value), 2);
+        if (BreakbarPercent > 100.0)
         {
-            byte[] bytes = new byte[sizeof(float)];
-            int offset = 0;
-            // 4 bytes
-            foreach (byte bt in BitConverter.GetBytes(evtcItem.Value))
-            {
-                bytes[offset++] = bt;
-            }
-            BreakbarPercent = Math.Round(100.0 * BitConverter.ToSingle(bytes, 0), 2);
-            if (BreakbarPercent > 100.0)
-            {
-                BreakbarPercent = 100;
-            }
+            BreakbarPercent = 100;
         }
+    }
 
-        public (long start, double value) ToState()
-        {
-            return (Time, BreakbarPercent);
-        }
+    public (long start, double value) ToState()
+    {
+        return (Time, BreakbarPercent);
     }
 }

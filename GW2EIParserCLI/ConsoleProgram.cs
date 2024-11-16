@@ -1,80 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
+using Tracing;
 
-namespace GW2EIParser
+namespace GW2EIParser;
+
+static class ConsoleProgram
 {
-    internal class ConsoleProgram
+
+    /// <returns>0 on success, other value on error</returns>
+    public static int ParseAll(List<string> logFiles, ProgramHelper programHelper)
     {
-
-        public ConsoleProgram(IEnumerable<string> logFiles, ProgramHelper programHelper)
+        using var _t = new AutoTrace("ParseAll");
+        if (programHelper.ParseMultipleLogs())
         {
-            if (programHelper.ParseMultipleLogs())
+            var state = new ThreadingState()
             {
-                var splitLogFiles = new List<List<string>>();
-                var sizeSortedLogFiles = new List<string>(logFiles);
-                for (int i = 0; i < programHelper.GetMaxParallelRunning(); i++)
-                {
-                    splitLogFiles.Add(new List<string>());
-                }
-                sizeSortedLogFiles.Sort((x, y) =>
-                {
-                    var fInfoX = new FileInfo(x);
-                    long xValue = fInfoX.Exists ? fInfoX.Length : 0;
-                    var fInfoY = new FileInfo(y);
-                    long yValue = fInfoY.Exists ? fInfoY.Length : 0;
-                    return xValue.CompareTo(yValue);
-                });
-                int index = 0;
-                foreach (string file in sizeSortedLogFiles)
-                {
-                    splitLogFiles[index].Add(file);
-                    index = (index + 1) % programHelper.GetMaxParallelRunning();
-                }
-                Parallel.ForEach(splitLogFiles, files =>
-                {
-                    foreach (string file in files)
-                    {
-                        ParseLog(file, programHelper);
-                    }
-                });
+                ProgramHelper = programHelper,
+                NoMoreFiles = false,
+                FileQueue = new(),
+            };
+
+            var parallelism = programHelper.GetMaxParallelRunning();
+            for(int i = 0; i < parallelism - 1; i++)
+            {
+                var t = new Thread(EnterParsetThread);
+                t.Start(state);
             }
-            else
+
+            foreach(var file in logFiles)
             {
-                foreach (string file in logFiles)
-                {
-                    ParseLog(file, programHelper);
-                }
+                state.FileQueue.Enqueue(file);
+            }
+
+            state.NoMoreFiles = true;
+            EnterParsetThread(state); // we take the last thread
+        }
+        else
+        {
+            foreach (string file in logFiles)
+            {
+                ParseLog(file, programHelper);
             }
         }
 
-        private static void ParseLog(string logFile, ProgramHelper programHelper)
+        return 0;
+    }
+
+    public class ThreadingState
+    {
+        public ProgramHelper ProgramHelper;
+        public volatile bool NoMoreFiles;
+        public ConcurrentQueue<string> FileQueue;
+    }
+
+    static void EnterParsetThread(object state_)
+    {
+        var state = (ThreadingState)state_;
+        while (true)
         {
-            programHelper.ExecuteMemoryCheckTask();
-            var operation = new ConsoleOperationController(logFile);
-            try
-            {
-                programHelper.DoWork(operation);
-                operation.FinalizeStatus("Parsing Successful - ");
+            string logFile;
+            while(!state.FileQueue.TryDequeue(out logFile)) {
+                if(state.NoMoreFiles && state.FileQueue.IsEmpty) { return; }
+                //NOTE(Rennorb): Don't even bother with synchronizing. Just wait a bit.
+                Thread.Sleep(10);
             }
-            catch (ProgramException ex)
-            {
-                operation.UpdateProgress("Program: " + ex.InnerException.Message);
-                operation.FinalizeStatus("Parsing Failure - ");
-            }
-            catch (Exception)
-            {
-                operation.UpdateProgress("Program: something terrible has happened");
-                operation.FinalizeStatus("Parsing Failure - ");
-            }
-            finally
-            {
-                programHelper.GenerateTraceFile(operation);
-            }
-            GC.Collect();
+
+            if(string.IsNullOrWhiteSpace(logFile)) { Debugger.Break(); }
+
+            ParseLog(logFile, state.ProgramHelper);
         }
+    }
+
+    private static void ParseLog(string logFile, ProgramHelper programHelper)
+    {
+        using var _t = new AutoTrace("Parse One");
+        programHelper.ExecuteMemoryCheckTask();
+        var operation = new ConsoleOperationController(logFile);
+        try
+        {
+            programHelper.DoWork(operation);
+            operation.FinalizeStatus("Parsing Successful - ");
+        }
+        catch (ProgramException ex)
+        {
+            operation.UpdateProgress("Program: " + ex.InnerException.Message);
+            operation.FinalizeStatus("Parsing Failure - ");
+        }
+        catch (Exception)
+        {
+            operation.UpdateProgress("Program: something terrible has happened");
+            operation.FinalizeStatus("Parsing Failure - ");
+        }
+        finally
+        {
+            programHelper.GenerateTraceFile(operation);
+        }
+        GC.Collect();
     }
 }
