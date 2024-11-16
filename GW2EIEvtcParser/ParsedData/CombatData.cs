@@ -1204,6 +1204,7 @@ public class CombatData
             return false;
         }
 
+        effects.SortByTime();
         groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
 
         return true;
@@ -1222,14 +1223,13 @@ public class CombatData
             return false;
         }
 
-        groupedEffectEvents = EpsilonWindowOverTime(effects.ToList(), epsilon);
+        groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
 
         return true;
     }
 
-    static List<List<EffectEvent>> EpsilonWindowOverTime(List<EffectEvent> effects, long epsilon)
+    static List<List<EffectEvent>> EpsilonWindowOverTime(IReadOnlyList<EffectEvent> effects, long epsilon)
     {
-        effects.SortByTime();
         //NOTE(Rennorb): Has entries due to invariant on TryGetEffectEventsBySrcWithGUID
         var startTime = effects[0].Time;
         var endTime = effects[^1].Time;

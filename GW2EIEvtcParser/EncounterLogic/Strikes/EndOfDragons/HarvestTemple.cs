@@ -21,8 +21,8 @@ internal class HarvestTemple : EndOfDragonsStrike
     {
         MechanicList.AddRange([
             // General
-            new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleSpreadNM, EffectGUIDs.HarvestTempleSpreadCM], "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
-            new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleRedPuddleSelectNM, EffectGUIDs.HarvestTempleRedPuddleSelectCM], "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
+            new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleTargetedExpulsionSpreadNM, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadCM], "Spread Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Yellow), "Spread.B", "Baited spread mechanic", "Spread Bait", 150),
+            new PlayerDstEffectMechanic([EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionNM, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionCM], "Red Bait", new MechanicPlotlySetting(Symbols.Circle, Colors.Red), "Red.B", "Baited red puddle mechanic", "Red Bait", 150),
             new PlayerDstBuffApplyMechanic(InfluenceOfTheVoidBuff, "Influence of the Void", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.DarkPurple), "Void.D", "Received Void debuff", "Void Debuff", 150),
             new PlayerDstHitMechanic(InfluenceOfTheVoidSkill, "Influence of the Void Hit", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.DarkPurple), "Void.H", "Hit by Void", "Void Hit", 150),
             new PlayerDstHitMechanic([VoidPoolNM, VoidPoolCM], "Void Pool", new MechanicPlotlySetting(Symbols.Circle, Colors.DarkPurple), "Red.H", "Hit by Red Void Pool", "Void Pool", 150),
@@ -696,11 +696,11 @@ internal class HarvestTemple : EndOfDragonsStrike
         {
             AddResultShareTheVoidDecoration(failedGreenEffects, false);
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleCM, out var redPuddleEffectsCM))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPoolRedPuddleAoECM, out var redPuddleEffectsCM))
         {
             AddPlacedVoidPoolDecoration(log, redPuddleEffectsCM, 400, 240000);
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleRedPuddleNM, out var redPuddleEffectsNM))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleVoidPoolRedPuddleAoENM, out var redPuddleEffectsNM))
         {
             AddPlacedVoidPoolDecoration(log, redPuddleEffectsNM, 300, 24000);
         }
@@ -1698,19 +1698,19 @@ internal class HarvestTemple : EndOfDragonsStrike
     internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleSpreadCM, out var spreadEffectsCM))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadCM, out var spreadEffectsCM))
         {
             AddSpreadSelectionDecoration(p, log, replay, spreadEffectsCM, 300);
         }
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleSpreadNM, out var spreadEffectsNM))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleTargetedExpulsionSpreadNM, out var spreadEffectsNM))
         {
             AddSpreadSelectionDecoration(p, log, replay, spreadEffectsNM, 240);
         }
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleRedPuddleSelectCM, out var redSelectedEffectsCM))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionCM, out var redSelectedEffectsCM))
         {
             AddVoidPoolSelectionDecoration(p, log, replay, redSelectedEffectsCM, 400);
         }
-        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleRedPuddleSelectNM, out var redSelectedEffectsNM))
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.HarvestTempleVoidPoolRedPuddleSelectionNM, out var redSelectedEffectsNM))
         {
             AddVoidPoolSelectionDecoration(p, log, replay, redSelectedEffectsNM, 300);
         }

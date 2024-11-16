@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.EIData;
+
+namespace GW2EIEvtcParser.ParsedData;
 
 public abstract class EffectEvent : AbstractEffectEvent
 {

@@ -68,7 +68,7 @@ public class ProgramHelper
 
     public static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
-    private CancellationTokenSource RunningMemoryCheck = null;
+    private CancellationTokenSource? RunningMemoryCheck = null;
 
     public int GetMaxParallelRunning()
     {
@@ -151,9 +151,12 @@ public class ProgramHelper
         //
         builder.WithTitle(log.FightData.FightName);
         //builder.WithTimestamp(DateTime.Now);
-        AgentItem pov = log.LogData.PoV;
-        AbstractSingleActor povActor = log.FindActor(pov);
-        builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon());
+        AgentItem? pov = log.LogData.PoV;
+        if (pov != null)
+        {
+            AbstractSingleActor povActor = log.FindActor(pov);
+            builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon());
+        }
         builder.WithColor(log.FightData.Success ? Discord.Color.Green : Discord.Color.Red);
         if (dpsReportPermalink.Length > 0)
         {
@@ -299,13 +302,13 @@ public class ProgramHelper
                                         APIController);
 
             //Process evtc here
-            ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out ParsingFailureReason failureReason, !Settings.SingleThreaded && HasFormat());
+            ParsedEvtcLog? log = parser.ParseLog(operation, fInfo, out var failureReason, !Settings.SingleThreaded && HasFormat());
             if (failureReason != null)
             {
                 failureReason.Throw();
             }
-            operation.BasicMetaData = new OperationController.OperationBasicMetaData(log);
-            string[] uploadStrings = UploadOperation(fInfo, log, operation);
+            operation.BasicMetaData = new OperationController.OperationBasicMetaData(log!);
+            string[] uploadStrings = UploadOperation(fInfo, log!, operation);
             if (Settings.SendEmbedToWebhook && Settings.UploadToDPSReports)
             {
                 if (Settings.SendSimpleMessageToWebhook)
@@ -315,7 +318,7 @@ public class ProgramHelper
                 }
                 else
                 {
-                    WebhookController.SendMessage(Settings.WebhookURL, BuildEmbed(log, uploadStrings[0]), out string message);
+                    WebhookController.SendMessage(Settings.WebhookURL, BuildEmbed(log!, uploadStrings[0]), out string message);
                     operation.UpdateProgressWithCancellationCheck("Webhook: " + message);
                 }
             }
@@ -324,7 +327,7 @@ public class ProgramHelper
                 operation.DPSReportLink = uploadStrings[0];
             }
             //Creating File
-            GenerateFiles(log, operation, uploadStrings, fInfo);
+            GenerateFiles(log!, operation, uploadStrings, fInfo);
         }
         catch (Exception ex)
         {
@@ -418,7 +421,7 @@ public class ProgramHelper
 
         string result = log.FightData.Success ? "kill" : "fail";
         string encounterLengthTerm = Settings.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
-        string PoVClassTerm = Settings.AddPoVProf ? "_" + log.LogData.PoV.Spec.ToString().ToLower() : "";
+        string PoVClassTerm = Settings.AddPoVProf && log.LogData.PoV != null ? "_" + log.LogData.PoV.Spec.ToString().ToLower() : "";
         string fName = Path.GetFileNameWithoutExtension(fInfo.FullName);
         fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 

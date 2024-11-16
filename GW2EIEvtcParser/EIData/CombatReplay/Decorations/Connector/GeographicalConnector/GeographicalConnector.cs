@@ -7,11 +7,11 @@ public abstract class GeographicalConnector : Connector
     private Vector3? Offset;
 
     private bool OffsetAfterRotation;
+    private bool _invertYOffset = false;
     public abstract class GeographicalConnectorDescriptor
     {
         public readonly IReadOnlyList<float>? Offset;
         public readonly bool OffsetAfterRotation;
-        private bool _invertYOffset = false;
 
         public GeographicalConnectorDescriptor(GeographicalConnector connector, CombatReplayMap map)
         {
@@ -20,7 +20,7 @@ public abstract class GeographicalConnector : Connector
                 OffsetAfterRotation = connector.OffsetAfterRotation;
                 Offset = [
                     connector.Offset.Value.X,
-                    connector._invertYOffset ? -connector.Offset.Y : connector.Offset.Y,
+                    connector._invertYOffset ? -connector.Offset.Value.Y : connector.Offset.Value.Y,
                 ];
             }
         }

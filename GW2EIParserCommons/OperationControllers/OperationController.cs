@@ -41,7 +41,7 @@ public abstract class OperationController : ParserController
     /// <summary>
     /// Location of the output
     /// </summary>
-    public string OutLocation { get; internal set; }
+    public string? OutLocation { get; internal set; }
 
     private readonly List<string> _GeneratedFiles;
     /// <summary>
@@ -57,9 +57,9 @@ public abstract class OperationController : ParserController
     /// <summary>
     /// Link to dps.report
     /// </summary>
-    public string DPSReportLink { get; internal set; }
+    public string? DPSReportLink { get; internal set; }
 
-    public OperationBasicMetaData BasicMetaData { get; set; }
+    public OperationBasicMetaData? BasicMetaData { get; set; }
 
     /// <summary>
     /// Time elapsed parsing

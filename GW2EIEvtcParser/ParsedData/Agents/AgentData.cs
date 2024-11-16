@@ -87,7 +87,7 @@ public class AgentData
         {
             return list;
         }
-        return [ ];
+        return [];
     }
     public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(int id, ulong agent)
     {
@@ -223,31 +223,30 @@ public class AgentData
             return new List<AgentItem>();
         }
 
+    }
 
+    public delegate long AgentGroupingTimeFetchet(AgentItem agentItem);
 
-        public delegate long AgentGroupingTimeFetchet(AgentItem agentItem);
-
-        public static IEnumerable<IEnumerable<AgentItem>> GetGroupedAgentsByTimeCondition(IEnumerable<AgentItem> agents, AgentGroupingTimeFetchet timeFetcher, long epsilon = ParserHelper.ServerDelayConstant)
+    public static IEnumerable<IEnumerable<AgentItem>> GetGroupedAgentsByTimeCondition(IEnumerable<AgentItem> agents, AgentGroupingTimeFetchet timeFetcher, long epsilon = ParserHelper.ServerDelayConstant)
+    {
+        var groupedAgents = new List<List<AgentItem>>();
+        var processedTimes = new HashSet<long>();
+        foreach (var agent in agents)
         {
-            var groupedAgents = new List<List<AgentItem>>();
-            var processedTimes = new HashSet<long>();
-            foreach (var agent in agents)
+            long time = timeFetcher(agent);
+            if (processedTimes.Contains(time))
             {
-                long time = timeFetcher(agent);
-                if (processedTimes.Contains(time))
-                {
-                    continue;
-                }
-                var group = agents.Where(otherAgent => timeFetcher(otherAgent) >= time && timeFetcher(otherAgent) < time + epsilon).ToList();
-                foreach (var groupedAgent in group)
-                {
-                    processedTimes.Add(timeFetcher(groupedAgent));
-                }
-
-                groupedAgents.Add(group);
+                continue;
             }
-            return groupedAgents;
+            var group = agents.Where(otherAgent => timeFetcher(otherAgent) >= time && timeFetcher(otherAgent) < time + epsilon).ToList();
+            foreach (var groupedAgent in group)
+            {
+                processedTimes.Add(timeFetcher(groupedAgent));
+            }
+
+            groupedAgents.Add(group);
         }
+        return groupedAgents;
     }
 
     internal void SwapMasters(HashSet<AgentItem> froms, AgentItem to)
