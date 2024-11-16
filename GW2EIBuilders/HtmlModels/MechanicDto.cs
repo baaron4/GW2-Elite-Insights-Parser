@@ -15,7 +15,7 @@ internal class MechanicDto
     public bool PlayerMech { get; set; }
     public bool IsAchievementEligibility { get; set; }
 
-    private static List<(int, int)> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
+    private static List<(int, int)> GetMechanicData(IReadOnlyCollection<Mechanic> presMech, ParsedEvtcLog log, SingleActor actor, PhaseData phase)
     {
         var res = new List<(int, int)>(presMech.Count);
 
@@ -74,7 +74,7 @@ internal class MechanicDto
     public static List<List<(int, int)>> BuildPlayerMechanicData(ParsedEvtcLog log, PhaseData phase)
     {
         var list = new List<List<(int, int)>>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(GetMechanicData(log.MechanicData.GetPresentFriendlyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, actor, phase));
         }
@@ -85,7 +85,7 @@ internal class MechanicDto
     {
         var enemies = log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd);
         var list = new List<List<(int, int)>>(enemies.Count);
-        foreach (AbstractSingleActor enemy in enemies)
+        foreach (SingleActor enemy in enemies)
         {
             list.Add(GetMechanicData(log.MechanicData.GetPresentEnemyMechs(log, log.FightData.FightStart, log.FightData.FightEnd), log, enemy, phase));
         }

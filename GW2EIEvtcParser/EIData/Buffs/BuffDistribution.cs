@@ -79,9 +79,9 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
         return _distribution.ContainsKey(buffID) && _distribution[buffID].ContainsKey(src);
     }
 
-    public List<AbstractSingleActor> GetSrcs(long buffID, ParsedEvtcLog log)
+    public List<SingleActor> GetSrcs(long buffID, ParsedEvtcLog log)
     {
-        var actors = new List<AbstractSingleActor>();
+        var actors = new List<SingleActor>();
         if (!_distribution.ContainsKey(buffID))
         {
             return actors;

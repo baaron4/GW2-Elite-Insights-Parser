@@ -89,7 +89,7 @@ internal class Golem : FightLogic
             new BuffGainCastFinder(MushroomKingsBlessing, POV_MushroomKingsBlessingBuff).UsingICD(500),
         ];
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
         foreach (CombatItem c in combatData)
@@ -103,7 +103,7 @@ internal class Golem : FightLogic
         ComputeFightTargets(agentData, combatData, extensions);
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 #if DEBUG_EFFECTS
@@ -114,7 +114,7 @@ internal class Golem : FightLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
         phases[0].Name = "Final Number";
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
@@ -186,7 +186,7 @@ internal class Golem : FightLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
         long fightEndLogTime = fightData.FightEnd;
         bool success = false;
         DeadEvent deadEvt = combatData.GetDeadEvents(mainTarget.AgentItem).LastOrDefault();
@@ -200,7 +200,7 @@ internal class Golem : FightLogic
             IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
-                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
+                HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
                 success = hpUpdates.Last().HealthPercent < 2.00;
                 if (success && lastDamageTaken != null)
                 {

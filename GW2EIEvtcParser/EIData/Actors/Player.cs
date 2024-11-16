@@ -6,7 +6,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class Player : AbstractPlayer
+public class Player : PlayerActor
 {
 
     private List<GenericSegment<GUID>>? CommanderStates = null;

@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class EvtcVersionEvent : AbstractMetaDataEvent
+public class EvtcVersionEvent : MetaDataEvent
 {
     public readonly int Build;
     public readonly int Revision = -1;

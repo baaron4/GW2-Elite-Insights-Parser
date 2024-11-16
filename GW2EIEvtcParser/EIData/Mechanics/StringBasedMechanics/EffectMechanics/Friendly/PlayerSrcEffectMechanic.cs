@@ -14,7 +14,7 @@ internal class PlayerSrcEffectMechanic : SrcEffectMechanic
     {
     }
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
         PlayerChecker(log, mechanicLogs);
     }

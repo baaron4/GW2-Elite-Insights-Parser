@@ -54,7 +54,7 @@ internal class PlayerDto : ActorDto
 
     }
 
-    public PlayerDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details) : base(actor, log, details)
+    public PlayerDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details) : base(actor, log, details)
     {
         Group = actor.Group;
         Acc = actor.Account;
@@ -84,7 +84,7 @@ internal class PlayerDto : ActorDto
         }
     }
 
-    private void BuildWeaponSets(AbstractSingleActor actor, ParsedEvtcLog log)
+    private void BuildWeaponSets(SingleActor actor, ParsedEvtcLog log)
     {
         WeaponSets weps = actor.GetWeaponSets(log);
         BuildWeaponSets(weps.LandSet1, L1Set);

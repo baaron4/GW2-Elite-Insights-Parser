@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData;
 internal static class CombatEventFactory
 {
 
-    public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<AbstractBuffEvent> buffEvents, EvtcVersionEvent evtcVersion)
+    public static void AddStateChangeEvent(CombatItem stateChangeEvent, AgentData agentData, SkillData skillData, MetaEventsContainer metaDataEvents, StatusEventsContainer statusEvents, List<RewardEvent> rewardEvents, List<WeaponSwapEvent> wepSwaps, List<BuffEvent> buffEvents, EvtcVersionEvent evtcVersion)
     {
         switch (stateChangeEvent.IsStateChange)
         {
@@ -377,7 +377,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddBuffApplyEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
+    public static void AddBuffApplyEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData, EvtcVersionEvent evtcVersion)
     {
         if (buffEvent.IsOffcycle > 0)
         {
@@ -389,7 +389,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddBuffRemoveEvent(CombatItem buffEvent, List<AbstractBuffEvent> buffEvents, AgentData agentData, SkillData skillData)
+    public static void AddBuffRemoveEvent(CombatItem buffEvent, List<BuffEvent> buffEvents, AgentData agentData, SkillData skillData)
     {
         switch (buffEvent.IsBuffRemove)
         {
@@ -469,7 +469,7 @@ internal static class CombatEventFactory
         return res;
     }
 
-    public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
+    public static void AddDirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
     {
         PhysicalResult result = GetPhysicalResult(damageEvent.Result);
         switch (result)
@@ -489,7 +489,7 @@ internal static class CombatEventFactory
         }
     }
 
-    public static void AddIndirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, AgentData agentData, SkillData skillData)
+    public static void AddIndirectDamageEvent(CombatItem damageEvent, List<HealthDamageEvent> hpDamage, AgentData agentData, SkillData skillData)
     {
         ConditionResult result = GetConditionResult(damageEvent.Result);
         switch (result)

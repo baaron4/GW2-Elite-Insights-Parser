@@ -14,11 +14,11 @@ public class ParsedEvtcLog
     public readonly SkillData SkillData;
     public readonly CombatData CombatData;
     public readonly IReadOnlyList<Player> PlayerList;
-    public readonly IReadOnlyList<AbstractSingleActor> Friendlies;
+    public readonly IReadOnlyList<SingleActor> Friendlies;
     public readonly IReadOnlyCollection<AgentItem> PlayerAgents;
     public readonly IReadOnlyCollection<AgentItem> FriendlyAgents;
     public bool IsBenchmarkMode => FightData.Logic.ParseMode == FightLogic.ParseModeEnum.Benchmark;
-    public readonly IReadOnlyDictionary<ParserHelper.Spec, List<AbstractSingleActor>> FriendliesListBySpec;
+    public readonly IReadOnlyDictionary<ParserHelper.Spec, List<SingleActor>> FriendliesListBySpec;
     public readonly DamageModifiersContainer DamageModifiers;
     public readonly BuffsContainer Buffs;
     public readonly EvtcParserSettings ParserSettings;
@@ -29,10 +29,10 @@ public class ParsedEvtcLog
 
     private readonly ParserController _operation;
 
-    private Dictionary<AgentItem, AbstractSingleActor>? _agentToActorDictionary;
+    private Dictionary<AgentItem, SingleActor>? _agentToActorDictionary;
 
     internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
-            IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
+            IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
     {
         FightData = fightData;
         AgentData = agentData;
@@ -85,7 +85,7 @@ public class ParsedEvtcLog
             }
         }
         //
-        var friendlies = new List<AbstractSingleActor>();
+        var friendlies = new List<SingleActor>();
         friendlies.AddRange(PlayerList);
         friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
         Friendlies = friendlies;
@@ -120,7 +120,7 @@ public class ParsedEvtcLog
         _operation.UpdateProgressWithCancellationCheck(status);
     }
 
-    private void AddToDictionary(AbstractSingleActor actor)
+    private void AddToDictionary(SingleActor actor)
     {
         _agentToActorDictionary![actor.AgentItem] = actor;
         /*foreach (Minions minions in actor.GetMinions(this).Values)
@@ -138,11 +138,11 @@ public class ParsedEvtcLog
         {
             _operation.UpdateProgressWithCancellationCheck("Parsing: Initializing Actor dictionary");
             _agentToActorDictionary = [];
-            foreach (AbstractSingleActor p in Friendlies)
+            foreach (SingleActor p in Friendlies)
             {
                 AddToDictionary(p);
             }
-            foreach (AbstractSingleActor npc in FightData.Logic.Hostiles)
+            foreach (SingleActor npc in FightData.Logic.Hostiles)
             {
                 AddToDictionary(npc);
             }
@@ -152,12 +152,12 @@ public class ParsedEvtcLog
     /// <summary>
     /// Find the corresponding actor, creates one otherwise
     /// </summary>
-    /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="AbstractSingleActor"/> for</param>
+    /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="SingleActor"/> for</param>
     /// <returns></returns>
-    public AbstractSingleActor FindActor(AgentItem agentItem)
+    public SingleActor FindActor(AgentItem agentItem)
     {
         InitActorDictionaries();
-        if (!_agentToActorDictionary!.TryGetValue(agentItem, out AbstractSingleActor actor))
+        if (!_agentToActorDictionary!.TryGetValue(agentItem, out SingleActor actor))
         {
             if (agentItem.Type == AgentItem.AgentType.Player)
             {
@@ -181,10 +181,10 @@ public class ParsedEvtcLog
     /// <summary>
     /// Find the corresponding actor, creates one otherwise
     /// </summary>
-    /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="AbstractSingleActor"/> for</param>
+    /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="SingleActor"/> for</param>
     /// <param name="excludePlayers">returns null if true and agentItem is a player or has a player master</param>
     /// <returns></returns>
-    public AbstractSingleActor? FindActor(AgentItem agentItem, bool excludePlayers)
+    public SingleActor? FindActor(AgentItem agentItem, bool excludePlayers)
     {
         if (excludePlayers && agentItem.GetFinalMaster().Type == AgentItem.AgentType.Player)
         {
@@ -194,14 +194,14 @@ public class ParsedEvtcLog
     }
 
 
-    public (List<AbstractSingleActorCombatReplayDescription>,List<AbstractCombatReplayRenderingDescription>, List<AbstractCombatReplayDecorationMetadataDescription>) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public (List<SingleActorCombatReplayDescription>,List<CombatReplayRenderingDescription>, List<CombatReplayDecorationMetadataDescription>) GetCombatReplayDescriptions(Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var map = FightData.Logic.GetCombatReplayMap(this);
-        var actors = new List<AbstractSingleActorCombatReplayDescription>();
-        var decorationRenderings = new List<AbstractCombatReplayRenderingDescription>();
-        var decorationMetadata = new List<AbstractCombatReplayDecorationMetadataDescription>();
-        var fromNonFriendliesSet = new HashSet<AbstractSingleActor>(FightData.Logic.Hostiles);
-        foreach (AbstractSingleActor actor in Friendlies)
+        var actors = new List<SingleActorCombatReplayDescription>();
+        var decorationRenderings = new List<CombatReplayRenderingDescription>();
+        var decorationMetadata = new List<CombatReplayDecorationMetadataDescription>();
+        var fromNonFriendliesSet = new HashSet<SingleActor>(FightData.Logic.Hostiles);
+        foreach (SingleActor actor in Friendlies)
         {
             if (actor.IsFakeActor || !actor.HasCombatReplayPositions(this))
             {
@@ -221,7 +221,7 @@ public class ParsedEvtcLog
                 }
             }
         }
-        foreach (AbstractSingleActor actor in fromNonFriendliesSet.ToList())
+        foreach (SingleActor actor in fromNonFriendliesSet.ToList())
         {
             if ((actor.LastAware - actor.FirstAware < 200) || !actor.HasCombatReplayPositions(this))
             {

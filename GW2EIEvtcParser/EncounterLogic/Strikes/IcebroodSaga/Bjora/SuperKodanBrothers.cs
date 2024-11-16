@@ -73,11 +73,11 @@ internal class SuperKodanBrothers : Bjora
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int voiceAndClawCount = 1;
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw))
             {
@@ -89,8 +89,8 @@ internal class SuperKodanBrothers : Bjora
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor voice = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ClawOfTheFallen));
-        AbstractSingleActor claw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceOfTheFallen));
+        SingleActor voice = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ClawOfTheFallen));
+        SingleActor claw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceOfTheFallen));
         if (voice == null || claw == null)
         {
             throw new MissingKeyActorsException("Claw or Voice not found");
@@ -114,7 +114,7 @@ internal class SuperKodanBrothers : Bjora
         phases.AddRange(unmergedPhases);
         //
         int voiceAndClawCount = 0;
-        foreach (AbstractSingleActor voiceAndClaw in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)))
+        foreach (SingleActor voiceAndClaw in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)))
         {
             EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
             long phaseStart = 0;
@@ -140,10 +140,10 @@ internal class SuperKodanBrothers : Bjora
         var teleports = voice.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == KodanTeleport).ToList();
         long tpCount = 0;
         long preTPPhaseStart = 0;
-        foreach (AbstractCastEvent teleport in teleports)
+        foreach (CastEvent teleport in teleports)
         {
             long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightEnd);
-            AbstractSingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
+            SingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
             if (voiceAndClaw != null)
             {
                 long oldEnd = preTPPhaseEnd;
@@ -175,7 +175,7 @@ internal class SuperKodanBrothers : Bjora
         }
 
         //
-        AbstractBuffEvent enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
         if (enrage != null)
         {
             var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");

@@ -14,7 +14,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonActorBuilder
 {
 
-    public static void FillJsonActor(JsonActor jsonActor, AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static void FillJsonActor(JsonActor jsonActor, SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         //
@@ -103,7 +103,7 @@ internal static class JsonActorBuilder
         }
     }
 
-    private static List<JsonDamageDist>[] BuildDamageDistData(AbstractSingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static List<JsonDamageDist>[] BuildDamageDistData(SingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var res = new List<JsonDamageDist>[phases.Count];
         for (int i = 0; i < phases.Count; i++)
@@ -120,7 +120,7 @@ internal static class JsonActorBuilder
         return res;
     }
 
-    private static List<JsonDamageDist>[] BuildDamageTakenDistData(AbstractSingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static List<JsonDamageDist>[] BuildDamageTakenDistData(SingleActor actor, IReadOnlyList<PhaseData> phases, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var res = new List<JsonDamageDist>[phases.Count];
         for (int i = 0; i < phases.Count; i++)

@@ -14,7 +14,7 @@ internal class EXTHealingStatsHealingDistributionDto
     public long TotalCasting { get; set; }
     public List<object[]>? Distribution { get; set; }
 
-    private static object[] GetHealingToItem(SkillItem skill, IEnumerable<EXTAbstractHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<AbstractCastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+    private static object[] GetHealingToItem(SkillItem skill, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
     {
         int totalhealing = 0,
             totaldownedhealing = 0,
@@ -22,7 +22,7 @@ internal class EXTHealingStatsHealingDistributionDto
                 maxhealing = int.MinValue,
                 hits = 0;
         bool isIndirectHealing = false;
-        foreach (EXTAbstractHealingEvent dl in healingLogs)
+        foreach (EXTHealingEvent dl in healingLogs)
         {
             isIndirectHealing = isIndirectHealing || dl is EXTNonDirectHealingEvent;
             int curdmg = dl.HealingDone;
@@ -60,7 +60,7 @@ internal class EXTHealingStatsHealingDistributionDto
             }
         }
 
-        IEnumerable<AbstractCastEvent>? clList = null;
+        IEnumerable<CastEvent>? clList = null;
         if (castLogsBySkill != null && castLogsBySkill.Remove(skill, out clList))
         {
             isIndirectHealing = false;
@@ -93,7 +93,7 @@ internal class EXTHealingStatsHealingDistributionDto
         return skillItem;
     }
 
-    public static EXTHealingStatsHealingDistributionDto BuildIncomingHealingDistData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static EXTHealingStatsHealingDistributionDto BuildIncomingHealingDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         EXTFinalIncomingHealingStat incomingHealingStats = p.EXTHealing.GetIncomingHealStats(null, log, phase.Start, phase.End);
         var dto = new EXTHealingStatsHealingDistributionDto
@@ -111,7 +111,7 @@ internal class EXTHealingStatsHealingDistributionDto
     }
 
 
-    private static List<object[]> BuildHealingDistBodyData(ParsedEvtcLog log, IReadOnlyList<AbstractCastEvent> casting, IReadOnlyList<EXTAbstractHealingEvent> healingLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<object[]> BuildHealingDistBodyData(ParsedEvtcLog log, IReadOnlyList<CastEvent> casting, IReadOnlyList<EXTHealingEvent> healingLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
     {
         var list = new List<object[]>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
@@ -170,7 +170,7 @@ internal class EXTHealingStatsHealingDistributionDto
         return list;
     }
 
-    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, AbstractSingleActor p, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, SingleActor p, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTHealingStatsHealingDistributionDto();
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
@@ -184,13 +184,13 @@ internal class EXTHealingStatsHealingDistributionDto
     }
 
 
-    public static EXTHealingStatsHealingDistributionDto BuildFriendlyHealingDistData(ParsedEvtcLog log, AbstractSingleActor actor, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static EXTHealingStatsHealingDistributionDto BuildFriendlyHealingDistData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         EXTFinalOutgoingHealingStat outgoingHealingStats = actor.EXTHealing.GetOutgoingHealStats(target, log, phase.Start, phase.End);
         return BuildHealingDistDataInternal(log, outgoingHealingStats, actor, target, phase, usedSkills, usedBuffs);
     }
 
-    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, Minions minions, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTHealingStatsHealingDistributionDto();
         var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
@@ -202,7 +202,7 @@ internal class EXTHealingStatsHealingDistributionDto
         return dto;
     }
 
-    public static EXTHealingStatsHealingDistributionDto BuildFriendlyMinionHealingDistData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minions, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static EXTHealingStatsHealingDistributionDto BuildFriendlyMinionHealingDistData(ParsedEvtcLog log, SingleActor actor, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         EXTFinalOutgoingHealingStat outgoingHealingStats = actor.EXTHealing.GetOutgoingHealStats(target, log, phase.Start, phase.End);
 

@@ -10,7 +10,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonRotationBuilder
 {
-    private static JsonSkill BuildJsonSkill(AbstractCastEvent cl)
+    private static JsonSkill BuildJsonSkill(CastEvent cl)
     {
         var jsonSkill = new JsonSkill
         {
@@ -21,7 +21,7 @@ internal static class JsonRotationBuilder
         };
         return jsonSkill;
     }
-    private static JsonRotation BuildJsonRotation(ParsedEvtcLog log, long skillID, List<AbstractCastEvent> skillCasts, Dictionary<long, SkillItem> skillMap)
+    private static JsonRotation BuildJsonRotation(ParsedEvtcLog log, long skillID, List<CastEvent> skillCasts, Dictionary<long, SkillItem> skillMap)
     {
         var jsonRotation = new JsonRotation();
         if (!skillMap.ContainsKey(skillID))
@@ -34,7 +34,7 @@ internal static class JsonRotationBuilder
         return jsonRotation;
     }
 
-    public static IEnumerable<JsonRotation> BuildJsonRotationList(ParsedEvtcLog log, IEnumerable<IGrouping<long, AbstractCastEvent>> skillByID, Dictionary<long, SkillItem> skillMap)
+    public static IEnumerable<JsonRotation> BuildJsonRotationList(ParsedEvtcLog log, IEnumerable<IGrouping<long, CastEvent>> skillByID, Dictionary<long, SkillItem> skillMap)
     {
         return skillByID.Select(group => BuildJsonRotation(log, group.Key, group.ToList(), skillMap));
     }

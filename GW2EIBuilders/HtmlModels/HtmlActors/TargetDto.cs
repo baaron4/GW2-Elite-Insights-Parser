@@ -13,7 +13,7 @@ internal class TargetDto : ActorDto
     public double BarrierLeftPercent { get; set; }
     public int BarrierLeft { get; set; }
 
-    public TargetDto(AbstractSingleActor target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
+    public TargetDto(SingleActor target, ParsedEvtcLog log, ActorDetailsDto details) : base(target, log, details)
     {
         HbHeight = target.HitboxHeight;
         HbWidth = target.HitboxWidth;

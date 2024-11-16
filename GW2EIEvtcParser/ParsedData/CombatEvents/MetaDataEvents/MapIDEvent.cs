@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class MapIDEvent : AbstractMetaDataEvent
+public class MapIDEvent : MetaDataEvent
 {
     public readonly int MapID;
 

@@ -22,7 +22,7 @@ internal static class EXTJsonMinionsHealingStatsBuilder
             TotalHealingDist = totalHealingDist
         };
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-        foreach (AbstractSingleActor friendly in log.Friendlies)
+        foreach (SingleActor friendly in log.Friendlies)
         {
             var totalAllyHealing = new List<int>();
             totalAlliedHealing.Add(totalAllyHealing);

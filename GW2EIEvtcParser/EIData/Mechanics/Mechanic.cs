@@ -79,7 +79,7 @@ public abstract class Mechanic
         _enableConditions = [];
     }
 
-    internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs);
+    internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs);
 
     internal Mechanic UsingShowOnTable(bool showOnTable)
     {

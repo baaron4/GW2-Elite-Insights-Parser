@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class ShardEvent : AbstractMetaDataEvent
+public class ShardEvent : MetaDataEvent
 {
     public readonly int ShardID;
 

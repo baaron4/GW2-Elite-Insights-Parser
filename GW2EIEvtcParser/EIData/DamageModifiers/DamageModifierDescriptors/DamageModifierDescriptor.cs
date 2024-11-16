@@ -69,7 +69,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
         return this;
     }
 
-    protected bool CheckCondition(AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+    protected bool CheckCondition(HealthDamageEvent dl, ParsedEvtcLog log)
     {
         return _dlCheckers.All(checker => checker(dl, log));
     }
@@ -118,13 +118,13 @@ internal abstract class DamageModifierDescriptor : IVersionable
         return false;
     }
 
-    protected abstract bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain);
+    protected abstract bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain);
 
     internal DamageModifierDescriptor UsingApproximate(bool approximate)
     {
         Approximate = approximate;
         return this;
     }
-    internal abstract List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier);
+    internal abstract List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier);
 
 }

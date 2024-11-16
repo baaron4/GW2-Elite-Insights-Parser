@@ -9,7 +9,7 @@ internal static class DamageModifiersUtils
     public enum DamageModifierMode { PvE, PvEInstanceOnly, sPvP, WvW, All, sPvPWvW, PvEWvW, PvEsPvP };
     public enum DamageSource { All, NoPets, NotApplicable };
 
-    internal delegate bool DamageLogChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
+    internal delegate bool DamageLogChecker(HealthDamageEvent dl, ParsedEvtcLog log);
 
     internal static readonly GainComputerByPresence ByPresence = new();
     internal static readonly GainComputerByMultiPresence ByMultiPresence = new();
@@ -17,7 +17,7 @@ internal static class DamageModifiersUtils
     internal static readonly GainComputerByMultiplyingStack ByMultipliyingStack = new();
     internal static readonly GainComputerByAbsence ByAbsence = new();
 
-    internal static double VulnerabilityAdjuster(AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+    internal static double VulnerabilityAdjuster(HealthDamageEvent dl, ParsedEvtcLog log)
     {
         var target = log.FindActor(dl.To);
         if (target.GetBuffGraphs(log).TryGetValue(Vulnerability, out BuffsGraphModel bgm))
@@ -27,7 +27,7 @@ internal static class DamageModifiersUtils
         return 1.0;
     }
 
-    internal static bool VulnerabilityAdditiveChecker(AbstractHealthDamageEvent dl, ParsedEvtcLog log, long buffID, double gainPerStack)
+    internal static bool VulnerabilityAdditiveChecker(HealthDamageEvent dl, ParsedEvtcLog log, long buffID, double gainPerStack)
     {
         var target = log.FindActor(dl.To);
         var buffSegment = target.GetBuffStatus(log, buffID, dl.Time);

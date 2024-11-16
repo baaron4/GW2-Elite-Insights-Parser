@@ -44,7 +44,7 @@ public class FinalActorBuffVolumes
                 {
                     activePlayerCount++;
                 }
-                foreach (AbstractBuffEvent abe in log.CombatData.GetBuffDataByIDByDst(buff.ID, p.AgentItem))
+                foreach (BuffEvent abe in log.CombatData.GetBuffDataByIDByDst(buff.ID, p.AgentItem))
                 {
                     if (abe.Time >= start && abe.Time <= end && abe is AbstractBuffApplyEvent abae)
                     {
@@ -115,7 +115,7 @@ public class FinalActorBuffVolumes
     }
 
 
-    internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForSelf(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
+    internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForSelf(ParsedEvtcLog log, SingleActor actor, long start, long end)
     {
         var buffs = new Dictionary<long, FinalActorBuffVolumes>();
         var activeBuffs = new Dictionary<long, FinalActorBuffVolumes>();
@@ -136,7 +136,7 @@ public class FinalActorBuffVolumes
             double totalActiveIncomingByUnknownExtension = 0;
             double totalActiveOutgoing = 0;
             double totalActiveOutgoingByExtension = 0;
-            foreach (AbstractBuffEvent abe in log.CombatData.GetBuffData(buff.ID))
+            foreach (BuffEvent abe in log.CombatData.GetBuffData(buff.ID))
             {
                 if (abe.Time >= start && abe.Time <= end && abe is AbstractBuffApplyEvent abae)
                 {

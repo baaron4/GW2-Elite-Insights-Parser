@@ -5,7 +5,7 @@ using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.EIData.GenericDecoration;
+using static GW2EIEvtcParser.EIData.Decoration;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -41,15 +41,15 @@ public abstract class FightLogic
     public IReadOnlyCollection<AgentItem> NonPlayerFriendlyAgents { get; protected set; }
     public IReadOnlyCollection<AgentItem> TrashMobAgents { get; protected set; }
     public IReadOnlyList<NPC> TrashMobs => _trashMobs;
-    public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
-    public IReadOnlyList<AbstractSingleActor> Targets => _targets;
-    public IReadOnlyList<AbstractSingleActor> Hostiles => _hostiles;
+    public IReadOnlyList<SingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
+    public IReadOnlyList<SingleActor> Targets => _targets;
+    public IReadOnlyList<SingleActor> Hostiles => _hostiles;
     protected List<NPC> _trashMobs { get; private set; } = [];
-    protected List<AbstractSingleActor> _nonPlayerFriendlies { get; private set; } = [];
-    protected List<AbstractSingleActor> _targets { get; private set; } = [];
-    protected List<AbstractSingleActor> _hostiles { get; private set; } = [];
+    protected List<SingleActor> _nonPlayerFriendlies { get; private set; } = [];
+    protected List<SingleActor> _targets { get; private set; } = [];
+    protected List<SingleActor> _hostiles { get; private set; } = [];
 
-    internal readonly Dictionary<string, GenericDecorationMetadata> DecorationCache = [];
+    internal readonly Dictionary<string, _DecorationMetadata> DecorationCache = [];
 
     internal CombatReplayDecorationContainer EnvironmentDecorations;
 
@@ -185,7 +185,7 @@ public abstract class FightLogic
 
     internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
         if (target == null)
         {
             return "UNKNOWN";
@@ -195,7 +195,7 @@ public abstract class FightLogic
 
     protected abstract ReadOnlySpan<int> GetUniqueNPCIDs();
 
-    internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal virtual void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         foreach (int id in GetUniqueNPCIDs())
         {
@@ -308,7 +308,7 @@ public abstract class FightLogic
 
         //TODO(Rennorb) @perf: find average complexity
         var breakbarPhases = new List<PhaseData>(Targets.Count);
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             int i = 0;
             var (_, actives, _, _) = target.GetBreakbarStatus(log);
@@ -336,7 +336,7 @@ public abstract class FightLogic
     internal virtual List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
         phases[0].AddTarget(mainTarget);
         return phases;
     }
@@ -352,7 +352,7 @@ public abstract class FightLogic
 
     protected void AddTargetsToPhase(PhaseData phase, List<int> ids)
     {
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (ids.Contains(target.ID) && phase.IntersectsWindow(target.FirstAware, target.LastAware))
             {
@@ -363,7 +363,7 @@ public abstract class FightLogic
 
     protected void AddSecondaryTargetsToPhase(PhaseData phase, List<int> ids)
     {
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (ids.Contains(target.ID) && phase.IntersectsWindow(target.FirstAware, target.LastAware))
             {
@@ -378,22 +378,22 @@ public abstract class FightLogic
         phase.OverrideTimes(log);
     }
 
-    internal virtual List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    internal virtual List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
         return [ ];
     }
 
-    internal virtual List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal virtual List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
         return [ ];
     }
 
-    internal virtual List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal virtual List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
         return [ ];
     }
 
-    internal virtual void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal virtual void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
     }
 
@@ -425,7 +425,7 @@ public abstract class FightLogic
         }
     }
 
-    internal IReadOnlyList<GenericDecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         if (EnvironmentDecorations == null)
         {
@@ -456,7 +456,7 @@ public abstract class FightLogic
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
     }
 
-    protected IReadOnlyList<AbstractSingleActor> GetSuccessCheckTargets()
+    protected IReadOnlyList<SingleActor> GetSuccessCheckTargets()
     {
         return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID)).ToList();
     }
@@ -493,7 +493,7 @@ public abstract class FightLogic
         return this;
     }
 
-    internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal virtual void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         ComputeFightTargets(agentData, combatData, extensions);
     }

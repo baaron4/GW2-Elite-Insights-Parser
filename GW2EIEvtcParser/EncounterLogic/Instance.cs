@@ -86,7 +86,7 @@ internal class Instance : FightLogic
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FillSubLogics(agentData);
         foreach (FightLogic logic in _subLogics)
@@ -220,34 +220,34 @@ internal class Instance : FightLogic
     {
         return _subLogics.SelectMany(logic => logic.GetCustomWarningMessages(fightData, evtcVersion));
     }
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         foreach (FightLogic logic in _subLogics)
         {
             logic.ComputePlayerCombatReplayActors(p, log, replay);
         }
     }
-    internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        var res = new List<AbstractBuffEvent>();
+        var res = new List<BuffEvent>();
         foreach (FightLogic logic in _subLogics)
         {
             res.AddRange(logic.SpecialBuffEventProcess(combatData, skillData));
         }
         return res;
     }
-    internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        var res = new List<AbstractCastEvent>();
+        var res = new List<CastEvent>();
         foreach (FightLogic logic in _subLogics)
         {
             res.AddRange(logic.SpecialCastEventProcess(combatData, skillData));
         }
         return res;
     }
-    internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
-        var res = new List<AbstractHealthDamageEvent>();
+        var res = new List<HealthDamageEvent>();
         foreach (FightLogic logic in _subLogics)
         {
             res.AddRange(logic.SpecialDamageEventProcess(combatData, skillData));

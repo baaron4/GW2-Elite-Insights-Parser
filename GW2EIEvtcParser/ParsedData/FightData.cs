@@ -368,7 +368,7 @@ public class FightData
         return _phases;
     }
 
-    public IReadOnlyList<AbstractSingleActor> GetMainTargets(ParsedEvtcLog log)
+    public IReadOnlyList<SingleActor> GetMainTargets(ParsedEvtcLog log)
     {
         return GetPhases(log)[0].Targets;
     }

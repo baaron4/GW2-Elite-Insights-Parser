@@ -19,7 +19,7 @@ internal static class WeaverHelper
     private static long GetLastAttunement(AgentItem agent, long time, CombatData combatData)
     {
         time = Math.Max(time, ServerDelayConstant);
-        var list = new List<AbstractBuffEvent>();
+        var list = new List<BuffEvent>();
         foreach (long attunement in _weaverAtunements)
         {
             list.AddRange(combatData.GetBuffDataByIDByDst(attunement, agent).Where(x => x is BuffApplyEvent && x.Time <= time + ServerDelayConstant));
@@ -350,9 +350,9 @@ internal static class WeaverHelper
         return inter.First();
     }
 
-    public static List<AbstractBuffEvent> TransformWeaverAttunements(IReadOnlyList<AbstractBuffEvent> buffs, Dictionary<long, List<AbstractBuffEvent>> buffsByID, AgentItem a, SkillData skillData)
+    public static List<BuffEvent> TransformWeaverAttunements(IReadOnlyList<BuffEvent> buffs, Dictionary<long, List<BuffEvent>> buffsByID, AgentItem a, SkillData skillData)
     {
-        var res = new List<AbstractBuffEvent>();
+        var res = new List<BuffEvent>();
         var attunements = new HashSet<long>
         {
             FireAttunementBuff,
@@ -395,7 +395,7 @@ internal static class WeaverHelper
         // first we get rid of standard attunements
         var toClean = new HashSet<long>();
         var attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
-        foreach (AbstractBuffEvent c in attuns)
+        foreach (BuffEvent c in attuns)
         {
             toClean.Add(c.BuffID);
             c.Invalidate(skillData);
@@ -406,13 +406,13 @@ internal static class WeaverHelper
         {
             return res;
         }
-        Dictionary<long, List<AbstractBuffEvent>> groupByTime = GroupByTime(weaverAttuns);
+        Dictionary<long, List<BuffEvent>> groupByTime = GroupByTime(weaverAttuns);
         long prevID = 0;
-        foreach (KeyValuePair<long, List<AbstractBuffEvent>> pair in groupByTime)
+        foreach (KeyValuePair<long, List<BuffEvent>> pair in groupByTime)
         {
             var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
             long curID = TranslateWeaverAttunement(applies);
-            foreach (AbstractBuffEvent c in pair.Value)
+            foreach (BuffEvent c in pair.Value)
             {
                 toClean.Add(c.BuffID);
                 c.Invalidate(skillData);

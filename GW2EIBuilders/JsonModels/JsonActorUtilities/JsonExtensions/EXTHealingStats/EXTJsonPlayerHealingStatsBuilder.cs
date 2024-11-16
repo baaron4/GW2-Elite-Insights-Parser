@@ -9,7 +9,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTHealing;
 internal static class EXTJsonPlayerHealingStatsBuilder
 {
 
-    public static EXTJsonPlayerHealingStats BuildPlayerHealingStats(AbstractSingleActor a, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static EXTJsonPlayerHealingStats BuildPlayerHealingStats(SingleActor a, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         int phasesCountIfRawFormatRequested = settings.RawFormatTimelineArrays ? phases.Count : 0;
@@ -58,7 +58,7 @@ internal static class EXTJsonPlayerHealingStatsBuilder
         var totalHealingDist                   = new List<List<EXTJsonHealingDist>>(phases.Count);
         var totalIncomingHealingDist           = new List<List<EXTJsonHealingDist>>(phases.Count);
         
-        foreach (AbstractSingleActor friendly in log.Friendlies)
+        foreach (SingleActor friendly in log.Friendlies)
         {
             var outgoingHealingAlly = new List<EXTJsonHealingStatistics.EXTJsonOutgoingHealingStatistics>(phases.Count);
             

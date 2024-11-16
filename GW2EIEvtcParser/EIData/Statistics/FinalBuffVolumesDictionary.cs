@@ -5,13 +5,13 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalBuffVolumesDictionary
 {
-    private Dictionary<AbstractSingleActor, double> _incomingBy = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> IncomingBy => _incomingBy;
-    private Dictionary<AbstractSingleActor, double> _incomingByExtensionBy = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
+    private Dictionary<SingleActor, double> _incomingBy = [];
+    public IReadOnlyDictionary<SingleActor, double> IncomingBy => _incomingBy;
+    private Dictionary<SingleActor, double> _incomingByExtensionBy = [];
+    public IReadOnlyDictionary<SingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
 
 
-    internal static (FinalBuffVolumesDictionary, FinalBuffVolumesDictionary) GetFinalBuffVolumesDictionary(ParsedEvtcLog log, Buff buff, AbstractSingleActor dstActor, long start, long end)
+    internal static (FinalBuffVolumesDictionary, FinalBuffVolumesDictionary) GetFinalBuffVolumesDictionary(ParsedEvtcLog log, Buff buff, SingleActor dstActor, long start, long end)
     {
         long phaseDuration = end - start;
         long activePhaseDuration = dstActor.GetActiveDuration(log, start, end);
@@ -24,7 +24,7 @@ public class FinalBuffVolumesDictionary
         var appliesBySrc = applies.GroupBy(x => x.CreditedBy);
         foreach (var group in appliesBySrc)
         {
-            AbstractSingleActor? actor = log.FindActor(group.Key);
+            SingleActor? actor = log.FindActor(group.Key);
             double incoming = 0;
             double incomingByExtension = 0;
             foreach (AbstractBuffApplyEvent abae in group)

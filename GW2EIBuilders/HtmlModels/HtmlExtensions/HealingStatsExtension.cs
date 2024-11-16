@@ -22,7 +22,7 @@ internal class HealingStatsExtension
         }
 
         PlayerHealingDetails = new(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             PlayerHealingDetails.Add(EXTHealingStatsPlayerDetailsDto.BuildPlayerHealingData(log, actor, usedSkills, usedBuffs));
         }

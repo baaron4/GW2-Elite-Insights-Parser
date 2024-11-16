@@ -11,15 +11,15 @@ internal class EnemyDamageMechanic : DamageMechanic
         IsEnemyMechanic = true;
     }
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
-        foreach (AbstractSingleActor actor in log.FightData.Logic.Hostiles)
+        foreach (SingleActor actor in log.FightData.Logic.Hostiles)
         {
-            foreach (AbstractHealthDamageEvent c in GetEvents(log, actor.AgentItem))
+            foreach (HealthDamageEvent c in GetEvents(log, actor.AgentItem))
             {
                 if (Keep(c, log))
                 {
-                    AbstractSingleActor? actorToUse = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
+                    SingleActor? actorToUse = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
                     // no need to null check, we are already iterating over an existing actor list
                     InsertMechanic(log, mechanicLogs, c.Time, actorToUse!);
                 }

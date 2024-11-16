@@ -12,20 +12,20 @@ internal class DamageLogDamageModifier : DamageModifierDescriptor
         base.UsingChecker(checker);
     }
 
-    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, AbstractHealthDamageEvent? dl, ParsedEvtcLog log, out double gain)
+    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, HealthDamageEvent? dl, ParsedEvtcLog log, out double gain)
     {
         gain = GainComputer.ComputeGain(GainPerStack, 1);
         return true;
     }
 
-    internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
+    internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
         var res = new List<DamageModifierEvent>();
         if (ComputeGain(null, null, log, out double gain))
         {
 
             var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
-            foreach (AbstractHealthDamageEvent evt in typeHits)
+            foreach (HealthDamageEvent evt in typeHits)
             {
                 if (CheckCondition(evt, log))
                 {

@@ -31,7 +31,7 @@ public class EvtcParser
     private ulong _gw2Build;
     private readonly EvtcParserSettings _parserSettings;
     private readonly GW2APIController _apiController;
-    private readonly Dictionary<uint, AbstractExtensionHandler> _enabledExtensions;
+    private readonly Dictionary<uint, ExtensionHandler> _enabledExtensions;
 
     public EvtcParser(EvtcParserSettings parserSettings, GW2APIController apiController)
     {
@@ -138,18 +138,18 @@ public class EvtcParser
                     IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                     operation.UpdateProgressWithCancellationCheck("Parsing: Multi threading");
                     
-                    var friendliesAndTargets = new List<AbstractSingleActor>(log.Friendlies.Count + log.FightData.Logic.Targets.Count);
+                    var friendliesAndTargets = new List<SingleActor>(log.Friendlies.Count + log.FightData.Logic.Targets.Count);
                     friendliesAndTargets.AddRange(log.Friendlies);
                     friendliesAndTargets.AddRange(log.FightData.Logic.Targets);
                     Trace.TrackAverageStat("friendliesAndTargets", friendliesAndTargets.Count);
 
-                    var friendliesAndTargetsAndMobs = new List<AbstractSingleActor>(log.FightData.Logic.TrashMobs.Count + friendliesAndTargets.Count);
+                    var friendliesAndTargetsAndMobs = new List<SingleActor>(log.FightData.Logic.TrashMobs.Count + friendliesAndTargets.Count);
                     friendliesAndTargetsAndMobs.AddRange(log.FightData.Logic.TrashMobs);
                     friendliesAndTargetsAndMobs.AddRange(friendliesAndTargets);
                     Trace.TrackAverageStat("friendliesAndTargetsAndMobs", friendliesAndTargetsAndMobs.Count);
                     
                     _t.Log("Paralell phases");
-                    foreach (AbstractSingleActor actor in friendliesAndTargetsAndMobs)
+                    foreach (SingleActor actor in friendliesAndTargetsAndMobs)
                     {
                         // that part can't be // due to buff extensions
                         _t.SetAverageTimeStart();
@@ -652,7 +652,7 @@ public class EvtcParser
             // Can't be ExtensionCombat
             if (combatItem.Pad == 0 && combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
             {
-                AbstractExtensionHandler? handler = ExtensionHelper.GetExtensionHandler(combatItem);
+                ExtensionHandler? handler = ExtensionHelper.GetExtensionHandler(combatItem);
                 if (handler != null)
                 {
                     _enabledExtensions[handler.Signature] = handler;
@@ -981,7 +981,7 @@ public class EvtcParser
             {
                 if (combatItem.IsExtension)
                 {
-                    if (_enabledExtensions.TryGetValue(combatItem.Pad, out AbstractExtensionHandler handler))
+                    if (_enabledExtensions.TryGetValue(combatItem.Pad, out ExtensionHandler handler))
                     {
                         handler.AdjustCombatEvent(combatItem, _agentData);
                     }

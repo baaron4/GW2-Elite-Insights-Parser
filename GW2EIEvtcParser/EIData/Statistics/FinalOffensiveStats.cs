@@ -40,10 +40,10 @@ public class FinalOffensiveStats
     public readonly double AppliedCrowdControlDuration;
 
 
-    internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
+    internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
         var dls = actor.GetDamageEvents(target, log, start, end);
-        foreach (AbstractHealthDamageEvent dl in dls)
+        foreach (HealthDamageEvent dl in dls)
         {
             if (dl.From == actor.AgentItem)
             {

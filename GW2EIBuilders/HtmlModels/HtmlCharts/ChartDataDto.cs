@@ -22,12 +22,12 @@ internal class ChartDataDto
         return subSegments.ToObjectList(phase.Start, phase.End);
     }
 
-    public static List<double[]>? BuildHealthStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
+    public static List<double[]>? BuildHealthStates(ParsedEvtcLog log, SingleActor actor, PhaseData phase, bool nullable)
     {
         return BuildGraphStates(actor.GetHealthUpdates(log), phase, nullable, 100.0);
     }
 
-    public static List<double[]>? BuildBarrierStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
+    public static List<double[]>? BuildBarrierStates(ParsedEvtcLog log, SingleActor actor, PhaseData phase)
     {
         var barriers = new List<GenericSegment<double>>(actor.GetBarrierUpdates(log));
         if (!barriers.Any(x => x.Value > 0))
@@ -37,7 +37,7 @@ internal class ChartDataDto
         return BuildGraphStates(barriers, phase, true, 0.0);
     }
 
-    public static List<double[]>? BuildBreakbarPercentStates(ParsedEvtcLog log, AbstractSingleActor npc, PhaseData phase)
+    public static List<double[]>? BuildBreakbarPercentStates(ParsedEvtcLog log, SingleActor npc, PhaseData phase)
     {
         return BuildGraphStates(npc.GetBreakbarPercentUpdates(log), phase, true, 100.0);
     }

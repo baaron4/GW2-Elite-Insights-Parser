@@ -10,7 +10,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonDamageDistBuilder
 {
-    private static JsonDamageDist BuildJsonDamageDist(long id, List<AbstractHealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static JsonDamageDist BuildJsonDamageDist(long id, List<HealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var jsonDamageDist = new JsonDamageDist();
         jsonDamageDist.IndirectDamage = dmList.Exists(x => x is NonDirectHealthDamageEvent);
@@ -41,7 +41,7 @@ internal static class JsonDamageDistBuilder
         jsonDamageDist.Id = id;
         jsonDamageDist.Min = int.MaxValue;
         jsonDamageDist.Max = int.MinValue;
-        foreach (AbstractHealthDamageEvent dmgEvt in dmList)
+        foreach (HealthDamageEvent dmgEvt in dmList)
         {
             jsonDamageDist.Hits += dmgEvt.DoubleProcHit ? 0 : 1;
             jsonDamageDist.TotalDamage += dmgEvt.HealthDamage;
@@ -75,7 +75,7 @@ internal static class JsonDamageDistBuilder
         return jsonDamageDist;
     }
 
-    internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<AbstractHealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    internal static List<JsonDamageDist> BuildJsonDamageDistList(Dictionary<long, List<HealthDamageEvent>> dlsByID, Dictionary<long, List<BreakbarDamageEvent>> brlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var res = new List<JsonDamageDist>(dlsByID.Count + brlsByID.Count);
 

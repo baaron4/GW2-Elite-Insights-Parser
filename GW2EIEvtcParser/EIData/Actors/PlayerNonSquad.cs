@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class PlayerNonSquad : AbstractPlayer
+public class PlayerNonSquad : PlayerActor
 {
 
     private static int NonSquadPlayers = 0;

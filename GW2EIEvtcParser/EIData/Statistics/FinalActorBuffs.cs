@@ -142,7 +142,7 @@ public class FinalActorBuffs
     }
 
 
-    internal static (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) GetBuffsForSelf(ParsedEvtcLog log, AbstractSingleActor dstActor, long start, long end)
+    internal static (Dictionary<long, FinalActorBuffs> Buffs, Dictionary<long, FinalActorBuffs> ActiveBuffs) GetBuffsForSelf(ParsedEvtcLog log, SingleActor dstActor, long start, long end)
     {
         var buffs = new Dictionary<long, FinalActorBuffs>();
         var activeBuffs = new Dictionary<long, FinalActorBuffs>();

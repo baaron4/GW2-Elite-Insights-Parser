@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.Extensions;
 
-public class EXTNonDirectBarrierEvent : EXTAbstractBarrierEvent
+public class EXTNonDirectBarrierEvent : EXTBarrierEvent
 {
 
     internal EXTNonDirectBarrierEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

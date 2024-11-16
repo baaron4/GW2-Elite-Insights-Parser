@@ -15,7 +15,7 @@ internal class LineDecoration : FormDecoration
         {
             return "Line" + Color;
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new LineDecorationMetadataDescription(this);
         }
@@ -34,7 +34,7 @@ internal class LineDecoration : FormDecoration
         {
         }
 
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new LineDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }

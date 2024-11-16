@@ -317,7 +317,7 @@ public class CombatReplay
     /// <param name="icon">URL of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddOverheadIcon(Segment segment, SingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
     {
         Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)));
     }
@@ -331,7 +331,7 @@ public class CombatReplay
     /// <param name="rotation">rotation of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddRotatedOverheadIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddRotatedOverheadIcon(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
     {
         Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingRotationConnector(new AngleConnector(rotation)));
     }
@@ -345,7 +345,7 @@ public class CombatReplay
     /// <param name="rotation">rotation of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddRotatedOverheadMarkerIcon(Segment segment, AbstractSingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddRotatedOverheadMarkerIcon(Segment segment, SingleActor actor, string icon, float rotation, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
     {
         Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)).UsingSquadMarker(true).UsingRotationConnector(new AngleConnector(rotation)));
     }
@@ -358,7 +358,7 @@ public class CombatReplay
     /// <param name="icon">URL of the icon</param>
     /// <param name="pixelSize">Size in pixel of the icon</param>
     /// <param name="opacity">Opacity of the icon</param>
-    internal void AddOverheadIcons(IEnumerable<Segment> segments, AbstractSingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    internal void AddOverheadIcons(IEnumerable<Segment> segments, SingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
     {
         foreach (Segment segment in segments)
         {
@@ -449,16 +449,16 @@ public class CombatReplay
     }
 
     /// <summary>
-    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="AbstractBuffEvent"/>.
+    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
     /// </summary>
     /// <param name="tethers">Buff events of the tethers.</param>
     /// <param name="color">color of the tether</param>
-    internal void AddTether(IEnumerable<AbstractBuffEvent> tethers, string color)
+    internal void AddTether(IEnumerable<BuffEvent> tethers, string color)
     {
         int tetherStart = 0;
         AgentItem src = ParserHelper._unknownAgent;
         AgentItem dst = ParserHelper._unknownAgent;
-        foreach (AbstractBuffEvent tether in tethers)
+        foreach (BuffEvent tether in tethers)
         {
             if (tether is BuffApplyEvent)
             {
@@ -479,11 +479,11 @@ public class CombatReplay
         }
     }
     /// <summary>
-    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="AbstractBuffEvent"/>.
+    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
     /// </summary>
     /// <param name="tethers">Buff events of the tethers.</param>
     /// <param name="color">color of the tether</param>
-    internal void AddTether(IEnumerable<AbstractBuffEvent> tethers, Color color, double opacity)
+    internal void AddTether(IEnumerable<BuffEvent> tethers, Color color, double opacity)
     {
         AddTether(tethers, color.WithAlpha(opacity).ToString(true));
     }
@@ -541,7 +541,7 @@ public class CombatReplay
     /// <param name="toTetherAgentId">ID of the agent to tether to the <paramref name="player"/>. Either <see cref="ArcDPSEnums.TargetID"/> or <see cref="ArcDPSEnums.TrashID"/>.</param>
     /// <param name="color">Color of the tether.</param>
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
-    internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, AbstractPlayer player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
+    internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, PlayerActor player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
     {
         var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffId, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
         var buffApplies = buffEvents.OfType<BuffApplyEvent>().ToList();
@@ -575,7 +575,7 @@ public class CombatReplay
     /// <param name="color">Color of the tether.</param>
     /// <param name="opacity">Opacity of the tether.</param>
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
-    internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, AbstractPlayer player, long buffId, int buffSrcAgentId, int toTetherAgentId, Color color, double opacity, int firstAwareThreshold = 2000)
+    internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, PlayerActor player, long buffId, int buffSrcAgentId, int toTetherAgentId, Color color, double opacity, int firstAwareThreshold = 2000)
     {
         AddTetherByThirdPartySrcBuff(log, player, buffId, buffSrcAgentId, toTetherAgentId, color.WithAlpha(opacity).ToString(true), firstAwareThreshold);
     }
@@ -644,7 +644,7 @@ public class CombatReplay
     /// <summary>
     /// Add hide based on buff's presence
     /// </summary>
-    internal void AddHideByBuff(AbstractSingleActor actor, ParsedEvtcLog log, long buffID)
+    internal void AddHideByBuff(SingleActor actor, ParsedEvtcLog log, long buffID)
     {
         Hidden.AddRange(actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0));
     }

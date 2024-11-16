@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EIData.FormDecoration;
 
 namespace GW2EIEvtcParser.EIData;
 
-public abstract class FormDecorationRenderingDescription : GenericAttachedDecorationRenderingDescription
+public abstract class FormDecorationRenderingDescription : AttachedDecorationRenderingDescription
 {
     public readonly bool Fill;
     public readonly int GrowingEnd;

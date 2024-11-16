@@ -11,9 +11,9 @@ public class EXTFinalIncomingHealingStat
     public readonly int HybridHealed;
     public readonly int DownedHealed;
 
-    internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
+    internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
-        foreach (EXTAbstractHealingEvent healingEvent in actor.EXTHealing.GetIncomingHealEvents(target, log, start, end))
+        foreach (EXTHealingEvent healingEvent in actor.EXTHealing.GetIncomingHealEvents(target, log, start, end))
         {
             Healed += healingEvent.HealingDone;
             switch (healingEvent.GetHealingType(log))

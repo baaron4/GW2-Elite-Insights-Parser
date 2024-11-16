@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class TeamChangeEvent : AbstractStatusEvent
+public class TeamChangeEvent : StatusEvent
 {
     public readonly ulong TeamIDComingFrom;
 

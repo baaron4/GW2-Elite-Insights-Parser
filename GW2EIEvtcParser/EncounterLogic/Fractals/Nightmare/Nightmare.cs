@@ -38,7 +38,7 @@ internal abstract class Nightmare : FractalLogic
         }
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Set manual FractalScale for old logs without the event
         AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>

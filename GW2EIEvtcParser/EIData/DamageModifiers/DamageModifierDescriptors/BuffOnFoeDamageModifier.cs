@@ -60,7 +60,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         return base.Keep(parseMode, skillMode, parserSettings);
     }
 
-    internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
+    internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
         IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);
         if (_trackerSource != null)
@@ -72,10 +72,10 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         }
         var res = new List<DamageModifierEvent>();
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
-        var ignoredTargets = new HashSet<AbstractSingleActor>();
-        foreach (AbstractHealthDamageEvent evt in typeHits)
+        var ignoredTargets = new HashSet<SingleActor>();
+        foreach (HealthDamageEvent evt in typeHits)
         {
-            AbstractSingleActor target = log.FindActor(damageModifier.GetFoe(evt));
+            SingleActor target = log.FindActor(damageModifier.GetFoe(evt));
             if (ignoredTargets.Contains(target))
             {
                 continue;

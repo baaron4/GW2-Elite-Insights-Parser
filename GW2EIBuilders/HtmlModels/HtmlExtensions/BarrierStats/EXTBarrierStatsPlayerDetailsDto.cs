@@ -13,7 +13,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
 
     // helpers
 
-    public static EXTBarrierStatsPlayerDetailsDto BuildPlayerBarrierData(ParsedEvtcLog log, AbstractSingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static EXTBarrierStatsPlayerDetailsDto BuildPlayerBarrierData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
@@ -26,7 +26,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
         {
             dto.BarrierDistributions.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyBarrierDistData(log, actor, null, phase, usedSkills, usedBuffs));
             var dmgTargetsDto = new List<EXTBarrierStatsBarrierDistributionDto>();
-            foreach (AbstractSingleActor target in log.Friendlies)
+            foreach (SingleActor target in log.Friendlies)
             {
                 dmgTargetsDto.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyBarrierDistData(log, actor, target, phase, usedSkills, usedBuffs));
             }
@@ -41,7 +41,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
         return dto;
     }
 
-    private static EXTBarrierStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static EXTBarrierStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
@@ -51,7 +51,7 @@ internal class EXTBarrierStatsPlayerDetailsDto
         foreach (PhaseData phase in log.FightData.GetPhases(log))
         {
             var dmgTargetsDto = new List<EXTBarrierStatsBarrierDistributionDto>();
-            foreach (AbstractSingleActor target in log.Friendlies)
+            foreach (SingleActor target in log.Friendlies)
             {
                 dmgTargetsDto.Add(EXTBarrierStatsBarrierDistributionDto.BuildFriendlyMinionBarrierDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
             }

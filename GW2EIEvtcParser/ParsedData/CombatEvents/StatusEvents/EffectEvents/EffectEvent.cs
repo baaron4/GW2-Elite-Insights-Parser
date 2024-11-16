@@ -181,12 +181,12 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// <param name="targets">The list of targets to search the events of.</param>
     /// <param name="species">The type of species of the targets.</param>
     /// <returns>The computed start and end times.</returns>
-    public (long start, long end) ComputeLifespanWithNPCRemoval(ParsedEvtcLog log, IReadOnlyList<AbstractSingleActor> targets, IReadOnlyList<int> species)
+    public (long start, long end) ComputeLifespanWithNPCRemoval(ParsedEvtcLog log, IReadOnlyList<SingleActor> targets, IReadOnlyList<int> species)
     {
         long start = Time;
         long end = start + Duration;
 
-        foreach (AbstractSingleActor target in targets.Where(x => x.IsAnySpecies(species)))
+        foreach (SingleActor target in targets.Where(x => x.IsAnySpecies(species)))
         {
             DeadEvent deadEvent = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
             DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(target.AgentItem).FirstOrDefault();

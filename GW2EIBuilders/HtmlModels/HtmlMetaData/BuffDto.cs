@@ -4,7 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLMetaData;
 
-internal class BuffDto : AbstractSkillDto
+internal class BuffDto : IDItemDto
 {
     public string? Description { get; set; } = null;
     public bool Stacking { get; set; }

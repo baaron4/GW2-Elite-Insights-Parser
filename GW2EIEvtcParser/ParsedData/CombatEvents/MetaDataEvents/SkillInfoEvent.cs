@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class SkillInfoEvent : AbstractMetaDataEvent
+public class SkillInfoEvent : MetaDataEvent
 {
     public readonly uint SkillID;
 

@@ -10,7 +10,7 @@ namespace GW2EIEvtcParser.EIData;
 internal static class SharedDamageModifiers
 {
 
-    private static bool VulnerabilityActiveCheck(AbstractHealthDamageEvent evt, ParsedEvtcLog log)
+    private static bool VulnerabilityActiveCheck(HealthDamageEvent evt, ParsedEvtcLog log)
     {
         if (evt.To.HasBuff(log, Resistance, evt.Time))
         {

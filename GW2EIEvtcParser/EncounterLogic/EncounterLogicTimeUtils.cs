@@ -59,15 +59,15 @@ internal static class EncounterLogicTimeUtils
         return mainTarget.FirstAware;
     }
 
-    internal static void SetSuccessByCombatExit(IReadOnlyList<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal static void SetSuccessByCombatExit(IReadOnlyList<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         if (targets.Count == 0)
         {
             return;
         }
         var targetExits = new List<ExitCombatEvent>();
-        var lastTargetDamages = new List<AbstractHealthDamageEvent>();
-        foreach (AbstractSingleActor t in targets)
+        var lastTargetDamages = new List<HealthDamageEvent>();
+        foreach (SingleActor t in targets)
         {
             EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
             ExitCombatEvent exitCombat;
@@ -79,7 +79,7 @@ internal static class EncounterLogicTimeUtils
             {
                 exitCombat = combatData.GetExitCombatEvents(t.AgentItem).LastOrDefault();
             }
-            AbstractHealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+            HealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (exitCombat == null || lastDamage == null ||
                 combatData.GetAnimatedCastData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant) ||
                 combatData.GetDamageData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant && playerAgents.Contains(x.To)))
@@ -90,7 +90,7 @@ internal static class EncounterLogicTimeUtils
             lastTargetDamages.Add(lastDamage);
         }
         ExitCombatEvent? lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
-        AbstractHealthDamageEvent? lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
+        HealthDamageEvent? lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
         // Make sure the last damage has been done before last combat exit
         if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + ParserHelper.TimeThresholdConstant >= lastDamageTaken.Time)
         {
@@ -115,7 +115,7 @@ internal static class EncounterLogicTimeUtils
         }
     }
 
-    internal static void SetSuccessByDeath(IReadOnlyList<AbstractSingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
+    internal static void SetSuccessByDeath(IReadOnlyList<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
     {
         if (!targets.Any())
         {
@@ -123,14 +123,14 @@ internal static class EncounterLogicTimeUtils
         }
         int success = 0;
         long maxTime = long.MinValue;
-        foreach (AbstractSingleActor target in targets)
+        foreach (SingleActor target in targets)
         {
             DeadEvent killed = combatData.GetDeadEvents(target.AgentItem).LastOrDefault();
             if (killed != null)
             {
                 long time = killed.Time;
                 success++;
-                AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken != null)
                 {
                     time = Math.Min(lastDamageTaken.Time, time);

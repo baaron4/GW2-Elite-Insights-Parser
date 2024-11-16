@@ -58,11 +58,11 @@ internal class AiKeeperOfThePeak : SunquaPeak
         new PlayerDstBuffApplyMechanic([FixatedFear1, FixatedFear2, FixatedFear3, FixatedFear4], "Fixated (Fear)", new MechanicPlotlySetting(Symbols.Bowtie, Colors.Purple), "Fear.Fix.A", "Fixated by Fear", "Fixated Application", 0),
         new PlayerDstBuffRemoveMechanic(CrushingGuilt, "Crushing Guilt Down", new MechanicPlotlySetting(Symbols.Star,Colors.LightPurple), "Crsh.Glt.Dwn.","Downed by Crushing Guilt", "Crushing Guilt Down",0).UsingChecker((evt, log) => evt.RemovedStacks == 10 && Math.Abs(evt.RemovedDuration - 90000) < 10 * ServerDelayConstant && log.CombatData.GetBuffDataByIDByDst(Downed, evt.To).Any(x => Math.Abs(x.Time - evt.Time) < 50 && x is BuffApplyEvent bae)),
         new EnemyCastStartMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear)", new MechanicPlotlySetting(Symbols.TriangleUp,Colors.LightPurple), "Fear Mnp.", "Empathic Manipulation (Fear)", "Empathic Manipulation (Fear)", 0),
-        new EnemyCastEndMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
+        new EnemyCastEndMechanic(EmpathicManipulationFear, "Empathic Manipulation (Fear) Interrupt", new MechanicPlotlySetting(Symbols.TriangleUpOpen,Colors.LightPurple), "IntFear.Mnp.", "Empathic Manipulation (Fear) Interrupt", "Empathic Manipulation (Fear) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == CastEvent.AnimationStatus.Interrupted),
         new EnemyCastStartMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow)", new MechanicPlotlySetting(Symbols.TriangleLeft,Colors.LightPurple), "Sor.Mnp.", "Empathic Manipulation (Sorrow)", "Empathic Manipulation (Sorrow)", 0),
-        new EnemyCastEndMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow) Interrupt", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightPurple), "IntSor.Mnp.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
+        new EnemyCastEndMechanic(EmpathicManipulationSorrow, "Empathic Manipulation (Sorrow) Interrupt", new MechanicPlotlySetting(Symbols.TriangleLeftOpen,Colors.LightPurple), "IntSor.Mnp.", "Empathic Manipulation (Sorrow) Interrupt", "Empathic Manipulation (Sorrow) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == CastEvent.AnimationStatus.Interrupted),
         new EnemyCastStartMechanic(EmpathicManipulationGuilt, "Empathic Manipulation (Guilt)", new MechanicPlotlySetting(Symbols.TriangleRight,Colors.LightPurple), "Glt.Mnp.", "Empathic Manipulation (Guilt)", "Empathic Manipulation (Guilt)", 0),
-        new EnemyCastEndMechanic(EmpathicManipulationGuilt, "Empathic Manipulation (Guilt) Interrupt", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightPurple), "Int.Glt.Mnp.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == AbstractCastEvent.AnimationStatus.Interrupted),
+        new EnemyCastEndMechanic(EmpathicManipulationGuilt, "Empathic Manipulation (Guilt) Interrupt", new MechanicPlotlySetting(Symbols.TriangleRightOpen,Colors.LightPurple), "Int.Glt.Mnp.", "Empathic Manipulation (Guilt) Interrupt", "Empathic Manipulation (Guilt) Interrupt", 0).UsingChecker((evt, log) => evt is AnimatedCastEvent ace && ace.Status == CastEvent.AnimationStatus.Interrupted),
         new EnemyDstBuffApplyMechanic(CacophonousMind, "Cacophonous Mind", new MechanicPlotlySetting(Symbols.Pentagon,Colors.LightPurple), "Ccphns.Mnd.","Cacophonous Mind", "Cacophonous Mind",0),
         });
         Extension = "ai";
@@ -143,7 +143,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.AiKeeperOfThePeak, out AgentItem aiAgent))
         {
@@ -178,14 +178,14 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // Manually set HP and names
-        AbstractSingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
-        AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
+        SingleActor eleAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
+        SingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
         darkAi?.OverrideName("Dark Ai");
         eleAi?.OverrideName("Elemental Ai");
         if (_hasDarkMode)
         {
             int sorrowCount = 0;
-            foreach (AbstractSingleActor target in Targets)
+            foreach (SingleActor target in Targets)
             {
                 if (target.IsSpecies(TrashID.CCSorrowDemon))
                 {
@@ -222,7 +222,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
+        SingleActor elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak));
         if (elementalAi == null)
         {
             if (_hasElementalMode)
@@ -234,7 +234,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         {
             phases[0].AddTarget(elementalAi);
         }
-        AbstractSingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
+        SingleActor darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2));
         if (darkAi == null)
         {
             if (_hasDarkMode)
@@ -274,7 +274,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                         long skillID = 61187;
                         var casts = elementalAi.GetCastEvents(log, phase.Start, phase.End);
                         // use last cast since determined is fixed 5s and the transition out (ai flying up) can happen after loss
-                        AbstractCastEvent castEvt = casts.LastOrDefault(x => x.SkillId == skillID);
+                        CastEvent castEvt = casts.LastOrDefault(x => x.SkillId == skillID);
                         if (castEvt != null)
                         {
                             phase.OverrideStart(castEvt.Time);
@@ -303,14 +303,14 @@ internal class AiKeeperOfThePeak : SunquaPeak
             {
                 // sub phases
                 long fearToSorrowSkillID = _china ? EmpathicManipulationSorrowCN : EmpathicManipulationSorrow;
-                AbstractCastEvent fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == fearToSorrowSkillID);
+                CastEvent fearToSorrow = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == fearToSorrowSkillID);
                 if (fearToSorrow != null)
                 {
                     var fearPhase = new PhaseData(darkStart, fearToSorrow.Time, "Fear");
                     fearPhase.AddTarget(darkAi);
                     phases.Add(fearPhase);
                     long sorrowToGuiltSkillID = _china ? EmpathicManipulationGuiltCN : EmpathicManipulationGuilt;
-                    AbstractCastEvent sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
+                    CastEvent sorrowToGuilt = darkAi.GetCastEvents(log, darkStart, darkEnd).FirstOrDefault(x => x.SkillId == sorrowToGuiltSkillID);
                     if (sorrowToGuilt != null)
                     {
                         var sorrowPhase = new PhaseData(fearToSorrow.Time, sorrowToGuilt.Time, "Sorrow");
@@ -410,7 +410,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         return null;
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 

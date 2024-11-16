@@ -26,8 +26,8 @@ internal class CerusAndDeimos : LonelyTower
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
-        AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
+        SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
+        SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         if (cerus.GetHealth(combatData) < 5e6 || deimos.GetHealth(combatData) < 5e6)
         {
             return FightData.EncounterMode.Normal;
@@ -69,8 +69,8 @@ internal class CerusAndDeimos : LonelyTower
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
-        AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
+        SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
+        SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
         BuffApplyEvent determinedApplyCerus = combatData.GetBuffDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         BuffApplyEvent determinedApplyDeimos = combatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (determinedApplyCerus != null && determinedApplyDeimos != null)
@@ -92,7 +92,7 @@ internal class CerusAndDeimos : LonelyTower
         return FightData.EncounterStartStatus.Normal;
     }
 
-    private static PhaseData GetBossPhase(ParsedEvtcLog log, AbstractSingleActor target, string phaseName)
+    private static PhaseData GetBossPhase(ParsedEvtcLog log, SingleActor target, string phaseName)
     {
         BuffApplyEvent determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         long end = determinedApply != null ? determinedApply.Time : target.LastAware;
@@ -107,8 +107,8 @@ internal class CerusAndDeimos : LonelyTower
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
-        AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
+        SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
+        SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         phases[0].AddTarget(cerus);
         phases[0].AddTarget(deimos);
         if (!requirePhases)
@@ -120,7 +120,7 @@ internal class CerusAndDeimos : LonelyTower
         return phases;
     }
 
-    private static void DoBrotherTether(ParsedEvtcLog log, AbstractSingleActor target, AbstractSingleActor brother, CombatReplay replay)
+    private static void DoBrotherTether(ParsedEvtcLog log, SingleActor target, SingleActor brother, CombatReplay replay)
     {
         if (brother != null)
         {
@@ -138,11 +138,11 @@ internal class CerusAndDeimos : LonelyTower
         switch (target.ID)
         {
             case (int)TargetID.DeimosLonelyTower:
-                AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
+                SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
                 DoBrotherTether(log, target, cerus, replay);
                 break;
             case (int)TargetID.CerusLonelyTower:
-                AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
+                SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
                 DoBrotherTether(log, target, deimos, replay);
                 break;
             default:
@@ -150,7 +150,7 @@ internal class CerusAndDeimos : LonelyTower
         }
     }
 
-    private static void DoFixationTether(ParsedEvtcLog log, AbstractPlayer p, CombatReplay replay, AbstractSingleActor target, long fixationID, Color color)
+    private static void DoFixationTether(ParsedEvtcLog log, PlayerActor p, CombatReplay replay, SingleActor target, long fixationID, Color color)
     {
         if (target != null)
         {
@@ -163,12 +163,12 @@ internal class CerusAndDeimos : LonelyTower
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        AbstractSingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
+        SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
         DoFixationTether(log, p, replay, cerus, CerussFocus, Colors.Orange);
-        AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
+        SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
         DoFixationTether(log, p, replay, deimos, DeimossFocus, Colors.Red);
     }
 

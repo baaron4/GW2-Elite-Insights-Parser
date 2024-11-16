@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class LanguageEvent : AbstractMetaDataEvent
+public class LanguageEvent : MetaDataEvent
 {
     public enum LanguageEnum : byte
     {

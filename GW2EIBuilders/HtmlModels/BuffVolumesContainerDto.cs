@@ -134,7 +134,7 @@ internal class BuffVolumesContainerDto
         TargetsCondiVolumeStats = [];
         TargetsCondiIncomingVolumeTotals = [];
         TargetsBoonIncomingVolumeTotals = [];
-        foreach (AbstractSingleActor target in phase.AllTargets)
+        foreach (SingleActor target in phase.AllTargets)
         {
             TargetsCondiVolumeStats.Add(BuffVolumeData.BuildTargetCondiVolumeData(log, phase, target));
             TargetsCondiIncomingVolumeTotals.Add(BuffVolumeData.BuildTargetCondiIncomingVolumeData(log, phase, target));

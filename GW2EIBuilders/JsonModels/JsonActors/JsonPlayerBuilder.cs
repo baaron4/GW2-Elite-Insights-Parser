@@ -20,7 +20,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonPlayerBuilder
 {
 
-    public static JsonPlayer BuildJsonPlayer(AbstractSingleActor player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, Dictionary<long, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, HashSet<long>> personalDamageMods)
+    public static JsonPlayer BuildJsonPlayer(SingleActor player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, Dictionary<long, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, HashSet<long>> personalDamageMods)
     {
         var jsonPlayer = new JsonPlayer();
         JsonActorBuilder.FillJsonActor(jsonPlayer, player, log, settings, skillMap, buffMap);
@@ -74,7 +74,7 @@ internal static class JsonPlayerBuilder
         }
         for (int j = 0; j < log.FightData.Logic.Targets.Count; j++)
         {
-            AbstractSingleActor target = log.FightData.Logic.Targets[j];
+            SingleActor target = log.FightData.Logic.Targets[j];
             var graph1SDamageList = new IReadOnlyList<int>[phases.Count];
             var graph1SPowerDamageList = new IReadOnlyList<int>[phases.Count];
             var graph1SConditionDamageList = new IReadOnlyList<int>[phases.Count];
@@ -243,7 +243,7 @@ internal static class JsonPlayerBuilder
         return uptimes;
     }
 
-    private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(AbstractSingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, List<IReadOnlyDictionary<long, FinalBuffsDictionary>> buffDictionaries, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap, Dictionary<string, HashSet<long>> personalBuffs)
+    private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(SingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, List<IReadOnlyDictionary<long, FinalBuffsDictionary>> buffDictionaries, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap, Dictionary<string, HashSet<long>> personalBuffs)
     {
         var res = new List<JsonBuffsUptime>();
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
@@ -337,7 +337,7 @@ internal static class JsonPlayerBuilder
         return uptimes;
     }
 
-    private static List<JsonBuffVolumes> GetPlayerJsonBuffVolumes(AbstractSingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffVolumes>> buffVolumes, List<IReadOnlyDictionary<long, FinalBuffVolumesDictionary>> buffVolumeDictionaries, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap, Dictionary<string, HashSet<long>> personalBuffs)
+    private static List<JsonBuffVolumes> GetPlayerJsonBuffVolumes(SingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffVolumes>> buffVolumes, List<IReadOnlyDictionary<long, FinalBuffVolumesDictionary>> buffVolumeDictionaries, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap, Dictionary<string, HashSet<long>> personalBuffs)
     {
         var res = new List<JsonBuffVolumes>();
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));

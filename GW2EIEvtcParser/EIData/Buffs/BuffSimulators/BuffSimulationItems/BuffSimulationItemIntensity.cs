@@ -31,7 +31,7 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
         return GetSources();
     }
 
-    public override int GetActiveStacks(AbstractSingleActor actor)
+    public override int GetActiveStacks(SingleActor actor)
     {
         return GetStacks(actor);
     }

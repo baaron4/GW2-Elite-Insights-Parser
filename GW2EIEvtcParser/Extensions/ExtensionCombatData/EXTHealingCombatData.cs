@@ -6,15 +6,15 @@ namespace GW2EIEvtcParser.Extensions;
 
 public class EXTHealingCombatData
 {
-    private readonly Dictionary<AgentItem, List<EXTAbstractHealingEvent>> _healData;
-    private readonly Dictionary<AgentItem, List<EXTAbstractHealingEvent>> _healReceivedData;
-    private readonly Dictionary<long, List<EXTAbstractHealingEvent>> _healDataById;
+    private readonly Dictionary<AgentItem, List<EXTHealingEvent>> _healData;
+    private readonly Dictionary<AgentItem, List<EXTHealingEvent>> _healReceivedData;
+    private readonly Dictionary<long, List<EXTHealingEvent>> _healDataById;
 
     private readonly Dictionary<long, EXTHealingType> EncounteredIDs = []; //TODO(Rennorb) @perf
 
     private readonly IReadOnlyCollection<long> _hybridHealIDs;
 
-    internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healData, Dictionary<AgentItem, List<EXTAbstractHealingEvent>> healReceivedData, Dictionary<long, List<EXTAbstractHealingEvent>> healDataById, IReadOnlyCollection<long> hybridHealIDs)
+    internal EXTHealingCombatData(Dictionary<AgentItem, List<EXTHealingEvent>> healData, Dictionary<AgentItem, List<EXTHealingEvent>> healReceivedData, Dictionary<long, List<EXTHealingEvent>> healDataById, IReadOnlyCollection<long> hybridHealIDs)
     {
         _healData = healData;
         _healReceivedData = healReceivedData;
@@ -22,16 +22,16 @@ public class EXTHealingCombatData
         _hybridHealIDs = hybridHealIDs;
     }
 
-    public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(AgentItem key)
+    public IReadOnlyList<EXTHealingEvent> GetHealData(AgentItem key)
     {
         return _healData.GetValueOrEmpty(key);
     }
-    public IReadOnlyList<EXTAbstractHealingEvent> GetHealReceivedData(AgentItem key)
+    public IReadOnlyList<EXTHealingEvent> GetHealReceivedData(AgentItem key)
     {
         return _healReceivedData.GetValueOrEmpty(key);
     }
 
-    public IReadOnlyList<EXTAbstractHealingEvent> GetHealData(long key)
+    public IReadOnlyList<EXTHealingEvent> GetHealData(long key)
     {
         return _healDataById.GetValueOrEmpty(key);
     }

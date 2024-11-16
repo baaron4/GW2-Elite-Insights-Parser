@@ -5,12 +5,12 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class PlayerDstFirstHitMechanic : PlayerDstHitMechanic
 {
-    protected override bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
+    protected override bool Keep(HealthDamageEvent c, ParsedEvtcLog log)
     {
         return c.From != ParserHelper._unknownAgent && base.Keep(c, log) && GetFirstHit(c.From, log) == c;
     }
 
-    private readonly Dictionary<AgentItem, AbstractHealthDamageEvent> _firstHits = [];
+    private readonly Dictionary<AgentItem, HealthDamageEvent> _firstHits = [];
 
     public PlayerDstFirstHitMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -20,11 +20,11 @@ internal class PlayerDstFirstHitMechanic : PlayerDstHitMechanic
     {
     }
 
-    private AbstractHealthDamageEvent GetFirstHit(AgentItem src, ParsedEvtcLog log)
+    private HealthDamageEvent GetFirstHit(AgentItem src, ParsedEvtcLog log)
     {
-        if (!_firstHits.TryGetValue(src, out AbstractHealthDamageEvent evt))
+        if (!_firstHits.TryGetValue(src, out HealthDamageEvent evt))
         {
-            AbstractHealthDamageEvent res = log.CombatData.GetDamageData(src).Where(x => MechanicIDs.Contains(x.SkillId) && x.To.Type == AgentItem.AgentType.Player && base.Keep(x, log)).FirstOrDefault();
+            HealthDamageEvent res = log.CombatData.GetDamageData(src).Where(x => MechanicIDs.Contains(x.SkillId) && x.To.Type == AgentItem.AgentType.Player && base.Keep(x, log)).FirstOrDefault();
             _firstHits[src] = res;
             return res;
         }

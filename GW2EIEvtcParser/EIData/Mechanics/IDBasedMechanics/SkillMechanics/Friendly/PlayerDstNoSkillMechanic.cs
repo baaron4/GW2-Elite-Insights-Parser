@@ -13,19 +13,19 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
     public PlayerDstNoSkillMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
-    protected override AgentItem GetAgentItem(AbstractHealthDamageEvent ahde)
+    protected override AgentItem GetAgentItem(HealthDamageEvent ahde)
     {
         return ahde.To;
     }
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
-        var allPlayers = new HashSet<AbstractSingleActor>(log.PlayerList);
-        var regroupedSkillDst = new Dictionary<long, HashSet<AbstractSingleActor>>();
+        var allPlayers = new HashSet<SingleActor>(log.PlayerList);
+        var regroupedSkillDst = new Dictionary<long, HashSet<SingleActor>>();
         foreach (long skillID in MechanicIDs)
         {
             long lastTime = int.MinValue;
-            foreach (AbstractHealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
+            foreach (HealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
             {
                 if (!Keep(ahde, log))
                 {
@@ -36,10 +36,10 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
                 {
                     time = lastTime;
                 }
-                AbstractSingleActor? amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
+                SingleActor? amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
                 if (amp != null)
                 {
-                    if (regroupedSkillDst.TryGetValue(time, out HashSet<AbstractSingleActor> set))
+                    if (regroupedSkillDst.TryGetValue(time, out HashSet<SingleActor> set))
                     {
                         set.Add(amp);
                     }
@@ -52,11 +52,11 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
                 lastTime = ahde.Time;
             }
         }
-        var regroupedNeverSkillDst = new Dictionary<long, HashSet<AbstractSingleActor>>();
-        foreach (KeyValuePair<long, HashSet<AbstractSingleActor>> pair in regroupedSkillDst)
+        var regroupedNeverSkillDst = new Dictionary<long, HashSet<SingleActor>>();
+        foreach (KeyValuePair<long, HashSet<SingleActor>> pair in regroupedSkillDst)
         {
             regroupedNeverSkillDst[pair.Key] = [];
-            foreach (AbstractSingleActor p in allPlayers.Except(pair.Value))
+            foreach (SingleActor p in allPlayers.Except(pair.Value))
             {
                 if (!regroupedSkillDst.Any(x => x.Value != pair.Value && x.Value.Contains(p)))
                 {
@@ -64,9 +64,9 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
                 }
             }
         }
-        foreach (KeyValuePair<long, HashSet<AbstractSingleActor>> pair in regroupedNeverSkillDst)
+        foreach (KeyValuePair<long, HashSet<SingleActor>> pair in regroupedNeverSkillDst)
         {
-            foreach (AbstractSingleActor p in pair.Value)
+            foreach (SingleActor p in pair.Value)
             {
                 InsertMechanic(log, mechanicLogs, pair.Key, p);
             }

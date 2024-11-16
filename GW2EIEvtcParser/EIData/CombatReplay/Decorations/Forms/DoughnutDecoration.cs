@@ -23,7 +23,7 @@ internal class DoughnutDecoration : FormDecoration
         {
             return "Dough" + OuterRadius + Color + InnerRadius;
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new DoughnutDecorationMetadataDescription(this);
         }
@@ -34,7 +34,7 @@ internal class DoughnutDecoration : FormDecoration
         {
         }
 
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new DoughnutDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }

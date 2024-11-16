@@ -75,7 +75,7 @@ internal class MAMA : Nightmare
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
+        SingleActor mama = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MAMA)) ?? throw new MissingKeyActorsException("MAMA not found");
         phases[0].AddTarget(mama);
         var knightIds = new List<int>
         {
@@ -97,7 +97,7 @@ internal class MAMA : Nightmare
                 AddTargetsToPhaseAndFit(phase, knightIds, log);
                 if (phase.Targets.Count > 0)
                 {
-                    AbstractSingleActor phaseTar = phase.Targets[0];
+                    SingleActor phaseTar = phase.Targets[0];
                     phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
                 }
             }
@@ -154,7 +154,7 @@ internal class MAMA : Nightmare
             case (int)TargetID.MAMA:
                 // Blastwave - AoE Knockback
                 var blastwave = casts.Where(x => x.SkillId == Blastwave1 || x.SkillId == Blastwave2);
-                foreach (AbstractCastEvent c in blastwave)
+                foreach (CastEvent c in blastwave)
                 {
                     int castDuration = 2750;
                     long expectedEndCast = c.Time + castDuration;
@@ -172,7 +172,7 @@ internal class MAMA : Nightmare
 
                 // Leap with shockwaves
                 var leap = casts.Where(x => x.SkillId == Leap);
-                foreach (AbstractCastEvent c in leap)
+                foreach (CastEvent c in leap)
                 {
                     int castDuration = 2400;
                     long expectedEndCast = c.Time + castDuration;
@@ -204,7 +204,7 @@ internal class MAMA : Nightmare
             case (int)TrashID.GreenKnight:
                 // Explosive Launch - Knight Jump in air
                 var explosiveLaunch = casts.Where(x => x.SkillId == ExplosiveLaunch);
-                foreach (AbstractCastEvent c in explosiveLaunch)
+                foreach (CastEvent c in explosiveLaunch)
                 {
                     int castDuration = 1714;
                     long expectedEndCast = c.Time + castDuration;
@@ -214,7 +214,7 @@ internal class MAMA : Nightmare
 
                 // Explosive Impact - Knight fall and knockback AoE
                 var explosiveImpact = casts.Where(x => x.SkillId == ExplosiveImpact);
-                foreach (AbstractCastEvent c in explosiveImpact)
+                foreach (CastEvent c in explosiveImpact)
                 {
                     int castDuration = 533;
                     long expectedEndCast = c.Time + castDuration;
@@ -224,7 +224,7 @@ internal class MAMA : Nightmare
 
                 // Pull AoE
                 var extraction = casts.Where(x => x.SkillId == Extraction);
-                foreach (AbstractCastEvent c in extraction)
+                foreach (CastEvent c in extraction)
                 {
                     int castDuration = 3835;
                     long expectedEndCast = c.Time + castDuration;

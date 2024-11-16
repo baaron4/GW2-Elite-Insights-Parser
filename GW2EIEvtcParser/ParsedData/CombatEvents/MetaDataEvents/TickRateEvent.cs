@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class TickRateEvent : AbstractMetaDataEvent
+public class TickRateEvent : MetaDataEvent
 {
     public readonly long Time;
     public readonly ulong TickRate;

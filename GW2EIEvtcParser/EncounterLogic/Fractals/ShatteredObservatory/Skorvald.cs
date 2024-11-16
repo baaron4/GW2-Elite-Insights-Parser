@@ -53,7 +53,7 @@ internal class Skorvald : ShatteredObservatory
     {
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
+        SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         phases[0].AddTarget(skorvald);
         var anomalyIds = new List<int>
         {
@@ -89,7 +89,7 @@ internal class Skorvald : ShatteredObservatory
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var manualFractalScaleSet = false;
         if (!combatData.Any(x => x.IsStateChange == StateChange.FractalScale))
@@ -126,7 +126,7 @@ internal class Skorvald : ShatteredObservatory
             agentData.Refresh();
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
+        SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         skorvald.OverrideName("Skorvald");
         if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
         {
@@ -177,7 +177,7 @@ internal class Skorvald : ShatteredObservatory
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.September2020SunquaPeakRelease)
         {
             // Agent check not reliable, produces false positives and regular false negatives
@@ -237,8 +237,8 @@ internal class Skorvald : ShatteredObservatory
         {
             return;
         }
-        AbstractSingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
-        AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+        SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
+        HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
         if (lastDamageTaken != null)
         {
             BuffApplyEvent invul895Apply = combatData.GetBuffDataByIDByDst(Determined895, skorvald.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
@@ -265,7 +265,7 @@ internal class Skorvald : ShatteredObservatory
             case (int)TargetID.Skorvald:
                 // Horizon Strike
                 var horizonStrike = casts.Where(x => x.SkillId == HorizonStrikeSkorvald2 || x.SkillId == HorizonStrikeSkorvald4);
-                foreach (AbstractCastEvent c in horizonStrike)
+                foreach (CastEvent c in horizonStrike)
                 {
                     int castDuration = 3900;
                     int shiftingAngle = 45;
@@ -306,7 +306,7 @@ internal class Skorvald : ShatteredObservatory
                 // Crimson Dawn
                 IReadOnlyList<long> skillIds = [ CrimsonDawnSkorvaldCM1, CrimsonDawnSkorvaldCM2, CrimsonDawnSkorvaldCM3, CrimsonDawnSkorvaldCM4 ];
                 var crimsonDawn = casts.Where(x => skillIds.Contains(x.SkillId));
-                foreach (AbstractCastEvent c in crimsonDawn)
+                foreach (CastEvent c in crimsonDawn)
                 {
                     uint radius = 1200;
                     int angle = 295;
@@ -335,7 +335,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Punishing Kick
                 var punishingKick = casts.Where(x => x.SkillId == PunishingKickSkorvald);
-                foreach (AbstractCastEvent c in punishingKick)
+                foreach (CastEvent c in punishingKick)
                 {
                     int castDuration = 1850;
                     (long start, long end) lifespan = (c.Time + 100, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
@@ -352,7 +352,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Radiant Fury
                 var radiantFury = casts.Where(x => x.SkillId == RadiantFurySkorvald);
-                foreach (AbstractCastEvent c in radiantFury)
+                foreach (CastEvent c in radiantFury)
                 {
                     int duration = 2700;
                     long expectedEndCast = c.Time + duration;
@@ -369,7 +369,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Supernova - Phase Oneshot
                 var supernova = casts.Where(x => x.SkillId == SupernovaSkorvaldCM);
-                foreach (AbstractCastEvent c in supernova)
+                foreach (CastEvent c in supernova)
                 {
                     int duration = 75000;
                     long expectedEndCast = c.Time + duration;
@@ -379,7 +379,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Cranial Cascade
                 var cranialCascadeSkorvald = casts.Where(x => x.SkillId == CranialCascadeSkorvald);
-                foreach (AbstractCastEvent c in cranialCascadeSkorvald)
+                foreach (CastEvent c in cranialCascadeSkorvald)
                 {
                     int castDuration = 1750;
                     int angle = 35;
@@ -407,7 +407,7 @@ internal class Skorvald : ShatteredObservatory
             case (int)TrashID.FluxAnomalyCM4:
                 // Solar Stomp
                 var solarStomp = casts.Where(x => x.SkillId == SolarStomp);
-                foreach (AbstractCastEvent c in solarStomp)
+                foreach (CastEvent c in solarStomp)
                 {
                     uint radius = 280;
                     int castDuration = 2250;
@@ -422,7 +422,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Punishing Kick
                 var punishingKickAnomaly = casts.Where(x => x.SkillId == PunishingKickAnomaly);
-                foreach (AbstractCastEvent c in punishingKickAnomaly)
+                foreach (CastEvent c in punishingKickAnomaly)
                 {
                     int castDuration = 1850;
                     long expectedEndCast = c.Time + castDuration;
@@ -438,7 +438,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Cranial Cascade
                 var cranialCascadeAnomaly = casts.Where(x => x.SkillId == CranialCascadeAnomaly);
-                foreach (AbstractCastEvent c in cranialCascadeAnomaly)
+                foreach (CastEvent c in cranialCascadeAnomaly)
                 {
                     int castDuration = 1750;
                     int angle = 35;
@@ -458,7 +458,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Mist Smash
                 var mistSmash = casts.Where(x => x.SkillId == MistSmash);
-                foreach (AbstractCastEvent c in mistSmash)
+                foreach (CastEvent c in mistSmash)
                 {
                     int castDuration = 1933;
                     (long start, long end) lifespan = (c.Time, c.Time + castDuration);
@@ -471,7 +471,7 @@ internal class Skorvald : ShatteredObservatory
 
                 // Wave of Mutilation
                 var waveOfMutilation = casts.Where(x => x.SkillId == WaveOfMutilation);
-                foreach (AbstractCastEvent c in waveOfMutilation)
+                foreach (CastEvent c in waveOfMutilation)
                 {
                     int castDuration = 1850;
                     int angle = 18;
@@ -536,7 +536,7 @@ internal class Skorvald : ShatteredObservatory
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixations
@@ -551,7 +551,7 @@ internal class Skorvald : ShatteredObservatory
     /// <param name="target">Actor.</param>
     /// <param name="lifespan">Start and End of cast.</param>
     /// <param name="degree">Degree of the strike.</param>
-    private static void AddHorizonStrikeDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, float degree)
+    private static void AddHorizonStrikeDecoration(CombatReplay replay, SingleActor target, (long start, long end) lifespan, float degree)
     {
         var connector = new AgentConnector(target);
         var frontRotationConnector = new AngleConnector(degree);
@@ -575,7 +575,7 @@ internal class Skorvald : ShatteredObservatory
     /// <param name="lifespan">Start and End of cast.</param>
     /// <param name="expectedEndCast">Expected end of the cast.</param>
     /// <param name="rotation">Rotation degree.</param>
-    private static void AddKickIndicatorDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, long expectedEndCast, float rotation)
+    private static void AddKickIndicatorDecoration(CombatReplay replay, SingleActor target, (long start, long end) lifespan, long expectedEndCast, float rotation)
     {
         int translation = 150;
         var rotationConnector = new AngleConnector(rotation);

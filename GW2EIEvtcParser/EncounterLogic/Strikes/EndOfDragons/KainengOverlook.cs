@@ -130,12 +130,12 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
-    private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<AbstractSingleActor> targets, AbstractSingleActor ministerLi, ParsedEvtcLog log, int phaseID)
+    private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<SingleActor> targets, SingleActor ministerLi, ParsedEvtcLog log, int phaseID)
     {
         if (targets.All(x => x != null))
         {
             EnterCombatEvent? cbtEnter = null;
-            foreach (AbstractSingleActor target in targets)
+            foreach (SingleActor target in targets)
             {
                 cbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
                 if (cbtEnter != null)
@@ -145,7 +145,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             }
             if (cbtEnter != null)
             {
-                AbstractBuffEvent nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
+                BuffEvent nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
                 long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
                 var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                 addPhase.AddTargets(targets);
@@ -154,7 +154,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         }
     }
 
-    private AbstractSingleActor GetMinisterLi(FightData fightData)
+    private SingleActor GetMinisterLi(FightData fightData)
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)ArcDPSEnums.TargetID.MinisterLiCM : (int)ArcDPSEnums.TargetID.MinisterLi));
     }
@@ -162,14 +162,14 @@ internal class KainengOverlook : EndOfDragonsStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
+        SingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
         phases[0].AddTarget(ministerLi);
         //
-        AbstractSingleActor enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
-        AbstractSingleActor mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
-        AbstractSingleActor mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
-        AbstractSingleActor sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
-        AbstractSingleActor ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
+        SingleActor enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
+        SingleActor mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
+        SingleActor mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
+        SingleActor sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
+        SingleActor ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
         //
         phases[0].AddSecondaryTarget(enforcer);
         phases[0].AddSecondaryTarget(mindblade);
@@ -196,7 +196,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        AbstractSingleActor ministerLi = GetMinisterLi(fightData) ?? throw new MissingKeyActorsException("Minister Li not found");
+        SingleActor ministerLi = GetMinisterLi(fightData) ?? throw new MissingKeyActorsException("Minister Li not found");
         var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
         if (buffApplies.Count != 0)
         {
@@ -206,11 +206,11 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
+        SingleActor ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
         return ministerLiCM != null ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Target Order
@@ -342,7 +342,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                     var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                     // Check for the normal mode skill for older logs
                     var waveCM = casts.Where(x => x.SkillId == DragonSlashWaveNM || x.SkillId == DragonSlashWaveCM);
-                    foreach (AbstractCastEvent c in waveCM)
+                    foreach (CastEvent c in waveCM)
                     {
                         int durationCone = c.SkillId == DragonSlashWaveNM ? 1000 : 500;
                         (long, long) lifespan = (c.Time, c.Time + durationCone);
@@ -356,7 +356,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 // Small Cone
                 var fallOfTheAxeSmall = casts.Where(x => x.SkillId == FallOfTheAxeSmallConeNM || x.SkillId == FallOfTheAxeSmallConeCM);
-                foreach (AbstractCastEvent c in fallOfTheAxeSmall)
+                foreach (CastEvent c in fallOfTheAxeSmall)
                 {
                     int durationCastTime = 965;
                     (long, long) lifespan = (c.Time, c.Time + durationCastTime);
@@ -365,7 +365,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
                 // Big Cone
                 var fallOfTheAxeBig = casts.Where(x => x.SkillId == FallOfTheAxeBigConeNM || x.SkillId == FallOfTheAxeBigConeCM);
-                foreach (AbstractCastEvent c in fallOfTheAxeBig)
+                foreach (CastEvent c in fallOfTheAxeBig)
                 {
                     int durationCastTime = 1030;
                     (long, long) lifespan = (c.Time, c.Time + durationCastTime);
@@ -390,7 +390,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                     }
                 }
                 // Damage decoration
-                foreach (AbstractCastEvent c in cannon)
+                foreach (CastEvent c in cannon)
                 {
                     int durationCastTime = 10367;
                     (long, long) lifespan = (c.Time + warningDuration, c.Time + durationCastTime - warningDuration);
@@ -610,7 +610,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         replay.AddDecorationWithGrowing(pie, lifespan.Item2);
     }
 
-    private static void AddSharedDestructionDecoration(AbstractPlayer p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)
+    private static void AddSharedDestructionDecoration(PlayerActor p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)
     {
         Color green = Colors.DarkGreen;
         Color color = isSuccessful ? green : Colors.DarkRed;

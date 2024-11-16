@@ -83,7 +83,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         long end = 0;
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.KeepConstruct)) ?? throw new MissingKeyActorsException("Keep Construct not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -91,7 +91,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         }
         // Main phases 35025
         var kcPhaseInvuls = GetFilteredList(log.CombatData, XerasBoon, mainTarget, true, true);
-        foreach (AbstractBuffEvent c in kcPhaseInvuls)
+        foreach (BuffEvent c in kcPhaseInvuls)
         {
             if (c is BuffApplyEvent)
             {
@@ -115,12 +115,12 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         }
         // add burn phases
         int offset = phases.Count;
-        IReadOnlyList<AbstractBuffEvent> orbItems = log.CombatData.GetBuffDataByIDByDst(Compromised, mainTarget.AgentItem);
+        IReadOnlyList<BuffEvent> orbItems = log.CombatData.GetBuffDataByIDByDst(Compromised, mainTarget.AgentItem);
         // Get number of orbs and filter the list
         start = 0;
         int orbCount = 0;
         var segments = new List<Segment>();
-        foreach (AbstractBuffEvent c in orbItems)
+        foreach (BuffEvent c in orbItems)
         {
             if (c is BuffApplyEvent)
             {
@@ -149,7 +149,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         int preBurnCount = 1;
         var preBurnPhase = new List<PhaseData>();
         var kcInvuls = GetFilteredList(log.CombatData, Determined762, mainTarget, true, true);
-        foreach (AbstractBuffEvent invul in kcInvuls)
+        foreach (BuffEvent invul in kcInvuls)
         {
             if (invul is BuffApplyEvent)
             {
@@ -242,7 +242,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         var countDict = new Dictionary<int, int>();
@@ -257,7 +257,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             (int)ArcDPSEnums.TrashID.Galletta,
             (int)ArcDPSEnums.TrashID.Ianim,
         };
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (bigPhantasmIDs.Contains(target.ID))
             {
@@ -291,7 +291,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 }
                 
                 var towerDrop = cls.Where(x => x.SkillId == TowerDrop);
-                foreach (AbstractCastEvent c in towerDrop)
+                foreach (CastEvent c in towerDrop)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
@@ -309,7 +309,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 int duration = 1000;
                 float bladeOpeningAngle = 360 * 3 / 32;
                 uint bladeRadius = 1600;
-                foreach (AbstractCastEvent c in blades1)
+                foreach (CastEvent c in blades1)
                 {
                     int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                     start = (int)c.Time + bladeDelay;
@@ -328,7 +328,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     }
                 }
 
-                foreach (AbstractCastEvent c in blades2)
+                foreach (CastEvent c in blades2)
                 {
                     int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                     start = (int)c.Time + bladeDelay;
@@ -351,7 +351,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     }
                 }
 
-                foreach (AbstractCastEvent c in blades3)
+                foreach (CastEvent c in blades3)
                 {
                     int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                     start = (int)c.Time + bladeDelay;
@@ -416,7 +416,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         return combatData.GetSkills().Contains(34958) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Bombs

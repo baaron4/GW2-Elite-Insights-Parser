@@ -29,7 +29,7 @@ internal static class EXTJsonBarrierStatsBuilderCommons
     }
 
     //TODO(Rennorb) @perf
-    private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTAbstractBarrierEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTBarrierEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var jsonBarrierDist = new EXTJsonBarrierDist();
         jsonBarrierDist.IndirectBarrier = list.Exists(x => x is EXTNonDirectBarrierEvent);
@@ -60,7 +60,7 @@ internal static class EXTJsonBarrierStatsBuilderCommons
         jsonBarrierDist.Id = id;
         jsonBarrierDist.Min = int.MaxValue;
         jsonBarrierDist.Max = int.MinValue;
-        foreach (EXTAbstractBarrierEvent barrierEvt in list)
+        foreach (EXTBarrierEvent barrierEvt in list)
         {
             jsonBarrierDist.Hits++; ;
             jsonBarrierDist.TotalBarrier += barrierEvt.BarrierGiven;
@@ -72,7 +72,7 @@ internal static class EXTJsonBarrierStatsBuilderCommons
         return jsonBarrierDist;
     }
 
-    internal static IEnumerable<EXTJsonBarrierDist> BuildBarrierDistList(IEnumerable<IGrouping<long, EXTAbstractBarrierEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    internal static IEnumerable<EXTJsonBarrierDist> BuildBarrierDistList(IEnumerable<IGrouping<long, EXTBarrierEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         return dlsByID.Select(group => BuildBarrierDist(group.Key, group.ToList(), log, skillMap, buffMap));
     }

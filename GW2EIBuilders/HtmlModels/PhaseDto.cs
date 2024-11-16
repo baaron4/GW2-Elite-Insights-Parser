@@ -61,14 +61,14 @@ internal class PhaseDto
         var allTargets = phase.AllTargets;
         Targets          = new(allTargets.Count);
         SecondaryTargets = new(allTargets.Count);
-        foreach (AbstractSingleActor target in allTargets)
+        foreach (SingleActor target in allTargets)
         {
             Targets.Add(log.FightData.Logic.Targets.IndexOf(target));
             SecondaryTargets.Add(phase.IsSecondaryTarget(target));
         }
 
         PlayerActiveTimes = new(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             PlayerActiveTimes.Add(actor.GetActiveDuration(log, phase.Start, phase.End));
         }
@@ -146,7 +146,7 @@ internal class PhaseDto
         EnemyMechanicStats    = MechanicDto.BuildEnemyMechanicData(log, phase);
     }
 
-    private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
+    private static bool HasBoons(ParsedEvtcLog log, PhaseData phase, SingleActor target)
     {
         IReadOnlyDictionary<long, FinalActorBuffs> conditions = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
         foreach (Buff boon in log.StatisticsHelper.PresentBoons)
@@ -301,7 +301,7 @@ internal class PhaseDto
     public static List<List<object>> BuildDPSData(ParsedEvtcLog log, PhaseData phase)
     {
         var list = new List<List<object>>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             FinalDPS dpsAll = actor.GetDPSStats(log, phase.Start, phase.End);
             list.Add(GetDPSStatData(dpsAll));
@@ -313,11 +313,11 @@ internal class PhaseDto
     {
         var list = new List<List<List<object>>>(log.Friendlies.Count);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             var playerData = new List<List<object>>();
 
-            foreach (AbstractSingleActor target in phase.AllTargets)
+            foreach (SingleActor target in phase.AllTargets)
             {
                 playerData.Add(GetDPSStatData(actor.GetDPSStats(target, log, phase.Start, phase.End)));
             }
@@ -329,7 +329,7 @@ internal class PhaseDto
     public static List<List<object>> BuildGameplayStatsData(ParsedEvtcLog log, PhaseData phase)
     {
         var list = new List<List<object>>();
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             FinalGameplayStats stats = actor.GetGameplayStats(log, phase.Start, phase.End);
             list.Add(GetGameplayStatData(stats));
@@ -340,7 +340,7 @@ internal class PhaseDto
     public static List<List<object>> BuildOffensiveStatsData(ParsedEvtcLog log, PhaseData phase)
     {
         var list = new List<List<object>>();
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             FinalOffensiveStats stats = actor.GetOffensiveStats(null, log, phase.Start, phase.End);
             list.Add(GetOffensiveStatData(stats));
@@ -352,10 +352,10 @@ internal class PhaseDto
     {
         var list = new List<List<List<object>>>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             var playerData = new List<List<object>>();
-            foreach (AbstractSingleActor target in phase.AllTargets)
+            foreach (SingleActor target in phase.AllTargets)
             {
                 FinalOffensiveStats statsTarget = actor.GetOffensiveStats(target, log, phase.Start, phase.End);
                 playerData.Add(GetOffensiveStatData(statsTarget));
@@ -369,7 +369,7 @@ internal class PhaseDto
     {
         var list = new List<List<object>>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             FinalDefensesAll defenses = actor.GetDefenseStats(log, phase.Start, phase.End);
             list.Add(GetDefenseStatData(defenses, phase));
@@ -382,7 +382,7 @@ internal class PhaseDto
     {
         var list = new List<List<object>>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             FinalToPlayersSupport support = actor.GetToPlayerSupportStats(log, phase.Start, phase.End);
             list.Add(GetSupportStatData(support));

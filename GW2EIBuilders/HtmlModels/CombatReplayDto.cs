@@ -6,9 +6,9 @@ namespace GW2EIBuilders.HtmlModels;
 
 internal class CombatReplayDto
 {
-    public List<AbstractCombatReplayRenderingDescription> DecorationRenderings { get; set; }
-    public List<AbstractCombatReplayDecorationMetadataDescription> DecorationMetadata { get; set; }
-    public List<AbstractSingleActorCombatReplayDescription> Actors { get; set; }
+    public List<CombatReplayRenderingDescription> DecorationRenderings { get; set; }
+    public List<CombatReplayDecorationMetadataDescription> DecorationMetadata { get; set; }
+    public List<SingleActorCombatReplayDescription> Actors { get; set; }
     public int[] Sizes { get; set; }
     public long MaxTime { get; set; }
     public float InchToPixel { get; set; }

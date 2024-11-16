@@ -11,7 +11,7 @@ public class FinalDefensesAll : FinalDefenses
     public readonly int DcCount;
     public readonly long DcDuration;
 
-    public FinalDefensesAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
+    public FinalDefensesAll(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
     {
         (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = actor.GetStatus(log);
 

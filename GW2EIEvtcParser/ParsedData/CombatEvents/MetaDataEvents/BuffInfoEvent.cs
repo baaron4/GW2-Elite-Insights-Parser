@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class BuffInfoEvent : AbstractMetaDataEvent
+public class BuffInfoEvent : MetaDataEvent
 {
     public readonly long BuffID;
 

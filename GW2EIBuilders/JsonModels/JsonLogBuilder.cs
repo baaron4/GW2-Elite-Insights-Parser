@@ -179,7 +179,7 @@ internal static class JsonLogBuilder
         if (log.LogData.UsedExtensions.Any())
         {
             var usedExtensions = new List<ExtensionDesc>();
-            foreach (AbstractExtensionHandler extension in log.LogData.UsedExtensions)
+            foreach (ExtensionHandler extension in log.LogData.UsedExtensions)
             {
                 var set = new HashSet<string>();
                 if (log.LogData.PoV != null)

@@ -88,7 +88,7 @@ internal static class CatalystHelper
         new Buff("Hardened Auras", HardenedAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.HardenedAuras),
     ];
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Elementalist;
 
@@ -98,7 +98,7 @@ internal static class CatalystHelper
         AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployEarthJadeSphere, DeployJadeSphereEarth, ParserIcons.EffectDeployJadeSphereEarth);
     }
 
-    internal static void AddJadeSphereDecoration(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, Color color, GUID effect, long skillId, string icon)
+    internal static void AddJadeSphereDecoration(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, Color color, GUID effect, long skillId, string icon)
     {
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, effect, out var events))
         {

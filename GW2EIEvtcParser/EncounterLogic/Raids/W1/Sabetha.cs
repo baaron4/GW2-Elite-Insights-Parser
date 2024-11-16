@@ -67,7 +67,7 @@ internal class Sabetha : SpiritVale
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
         phases[0].AddTarget(mainTarget);
         var miniBossIds = new List<int>
         {
@@ -91,7 +91,7 @@ internal class Sabetha : SpiritVale
                 AddTargetsToPhaseAndFit(phase, miniBossIds, log);
                 if (phase.Targets.Count > 0)
                 {
-                    AbstractSingleActor phaseTar = phase.Targets[0];
+                    SingleActor phaseTar = phase.Targets[0];
                     phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
                 }
                 switch (phaseID)
@@ -150,7 +150,7 @@ internal class Sabetha : SpiritVale
         {
             case (int)ArcDPSEnums.TargetID.Sabetha:
                 var flameWall = cls.Where(x => x.SkillId == Firestorm);
-                foreach (AbstractCastEvent c in flameWall)
+                foreach (CastEvent c in flameWall)
                 {
                     int start = (int)c.Time;
                     int preCastTime = 2800;
@@ -167,7 +167,7 @@ internal class Sabetha : SpiritVale
 
             case (int)ArcDPSEnums.TrashID.Kernan:
                 var bulletHail = cls.Where(x => x.SkillId == BulletHail);
-                foreach (AbstractCastEvent c in bulletHail)
+                foreach (CastEvent c in bulletHail)
                 {
                     int start = (int)c.Time;
                     int firstConeStart = start;
@@ -190,7 +190,7 @@ internal class Sabetha : SpiritVale
 
             case (int)ArcDPSEnums.TrashID.Knuckles:
                 var breakbar = cls.Where(x => x.SkillId == PlatformQuake);
-                foreach (AbstractCastEvent c in breakbar)
+                foreach (CastEvent c in breakbar)
                 {
                     replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
@@ -198,7 +198,7 @@ internal class Sabetha : SpiritVale
 
             case (int)ArcDPSEnums.TrashID.Karde:
                 var flameBlast = cls.Where(x => x.SkillId == FlameBlast);
-                foreach (AbstractCastEvent c in flameBlast)
+                foreach (CastEvent c in flameBlast)
                 {
                     int start = (int)c.Time;
                     int end = start + 4000;
@@ -225,12 +225,12 @@ internal class Sabetha : SpiritVale
         ];
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
                 // timed bombs
         var timedBombs = log.CombatData.GetBuffDataByIDByDst(TimeBomb, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in timedBombs)
+        foreach (BuffEvent c in timedBombs)
         {
             int start = (int)c.Time;
             int end = start + 3000;

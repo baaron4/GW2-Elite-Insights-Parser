@@ -43,7 +43,7 @@ internal abstract class BuffSimulatorID(ParsedEvtcLog log, Buff buff) : Abstract
         BuffStack.Clear();
     }
 
-    protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
+    protected override void UpdateSimulator(BuffEvent buffEvent)
     {
         buffEvent.UpdateSimulator(this, false);
     }

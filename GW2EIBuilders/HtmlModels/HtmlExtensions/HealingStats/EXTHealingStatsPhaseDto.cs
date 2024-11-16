@@ -50,7 +50,7 @@ internal class EXTHealingStatsPhaseDto
     public static List<List<object>> BuildOutgoingHealingStatData(ParsedEvtcLog log, PhaseData phase)
     {
         var list = new List<List<object>>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             EXTFinalOutgoingHealingStat outgoingHealingStats = actor.EXTHealing.GetOutgoingHealStats(null, log, phase.Start, phase.End);
             list.Add(GetOutgoingHealingStatData(outgoingHealingStats));
@@ -62,11 +62,11 @@ internal class EXTHealingStatsPhaseDto
     {
         var list = new List<List<List<object>>>(log.Friendlies.Count);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             var playerData = new List<List<object>>();
 
-            foreach (AbstractSingleActor target in log.Friendlies)
+            foreach (SingleActor target in log.Friendlies)
             {
                 playerData.Add(GetOutgoingHealingStatData(actor.EXTHealing.GetOutgoingHealStats(target, log, phase.Start, phase.End)));
             }
@@ -79,7 +79,7 @@ internal class EXTHealingStatsPhaseDto
     {
         var list = new List<List<object>>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             EXTFinalIncomingHealingStat incomingHealintStats = actor.EXTHealing.GetIncomingHealStats(null, log, phase.Start, phase.End);
             list.Add(GetIncomingHealingStatData(incomingHealintStats));

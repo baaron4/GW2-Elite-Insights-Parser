@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 internal static class EncounterLogicPhaseUtils
 {
 
-    internal static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, AbstractSingleActor mainTarget, IReadOnlyList<double> thresholds)
+    internal static List<PhaseData> GetPhasesByHealthPercent(ParsedEvtcLog log, SingleActor mainTarget, IReadOnlyList<double> thresholds)
     {
         var phases = new List<PhaseData>();
         if (thresholds.Count == 0)
@@ -39,7 +39,7 @@ internal static class EncounterLogicPhaseUtils
         return phases;
     }
 
-    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
+    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
     {
         long last = start;
         var invuls = GetFilteredList(log.CombatData, skillIDs, mainTarget, beginWithStart, true)
@@ -49,7 +49,7 @@ internal static class EncounterLogicPhaseUtils
 
         var phases = new List<PhaseData>(invuls.Count);
         bool nextToAddIsSkipPhase = !beginWithStart;
-        foreach (AbstractBuffEvent c in invuls)
+        foreach (BuffEvent c in invuls)
         {
             if (c is BuffApplyEvent)
             {
@@ -76,12 +76,12 @@ internal static class EncounterLogicPhaseUtils
         return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
     }
 
-    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
+    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart, long start, long end)
     {
         return GetPhasesByInvul(log, [ skillID ], mainTarget, addSkipPhases, beginWithStart, start, end);
     }
 
-    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, AbstractSingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
+    internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
     {
         return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.FightData.FightStart, log.FightData.FightEnd);
     }

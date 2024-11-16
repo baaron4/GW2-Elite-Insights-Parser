@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class PlayerDstHitMechanic : PlayerDstSkillMechanic
 {
-    protected override bool Keep(AbstractHealthDamageEvent c, ParsedEvtcLog log)
+    protected override bool Keep(HealthDamageEvent c, ParsedEvtcLog log)
     {
         return c.HasHit && base.Keep(c, log);
     }

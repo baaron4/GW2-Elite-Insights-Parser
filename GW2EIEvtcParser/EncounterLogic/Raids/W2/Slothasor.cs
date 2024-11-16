@@ -81,7 +81,7 @@ internal class Slothasor : SalvationPass
     {
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Slothasor)) ?? throw new MissingKeyActorsException("Slothasor not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -90,7 +90,7 @@ internal class Slothasor : SalvationPass
         var sleepy = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == NarcolepsySkill).ToList();
         long start = 0;
         int i = 1;
-        foreach (AbstractCastEvent c in sleepy)
+        foreach (CastEvent c in sleepy)
         {
             var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Phase " + i++);
             phase.AddTarget(mainTarget);
@@ -103,7 +103,7 @@ internal class Slothasor : SalvationPass
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Mushrooms
         var mushroomAgents = combatData
@@ -153,12 +153,12 @@ internal class Slothasor : SalvationPass
             case (int)ArcDPSEnums.TargetID.Slothasor:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill);
-                foreach (AbstractCastEvent c in sleepy)
+                foreach (CastEvent c in sleepy)
                 {
                     replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
                 var breath = cls.Where(x => x.SkillId == Halitosis);
-                foreach (AbstractCastEvent c in breath)
+                foreach (CastEvent c in breath)
                 {
                     int start = (int)c.Time;
                     int preCastTime = 1000;
@@ -174,7 +174,7 @@ internal class Slothasor : SalvationPass
                     }
                 }
                 var tantrum = cls.Where(x => x.SkillId == TantrumSkill);
-                foreach (AbstractCastEvent c in tantrum)
+                foreach (CastEvent c in tantrum)
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
@@ -182,7 +182,7 @@ internal class Slothasor : SalvationPass
                     replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                 }
                 var shakes = cls.Where(x => x.SkillId == SporeRelease);
-                foreach (AbstractCastEvent c in shakes)
+                foreach (CastEvent c in shakes)
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
@@ -198,7 +198,7 @@ internal class Slothasor : SalvationPass
 
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Poison

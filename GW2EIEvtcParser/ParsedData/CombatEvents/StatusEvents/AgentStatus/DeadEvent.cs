@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class DeadEvent : AbstractStatusEvent
+public class DeadEvent : StatusEvent
 {
     internal DeadEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

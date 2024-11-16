@@ -4,25 +4,25 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalBuffsDictionary
 {
-    private readonly Dictionary<AbstractSingleActor, double> _generatedBy = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> GeneratedBy => _generatedBy;
-    private readonly Dictionary<AbstractSingleActor, double> _overstackedBy = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> OverstackedBy => _overstackedBy;
-    private readonly Dictionary<AbstractSingleActor, double> _wastedFrom = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> WastedFrom => _wastedFrom;
-    private readonly Dictionary<AbstractSingleActor, double> _unknownExtensionFrom = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> UnknownExtensionFrom => _unknownExtensionFrom;
-    private readonly Dictionary<AbstractSingleActor, double> _extensionBy = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> ExtensionBy => _extensionBy;
-    private readonly Dictionary<AbstractSingleActor, double> _extendedFrom = [];
-    public IReadOnlyDictionary<AbstractSingleActor, double> ExtendedFrom => _extendedFrom;
+    private readonly Dictionary<SingleActor, double> _generatedBy = [];
+    public IReadOnlyDictionary<SingleActor, double> GeneratedBy => _generatedBy;
+    private readonly Dictionary<SingleActor, double> _overstackedBy = [];
+    public IReadOnlyDictionary<SingleActor, double> OverstackedBy => _overstackedBy;
+    private readonly Dictionary<SingleActor, double> _wastedFrom = [];
+    public IReadOnlyDictionary<SingleActor, double> WastedFrom => _wastedFrom;
+    private readonly Dictionary<SingleActor, double> _unknownExtensionFrom = [];
+    public IReadOnlyDictionary<SingleActor, double> UnknownExtensionFrom => _unknownExtensionFrom;
+    private readonly Dictionary<SingleActor, double> _extensionBy = [];
+    public IReadOnlyDictionary<SingleActor, double> ExtensionBy => _extensionBy;
+    private readonly Dictionary<SingleActor, double> _extendedFrom = [];
+    public IReadOnlyDictionary<SingleActor, double> ExtendedFrom => _extendedFrom;
 
 
     internal static (FinalBuffsDictionary, FinalBuffsDictionary) GetFinalBuffsDictionary(ParsedEvtcLog log, Buff buff, BuffDistribution buffDistribution, long phaseDuration, long activePhaseDuration)
     {
         var buffs = new FinalBuffsDictionary();
         var buffsActive = new FinalBuffsDictionary();
-        foreach (AbstractSingleActor actor in buffDistribution.GetSrcs(buff.ID, log))
+        foreach (SingleActor actor in buffDistribution.GetSrcs(buff.ID, log))
         {
             long gen = buffDistribution.GetGeneration(buff.ID, actor.AgentItem);
             double generated = gen;

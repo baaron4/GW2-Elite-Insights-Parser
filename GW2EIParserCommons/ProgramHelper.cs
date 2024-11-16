@@ -154,7 +154,7 @@ public class ProgramHelper
         AgentItem? pov = log.LogData.PoV;
         if (pov != null)
         {
-            AbstractSingleActor povActor = log.FindActor(pov);
+            SingleActor povActor = log.FindActor(pov);
             builder.WithFooter(povActor.Account + " - " + povActor.Spec.ToString() + "\n" + log.LogData.LogStartStd + " / " + log.LogData.LogEndStd, povActor.GetIcon());
         }
         builder.WithColor(log.FightData.Success ? Discord.Color.Green : Discord.Color.Red);

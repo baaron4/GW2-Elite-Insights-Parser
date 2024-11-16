@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class LogDateEvent : AbstractMetaDataEvent
+public abstract class LogDateEvent : MetaDataEvent
 {
     public readonly uint ServerUnixTimeStamp;
     public readonly uint LocalUnixTimeStamp;

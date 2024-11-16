@@ -165,7 +165,7 @@ public class BuffsContainer
             var stackType0Buffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss).ToList();
             foreach (Buff buff in stackType0Buffs)
             {
-                IReadOnlyList<AbstractBuffEvent> buffData = combatData.GetBuffData(buff.ID);
+                IReadOnlyList<BuffEvent> buffData = combatData.GetBuffData(buff.ID);
                 foreach (var group in buffData.GroupBy(x => x.To))
                 {
                     var buffs = group.ToList();

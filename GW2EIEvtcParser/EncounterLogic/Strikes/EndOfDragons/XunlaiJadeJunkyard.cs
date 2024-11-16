@@ -64,7 +64,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
+        SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
         phases[0].AddTarget(ankka);
         if (!requirePhases)
         {
@@ -128,7 +128,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
+            SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
             var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000).ToList();
             if (buffApplies.Count == 3)
             {
@@ -184,7 +184,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
+        SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
         MapIDEvent map = combatData.GetMapIDEvents().FirstOrDefault();
         if (map != null && map.MapID == 1434)
         {
@@ -193,7 +193,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         return ankka.GetHealth(combatData) > 50e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16).ToList();
         foreach (AgentItem sanctuary in sanctuaryPrism)
@@ -241,7 +241,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var deathsEmbraces = casts.Where(x => x.SkillId == DeathsEmbraceSkill);
                 int deathsEmbraceCastDuration = 10143;
-                foreach (AbstractCastEvent deathEmbrace in deathsEmbraces)
+                foreach (CastEvent deathEmbrace in deathsEmbraces)
                 {
                     int endTime = (int)deathEmbrace.Time + deathsEmbraceCastDuration;
 
@@ -357,7 +357,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM).ToList();
-                foreach (AbstractCastEvent c in waveOfTormentNM)
+                foreach (CastEvent c in waveOfTormentNM)
                 {
                     int castTime = 2800;
                     uint radius = 300;
@@ -369,7 +369,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             case (int)ArcDPSEnums.TrashID.QuaggansHallucinationCM: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var waveOfTormentCM = casts.Where(x => x.SkillId == WaveOfTormentCM).ToList();
-                foreach (AbstractCastEvent c in waveOfTormentCM)
+                foreach (CastEvent c in waveOfTormentCM)
                 {
                     int castTime = 5600;
                     uint radius = 450;
@@ -382,7 +382,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 // Thrash - Circle that pulls in
                 var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashXJJ1 || x.SkillId == ZhaitansReachThrashXJJ2).ToList();
-                foreach (AbstractCastEvent c in thrash)
+                foreach (CastEvent c in thrash)
                 {
                     int castTime = 1900;
                     int endTime = (int)c.Time + castTime;
@@ -390,7 +390,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 }
                 // Ground Slam - AoE that knocks out
                 var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamXJJ).ToList();
-                foreach (AbstractCastEvent c in groundSlam)
+                foreach (CastEvent c in groundSlam)
                 {
                     int castTime = 0;
                     uint radius = 400;
@@ -417,7 +417,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out BuffsGraphModel value))

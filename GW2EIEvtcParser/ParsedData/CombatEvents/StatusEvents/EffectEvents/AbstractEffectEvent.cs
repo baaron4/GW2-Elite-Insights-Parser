@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class AbstractEffectEvent : AbstractStatusEvent
+public abstract class AbstractEffectEvent : StatusEvent
 {
 
     /// <summary>

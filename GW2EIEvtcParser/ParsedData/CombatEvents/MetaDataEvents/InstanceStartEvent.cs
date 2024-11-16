@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class InstanceStartEvent : AbstractMetaDataEvent
+public class InstanceStartEvent : MetaDataEvent
 {
     public readonly long TimeOffsetFromInstanceCreation;
 

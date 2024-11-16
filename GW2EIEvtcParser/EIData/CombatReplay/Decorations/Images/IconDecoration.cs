@@ -2,9 +2,9 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-internal class IconDecoration : GenericIconDecoration
+internal class IconDecoration : ImageDecoration
 {
-    internal class IconDecorationMetadata : GenericIconDecorationMetadata
+    internal class IconDecorationMetadata : ImageDecorationMetadata
     {
         public readonly float Opacity;
 
@@ -18,12 +18,12 @@ internal class IconDecoration : GenericIconDecoration
         {
             return "I" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new IconDecorationMetadataDescription(this);
         }
     }
-    internal class IconDecorationRenderingData : GenericIconDecorationRenderingData
+    internal class IconDecorationRenderingData : ImageDecorationRenderingData
     {
         public bool IsSquadMarker { get; private set; }
         public IconDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
@@ -33,7 +33,7 @@ internal class IconDecoration : GenericIconDecoration
         {
             IsSquadMarker = isSquadMarker;
         }
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new IconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }

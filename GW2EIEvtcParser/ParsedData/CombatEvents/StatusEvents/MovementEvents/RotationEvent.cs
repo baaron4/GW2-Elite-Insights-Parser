@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class RotationEvent : AbstractMovementEvent
+public class RotationEvent : MovementEvent
 {
 
     internal RotationEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)

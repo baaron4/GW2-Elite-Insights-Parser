@@ -49,7 +49,7 @@ internal static class EXTJsonHealingStatsBuilderCommons
     }
 
     //TODO(Rennorb) @perf
-    private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTAbstractHealingEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTHealingEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var jsonHealingDist = new EXTJsonHealingDist();
         jsonHealingDist.IndirectHealing = list.Exists(x => x is EXTNonDirectHealingEvent);
@@ -80,7 +80,7 @@ internal static class EXTJsonHealingStatsBuilderCommons
         jsonHealingDist.Id = id;
         jsonHealingDist.Min = int.MaxValue;
         jsonHealingDist.Max = int.MinValue;
-        foreach (EXTAbstractHealingEvent healingEvt in list)
+        foreach (EXTHealingEvent healingEvt in list)
         {
             jsonHealingDist.Hits++; ;
             jsonHealingDist.TotalHealing += healingEvt.HealingDone;
@@ -97,7 +97,7 @@ internal static class EXTJsonHealingStatsBuilderCommons
     }
 
     //TODO(Rennorb) @perf
-    internal static List<EXTJsonHealingDist> BuildHealingDistList(IEnumerable<IGrouping<long, EXTAbstractHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    internal static List<EXTJsonHealingDist> BuildHealingDistList(IEnumerable<IGrouping<long, EXTHealingEvent>> dlsByID, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var res = new List<EXTJsonHealingDist>();
         foreach (var pair in dlsByID)

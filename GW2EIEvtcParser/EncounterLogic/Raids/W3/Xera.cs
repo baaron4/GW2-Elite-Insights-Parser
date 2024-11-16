@@ -66,10 +66,10 @@ internal class Xera : StrongholdOfTheFaithful
         ];
     }
 
-    internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
-        var res = new List<AbstractBuffEvent>();
+        SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
+        var res = new List<BuffEvent>();
         if (_xeraSecondPhaseStartTime != 0)
         {
             res.Add(new BuffRemoveAllEvent(_unknownAgent, mainTarget.AgentItem, _xeraSecondPhaseStartTime, int.MaxValue, skillData.Get(Determined762), ArcDPSEnums.IFF.Unknown, 1, int.MaxValue));
@@ -95,7 +95,7 @@ internal class Xera : StrongholdOfTheFaithful
     {
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
+        SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
         phases[0].AddTarget(mainTarget);
         if (requirePhases)
         {
@@ -109,7 +109,7 @@ internal class Xera : StrongholdOfTheFaithful
                 phase100to0.AddTarget(mainTarget);
                 phases.Add(phase100to0);
             }
-            AbstractBuffEvent invulXera = GetInvulXeraEvent(log, mainTarget);
+            BuffEvent invulXera = GetInvulXeraEvent(log, mainTarget);
             // split happened
             if (invulXera != null)
             {
@@ -135,11 +135,11 @@ internal class Xera : StrongholdOfTheFaithful
         return phases;
     }
 
-    private AbstractSingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Xera));
+    private SingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Xera));
 
-    private static AbstractBuffEvent GetInvulXeraEvent(ParsedEvtcLog log, AbstractSingleActor xera)
+    private static BuffEvent GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
     {
-        AbstractBuffEvent determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
         return determined;
     }
 
@@ -178,7 +178,7 @@ internal class Xera : StrongholdOfTheFaithful
         return GetGenericFightOffset(fightData);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         bool needsRefresh = false;
         bool needsDummy = true;
@@ -262,7 +262,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
         ComputeFightTargets(agentData, combatData, extensions);
         // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
-        AbstractSingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
+        SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
         mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()
         {
             (22611300, 100),
@@ -318,7 +318,7 @@ internal class Xera : StrongholdOfTheFaithful
             case (int)ArcDPSEnums.TargetID.Xera:
                 var cls = target.GetCastEvents(log, 0, log.FightData.FightEnd);
                 var summon = cls.Where(x => x.SkillId == SummonFragments);
-                foreach (AbstractCastEvent c in summon)
+                foreach (CastEvent c in summon)
                 {
                     replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
@@ -331,7 +331,7 @@ internal class Xera : StrongholdOfTheFaithful
                 if (_xeraFirstPhaseEndTime != 0)
                 {
                     long end = replay.TimeOffsets.end;
-                    AbstractHealthDamageEvent lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
+                    HealthDamageEvent lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
                     if (lastDamage != null)
                     {
                         end = lastDamage.Time;
@@ -347,7 +347,7 @@ internal class Xera : StrongholdOfTheFaithful
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         // Derangement - 0 to 29 nothing, 30 to 59 Silver, 60 to 89 Gold, 90 to 99 Red

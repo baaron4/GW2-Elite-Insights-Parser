@@ -133,7 +133,7 @@ public static class ParserHelper
     }
     public enum BuffEnum { Self, Group, OffGroup, Squad };
 
-    internal static Dictionary<long, List<T>> GroupByTime<T>(IReadOnlyList<T> list) where T : AbstractTimeCombatEvent
+    internal static Dictionary<long, List<T>> GroupByTime<T>(IReadOnlyList<T> list) where T : TimeCombatEvent
     {
         var groupByTime = new Dictionary<long, List<T>>();
         foreach (T c in list)
@@ -298,7 +298,7 @@ public static class ParserHelper
     /// <param name="to">AgentItem the events need to be redirected to</param>
     /// <param name="copyPositionalDataFromAttackTarget">If true, "to" will get the positional data from attack targets, if possible</param>
     /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-    internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null)
+    internal static void RedirectEventsAndCopyPreviousStates(List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, List<AgentItem> stateCopyFroms, AgentItem to, bool copyPositionalDataFromAttackTarget, ExtraRedirection? extraRedirections = null)
     {
         // Redirect combat events
         foreach (CombatItem evt in combatData)
@@ -417,7 +417,7 @@ public static class ParserHelper
     /// <param name="redirectFrom">AgentItem the events need to be redirected from</param>
     /// <param name="to">AgentItem the events need to be redirected to</param>
     /// <param name="extraRedirections">function to handle special conditions, given event either src or dst matches from</param>
-    internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection? extraRedirections = null)
+    internal static void RedirectAllEvents(IReadOnlyList<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions, AgentData agentData, AgentItem redirectFrom, AgentItem to, ExtraRedirection? extraRedirections = null)
     {
         // Redirect combat events
         foreach (CombatItem evt in combatData)

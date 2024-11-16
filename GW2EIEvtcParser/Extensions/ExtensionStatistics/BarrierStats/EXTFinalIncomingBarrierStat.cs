@@ -7,9 +7,9 @@ public class EXTFinalIncomingBarrierStat
     public readonly int BarrierReceived;
     public readonly int DownedBarrierReceived;
 
-    internal EXTFinalIncomingBarrierStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
+    internal EXTFinalIncomingBarrierStat(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
-        foreach (EXTAbstractBarrierEvent barrierEvent in actor.EXTBarrier.GetIncomingBarrierEvents(target, log, start, end))
+        foreach (EXTBarrierEvent barrierEvent in actor.EXTBarrier.GetIncomingBarrierEvents(target, log, start, end))
         {
             BarrierReceived += barrierEvent.BarrierGiven;
             if (barrierEvent.AgainstDowned)

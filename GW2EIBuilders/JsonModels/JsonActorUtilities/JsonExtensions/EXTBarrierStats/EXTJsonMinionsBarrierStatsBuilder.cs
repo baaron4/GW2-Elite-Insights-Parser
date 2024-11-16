@@ -13,7 +13,7 @@ internal static class EXTJsonMinionsBarrierStatsBuilder
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         var totalAlliedBarrier = new List<List<int>>(log.Friendlies.Count);
         var alliedBarrierDist = new List<List<List<EXTJsonBarrierDist>>>(log.Friendlies.Count);
-        foreach (AbstractSingleActor friendly in log.Friendlies)
+        foreach (SingleActor friendly in log.Friendlies)
         {
             var totalAllyBarrier = new List<int>(phases.Count);
             var allyBarrierDist = new List<List<EXTJsonBarrierDist>>(phases.Count);

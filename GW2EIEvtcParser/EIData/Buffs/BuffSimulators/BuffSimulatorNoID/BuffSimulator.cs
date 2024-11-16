@@ -69,7 +69,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
             _logic.Activate(BuffStack, toAdd);
         }
     }
-    protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
+    protected override void UpdateSimulator(BuffEvent buffEvent)
     {
         buffEvent.UpdateSimulator(this, true);
     }

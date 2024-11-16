@@ -9,11 +9,11 @@ internal class PlayerDamageMechanic : DamageMechanic
     {
     }
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
         foreach (Player p in log.PlayerList)
         {
-            foreach (AbstractHealthDamageEvent c in GetEvents(log, p.AgentItem))
+            foreach (HealthDamageEvent c in GetEvents(log, p.AgentItem))
             {
                 if (Keep(c, log))
                 {

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
 internal abstract class BuffSourceFinder
 {
-    private List<AbstractCastEvent>? _extensionSkills = null;
+    private List<CastEvent>? _extensionSkills = null;
     private readonly HashSet<long> _boonIds;
     protected HashSet<long> ExtensionIDS = [];
     protected Dictionary<long, HashSet<long>> DurationToIDs = [];
@@ -18,14 +18,14 @@ internal abstract class BuffSourceFinder
         _boonIds = boonIds;
     }
 
-    private List<AbstractCastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
+    private List<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
     {
         if (_extensionSkills == null)
         {
             _extensionSkills = [];
             foreach (Player p in log.PlayerList)
             {
-                _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != AbstractCastEvent.AnimationStatus.Interrupted));
+                _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != CastEvent.AnimationStatus.Interrupted));
             }
         }
         return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
@@ -58,10 +58,10 @@ internal abstract class BuffSourceFinder
 
     protected virtual bool CouldBeImbuedMelodies(AgentItem agent, long buffID, long time, long extension, ParsedEvtcLog log)
     {
-        if (log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out List<AbstractSingleActor> tempests) && Math.Abs(extension - ImbuedMelodies) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
+        if (log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out List<SingleActor> tempests) && Math.Abs(extension - ImbuedMelodies) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
             var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.CreditedBy != agent).Select(x => x.CreditedBy));
-            foreach (AbstractSingleActor tempest in tempests)
+            foreach (SingleActor tempest in tempests)
             {
                 if (magAuraApplications.Contains(tempest.AgentItem))
                 {
@@ -144,7 +144,7 @@ internal abstract class BuffSourceFinder
         HashSet<long> idsToCheck = GetIDs(log, buffID, extension);
         if (idsToCheck.Count != 0)
         {
-            List<AbstractCastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
+            List<CastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
             // If multiple casters, return unknown
             if (cls.Count > 1)
             {
@@ -152,7 +152,7 @@ internal abstract class BuffSourceFinder
             }
             else if (cls.Count == 1)
             {
-                AbstractCastEvent item = cls.First();
+                CastEvent item = cls.First();
                 // If uncertainty due to essence of speed, imbued melodies or imperial impact, return unknown
                 if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, buffID, time, extension, log) || imperialImpactCheck.Count != 0)
                 {

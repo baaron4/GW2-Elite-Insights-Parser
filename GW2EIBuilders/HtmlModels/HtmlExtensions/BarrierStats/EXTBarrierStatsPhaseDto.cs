@@ -42,7 +42,7 @@ internal class EXTBarrierStatsPhaseDto
     public static List<List<object>> BuildOutgoingBarrierStatData(ParsedEvtcLog log, PhaseData phase)
     {
         var list = new List<List<object>>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             EXTFinalOutgoingBarrierStat outgoingBarrierStats = actor.EXTBarrier.GetOutgoingBarrierStats(null, log, phase.Start, phase.End);
             list.Add(GetOutgoingBarrierStatData(outgoingBarrierStats));
@@ -54,11 +54,11 @@ internal class EXTBarrierStatsPhaseDto
     {
         var list = new List<List<List<object>>>(log.Friendlies.Count);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             var playerData = new List<List<object>>();
 
-            foreach (AbstractSingleActor target in log.Friendlies)
+            foreach (SingleActor target in log.Friendlies)
             {
                 playerData.Add(GetOutgoingBarrierStatData(actor.EXTBarrier.GetOutgoingBarrierStats(target, log, phase.Start, phase.End)));
             }
@@ -71,7 +71,7 @@ internal class EXTBarrierStatsPhaseDto
     {
         var list = new List<List<object>>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             EXTFinalIncomingBarrierStat incomingBarrierStats = actor.EXTBarrier.GetIncomingBarrierStats(null, log, phase.Start, phase.End);
             list.Add(GetIncomingBarrierStatData(incomingBarrierStats));

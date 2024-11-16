@@ -17,7 +17,7 @@ public class DeathRecap
     public readonly List<DeathRecapDamageItem>? ToDown;
     public readonly List<DeathRecapDamageItem>? ToKill;
 
-    internal DeathRecap(ParsedEvtcLog log, IReadOnlyList<AbstractHealthDamageEvent> damageLogs, DeadEvent dead, IReadOnlyList<DownEvent> downs, IReadOnlyList<AliveEvent> ups, long lastDeathTime)
+    internal DeathRecap(ParsedEvtcLog log, IReadOnlyList<HealthDamageEvent> damageLogs, DeadEvent dead, IReadOnlyList<DownEvent> downs, IReadOnlyList<AliveEvent> ups, long lastDeathTime)
     {
         //TODO(Rennorb) @perf
         DeathTime = dead.Time;
@@ -38,7 +38,7 @@ public class DeathRecap
             int damage = 0;
             for (int i = damageToDown.Count - 1; i >= 0; i--)
             {
-                AbstractHealthDamageEvent dl = damageToDown[i];
+                HealthDamageEvent dl = damageToDown[i];
                 AgentItem ag = dl.From;
                 var item = new DeathRecapDamageItem()
                 {
@@ -59,7 +59,7 @@ public class DeathRecap
             ToKill = damageToKill.Count > 0 ? new() : null;
             for (int i = damageToKill.Count - 1; i >= 0; i--)
             {
-                AbstractHealthDamageEvent dl = damageToKill[i];
+                HealthDamageEvent dl = damageToKill[i];
                 AgentItem ag = dl.From;
                 var item = new DeathRecapDamageItem()
                 {
@@ -80,7 +80,7 @@ public class DeathRecap
             int damage = 0;
             for (int i = damageToKill.Count - 1; i >= 0; i--)
             {
-                AbstractHealthDamageEvent dl = damageToKill[i];
+                HealthDamageEvent dl = damageToKill[i];
                 AgentItem ag = dl.From;
                 var item = new DeathRecapDamageItem()
                 {

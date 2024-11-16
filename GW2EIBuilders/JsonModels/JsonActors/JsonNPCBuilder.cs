@@ -14,7 +14,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonNPCBuilder
 {
 
-    public static JsonNPC BuildJsonNPC(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static JsonNPC BuildJsonNPC(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var jsonNPC = new JsonNPC();
         JsonActorBuilder.FillJsonActor(jsonNPC, npc, log, settings, skillMap, buffMap);
@@ -58,7 +58,7 @@ internal static class JsonNPCBuilder
         return jsonNPC;
     }
 
-    private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(AbstractSingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap)
+    private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap)
     {
         var res = new List<JsonBuffsUptime>();
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
@@ -89,7 +89,7 @@ internal static class JsonNPCBuilder
         }
         return res;
     }
-    private static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(AbstractSingleActor npc, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
+    private static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
         var res = new List<JsonBuffVolumes>();
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);

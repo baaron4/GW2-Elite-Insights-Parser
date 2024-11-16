@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class WeaponSwapEvent : AbstractCastEvent
+public class WeaponSwapEvent : CastEvent
 {
     // Swaps
     public int SwappedTo { get; protected set; }

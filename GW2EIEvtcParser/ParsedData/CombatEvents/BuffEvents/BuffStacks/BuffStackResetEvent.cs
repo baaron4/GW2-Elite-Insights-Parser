@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class BuffStackResetEvent : AbstractBuffStackEvent
+public class BuffStackResetEvent : BuffStackEvent
 {
     public readonly int ResetToDuration;
     internal BuffStackResetEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

@@ -107,7 +107,7 @@ internal abstract class InstantCastFinder : IVersionable
         return this;
     }
 
-    protected long GetTime(AbstractTimeCombatEvent evt, AgentItem caster, CombatData combatData)
+    protected long GetTime(TimeCombatEvent evt, AgentItem caster, CombatData combatData)
     {
         long time = evt.Time + TimeOffset;
         if (BeforeWeaponSwap || AfterWeaponSwap)

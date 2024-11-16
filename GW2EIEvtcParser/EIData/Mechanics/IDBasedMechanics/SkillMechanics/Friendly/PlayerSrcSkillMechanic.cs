@@ -14,7 +14,7 @@ internal class PlayerSrcSkillMechanic : PlayerSkillMechanic
     {
     }
 
-    protected override AgentItem GetAgentItem(AbstractHealthDamageEvent ahde)
+    protected override AgentItem GetAgentItem(HealthDamageEvent ahde)
     {
         return ahde.From;
     }

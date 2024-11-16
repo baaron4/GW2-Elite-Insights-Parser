@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class NonDirectHealthDamageEvent : AbstractHealthDamageEvent
+public class NonDirectHealthDamageEvent : HealthDamageEvent
 {
     private readonly BuffCycle _cycle;
 

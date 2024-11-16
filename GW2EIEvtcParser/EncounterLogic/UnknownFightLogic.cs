@@ -38,7 +38,7 @@ internal class UnknownFightLogic : FightLogic
         return GetGenericFightOffset(fightData);
     }
 
-    internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         int id = GenericTriggerID;
         AgentItem agentItem = agentData.GetNPCsByID(id).FirstOrDefault();

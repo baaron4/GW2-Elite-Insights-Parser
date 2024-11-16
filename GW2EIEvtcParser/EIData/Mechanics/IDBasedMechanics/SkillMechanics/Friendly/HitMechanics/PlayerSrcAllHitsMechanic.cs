@@ -10,21 +10,21 @@ internal class PlayerSrcAllHitsMechanic : PlayerSrcHitMechanic
     {
     }
 
-    protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    protected override SingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs)
     {
         throw new InvalidOperationException();
     }
 
-    protected override AgentItem GetAgentItem(AbstractHealthDamageEvent ahde)
+    protected override AgentItem GetAgentItem(HealthDamageEvent ahde)
     {
         throw new InvalidOperationException();
     }
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
         foreach (Player p in log.PlayerList)
         {
-            foreach (AbstractHealthDamageEvent ahde in (Minions ? p.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd) : p.GetJustActorDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd)))
+            foreach (HealthDamageEvent ahde in (Minions ? p.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd) : p.GetJustActorDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd)))
             {
                 if (Keep(ahde, log))
                 {

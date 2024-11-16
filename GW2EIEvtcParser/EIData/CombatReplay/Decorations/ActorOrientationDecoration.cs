@@ -2,21 +2,21 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-internal class ActorOrientationDecoration : GenericAttachedDecoration
+internal class ActorOrientationDecoration : AttachedDecoration
 {
-    internal class ActorOrientationDecorationMetadata : GenericAttachedDecorationMetadata
+    internal class ActorOrientationDecorationMetadata : AttachedDecorationMetadata
     {
 
         public override string GetSignature()
         {
             return "AO";
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new ActorOrientationDecorationMetadataDescription(this);
         }
     }
-    internal class ActorOrientationDecorationRenderingData : GenericAttachedDecorationRenderingData
+    internal class ActorOrientationDecorationRenderingData : AttachedDecorationRenderingData
     {
         public ActorOrientationDecorationRenderingData((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
         {
@@ -30,7 +30,7 @@ internal class ActorOrientationDecoration : GenericAttachedDecoration
         {
         }
 
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new ActorOrientationDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }

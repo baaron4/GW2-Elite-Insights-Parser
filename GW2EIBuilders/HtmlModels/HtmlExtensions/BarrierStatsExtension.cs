@@ -24,7 +24,7 @@ internal class BarrierStatsExtension
         }
 
         PlayerBarrierDetails = new(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             PlayerBarrierDetails.Add(EXTBarrierStatsPlayerDetailsDto.BuildPlayerBarrierData(log, actor, usedSkills, usedBuffs));
         }

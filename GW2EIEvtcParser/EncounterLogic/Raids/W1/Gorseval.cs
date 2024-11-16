@@ -51,7 +51,7 @@ internal class Gorseval : SpiritVale
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Gorseval)) ?? throw new MissingKeyActorsException("Gorseval not found");
         phases[0].AddTarget(mainTarget);
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul)));
         if (!requirePhases)
@@ -89,11 +89,11 @@ internal class Gorseval : SpiritVale
         ("SE", new(2470.5596f, -5194.389f)),
     ];
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 1 }, { "SE", 1 } };
-        foreach (AbstractSingleActor target in _targets)
+        foreach (SingleActor target in _targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.ChargedSoul))
             {
@@ -126,7 +126,7 @@ internal class Gorseval : SpiritVale
         ];
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Ghastly Prison - Eggs AoEs
@@ -148,7 +148,7 @@ internal class Gorseval : SpiritVale
             case (int)ArcDPSEnums.TargetID.Gorseval:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var blooms = cls.Where(x => x.SkillId == GorsevalBloom);
-                foreach (AbstractCastEvent c in blooms)
+                foreach (CastEvent c in blooms)
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
@@ -166,7 +166,7 @@ internal class Gorseval : SpiritVale
                     const byte full = 1 << 5;
 
                     var pos = replay.PolledPositions.First().Value;
-                    foreach (AbstractCastEvent c in rampage)
+                    foreach (CastEvent c in rampage)
                     {
                         int start = (int)c.Time;
                         int end = (int)c.EndTime;
@@ -277,7 +277,7 @@ internal class Gorseval : SpiritVale
                     }
                 }
                 var slam = cls.Where(x => x.SkillId == SpectralImpact).ToList();
-                foreach (AbstractCastEvent c in slam)
+                foreach (CastEvent c in slam)
                 {
                     int start = (int)c.Time;
                     int impactPoint = 1185;

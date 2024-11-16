@@ -78,7 +78,7 @@ internal class Sabir : TheKeyOfAhdashim
         ];
     }
 
-    internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
         NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem).ToList());
         return [];
@@ -87,7 +87,7 @@ internal class Sabir : TheKeyOfAhdashim
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -103,7 +103,7 @@ internal class Sabir : TheKeyOfAhdashim
             var phase = new PhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
             phase.AddTarget(mainTarget);
             phases.Add(phase);
-            AbstractCastEvent nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
+            CastEvent nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
             if (nextAttack == null)
             {
                 break;
@@ -131,7 +131,7 @@ internal class Sabir : TheKeyOfAhdashim
                         (33530, 34050, 35450, 35970)*/);
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -163,13 +163,13 @@ internal class Sabir : TheKeyOfAhdashim
                 }
                 //
                 var furyOfTheStorm = casts.Where(x => x.SkillId == FuryOfTheStorm);
-                foreach (AbstractCastEvent c in furyOfTheStorm)
+                foreach (CastEvent c in furyOfTheStorm)
                 {
                     replay.Decorations.Add(new CircleDecoration(1200, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)).UsingGrowingEnd(c.EndTime));
                 }
                 //
                 var unbridledTempest = casts.Where(x => x.SkillId == UnbridledTempest);
-                foreach (AbstractCastEvent c in unbridledTempest)
+                foreach (CastEvent c in unbridledTempest)
                 {
                     int start = (int)c.Time;
                     int delay = 3000; // casttime 0 from skill def
@@ -230,7 +230,7 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabir)) ?? throw new MissingKeyActorsException("Sabir not found");
         return (target.GetHealth(combatData) > 32e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }

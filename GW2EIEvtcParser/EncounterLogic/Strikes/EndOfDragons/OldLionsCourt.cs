@@ -156,20 +156,20 @@ internal class OldLionsCourt : EndOfDragonsStrike
         ];
     }
 
-    private AbstractSingleActor Vermilion()
+    private SingleActor Vermilion()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilionCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilion));
     }
-    private AbstractSingleActor Indigo()
+    private SingleActor Indigo()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeIndigoCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeIndigo));
     }
-    private AbstractSingleActor Arsenite()
+    private SingleActor Arsenite()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArsenite));
     }
 
-    private static List<PhaseData> GetSubPhases(AbstractSingleActor target, ParsedEvtcLog log, string phaseName)
+    private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName)
     {
         DeadEvent dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
         long end = log.FightData.FightEnd;
@@ -230,9 +230,9 @@ internal class OldLionsCourt : EndOfDragonsStrike
         return startToUse;
     }
 
-    internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        List<AbstractBuffEvent> toAdd = base.SpecialBuffEventProcess(combatData, skillData);
+        List<BuffEvent> toAdd = base.SpecialBuffEventProcess(combatData, skillData);
         var shields = combatData.GetBuffData(LeyWovenShielding).GroupBy(x => x.To);
         foreach (var group in shields)
         {
@@ -248,7 +248,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor vermilion = Vermilion();
+        SingleActor vermilion = Vermilion();
         bool canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
         if (vermilion != null)
         {
@@ -258,7 +258,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 phases.AddRange(GetSubPhases(vermilion, log, "Vermilion"));
             }
         }
-        AbstractSingleActor indigo = Indigo();
+        SingleActor indigo = Indigo();
         if (indigo != null)
         {
             phases[0].AddTarget(indigo);
@@ -267,7 +267,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 phases.AddRange(GetSubPhases(indigo, log, "Indigo"));
             }
         }
-        AbstractSingleActor arsenite = Arsenite();
+        SingleActor arsenite = Arsenite();
         if (arsenite != null)
         {
             phases[0].AddTarget(arsenite);
@@ -281,7 +281,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = (Vermilion() ?? Indigo() ?? Arsenite()) ?? throw new MissingKeyActorsException("Main target not found");
+        SingleActor target = (Vermilion() ?? Indigo() ?? Arsenite()) ?? throw new MissingKeyActorsException("Main target not found");
         return target.GetHealth(combatData) > 20e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
@@ -295,14 +295,14 @@ internal class OldLionsCourt : EndOfDragonsStrike
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixation
-        IEnumerable<AbstractBuffEvent> fixations = log.CombatData.GetBuffDataByIDByDst(FixatedOldLionsCourt, p.AgentItem);
-        IEnumerable<AbstractBuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM }));
-        IEnumerable<AbstractBuffEvent> fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM }));
-        IEnumerable<AbstractBuffEvent> fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM }));
+        IEnumerable<BuffEvent> fixations = log.CombatData.GetBuffDataByIDByDst(FixatedOldLionsCourt, p.AgentItem);
+        IEnumerable<BuffEvent> fixatedVermillion = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM }));
+        IEnumerable<BuffEvent> fixatedArsenite = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM }));
+        IEnumerable<BuffEvent> fixatedIndigo = fixations.Where(bae => bae.CreditedBy.IsAnySpecies(new List<TargetID> { TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM }));
 
         AddFixatedDecorations(p, log, replay, fixatedVermillion, ParserIcons.FixationRedOverhead);
         AddFixatedDecorations(p, log, replay, fixatedArsenite, ParserIcons.FixationGreenOverhead);
@@ -688,12 +688,12 @@ internal class OldLionsCourt : EndOfDragonsStrike
     /// </summary>
     /// <param name="player">Player for the decoration.</param>
     /// <param name="replay">Combat Replay.</param>
-    /// <param name="fixations">The <see cref="AbstractBuffEvent"/> where the buff appears.</param>
+    /// <param name="fixations">The <see cref="BuffEvent"/> where the buff appears.</param>
     /// <param name="icon">The icon related to the respective buff.</param>
-    private static void AddFixatedDecorations(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay, IEnumerable<AbstractBuffEvent> fixations, string icon)
+    private static void AddFixatedDecorations(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, IEnumerable<BuffEvent> fixations, string icon)
     {
-        IEnumerable<AbstractBuffEvent> applications = fixations.Where(x => x is BuffApplyEvent);
-        IEnumerable<AbstractBuffEvent> removals = fixations.Where(x => x is BuffRemoveAllEvent);
+        IEnumerable<BuffEvent> applications = fixations.Where(x => x is BuffApplyEvent);
+        IEnumerable<BuffEvent> removals = fixations.Where(x => x is BuffRemoveAllEvent);
         foreach (BuffApplyEvent bae in applications.Cast<BuffApplyEvent>())
         {
             long start = bae.Time;

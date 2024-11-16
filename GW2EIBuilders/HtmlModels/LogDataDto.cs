@@ -106,7 +106,7 @@ internal class LogDataDto
         {
             UsedExtensions = [];
             PlayersRunningExtensions = [];
-            foreach (AbstractExtensionHandler extension in log.LogData.UsedExtensions)
+            foreach (ExtensionHandler extension in log.LogData.UsedExtensions)
             {
                 UsedExtensions.Add(extension.Name + " - " + extension.Version);
                 var set = new HashSet<string>();
@@ -142,12 +142,12 @@ internal class LogDataDto
     {
         var boonsBySpec = new Dictionary<Spec, IReadOnlyList<Buff>>();
         // Collect all personal buffs by spec
-        foreach (KeyValuePair<Spec, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
+        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
         {
-            List<AbstractSingleActor> friendlies = pair.Value;
+            List<SingleActor> friendlies = pair.Value;
             var specBoonIds = new HashSet<long>(log.Buffs.GetPersonalBuffsList(pair.Key).Select(x => x.ID));
             var boonToUse = new HashSet<Buff>();
-            foreach (AbstractSingleActor actor in friendlies)
+            foreach (SingleActor actor in friendlies)
             {
                 foreach (PhaseData phase in log.FightData.GetPhases(log))
                 {
@@ -182,11 +182,11 @@ internal class LogDataDto
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>>();
         // Collect all personal damage mods by spec
-        foreach (KeyValuePair<Spec, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
+        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
         {
             var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetOutgoingModifiersPerSpec(pair.Key).Select(x => x.Name));
             var damageModsToUse = new HashSet<OutgoingDamageModifier>();
-            foreach (AbstractSingleActor actor in pair.Value)
+            foreach (SingleActor actor in pair.Value)
             {
                 var presentDamageMods = new HashSet<string>(actor.GetPresentOutgoingDamageModifier(log).Intersect(specDamageModsName));
                 foreach (string name in presentDamageMods)
@@ -212,11 +212,11 @@ internal class LogDataDto
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>>();
         // Collect all personal damage mods by spec
-        foreach (KeyValuePair<Spec, List<AbstractSingleActor>> pair in log.FriendliesListBySpec)
+        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
         {
             var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetIncomingModifiersPerSpec(pair.Key).Select(x => x.Name));
             var damageModsToUse = new HashSet<IncomingDamageModifier>();
-            foreach (AbstractSingleActor actor in pair.Value)
+            foreach (SingleActor actor in pair.Value)
             {
                 var presentDamageMods = new HashSet<string>(actor.GetPresentIncomingDamageModifier(log).Intersect(specDamageModsName));
                 foreach (string name in presentDamageMods)
@@ -301,7 +301,7 @@ internal class LogDataDto
     private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, HashSet<OutgoingDamageModifier> usedDamageMods,
         HashSet<string> allDamageMods, List<OutgoingDamageModifier> commonDamageModifiers, List<OutgoingDamageModifier> itemDamageModifiers)
     {
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             allDamageMods.UnionWith(actor.GetPresentOutgoingDamageModifier(log));
         }
@@ -358,7 +358,7 @@ internal class LogDataDto
     private void BuildIncomingDamageModDictionaries(ParsedEvtcLog log, HashSet<IncomingDamageModifier> usedIncDamageMods,
         HashSet<string> allIncDamageMods, List<IncomingDamageModifier> commonIncDamageModifiers, List<IncomingDamageModifier> itemIncDamageModifiers)
     {
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             allIncDamageMods.UnionWith(actor.GetPresentIncomingDamageModifier(log));
         }
@@ -435,7 +435,7 @@ internal class LogDataDto
         _t.Log("built graph data");
         
         log.UpdateProgressWithCancellationCheck("HTML: building Players");
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             logData.HasCommander = logData.HasCommander || (actor is Player p && p.IsCommander(log));
             logData.Players.Add(new PlayerDto(actor, log, ActorDetailsDto.BuildPlayerData(log, actor, usedSkills, usedBuffs)));
@@ -443,14 +443,14 @@ internal class LogDataDto
         _t.Log("built player data");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Enemies");
-        foreach (AbstractSingleActor enemy in log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd))
+        foreach (SingleActor enemy in log.MechanicData.GetEnemyList(log, log.FightData.FightStart, log.FightData.FightEnd))
         {
             logData.Enemies.Add(new EnemyDto() { Name = enemy.Character });
         }
         _t.Log("built enemy data");
 
         log.UpdateProgressWithCancellationCheck("HTML: building Targets");
-        foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
+        foreach (SingleActor target in log.FightData.Logic.Targets)
         {
             var targetDto = new TargetDto(target, log, ActorDetailsDto.BuildTargetData(log, target, usedSkills, usedBuffs, cr));
             logData.Targets.Add(targetDto);

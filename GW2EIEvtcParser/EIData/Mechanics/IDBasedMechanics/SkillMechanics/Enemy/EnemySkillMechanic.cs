@@ -15,7 +15,7 @@ internal abstract class EnemySkillMechanic : SkillMechanic
     {
         IsEnemyMechanic = true;
     }
-    protected override AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    protected override SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs)
     {
         return MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
     }

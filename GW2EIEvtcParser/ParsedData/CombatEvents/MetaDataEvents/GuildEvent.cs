@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class GuildEvent : AbstractMetaDataEvent
+public class GuildEvent : MetaDataEvent
 {
     public AgentItem Src { get; protected set; }
 

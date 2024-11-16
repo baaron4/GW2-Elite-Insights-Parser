@@ -3,17 +3,17 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class Minions : AbstractActor
+public class Minions : Actor
 {
     private readonly List<NPC> _minionList;
     public AgentItem ReferenceAgentItem => AgentItem;
 
     public IReadOnlyList<NPC> MinionList => _minionList;
-    public readonly AbstractSingleActor Master;
+    public readonly SingleActor Master;
     public readonly EXTMinionsHealingHelper EXTHealing;
     public readonly EXTMinionsBarrierHelper EXTBarrier;
 
-    internal Minions(AbstractSingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
+    internal Minions(SingleActor master, NPC firstMinion) : base(firstMinion.AgentItem)
     {
         _minionList = [firstMinion];
         Master = master;
@@ -31,11 +31,11 @@ public class Minions : AbstractActor
     }
 
     #region DAMAGE
-    public override IEnumerable<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (DamageEvents == null)
         {
-            DamageEvents = new List<AbstractHealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            DamageEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
                 DamageEvents.AddRange(minion.GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
@@ -46,7 +46,7 @@ public class Minions : AbstractActor
 
         if (target != null)
         {
-            if (DamageEventByDst!.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+            if (DamageEventByDst!.TryGetValue(target.AgentItem, out List<HealthDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -58,11 +58,11 @@ public class Minions : AbstractActor
 
         return DamageEvents.Where(x => x.Time >= start && x.Time <= end);
     }
-    public override IEnumerable<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (DamageTakenEvents == null || DamageTakenEventsBySrc == null)
         {
-            DamageTakenEvents = new List<AbstractHealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            DamageTakenEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
                 DamageTakenEvents.AddRange(minion.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
@@ -73,7 +73,7 @@ public class Minions : AbstractActor
 
         if (target != null)
         {
-            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<HealthDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -88,7 +88,7 @@ public class Minions : AbstractActor
 
     #region BREAKBAR DAMAGE
 
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (BreakbarDamageEvents == null)
         {
@@ -116,7 +116,7 @@ public class Minions : AbstractActor
         return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
     {
         if (BreakbarDamageTakenEvents == null)
         {
@@ -148,7 +148,7 @@ public class Minions : AbstractActor
 
     #region CROWD CONTROL
 
-    public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (OutgoingCrowdControlEvents == null)
         {
@@ -176,7 +176,7 @@ public class Minions : AbstractActor
         return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
     {
         if (IncomingCrowdControlEvents == null)
         {
@@ -208,7 +208,7 @@ public class Minions : AbstractActor
     #region CAST
     private void InitCastEvents(ParsedEvtcLog log)
     {
-        CastEvents = new List<AbstractCastEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+        CastEvents = new List<CastEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (NPC minion in _minionList)
         {
             CastEvents.AddRange(minion.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd));
@@ -216,7 +216,7 @@ public class Minions : AbstractActor
         CastEvents.SortByTimeThenSwap();
     }
 
-    public override IEnumerable<AbstractCastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<CastEvent> GetCastEvents(ParsedEvtcLog log, long start, long end)
     {
         if (CastEvents == null)
         {
@@ -225,7 +225,7 @@ public class Minions : AbstractActor
         return CastEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<AbstractCastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
     {
         if (CastEvents == null)
         {

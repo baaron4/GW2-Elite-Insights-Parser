@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class BuffStackActiveEvent : AbstractBuffStackEvent
+public class BuffStackActiveEvent : BuffStackEvent
 {
 
     internal BuffStackActiveEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

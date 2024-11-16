@@ -8,16 +8,16 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
     readonly int _layer2InitialCapacityBuffs = layer2InitialCapacityBuffs;
     readonly int _layer2InitialCapacityExts = layer2InitialCapacityExts;
     readonly int _layer3InitialCapacityExts = layer3InitialCapacityExts;
-    readonly Dictionary<long, List<AbstractBuffEvent>> _buffIdToEvents = new(layer1InitialCapacity);
+    readonly Dictionary<long, List<BuffEvent>> _buffIdToEvents = new(layer1InitialCapacity);
     // Fast look up table for AddToList
     readonly Dictionary<long, Dictionary<uint, List<BuffExtensionEvent>>> _buffIdToExtensions = new(layer1InitialCapacity);
 
-    public bool TryGetValue(long buffID, [NotNullWhen(true)] out List<AbstractBuffEvent>? list)
+    public bool TryGetValue(long buffID, [NotNullWhen(true)] out List<BuffEvent>? list)
     {
         return _buffIdToEvents.TryGetValue(buffID, out list);
     }
 
-    static void AddToList(ParsedEvtcLog log, List<AbstractBuffEvent> list, Dictionary<uint, List<BuffExtensionEvent>> dictExtension, AbstractBuffEvent buffEvent, int initialListCapacity)
+    static void AddToList(ParsedEvtcLog log, List<BuffEvent> list, Dictionary<uint, List<BuffExtensionEvent>> dictExtension, BuffEvent buffEvent, int initialListCapacity)
     {
         // Essence of speed issue for Soulbeast
         if (buffEvent is BuffExtensionEvent beeCurrent)
@@ -62,7 +62,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
         list.Add(buffEvent);
     }
 
-    public void Add(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
+    public void Add(ParsedEvtcLog log, Buff buff, BuffEvent buffEvent)
     {
         if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))
         {
@@ -81,7 +81,7 @@ internal class BuffDictionary(int layer1InitialCapacity, int layer2InitialCapaci
     }
 
     private BuffRemoveSingleEvent? _lastRemovedRegen = null;
-    public void AddRegen(ParsedEvtcLog log, Buff buff, AbstractBuffEvent buffEvent)
+    public void AddRegen(ParsedEvtcLog log, Buff buff, BuffEvent buffEvent)
     {
         if (!buffEvent.IsBuffSimulatorCompliant(log.CombatData.UseBuffInstanceSimulator))
         {

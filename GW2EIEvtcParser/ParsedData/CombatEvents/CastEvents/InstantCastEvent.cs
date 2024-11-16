@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class InstantCastEvent : AbstractCastEvent
+public class InstantCastEvent : CastEvent
 {
 
     internal InstantCastEvent(long time, SkillItem skill, AgentItem caster) : base(time, skill, caster)

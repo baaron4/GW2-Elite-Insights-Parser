@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class TargetableEvent : AbstractStatusEvent
+public class TargetableEvent : StatusEvent
 {
     public readonly bool Targetable;
 

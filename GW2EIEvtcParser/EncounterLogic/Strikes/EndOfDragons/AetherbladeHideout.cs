@@ -136,7 +136,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                 // Nightmare Fusillade - Cone Attack
                 var nightmareFusilladeMain = casts.Where(x => x.SkillId == NightmareFusilladeMain).ToList();
-                foreach (AbstractCastEvent cast in nightmareFusilladeMain)
+                foreach (CastEvent cast in nightmareFusilladeMain)
                 {
                     int castDuration = 1767;
                     int waveDuration = 1066;
@@ -147,7 +147,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                 // Heartpiercer - Arrow attack with dash
                 var heartpiercer = casts.Where(x => x.SkillId == Heartpiercer).ToList();
-                foreach (AbstractCastEvent cast in heartpiercer)
+                foreach (CastEvent cast in heartpiercer)
                 {
                     int castDuration = 2500;
                     uint range = 500;
@@ -168,7 +168,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             case (int)TrashID.MaiTrinStrikeDuringEcho:
                 // Nightmare Fusillade - Cone Attack
                 var nightmareFusilladeSide = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == NightmareFusilladeSide).ToList();
-                foreach (AbstractCastEvent cast in nightmareFusilladeSide)
+                foreach (CastEvent cast in nightmareFusilladeSide)
                 {
                     int castDuration = 3167;
                     int waveDuration = 1066;
@@ -277,7 +277,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             case (int)TrashID.ScarletPhantomBeamNM:
                 // Flanking Shot - Normal Mode Puzzle - Rectangular Beam
                 var flankingShot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == FlankingShot).ToList();
-                foreach (AbstractCastEvent cast in flankingShot)
+                foreach (CastEvent cast in flankingShot)
                 {
                     int duration = 500;
                     uint range = 1600;
@@ -311,7 +311,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 break;
         }
     }
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
@@ -430,11 +430,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             const uint radiusFromCenter = 375; // Found by calculating distance between detonation effect and echo position, original value is 374.999969
             const uint innerRadius = 160;
             const uint outerRadius = 480;
-            AbstractSingleActor echo = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM));
+            SingleActor echo = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM));
             foreach (EffectEvent effect in puzzleNM)
             {
                 // The effect position is outside of the arena, take the position of the Echo as central point.
-                AbstractSingleActor phantom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
+                SingleActor phantom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
                 if (echo != null && phantom != null)
                 {
                     if (echo.TryGetCurrentPosition(log, effect.Time, out var echoPosition) 
@@ -490,7 +490,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
     }
 
-    private AbstractSingleActor GetEchoOfScarletBriar(FightData fightData)
+    private SingleActor GetEchoOfScarletBriar(FightData fightData)
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
     }
@@ -500,10 +500,10 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(fightData);
+            SingleActor echoOfScarlet = GetEchoOfScarletBriar(fightData);
             if (echoOfScarlet != null)
             {
-                AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
+                SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
                 BuffApplyEvent buffApply = combatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
                 if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                 {
@@ -513,7 +513,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
     }
 
-    private IEnumerable<AbstractSingleActor> GetHPScarletPhantoms(PhaseData phase)
+    private IEnumerable<SingleActor> GetHPScarletPhantoms(PhaseData phase)
     {
         return Targets.Where(x => (x.IsSpecies(TrashID.ScarletPhantomHP) || x.IsSpecies(TrashID.ScarletPhantomHPCM)) && phase.IntersectsWindow(x.FirstAware, x.LastAware));
     }
@@ -521,9 +521,9 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
+        SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
         phases[0].AddTarget(maiTrin);
-        AbstractSingleActor echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
+        SingleActor echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
         if (echoOfScarlet != null)
         {
             phases[0].AddTarget(echoOfScarlet);
@@ -588,7 +588,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Ferrous Bombs
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
@@ -615,7 +615,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
         ComputeFightTargets(agentData, combatData, extensions);
         var echoesOfScarlet = Targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM)).ToList();
-        foreach (AbstractSingleActor echoOfScarlet in echoesOfScarlet)
+        foreach (SingleActor echoOfScarlet in echoesOfScarlet)
         {
             var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
             if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()) == 100)
@@ -659,7 +659,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     /// <param name="skillId">The buff applied on the player or the Ferrous Bomb.</param>
     /// <param name="angle1">The rotation angle of the first rectangle.</param>
     /// <param name="angle2">The rotation angle of the second rectangle.</param>
-    private static void AddMagBeamDecorations(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
+    private static void AddMagBeamDecorations(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
     {
         const uint width = 320;
         const uint length = 2000;
@@ -735,7 +735,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     /// Focused Destruction - Green AoEs.<br></br>
     /// <remarks>As of EVTC20241030 effects on players have Dynamic End Time.</remarks>
     /// </summary>
-    private static void AddOnPlayerDecorations(ParsedEvtcLog log, AbstractPlayer player, CombatReplay replay, EffectEvent effect, IReadOnlyList<AbstractSingleActor> targets, long duration, uint radius)
+    private static void AddOnPlayerDecorations(ParsedEvtcLog log, PlayerActor player, CombatReplay replay, EffectEvent effect, IReadOnlyList<SingleActor> targets, long duration, uint radius)
     {
         (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
         long growing = effect.Time + duration;
@@ -904,7 +904,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     /// <param name="skillId">The buff applied on the player or the Ferrous Bomb.</param>
     /// <param name="angle1">The rotation angle of the first rectangle.</param>
     /// <param name="angle2">The rotation angle of the second rectangle.</param>
-    private static void AddFlankingShotDecorations(AbstractSingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
+    private static void AddFlankingShotDecorations(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
     {
         const uint width = 320;
         const uint length = 2000;
@@ -961,7 +961,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
+        SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
         return maiTrin.GetHealth(combatData) > 8e6 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 

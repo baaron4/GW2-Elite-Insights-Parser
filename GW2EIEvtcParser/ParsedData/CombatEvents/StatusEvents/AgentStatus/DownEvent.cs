@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class DownEvent : AbstractStatusEvent
+public class DownEvent : StatusEvent
 {
     internal DownEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

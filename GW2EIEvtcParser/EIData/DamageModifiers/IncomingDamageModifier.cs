@@ -11,7 +11,7 @@ public class IncomingDamageModifier : DamageModifier
         Incoming = true;
     }
 
-    public override int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end)
+    public override int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
         FinalDefenses defenseData = actor.GetDefenseStats(t, log, start, end);
         return (CompareType) switch
@@ -27,11 +27,11 @@ public class IncomingDamageModifier : DamageModifier
         };
     }
 
-    public override IEnumerable<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end)
+    public override IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end)
     {
         return actor.GetHitDamageTakenEvents(t, log, start, end, SrcType);
     }
-    internal override AgentItem GetFoe(AbstractHealthDamageEvent evt)
+    internal override AgentItem GetFoe(HealthDamageEvent evt)
     {
         return evt.From;
     }

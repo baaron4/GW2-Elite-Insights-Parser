@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class ErrorEvent : AbstractMetaDataEvent
+public class ErrorEvent : MetaDataEvent
 {
     public readonly string Message;
     internal ErrorEvent(CombatItem evtcItem) : base(evtcItem)

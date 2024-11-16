@@ -4,40 +4,40 @@ namespace GW2EIEvtcParser.Extensions;
 
 public class EXTBarrierCombatData
 {
-    private readonly Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> _barrierData;
-    private readonly Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> _barrierReceivedData;
-    private readonly Dictionary<long, List<EXTAbstractBarrierEvent>> _barrierDataByID;
+    private readonly Dictionary<AgentItem, List<EXTBarrierEvent>> _barrierData;
+    private readonly Dictionary<AgentItem, List<EXTBarrierEvent>> _barrierReceivedData;
+    private readonly Dictionary<long, List<EXTBarrierEvent>> _barrierDataByID;
 
-    internal EXTBarrierCombatData(Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> barrierData, Dictionary<AgentItem, List<EXTAbstractBarrierEvent>> barrierReceivedData, Dictionary<long, List<EXTAbstractBarrierEvent>> barrierDataByID)
+    internal EXTBarrierCombatData(Dictionary<AgentItem, List<EXTBarrierEvent>> barrierData, Dictionary<AgentItem, List<EXTBarrierEvent>> barrierReceivedData, Dictionary<long, List<EXTBarrierEvent>> barrierDataByID)
     {
         _barrierData = barrierData;
         _barrierReceivedData = barrierReceivedData;
         _barrierDataByID = barrierDataByID;
     }
 
-    public IReadOnlyList<EXTAbstractBarrierEvent> GetBarrierData(AgentItem key)
+    public IReadOnlyList<EXTBarrierEvent> GetBarrierData(AgentItem key)
     {
-        if (_barrierData.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
+        if (_barrierData.TryGetValue(key, out List<EXTBarrierEvent> res))
         {
             return res;
         }
-        return new List<EXTAbstractBarrierEvent>();
+        return new List<EXTBarrierEvent>();
     }
-    public IReadOnlyList<EXTAbstractBarrierEvent> GetBarrierReceivedData(AgentItem key)
+    public IReadOnlyList<EXTBarrierEvent> GetBarrierReceivedData(AgentItem key)
     {
-        if (_barrierReceivedData.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
+        if (_barrierReceivedData.TryGetValue(key, out List<EXTBarrierEvent> res))
         {
             return res;
         }
-        return new List<EXTAbstractBarrierEvent>();
+        return new List<EXTBarrierEvent>();
     }
 
-    public IReadOnlyList<EXTAbstractBarrierEvent> GetBarrierData(long key)
+    public IReadOnlyList<EXTBarrierEvent> GetBarrierData(long key)
     {
-        if (_barrierDataByID.TryGetValue(key, out List<EXTAbstractBarrierEvent> res))
+        if (_barrierDataByID.TryGetValue(key, out List<EXTBarrierEvent> res))
         {
             return res;
         }
-        return new List<EXTAbstractBarrierEvent>();
+        return new List<EXTBarrierEvent>();
     }
 }

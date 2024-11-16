@@ -138,12 +138,12 @@ internal static class ThiefHelper
         return Minions.Contains(id);
     }
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Thief;
 
         // Shadow Portal locations
-        var entranceDecorations = new List<GenericAttachedDecoration>();
+        var entranceDecorations = new List<AttachedDecoration>();
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ThiefShadowPortalActiveEntrance, out var shadowPortalActiveEntrance))
         {
             var skill = new SkillModeDescriptor(player, Spec.Thief, PrepareShadowPortal, SkillModeCategory.Portal);
@@ -152,7 +152,7 @@ internal static class ThiefHelper
                 (long, long) lifespan = enter.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                 var connector = new PositionConnector(enter.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                AttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                 replay.Decorations.Add(icon);
                 entranceDecorations.Add(icon);
             }
@@ -165,8 +165,8 @@ internal static class ThiefHelper
                 (long, long) lifespan = exit.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                 var connector = new PositionConnector(exit.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
-                GenericAttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
+                AttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                AttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
                 if (entranceDecoration != null)
                 {
                     replay.Decorations.Add(entranceDecoration.LineTo(icon, color, 0.5).UsingSkillMode(skill));

@@ -36,16 +36,16 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
         }
     }
 
-    protected abstract void UpdateSimulator(AbstractBuffEvent buffEvent);
+    protected abstract void UpdateSimulator(BuffEvent buffEvent);
 
-    public void Simulate(List<AbstractBuffEvent> buffEvents, long fightStart, long fightEnd)
+    public void Simulate(List<BuffEvent> buffEvents, long fightStart, long fightEnd)
     {
         if (GenerationSimulation.Count != 0)
         {
             return;
         }
         long timePrev = buffEvents.Count > 0 ? Math.Min(buffEvents[0].Time, fightStart) : fightStart;
-        foreach (AbstractBuffEvent buffEvent in buffEvents)
+        foreach (BuffEvent buffEvent in buffEvents)
         {
             long timeCur = buffEvent.Time;
             Debug.Assert(timeCur >= timePrev, "Negative passed time in boon simulation");

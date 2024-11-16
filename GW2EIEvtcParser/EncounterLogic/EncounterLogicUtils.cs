@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicUtils
 {
-    internal static void RegroupTargetsByID(int id, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal static void RegroupTargetsByID(int id, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
         if (agents.Count > 1)
@@ -25,9 +25,9 @@ internal static class EncounterLogicUtils
         }
     }
 
-    internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
+    internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {
-        AbstractSingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
+        SingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
         if (target == null)
         {
             // If tracked target is missing, then 0% hp
@@ -48,19 +48,19 @@ internal static class EncounterLogicUtils
         return hpUpdate.HealthPercent < threshold - 2;
     }
 
-    internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<AbstractSingleActor> targets, double expectedInitialPercent = 100.0)
+    internal static bool TargetHPPercentUnderThreshold(ArcDPSEnums.TargetID targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {
         return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);
     }
 
     internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)
     {
-        var dmgEvts = new List<AbstractHealthDamageEvent>();
+        var dmgEvts = new List<HealthDamageEvent>();
         foreach (AgentItem agentItem in agentItems)
         {
             dmgEvts.AddRange(combatData.GetDamageTakenData(agentItem));
         }
-        foreach (AbstractHealthDamageEvent de in dmgEvts)
+        foreach (HealthDamageEvent de in dmgEvts)
         {
             if (de.ShieldDamage > 0)
             {
@@ -102,14 +102,14 @@ internal static class EncounterLogicUtils
         }
         return new("Missing confusion damage");
     }
-    internal static List<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
+    internal static List<BuffEvent> GetFilteredList(CombatData combatData, long buffID, AgentItem target, bool beginWithStart, bool padEnd)
     {
         bool needStart = beginWithStart;
         var main = combatData.GetBuffDataByIDByDst(buffID, target).Where(x => (x is BuffApplyEvent || x is BuffRemoveAllEvent)).ToList();
-        var filtered = new List<AbstractBuffEvent>();
+        var filtered = new List<BuffEvent>();
         for (int i = 0; i < main.Count; i++)
         {
-            AbstractBuffEvent c = main[i];
+            BuffEvent c = main[i];
             if (needStart && c is BuffApplyEvent)
             {
                 needStart = false;
@@ -127,23 +127,23 @@ internal static class EncounterLogicUtils
         }
         if (padEnd && filtered.Count != 0 && filtered.Last() is BuffApplyEvent)
         {
-            AbstractBuffEvent last = filtered.Last();
+            BuffEvent last = filtered.Last();
             filtered.Add(new BuffRemoveAllEvent(_unknownAgent, last.To, target.LastAware, int.MaxValue, last.BuffSkill, ArcDPSEnums.IFF.Unknown, BuffRemoveAllEvent.FullRemoval, int.MaxValue));
         }
         return filtered;
     }
 
-    internal static IEnumerable<AbstractBuffEvent> GetFilteredList(CombatData combatData, long buffID, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+    internal static IEnumerable<BuffEvent> GetFilteredList(CombatData combatData, long buffID, SingleActor target, bool beginWithStart, bool padEnd)
     {
         return GetFilteredList(combatData, buffID, target.AgentItem, beginWithStart, padEnd);
     }
 
-    internal static IEnumerable<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithStart, bool padEnd)
+    internal static IEnumerable<BuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AgentItem target, bool beginWithStart, bool padEnd)
     {
         return buffIDs.SelectMany(buffID => GetFilteredList(combatData, buffID, target, beginWithStart, padEnd));
     }
 
-    internal static IEnumerable<AbstractBuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, AbstractSingleActor target, bool beginWithStart, bool padEnd)
+    internal static IEnumerable<BuffEvent> GetFilteredList(CombatData combatData, IEnumerable<long> buffIDs, SingleActor target, bool beginWithStart, bool padEnd)
     {
         return GetFilteredList(combatData, buffIDs, target.AgentItem, beginWithStart, padEnd);
     }
@@ -195,7 +195,7 @@ internal static class EncounterLogicUtils
                 return false;
             }
 
-            var position = AbstractMovementEvent.GetPoint3D(evt);
+            var position = MovementEvent.GetPoint3D(evt);
             if ((position - chestPosition).XY().Length() < InchDistanceThreshold)
             {
                 return true;
@@ -219,7 +219,7 @@ internal static class EncounterLogicUtils
 
         var candidates = positions.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
         // Remove all candidates who moved, chests can not move
-        candidates.RemoveAll(candidate => velocities.Where(evt => evt.SrcMatchesAgent(candidate)).Any(evt => AbstractMovementEvent.GetPoint3D(evt).Length() >= 1e-6));
+        candidates.RemoveAll(candidate => velocities.Where(evt => evt.SrcMatchesAgent(candidate)).Any(evt => MovementEvent.GetPoint3D(evt).Length() >= 1e-6));
         var chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
         if (chest != null)
         {
@@ -229,12 +229,12 @@ internal static class EncounterLogicUtils
         return false;
     }
 
-    internal static string? AddNameSuffixBasedOnInitialPosition(AbstractSingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)
+    internal static string? AddNameSuffixBasedOnInitialPosition(SingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)
     {
         var positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target.AgentItem) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
         if (positionEvt != null)
         {
-            var position = AbstractMovementEvent.GetPoint3D(positionEvt).XY();
+            var position = MovementEvent.GetPoint3D(positionEvt).XY();
             foreach (var (suffix, expectedPosition) in positionData)
             {
                 if ((position - expectedPosition).Length() < maxDiff)
@@ -255,7 +255,7 @@ internal static class EncounterLogicUtils
     /// <param name="startCastTime">Starting time of the cast.</param>
     /// <param name="castDuration">Duration of the cast.</param>
     /// <returns>The duration of the cast.</returns>
-    internal static double ComputeCastTimeWithQuickness(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+    internal static double ComputeCastTimeWithQuickness(ParsedEvtcLog log, SingleActor actor, long startCastTime, long castDuration)
     {
         long expectedEndCastTime = startCastTime + castDuration;
         Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in Segment x) => x.Value == 1);
@@ -285,7 +285,7 @@ internal static class EncounterLogicUtils
     /// <param name="startCastTime">Starting time of the cast.</param>
     /// <param name="castDuration">Duration of the cast.</param>
     /// <returns>The duration of the cast.</returns>
-    internal static double ComputeCastTimeWithQuicknessAndSugarRush(ParsedEvtcLog log, AbstractSingleActor actor, long startCastTime, long castDuration)
+    internal static double ComputeCastTimeWithQuicknessAndSugarRush(ParsedEvtcLog log, SingleActor actor, long startCastTime, long castDuration)
     {
         long expectedEndCastTime = startCastTime + castDuration;
         Segment? quickness = actor.GetBuffStatus(log, Quickness, startCastTime, expectedEndCastTime).FirstOrNull((in Segment x) => x.Value == 1);
@@ -308,7 +308,7 @@ internal static class EncounterLogicUtils
     /// <param name="startCastTime">Starting time of the cast.</param>
     /// <param name="castDuration">Duration of the cast.</param>
     /// <returns>The end time of the cast.</returns>
-    internal static long ComputeEndCastTimeByBuffApplication(ParsedEvtcLog log, AbstractSingleActor actor, long buffId, long startCastTime, long castDuration)
+    internal static long ComputeEndCastTimeByBuffApplication(ParsedEvtcLog log, SingleActor actor, long buffId, long startCastTime, long castDuration)
     {
         long end = startCastTime + castDuration;
         Segment? segment = actor.GetBuffStatus(log, buffId, startCastTime, end).FirstOrNull((in Segment x) => x.Value > 0);

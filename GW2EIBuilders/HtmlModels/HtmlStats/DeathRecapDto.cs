@@ -26,7 +26,7 @@ internal class DeathRecapDto
         return data;
     }
 
-    public static List<DeathRecapDto>? BuildDeathRecap(ParsedEvtcLog log, AbstractSingleActor actor)
+    public static List<DeathRecapDto>? BuildDeathRecap(ParsedEvtcLog log, SingleActor actor)
     {
         IReadOnlyList<DeathRecap> recaps = actor.GetDeathRecaps(log);
         if (!recaps.Any())

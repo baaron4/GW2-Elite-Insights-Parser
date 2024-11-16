@@ -30,7 +30,7 @@ internal static class JsonMinionsBuilder
         {
             int tot = 0;
             int shdTot = 0;
-            foreach (AbstractHealthDamageEvent de in minions.GetDamageEvents(null, log, phase.Start, phase.End))
+            foreach (HealthDamageEvent de in minions.GetDamageEvents(null, log, phase.Start, phase.End))
             {
                 tot += de.HealthDamage;
                 shdTot += de.ShieldDamage;
@@ -49,7 +49,7 @@ internal static class JsonMinionsBuilder
             var totalTargetBreakbarDamage = new IReadOnlyList<double>[log.FightData.Logic.Targets.Count];
             for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
             {
-                AbstractSingleActor tar = log.FightData.Logic.Targets[i];
+                SingleActor tar = log.FightData.Logic.Targets[i];
                 var totalTarDamage = new List<int>();
                 var totalTarShieldDamage = new List<int>();
                 var totalTarBreakbarDamage = new List<double>();
@@ -57,7 +57,7 @@ internal static class JsonMinionsBuilder
                 {
                     int tot = 0;
                     int shdTot = 0;
-                    foreach (AbstractHealthDamageEvent de in minions.GetDamageEvents(tar, log, phase.Start, phase.End))
+                    foreach (HealthDamageEvent de in minions.GetDamageEvents(tar, log, phase.Start, phase.End))
                     {
                         tot += de.HealthDamage;
                         shdTot += de.ShieldDamage;
@@ -100,7 +100,7 @@ internal static class JsonMinionsBuilder
             var targetDamageDist = new IReadOnlyList<JsonDamageDist>[log.FightData.Logic.Targets.Count][];
             for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
             {
-                AbstractSingleActor target = log.FightData.Logic.Targets[i];
+                SingleActor target = log.FightData.Logic.Targets[i];
                 targetDamageDist[i] = new IReadOnlyList<JsonDamageDist>[phases.Count];
                 for (int j = 0; j < phases.Count; j++)
                 {

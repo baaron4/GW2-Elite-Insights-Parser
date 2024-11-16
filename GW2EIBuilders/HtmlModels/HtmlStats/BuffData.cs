@@ -28,7 +28,7 @@ internal class BuffData
         }
     }
 
-    private BuffData(IReadOnlyDictionary<long, FinalBuffsDictionary> buffs, IReadOnlyList<Buff> listToUse, AbstractSingleActor actor)
+    private BuffData(IReadOnlyDictionary<long, FinalBuffsDictionary> buffs, IReadOnlyList<Buff> listToUse, SingleActor actor)
     {
         foreach (Buff buff in listToUse)
         {
@@ -118,7 +118,7 @@ internal class BuffData
         bool boonTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Boon);
         bool conditionTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Condition);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             double avg = 0.0;
             if (boonTable)
@@ -140,7 +140,7 @@ internal class BuffData
         bool boonTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Boon);
         bool conditionTable = listToUse.Any(x => x.Classification == Buff.BuffClassification.Condition);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             double avg = 0.0;
             if (boonTable)
@@ -160,7 +160,7 @@ internal class BuffData
     public static List<BuffData> BuildPersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
     {
         var list = new List<BuffData>();
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new BuffData(actor.Spec, buffsBySpec, actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
         }
@@ -170,7 +170,7 @@ internal class BuffData
     public static List<BuffData> BuildActivePersonalBuffUptimeData(ParsedEvtcLog log, IReadOnlyDictionary<Spec, IReadOnlyList<Buff>> buffsBySpec, PhaseData phase)
     {
         var list = new List<BuffData>();
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new BuffData(actor.Spec, buffsBySpec, actor.GetActiveBuffs(BuffEnum.Self, log, phase.Start, phase.End)));
         }
@@ -183,7 +183,7 @@ internal class BuffData
     {
         var list = new List<BuffData>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new BuffData(listToUse, actor.GetBuffs(type, log, phase.Start, phase.End)));
         }
@@ -194,19 +194,19 @@ internal class BuffData
     {
         var list = new List<BuffData>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new BuffData(listToUse, actor.GetActiveBuffs(type, log, phase.Start, phase.End)));
         }
         return list;
     }
     // 
-    private static List<BuffData> BuildBuffDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, AbstractSingleActor player)
+    private static List<BuffData> BuildBuffDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, SingleActor player)
     {
         IReadOnlyDictionary<long, FinalBuffsDictionary> buffs = player.GetBuffsDictionary(log, phase.Start, phase.End);
         var list = new List<BuffData>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new BuffData(buffs, listToUse, actor));
         }
@@ -216,19 +216,19 @@ internal class BuffData
     {
         var list = new List<List<BuffData>>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(BuildBuffDictionaryData(log, listToUse, phase, actor));
         }
         return list;
     }
 
-    private static List<BuffData> BuildActiveBuffDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, AbstractSingleActor player)
+    private static List<BuffData> BuildActiveBuffDictionaryData(ParsedEvtcLog log, IReadOnlyList<Buff> listToUse, PhaseData phase, SingleActor player)
     {
         IReadOnlyDictionary<long, FinalBuffsDictionary> buffs = player.GetActiveBuffsDictionary(log, phase.Start, phase.End);
         var list = new List<BuffData>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new BuffData(buffs, listToUse, actor));
         }
@@ -239,7 +239,7 @@ internal class BuffData
     {
         var list = new List<List<BuffData>>();
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(BuildActiveBuffDictionaryData(log, listToUse, phase, actor));
         }
@@ -247,18 +247,18 @@ internal class BuffData
     }
 
     /////
-    public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor actor)
+    public static List<BuffData> BuildTargetCondiData(ParsedEvtcLog log, PhaseData phase, SingleActor actor)
     {
         return BuildBuffDictionaryData(log, log.StatisticsHelper.PresentConditions, phase, actor);
     }
 
-    public static BuffData BuildTargetCondiUptimeData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
+    public static BuffData BuildTargetCondiUptimeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
     {
         IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffData(buffs, log.StatisticsHelper.PresentConditions, target.GetGameplayStats(log, phase.Start, phase.End).AvgConditions);
     }
 
-    public static BuffData BuildTargetBoonUptimeData(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target)
+    public static BuffData BuildTargetBoonUptimeData(ParsedEvtcLog log, PhaseData phase, SingleActor target)
     {
         IReadOnlyDictionary<long, FinalActorBuffs> buffs = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
         return new BuffData(buffs, log.StatisticsHelper.PresentBoons, target.GetGameplayStats(log, phase.Start, phase.End).AvgBoons);

@@ -3,14 +3,14 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
-partial class AbstractSingleActor
+partial class SingleActor
 {
     private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>? _outgoingDamageModifiersPerTargets;
     private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>? _outgoingDamageModifierEventsPerTargets;
     private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>? _incomingDamageModifiersPerTargets;
     private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>? _incomingDamageModifierEventsPerTargets;
 
-    private Dictionary<string, DamageModifierStat>? ComputeDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    private Dictionary<string, DamageModifierStat>? ComputeDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         // Check if damage mods against target
         if (_outgoingDamageModifierEventsPerTargets!.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
@@ -41,7 +41,7 @@ partial class AbstractSingleActor
         return null;
     }
 
-    public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
         {
@@ -114,7 +114,7 @@ partial class AbstractSingleActor
         return new HashSet<string>(GetOutgoingDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
     }
 
-    private Dictionary<string, DamageModifierStat>? ComputeIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    private Dictionary<string, DamageModifierStat>? ComputeIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         // Check if damage mods against target
         if (_incomingDamageModifierEventsPerTargets!.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
@@ -145,7 +145,7 @@ partial class AbstractSingleActor
         return null;
     }
 
-    public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
         {

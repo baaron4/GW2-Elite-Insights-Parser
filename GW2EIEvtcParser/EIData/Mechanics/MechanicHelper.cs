@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class MechanicHelper
 {
-    public static AbstractSingleActor? FindEnemyActor(ParsedEvtcLog log, AgentItem a, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    public static SingleActor? FindEnemyActor(ParsedEvtcLog log, AgentItem a, Dictionary<int, SingleActor> regroupedMobs)
     {
         if (log.FightData.Logic.TargetAgents.Contains(a))
         {
@@ -14,7 +14,7 @@ internal static class MechanicHelper
         // We regroup trash mobs by their ID
         if (log.FightData.Logic.TrashMobAgents.Contains(a))
         {
-            if (!regroupedMobs.TryGetValue(a.ID, out AbstractSingleActor amp))
+            if (!regroupedMobs.TryGetValue(a.ID, out SingleActor amp))
             {
                 amp = log.FightData.Logic.TrashMobs.First(x => x.AgentItem == a);
                 regroupedMobs.Add(amp.ID, amp);
@@ -24,7 +24,7 @@ internal static class MechanicHelper
         return null;
     }
 
-    public static AbstractSingleActor? FindPlayerActor(ParsedEvtcLog log, AgentItem a)
+    public static SingleActor? FindPlayerActor(ParsedEvtcLog log, AgentItem a)
     {
         if (log.PlayerAgents.Contains(a))
         {

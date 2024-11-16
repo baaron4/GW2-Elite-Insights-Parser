@@ -9,7 +9,7 @@ internal class DamageModData
     public readonly List<object[]> Data;
     public readonly List<List<object[]>> DataTarget;
 
-    private DamageModData(AbstractSingleActor actor, ParsedEvtcLog log, IReadOnlyList<OutgoingDamageModifier> listToUse, PhaseData phase)
+    private DamageModData(SingleActor actor, ParsedEvtcLog log, IReadOnlyList<OutgoingDamageModifier> listToUse, PhaseData phase)
     {
         var dModData = actor.GetOutgoingDamageModifierStats(null, log, phase.Start, phase.End);
 
@@ -40,7 +40,7 @@ internal class DamageModData
 
         var allTargets = phase.AllTargets;
         DataTarget = new(allTargets.Count);
-        foreach (AbstractSingleActor target in allTargets)
+        foreach (SingleActor target in allTargets)
         {
             var pTarget = new List<object[]>(1 + listToUse.Count);
             DataTarget.Add(pTarget);
@@ -70,7 +70,7 @@ internal class DamageModData
             }
         }
     }
-    private DamageModData(AbstractSingleActor actor, ParsedEvtcLog log, IReadOnlyList<IncomingDamageModifier> listToUse, PhaseData phase)
+    private DamageModData(SingleActor actor, ParsedEvtcLog log, IReadOnlyList<IncomingDamageModifier> listToUse, PhaseData phase)
     {
         var dModData = actor.GetIncomingDamageModifierStats(null, log, phase.Start, phase.End);
 
@@ -100,7 +100,7 @@ internal class DamageModData
         }
 
         DataTarget = new(phase.Targets.Count);
-        foreach (AbstractSingleActor target in phase.Targets)
+        foreach (SingleActor target in phase.Targets)
         {
             var pTarget = new List<object[]>();
             DataTarget.Add(pTarget);
@@ -133,7 +133,7 @@ internal class DamageModData
     public static List<DamageModData> BuildOutgoingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<OutgoingDamageModifier> damageModsToUse)
     {
         var pData = new List<DamageModData>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             pData.Add(new DamageModData(actor, log, damageModsToUse, phase));
         }
@@ -143,7 +143,7 @@ internal class DamageModData
     public static List<DamageModData> BuildIncomingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyList<IncomingDamageModifier> damageModsToUse)
     {
         var pData = new List<DamageModData>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             pData.Add(new DamageModData(actor, log, damageModsToUse, phase));
         }
@@ -153,7 +153,7 @@ internal class DamageModData
     public static List<DamageModData> BuildPersonalOutgoingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> damageModsToUse)
     {
         var pData = new List<DamageModData>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             pData.Add(new DamageModData(actor, log, damageModsToUse[actor.Spec], phase));
         }
@@ -163,7 +163,7 @@ internal class DamageModData
     public static List<DamageModData> BuildPersonalIncomingDmgModifiersData(ParsedEvtcLog log, PhaseData phase, IReadOnlyDictionary<Spec, IReadOnlyList<IncomingDamageModifier>> damageModsToUse)
     {
         var pData = new List<DamageModData>(log.Friendlies.Count);
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             pData.Add(new DamageModData(actor, log, damageModsToUse[actor.Spec], phase));
         }

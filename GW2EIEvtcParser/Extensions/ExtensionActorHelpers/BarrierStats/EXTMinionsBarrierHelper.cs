@@ -14,11 +14,11 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
     }
 
 
-    public override IEnumerable<EXTAbstractBarrierEvent> GetOutgoingBarrierEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<EXTBarrierEvent> GetOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (BarrierEvents == null)
         {
-            BarrierEvents = new List<EXTAbstractBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            BarrierEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
                 BarrierEvents.AddRange(minion.EXTBarrier.GetOutgoingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
@@ -29,7 +29,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierEventsByDst!.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
+            if (BarrierEventsByDst!.TryGetValue(target.AgentItem, out List<EXTBarrierEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -42,11 +42,11 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
         return BarrierEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<EXTAbstractBarrierEvent> GetIncomingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public override IEnumerable<EXTBarrierEvent> GetIncomingBarrierEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
     {
         if (BarrierReceivedEvents == null)
         {
-            BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
+            BarrierReceivedEvents = new List<EXTBarrierEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
             {
                 BarrierReceivedEvents.AddRange(minion.EXTBarrier.GetIncomingBarrierEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd));
@@ -57,7 +57,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierReceivedEventsBySrc!.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
+            if (BarrierReceivedEventsBySrc!.TryGetValue(target.AgentItem, out List<EXTBarrierEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }

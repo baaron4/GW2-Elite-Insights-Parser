@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class PositionEvent : AbstractMovementEvent
+public class PositionEvent : MovementEvent
 {
     internal PositionEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

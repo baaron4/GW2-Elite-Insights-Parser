@@ -51,15 +51,15 @@ public abstract class DamageModifier
             Tooltip += "<br>Approximate";
         }
     }
-    internal abstract AgentItem GetFoe(AbstractHealthDamageEvent evt);
+    internal abstract AgentItem GetFoe(HealthDamageEvent evt);
 
 
-    internal List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log)
+    internal List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log)
     {
         return DamageModDescriptor.ComputeDamageModifier(actor, log, this);
     }
 
-    public abstract int GetTotalDamage(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end);
+    public abstract int GetTotalDamage(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end);
 
-    public abstract IEnumerable<AbstractHealthDamageEvent> GetHitDamageEvents(AbstractSingleActor actor, ParsedEvtcLog log, AbstractSingleActor? t, long start, long end);
+    public abstract IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor actor, ParsedEvtcLog log, SingleActor? t, long start, long end);
 }

@@ -60,7 +60,7 @@ internal class Matthias : SalvationPass
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
-        IReadOnlyList<AbstractBuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
+        IReadOnlyList<BuffEvent> bloodstoneBisque = log.CombatData.GetBuffData(BloodstoneBisque);
         if (bloodstoneBisque.Any() && log.FightData.Success)
         {
             int playersWithBisque = 0;
@@ -103,26 +103,26 @@ internal class Matthias : SalvationPass
     {
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Matthias)) ?? throw new MissingKeyActorsException("Matthias not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
             return phases;
         }
         // Special buff cast check
-        AbstractBuffEvent heatWave = log.CombatData.GetBuffData(HeatWaveMatthias).FirstOrDefault();
+        BuffEvent heatWave = log.CombatData.GetBuffData(HeatWaveMatthias).FirstOrDefault();
         if (heatWave != null)
         {
             phases.Add(new PhaseData(0, heatWave.Time));
-            AbstractBuffEvent downPour = log.CombatData.GetBuffData(DownpourMatthias).FirstOrDefault();
+            BuffEvent downPour = log.CombatData.GetBuffData(DownpourMatthias).FirstOrDefault();
             if (downPour != null)
             {
                 phases.Add(new PhaseData(heatWave.Time, downPour.Time));
-                AbstractBuffEvent abo = log.CombatData.GetBuffData(Unstable).FirstOrDefault();
+                BuffEvent abo = log.CombatData.GetBuffData(Unstable).FirstOrDefault();
                 if (abo != null)
                 {
                     phases.Add(new PhaseData(downPour.Time, abo.Time));
-                    AbstractBuffEvent invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
+                    BuffEvent invulRemove = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= abo.Time && x.Time <= abo.Time + 10000 && !(x is BuffApplyEvent));
                     if (invulRemove != null)
                     {
                         phases.Add(new PhaseData(invulRemove.Time, fightEnd));
@@ -152,7 +152,7 @@ internal class Matthias : SalvationPass
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // has breakbar state into
         if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
@@ -215,7 +215,7 @@ internal class Matthias : SalvationPass
             }
         }
         ComputeFightTargets(agentData, combatData, extensions);
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.MatthiasSacrificeCrystal))
             {
@@ -265,14 +265,14 @@ internal class Matthias : SalvationPass
                 AddMatthiasBubbles(BloodShield, target, log, replay);
                 AddMatthiasBubbles(BloodShieldAbo, target, log, replay);
                 var rageShards = cls.Where(x => x.SkillId == ShardsOfRageHuman || x.SkillId == ShardsOfRageAbomination);
-                foreach (AbstractCastEvent c in rageShards)
+                foreach (CastEvent c in rageShards)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
                     replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, end);
                 }
                 var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman);
-                foreach (AbstractCastEvent c in hadouken)
+                foreach (CastEvent c in hadouken)
                 {
                     start = (int)c.Time;
                     int preCastTime = 1000;
@@ -306,7 +306,7 @@ internal class Matthias : SalvationPass
 
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Corruption
@@ -344,7 +344,7 @@ internal class Matthias : SalvationPass
         }
                 // Bombs
         var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in zealousBenediction)
+        foreach (BuffEvent c in zealousBenediction)
         {
             int zealousStart = (int)c.Time;
             int zealousEnd = zealousStart + 5000;

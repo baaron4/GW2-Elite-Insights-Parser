@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.Extensions;
 
-internal class EXTBarrierCastFinder : CheckedCastFinder<EXTAbstractBarrierEvent>
+internal class EXTBarrierCastFinder : CheckedCastFinder<EXTBarrierEvent>
 {
 
     private readonly long _damageSkillID;
@@ -26,7 +26,7 @@ internal class EXTBarrierCastFinder : CheckedCastFinder<EXTAbstractBarrierEvent>
             {
                 continue;
             }
-            foreach (EXTAbstractBarrierEvent be in groupedHeals)
+            foreach (EXTBarrierEvent be in groupedHeals)
             {
                 if (be.Time - lastTime < ICD)
                 {

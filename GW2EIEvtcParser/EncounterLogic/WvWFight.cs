@@ -31,7 +31,7 @@ internal class WvWFight : FightLogic
             new PlayerDamageMechanic("Killing Blows to enemy Players", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Blue), "Kllng.Blw.Player", "Killing Blows inflicted by Squad Players to enemy Players", "Killing Blows to enemy Players", 0, (log, a) => {
                 if (a.Type != AgentItem.AgentType.Player)
                 {
-                    return new List<AbstractHealthDamageEvent>();
+                    return new List<HealthDamageEvent>();
                 }
                 return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); //TODO(Rennorb) @perf
             }).UsingChecker((x, log) => x.HasKilled && (x.To.Type == AgentItem.AgentType.NonSquadPlayer || x.To.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))),
@@ -49,7 +49,7 @@ internal class WvWFight : FightLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -232,7 +232,7 @@ internal class WvWFight : FightLogic
         base.SetInstanceBuffs(log);
         if (_isGuildHall)
         {
-            var modes = new List<AbstractBuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
+            var modes = new List<BuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
             modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
             modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
             modes.SortByTime();
@@ -254,19 +254,19 @@ internal class WvWFight : FightLogic
         fightData.SetSuccess(true, fightData.FightEnd);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, _detailed ? "Dummy PvP Agent" : "Enemy Players", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.WorldVersusWorld, true);
         // Handle non squad players
         IReadOnlyList<AgentItem> aList = agentData.GetAgentByType(AgentItem.AgentType.NonSquadPlayer);
         //
-        var garbageList = new List<AbstractSingleActor>();
-        var auxTargets = new List<AbstractSingleActor>();
-        var auxFriendlies = new List<AbstractSingleActor>();
+        var garbageList = new List<SingleActor>();
+        var auxTargets = new List<SingleActor>();
+        var auxFriendlies = new List<SingleActor>();
         foreach (AgentItem a in aList)
         {
             var nonSquadPlayer = new PlayerNonSquad(a);
-            List<AbstractSingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : _detailed ? auxTargets : garbageList;
+            List<SingleActor> actorListToFill = nonSquadPlayer.IsFriendlyPlayer ? auxFriendlies : _detailed ? auxTargets : garbageList;
             actorListToFill.Add(nonSquadPlayer);
         }
         //

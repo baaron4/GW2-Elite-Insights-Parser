@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.Extensions;
 
-public class HealingStatsExtensionHandler : AbstractExtensionHandler
+public class HealingStatsExtensionHandler : ExtensionHandler
 {
 
     public const uint EXT_HealingStats = 0x9c9b3c99;
@@ -118,8 +118,8 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
         EssenceOfLivingShadows,
     ];
 
-    private readonly List<EXTAbstractHealingEvent> _healingEvents = [];
-    private readonly List<EXTAbstractBarrierEvent> _barrierEvents = [];
+    private readonly List<EXTHealingEvent> _healingEvents = [];
+    private readonly List<EXTBarrierEvent> _barrierEvents = [];
     internal HealingStatsExtensionHandler(CombatItem c, uint revision) : base(EXT_HealingStats, "Healing Stats")
     {
         Revision = revision;
@@ -152,7 +152,7 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
         var nullTerm = bytes.AsUsedSpan().IndexOf((byte)0);
         Version = System.Text.Encoding.UTF8.GetString(nullTerm != -1 ? bytes.AsUsedSpan()[..nullTerm] : bytes);
     }
-    public static bool SanitizeForSrc<T>(List<T> events) where T : EXTAbstractHealingExtensionEvent
+    public static bool SanitizeForSrc<T>(List<T> events) where T : EXTHealingExtensionEvent
     {
         if (events.Any(x => x.SrcIsPeer))
         {
@@ -162,7 +162,7 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
         return false;
     }
 
-    public static bool SanitizeForDst<T>(List<T> events) where T : EXTAbstractHealingExtensionEvent
+    public static bool SanitizeForDst<T>(List<T> events) where T : EXTHealingExtensionEvent
     {
         if (events.Any(x => x.DstIsPeer))
         {
@@ -287,7 +287,7 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
         if (_barrierEvents.Count != 0)
         {
             var barrierData = _barrierEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in barrierData)
+            foreach (KeyValuePair<AgentItem, List<EXTBarrierEvent>> pair in barrierData)
             {
                 if (SanitizeForSrc(pair.Value) && pair.Key.IsPlayer)
                 {
@@ -295,7 +295,7 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
                 }
             }
             var barrierReceivedData = _barrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in barrierReceivedData)
+            foreach (KeyValuePair<AgentItem, List<EXTBarrierEvent>> pair in barrierReceivedData)
             {
                 if (SanitizeForDst(pair.Value) && pair.Key.IsPlayer)
                 {

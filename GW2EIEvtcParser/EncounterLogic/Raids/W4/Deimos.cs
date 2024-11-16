@@ -30,7 +30,7 @@ internal class Deimos : BastionOfThePenitent
         {
         new PlayerDstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
         new PlayerDstFirstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0).UsingChecker((ce, log) => {
-            AbstractSingleActor? actor = log.FindActor(ce.To);
+            SingleActor? actor = log.FindActor(ce.To);
             if (actor == null)
             {
                 return false;
@@ -99,7 +99,7 @@ internal class Deimos : BastionOfThePenitent
         ];
     }
 
-    private static void MergeWithGadgets(AgentItem deimos, long upperTimeThreshold, HashSet<AgentItem> gadgets, AgentItem mainBody, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    private static void MergeWithGadgets(AgentItem deimos, long upperTimeThreshold, HashSet<AgentItem> gadgets, AgentItem mainBody, List<CombatItem> combatData, AgentData agentData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         foreach (AgentItem gadget in gadgets)
         {
@@ -142,16 +142,16 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    internal override List<AbstractBuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<BuffEvent> SpecialBuffEventProcess(CombatData combatData, SkillData skillData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
-        var res = new List<AbstractBuffEvent>();
-        IReadOnlyList<AbstractBuffEvent> signets = combatData.GetBuffData(UnnaturalSignet);
-        foreach (AbstractBuffEvent bfe in signets)
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
+        var res = new List<BuffEvent>();
+        IReadOnlyList<BuffEvent> signets = combatData.GetBuffData(UnnaturalSignet);
+        foreach (BuffEvent bfe in signets)
         {
             if (bfe is BuffApplyEvent ba)
             {
-                AbstractBuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
+                BuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                 if (removal == null)
                 {
                     res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), ArcDPSEnums.IFF.Unknown, 1, 0));
@@ -160,7 +160,7 @@ internal class Deimos : BastionOfThePenitent
             }
             else if (bfe is BuffRemoveAllEvent)
             {
-                AbstractBuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
+                BuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                 if (apply == null)
                 {
                     res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), ArcDPSEnums.IFF.Unknown, uint.MaxValue, true));
@@ -175,7 +175,7 @@ internal class Deimos : BastionOfThePenitent
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success && _deimos10PercentTime > 0)
         {
-            AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
+            SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
             if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.Saul, out AgentItem saul))
             {
                 throw new MissingKeyActorsException("Saul not found");
@@ -206,11 +206,11 @@ internal class Deimos : BastionOfThePenitent
             {
                 return;
             }
-            AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
+            HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
             if (lastDamageTaken != null)
             {
                 // This means Deimos received damage after becoming non attackable, that means it did not die
-                AbstractHealthDamageEvent friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && x.Time > lastDamageTaken.Time && x.ToFriendly);
+                HealthDamageEvent friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && x.Time > lastDamageTaken.Time && x.ToFriendly);
                 if (friendlyDamageToDeimos != null || !AtLeastOnePlayerAlive(combatData, fightData, notAttackableEvent.Time, playerAgents))
                 {
                     return;
@@ -288,7 +288,7 @@ internal class Deimos : BastionOfThePenitent
         return demonicBonds.Count != 0;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
         bool needsDummy = !needsRefresh;
@@ -311,7 +311,7 @@ internal class Deimos : BastionOfThePenitent
         }
         ComputeFightTargets(agentData, combatData, extensions);
         // Find target
-        AbstractSingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
+        SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         // Deimos gadgets via attack targets
         var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
         var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware).Select(x => new TargetableEvent(x, agentData)).ToList();
@@ -373,7 +373,7 @@ internal class Deimos : BastionOfThePenitent
         }
         deimos.AgentItem.OverrideAwareTimes(deimos.FirstAware, fightData.FightEnd);
         deimos.OverrideName("Deimos");
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.Thief) || target.IsSpecies(ArcDPSEnums.TrashID.Drunkard) || target.IsSpecies(ArcDPSEnums.TrashID.Gambler))
             {
@@ -400,7 +400,7 @@ internal class Deimos : BastionOfThePenitent
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         phases[0].AddTarget(mainTarget);
 
         if (requirePhases)
@@ -423,10 +423,10 @@ internal class Deimos : BastionOfThePenitent
         return phases;
     }
 
-    private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
+    private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget)
     {
         // Determined + additional data on inst change
-        AbstractBuffEvent invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, mainTarget.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, mainTarget.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
 
         if (invulDei != null || _deimos10PercentTime > 0)
         {
@@ -461,9 +461,9 @@ internal class Deimos : BastionOfThePenitent
         return phases;
     }
 
-    private List<PhaseData> AddAddPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
+    private List<PhaseData> AddAddPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget)
     {
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.Thief) || target.IsSpecies(ArcDPSEnums.TrashID.Drunkard) || target.IsSpecies(ArcDPSEnums.TrashID.Gambler))
             {
@@ -479,7 +479,7 @@ internal class Deimos : BastionOfThePenitent
         return phases;
     }
 
-    private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, AbstractSingleActor mainTarget)
+    private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget)
     {
         var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
         int burstID = 1;
@@ -530,7 +530,7 @@ internal class Deimos : BastionOfThePenitent
             case (int)ArcDPSEnums.TargetID.Deimos:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var mindCrush = cls.Where(x => x.SkillId == MindCrush);
-                foreach (AbstractCastEvent c in mindCrush)
+                foreach (CastEvent c in mindCrush)
                 {
                     start = (int)c.Time;
                     end = start + 5000;
@@ -543,7 +543,7 @@ internal class Deimos : BastionOfThePenitent
                 }
 
                 var annihilate = cls.Where(x => (x.SkillId == Annihilate2) || (x.SkillId == Annihilate1));
-                foreach (AbstractCastEvent c in annihilate)
+                foreach (CastEvent c in annihilate)
                 {
                     start = (int)c.Time;
                     int delay = 1000;
@@ -595,7 +595,7 @@ internal class Deimos : BastionOfThePenitent
                 replay.Decorations.Add(new CircleDecoration(200, (start + delayOil, end), Colors.Black, 0.5, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
-                AbstractSingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
+                SingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
                 if (Saul != null)
                 {
                     replay.Trim(replay.TimeOffsets.start, Saul.FirstAware);
@@ -605,7 +605,7 @@ internal class Deimos : BastionOfThePenitent
                 replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
                 var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
                 replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
-                AbstractSingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
+                SingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                 if (shackledPrisoner != null)
                 {
                     if (shackledPrisoner.TryGetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant, out var shackledPos))
@@ -654,7 +654,7 @@ internal class Deimos : BastionOfThePenitent
 
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // teleport zone
@@ -671,7 +671,7 @@ internal class Deimos : BastionOfThePenitent
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         FightData.EncounterMode cmStatus = (target.GetHealth(combatData) > 40e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
 
         // Deimos gains additional health during the last 10% so the max-health needs to be corrected

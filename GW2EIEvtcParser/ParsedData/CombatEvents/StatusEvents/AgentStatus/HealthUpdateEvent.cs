@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class HealthUpdateEvent : AbstractStatusEvent, IStateable
+public class HealthUpdateEvent : StatusEvent, IStateable
 {
     public readonly double HealthPercent;
 

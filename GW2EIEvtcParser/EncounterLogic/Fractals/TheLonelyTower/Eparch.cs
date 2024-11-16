@@ -29,7 +29,7 @@ internal class Eparch : LonelyTower
         ulong build = combatData.GetGW2BuildEvent().Build;
         int healthCMRelease = build >= GW2Builds.June2024Balance ? 22_833_236 : 32_618_906;
         int healthThreshold = (int)(0.95 * healthCMRelease); // fractals lose hp as their scale lowers
-        AbstractSingleActor eparch = GetEparchActor();
+        SingleActor eparch = GetEparchActor();
         if (build >= GW2Builds.June2024LonelyTowerCMRelease && eparch.GetHealth(combatData) >= healthThreshold)
         {
             return FightData.EncounterMode.CM;
@@ -45,7 +45,7 @@ internal class Eparch : LonelyTower
         return "Eparch";
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
         {
@@ -89,7 +89,7 @@ internal class Eparch : LonelyTower
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        AbstractSingleActor eparch = GetEparchActor();
+        SingleActor eparch = GetEparchActor();
         var determinedApplies = combatData.GetBuffDataByIDByDst(Determined762, eparch.AgentItem).OfType<BuffApplyEvent>().ToList();
         if (fightData.IsCM && determinedApplies.Count >= 3)
         {
@@ -104,7 +104,7 @@ internal class Eparch : LonelyTower
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor eparch = GetEparchActor();
+        SingleActor eparch = GetEparchActor();
         phases[0].AddTarget(eparch);
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.IncarnationOfCruelty) || x.IsSpecies(TrashID.IncarnationOfJudgement)));
         if (!requirePhases || !log.FightData.IsCM)
@@ -168,13 +168,13 @@ internal class Eparch : LonelyTower
         ];
     }
 
-    private AbstractSingleActor GetEparchActor()
+    private SingleActor GetEparchActor()
     {
-        AbstractSingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower)) ?? throw new MissingKeyActorsException("Eparch not found");
+        SingleActor eparch = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EparchLonelyTower)) ?? throw new MissingKeyActorsException("Eparch not found");
         return eparch;
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
@@ -301,7 +301,7 @@ internal class Eparch : LonelyTower
 
     private void AddGlobuleDecorations(ParsedEvtcLog log)
     {
-        AbstractSingleActor eparch = GetEparchActor();
+        SingleActor eparch = GetEparchActor();
         IReadOnlyList<AnimatedCastEvent> eparchCasts = log.CombatData.GetAnimatedCastData(eparch.AgentItem);
 
         // globule gadgets as decorations

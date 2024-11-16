@@ -27,7 +27,7 @@ public class FinalDefenses
     public readonly int ReceivedCrowdControl;
     public readonly double ReceivedCrowdControlDuration;
 
-    private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? from, bool excludeSelf)
+    private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? from, bool excludeSelf)
     {
         double stripTime = 0;
         int strip = 0;
@@ -53,10 +53,10 @@ public class FinalDefenses
         return (strip, stripTime);
     }
 
-    internal FinalDefenses(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? from)
+    internal FinalDefenses(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? from)
     {
         var damageLogs = actor.GetDamageTakenEvents(from, log, start, end);
-        foreach (AbstractHealthDamageEvent damageEvent in damageLogs)
+        foreach (HealthDamageEvent damageEvent in damageLogs)
         {
             DamageTaken += damageEvent.HealthDamage;
             if (damageEvent is NonDirectHealthDamageEvent ndhd)

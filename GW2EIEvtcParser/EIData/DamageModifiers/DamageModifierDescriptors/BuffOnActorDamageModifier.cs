@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class BuffOnActorDamageModifier : DamageModifierDescriptor
 {
-    internal delegate double DamageGainAdjuster(AbstractHealthDamageEvent dl, ParsedEvtcLog log);
+    internal delegate double DamageGainAdjuster(HealthDamageEvent dl, ParsedEvtcLog log);
 
     internal BuffsTracker Tracker;
     internal DamageGainAdjuster? GainAdjuster;
@@ -27,12 +27,12 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         return this;
     }
 
-    private double ComputeAdjustedGain(AbstractHealthDamageEvent dl, ParsedEvtcLog log)
+    private double ComputeAdjustedGain(HealthDamageEvent dl, ParsedEvtcLog log)
     {
         return GainAdjuster != null ? GainAdjuster(dl, log) * GainPerStack : GainPerStack;
     }
 
-    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel> bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
     {
         int stack = Tracker.GetStack(bgms, dl.Time);
         gain = GainComputer.ComputeGain(ComputeAdjustedGain(dl, log), stack);
@@ -44,7 +44,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         return (!tracker.Has(bgms) && gainComputer != ByAbsence) || (tracker.Has(bgms) && gainComputer == ByAbsence);
     }
 
-    internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
+    internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
         IReadOnlyDictionary<long, BuffsGraphModel> bgms = actor.GetBuffGraphs(log);
         if (Skip(Tracker, bgms, GainComputer))
@@ -53,7 +53,7 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
         }
         var res = new List<DamageModifierEvent>();
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
-        foreach (AbstractHealthDamageEvent evt in typeHits)
+        foreach (HealthDamageEvent evt in typeHits)
         {
             if (ComputeGain(bgms, evt, log, out double gain) && CheckCondition(evt, log))
             {

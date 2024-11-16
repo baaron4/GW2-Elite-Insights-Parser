@@ -31,14 +31,14 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
         }
     }
 
-    internal void OffsetNewDuration(IReadOnlyList<AbstractBuffEvent> events, EvtcVersionEvent evtcVersion)
+    internal void OffsetNewDuration(IReadOnlyList<BuffEvent> events, EvtcVersionEvent evtcVersion)
     {
         long activeTime = 0;
         long previousTime = long.MinValue;
         long originalStackDuration = 0;
         for (int i = 0; i < events.Count; i++)
         {
-            AbstractBuffEvent cur = events[i];
+            BuffEvent cur = events[i];
             if (i == 0)
             {
                 if (cur is BuffApplyEvent bae)

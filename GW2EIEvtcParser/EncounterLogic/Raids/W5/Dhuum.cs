@@ -68,7 +68,7 @@ internal class Dhuum : HallOfChains
         new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, "Messenger Fixation", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", 10).UsingChecker((bae, log) =>
         {
             // Additional buff applications can happen, filting them out
-            AbstractBuffEvent firstAggroEvent = log.CombatData.GetBuffDataByIDByDst(DhuumsMessengerFixationBuff, bae.To).FirstOrDefault();
+            BuffEvent firstAggroEvent = log.CombatData.GetBuffDataByIDByDst(DhuumsMessengerFixationBuff, bae.To).FirstOrDefault();
             if (firstAggroEvent != null && bae.Time > firstAggroEvent.Time + ServerDelayConstant && bae.Initial)
             {
                 return false;
@@ -115,15 +115,15 @@ internal class Dhuum : HallOfChains
     }
 
     //TODO(Rennorb) @perf
-    private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<AbstractCastEvent> castLogs, long fightDuration, long start)
+    private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<CastEvent> castLogs, long fightDuration, long start)
     {
-        AbstractCastEvent shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
+        CastEvent shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
         // Dhuum brought down to 10%
         if (shield != null)
         {
             long end = shield.Time;
             phases.Add(new PhaseData(start, end, "Dhuum Fight"));
-            AbstractCastEvent firstDamageable = castLogs.FirstOrDefault(x => x.SkillId == DhuumVulnerableLast10Percent && x.Time >= end);
+            CastEvent firstDamageable = castLogs.FirstOrDefault(x => x.SkillId == DhuumVulnerableLast10Percent && x.Time >= end);
             // ritual started
             if (firstDamageable != null)
             {
@@ -143,7 +143,7 @@ internal class Dhuum : HallOfChains
         }
     }
 
-    private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, AbstractSingleActor dhuum, long mainStart, long mainEnd, bool hasRitual)
+    private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, SingleActor dhuum, long mainStart, long mainEnd, bool hasRitual)
     {
         var cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
         var cataCycles = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
@@ -157,9 +157,9 @@ internal class Dhuum : HallOfChains
         long start = mainStart;
         long end = 0;
         int i = 0;
-        foreach (AbstractCastEvent cataCycle in cataCycles)
+        foreach (CastEvent cataCycle in cataCycles)
         {
-            AbstractCastEvent gDeathmark = gDeathmarks[i];
+            CastEvent gDeathmark = gDeathmarks[i];
             end = Math.Min(gDeathmark.Time, mainEnd);
             long soulsplitEnd = Math.Min(cataCycle.EndTime, mainEnd);
             ++i;
@@ -178,7 +178,7 @@ internal class Dhuum : HallOfChains
     {
         long fightDuration = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
+        SingleActor dhuum = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
         phases[0].AddTarget(dhuum);
         if (!requirePhases)
         {
@@ -194,7 +194,7 @@ internal class Dhuum : HallOfChains
         else
         {
             // full fight contains the pre event
-            AbstractBuffEvent invulDhuum = log.CombatData.GetBuffDataByIDByDst(Determined762, dhuum.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > 115000);
+            BuffEvent invulDhuum = log.CombatData.GetBuffDataByIDByDst(Determined762, dhuum.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > 115000);
             // pre event done
             if (invulDhuum != null)
             {
@@ -269,7 +269,7 @@ internal class Dhuum : HallOfChains
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out AgentItem dhuum))
         {
@@ -344,11 +344,11 @@ internal class Dhuum : HallOfChains
             case (int)TargetID.Dhuum: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var deathmark = cls.Where(x => x.SkillId == DeathMark);
-                AbstractCastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
+                CastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
                 // Using new effects method for logs that contain them
                 if (!log.CombatData.HasEffectData)
                 {
-                    foreach (AbstractCastEvent c in deathmark)
+                    foreach (CastEvent c in deathmark)
                     {
                         start = (int)c.Time;
                         long defaultCastDuration = 1550;
@@ -406,7 +406,7 @@ internal class Dhuum : HallOfChains
 
                 // Cataclysmic Cycle - Suction during Major Soul Split
                 var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
-                foreach (AbstractCastEvent c in cataCycle)
+                foreach (CastEvent c in cataCycle)
                 {
                     var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
                     replay.AddDecorationWithGrowing(circle, end);
@@ -417,7 +417,7 @@ internal class Dhuum : HallOfChains
                 if (!log.CombatData.HasEffectData)
                 {
                     var slash = cls.Where(x => x.SkillId == ConeSlash).ToList();
-                    foreach (AbstractCastEvent c in slash)
+                    foreach (CastEvent c in slash)
                     {
                         start = (int)c.Time;
                         end = (int)c.EndTime;
@@ -513,7 +513,7 @@ internal class Dhuum : HallOfChains
             case (int)TrashID.Enforcer: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var rendingSwipes = cls.Where(x => x.SkillId == RendingSwipe);
-                foreach (AbstractCastEvent c in rendingSwipes)
+                foreach (CastEvent c in rendingSwipes)
                 {
                     long castDuration = 667;
                     (long, long) lifespan = (c.Time, c.Time + castDuration);
@@ -545,7 +545,7 @@ internal class Dhuum : HallOfChains
                 {
                     if (_greenStart == 0)
                     {
-                        AbstractBuffEvent greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                        BuffEvent greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
                         if (greenTaken != null)
                         {
                             _greenStart = (int)greenTaken.Time - 5000;
@@ -607,19 +607,19 @@ internal class Dhuum : HallOfChains
 
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // spirit transform
         var spiritTransform = log.CombatData.GetBuffDataByIDByDst(FracturedSpirit, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in spiritTransform)
+        foreach (BuffEvent c in spiritTransform)
         {
             int duration = 15000;
             if (p.HasBuff(log, SourcePureOblivionBuff, c.Time + ServerDelayConstant))
             {
                 duration = 30000;
             }
-            AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+            BuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
             int start = (int)c.Time;
             int end = start + duration;
             if (removedBuff != null)
@@ -763,7 +763,7 @@ internal class Dhuum : HallOfChains
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dhuum)) ?? throw new MissingKeyActorsException("Dhuum not found");
         return (target.GetHealth(combatData) > 35e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
@@ -775,7 +775,7 @@ internal class Dhuum : HallOfChains
     /// <param name="soul">The Soul to tether to the player.</param>
     /// <param name="hastenedDemise">The segment of the buff on the player.</param>
     /// <param name="soulPosition">The position of the Soul.</param>
-    private static void AddSoulSplitDecorations(AbstractPlayer p, CombatReplay replay, AgentItem soul, in Segment hastenedDemise, in Vector3 soulPosition)
+    private static void AddSoulSplitDecorations(PlayerActor p, CombatReplay replay, AgentItem soul, in Segment hastenedDemise, in Vector3 soulPosition)
     {
         (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
         long soulSplitDeathTime = hastenedDemise.Start + 10000;

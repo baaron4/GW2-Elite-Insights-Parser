@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class FractalScaleEvent : AbstractMetaDataEvent
+public class FractalScaleEvent : MetaDataEvent
 {
     public readonly byte Scale;
 

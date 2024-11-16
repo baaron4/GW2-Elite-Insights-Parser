@@ -58,7 +58,7 @@ internal class WhisperOfJormag : Bjora
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WhisperOfJormag)) ?? throw new MissingKeyActorsException("Whisper of Jormag not found");
+        SingleActor woj = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.WhisperOfJormag)) ?? throw new MissingKeyActorsException("Whisper of Jormag not found");
         phases[0].AddTarget(woj);
         if (!requirePhases)
         {

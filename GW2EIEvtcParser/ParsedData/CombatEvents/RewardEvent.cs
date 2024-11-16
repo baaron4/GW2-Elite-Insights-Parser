@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class RewardEvent : AbstractTimeCombatEvent
+public class RewardEvent : TimeCombatEvent
 {
     public readonly ulong RewardID;
     public readonly int RewardType;

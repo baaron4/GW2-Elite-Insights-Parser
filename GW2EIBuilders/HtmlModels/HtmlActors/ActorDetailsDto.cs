@@ -20,7 +20,7 @@ internal class ActorDetailsDto
     public List<DeathRecapDto>?                DeathRecap;
 
 
-    public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, AbstractSingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static ActorDetailsDto BuildPlayerData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var phases = log.FightData.GetPhases(log);
         var minions = actor.GetMinions(log);
@@ -40,7 +40,7 @@ internal class ActorDetailsDto
             dto.Rotation.Add(SkillDto.BuildRotationData(log, actor, phase, usedSkills));
             dto.DmgDistributions.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, null, phase, usedSkills, usedBuffs));
             var dmgTargetsDto = new List<DmgDistributionDto>(phase.AllTargets.Count);
-            foreach (AbstractSingleActor target in phase.AllTargets)
+            foreach (SingleActor target in phase.AllTargets)
             {
                 dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyDMGDistData(log, actor, target, phase, usedSkills, usedBuffs));
             }
@@ -56,7 +56,7 @@ internal class ActorDetailsDto
         return dto;
     }
 
-    private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static ActorDetailsDto BuildFriendlyMinionsData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var phases = log.FightData.GetPhases(log);
         var dto = new ActorDetailsDto
@@ -69,7 +69,7 @@ internal class ActorDetailsDto
         {
             var allTargets = phase.AllTargets;
             var dmgTargetsDto = new List<DmgDistributionDto>(allTargets.Count);
-            foreach (AbstractSingleActor target in allTargets)
+            foreach (SingleActor target in allTargets)
             {
                 dmgTargetsDto.Add(DmgDistributionDto.BuildFriendlyMinionDMGDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
             }
@@ -83,7 +83,7 @@ internal class ActorDetailsDto
     static readonly List<SkillCastDto>           EmptyRotationList  = [];
     static readonly List<BuffChartDataDto>       EmptyBoonGraphList = [];
 
-    public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, AbstractSingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
+    public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, SingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
     {
         var phases = log.FightData.GetPhases(log);
         var minions = target.GetMinions(log);

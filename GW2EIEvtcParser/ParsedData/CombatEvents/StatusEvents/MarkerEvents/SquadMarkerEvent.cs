@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class SquadMarkerEvent : AbstractStatusEvent
+public class SquadMarkerEvent : StatusEvent
 {
     public Vector3 Position { get; protected set; } = Vector3.Zero;
 

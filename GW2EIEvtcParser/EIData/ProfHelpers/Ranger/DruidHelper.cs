@@ -56,7 +56,7 @@ internal static class DruidHelper
         new Buff("Natural Balance", NaturalBalance, Source.Druid, BuffClassification.Other, BuffImages.NaturalBalance).WithBuilds(GW2Builds.June2023Balance),
     ];
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Ranger;
 

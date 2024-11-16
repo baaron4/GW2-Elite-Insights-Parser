@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class IDToGUIDEvent : AbstractMetaDataEvent
+public abstract class IDToGUIDEvent : MetaDataEvent
 {
     public readonly GUID ContentGUID;
     public readonly long ContentID;

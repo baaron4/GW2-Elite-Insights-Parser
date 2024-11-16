@@ -18,23 +18,23 @@ public class CombatData
     private readonly StatusEventsContainer _statusEvents = new();
     private readonly MetaEventsContainer _metaDataEvents = new();
     private readonly HashSet<long> _skillIds;
-    private readonly Dictionary<long, List<AbstractBuffEvent>> _buffData;
-    private Dictionary<long, Dictionary<uint, List<AbstractBuffEvent>>> _buffDataByInstanceID;
+    private readonly Dictionary<long, List<BuffEvent>> _buffData;
+    private Dictionary<long, Dictionary<uint, List<BuffEvent>>> _buffDataByInstanceID;
     private Dictionary<long, List<BuffRemoveAllEvent>> _buffRemoveAllData;
-    private readonly Dictionary<AgentItem, List<AbstractBuffEvent>> _buffDataByDst;
-    private Dictionary<long, Dictionary<AgentItem, List<AbstractBuffEvent>>> _buffDataByIDByDst;
-    private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageData;
+    private readonly Dictionary<AgentItem, List<BuffEvent>> _buffDataByDst;
+    private Dictionary<long, Dictionary<AgentItem, List<BuffEvent>>> _buffDataByIDByDst;
+    private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlData;
     private readonly Dictionary<long, List<BreakbarDamageEvent>> _breakbarDamageDataById;
-    private readonly Dictionary<long, List<AbstractHealthDamageEvent>> _damageDataById;
+    private readonly Dictionary<long, List<HealthDamageEvent>> _damageDataById;
     private readonly Dictionary<long, List<CrowdControlEvent>> _crowControlDataById;
     private readonly Dictionary<AgentItem, List<AnimatedCastEvent>> _animatedCastData;
     private readonly Dictionary<AgentItem, List<InstantCastEvent>> _instantCastData;
     private readonly Dictionary<AgentItem, List<WeaponSwapEvent>> _weaponSwapData;
     private readonly Dictionary<long, List<AnimatedCastEvent>> _animatedCastDataById;
     private readonly Dictionary<long, List<InstantCastEvent>> _instantCastDataById;
-    private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
+    private readonly Dictionary<AgentItem, List<HealthDamageEvent>> _damageTakenData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
     private readonly List<RewardEvent> _rewardEvents = [];
@@ -54,7 +54,7 @@ public class CombatData
     private void EIBuffParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, EvtcVersionEvent evtcVersion)
     {
         //TODO(Rennorb) @perf @mem: find average complexity
-        var toAdd = new List<AbstractBuffEvent>(players.Count * 10);
+        var toAdd = new List<BuffEvent>(players.Count * 10);
         foreach (Player p in players)
         {
             if (p.Spec == Spec.Weaver)
@@ -74,7 +74,7 @@ public class CombatData
 
         var buffIDsToSort = new HashSet<long>(toAdd.Count);
         var buffAgentsToSort = new HashSet<AgentItem>(toAdd.Count);
-        foreach (AbstractBuffEvent bf in toAdd)
+        foreach (BuffEvent bf in toAdd)
         {
             //TODO(Rennorb) @perf @mem: find average complexity
             _buffDataByDst.AddToList(bf.To, bf, toAdd.Count / 4);
@@ -108,7 +108,7 @@ public class CombatData
         var idsToSort = new HashSet<long>(toAdd.Count);
         var dstToSort = new HashSet<AgentItem>(toAdd.Count);
         var srcToSort = new HashSet<AgentItem>(toAdd.Count);
-        foreach (AbstractHealthDamageEvent de in toAdd)
+        foreach (HealthDamageEvent de in toAdd)
         {
             //TODO(Rennorb) @perf @mem: find average complexity
             _damageTakenData.AddToList(de.To, de, toAdd.Count / 4);
@@ -171,7 +171,7 @@ public class CombatData
 
     private void EICastParse(IReadOnlyList<Player> players, SkillData skillData, FightData fightData, AgentData agentData)
     {
-        List<AbstractCastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
+        List<CastEvent> toAdd = fightData.Logic.SpecialCastEventProcess(this, skillData);
         ulong gw2Build = GetGW2BuildEvent().Build;
         foreach (Player p in players)
         {
@@ -225,7 +225,7 @@ public class CombatData
         var wepSwapAgentsToSort = new HashSet<AgentItem>(toAdd.Count / 3);
         var instantAgentsToSort = new HashSet<AgentItem>(toAdd.Count / 3);
         var instantIDsToSort    = new HashSet<long>(toAdd.Count / 3);
-        foreach (AbstractCastEvent cast in toAdd)
+        foreach (CastEvent cast in toAdd)
         {
             if (cast is AnimatedCastEvent ace)
             {
@@ -306,7 +306,7 @@ public class CombatData
                 setDowns = true;
             }
 
-            foreach (AbstractHealthDamageEvent evt in events)
+            foreach (HealthDamageEvent evt in events)
             {
                 if (evt.HasKilled)
                 {
@@ -391,7 +391,7 @@ public class CombatData
                 .Where(x => x.BuffInstance != 0)
                 .GroupBy(x => x.BuffInstance)
                 .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
-            var dictStacks = events.OfType<AbstractBuffStackEvent>()
+            var dictStacks = events.OfType<BuffStackEvent>()
                 .Where(x => x.BuffInstance != 0)
                 .GroupBy(x => x.BuffInstance)
                 .ToDictionary(x => x.Key, x => x.GroupBy(y => y.BuffID).ToDictionary(y => y.Key, y => y.ToList()));
@@ -413,7 +413,7 @@ public class CombatData
                         BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
                         if (initialStackApplication == null) { continue; }
 
-                        var sequence = new List<AbstractBuffEvent>(2) { initialStackApplication };
+                        var sequence = new List<BuffEvent>(2) { initialStackApplication };
                         if (dictStacks.TryGetValue(extensionEvent.BuffInstance, out var stacksPerBuffID))
                         {
                             if (stacksPerBuffID.TryGetValue(extensionEvent.BuffID, out var stacks))
@@ -436,7 +436,7 @@ public class CombatData
         }
     }
 
-    internal CombatData(IReadOnlyList<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
+    internal CombatData(IReadOnlyList<CombatItem> allCombatItems, FightData fightData, AgentData agentData, SkillData skillData, IReadOnlyList<Player> players, ParserController operation, IReadOnlyDictionary<uint, ExtensionHandler> extensions, EvtcVersionEvent evtcVersion)
     {
         using var _t = new AutoTrace("CombatData");
         _metaDataEvents.EvtcVersionEvent = evtcVersion;
@@ -447,11 +447,11 @@ public class CombatData
         //TODO(Rennorb) @perf: find average complexity
         _skillIds = new HashSet<long>(combatEvents.Count / 2);
         var castCombatEvents = new Dictionary<ulong, List<CombatItem>>(combatEvents.Count / 5);
-        var buffEvents = new List<AbstractBuffEvent>(combatEvents.Count / 2);
+        var buffEvents = new List<BuffEvent>(combatEvents.Count / 2);
         var wepSwaps = new List<WeaponSwapEvent>(combatEvents.Count / 50);
         var brkDamageData = new List<BreakbarDamageEvent>(combatEvents.Count / 25);
         var crowdControlData = new List<CrowdControlEvent>(combatEvents.Count / 10);
-        var damageData = new List<AbstractHealthDamageEvent>(combatEvents.Count / 2);
+        var damageData = new List<HealthDamageEvent>(combatEvents.Count / 2);
 
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating EI Combat Data");
         foreach (CombatItem combatItem in combatEvents)
@@ -461,7 +461,7 @@ public class CombatData
             {
                 if (combatItem.IsExtension)
                 {
-                    if (extensions.TryGetValue(combatItem.Pad, out AbstractExtensionHandler handler))
+                    if (extensions.TryGetValue(combatItem.Pad, out ExtensionHandler handler))
                     {
                         insertToSkillIDs = handler.IsSkillID(combatItem);
                         handler.InsertEIExtensionEvent(combatItem, agentData, skillData);
@@ -547,7 +547,7 @@ public class CombatData
         BuildBuffDependentContainers();
         //
         operation.UpdateProgressWithCancellationCheck("Parsing: Attaching Extension Events");
-        foreach (AbstractExtensionHandler handler in extensions.Values)
+        foreach (ExtensionHandler handler in extensions.Values)
         {
             handler.AttachToCombatData(this, operation, GetGW2BuildEvent().Build);
         }
@@ -564,7 +564,7 @@ public class CombatData
         _buffDataByInstanceID = new(_buffData.Count / 10);
         foreach (var buffEvents in _buffData.Values)
         {
-            foreach (AbstractBuffEvent abe in buffEvents)
+            foreach (BuffEvent abe in buffEvents)
             {
                 if (!_buffDataByInstanceID.TryGetValue(abe.BuffID, out var dict))
                 {
@@ -575,7 +575,7 @@ public class CombatData
 
                 uint buffInstance = (abe) switch {
                     AbstractBuffApplyEvent abae => abae.BuffInstance,
-                    AbstractBuffStackEvent abse => abse.BuffInstance,
+                    BuffStackEvent abse => abse.BuffInstance,
                     BuffRemoveSingleEvent brse => brse.BuffInstance,
                     _ => 0,
                 };
@@ -838,7 +838,7 @@ public class CombatData
         return _statusEvents.Last90BeforeDownEventsBySrc.GetValueOrEmpty(src);
     }
 
-    public IReadOnlyList<AbstractBuffEvent> GetBuffData(long buffID)
+    public IReadOnlyList<BuffEvent> GetBuffData(long buffID)
     {
         return _buffData.GetValueOrEmpty(buffID);
     }
@@ -846,7 +846,7 @@ public class CombatData
     /// <summary>
     /// Returns list of buff events applied on agent for given id
     /// </summary>
-    public IReadOnlyList<AbstractBuffEvent> GetBuffDataByIDByDst(long buffID, AgentItem dst)
+    public IReadOnlyList<BuffEvent> GetBuffDataByIDByDst(long buffID, AgentItem dst)
     {
         if (_buffDataByIDByDst.TryGetValue(buffID, out var agentDict))
         {
@@ -858,15 +858,15 @@ public class CombatData
         return [ ];
     }
 
-    public IReadOnlyList<AbstractBuffEvent> GetBuffDataByInstanceID(long buffID, uint instanceID)
+    public IReadOnlyList<BuffEvent> GetBuffDataByInstanceID(long buffID, uint instanceID)
     {
         if (instanceID == 0)
         {
             return GetBuffData(buffID);
         }
-        if (_buffDataByInstanceID.TryGetValue(buffID, out Dictionary<uint, List<AbstractBuffEvent>> dict))
+        if (_buffDataByInstanceID.TryGetValue(buffID, out Dictionary<uint, List<BuffEvent>> dict))
         {
-            if (dict.TryGetValue(instanceID, out List<AbstractBuffEvent> list))
+            if (dict.TryGetValue(instanceID, out List<BuffEvent> list))
             {
                 return list;
             }
@@ -882,7 +882,7 @@ public class CombatData
     /// <summary>
     /// Returns list of buff events applied on agent
     /// </summary>
-    public IReadOnlyList<AbstractBuffEvent> GetBuffDataByDst(AgentItem dst)
+    public IReadOnlyList<BuffEvent> GetBuffDataByDst(AgentItem dst)
     {
         return _buffDataByDst.GetValueOrEmpty(dst);
     }
@@ -890,7 +890,7 @@ public class CombatData
     /// <summary>
     /// Returns list of damage events done by agent
     /// </summary>
-    public IReadOnlyList<AbstractHealthDamageEvent> GetDamageData(AgentItem src)
+    public IReadOnlyList<HealthDamageEvent> GetDamageData(AgentItem src)
     {
         return _damageData.GetValueOrEmpty(src);
     }
@@ -914,7 +914,7 @@ public class CombatData
     /// <summary>
     /// Returns list of damage events applied by a skill
     /// </summary>
-    public IReadOnlyList<AbstractHealthDamageEvent> GetDamageData(long skillID)
+    public IReadOnlyList<HealthDamageEvent> GetDamageData(long skillID)
     {
         return _damageDataById.GetValueOrEmpty(skillID);
     }
@@ -978,7 +978,7 @@ public class CombatData
     /// <summary>
     /// Returns list of damage events taken by Agent
     /// </summary>
-    public IReadOnlyList<AbstractHealthDamageEvent> GetDamageTakenData(AgentItem dst)
+    public IReadOnlyList<HealthDamageEvent> GetDamageTakenData(AgentItem dst)
     {
         return _damageTakenData.GetValueOrEmpty(dst);
     }
@@ -999,7 +999,7 @@ public class CombatData
         return _crowControlTakenData.GetValueOrEmpty(dst);
     }
 
-    public IReadOnlyList<AbstractMovementEvent> GetMovementData(AgentItem src)
+    public IReadOnlyList<MovementEvent> GetMovementData(AgentItem src)
     {
         return _statusEvents.MovementEvents.GetValueOrEmpty(src);
     }
@@ -1305,7 +1305,7 @@ public class CombatData
 
     /// 
 
-    public static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T : AbstractTimeCombatEvent
+    public static IEnumerable<T> FindRelatedEvents<T>(IEnumerable<T> events, long time, long epsilon = ServerDelayConstant) where T : TimeCombatEvent
     {
         return events.Where(evt => Math.Abs(evt.Time - time) < epsilon);
     }

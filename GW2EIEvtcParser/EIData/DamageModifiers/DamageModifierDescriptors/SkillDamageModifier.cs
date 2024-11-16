@@ -29,11 +29,11 @@ internal class SkillDamageModifier : DamageModifierDescriptor
         _skillID = skillID;
     }
 
-    internal override List<DamageModifierEvent> ComputeDamageModifier(AbstractSingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
+    internal override List<DamageModifierEvent> ComputeDamageModifier(SingleActor actor, ParsedEvtcLog log, DamageModifier damageModifier)
     {
         var res = new List<DamageModifierEvent>();
         var typeHits = damageModifier.GetHitDamageEvents(actor, log, null, log.FightData.FightStart, log.FightData.FightEnd);
-        foreach (AbstractHealthDamageEvent evt in typeHits)
+        foreach (HealthDamageEvent evt in typeHits)
         {
             if (ComputeGain(null, evt, log, out _) && CheckCondition(evt, log))
             {
@@ -43,7 +43,7 @@ internal class SkillDamageModifier : DamageModifierDescriptor
         return res;
     }
 
-    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, AbstractHealthDamageEvent dl, ParsedEvtcLog log, out double gain)
+    protected override bool ComputeGain(IReadOnlyDictionary<long, BuffsGraphModel>? bgms, HealthDamageEvent dl, ParsedEvtcLog log, out double gain)
     {
         gain = 0;
         if (dl.SkillId != _skillID)

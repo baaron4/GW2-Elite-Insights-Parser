@@ -25,7 +25,7 @@ internal static class DeadeyeHelper
         new BuffOnActorDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds( GW2Builds.July2023BalanceAndSilentSurfCM),
         //
         new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
-            AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -33,7 +33,7 @@ internal static class DeadeyeHelper
             return false;
         }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
-            AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -41,7 +41,7 @@ internal static class DeadeyeHelper
             return false;
         }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
         new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "15% to marked target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
-            AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -50,7 +50,7 @@ internal static class DeadeyeHelper
         }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
 
         new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
-            AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -62,7 +62,7 @@ internal static class DeadeyeHelper
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
-            AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -70,7 +70,7 @@ internal static class DeadeyeHelper
             return false;
         }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
-            AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -78,7 +78,7 @@ internal static class DeadeyeHelper
             return false;
         }).WithBuilds(GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-15% from marked target", DamageSource.NoPets, -15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
-            AbstractBuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.From == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);

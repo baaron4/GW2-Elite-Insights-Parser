@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class AbstractBuffApplyEvent : AbstractBuffEvent
+public abstract class AbstractBuffApplyEvent : BuffEvent
 {
     public readonly uint BuffInstance;
 

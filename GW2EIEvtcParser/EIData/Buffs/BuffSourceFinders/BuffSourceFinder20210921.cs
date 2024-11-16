@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 
 internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
 {
-    private List<AbstractCastEvent>? _vindicatorDodges = null;
+    private List<CastEvent>? _vindicatorDodges = null;
     public BuffSourceFinder20210921(HashSet<long> boonIds) : base(boonIds)
     {
         ImperialImpactExtension = 2000;
@@ -20,7 +20,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
         if (_vindicatorDodges == null)
         {
             //TODO(Rennorb) @perf: find average complexity
-            _vindicatorDodges = new List<AbstractCastEvent>(log.PlayerList.Count(p => p.Spec == ParserHelper.Spec.Vindicator) * 50);
+            _vindicatorDodges = new List<CastEvent>(log.PlayerList.Count(p => p.Spec == ParserHelper.Spec.Vindicator) * 50);
             foreach (Player p in log.PlayerList)
             {
                 if (p.Spec == ParserHelper.Spec.Vindicator)

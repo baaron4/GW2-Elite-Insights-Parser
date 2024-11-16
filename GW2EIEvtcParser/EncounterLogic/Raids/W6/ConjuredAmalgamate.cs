@@ -118,7 +118,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // make those into npcs
         IReadOnlyList<AgentItem> cas = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA : ArcDPSEnums.TargetID.ConjuredAmalgamate);
@@ -210,9 +210,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
-            AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
-            AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
+            SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+            SingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
+            SingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
@@ -223,14 +223,14 @@ internal class ConjuredAmalgamate : MythwrightGambit
                 return;
             }
             SpawnEvent npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
-            AbstractHealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Contains(x.From.GetFinalMaster()));
+            HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken == null)
             {
                 return;
             }
             if (rightArm != null)
             {
-                AbstractHealthDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(rightArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                HealthDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(rightArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTakenArm != null)
                 {
                     lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
@@ -238,7 +238,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
             if (leftArm != null)
             {
-                AbstractHealthDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(leftArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                HealthDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(leftArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTakenArm != null)
                 {
                     lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
@@ -251,7 +251,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         }
     }
 
-    private static List<long> GetTargetableTimes(ParsedEvtcLog log, AbstractSingleActor? target)
+    private static List<long> GetTargetableTimes(ParsedEvtcLog log, SingleActor? target)
     {
         if (target == null)
         {
@@ -279,9 +279,9 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
-        AbstractSingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
-        AbstractSingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
+        SingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
+        SingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
+        SingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
         phases[0].AddTarget(ca);
         phases[0].AddSecondaryTarget(leftArm);
         phases[0].AddSecondaryTarget(rightArm);
@@ -341,13 +341,13 @@ internal class ConjuredAmalgamate : MythwrightGambit
         return phases;
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Conjured Protection - Shield AoE
         var casts = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         var shieldCast = casts.Where(x => x.SkillId == ConjuredProtectionSAK);
-        foreach (AbstractCastEvent c in shieldCast)
+        foreach (CastEvent c in shieldCast)
         {
             int start = (int)c.Time;
             int duration = 10000;
@@ -365,7 +365,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
         return combatData.GetBuffData(LockedOn).Count > 0 ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }

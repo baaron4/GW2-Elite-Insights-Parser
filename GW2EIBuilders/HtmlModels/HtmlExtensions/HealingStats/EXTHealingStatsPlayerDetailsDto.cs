@@ -13,7 +13,7 @@ internal class EXTHealingStatsPlayerDetailsDto
 
     // helpers
 
-    public static EXTHealingStatsPlayerDetailsDto BuildPlayerHealingData(ParsedEvtcLog log, AbstractSingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static EXTHealingStatsPlayerDetailsDto BuildPlayerHealingData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
@@ -26,7 +26,7 @@ internal class EXTHealingStatsPlayerDetailsDto
         {
             dto.HealingDistributions.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyHealingDistData(log, actor, null, phase, usedSkills, usedBuffs));
             var dmgTargetsDto = new List<EXTHealingStatsHealingDistributionDto>();
-            foreach (AbstractSingleActor target in log.Friendlies)
+            foreach (SingleActor target in log.Friendlies)
             {
                 dmgTargetsDto.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyHealingDistData(log, actor, target, phase, usedSkills, usedBuffs));
             }
@@ -41,7 +41,7 @@ internal class EXTHealingStatsPlayerDetailsDto
         return dto;
     }
 
-    private static EXTHealingStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static EXTHealingStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
@@ -51,7 +51,7 @@ internal class EXTHealingStatsPlayerDetailsDto
         foreach (PhaseData phase in log.FightData.GetPhases(log))
         {
             var dmgTargetsDto = new List<EXTHealingStatsHealingDistributionDto>();
-            foreach (AbstractSingleActor target in log.Friendlies)
+            foreach (SingleActor target in log.Friendlies)
             {
                 dmgTargetsDto.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyMinionHealingDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));
             }

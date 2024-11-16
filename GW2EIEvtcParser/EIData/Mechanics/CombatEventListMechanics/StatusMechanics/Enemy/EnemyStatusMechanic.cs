@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData;
 
 
-internal class EnemyStatusMechanic<T> : StatusMechanic<T> where T : AbstractStatusEvent
+internal class EnemyStatusMechanic<T> : StatusMechanic<T> where T : StatusEvent
 {
 
     public EnemyStatusMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown, CombatEventsGetter getter) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown, getter)
@@ -11,15 +11,15 @@ internal class EnemyStatusMechanic<T> : StatusMechanic<T> where T : AbstractStat
         IsEnemyMechanic = true;
     }
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
-        foreach (AbstractSingleActor actor in log.FightData.Logic.Hostiles)
+        foreach (SingleActor actor in log.FightData.Logic.Hostiles)
         {
             foreach (T c in GetEvents(log, actor.AgentItem))
             {
                 if (Keep(c, log))
                 {
-                    AbstractSingleActor? actorToUse = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
+                    SingleActor? actorToUse = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
                     // no need to null check, we are already iterating over an existing actor list
                     InsertMechanic(log, mechanicLogs, c.Time, actorToUse!);
                 }

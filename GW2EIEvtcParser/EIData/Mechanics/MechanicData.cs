@@ -10,7 +10,7 @@ public class MechanicData
     private CachingCollection<HashSet<Mechanic>>? _presentOnFriendliesMechanics;
     private CachingCollection<HashSet<Mechanic>>? _presentOnEnemyMechanics;
     private CachingCollection<HashSet<Mechanic>>? _presentMechanics;
-    private CachingCollection<List<AbstractSingleActor>>? _enemyList;
+    private CachingCollection<List<SingleActor>>? _enemyList;
 
     internal MechanicData(List<Mechanic> fightMechanics)
     {
@@ -84,7 +84,7 @@ public class MechanicData
     private void ComputeMechanics(ParsedEvtcLog log)
     {
         //TODO(Rennorb) @perf <regroupedMobs> = 0
-        var regroupedMobs = new Dictionary<int, AbstractSingleActor>();
+        var regroupedMobs = new Dictionary<int, SingleActor>();
         foreach(var x in _mechanicLogs.Keys.Where(x => !x.Available(log))) { _mechanicLogs.Remove(x); }
         foreach (Mechanic mech in _mechanicLogs.Keys)
         {
@@ -142,7 +142,7 @@ public class MechanicData
         return _mechanicLogs.TryGetValue(mech, out var list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : [];
     }
 
-    public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, AbstractSingleActor actor, long start, long end)
+    public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, SingleActor actor, long start, long end)
     {
         return GetMechanicLogs(log, mech, start, end).Where(x => x.Actor == actor).ToList();
     }
@@ -152,7 +152,7 @@ public class MechanicData
         var presentMechanics = new HashSet<Mechanic>();
         var presentOnEnemyMechanics = new HashSet<Mechanic>();
         var presentOnFriendliesMechanics = new HashSet<Mechanic>();
-        var enemyHash = new HashSet<AbstractSingleActor>();
+        var enemyHash = new HashSet<SingleActor>();
         foreach (KeyValuePair<Mechanic, List<MechanicEvent>> pair in _mechanicLogs)
         {
             if (pair.Key.KeepIfEmpty(log) || pair.Value.Any(x => x.Time >= start && x.Time <= end))
@@ -183,7 +183,7 @@ public class MechanicData
         _presentMechanics!.Set(start, end, presentMechanics);
         _presentOnEnemyMechanics!.Set(start, end, presentOnEnemyMechanics);
         _presentOnFriendliesMechanics!.Set(start, end, presentOnFriendliesMechanics);
-        _enemyList!.Set(start, end, new List<AbstractSingleActor>(enemyHash));
+        _enemyList!.Set(start, end, new List<SingleActor>(enemyHash));
     }
 
     public IReadOnlyCollection<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, long start, long end)
@@ -214,7 +214,7 @@ public class MechanicData
         return _presentMechanics.Get(start, end)!;
     }
 
-    public IReadOnlyList<AbstractSingleActor> GetEnemyList(ParsedEvtcLog log, long start, long end)
+    public IReadOnlyList<SingleActor> GetEnemyList(ParsedEvtcLog log, long start, long end)
     {
         ProcessMechanics(log);
         if (!_enemyList.HasKeys(start, end))

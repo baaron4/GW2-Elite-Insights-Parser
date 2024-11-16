@@ -317,7 +317,7 @@ internal static class MesmerHelper
         return NonCloneMinions.Contains(id) || IsClone(id);
     }
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Mesmer;
         ulong gw2Build = log.CombatData.GetGW2BuildEvent().Build;
@@ -339,13 +339,13 @@ internal static class MesmerHelper
             var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalExeunt, SkillModeCategory.Portal);
             foreach (var group in portalActives)
             {
-                GenericAttachedDecoration? first = null;
+                AttachedDecoration? first = null;
                 foreach (EffectEvent effect in group)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUses);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                    GenericAttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                    AttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     if (first == null)
                     {
                         first = icon;
@@ -412,7 +412,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in dimensionalApertures)
             {
                 // The buff can be quite delayed
-                AbstractBuffEvent buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
+                BuffEvent buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
                 // Security
                 if (buffApply != null)
                 {

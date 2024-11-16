@@ -74,7 +74,7 @@ internal class Artsariiv : ShatteredObservatory
     {
         // generic method for fractals
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
+        SingleActor artsariiv = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
         phases[0].AddTarget(artsariiv);
         if (!requirePhases)
         {
@@ -115,7 +115,7 @@ internal class Artsariiv : ShatteredObservatory
         ("W" , new(9295.668f, 1450.060f)),
     ];
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var artsariivs = new List<AgentItem>(agentData.GetNPCsByID(TargetID.Artsariiv));
         if (artsariivs.Count != 0)
@@ -185,11 +185,11 @@ internal class Artsariiv : ShatteredObservatory
         {
             return;
         }
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Artsariiv)) ?? throw new MissingKeyActorsException("Artsariiv not found");
         SetSuccessByBuffCount(combatData, fightData, GetParticipatingPlayerAgents(target, combatData, playerAgents), target, Determined762, 4);
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
@@ -283,9 +283,9 @@ internal class Artsariiv : ShatteredObservatory
         EnvironmentDecorations.Add(new RectangleDecoration(360, length + hitbox, lifespan, color, opacity, position).UsingRotationConnector(rotation));
     }
 
-    internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+        List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
         res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, NovaLaunchSAK, NovaLaunchBuff));
         return res;
     }

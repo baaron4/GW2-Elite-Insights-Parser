@@ -29,7 +29,7 @@ namespace GW2EIBuilders;
 [JsonSerializable(typeof(AngleConnector.AngleConnectorDescriptor))]
 [JsonSerializable(typeof(AngleInterpolationConnector.AngleInterpolationConnectorDescriptor))]
 [JsonSerializable(typeof(InterpolationConnector.InterpolationConnectorDescriptor))]
-[JsonSerializable(typeof(GenericAttachedDecorationRenderingDescription.SkillModeDescription))]
+[JsonSerializable(typeof(AttachedDecorationRenderingDescription.SkillModeDescription))]
 partial class LogDataDtoSerializerContext : JsonSerializerContext {  }
 
 

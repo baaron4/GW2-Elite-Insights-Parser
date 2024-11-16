@@ -252,7 +252,7 @@ internal static class ElementalistHelper
         return _elementalSwaps.Contains(id);
     }
 
-    public static void RemoveDualBuffs(IReadOnlyList<AbstractBuffEvent> buffsPerDst, Dictionary<long, List<AbstractBuffEvent>> buffsByID, SkillData skillData)
+    public static void RemoveDualBuffs(IReadOnlyList<BuffEvent> buffsPerDst, Dictionary<long, List<BuffEvent>> buffsByID, SkillData skillData)
     {
         var duals = new HashSet<long>
         {
@@ -262,7 +262,7 @@ internal static class ElementalistHelper
             DualEarthAttunement,
         };
         var toClean = new HashSet<long>();
-        foreach (AbstractBuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
+        foreach (BuffEvent c in buffsPerDst.Where(x => duals.Contains(x.BuffID)))
         {
             toClean.Add(c.BuffID);
             c.Invalidate(skillData);
@@ -289,7 +289,7 @@ internal static class ElementalistHelper
         return Minions.Contains(id);
     }
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Elementalist;
 
@@ -542,7 +542,7 @@ internal static class ElementalistHelper
     /// <param name="color">The specialization color.</param>
     /// <param name="volcanoStartTime">The Volcano effect start time.</param>
     /// <param name="volcanoDuraiton">The Volcano effect duration.</param>
-    private static void AddVolcanoProjectileHitDecorations(ParsedEvtcLog log, AbstractPlayer player, CombatReplay replay, SkillModeDescriptor skill, Color color, long volcanoStartTime, long volcanoDuraiton)
+    private static void AddVolcanoProjectileHitDecorations(ParsedEvtcLog log, PlayerActor player, CombatReplay replay, SkillModeDescriptor skill, Color color, long volcanoStartTime, long volcanoDuraiton)
     {
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistVolcanoHits, out var volcanoHits))
         {
@@ -565,7 +565,7 @@ internal static class ElementalistHelper
     /// <param name="effects">The etching effects.</param>
     /// <param name="skillId">The etching skill ID.</param>
     /// <param name="icon">The etching icon.</param>
-    private static void AddEtchingDecorations(ParsedEvtcLog log, AbstractPlayer player, CombatReplay replay, Color color, IReadOnlyList<EffectEvent> effects, long skillId, string icon)
+    private static void AddEtchingDecorations(ParsedEvtcLog log, PlayerActor player, CombatReplay replay, Color color, IReadOnlyList<EffectEvent> effects, long skillId, string icon)
     {
         var skill = new SkillModeDescriptor(player, Spec.Elementalist, skillId, SkillModeCategory.ShowOnSelect);
         foreach (EffectEvent effect in effects)

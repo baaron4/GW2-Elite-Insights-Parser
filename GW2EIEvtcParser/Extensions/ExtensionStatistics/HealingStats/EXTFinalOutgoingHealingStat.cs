@@ -27,7 +27,7 @@ public class EXTFinalOutgoingHealingStat
     public readonly int ActorDownedHps;
     public readonly int ActorDownedHealing;
 
-    internal EXTFinalOutgoingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
+    internal EXTFinalOutgoingHealingStat(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
         (Healing, HealingPowerHealing, ConversionHealing, HybridHealing, DownedHealing) = ComputeHealingFrom(log, actor.EXTHealing.GetOutgoingHealEvents(target, log, start, end));
         (ActorHealing, ActorHealingPowerHealing, ActorConversionHealing, ActorHybridHealing, ActorDownedHealing) = ComputeHealingFrom(log, actor.EXTHealing.GetJustActorOutgoingHealEvents(target, log, start, end));
@@ -48,14 +48,14 @@ public class EXTFinalOutgoingHealingStat
         }
     }
 
-    private static (int healing, int healingPowerHealing, int conversionHealing, int hybridHealing, int downedHealing) ComputeHealingFrom(ParsedEvtcLog log, IEnumerable<EXTAbstractHealingEvent> healingEvents)
+    private static (int healing, int healingPowerHealing, int conversionHealing, int hybridHealing, int downedHealing) ComputeHealingFrom(ParsedEvtcLog log, IEnumerable<EXTHealingEvent> healingEvents)
     {
         int healing = 0;
         int healingPowerHealing = 0;
         int conversionhealing = 0;
         int hybridHealing = 0;
         int downedHealing = 0;
-        foreach (EXTAbstractHealingEvent healingEvent in healingEvents)
+        foreach (EXTHealingEvent healingEvent in healingEvents)
         {
             healing += healingEvent.HealingDone;
             switch (healingEvent.GetHealingType(log))

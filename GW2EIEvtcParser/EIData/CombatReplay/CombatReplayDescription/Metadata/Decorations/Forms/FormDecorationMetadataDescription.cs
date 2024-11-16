@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public abstract class FormDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
+public abstract class FormDecorationMetadataDescription : AttachedDecorationMetadataDescription
 {
     public readonly string Color;
 

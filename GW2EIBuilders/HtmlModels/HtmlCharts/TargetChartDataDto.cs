@@ -10,7 +10,7 @@ internal class TargetChartDataDto : ActorChartDataDto
     public readonly IReadOnlyList<int> TotalCondition;
     public readonly List<double[]>? BreakbarPercentStates;
 
-    public TargetChartDataDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target) : base(log, phase, target, false)
+    public TargetChartDataDto(ParsedEvtcLog log, PhaseData phase, SingleActor target) : base(log, phase, target, false)
     {
         Total = target.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.All);
         TotalPower = target.Get1SDamageList(log, phase.Start, phase.End, null, ParserHelper.DamageType.Power);

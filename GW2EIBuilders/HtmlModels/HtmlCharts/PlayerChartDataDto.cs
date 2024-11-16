@@ -10,7 +10,7 @@ internal class PlayerChartDataDto : ActorChartDataDto
     public readonly PlayerDamageChartDto<int> ConditionDamage;
     public readonly PlayerDamageChartDto<double> BreakbarDamage;
 
-    private PlayerChartDataDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor p) : base(log, phase, p, true)
+    private PlayerChartDataDto(ParsedEvtcLog log, PhaseData phase, SingleActor p) : base(log, phase, p, true)
     {
         Damage = new PlayerDamageChartDto<int>()
         {
@@ -36,7 +36,7 @@ internal class PlayerChartDataDto : ActorChartDataDto
             Taken = p.Get1SBreakbarDamageTakenList(log, phase.Start, phase.End, null),
             Targets = []
         };
-        foreach (AbstractSingleActor target in phase.AllTargets)
+        foreach (SingleActor target in phase.AllTargets)
         {
             Damage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.All));
             PowerDamage.Targets.Add(p.Get1SDamageList(log, phase.Start, phase.End, target, ParserHelper.DamageType.Power));
@@ -49,7 +49,7 @@ internal class PlayerChartDataDto : ActorChartDataDto
     {
         var list = new List<PlayerChartDataDto>(log.Friendlies.Count);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new PlayerChartDataDto(log, phase, actor));
         }

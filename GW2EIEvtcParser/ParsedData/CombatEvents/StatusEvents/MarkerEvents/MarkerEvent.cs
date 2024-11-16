@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class MarkerEvent : AbstractStatusEvent
+public class MarkerEvent : StatusEvent
 {
     /// <summary>
     /// ID of the marker. Match to stable GUID with <see cref="MarkerGUIDEvent"/>.

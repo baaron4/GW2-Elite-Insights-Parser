@@ -1,8 +1,8 @@
 ﻿namespace GW2EIEvtcParser.EIData;
 
-internal abstract class FormDecoration : GenericAttachedDecoration
+internal abstract class FormDecoration : AttachedDecoration
 {
-    internal abstract class FormDecorationMetadata : GenericAttachedDecorationMetadata
+    internal abstract class FormDecorationMetadata : AttachedDecorationMetadata
     {
         public readonly string Color;
 
@@ -11,7 +11,7 @@ internal abstract class FormDecoration : GenericAttachedDecoration
             Color = color;
         }
     }
-    internal abstract class FormDecorationRenderingData : GenericAttachedDecorationRenderingData
+    internal abstract class FormDecorationRenderingData : AttachedDecorationRenderingData
     {
         public bool Filled { get; private set; } = true;
         public int GrowingEnd { get; private set; }

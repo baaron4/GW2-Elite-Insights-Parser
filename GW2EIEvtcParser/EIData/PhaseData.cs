@@ -18,13 +18,13 @@ public class PhaseData
 
     public bool BreakbarPhase { get; internal set; } = false;
 
-    public IReadOnlyList<AbstractSingleActor> Targets => _targets;
-    private readonly List<AbstractSingleActor> _targets = [];
-    public IReadOnlyList<AbstractSingleActor> SecondaryTargets => _secondaryTargets;
-    private readonly List<AbstractSingleActor> _secondaryTargets = [];
+    public IReadOnlyList<SingleActor> Targets => _targets;
+    private readonly List<SingleActor> _targets = [];
+    public IReadOnlyList<SingleActor> SecondaryTargets => _secondaryTargets;
+    private readonly List<SingleActor> _secondaryTargets = [];
 
-    public IReadOnlyList<AbstractSingleActor> AllTargets => _secondaryTargets.Count != 0 ? _allTargets : _targets;
-    private readonly List<AbstractSingleActor> _allTargets = [];
+    public IReadOnlyList<SingleActor> AllTargets => _secondaryTargets.Count != 0 ? _allTargets : _targets;
+    private readonly List<SingleActor> _allTargets = [];
 
     internal PhaseData(long start, long end)
     {
@@ -52,7 +52,7 @@ public class PhaseData
         return minEnd - maxStart > 0;
     }
 
-    internal void AddTarget(AbstractSingleActor? target)
+    internal void AddTarget(SingleActor? target)
     {
         if (target == null || _targets.Contains(target))
         {
@@ -61,18 +61,18 @@ public class PhaseData
         _targets.Add(target);
     }
 
-    internal void RemoveTarget(AbstractSingleActor target)
+    internal void RemoveTarget(SingleActor target)
     {
         //TODO(Rennorb) @perf
         _targets.Remove(target);
     }
 
-    internal void AddTargets(IEnumerable<AbstractSingleActor> targets)
+    internal void AddTargets(IEnumerable<SingleActor> targets)
     {
         _targets.AddRange(targets.Where(x => x != null));
     }
 
-    internal void AddSecondaryTarget(AbstractSingleActor target)
+    internal void AddSecondaryTarget(SingleActor target)
     {
         if (target == null || _secondaryTargets.Contains(target))
         {
@@ -82,18 +82,18 @@ public class PhaseData
         RefreshAllTargetsList();
     }
 
-    public bool IsSecondaryTarget(AbstractSingleActor target)
+    public bool IsSecondaryTarget(SingleActor target)
     {
         return _secondaryTargets.Contains(target);
     }
 
-    internal void RemoveSecondaryTarget(AbstractSingleActor target)
+    internal void RemoveSecondaryTarget(SingleActor target)
     {
         _secondaryTargets.Remove(target);
         RefreshAllTargetsList();
     }
 
-    internal void AddSecondaryTargets(IEnumerable<AbstractSingleActor> targets)
+    internal void AddSecondaryTargets(IEnumerable<SingleActor> targets)
     {
         _secondaryTargets.AddRange(targets.Where(x => x != null));
         RefreshAllTargetsList();
@@ -140,7 +140,7 @@ public class PhaseData
         if (Targets.Count > 0)
         {
             long start = long.MaxValue;
-            foreach (AbstractSingleActor target in Targets)
+            foreach (SingleActor target in Targets)
             {
                 long startTime = target.FirstAware;
                 SpawnEvent spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
@@ -167,7 +167,7 @@ public class PhaseData
         if (Targets.Count > 0)
         {
             long end = long.MinValue;
-            foreach (AbstractSingleActor target in Targets)
+            foreach (SingleActor target in Targets)
             {
                 long deadTime = target.LastAware;
                 DeadEvent died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();

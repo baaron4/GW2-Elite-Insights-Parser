@@ -48,7 +48,7 @@ public class SkillModeDescriptor
     /// <param name="skillID">ID of the skill</param>
     /// <param name="category">Category of the skill</param>
     /// <returns></returns>
-    public SkillModeDescriptor(AbstractSingleActor owner, Spec spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
+    public SkillModeDescriptor(SingleActor owner, Spec spec, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable)
     {
         if (owner == null)
         {
@@ -69,7 +69,7 @@ public class SkillModeDescriptor
     /// <param name="skillID">ID of the skill</param>
     /// <param name="category">Category of the skill</param>
     /// <returns></returns>
-    public SkillModeDescriptor(AbstractSingleActor owner, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable) : this(owner, Spec.Unknown, skillID, category)
+    public SkillModeDescriptor(SingleActor owner, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable) : this(owner, Spec.Unknown, skillID, category)
     {
     }
 }

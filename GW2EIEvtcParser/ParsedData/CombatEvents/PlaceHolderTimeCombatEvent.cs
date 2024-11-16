@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class PlaceHolderTimeCombatEvent : AbstractTimeCombatEvent
+public class PlaceHolderTimeCombatEvent : TimeCombatEvent
 {
 
     internal PlaceHolderTimeCombatEvent(long time) : base(time)

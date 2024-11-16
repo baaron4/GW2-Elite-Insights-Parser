@@ -6,7 +6,7 @@ internal class AgentFacingAgentConnector : AgentFacingConnector
 {
     public readonly AgentItem DstAgent;
 
-    public AgentFacingAgentConnector(AbstractSingleActor agent, AbstractSingleActor dstAgent) : this(agent.AgentItem, dstAgent.AgentItem)
+    public AgentFacingAgentConnector(SingleActor agent, SingleActor dstAgent) : this(agent.AgentItem, dstAgent.AgentItem)
     {
     }
 

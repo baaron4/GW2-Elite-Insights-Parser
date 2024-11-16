@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class ActorOrientationDecorationMetadataDescription : GenericAttachedDecorationMetadataDescription
+public class ActorOrientationDecorationMetadataDescription : AttachedDecorationMetadataDescription
 {
 
     internal ActorOrientationDecorationMetadataDescription(ActorOrientationDecorationMetadata decoration) : base(decoration)

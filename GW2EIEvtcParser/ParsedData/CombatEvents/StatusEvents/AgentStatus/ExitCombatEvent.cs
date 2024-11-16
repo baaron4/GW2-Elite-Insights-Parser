@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class ExitCombatEvent : AbstractStatusEvent
+public class ExitCombatEvent : StatusEvent
 {
     internal ExitCombatEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {

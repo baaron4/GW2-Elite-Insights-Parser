@@ -26,7 +26,7 @@ public class FinalGameplayStats
     public readonly double SkillCastUptime;
     public readonly double SkillCastUptimeNoAA;
 
-    private static double GetDistanceToTarget(AbstractSingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> reference)
+    private static double GetDistanceToTarget(SingleActor actor, ParsedEvtcLog log, long start, long end, IReadOnlyList<ParametricPoint3D?> reference)
     {
 
         var positions = actor.GetCombatReplayPolledPositions(log).Where(x => x.Time >= start && x.Time <= end).ToList();
@@ -53,7 +53,7 @@ public class FinalGameplayStats
         }
     }
 
-    internal FinalGameplayStats(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor)
+    internal FinalGameplayStats(ParsedEvtcLog log, long start, long end, SingleActor actor)
     {
         // If dummy actor, stop
         if (actor.IsFakeActor)
@@ -61,15 +61,15 @@ public class FinalGameplayStats
             return;
         }
         long duration = end - start;
-        foreach (AbstractCastEvent cl in actor.GetCastEvents(log, start, end))
+        foreach (CastEvent cl in actor.GetCastEvents(log, start, end))
         {
             switch (cl.Status)
             {
-                case AbstractCastEvent.AnimationStatus.Interrupted:
+                case CastEvent.AnimationStatus.Interrupted:
                     Wasted++;
                     TimeWasted += cl.SavedDuration;
                     break;
-                case AbstractCastEvent.AnimationStatus.Reduced:
+                case CastEvent.AnimationStatus.Reduced:
                     Saved++;
                     TimeSaved += cl.SavedDuration;
                     break;
@@ -82,9 +82,9 @@ public class FinalGameplayStats
         TimeSaved = Math.Round(TimeSaved / 1000.0, ParserHelper.TimeDigit);
         TimeWasted = -Math.Round(TimeWasted / 1000.0, ParserHelper.TimeDigit);
         //
-        foreach (AbstractCastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
+        foreach (CastEvent cl in actor.GetIntersectingCastEvents(log, start, end))
         {
-            if (cl.Status == AbstractCastEvent.AnimationStatus.Interrupted || cl.Status == AbstractCastEvent.AnimationStatus.Unknown)
+            if (cl.Status == CastEvent.AnimationStatus.Interrupted || cl.Status == CastEvent.AnimationStatus.Unknown)
             {
                 continue;
             }

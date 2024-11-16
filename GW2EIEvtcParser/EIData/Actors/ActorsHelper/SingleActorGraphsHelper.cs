@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
-partial class AbstractSingleActor
+partial class SingleActor
 {
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = [];
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<int[]>> _damageTakenList1S = [];
@@ -82,14 +82,14 @@ partial class AbstractSingleActor
         return res;
     }
 
-    private static int[] ComputeDamageGraph(IEnumerable<AbstractHealthDamageEvent> dls, long start, long end)
+    private static int[] ComputeDamageGraph(IEnumerable<HealthDamageEvent> dls, long start, long end)
     {
         int durationInMS = (int)(end - start);
         int durationInS = durationInMS / 1000;
         var graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
         // fill the graph
         int previousTime = 0;
-        foreach (AbstractHealthDamageEvent dl in dls)
+        foreach (HealthDamageEvent dl in dls)
         {
             int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
             if (time != previousTime)
@@ -111,7 +111,7 @@ partial class AbstractSingleActor
         return graph;
     }
 
-    public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, DamageType damageType = DamageType.All)
+    public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
     {
         if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
         {
@@ -129,7 +129,7 @@ partial class AbstractSingleActor
         return graph;
     }
 
-    public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, DamageType damageType = DamageType.All)
+    public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
     {
         if (!_damageTakenList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
         {
@@ -176,7 +176,7 @@ partial class AbstractSingleActor
         return graph;
     }
 
-    public IReadOnlyList<double>? Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target)
+    public IReadOnlyList<double>? Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, SingleActor? target)
     {
         if (!log.CombatData.HasBreakbarDamageData)
         {
@@ -195,7 +195,7 @@ partial class AbstractSingleActor
         return brkDmgList;
     }
 
-    public IReadOnlyList<double>? Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target)
+    public IReadOnlyList<double>? Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, SingleActor? target)
     {
         if (!log.CombatData.HasBreakbarDamageData)
         {

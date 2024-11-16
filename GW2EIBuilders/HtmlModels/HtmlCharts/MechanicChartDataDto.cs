@@ -26,7 +26,7 @@ internal class MechanicChartDataDto
         var res = new List<List<(double time, string? name)>>();
         if (!enemyMechanic)
         {
-            var playerIndex = new Dictionary<AbstractSingleActor, int>();
+            var playerIndex = new Dictionary<SingleActor, int>();
             for (int p = 0; p < log.Friendlies.Count; p++)
             {
                 playerIndex.Add(log.Friendlies[p], p);
@@ -43,7 +43,7 @@ internal class MechanicChartDataDto
         }
         else
         {
-            var targetIndex = new Dictionary<AbstractSingleActor, int>();
+            var targetIndex = new Dictionary<SingleActor, int>();
             for (int p = 0; p < phase.AllTargets.Count; p++)
             {
                 targetIndex.Add(phase.AllTargets[p], p);

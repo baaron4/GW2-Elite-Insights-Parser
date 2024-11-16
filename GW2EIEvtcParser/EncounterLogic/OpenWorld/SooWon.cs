@@ -52,8 +52,8 @@ internal class SooWon : OpenWorldLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SooWonOW));
-        AbstractSingleActor tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.SooWonTail));
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SooWonOW));
+        SingleActor tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.SooWonTail));
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Soo-Won not found");
@@ -93,13 +93,13 @@ internal class SooWon : OpenWorldLogic
     /// 10: 20% - 0%
     /// </code>
     /// </returns>
-    private static int GetPhaseOffset(ParsedEvtcLog log, AbstractSingleActor mainTarget)
+    private static int GetPhaseOffset(ParsedEvtcLog log, SingleActor mainTarget)
     {
         double initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
         Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs =
             log.CombatData.GetBuffDataByDst(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault;
-        AbstractBuffEvent initialInvuln = targetBuffs(x => x.Initial && x.BuffID == Invulnerability757);
-        AbstractBuffEvent initialDmgImmunity = targetBuffs(x => x.Initial && x.BuffID == SooWonSpearPhaseInvul); // spear phase
+        BuffEvent initialInvuln = targetBuffs(x => x.Initial && x.BuffID == Invulnerability757);
+        BuffEvent initialDmgImmunity = targetBuffs(x => x.Initial && x.BuffID == SooWonSpearPhaseInvul); // spear phase
 
         int offset = 0;
         if (initialHealth <= 80 && initialHealth > 60)
@@ -134,8 +134,8 @@ internal class SooWon : OpenWorldLogic
         return offset;
     }
 
-    private void InitPhases(List<PhaseData> phases, AbstractSingleActor mainTarget,
-        AbstractSingleActor tailTarget, int phaseOffset)
+    private void InitPhases(List<PhaseData> phases, SingleActor mainTarget,
+        SingleActor tailTarget, int phaseOffset)
     {
         for (int i = 1; i < phases.Count; i++)
         {
@@ -200,7 +200,7 @@ internal class SooWon : OpenWorldLogic
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData,
-        AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+        AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         IReadOnlyList<AgentItem> sooWons = agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW);
         if (!sooWons.Any())

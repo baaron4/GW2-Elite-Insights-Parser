@@ -35,12 +35,12 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         return 1;
     }
 
-    public override int GetActiveStacks(AbstractSingleActor actor)
+    public override int GetActiveStacks(SingleActor actor)
     {
         return GetStacks(actor);
     }
 
-    public override int GetStacks(AbstractSingleActor actor)
+    public override int GetStacks(SingleActor actor)
     {
         return GetActiveSources().Any(x => x == actor.AgentItem) ? 1 : 0;
     }

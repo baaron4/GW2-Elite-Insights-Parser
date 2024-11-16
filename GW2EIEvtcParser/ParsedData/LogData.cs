@@ -27,13 +27,13 @@ public class LogData
     public string LogEndStd { get; private set; } = DefaultTimeValue;
     public readonly string? LogInstanceIP = null;
 
-    public readonly IReadOnlyList<AbstractExtensionHandler> UsedExtensions;
+    public readonly IReadOnlyList<ExtensionHandler> UsedExtensions;
 
     public IReadOnlyList<string> LogErrors => _logErrors;
     private readonly List<string> _logErrors = [];
 
     // Constructors
-    internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
+    internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, ExtensionHandler> extensions, ParserController operation)
     {
         if (evtcVersion != null)
         {

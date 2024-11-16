@@ -67,7 +67,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
                 // Red AoE during 75-50-25 % phases
                 var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast);
-                foreach (AbstractCastEvent cast in demonicBlasts)
+                foreach (CastEvent cast in demonicBlasts)
                 {
                     // Dagda uses Demonic Blast at 90% but she will not spawn the red pushback AoE
                     // We check if she has gained the buff to be sure that the phase has started.
@@ -84,7 +84,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
                 // Spinning nebula
                 var spinningNebulas = casts.Where(x => x.SkillId == SpinningNebulaCentral || x.SkillId == SpinningNebulaWithTeleport);
-                foreach (AbstractCastEvent cast in spinningNebulas)
+                foreach (CastEvent cast in spinningNebulas)
                 {
                     (long, long) lifespan = (cast.Time, cast.Time + cast.ActualDuration);
                     var connector = new AgentConnector(target);
@@ -94,7 +94,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
                 // Shooting Stars - Green Arrow
                 var shootingStars = casts.Where(x => x.SkillId == ShootingStars);
-                foreach (AbstractCastEvent cast in shootingStars)
+                foreach (CastEvent cast in shootingStars)
                 {
                     uint length = 1500;
                     uint width = 100;
@@ -105,7 +105,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     // Before then, the mechanic would continue during the phase and shoot.
                     if (log.LogData.GW2Build >= GW2Builds.DagdaNMHPChangedAndCMRelease)
                     {
-                        foreach (AbstractCastEvent demonicBlastCast in demonicBlasts)
+                        foreach (CastEvent demonicBlastCast in demonicBlasts)
                         {
                             if (lifespan.Item1 < demonicBlastCast.Time && lifespan.Item2 > demonicBlastCast.Time)
                             {
@@ -130,7 +130,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
@@ -282,11 +282,11 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         // Special check since CM release, normal mode broke too, but we always trust reward events
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
         {
-            AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
+            SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
             HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HealthPercent <= 1e-6);
             if (hpUpdate != null)
             {
-                AbstractHealthDamageEvent lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
+                HealthDamageEvent lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
                 if (fightData.Success)
                 {
                     fightData.SetSuccess(true, Math.Min(lastDamageEvent.Time, fightData.FightEnd));
@@ -302,7 +302,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -386,7 +386,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             }
             else
             {
-                AbstractBuffEvent phasingBuffLoss = log.CombatData.GetBuffDataByIDByDst(DagdaDuringPhase75_50_25, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= start && x.Time <= end && x is BuffRemoveAllEvent);
+                BuffEvent phasingBuffLoss = log.CombatData.GetBuffDataByIDByDst(DagdaDuringPhase75_50_25, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= start && x.Time <= end && x is BuffRemoveAllEvent);
                 if (phasingBuffLoss != null)
                 {
                     start = phasingBuffLoss.Time;
@@ -402,11 +402,11 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int[] curTormenteds = [1, 1, 1, 1];
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
@@ -426,7 +426,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     break;
             }
         }
-        AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
+        SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
         // Security check to stop dagda from going back to 100%
         var dagdaHPUpdates = combatData.Where(x => x.SrcMatchesAgent(dagda.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
         if (dagdaHPUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(dagdaHPUpdates.LastOrDefault()) == 100)
@@ -462,7 +462,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         {
             return FightData.EncounterMode.Normal;
         }
-        AbstractSingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
+        SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
         return (dagda.GetHealth(combatData) > 56e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 

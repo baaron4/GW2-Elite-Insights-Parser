@@ -67,10 +67,10 @@ internal class Samarog : BastionOfThePenitent
         ];
     }
 
-    internal override List<AbstractHealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
-        AbstractSingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
-        IReadOnlyList<AbstractHealthDamageEvent> damageTaken = combatData.GetDamageTakenData(samarog.AgentItem);
+        SingleActor samarog = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
+        IReadOnlyList<HealthDamageEvent> damageTaken = combatData.GetDamageTakenData(samarog.AgentItem);
         var fanaticalResilienceTimes = GetFilteredList(combatData, FanaticalResilience, samarog, true, false).Select(x => x.Time).ToList();
         var fanaticalResilienceSegments = new List<Segment>();
         for (int i = 0; i < fanaticalResilienceTimes.Count; i += 2)
@@ -83,7 +83,7 @@ internal class Samarog : BastionOfThePenitent
             }
             fanaticalResilienceSegments.Add(new Segment(start, end, 1));
         }
-        foreach (AbstractHealthDamageEvent healthDamageEvent in damageTaken)
+        foreach (HealthDamageEvent healthDamageEvent in damageTaken)
         {
             // Can't have been absorbed if not 0 damages
             if (healthDamageEvent.HasHit && healthDamageEvent.HealthDamage == 0 && fanaticalResilienceSegments.Any(x => healthDamageEvent.Time >= x.Start && healthDamageEvent.Time <= x.End))
@@ -97,7 +97,7 @@ internal class Samarog : BastionOfThePenitent
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         phases[0].AddTarget(mainTarget);
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem)));
         if (!requirePhases)
@@ -128,7 +128,7 @@ internal class Samarog : BastionOfThePenitent
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // With lingering agents, last aware of the spears are properly set
         if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
@@ -147,7 +147,7 @@ internal class Samarog : BastionOfThePenitent
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int curGuldhem = 1;
         int curRigom = 1;
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.Guldhem))
             {
@@ -210,12 +210,12 @@ internal class Samarog : BastionOfThePenitent
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // big bomb
         var bigbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalBig, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in bigbomb)
+        foreach (BuffEvent c in bigbomb)
         {
             int bigStart = (int)c.Time;
             int bigEnd = bigStart + 6000;
@@ -224,7 +224,7 @@ internal class Samarog : BastionOfThePenitent
         }
         // small bomb
         var smallbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalSmall, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in smallbomb)
+        foreach (BuffEvent c in smallbomb)
         {
             int smallStart = (int)c.Time;
             int smallEnd = smallStart + 6000;
@@ -244,7 +244,7 @@ internal class Samarog : BastionOfThePenitent
         foreach (Segment seg in fixatedGuldhem)
         {
             long mid = (seg.Start + seg.End) / 2;
-            AbstractSingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
+            SingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
             if (guldhem != null)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.Orange, 0.3, new AgentConnector(p), new AgentConnector(guldhem)));
@@ -255,7 +255,7 @@ internal class Samarog : BastionOfThePenitent
         foreach (Segment seg in fixatedRigom)
         {
             long mid = (seg.Start + seg.End) / 2;
-            AbstractSingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
+            SingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
             if (rigom != null)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.Red, 0.3, new AgentConnector(p), new AgentConnector(rigom)));
@@ -265,7 +265,7 @@ internal class Samarog : BastionOfThePenitent
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Samarog)) ?? throw new MissingKeyActorsException("Samarog not found");
         return (target.GetHealth(combatData) > 30e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 }

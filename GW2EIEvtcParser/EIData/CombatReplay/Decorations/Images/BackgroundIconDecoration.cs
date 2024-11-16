@@ -2,9 +2,9 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-internal class BackgroundIconDecoration : GenericIconDecoration
+internal class BackgroundIconDecoration : ImageDecoration
 {
-    internal class BackgroundIconDecorationMetadata : GenericIconDecorationMetadata
+    internal class BackgroundIconDecorationMetadata : ImageDecorationMetadata
     {
 
         public BackgroundIconDecorationMetadata(string icon, uint pixelSize, uint worldSize) : base(icon, pixelSize, worldSize)
@@ -15,12 +15,12 @@ internal class BackgroundIconDecoration : GenericIconDecoration
         {
             return "BI" + PixelSize + Image.GetHashCode().ToString() + WorldSize;
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new BackgroundIconDecorationMetadataDescription(this);
         }
     }
-    internal class BackgroundIconDecorationRenderingData : GenericIconDecorationRenderingData
+    internal class BackgroundIconDecorationRenderingData : ImageDecorationRenderingData
     {
         public readonly IReadOnlyList<ParametricPoint1D> Opacities;
         public readonly IReadOnlyList<ParametricPoint1D> Heights;
@@ -33,7 +33,7 @@ internal class BackgroundIconDecoration : GenericIconDecoration
         {
         }
 
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new BackgroundIconDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }

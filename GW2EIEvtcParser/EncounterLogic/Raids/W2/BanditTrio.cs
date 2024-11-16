@@ -130,7 +130,7 @@ internal class BanditTrio : SalvationPass
         return startToUse;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Cage
         AgentItem cage = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
@@ -166,7 +166,7 @@ internal class BanditTrio : SalvationPass
             var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration).ToList();
             if (movements.Count != 0)
             {
-                AbstractMovementEvent firstMove = movements.First();
+                MovementEvent firstMove = movements.First();
                 // two minutes
                 if (firstMove.Time < 120000)
                 {
@@ -177,7 +177,7 @@ internal class BanditTrio : SalvationPass
         return FightData.EncounterStartStatus.Normal;
     }
 
-    private static void SetPhasePerTarget(AbstractSingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
+    private static void SetPhasePerTarget(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
     {
         EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
         if (phaseStart != null)
@@ -222,15 +222,15 @@ internal class BanditTrio : SalvationPass
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor berg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Berg)) ?? throw new MissingKeyActorsException("Berg not found");
-        AbstractSingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Zane)) ?? throw new MissingKeyActorsException("Zane not found");
-        AbstractSingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Narella)) ?? throw new MissingKeyActorsException("Narella not found");
+        SingleActor berg = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Berg)) ?? throw new MissingKeyActorsException("Berg not found");
+        SingleActor zane = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Zane)) ?? throw new MissingKeyActorsException("Zane not found");
+        SingleActor narella = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Narella)) ?? throw new MissingKeyActorsException("Narella not found");
         phases[0].AddTargets(Targets);
         if (!requirePhases)
         {
             return phases;
         }
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             SetPhasePerTarget(target, phases, log);
         }
@@ -278,7 +278,7 @@ internal class BanditTrio : SalvationPass
             case (int)TargetID.Berg: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var overheadSmash = casts.Where(x => x.SkillId == OverheadSmashBerg);
-                foreach (AbstractCastEvent c in overheadSmash)
+                foreach (CastEvent c in overheadSmash)
                 {
                     uint radius = 550;
                     int angle = 80;
@@ -295,7 +295,7 @@ internal class BanditTrio : SalvationPass
             case (int)TargetID.Zane: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var bulletHail = casts.Where(x => x.SkillId == HailOfBulletsZane).ToList();
-                foreach (AbstractCastEvent c in bulletHail)
+                foreach (CastEvent c in bulletHail)
                 {
                     long start = c.Time;
                     long firstConeStart = start;
@@ -323,7 +323,7 @@ internal class BanditTrio : SalvationPass
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         // Sapper bombs

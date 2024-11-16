@@ -2,15 +2,15 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-internal class DamageModifierEvent : AbstractTimeCombatEvent
+internal class DamageModifierEvent : TimeCombatEvent
 {
     public readonly DamageModifier DamageModifier;
-    private readonly AbstractHealthDamageEvent _evt;
+    private readonly HealthDamageEvent _evt;
     public AgentItem Src => _evt.From;
     public AgentItem Dst => _evt.To;
     public readonly double DamageGain;
 
-    internal DamageModifierEvent(AbstractHealthDamageEvent evt, DamageModifier damageModifier, double damageGain) : base(evt.Time)
+    internal DamageModifierEvent(HealthDamageEvent evt, DamageModifier damageModifier, double damageGain) : base(evt.Time)
     {
         _evt = evt;
         DamageGain = damageGain;

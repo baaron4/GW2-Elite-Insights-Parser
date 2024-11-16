@@ -21,7 +21,7 @@ internal class MovingPlatformDecoration : BackgroundDecoration
         {
             return "MP" + Height + Image.GetHashCode().ToString() + Width;
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new MovingPlatformDecorationMetadataDescription(this);
         }
@@ -30,7 +30,7 @@ internal class MovingPlatformDecoration : BackgroundDecoration
     {
         public readonly List<(float x, float y, float z, float angle, float opacity, long time)> Positions = [];
 
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new MovingPlatformDecorationRenderingDescription(this, map, metadataSignature);
         }

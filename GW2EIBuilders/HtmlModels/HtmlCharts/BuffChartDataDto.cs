@@ -116,12 +116,12 @@ internal class BuffChartDataDto
         return list;
     }
 
-    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, Buff> usedBuffs)
+    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, Buff> usedBuffs)
     {
         return BuildBuffGraphData(log, phase, p.GetBuffGraphs(log).ToDictionary(x => x.Key, x => x.Value), usedBuffs);
     }
 
-    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, AbstractSingleActor p, AbstractSingleActor by, PhaseData phase, Dictionary<long, Buff> usedBuffs)
+    public static List<BuffChartDataDto> BuildBuffGraphData(ParsedEvtcLog log, SingleActor p, SingleActor by, PhaseData phase, Dictionary<long, Buff> usedBuffs)
     {
         return BuildBuffGraphData(log, phase, p.GetBuffGraphs(log, by).ToDictionary(x => x.Key, x => x.Value), usedBuffs);
     }

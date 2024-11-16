@@ -34,7 +34,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
         }
     }
 
-    protected void EnemyChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    protected void EnemyChecker(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
         foreach (var guid in MechanicIDs)
         {
@@ -45,7 +45,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
                     AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
                     if (agentItem.IsSpecies(ArcDPSEnums.TrashID.Environment) && Keep(effectEvent, log))
                     {
-                        AbstractSingleActor? actor = log.FindActor(agentItem, true);
+                        SingleActor? actor = log.FindActor(agentItem, true);
                         if (actor != null)
                         {
                             InsertMechanic(log, mechanicLogs, effectEvent.Time, actor);
@@ -53,7 +53,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
                     }
                     else
                     {
-                        AbstractSingleActor? actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
+                        SingleActor? actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
                         if (actor != null && Keep(effectEvent, log))
                         {
                             InsertMechanic(log, mechanicLogs, effectEvent.Time, actor);

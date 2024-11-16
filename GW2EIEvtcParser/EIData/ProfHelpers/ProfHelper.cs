@@ -188,7 +188,7 @@ internal static class ProfHelper
             gadgetSpawnCastData.AddRange(combatData.GetAnimatedCastData(id));
         }
         gadgetSpawnCastData.Sort((x, y) => x.Time.CompareTo(y.Time));
-        foreach (AbstractCastEvent castEvent in gadgetSpawnCastData)
+        foreach (CastEvent castEvent in gadgetSpawnCastData)
         {
             long start = castEvent.Time;
             long end = castEvent.EndTime;
@@ -222,7 +222,7 @@ internal static class ProfHelper
     internal static HashSet<AgentItem> GetOffensiveGadgetAgents(CombatData combatData, long damageSkillID, IReadOnlyCollection<AgentItem> playerAgents)
     {
         var res = new HashSet<AgentItem>();
-        foreach (AbstractHealthDamageEvent evt in combatData.GetDamageData(damageSkillID))
+        foreach (HealthDamageEvent evt in combatData.GetDamageData(damageSkillID))
         {
             // dst must no be a gadget nor a friendly player
             // src must be a masterless gadget
@@ -410,7 +410,7 @@ internal static class ProfHelper
         return instantCastFinders;
     }
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Blue;
 
@@ -431,13 +431,13 @@ internal static class ProfHelper
             var skill = new SkillModeDescriptor(player, PortalExitWhiteMantleWatchwork, SkillModeCategory.Portal);
             foreach (var group in whiteMantlePortalActive)
             {
-                GenericAttachedDecoration? first = null;
+                AttachedDecoration? first = null;
                 foreach (EffectEvent effect in group)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.3, connector).UsingSkillMode(skill));
-                    GenericAttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                    AttachedDecoration decoration = new IconDecoration(ParserIcons.PortalWhiteMantleSkill, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     if (first == null)
                     {
                         first = decoration;
@@ -642,7 +642,7 @@ internal static class ProfHelper
         return CommonMinions.Contains(id);
     }
 
-    public static void ComputeMinionCombatReplayActors(AbstractSingleActor minion, AbstractSingleActor master, ParsedEvtcLog log, CombatReplay combatReplay)
+    public static void ComputeMinionCombatReplayActors(SingleActor minion, SingleActor master, ParsedEvtcLog log, CombatReplay combatReplay)
     {
 
     }
@@ -667,7 +667,7 @@ internal static class ProfHelper
     /// </summary>
     /// <param name="actor">actor who is the source of the effect</param>
     /// <param name="startOffset">offset to be applied to the time value of the effect</param>
-    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillID, GUID effect, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
+    public static IReadOnlyList<AnimatedCastEvent> ComputeEffectCastEvents(SingleActor actor, CombatData combatData, SkillData skillData, long skillID, GUID effect, long startOffset, long castDuration, EffectCastEventsChecker? checker = null)
     {
         var res = new List<AnimatedCastEvent>();
         if (combatData.GetAnimatedCastData(skillID).Count > 0)
@@ -691,7 +691,7 @@ internal static class ProfHelper
     }
 
 
-    private static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, IReadOnlyList<AbstractBuffEvent> buffs, SkillItem skill)
+    private static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(CombatData combatData, IReadOnlyList<BuffEvent> buffs, SkillItem skill)
     {
         if (combatData.GetAnimatedCastData(skill.ID).Count > 0)
         {
@@ -721,13 +721,13 @@ internal static class ProfHelper
         return buffs.Select(bae => new AnimatedCastEvent(bae.To, skill, bae.Time - startOffset, skillDuration));
     }
 
-    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
+    internal static IReadOnlyList<AnimatedCastEvent> ComputeUnderBuffCastEvents(SingleActor actor, CombatData combatData, SkillData skillData, long skillId, long buffId)
     {
         SkillItem skill = skillData.Get(skillId);
         return ComputeUnderBuffCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem), skill);
     }
 
-    internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(AbstractSingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
+    internal static IEnumerable<AnimatedCastEvent> ComputeEndWithBuffApplyCastEvents(SingleActor actor, CombatData combatData, SkillData skillData, long skillId, long startOffset, long skillDuration, long buffId)
     {
         SkillItem skill = skillData.Get(skillId);
         return ComputeEndWithBuffApplyCastEvents(combatData, combatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).OfType<BuffApplyEvent>(), skill, startOffset, skillDuration);

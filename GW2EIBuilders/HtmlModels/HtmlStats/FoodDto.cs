@@ -20,7 +20,7 @@ internal class FoodDto
         Dimished = (consume.Buff.ID == 46587 || consume.Buff.ID == 46668);
     }
 
-    public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, AbstractSingleActor actor, Dictionary<long, Buff> usedBuffs)
+    public static List<FoodDto> BuildFoodData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, Buff> usedBuffs)
     {
         var consumables = actor.GetConsumablesList(log, log.FightData.FightStart, log.FightData.FightEnd);
         var list = new List<FoodDto>(consumables.Count);

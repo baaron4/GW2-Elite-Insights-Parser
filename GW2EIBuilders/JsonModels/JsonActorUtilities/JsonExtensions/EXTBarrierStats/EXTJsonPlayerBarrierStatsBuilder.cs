@@ -8,7 +8,7 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities.JsonExtensions.EXTBarrier;
 internal static class EXTJsonPlayerBarrierStatsBuilder
 {
 
-    public static EXTJsonPlayerBarrierStats BuildPlayerBarrierStats(AbstractSingleActor a, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
+    public static EXTJsonPlayerBarrierStats BuildPlayerBarrierStats(SingleActor a, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
         var outgoingBarrierAllies = new List<List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>>();
         var outgoingBarrier = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>();
@@ -21,7 +21,7 @@ internal static class EXTJsonPlayerBarrierStatsBuilder
         var totalIncomingBarrierDist = new List<List<EXTJsonBarrierDist>>();
 
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-        foreach (AbstractSingleActor friendly in log.Friendlies)
+        foreach (SingleActor friendly in log.Friendlies)
         {
             var outgoingBarrierAlly = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>();
             var allyBarrier1S = new List<IReadOnlyList<int>>();

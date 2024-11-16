@@ -8,7 +8,7 @@ internal class EXTBarrierStatsPlayerChartDto
 {
     public readonly PlayerDamageChartDto<int> Barrier;
 
-    private EXTBarrierStatsPlayerChartDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor p)
+    private EXTBarrierStatsPlayerChartDto(ParsedEvtcLog log, PhaseData phase, SingleActor p)
     {
         Barrier = new PlayerDamageChartDto<int>()
         {
@@ -16,7 +16,7 @@ internal class EXTBarrierStatsPlayerChartDto
             Taken = p.EXTBarrier.Get1SBarrierReceivedList(log, phase.Start, phase.End, null),
             Targets = []
         };
-        foreach (AbstractSingleActor target in log.Friendlies)
+        foreach (SingleActor target in log.Friendlies)
         {
             Barrier.Targets.Add(p.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, target));
         }
@@ -26,7 +26,7 @@ internal class EXTBarrierStatsPlayerChartDto
     {
         var list = new List<EXTBarrierStatsPlayerChartDto>(log.Friendlies.Count);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new EXTBarrierStatsPlayerChartDto(log, phase, actor));
         }

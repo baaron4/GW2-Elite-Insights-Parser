@@ -70,7 +70,7 @@ internal class Ensolyss : Nightmare
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
+        SingleActor enso = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Ensolyss)) ?? throw new MissingKeyActorsException("Ensolyss not found");
         phases[0].AddTarget(enso);
         if (!requirePhases)
         {
@@ -94,7 +94,7 @@ internal class Ensolyss : Nightmare
         return phases;
     }
 
-    private static void AddTormentingBlastDecoration(CombatReplay replay, AbstractSingleActor target, (long start, long end) lifespan, in Vector3 point, int quarterAoE, int quarterHit)
+    private static void AddTormentingBlastDecoration(CombatReplay replay, SingleActor target, (long start, long end) lifespan, in Vector3 point, int quarterAoE, int quarterHit)
     {
         long startQuarter = lifespan.start + quarterAoE;
         long endQuarter = lifespan.start + quarterHit;
@@ -111,7 +111,7 @@ internal class Ensolyss : Nightmare
         }
     }
 
-    private static void AddCausticExplosionDecoration(CombatReplay replay, AbstractSingleActor target, in Vector3 point, long attackEnd, (long start, long end) lifespan, long growing)
+    private static void AddCausticExplosionDecoration(CombatReplay replay, SingleActor target, in Vector3 point, long attackEnd, (long start, long end) lifespan, long growing)
     {
         if (attackEnd >= lifespan.end) // If the attack started
         {
@@ -239,7 +239,7 @@ internal class Ensolyss : Nightmare
 
                 // Tail Lash
                 var tailLash = casts.Where(x => x.SkillId == TailLashEnsolyss);
-                foreach (AbstractCastEvent c in tailLash)
+                foreach (CastEvent c in tailLash)
                 {
                     int castDuration = 1550;
                     long expectedEndCast = c.Time + castDuration;
@@ -254,7 +254,7 @@ internal class Ensolyss : Nightmare
 
                 // Tormenting Blast (Quarter attacks)
                 var tormentingBlast = casts.Where(x => x.SkillId == TormentingBlast);
-                foreach (AbstractCastEvent c in tormentingBlast)
+                foreach (CastEvent c in tormentingBlast)
                 {
                     int firstQuarterAoe = 400;
                     int secondQuarterAoe = 900;
@@ -277,7 +277,7 @@ internal class Ensolyss : Nightmare
 
                 // Caustic Grasp (AoE Pull)
                 var causticGrasp = casts.Where(x => x.SkillId == CausticGrasp);
-                foreach (AbstractCastEvent c in causticGrasp)
+                foreach (CastEvent c in causticGrasp)
                 {
                     int castDuration = 1500;
                     long expectedEndCast = c.Time + castDuration;
@@ -287,7 +287,7 @@ internal class Ensolyss : Nightmare
 
                 // Upswing
                 var upswingEnso = casts.Where(x => x.SkillId == UpswingEnsolyss);
-                foreach (AbstractCastEvent c in upswingEnso)
+                foreach (CastEvent c in upswingEnso)
                 {
                     int castDuration = 1333;
                     long expectedEndCast = c.Time + castDuration;
@@ -301,7 +301,7 @@ internal class Ensolyss : Nightmare
 
                 // 66% & 33% Breakbars
                 var causticExplosion = casts.Where(x => x.SkillId == CausticExplosionEnsolyss);
-                foreach (AbstractCastEvent c in causticExplosion)
+                foreach (CastEvent c in causticExplosion)
                 {
                     int castDuration = 15000;
                     long expectedEndCast = c.Time + castDuration;
@@ -346,7 +346,7 @@ internal class Ensolyss : Nightmare
 
                 // Lunge (Dash)
                 var lungeEnso = casts.Where(x => x.SkillId == LungeEnsolyss);
-                foreach (AbstractCastEvent c in lungeEnso)
+                foreach (CastEvent c in lungeEnso)
                 {
                     int castDuration = 1000;
                     if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
@@ -359,7 +359,7 @@ internal class Ensolyss : Nightmare
 
                 // Rampage - 8 Arrows attack
                 var rampage = casts.Where(x => x.SkillId == RampageEnsolyss);
-                foreach (AbstractCastEvent c in rampage)
+                foreach (CastEvent c in rampage)
                 {
                     // Cast duration is 4050 but visually fits better 4450
                     int castDuration = 4050;
@@ -396,7 +396,7 @@ internal class Ensolyss : Nightmare
             case (int)TrashID.NightmareHallucination1:
                 // Lunge (Dash)
                 var lungeHallu = casts.Where(x => x.SkillId == LungeNightmareHallucination);
-                foreach (AbstractCastEvent c in lungeHallu)
+                foreach (CastEvent c in lungeHallu)
                 {
                     int castDuration = 1000;
                     if (target.TryGetCurrentFacingDirection(log, c.Time + castDuration, out var facing))
@@ -409,7 +409,7 @@ internal class Ensolyss : Nightmare
 
                 // Upswing
                 var upswingHallu = casts.Where(x => x.SkillId == UpswingHallucination);
-                foreach (AbstractCastEvent c in upswingHallu)
+                foreach (CastEvent c in upswingHallu)
                 {
                     int castDuration = 1333;
                     (long start, long end) lifespan = (c.Time, c.Time + castDuration);

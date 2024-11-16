@@ -13,7 +13,7 @@ internal class EnemyDstSkillMechanic : EnemySkillMechanic
     public EnemyDstSkillMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
-    protected override AgentItem GetAgentItem(AbstractHealthDamageEvent ahde)
+    protected override AgentItem GetAgentItem(HealthDamageEvent ahde)
     {
         return ahde.To;
     }

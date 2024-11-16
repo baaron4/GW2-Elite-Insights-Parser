@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.Extensions;
 
-public class EXTNonDirectHealingEvent : EXTAbstractHealingEvent
+public class EXTNonDirectHealingEvent : EXTHealingEvent
 {
 
     internal EXTNonDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)

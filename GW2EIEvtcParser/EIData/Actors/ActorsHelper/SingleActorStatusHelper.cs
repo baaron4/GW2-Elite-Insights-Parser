@@ -4,7 +4,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
-partial class AbstractSingleActor
+partial class SingleActor
 {
 
     private List<Segment>? _deads;
@@ -134,7 +134,7 @@ partial class AbstractSingleActor
     private void EstimateWeapons(ParsedEvtcLog log)
     {
         _weaponSets = new WeaponSets();
-        if (this is not AbstractPlayer)
+        if (this is not PlayerActor)
         {
             return;
         }
@@ -145,7 +145,7 @@ partial class AbstractSingleActor
         {
             return (x.SwappedTo, x.SwappedFrom);
         }).ToList();
-        foreach (AbstractCastEvent cl in casting)
+        foreach (CastEvent cl in casting)
         {
             if (cl.ActualDuration == 0 && cl.SkillId != SkillIDs.WeaponSwap)
             {

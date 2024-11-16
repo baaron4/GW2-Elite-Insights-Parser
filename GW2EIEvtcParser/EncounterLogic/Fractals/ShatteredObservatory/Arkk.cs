@@ -91,7 +91,7 @@ internal class Arkk : ShatteredObservatory
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
@@ -105,7 +105,7 @@ internal class Arkk : ShatteredObservatory
 
     private void GetMiniBossPhase(int targetID, ParsedEvtcLog log, string phaseName, List<PhaseData> phases)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(targetID));
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(targetID));
         if (target == null)
         {
             return;
@@ -118,7 +118,7 @@ internal class Arkk : ShatteredObservatory
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
+        SingleActor arkk = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
         phases[0].AddTarget(arkk);
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.Archdiviner) || x.IsSpecies(TrashID.EliteBrazenGladiator)));
         if (!requirePhases)
@@ -157,7 +157,7 @@ internal class Arkk : ShatteredObservatory
             PhaseData phase = bloomPhases[i];
             phase.Name = $"Blooms {i + 1}";
             phase.AddTarget(arkk);
-            AbstractBuffEvent invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
+            BuffEvent invulLoss = invuls.FirstOrDefault(x => x.Time > phase.Start && x.Time < phase.End);
             phase.OverrideEnd(Math.Min(phase.End, invulLoss?.Time ?? log.FightData.FightEnd));
         }
         phases.AddRange(bloomPhases);
@@ -197,7 +197,7 @@ internal class Arkk : ShatteredObservatory
         {
             return;
         }
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Arkk)) ?? throw new MissingKeyActorsException("Arkk not found");
         HashSet<AgentItem> adjustedPlayers = GetParticipatingPlayerAgents(target, combatData, playerAgents);
         // missing buff apply events fallback, some phases will be missing
         // removes should be present
@@ -214,7 +214,7 @@ internal class Arkk : ShatteredObservatory
     protected override void SetInstanceBuffs(ParsedEvtcLog log)
     {
         base.SetInstanceBuffs(log);
-        IReadOnlyList<AbstractBuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
+        IReadOnlyList<BuffEvent> beDynamic = log.CombatData.GetBuffData(AchievementEligibilityBeDynamic);
         int counter = 0;
 
         if (beDynamic.Any() && log.FightData.Success)
@@ -234,7 +234,7 @@ internal class Arkk : ShatteredObservatory
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
@@ -266,7 +266,7 @@ internal class Arkk : ShatteredObservatory
         switch (target.ID)
         {
             case (int)TargetID.Arkk:
-                foreach (AbstractCastEvent cast in casts)
+                foreach (CastEvent cast in casts)
                 {
                     switch (cast.SkillId)
                     {
@@ -372,9 +372,9 @@ internal class Arkk : ShatteredObservatory
         }
     }
 
-    internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+        List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
         res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, HypernovaLaunchSAK, HypernovaLaunchBuff));
         return res;
     }

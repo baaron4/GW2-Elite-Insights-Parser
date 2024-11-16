@@ -21,7 +21,7 @@ public class AgentFacingConnector : RotationConnector
 
     public readonly RotationOffsetMode OffsetMode = RotationOffsetMode.RotateAfterTranslationOffset;
 
-    public AgentFacingConnector(AbstractSingleActor agent) : this(agent.AgentItem)
+    public AgentFacingConnector(SingleActor agent) : this(agent.AgentItem)
     {
     }
 
@@ -30,7 +30,7 @@ public class AgentFacingConnector : RotationConnector
         Agent = agent;
     }
 
-    public AgentFacingConnector(AbstractSingleActor agent, float rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent.AgentItem, rotationOffset, rotationOffsetMode)
+    public AgentFacingConnector(SingleActor agent, float rotationOffset, RotationOffsetMode rotationOffsetMode) : this(agent.AgentItem, rotationOffset, rotationOffsetMode)
     {
 
     }
@@ -41,7 +41,7 @@ public class AgentFacingConnector : RotationConnector
         OffsetMode = rotationOffsetMode;
     }
 
-    public AgentFacingConnector(AbstractSingleActor agent, in Vector3 facingDirection, RotationOffsetMode rotationOffsetMode) : this(agent, facingDirection.GetRoundedZRotationDeg(), rotationOffsetMode)
+    public AgentFacingConnector(SingleActor agent, in Vector3 facingDirection, RotationOffsetMode rotationOffsetMode) : this(agent, facingDirection.GetRoundedZRotationDeg(), rotationOffsetMode)
     {
     }
 

@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class VelocityEvent : AbstractMovementEvent
+public class VelocityEvent : MovementEvent
 {
 
     internal VelocityEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)

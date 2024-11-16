@@ -107,7 +107,7 @@ public class StatisticsHelper
         foreach (Player player in players)
         {
             _presentRemainingBuffsPerPlayer[player] = [];
-            foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
+            foreach (BuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
             {
                 if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
                 {
@@ -130,7 +130,7 @@ public class StatisticsHelper
     public IReadOnlyList<Buff> PresentEnhancements => _presentEnhancements;
     public IReadOnlyList<Buff> PresentOtherConsumables => _presentOtherConsumables;
 
-    public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(AbstractSingleActor actor)
+    public IReadOnlyCollection<Buff> GetPresentRemainingBuffsOnPlayer(SingleActor actor)
     {
         if (actor is Player p && _presentRemainingBuffsPerPlayer.TryGetValue(p, out var buffs))
         {

@@ -38,7 +38,7 @@ public struct SkillCastDto
 }
 
 
-internal class SkillDto : AbstractSkillDto
+internal class SkillDto : IDItemDto
 {
     public bool Aa;
     public bool IsSwap;
@@ -65,7 +65,7 @@ internal class SkillDto : AbstractSkillDto
         }
     }
 
-    private static SkillCastDto GetSkillData(AbstractCastEvent cl, long phaseStart)
+    private static SkillCastDto GetSkillData(CastEvent cl, long phaseStart)
     {
         return new SkillCastDto()
         {
@@ -77,11 +77,11 @@ internal class SkillDto : AbstractSkillDto
         };
     }
 
-    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
+    public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
     {
         var list = new List<SkillCastDto>(); //TODO(Rennorb) @perf
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
-        foreach (AbstractCastEvent cl in casting)
+        foreach (CastEvent cl in casting)
         {
             if (!usedSkills.ContainsKey(cl.SkillId))
             {

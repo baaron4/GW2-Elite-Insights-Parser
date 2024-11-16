@@ -31,7 +31,7 @@ internal abstract class BuffSimulationItem : AbstractSimulationItem
         return new Segment(Start, End, GetActiveStacks());
     }
 
-    public Segment ToSegment(AbstractSingleActor actor)
+    public Segment ToSegment(SingleActor actor)
     {
         return new Segment(Start, End, GetActiveStacks(actor));
     }
@@ -50,6 +50,6 @@ internal abstract class BuffSimulationItem : AbstractSimulationItem
 
     public abstract int GetActiveStacks();
     public abstract int GetStacks();
-    public abstract int GetActiveStacks(AbstractSingleActor actor);
-    public abstract int GetStacks(AbstractSingleActor actor);
+    public abstract int GetActiveStacks(SingleActor actor);
+    public abstract int GetStacks(SingleActor actor);
 }

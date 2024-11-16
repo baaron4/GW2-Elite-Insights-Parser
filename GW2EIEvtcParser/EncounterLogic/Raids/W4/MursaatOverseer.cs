@@ -65,7 +65,7 @@ internal class MursaatOverseer : BastionOfThePenitent
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -94,7 +94,7 @@ internal class MursaatOverseer : BastionOfThePenitent
                     replay.Decorations.Add(new CircleDecoration(shieldRadius, seg, Colors.Yellow, 0.3, new AgentConnector(target)));
                 }
                 var explosion = cls.Where(x => x.SkillId == JadeSoldierExplosion);
-                foreach (AbstractCastEvent c in explosion)
+                foreach (CastEvent c in explosion)
                 {
                     int start = (int)c.Time;
                     int precast = 1350;
@@ -109,7 +109,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         var claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
@@ -118,13 +118,13 @@ internal class MursaatOverseer : BastionOfThePenitent
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MursaatOverseer)) ?? throw new MissingKeyActorsException("Mursaat Overseer not found");
         return (target.GetHealth(combatData) > 25e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+        List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
 
         var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
         var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();

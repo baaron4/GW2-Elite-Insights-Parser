@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class EnemyCastStartMechanic : EnemyCastMechanic
 {
-    protected override long GetTime(AbstractCastEvent evt)
+    protected override long GetTime(CastEvent evt)
     {
         return evt.Time;
     }

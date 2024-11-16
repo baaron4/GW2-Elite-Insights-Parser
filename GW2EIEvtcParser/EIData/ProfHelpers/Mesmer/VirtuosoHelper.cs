@@ -52,9 +52,9 @@ internal static class VirtuosoHelper
         new Buff("Psychic Riposte", PsychicRiposteBuff, Source.Virtuoso, BuffClassification.Other, BuffImages.PsychicRiposte),
     ];
 
-    public static List<AbstractBuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<AbstractBuffEvent> buffs, AgentItem a, SkillData skillData, EvtcVersionEvent evtcVersion)
+    public static List<BuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<BuffEvent> buffs, AgentItem a, SkillData skillData, EvtcVersionEvent evtcVersion)
     {
-        var res = new List<AbstractBuffEvent>();
+        var res = new List<BuffEvent>();
         var bladeIDs = new HashSet<long>
         {
             VirtuosoBlade1,
@@ -66,7 +66,7 @@ internal static class VirtuosoHelper
         var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID)).ToList();
         SkillItem skill = skillData.Get(VirtuosoBlades);
         var lastAddedBuffInstance = new Dictionary<long, BuffApplyEvent>();
-        foreach (AbstractBuffEvent blade in blades)
+        foreach (BuffEvent blade in blades)
         {
             if (blade is BuffApplyEvent bae)
             {
@@ -103,7 +103,7 @@ internal static class VirtuosoHelper
         return Minions.Contains(id);
     }
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Mesmer;
 

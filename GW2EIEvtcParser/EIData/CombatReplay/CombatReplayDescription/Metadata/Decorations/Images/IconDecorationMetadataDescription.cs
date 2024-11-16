@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class IconDecorationMetadataDescription : GenericIconDecorationMetadataDescription
+public class IconDecorationMetadataDescription : ImageDecorationMetadataDescription
 {
     public readonly float Opacity;
 

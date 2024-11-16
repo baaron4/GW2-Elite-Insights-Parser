@@ -17,7 +17,7 @@ internal abstract class ActorDto
     public List<MinionDto> Minions;
     public ActorDetailsDto Details;
 
-    protected ActorDto(AbstractSingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
+    protected ActorDto(SingleActor actor, ParsedEvtcLog log, ActorDetailsDto details)
     {
         Health = actor.GetHealth(log.CombatData);
         Condi = actor.Condition;

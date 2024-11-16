@@ -3,7 +3,7 @@ using static GW2EIEvtcParser.EIData.BackgroundIconDecoration;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class BackgroundIconDecorationRenderingDescription : GenericIconDecorationRenderingDescription
+public class BackgroundIconDecorationRenderingDescription : ImageDecorationRenderingDescription
 {
 
     public IReadOnlyList<float> Opacities { get; private set; }

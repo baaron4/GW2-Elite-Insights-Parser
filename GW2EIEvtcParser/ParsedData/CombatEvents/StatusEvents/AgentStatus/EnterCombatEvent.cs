@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class EnterCombatEvent : AbstractStatusEvent
+public class EnterCombatEvent : StatusEvent
 {
     public readonly int Subgroup;
     public readonly Spec Spec = Spec.Unknown;

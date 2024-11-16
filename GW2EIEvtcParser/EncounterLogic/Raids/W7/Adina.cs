@@ -62,7 +62,7 @@ internal class Adina : TheKeyOfAhdashim
         ("SE", new(15478.0f, -2156.67f)), // erosion
     ];
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var attackTargetEvents = combatData
             .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget)
@@ -102,7 +102,7 @@ internal class Adina : TheKeyOfAhdashim
             ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
             if (posEvt != null)
             {
-                var pos = AbstractMovementEvent.GetPoint3D(posEvt);
+                var pos = MovementEvent.GetPoint3D(posEvt);
                 if (handOfEruptionPositions.Any(x => (x - pos.XY()).Length() < InchDistanceThreshold))
                 {
                     id = ArcDPSEnums.TrashID.HandOfEruption;
@@ -125,7 +125,7 @@ internal class Adina : TheKeyOfAhdashim
         ComputeFightTargets(agentData, combatData, extensions);
 
         var nameCount = new Dictionary<string, int>{ { "NE", 1 }, { "NW", 1 }, { "SW", 2 }, { "SE", 2 } }; // 2nd split hands start at 2
-        foreach (AbstractSingleActor target in _targets)
+        foreach (SingleActor target in _targets)
         {
             if (target.IsAnySpecies(new [] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption }))
             {
@@ -159,7 +159,7 @@ internal class Adina : TheKeyOfAhdashim
         };
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
@@ -179,7 +179,7 @@ internal class Adina : TheKeyOfAhdashim
             case (int)ArcDPSEnums.TargetID.Adina:
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var doubleQuantumQuakes = casts.Where(x => x.SkillId == DoubleRotatingEarthRays);
-                foreach (AbstractCastEvent c in doubleQuantumQuakes)
+                foreach (CastEvent c in doubleQuantumQuakes)
                 {
                     long start = c.Time;
                     int preCastTime = 2990; // casttime 0
@@ -194,7 +194,7 @@ internal class Adina : TheKeyOfAhdashim
                 }
                 //
                 var tripleQuantumQuakes = casts.Where(x => x.SkillId == TripleRotatingEarthRays);
-                foreach (AbstractCastEvent c in tripleQuantumQuakes)
+                foreach (CastEvent c in tripleQuantumQuakes)
                 {
                     long start = c.Time;
                     int preCastTime = 2990; // casttime 0
@@ -210,7 +210,7 @@ internal class Adina : TheKeyOfAhdashim
                 }
                 //
                 var terraforms = casts.Where(x => x.SkillId == Terraform);
-                foreach (AbstractCastEvent c in terraforms)
+                foreach (CastEvent c in terraforms)
                 {
                     long start = c.Time;
                     int delay = 2000; // casttime 0 from skill def
@@ -228,7 +228,7 @@ internal class Adina : TheKeyOfAhdashim
                 }
                 //
                 var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage).ToList();
-                foreach (AbstractCastEvent c in boulderBarrages)
+                foreach (CastEvent c in boulderBarrages)
                 {
                     long start = c.Time;
                     int duration = 4600; // cycle 3 from skill def
@@ -246,11 +246,11 @@ internal class Adina : TheKeyOfAhdashim
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
+        SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
         phases[0].AddTarget(adina);
         var handIds = new ArcDPSEnums.TrashID[] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption };
         var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList(); //TODO(Rennorb) @perf
-        AbstractBuffEvent lastInvuln = invuls.LastOrDefault();
+        BuffEvent lastInvuln = invuls.LastOrDefault();
         long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart));
         if (!requirePhases)
@@ -264,7 +264,7 @@ internal class Adina : TheKeyOfAhdashim
         for (int i = 0; i < invuls.Count; i++)
         {
             PhaseData splitPhase;
-            AbstractBuffEvent be = invuls[i];
+            BuffEvent be = invuls[i];
             if (be is BuffApplyEvent)
             {
                 start = be.Time;
@@ -297,7 +297,7 @@ internal class Adina : TheKeyOfAhdashim
                 mainPhaseEnds.Add(pair.Key);
             }
         }
-        AbstractCastEvent boulderBarrage = adina.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
+        CastEvent boulderBarrage = adina.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
         start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
         if (mainPhaseEnds.Count != 0)
         {
@@ -400,7 +400,7 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
         return (target.GetHealth(combatData) > 23e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 

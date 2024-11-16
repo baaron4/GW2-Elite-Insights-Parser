@@ -17,7 +17,7 @@ public class FinalToPlayersSupport
     public readonly int StunBreak;
     public readonly double RemovedStunDuration;
 
-    internal FinalToPlayersSupport(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
+    internal FinalToPlayersSupport(ParsedEvtcLog log, SingleActor actor, long start, long end)
     {
         var totals = actor.GetSupportStats(log, start, end);
         Resurrects = totals.Resurrects;

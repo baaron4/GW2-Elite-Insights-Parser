@@ -16,28 +16,28 @@ internal class DmgDistributionDto
     public long            TotalCasting;
     public List<object[]>? Distribution;
 
-    internal static (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) GetCastValues(IEnumerable<AbstractCastEvent> clList, PhaseData phase)
+    internal static (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) GetCastValues(IEnumerable<CastEvent> clList, PhaseData phase)
     {
         long timeSpentCasting = 0;
         long timeSpentCastingNoInterrupt = 0;
         int numberOfCast = 0, numberOfCastNoInterrupt = 0, timeWasted = 0, timeSaved = 0;
         long minTimeSpentCastingNoInterrupt = long.MaxValue, maxTimeSpentCastingNoInterrupt = long.MinValue;
-        foreach (AbstractCastEvent cl in clList)
+        foreach (CastEvent cl in clList)
         {
             if (phase.InInterval(cl.Time))
             {
                 numberOfCast++;
                 switch (cl.Status)
                 {
-                    case AbstractCastEvent.AnimationStatus.Interrupted:
+                    case CastEvent.AnimationStatus.Interrupted:
                         timeWasted += cl.SavedDuration;
                         break;
 
-                    case AbstractCastEvent.AnimationStatus.Reduced:
+                    case CastEvent.AnimationStatus.Reduced:
                         timeSaved += cl.SavedDuration;
                         break;
                 }
-                if (cl.Status == AbstractCastEvent.AnimationStatus.Reduced || cl.Status == AbstractCastEvent.AnimationStatus.Full)
+                if (cl.Status == CastEvent.AnimationStatus.Reduced || cl.Status == CastEvent.AnimationStatus.Full)
                 {
                     timeSpentCastingNoInterrupt += cl.ActualDuration;
                     numberOfCastNoInterrupt++;
@@ -57,7 +57,7 @@ internal class DmgDistributionDto
         return (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCastingNoInterrupt, maxTimeSpentCastingNoInterrupt, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted);
     }
 
-    private static object[] GetDMGDtoItem(SkillItem skill, IEnumerable<AbstractHealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<AbstractCastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+    private static object[] GetDMGDtoItem(SkillItem skill, IEnumerable<HealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
     {
         int totaldamage = 0,
             mindamage = int.MaxValue,
@@ -71,7 +71,7 @@ internal class DmgDistributionDto
             glance = 0,
             shieldDamage = 0;
         bool IsIndirectDamage = false;
-        foreach (AbstractHealthDamageEvent dl in damageLogs)
+        foreach (HealthDamageEvent dl in damageLogs)
         {
             IsIndirectDamage = IsIndirectDamage || dl is NonDirectHealthDamageEvent;
             int curdmg = dl.HealthDamage;
@@ -167,7 +167,7 @@ internal class DmgDistributionDto
         return skillItem;
     }
 
-    public static DmgDistributionDto BuildDMGTakenDistData(ParsedEvtcLog log, AbstractSingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DmgDistributionDto BuildDMGTakenDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         FinalDefensesAll? incomingDamageStats = p.GetDefenseStats(log, phase.Start, phase.End);
         var damageLogs = p.GetDamageTakenEvents(null, log, phase.Start, phase.End);
@@ -189,7 +189,7 @@ internal class DmgDistributionDto
     }
 
 
-    private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IEnumerable<AbstractCastEvent> casting, IEnumerable<AbstractHealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
     {
         var list = new List<object[]>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
@@ -270,7 +270,7 @@ internal class DmgDistributionDto
         return list;
     }
 
-    private static DmgDistributionDto BuildDMGDistDataInternal(ParsedEvtcLog log, FinalDPS dps, AbstractSingleActor p, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static DmgDistributionDto BuildDMGDistDataInternal(ParsedEvtcLog log, FinalDPS dps, SingleActor p, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new DmgDistributionDto();
         var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
@@ -287,20 +287,20 @@ internal class DmgDistributionDto
     }
 
 
-    public static DmgDistributionDto BuildFriendlyDMGDistData(ParsedEvtcLog log, AbstractSingleActor actor, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DmgDistributionDto BuildFriendlyDMGDistData(ParsedEvtcLog log, SingleActor actor, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         FinalDPS dps = actor.GetDPSStats(target, log, phase.Start, phase.End);
         return BuildDMGDistDataInternal(log, dps, actor, target, phase, usedSkills, usedBuffs);
     }
 
 
-    public static DmgDistributionDto BuildTargetDMGDistData(ParsedEvtcLog log, AbstractSingleActor npc, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DmgDistributionDto BuildTargetDMGDistData(ParsedEvtcLog log, SingleActor npc, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         FinalDPS dps = npc.GetDPSStats(log, phase.Start, phase.End);
         return BuildDMGDistDataInternal(log, dps, npc, null, phase, usedSkills, usedBuffs);
     }
 
-    private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedEvtcLog log, FinalDPS dps, Minions minions, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedEvtcLog log, FinalDPS dps, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
         var damageLogs = minions.GetDamageEvents(target, log, phase.Start, phase.End).ToList();
@@ -318,7 +318,7 @@ internal class DmgDistributionDto
         return dto;
     }
 
-    public static DmgDistributionDto BuildFriendlyMinionDMGDistData(ParsedEvtcLog log, AbstractSingleActor actor, Minions minions, AbstractSingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DmgDistributionDto BuildFriendlyMinionDMGDistData(ParsedEvtcLog log, SingleActor actor, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         FinalDPS dps = actor.GetDPSStats(target, log, phase.Start, phase.End);
 
@@ -326,7 +326,7 @@ internal class DmgDistributionDto
     }
 
 
-    public static DmgDistributionDto BuildTargetMinionDMGDistData(ParsedEvtcLog log, AbstractSingleActor target, Minions minions, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public static DmgDistributionDto BuildTargetMinionDMGDistData(ParsedEvtcLog log, SingleActor target, Minions minions, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         FinalDPS dps = target.GetDPSStats(log, phase.Start, phase.End);
         return BuildDMGDistDataMinionsInternal(log, dps, minions, null, phase, usedSkills, usedBuffs);

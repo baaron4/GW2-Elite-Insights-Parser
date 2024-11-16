@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public abstract class AbstractBuffRemoveEvent : AbstractBuffEvent
+public abstract class AbstractBuffRemoveEvent : BuffEvent
 {
     public int RemovedDuration { get; private set; }
 

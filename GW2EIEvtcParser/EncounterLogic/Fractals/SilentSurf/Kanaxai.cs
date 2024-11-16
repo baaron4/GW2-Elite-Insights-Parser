@@ -116,11 +116,11 @@ internal class Kanaxai : SilentSurf
         return FightData.EncounterMode.CMNoName;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         var aspectCounts = new Dictionary<int, int>();
-        foreach (AbstractSingleActor actor in Targets)
+        foreach (SingleActor actor in Targets)
         {
             switch (actor.ID)
             {
@@ -147,7 +147,7 @@ internal class Kanaxai : SilentSurf
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
+        SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
         phases[0].AddTarget(kanaxai);
         if (!requirePhases)
         {
@@ -205,7 +205,7 @@ internal class Kanaxai : SilentSurf
                     // No hp update events, buggy log
                     return phases;
                 }
-                foreach (AbstractSingleActor aspect in Targets)
+                foreach (SingleActor aspect in Targets)
                 {
                     switch (aspect.ID)
                     {
@@ -262,7 +262,7 @@ internal class Kanaxai : SilentSurf
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
+        SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
         BuffApplyEvent invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
         if (invul762Gain != null && !combatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - invul762Gain.Time) < ServerDelayConstant))
         {
@@ -270,13 +270,13 @@ internal class Kanaxai : SilentSurf
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         long maxEnd = log.FightData.FightEnd;
 
         // Orange Tether from Aspect to player
-        IEnumerable<AbstractBuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
+        IEnumerable<BuffEvent> tethers = log.CombatData.GetBuffDataByIDByDst(AspectTetherBuff, player.AgentItem);
         IEnumerable<BuffApplyEvent> tetherApplies = tethers.OfType<BuffApplyEvent>();
         IEnumerable<BuffRemoveAllEvent> tetherRemoves = tethers.OfType<BuffRemoveAllEvent>();
         AgentItem tetherAspect = _unknownAgent;
@@ -326,7 +326,7 @@ internal class Kanaxai : SilentSurf
             case (int)TargetID.KanaxaiScytheOfHouseAurkusCM:
                 // World Cleaver
                 var worldCleaver = casts.Where(x => x.SkillId == WorldCleaver);
-                foreach (AbstractCastEvent c in worldCleaver)
+                foreach (CastEvent c in worldCleaver)
                 {
                     int castDuration = 26320;
                     (long start, long end) lifespan = (c.Time, c.Time + castDuration);
@@ -344,7 +344,7 @@ internal class Kanaxai : SilentSurf
                 }
                 // Dread Visage
                 var dreadVisage = casts.Where(x => x.SkillId == DreadVisageKanaxaiSkill || x.SkillId == DreadVisageKanaxaiSkillIsland);
-                foreach (AbstractCastEvent c in dreadVisage)
+                foreach (CastEvent c in dreadVisage)
                 {
                     int castDuration = 5400;
                     int expectedEndCastTime = (int)c.Time + castDuration;
@@ -377,7 +377,7 @@ internal class Kanaxai : SilentSurf
                 // Check if the log contains Sugar Rush
                 bool hasSugarRush = log.CombatData.GetBuffData(MistlockInstabilitySugarRush).Any(x => x.To.IsPlayer);
 
-                foreach (AbstractCastEvent c in dreadVisageAspects)
+                foreach (CastEvent c in dreadVisageAspects)
                 {
                     int castDuration = 5400;
                     int expectedEndCastTime = (int)c.Time + castDuration;
@@ -440,12 +440,12 @@ internal class Kanaxai : SilentSurf
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out var axeAoEs))
         {
             // Get World Cleaver casts
-            AbstractSingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
+            SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
             var casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
 
             // Get Axe AoE Buffs
             //TODO(Rennorb) @perf: find average complexity
-            var axes = new List<AbstractBuffEvent>(50);
+            var axes = new List<BuffEvent>(50);
             axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1).OfType<BuffRemoveAllEvent>());
             axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2).OfType<BuffRemoveAllEvent>());
             axes.SortByTime();
@@ -492,7 +492,7 @@ internal class Kanaxai : SilentSurf
     /// <param name="aoe">Effect of the AoE.</param>
     /// <param name="axeBuffRemoval">Buff removal of the orange AoE.</param>
     /// <param name="time">Last time possible.</param>
-    private void AddAxeAoeDecoration(EffectEvent aoe, AbstractBuffEvent? axeBuffRemoval, long time)
+    private void AddAxeAoeDecoration(EffectEvent aoe, BuffEvent? axeBuffRemoval, long time)
     {
         int duration;
         if (axeBuffRemoval != null)

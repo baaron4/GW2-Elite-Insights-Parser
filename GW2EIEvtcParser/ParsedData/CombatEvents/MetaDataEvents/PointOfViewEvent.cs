@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class PointOfViewEvent : AbstractMetaDataEvent
+public class PointOfViewEvent : MetaDataEvent
 {
     public readonly AgentItem PoV;
 

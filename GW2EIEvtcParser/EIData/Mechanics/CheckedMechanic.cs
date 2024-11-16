@@ -29,7 +29,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
         return this;
     }
 
-    protected void InsertMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, AbstractSingleActor actor)
+    protected void InsertMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, SingleActor actor)
     {
         if (actor != null)
         {

@@ -18,7 +18,7 @@ internal class StatueOfDeath : HallOfChains
             new PlayerCastStartMechanic(ReclaimedEnergySkill, "Reclaimed Energy Thrown", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Yellow), "Light Orb Thrown","Has thrown a light orb", "Light Orb Thrown",0)
                 .UsingChecker((evt, log) =>
                 {
-                    return evt.Status != AbstractCastEvent.AnimationStatus.Interrupted;
+                    return evt.Status != CastEvent.AnimationStatus.Interrupted;
                 }),
             new PlayerDstBuffApplyMechanic(FracturedSpirit, "Fractured Spirit", new MechanicPlotlySetting(Symbols.Circle,Colors.Green), "Orb CD","Applied when taking green", "Green port",0),
         ]);
@@ -89,7 +89,7 @@ internal class StatueOfDeath : HallOfChains
             case (int)ArcDPSEnums.TargetID.EaterOfSouls: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var breakbar = cls.Where(x => x.SkillId == Imbibe);
-                foreach (AbstractCastEvent c in breakbar)
+                foreach (CastEvent c in breakbar)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
@@ -97,7 +97,7 @@ internal class StatueOfDeath : HallOfChains
                     replay.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
                 }
                 var vomit = cls.Where(x => x.SkillId == HungeringMiasma);
-                foreach (AbstractCastEvent c in vomit)
+                foreach (CastEvent c in vomit)
                 {
                     start = (int)c.Time + 2100;
                     int cascading = 1500;
@@ -110,7 +110,7 @@ internal class StatueOfDeath : HallOfChains
                     }
                 }
                 var pseudoDeath = cls.Where(x => x.SkillId == PseudoDeathEaterOfSouls);
-                foreach (AbstractCastEvent c in pseudoDeath)
+                foreach (CastEvent c in pseudoDeath)
                 {
                     start = (int)c.Time;
                     //int duration = 900;
@@ -123,7 +123,7 @@ internal class StatueOfDeath : HallOfChains
             case (int)ArcDPSEnums.TrashID.GreenSpirit2: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var green = cls.Where(x => x.SkillId == GreensEaterofSouls);
-                foreach (AbstractCastEvent c in green)
+                foreach (CastEvent c in green)
                 {
                     int gstart = (int)c.Time + 667;
                     int gend = gstart + 5000;
@@ -194,14 +194,14 @@ internal class StatueOfDeath : HallOfChains
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         var spiritTransform = log.CombatData.GetBuffDataByIDByDst(FracturedSpirit, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in spiritTransform)
+        foreach (BuffEvent c in spiritTransform)
         {
             int duration = 30000;
-            AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilStatueOfDeath).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+            BuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilStatueOfDeath).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
             int start = (int)c.Time;
             int end = start + duration;
             if (removedBuff != null)

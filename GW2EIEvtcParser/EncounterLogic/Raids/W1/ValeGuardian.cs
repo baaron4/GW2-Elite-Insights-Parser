@@ -82,7 +82,7 @@ internal class ValeGuardian : SpiritVale
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ValeGuardian)) ?? throw new MissingKeyActorsException("Vale Guardian not found");
         phases[0].AddTarget(mainTarget);
         var splitGuardianIds = new List<int>
         {
@@ -114,13 +114,13 @@ internal class ValeGuardian : SpiritVale
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int curRed = 1;
         int curBlue = 1;
         int curGreen = 1;
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.RedGuardian))
             {
@@ -186,7 +186,7 @@ internal class ValeGuardian : SpiritVale
             case (int)ArcDPSEnums.TargetID.ValeGuardian:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var magicStorms = cls.Where(x => x.SkillId == MagicStorm);
-                foreach (AbstractCastEvent c in magicStorms)
+                foreach (CastEvent c in magicStorms)
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
@@ -198,7 +198,7 @@ internal class ValeGuardian : SpiritVale
                     int impactDuration = 110;
                     uint arenaRadius = 1600;
                     var distributedMagicGreen = cls.Where(x => x.SkillId == DistributedMagicGreen);
-                    foreach (AbstractCastEvent c in distributedMagicGreen)
+                    foreach (CastEvent c in distributedMagicGreen)
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
@@ -209,7 +209,7 @@ internal class ValeGuardian : SpiritVale
                         replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-5449.0f, -20219.0f, 0.0f))));
                     }
                     var distributedMagicBlue = cls.Where(x => x.SkillId == DistributedMagicBlue);
-                    foreach (AbstractCastEvent c in distributedMagicBlue)
+                    foreach (CastEvent c in distributedMagicBlue)
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
@@ -220,7 +220,7 @@ internal class ValeGuardian : SpiritVale
                         replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Green, 0.2, new PositionConnector(new(-4063.0f, -20195.0f, 0.0f))));
                     }
                     var distributedMagicRed = cls.Where(x => x.SkillId == DistributedMagicRed);
-                    foreach (AbstractCastEvent c in distributedMagicRed)
+                    foreach (CastEvent c in distributedMagicRed)
                     {
                         int start = (int)c.Time;
                         int end = start + distributedMagicDuration;
@@ -253,7 +253,7 @@ internal class ValeGuardian : SpiritVale
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Attunements Overhead

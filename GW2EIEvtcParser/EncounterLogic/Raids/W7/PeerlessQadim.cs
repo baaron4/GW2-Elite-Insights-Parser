@@ -88,7 +88,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         return base.GetEncounterStartStatus(combatData, agentData, fightData);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
@@ -102,7 +102,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -112,7 +112,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         var phaseEnds = new List<long>();
         //
         var magmaDrops = log.CombatData.GetBuffData(MagmaDrop).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent magmaDrop in magmaDrops)
+        foreach (BuffEvent magmaDrop in magmaDrops)
         {
             if (phaseEnds.Count > 0)
             {
@@ -129,7 +129,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(ForceOfRetaliationCast);
         if (pushes.Count > 0)
         {
-            AbstractCastEvent push = pushes[0];
+            CastEvent push = pushes[0];
             phaseStarts.Add(push.Time);
             foreach (long magmaDrop in phaseEnds)
             {
@@ -196,7 +196,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             case (int)ArcDPSEnums.TargetID.PeerlessQadim:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop);
-                foreach (AbstractCastEvent c in cataCycle)
+                foreach (CastEvent c in cataCycle)
                 {
                     uint magmaRadius = 850;
                     start = (int)c.Time;
@@ -209,7 +209,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                 }
                 var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2);
-                foreach (AbstractCastEvent c in forceOfHavoc)
+                foreach (CastEvent c in forceOfHavoc)
                 {
                     uint roadLength = 2400;
                     uint roadWidth = 360;
@@ -231,7 +231,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     }
                 }
                 var forceOfRetal = cls.Where(x => x.SkillId == ForceOfRetaliationCast);
-                foreach (AbstractCastEvent c in forceOfRetal)
+                foreach (CastEvent c in forceOfRetal)
                 {
                     uint radius = 650;
                     double radiusIncrement = 433.3;
@@ -250,7 +250,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     }
                 }
                 var etherStrikes = cls.Where(x => x.SkillId == EtherStrikes1 || x.SkillId == EtherStrikes2);
-                foreach (AbstractCastEvent c in etherStrikes)
+                foreach (CastEvent c in etherStrikes)
                 {
                     uint coneRadius = 2600;
                     int coneAngle = 60;
@@ -264,7 +264,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     }
                 }
                 var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile);
-                foreach (AbstractCastEvent c in causticChaos)
+                foreach (CastEvent c in causticChaos)
                 {
                     double acceleration = c.Acceleration;
                     double ratio = 1.0;
@@ -293,7 +293,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     }
                 }
                 var expoReperc = cls.Where(x => x.SkillId == ExponentialRepercussion);
-                foreach (AbstractCastEvent c in expoReperc)
+                foreach (CastEvent c in expoReperc)
                 {
                     uint radius = 650;
                     start = (int)c.Time;
@@ -355,7 +355,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
      const string MagmaColor1 = "rgba(255, 215,  0, ";
      const string MagmaColor2 = "rgba(255, 130, 50, ";
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixated
@@ -415,7 +415,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         deadEvents.SortByTime();
 
         var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PlayerLiftUpQadimThePeerless);
-        foreach (AbstractCastEvent cast in castsLiftUp)
+        foreach (CastEvent cast in castsLiftUp)
         {
             long liftUpEnd = log.FightData.LogEnd;
             var unleashCast = castsUnleash.FirstOrDefault(x => x.Time > cast.Time);
@@ -607,7 +607,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
     }
 
-    private static void AddTetherDecorations(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
+    private static void AddTetherDecorations(ParsedEvtcLog log, SingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
     {
         var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent).ToList();
         var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
@@ -635,7 +635,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.PeerlessQadim)) ?? throw new MissingKeyActorsException("Peerless Qadim not found");
         return (target.GetHealth(combatData) > 48e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 

@@ -6,10 +6,10 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 
 internal static class JsonActorCombatReplayDataBuilder
 {
-    public static JsonActorCombatReplayData BuildJsonActorCombatReplayDataBuilder(AbstractSingleActor actor, ParsedEvtcLog log, RawFormatSettings settings)
+    public static JsonActorCombatReplayData BuildJsonActorCombatReplayDataBuilder(SingleActor actor, ParsedEvtcLog log, RawFormatSettings settings)
     {
         CombatReplayMap map = log.FightData.Logic.GetCombatReplayMap(log);
-        AbstractSingleActorCombatReplayDescription description = actor.GetCombatReplayDescription(map, log);
+        SingleActorCombatReplayDescription description = actor.GetCombatReplayDescription(map, log);
         var actorCombatReplayData = new JsonActorCombatReplayData()
         {
             IconURL = description.Img,

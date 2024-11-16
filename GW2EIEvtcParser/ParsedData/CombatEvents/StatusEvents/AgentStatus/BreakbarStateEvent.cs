@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class BreakbarStateEvent : AbstractStatusEvent
+public class BreakbarStateEvent : StatusEvent
 {
 
     public readonly ArcDPSEnums.BreakbarState State;

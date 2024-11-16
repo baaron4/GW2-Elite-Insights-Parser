@@ -59,14 +59,14 @@ internal class StatueOfIce : HallOfChains
         return startToUse;
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         var green = log.CombatData.GetBuffDataByIDByDst(FrozenWind, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in green)
+        foreach (BuffEvent c in green)
         {
             int duration = 45000;
-            AbstractBuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(FrozenWind).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+            BuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(FrozenWind).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
             int start = (int)c.Time;
             int end = start + duration;
             if (removedBuff != null)
@@ -84,7 +84,7 @@ internal class StatueOfIce : HallOfChains
             case (int)ArcDPSEnums.TargetID.BrokenKing:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards).ToList();
-                foreach (AbstractCastEvent c in Cone)
+                foreach (CastEvent c in Cone)
                 {
                     var start = c.Time;
                     if (target.TryGetCurrentFacingDirection(log, start + 1000, out var facing))

@@ -186,7 +186,7 @@ public class AgentItem
         return atEvents.Any() ? atEvents.LastOrDefault(y => time >= y.Time)?.Src : this;
     }
 
-    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, AbstractStatusEvent cur, long nextTime, long minTime, int index)
+    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, StatusEvent cur, long nextTime, long minTime, int index)
     {
         long cTime = cur.Time;
 
@@ -217,7 +217,7 @@ public class AgentItem
         var spawnEvents = combatData.GetSpawnEvents(this);
         var despawnEvents = combatData.GetDespawnEvents(this);
 
-        var status = new List<AbstractStatusEvent>(
+        var status = new List<StatusEvent>(
             downEvents.Count +
             aliveEvents.Count +
             deadEvents.Count +
@@ -246,15 +246,15 @@ public class AgentItem
 
         for (int i = 0; i < status.Count - 1; i++)
         {
-            AbstractStatusEvent cur = status[i];
-            AbstractStatusEvent next = status[i + 1];
+            StatusEvent cur = status[i];
+            StatusEvent next = status[i + 1];
             AddValueToStatusList(dead, down, dc, cur, next.Time, FirstAware, i);
         }
 
         // check last value
         if (status.Count > 0)
         {
-            AbstractStatusEvent cur = status.Last();
+            StatusEvent cur = status.Last();
             AddValueToStatusList(dead, down, dc, cur, LastAware, FirstAware, status.Count - 1);
             if (cur is DeadEvent)
             {
@@ -353,7 +353,7 @@ public class AgentItem
     /// </summary>
     public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
     {
-        AbstractSingleActor? actor = log.FindActor(this);
+        SingleActor? actor = log.FindActor(this);
         if (actor == null)
         {
             return false;
@@ -364,7 +364,7 @@ public class AgentItem
     /// <summary>
     /// Checks if a buff is present on the actor and applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
-    public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+    public bool HasBuff(ParsedEvtcLog log, SingleActor by, long buffId, long time)
     {
         return log.FindActor(this).HasBuff(log, by, buffId, time);
     }
@@ -379,12 +379,12 @@ public class AgentItem
         return log.FindActor(this).GetBuffStatus(log, buffId, start, end);
     }
 
-    public Segment GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+    public Segment GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
     {
         return log.FindActor(this).GetBuffStatus(log, by, buffId, time);
     }
 
-    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long start, long end)
     {
         return log.FindActor(this).GetBuffStatus(log, by, buffId, start, end);
     }

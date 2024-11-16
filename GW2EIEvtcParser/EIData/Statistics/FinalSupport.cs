@@ -11,7 +11,7 @@ public class FinalSupport
     private readonly Dictionary<long, (int count, long time)> _unknownRemovals = [];
     public IReadOnlyDictionary<long, (int count, long time)> UnknownRemovals => _unknownRemovals;
 
-    internal FinalSupport(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? to)
+    internal FinalSupport(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? to)
     {
         foreach (long buffID in log.Buffs.BuffsByIds.Keys)
         {

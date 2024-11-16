@@ -92,8 +92,8 @@ internal class SoullessHorror : HallOfChains
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
-            AbstractBuffEvent buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
+            SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+            BuffEvent buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
             if (buffOnDeath != null)
             {
                 if (agentData.GetNPCsByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
@@ -103,7 +103,7 @@ internal class SoullessHorror : HallOfChains
             }
         }
     }
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (FindChestGadget(ChestID, agentData, combatData, ChestOfDesminaPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100)))
         {
@@ -111,7 +111,7 @@ internal class SoullessHorror : HallOfChains
         }
         ComputeFightTargets(agentData, combatData, extensions);
         // discard hp update events after determined apply
-        AbstractSingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+        SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         CombatItem determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
         if (determined895Apply != null)
         {
@@ -138,7 +138,7 @@ internal class SoullessHorror : HallOfChains
     {
         long fightEnd = log.FightData.FightEnd;
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
         phases[0].AddTarget(mainTarget);
         if (!requirePhases)
         {
@@ -147,7 +147,7 @@ internal class SoullessHorror : HallOfChains
         var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == HowlingDeath).ToList();
         long start = 0;
         int i = 1;
-        foreach (AbstractCastEvent c in howling)
+        foreach (CastEvent c in howling)
         {
             var phase = new PhaseData(start, Math.Min(c.Time, fightEnd), "Pre-Breakbar " + i++);
             phase.AddTarget(mainTarget);
@@ -217,7 +217,7 @@ internal class SoullessHorror : HallOfChains
 
                 //
                 var howling = cls.Where(x => x.SkillId == HowlingDeath);
-                foreach (AbstractCastEvent c in howling)
+                foreach (CastEvent c in howling)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
@@ -226,7 +226,7 @@ internal class SoullessHorror : HallOfChains
                 }
                 
                 var vortex = cls.Where(x => x.SkillId == InnerVortexSlash);
-                foreach (AbstractCastEvent c in vortex)
+                foreach (CastEvent c in vortex)
                 {
                     start = (int)c.Time;
                     end = start + 4000;
@@ -239,7 +239,7 @@ internal class SoullessHorror : HallOfChains
                 }
                 
                 var deathBloom = cls.Where(x => x.SkillId == DeathBloom);
-                foreach (AbstractCastEvent c in deathBloom)
+                foreach (CastEvent c in deathBloom)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
@@ -260,7 +260,7 @@ internal class SoullessHorror : HallOfChains
                 
                 var quad1 = cls.Where(x => x.SkillId == QuadSlashFirstSet);
                 var quad2 = cls.Where(x => x.SkillId == QuadSlashSecondSet);
-                foreach (AbstractCastEvent c in quad1)
+                foreach (CastEvent c in quad1)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
@@ -279,7 +279,7 @@ internal class SoullessHorror : HallOfChains
 
                 }
 
-                foreach (AbstractCastEvent c in quad2)
+                foreach (CastEvent c in quad2)
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
@@ -339,7 +339,7 @@ internal class SoullessHorror : HallOfChains
 
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         IEnumerable<Segment> fixations = player.GetBuffStatus(log, FixatedSH, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
@@ -354,8 +354,8 @@ internal class SoullessHorror : HallOfChains
             return 0;
         }
         // split necrosis
-        var splitNecrosis = new Dictionary<AgentItem, List<AbstractBuffEvent>>();
-        foreach (AbstractBuffEvent c in necrosis)
+        var splitNecrosis = new Dictionary<AgentItem, List<BuffEvent>>();
+        foreach (BuffEvent c in necrosis)
         {
             AgentItem tank = c.To;
             if (!splitNecrosis.TryGetValue(tank, out var value))
@@ -366,12 +366,12 @@ internal class SoullessHorror : HallOfChains
 
             value.Add(c);
         }
-        List<AbstractBuffEvent> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
+        List<BuffEvent> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
         long minDiff = long.MaxValue;
         for (int i = 0; i < longestNecrosis.Count - 1; i++)
         {
-            AbstractBuffEvent cur = longestNecrosis[i];
-            AbstractBuffEvent next = longestNecrosis[i + 1];
+            BuffEvent cur = longestNecrosis[i];
+            BuffEvent next = longestNecrosis[i + 1];
             long timeDiff = next.Time - cur.Time;
             if (timeDiff > 1000 && minDiff > timeDiff)
             {

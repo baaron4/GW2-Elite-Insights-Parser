@@ -19,11 +19,11 @@ internal static class JsonPhaseBuilder
         var targets = new List<int>();
         var secondaryTargets = new List<int>();
         jsPhase.BreakbarPhase = phase.BreakbarPhase;
-        foreach (AbstractSingleActor tar in phase.Targets)
+        foreach (SingleActor tar in phase.Targets)
         {
             targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
         }
-        foreach (AbstractSingleActor tar in phase.SecondaryTargets)
+        foreach (SingleActor tar in phase.SecondaryTargets)
         {
             secondaryTargets.Add(log.FightData.Logic.Targets.IndexOf(tar));
         }

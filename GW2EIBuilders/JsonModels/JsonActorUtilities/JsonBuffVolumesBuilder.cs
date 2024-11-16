@@ -10,10 +10,10 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonBuffVolumesBuilder
 {
-    private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<AbstractSingleActor, double> toConvert)
+    private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
     {
         var res = new Dictionary<string, double>();
-        foreach (KeyValuePair<AbstractSingleActor, double> pair in toConvert)
+        foreach (KeyValuePair<SingleActor, double> pair in toConvert)
         {
             res[pair.Key.Character] = pair.Value;
         }

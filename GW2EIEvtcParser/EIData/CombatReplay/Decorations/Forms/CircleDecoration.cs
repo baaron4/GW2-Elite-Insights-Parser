@@ -23,7 +23,7 @@ internal class CircleDecoration : FormDecoration
         {
             return "Cir" + Radius + Color + MinRadius;
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new CircleDecorationMetadataDescription(this);
         }
@@ -34,7 +34,7 @@ internal class CircleDecoration : FormDecoration
         {
         }
 
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new CircleDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }

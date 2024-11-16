@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class NPCCombatReplayDescription : AbstractSingleActorCombatReplayDescription
+public class NPCCombatReplayDescription : SingleActorCombatReplayDescription
 {
     public readonly int MasterID;
 

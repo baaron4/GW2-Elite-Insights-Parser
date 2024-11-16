@@ -6,7 +6,7 @@ public class AgentConnector : GeographicalConnector
 {
     public readonly AgentItem Agent;
 
-    public AgentConnector(AbstractSingleActor agent)
+    public AgentConnector(SingleActor agent)
     {
         Agent = agent.AgentItem;
     }

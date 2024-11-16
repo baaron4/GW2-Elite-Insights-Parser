@@ -110,7 +110,7 @@ internal class SpiritRace : SpiritVale
         {
             foreach(var @event in combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
             {
-                if(AbstractMovementEvent.GetPointXY(@event) != default)
+                if(MovementEvent.GetPointXY(@event) != default)
                 {
                     //first velocity
                     return @event.Time;
@@ -121,7 +121,7 @@ internal class SpiritRace : SpiritVale
         return EncounterLogicTimeUtils.GetGenericFightOffset(fightData);
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var maxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 1494000).ToList();
         bool needRefresh = false;
@@ -149,12 +149,12 @@ internal class SpiritRace : SpiritVale
         var position2 = new Vector2(-8423.886f, -9858.193f/*, -1335.1134f*/);
         var position3 = new Vector2(-9104.786f, -6910.657f/*, -2405.52222f*/);
         var position4 = new Vector2(-8552.994f, -863.6334f/*, -1416.31714f*/);
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.EtherealBarrier:
-                    var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(AbstractMovementEvent.GetPointXY).ToList();
+                    var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY).ToList();
                     if (posititions.Any(x => (x - position1).Length() < 10)) {
                         target.OverrideName(target.Character + " 1" );
                     } 

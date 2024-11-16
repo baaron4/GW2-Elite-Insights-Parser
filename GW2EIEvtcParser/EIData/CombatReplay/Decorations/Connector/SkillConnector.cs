@@ -6,7 +6,7 @@ public class SkillConnector : Connector
 {
     public readonly AgentItem Agent;
 
-    public SkillConnector(AbstractSingleActor agent)
+    public SkillConnector(SingleActor agent)
     {
         Agent = agent.AgentItem;
     }

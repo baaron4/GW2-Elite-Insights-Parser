@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class MaxHealthUpdateEvent : AbstractStatusEvent
+public class MaxHealthUpdateEvent : StatusEvent
 {
     public readonly int MaxHealth;
 

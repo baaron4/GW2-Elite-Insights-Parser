@@ -52,7 +52,7 @@ internal static class SpellbreakerHelper
         new Buff("Magebane Tether", MagebaneTetherBuff, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MagebaneTether),
     ];
 
-    internal static void ComputeProfessionCombatReplayActors(AbstractPlayer player, ParsedEvtcLog log, CombatReplay replay)
+    internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         Color color = Colors.Warrior;
 

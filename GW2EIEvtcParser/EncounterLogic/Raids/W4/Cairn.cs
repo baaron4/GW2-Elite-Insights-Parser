@@ -62,7 +62,7 @@ internal class Cairn : BastionOfThePenitent
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cairn)) ?? throw new MissingKeyActorsException("Cairn not found");
+        SingleActor cairn = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Cairn)) ?? throw new MissingKeyActorsException("Cairn not found");
         phases[0].AddTarget(cairn);
         if (!requirePhases)
         {
@@ -111,7 +111,7 @@ internal class Cairn : BastionOfThePenitent
             case (int)ArcDPSEnums.TargetID.Cairn:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var swordSweep = cls.Where(x => x.SkillId == OrbitalSweep);
-                foreach (AbstractCastEvent c in swordSweep)
+                foreach (CastEvent c in swordSweep)
                 {
                     int start = (int)c.Time;
                     int preCastTime = 1400;
@@ -128,7 +128,7 @@ internal class Cairn : BastionOfThePenitent
                     }
                 }
                 var wave = cls.Where(x => x.SkillId == GravityWave);
-                foreach (AbstractCastEvent c in wave)
+                foreach (CastEvent c in wave)
                 {
                     int start = (int)c.Time;
                     int preCastTime = 1200;
@@ -148,7 +148,7 @@ internal class Cairn : BastionOfThePenitent
                     {
                         long dashGreenStart = dashGreen.Time;
                         long dashGreenEnd = target.LastAware;
-                        AbstractCastEvent endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
+                        CastEvent endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
                         if (endEvent != null)
                         {
                             dashGreenEnd = endEvent.Time + 3300; // from skill def
@@ -203,19 +203,19 @@ internal class Cairn : BastionOfThePenitent
         return GetGenericFightOffset(fightData);
     }
 
-    internal override List<AbstractCastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
+    internal override List<CastEvent> SpecialCastEventProcess(CombatData combatData, SkillData skillData)
     {
-        List<AbstractCastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
+        List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
         res.AddRange(ProfHelper.ComputeUnderBuffCastEvents(combatData, skillData, CelestialDashSAK, CelestialDashBuff));
         return res;
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // shared agony
         var agony = log.CombatData.GetBuffDataByIDByDst(SharedAgony, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
-        foreach (AbstractBuffEvent c in agony)
+        foreach (BuffEvent c in agony)
         {
             long agonyStart = c.Time;
             long agonyEnd = agonyStart + 62000;

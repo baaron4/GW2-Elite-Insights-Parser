@@ -12,7 +12,7 @@ internal class EXTHealingStatsPlayerChartDto
     public readonly PlayerDamageChartDto<int> ConversionBasedHealing;
     //public readonly PlayerDamageChartDto<int> HybridHealing;
 
-    private EXTHealingStatsPlayerChartDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor p)
+    private EXTHealingStatsPlayerChartDto(ParsedEvtcLog log, PhaseData phase, SingleActor p)
     {
         Healing = new PlayerDamageChartDto<int>()
         {
@@ -53,7 +53,7 @@ internal class EXTHealingStatsPlayerChartDto
             Targets = new List<IReadOnlyList<int>>()
         };*/
         //
-        foreach (AbstractSingleActor target in log.Friendlies)
+        foreach (SingleActor target in log.Friendlies)
         {
             Healing.Targets.Add(p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, target, HealingStatsExtensionHandler.EXTHealingType.All));
             //
@@ -75,7 +75,7 @@ internal class EXTHealingStatsPlayerChartDto
     {
         var list = new List<EXTHealingStatsPlayerChartDto>(log.Friendlies.Count);
 
-        foreach (AbstractSingleActor actor in log.Friendlies)
+        foreach (SingleActor actor in log.Friendlies)
         {
             list.Add(new EXTHealingStatsPlayerChartDto(log, phase, actor));
         }

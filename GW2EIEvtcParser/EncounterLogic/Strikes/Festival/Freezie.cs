@@ -50,7 +50,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Snow Piles
         var snowPiles = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 2 && x.HitboxHeight == 300).ToList();
@@ -66,8 +66,8 @@ internal class Freezie : FestivalStrikeMissionLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Freezie));
-        AbstractSingleActor heartTarget = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.FreeziesFrozenHeart));
+        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Freezie));
+        SingleActor heartTarget = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.FreeziesFrozenHeart));
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Freezie not found");
@@ -160,7 +160,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
 

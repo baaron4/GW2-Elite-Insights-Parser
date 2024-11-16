@@ -51,7 +51,7 @@ internal class Escort : StrongholdOfTheFaithful
         return "Siege the Stronghold";
     }
 
-    private IReadOnlyList<PhaseData> GetMcLeodPhases(AbstractSingleActor mcLeod, ParsedEvtcLog log)
+    private IReadOnlyList<PhaseData> GetMcLeodPhases(SingleActor mcLeod, ParsedEvtcLog log)
     {
         var phases = new List<PhaseData>();
         //
@@ -72,8 +72,8 @@ internal class Escort : StrongholdOfTheFaithful
             if (i % 2 == 0)
             {
                 phase.Name = "McLeod Split " + (i) / 2;
-                AbstractSingleActor whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
-                AbstractSingleActor redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
+                SingleActor whiteMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.RadiantMcLeod) && x.LastAware > phase.Start);
+                SingleActor redMcLeod = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.CrimsonMcLeod) && x.LastAware > phase.Start);
                 phase.AddTarget(whiteMcLeod);
                 phase.AddTarget(redMcLeod);
                 phase.OverrideTimes(log);
@@ -91,13 +91,13 @@ internal class Escort : StrongholdOfTheFaithful
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
+        SingleActor mcLeod = Targets.FirstOrDefault(x => x.ID == (int)ArcDPSEnums.TargetID.McLeodTheSilent) ?? throw new MissingKeyActorsException("McLeod not found");
         phases[0].AddTarget(mcLeod);
         if (!requirePhases)
         {
             return phases;
         }
-        IReadOnlyList<AbstractSingleActor> wargs = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound)).ToList();
+        IReadOnlyList<SingleActor> wargs = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound)).ToList();
         if (_hasPreEvent)
         {
             var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware).ToList();
@@ -126,7 +126,7 @@ internal class Escort : StrongholdOfTheFaithful
         return phases;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.McLeodTheSilent, out AgentItem mcLeod))
         {
@@ -154,7 +154,7 @@ internal class Escort : StrongholdOfTheFaithful
         int curCrimson = 1;
         int curRadiant = 1;
         int curWarg = 1;
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound))
             {
@@ -296,7 +296,7 @@ internal class Escort : StrongholdOfTheFaithful
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Attunements Overhead

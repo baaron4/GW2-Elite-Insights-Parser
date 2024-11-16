@@ -67,7 +67,7 @@ internal class Siax : Nightmare
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax)) ?? throw new MissingKeyActorsException("Siax not found");
+        SingleActor siax = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Siax)) ?? throw new MissingKeyActorsException("Siax not found");
         phases[0].AddTarget(siax);
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsSpecies(TrashID.EchoOfTheUnclean)));
         if (!requirePhases)
@@ -108,10 +108,10 @@ internal class Siax : Nightmare
         ("SW", new(891.370f, -3722.450f)),
     ];
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
-        foreach (AbstractSingleActor target in Targets)
+        foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(TargetID.Siax))
             {
@@ -133,7 +133,7 @@ internal class Siax : Nightmare
             case (int)TargetID.Siax:
                 // Siax's Breakbar
                 var causticExplosionBreakbar = casts.Where(x => x.SkillId == CausticExplosionSiaxBreakbar);
-                foreach (AbstractCastEvent c in causticExplosionBreakbar)
+                foreach (CastEvent c in causticExplosionBreakbar)
                 {
                     int castDuration = 15000;
                     long expectedEndCast = c.Time + castDuration;
@@ -144,7 +144,7 @@ internal class Siax : Nightmare
                 }
                 // Tail Swipe
                 var tailLash = casts.Where(x => x.SkillId == TailLashSiax);
-                foreach (AbstractCastEvent c in tailLash)
+                foreach (CastEvent c in tailLash)
                 {
                     int castDuration = 1550;
                     (long start, long end) lifespan = (c.Time, c.Time + castDuration);
@@ -156,7 +156,7 @@ internal class Siax : Nightmare
                 }
                 // 66% and 33% phases
                 var causticExplosionPhases = casts.Where(x => x.SkillId == CausticExplosionSiaxPhase66 || x.SkillId == CausticExplosionSiaxPhase33);
-                foreach (AbstractCastEvent c in causticExplosionPhases)
+                foreach (CastEvent c in causticExplosionPhases)
                 {
                     int castDuration = 20000;
                     long expectedEndCast = c.Time + castDuration;
@@ -168,7 +168,7 @@ internal class Siax : Nightmare
                 break;
             case (int)TrashID.EchoOfTheUnclean:
                 var causticExplosionEcho = casts.Where(x => x.SkillId == CausticExplosionSiaxEcho);
-                foreach (AbstractCastEvent c in causticExplosionEcho)
+                foreach (CastEvent c in causticExplosionEcho)
                 {
                     // Duration is the same as Siax's explosion but starts 2 seconds later
                     // Display the explosion for a brief time
@@ -194,7 +194,7 @@ internal class Siax : Nightmare
         }
     }
 
-    internal override void ComputePlayerCombatReplayActors(AbstractPlayer p, ParsedEvtcLog log, CombatReplay replay)
+    internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixations

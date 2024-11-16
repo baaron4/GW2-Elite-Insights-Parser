@@ -11,11 +11,11 @@ public class FinalSupportAll : FinalSupport
     public readonly int StunBreak;
     public readonly double RemovedStunDuration;
 
-    private static (int Count, long Duration) GetReses(ParsedEvtcLog log, AbstractSingleActor actor, long start, long end)
+    private static (int Count, long Duration) GetReses(ParsedEvtcLog log, SingleActor actor, long start, long end)
     {
         var cls = actor.GetCastEvents(log, start, end);
         (int Count, long Duration) reses = (0, 0);
-        foreach (AbstractCastEvent cl in cls)
+        foreach (CastEvent cl in cls)
         {
             if (cl.SkillId == SkillIDs.Resurrect)
             {
@@ -26,7 +26,7 @@ public class FinalSupportAll : FinalSupport
         return reses;
     }
 
-    internal FinalSupportAll(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor) : base(log, start, end, actor, null)
+    internal FinalSupportAll(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
     {
         var resArray = GetReses(log, actor, start, end);
         Resurrects = resArray.Count;

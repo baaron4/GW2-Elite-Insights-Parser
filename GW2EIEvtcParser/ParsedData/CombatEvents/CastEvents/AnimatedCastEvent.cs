@@ -3,7 +3,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class AnimatedCastEvent : AbstractCastEvent
+public class AnimatedCastEvent : CastEvent
 {
     private readonly int _scaledActualDuration;
     //private readonly int _effectHappenedDuration;

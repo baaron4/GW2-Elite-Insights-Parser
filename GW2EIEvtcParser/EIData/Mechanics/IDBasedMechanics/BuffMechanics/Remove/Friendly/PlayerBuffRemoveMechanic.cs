@@ -13,7 +13,7 @@ internal abstract class PlayerBuffRemoveMechanic<T> : BuffRemoveMechanic<T> wher
     {
     }
 
-    protected override AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    protected override SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs)
     {
         return MechanicHelper.FindPlayerActor(log, agentItem);
     }

@@ -29,7 +29,7 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
         return Stacks.Length;
     }
 
-    public override int GetStacks(AbstractSingleActor actor)
+    public override int GetStacks(SingleActor actor)
     {
         //NOTE(Rennorb): This method only gets called for ~5% of the instances created, so we don't create the buffer in the constructor.
         if(_stacksPerSource == null)

@@ -10,10 +10,10 @@ namespace GW2EIBuilders.JsonModels.JsonActorUtilities;
 /// </summary>
 internal static class JsonBuffsUptimeBuilder
 {
-    private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<AbstractSingleActor, double> toConvert)
+    private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
     {
         var res = new Dictionary<string, double>();
-        foreach (KeyValuePair<AbstractSingleActor, double> pair in toConvert)
+        foreach (KeyValuePair<SingleActor, double> pair in toConvert)
         {
             res[pair.Key.Character] = pair.Value;
         }
@@ -37,7 +37,7 @@ internal static class JsonBuffsUptimeBuilder
     }
 
 
-    public static JsonBuffsUptime BuildJsonBuffsUptime(AbstractSingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<long, Buff> buffMap)
+    public static JsonBuffsUptime BuildJsonBuffsUptime(SingleActor actor, long buffID, ParsedEvtcLog log, RawFormatSettings settings, List<JsonBuffsUptimeData> buffData, Dictionary<long, Buff> buffMap)
     {
         var jsonBuffsUptime = new JsonBuffsUptime
         {
@@ -55,7 +55,7 @@ internal static class JsonBuffsUptimeBuilder
             if (buffDicts.TryGetValue(buffID, out FinalBuffsDictionary buffDict))
             {
                 var statesPerSource = new Dictionary<string, IReadOnlyList<(long Time, int BoonCount)>>(buffDict.GeneratedBy.Count);
-                foreach (AbstractSingleActor source in buffDict.GeneratedBy.Keys)
+                foreach (SingleActor source in buffDict.GeneratedBy.Keys)
                 {
                     statesPerSource[source.Character] = GetBuffStates(actor.GetBuffGraphs(log, source)[buffID]).ToList();
                 }

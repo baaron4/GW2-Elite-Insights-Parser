@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-internal abstract class CombatEventListMechanic<T> : CheckedMechanic<T> where T : AbstractTimeCombatEvent
+internal abstract class CombatEventListMechanic<T> : CheckedMechanic<T> where T : TimeCombatEvent
 {
 
     public delegate IReadOnlyList<T> CombatEventsGetter(ParsedEvtcLog log, AgentItem agent);

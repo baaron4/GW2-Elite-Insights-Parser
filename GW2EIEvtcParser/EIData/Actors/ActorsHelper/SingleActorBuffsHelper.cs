@@ -7,7 +7,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
-partial class AbstractSingleActor
+partial class SingleActor
 {
     private List<Consumable>? _consumeList;
     // Boons
@@ -106,7 +106,7 @@ partial class AbstractSingleActor
         return _buffGraphs;
     }
 
-    public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log, AbstractSingleActor by)
+    public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log, SingleActor by)
     {
         AgentItem agent = by.AgentItem;
         if (_buffGraphs == null)
@@ -140,7 +140,7 @@ partial class AbstractSingleActor
     /// <summary>
     /// Checks if a buff is present on the actor and applied by given actor. Given buff id must be in the buff simulator, throws <see cref="InvalidOperationException"/> otherwise
     /// </summary>
-    public bool HasBuff(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+    public bool HasBuff(ParsedEvtcLog log, SingleActor by, long buffId, long time)
     {
         if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
         {
@@ -167,7 +167,7 @@ partial class AbstractSingleActor
         return GetBuffStatus(buffId, time, GetBuffGraphs(log));
     }
 
-    public Segment GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long time)
+    public Segment GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long time)
     {
         if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
         {
@@ -192,7 +192,7 @@ partial class AbstractSingleActor
     }
 
     /// <exception cref="InvalidOperationException"></exception>
-    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, AbstractSingleActor by, long buffId, long start, long end)
+    public IReadOnlyList<Segment> GetBuffStatus(ParsedEvtcLog log, SingleActor by, long buffId, long start, long end)
     {
         if (!log.Buffs.BuffsByIds.ContainsKey(buffId))
         {
@@ -417,7 +417,7 @@ partial class AbstractSingleActor
         }
     }
 
-    private void SetBuffGraphs(ParsedEvtcLog log, AbstractSingleActor by)
+    private void SetBuffGraphs(ParsedEvtcLog log, SingleActor by)
     {
         var trackedBuffs = GetTrackedBuffs(log);
         var buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count);
@@ -561,7 +561,7 @@ partial class AbstractSingleActor
         _consumeList = [];
         foreach (Buff consumable in consumableList)
         {
-            foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(consumable.ID))
+            foreach (BuffEvent c in log.CombatData.GetBuffData(consumable.ID))
             {
                 if (!(c is BuffApplyEvent ba) || AgentItem != ba.To)
                 {

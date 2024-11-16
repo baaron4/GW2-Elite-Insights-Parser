@@ -34,7 +34,7 @@ public class FinalDPS
     public readonly int ActorBarrierDamage;
 
 
-    internal FinalDPS(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
+    internal FinalDPS(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
     {
         double phaseDuration = (end - start) / 1000.0;
         (Damage, PowerDamage, CondiDamage, StrikeDamage, LifeLeechDamage, BarrierDamage) = ComputeDamageFrom(log, actor.GetDamageEvents(target, log, start, end));
@@ -62,7 +62,7 @@ public class FinalDPS
         ActorBreakbarDamage = Math.Round(actor.GetJustActorBreakbarDamageEvents(target, log, start, end).Sum(x => x.BreakbarDamage), 1);
     }
 
-    private static (int allDamage, int powerDamage, int conditionDamage, int strikeDamage, int lifeLeechDamage, int barrierDamage) ComputeDamageFrom(ParsedEvtcLog log, IEnumerable<AbstractHealthDamageEvent> damageEvents)
+    private static (int allDamage, int powerDamage, int conditionDamage, int strikeDamage, int lifeLeechDamage, int barrierDamage) ComputeDamageFrom(ParsedEvtcLog log, IEnumerable<HealthDamageEvent> damageEvents)
     {
         int allDamage = 0;
         int powerDamage = 0;
@@ -70,7 +70,7 @@ public class FinalDPS
         int strikeDamage = 0;
         int lifeLeechDamage = 0;
         int barrierDamage = 0;
-        foreach (AbstractHealthDamageEvent damageEvent in damageEvents)
+        foreach (HealthDamageEvent damageEvent in damageEvents)
         {
             allDamage += damageEvent.HealthDamage;
             if (damageEvent is NonDirectHealthDamageEvent ndhd)

@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class BarrierUpdateEvent : AbstractStatusEvent, IStateable
+public class BarrierUpdateEvent : StatusEvent, IStateable
 {
     public readonly double BarrierPercent;
 

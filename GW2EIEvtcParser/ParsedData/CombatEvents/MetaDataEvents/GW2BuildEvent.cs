@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class GW2BuildEvent : AbstractMetaDataEvent
+public class GW2BuildEvent : MetaDataEvent
 {
     public readonly ulong Build;
 

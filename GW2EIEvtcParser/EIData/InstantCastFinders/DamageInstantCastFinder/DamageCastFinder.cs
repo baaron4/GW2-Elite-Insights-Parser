@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-internal class DamageCastFinder : CheckedCastFinder<AbstractHealthDamageEvent>
+internal class DamageCastFinder : CheckedCastFinder<HealthDamageEvent>
 {
     private readonly long _damageSkillID;
     public DamageCastFinder(long skillID, long damageSkillID) : base(skillID)
@@ -18,7 +18,7 @@ internal class DamageCastFinder : CheckedCastFinder<AbstractHealthDamageEvent>
         foreach (var group in damages)
         {
             long lastTime = int.MinValue;
-            foreach (AbstractHealthDamageEvent de in group)
+            foreach (HealthDamageEvent de in group)
             {
                 if (CheckCondition(de, combatData, agentData, skillData))
                 {

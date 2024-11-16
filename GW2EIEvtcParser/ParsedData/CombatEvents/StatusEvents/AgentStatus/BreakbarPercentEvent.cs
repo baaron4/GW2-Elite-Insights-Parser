@@ -2,7 +2,7 @@
 
 namespace GW2EIEvtcParser.ParsedData;
 
-public class BreakbarPercentEvent : AbstractStatusEvent, IStateable
+public class BreakbarPercentEvent : StatusEvent, IStateable
 {
     public readonly double BreakbarPercent;
 

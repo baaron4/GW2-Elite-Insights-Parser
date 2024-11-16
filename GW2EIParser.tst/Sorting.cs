@@ -6,7 +6,7 @@ namespace GW2EIEvtcParser.tst.Internals;
 
 sealed class Sorting
 {
-    public sealed class TestEvent(long t, int order) : AbstractTimeCombatEvent(t)
+    public sealed class TestEvent(long t, int order) : TimeCombatEvent(t)
     {
         public int Order = order;
 
@@ -80,7 +80,7 @@ sealed class Sorting
     }
 
 #pragma warning disable CS0618 // Type or member is obsolete
-    sealed class TestCastEvent(long t, bool swap, int order) : AbstractCastEvent(t, new(swap), null!)
+    sealed class TestCastEvent(long t, bool swap, int order) : CastEvent(t, new(swap), null!)
     {
         public int Order = order;
 

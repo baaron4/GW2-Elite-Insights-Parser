@@ -16,7 +16,7 @@ internal abstract class ShatteredObservatory : FractalLogic
         EncounterID |= EncounterIDs.FractalMasks.ShatteredObservatoryMask;
     }
 
-    protected static HashSet<AgentItem> GetParticipatingPlayerAgents(AbstractSingleActor target, CombatData combatData, IReadOnlyCollection<AgentItem> playerAgents)
+    protected static HashSet<AgentItem> GetParticipatingPlayerAgents(SingleActor target, CombatData combatData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         if (target == null)
         {
@@ -27,7 +27,7 @@ internal abstract class ShatteredObservatory : FractalLogic
         return participatingPlayerAgents;
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Set manual FractalScale for old logs without the event
         AddFractalScaleEvent(gw2Build, combatData, new List<(ulong, byte)>
@@ -42,7 +42,7 @@ internal abstract class ShatteredObservatory : FractalLogic
     /// <summary>
     /// Returns true if the buff count was not reached so that another method can be called, if necessary
     /// </summary>
-    protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, AbstractSingleActor target, long buffID, int count)
+    protected static bool SetSuccessByBuffCount(CombatData combatData, FightData fightData, HashSet<AgentItem> playerAgents, SingleActor target, long buffID, int count)
     {
         if (target == null)
         {
@@ -51,10 +51,10 @@ internal abstract class ShatteredObservatory : FractalLogic
         var invulsTarget = GetFilteredList(combatData, buffID, target, true, false).Where(x => x.Time >= 0).ToList();
         if (invulsTarget.Count == count)
         {
-            AbstractBuffEvent last = invulsTarget.Last();
+            BuffEvent last = invulsTarget.Last();
             if (!(last is BuffApplyEvent))
             {
-                SetSuccessByCombatExit(new List<AbstractSingleActor> { target }, combatData, fightData, playerAgents);
+                SetSuccessByCombatExit(new List<SingleActor> { target }, combatData, fightData, playerAgents);
                 return false;
             }
         }

@@ -22,9 +22,9 @@ internal class Boneskinner : Bjora
             new PlayerDstHitMechanic(DouseInDarkness, "Douse in Darkness", new MechanicPlotlySetting(Symbols.Cross, Colors.DarkTeal), "DouseDarkness.H", "Hit by Douse in Darkness", "Douse in Darkness Hit", 0),
             new PlayerDstHitMechanic(BarrageWispBoneskinner, "Barrage", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Green), "Barrage.H", "Hit by Barrage (Wisp AoE)", "Barrage Hit", 0),
             new PlayerDstBuffApplyMechanic(UnrelentingPainBuff, "Unrelenting Pain", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.Pink), "UnrelPain.A", "Unreleting Pain Applied", "Unrelenting Pain Applied", 0),
-            new EnemyCastEndMechanic(BoneskinnerCharge, "Charge", new MechanicPlotlySetting(Symbols.Hexagram, Colors.LightRed), "D.Torch", "Charged a torch", "Charge", 0).UsingChecker((ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-            new EnemyCastEndMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "D.Wind", "Cast Death Wind (extinguished one torch)", "Death Wind", 0).UsingChecker((ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
-            new EnemyCastEndMechanic(DouseInDarkness, "Douse in Darkness", new MechanicPlotlySetting(Symbols.Cross, Colors.Teal), "D.Darkness", "Cast Douse in Darkness (extinguished all torches)", "Douse in Darkness", 0).UsingChecker((ce, log) => ce.Status != AbstractCastEvent.AnimationStatus.Interrupted),
+            new EnemyCastEndMechanic(BoneskinnerCharge, "Charge", new MechanicPlotlySetting(Symbols.Hexagram, Colors.LightRed), "D.Torch", "Charged a torch", "Charge", 0).UsingChecker((ce, log) => ce.Status != CastEvent.AnimationStatus.Interrupted),
+            new EnemyCastEndMechanic(DeathWind, "Death Wind", new MechanicPlotlySetting(Symbols.TriangleUpOpen, Colors.LightOrange), "D.Wind", "Cast Death Wind (extinguished one torch)", "Death Wind", 0).UsingChecker((ce, log) => ce.Status != CastEvent.AnimationStatus.Interrupted),
+            new EnemyCastEndMechanic(DouseInDarkness, "Douse in Darkness", new MechanicPlotlySetting(Symbols.Cross, Colors.Teal), "D.Darkness", "Cast Douse in Darkness (extinguished all torches)", "Douse in Darkness", 0).UsingChecker((ce, log) => ce.Status != CastEvent.AnimationStatus.Interrupted),
             new EnemyCastStartMechanic(BoneskinnerBreakbar, "Breakbar", new MechanicPlotlySetting(Symbols.Square, Colors.Purple), "Breakbar", "Casting a Breakbar", "Breakbar", 0),
             new EnemyDstBuffApplyMechanic(Exposed31589, "Exposed" , new MechanicPlotlySetting(Symbols.SquareOpen, Colors.Pink), "Exposed", "Gained Exposed (Breakbar broken)", "Exposed", 0),
         }
@@ -65,7 +65,7 @@ internal class Boneskinner : Bjora
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250).ToList();
         foreach (AgentItem torch in torches)
@@ -97,7 +97,7 @@ internal class Boneskinner : Bjora
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 // Death Wind
                 var deathWind = casts.Where(x => x.SkillId == DeathWind);
-                foreach (AbstractCastEvent c in deathWind)
+                foreach (CastEvent c in deathWind)
                 {
                     int castTime = 3330;
                     int hitTime = 1179;
@@ -120,7 +120,7 @@ internal class Boneskinner : Bjora
 
                 // Crushing Cruelty
                 var crushingCruelty = casts.Where(x => x.SkillId == CrushingCruelty);
-                foreach (AbstractCastEvent c in crushingCruelty)
+                foreach (CastEvent c in crushingCruelty)
                 {
                     int hitTime = 2833;
                     uint radius = 1500;
@@ -134,7 +134,7 @@ internal class Boneskinner : Bjora
 
                 // Douse in Darkness
                 var douseInDarkness = casts.Where(x => x.SkillId == DouseInDarkness).ToList();
-                foreach (AbstractCastEvent c in douseInDarkness)
+                foreach (CastEvent c in douseInDarkness)
                 {
                     int jumpTime = 2500;
                     uint radius = 1500;
@@ -203,7 +203,7 @@ internal class Boneskinner : Bjora
         }
     }
 
-    private static void AddCascadeDecoration(ParsedEvtcLog log, AbstractSingleActor actor, CombatReplay replay, GUID guid, uint width, uint height)
+    private static void AddCascadeDecoration(ParsedEvtcLog log, SingleActor actor, CombatReplay replay, GUID guid, uint width, uint height)
     {
         if (log.CombatData.TryGetEffectEventsByGUID(guid, out var rectangularIndicators))
         {

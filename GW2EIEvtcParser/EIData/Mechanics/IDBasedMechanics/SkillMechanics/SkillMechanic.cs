@@ -3,7 +3,7 @@
 namespace GW2EIEvtcParser.EIData;
 
 
-internal abstract class SkillMechanic : IDBasedMechanic<AbstractHealthDamageEvent>
+internal abstract class SkillMechanic : IDBasedMechanic<HealthDamageEvent>
 {
 
     protected bool Minions { get; private set; } = false;
@@ -22,9 +22,9 @@ internal abstract class SkillMechanic : IDBasedMechanic<AbstractHealthDamageEven
         return this;
     }
 
-    protected abstract AgentItem GetAgentItem(AbstractHealthDamageEvent ahde);
+    protected abstract AgentItem GetAgentItem(HealthDamageEvent ahde);
 
-    protected AgentItem GetCreditedAgentItem(AbstractHealthDamageEvent ahde)
+    protected AgentItem GetCreditedAgentItem(HealthDamageEvent ahde)
     {
         AgentItem agentItem = GetAgentItem(ahde);
         if (Minions && agentItem != null)
@@ -34,15 +34,15 @@ internal abstract class SkillMechanic : IDBasedMechanic<AbstractHealthDamageEven
         return agentItem!;
     }
 
-    protected abstract AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
+    protected abstract SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs);
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
         foreach (long skillID in MechanicIDs)
         {
-            foreach (AbstractHealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
+            foreach (HealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
             {
-                AbstractSingleActor? amp = null;
+                SingleActor? amp = null;
                 if (Keep(ahde, log))
                 {
                     amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);

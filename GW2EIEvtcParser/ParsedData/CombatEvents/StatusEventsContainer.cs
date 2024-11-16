@@ -20,7 +20,7 @@ internal class StatusEventsContainer
     public readonly Dictionary<AgentItem, List<TeamChangeEvent>> TeamChangeEvents = [];
     public readonly Dictionary<AgentItem, List<BreakbarStateEvent>> BreakbarStateEvents = [];
     public readonly Dictionary<AgentItem, List<BreakbarPercentEvent>> BreakbarPercentEvents = [];
-    public readonly Dictionary<AgentItem, List<AbstractMovementEvent>> MovementEvents = [];
+    public readonly Dictionary<AgentItem, List<MovementEvent>> MovementEvents = [];
     public readonly Dictionary<AgentItem, List<EffectEvent>> EffectEventsBySrc = [];
     public readonly Dictionary<AgentItem, List<EffectEvent>> EffectEventsByDst = [];
     public readonly List<EffectEvent> EffectEvents = [];

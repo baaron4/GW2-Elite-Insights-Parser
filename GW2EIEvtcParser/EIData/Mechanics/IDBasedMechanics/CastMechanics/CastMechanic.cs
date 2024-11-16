@@ -3,12 +3,12 @@
 namespace GW2EIEvtcParser.EIData;
 
 
-internal abstract class CastMechanic : IDBasedMechanic<AbstractCastEvent>
+internal abstract class CastMechanic : IDBasedMechanic<CastEvent>
 {
 
-    protected abstract long GetTime(AbstractCastEvent evt);
+    protected abstract long GetTime(CastEvent evt);
 
-    protected abstract AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
+    protected abstract SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs);
 
     public CastMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -18,15 +18,15 @@ internal abstract class CastMechanic : IDBasedMechanic<AbstractCastEvent>
     {
     }
 
-    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
     {
         foreach (long mechanicID in MechanicIDs)
         {
-            foreach (AbstractCastEvent c in log.CombatData.GetAnimatedCastData(mechanicID))
+            foreach (CastEvent c in log.CombatData.GetAnimatedCastData(mechanicID))
             {
                 if (Keep(c, log))
                 {
-                    AbstractSingleActor? amp = GetActor(log, c.Caster, regroupedMobs);
+                    SingleActor? amp = GetActor(log, c.Caster, regroupedMobs);
                     if (amp != null)
                     {
                         InsertMechanic(log, mechanicLogs, GetTime(c), amp);

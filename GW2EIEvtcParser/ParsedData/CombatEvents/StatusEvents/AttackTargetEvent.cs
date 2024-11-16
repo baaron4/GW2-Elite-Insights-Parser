@@ -1,6 +1,6 @@
 ﻿namespace GW2EIEvtcParser.ParsedData;
 
-public class AttackTargetEvent : AbstractStatusEvent
+public class AttackTargetEvent : StatusEvent
 {
     public readonly AgentItem AttackTarget;
 

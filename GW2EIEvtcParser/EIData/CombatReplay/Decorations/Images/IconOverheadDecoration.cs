@@ -16,7 +16,7 @@ internal class IconOverheadDecoration : IconDecoration
         {
             return "IO" + PixelSize + Image.GetHashCode().ToString() + WorldSize + Opacity.ToString();
         }
-        public override GenericDecorationMetadataDescription GetCombatReplayMetadataDescription()
+        public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
             return new IconOverheadDecorationMetadataDescription(this);
         }
@@ -30,7 +30,7 @@ internal class IconOverheadDecoration : IconDecoration
         {
         }
 
-        public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
+        public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new IconOverheadDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }

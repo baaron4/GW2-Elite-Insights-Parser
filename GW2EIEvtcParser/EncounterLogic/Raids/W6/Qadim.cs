@@ -109,7 +109,7 @@ internal class Qadim : MythwrightGambit
         ];
     }
 
-    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         bool refresh = false;
         var maxHPUpdates = combatData
@@ -155,7 +155,7 @@ internal class Qadim : MythwrightGambit
             CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
             if (positionEvt != null)
             {
-                var position = AbstractMovementEvent.GetPoint3D(positionEvt).XY();
+                var position = MovementEvent.GetPoint3D(positionEvt).XY();
                 if (protectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
                     pyre.OverrideID(TrashID.PyreGuardianProtect);
@@ -280,7 +280,7 @@ internal class Qadim : MythwrightGambit
         // If changing phase detection, combat replay platform timings may have to be updated.
 
         List<PhaseData> phases = GetInitialPhase(log);
-        AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
+        SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
         phases[0].AddTarget(qadim);
         var secondaryTargetIds = new HashSet<TrashID>
                     {
@@ -506,20 +506,20 @@ internal class Qadim : MythwrightGambit
             case (int)TargetID.Qadim:
                 //CC
                 var breakbar = cls.Where(x => x.SkillId == QadimCC);
-                foreach (AbstractCastEvent c in breakbar)
+                foreach (CastEvent c in breakbar)
                 {
                     replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
                 //Riposte
                 var riposte = cls.Where(x => x.SkillId == QadimRiposte);
-                foreach (AbstractCastEvent c in riposte)
+                foreach (CastEvent c in riposte)
                 {
                     uint radius = 2200;
                     replay.Decorations.Add(new CircleDecoration(radius, ((int)c.Time, (int)c.EndTime), Colors.Red, 0.5, new AgentConnector(target)));
                 }
                 //Big Hit
-                var maceShockwave = cls.Where(x => x.SkillId == BigHit && x.Status != AbstractCastEvent.AnimationStatus.Interrupted);
-                foreach (AbstractCastEvent c in maceShockwave)
+                var maceShockwave = cls.Where(x => x.SkillId == BigHit && x.Status != CastEvent.AnimationStatus.Interrupted);
+                foreach (CastEvent c in maceShockwave)
                 {
                     int start = (int)c.Time;
                     int delay = 2230;
@@ -542,12 +542,12 @@ internal class Qadim : MythwrightGambit
             case (int)TrashID.AncientInvokedHydra:
                 //CC
                 var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor);
-                foreach (AbstractCastEvent c in fieryMeteor)
+                foreach (CastEvent c in fieryMeteor)
                 {
                     replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
                 var eleBreath = cls.Where(x => x.SkillId == ElementalBreath);
-                foreach (AbstractCastEvent c in eleBreath)
+                foreach (CastEvent c in eleBreath)
                 {
                     int start = (int)c.Time;
                     uint radius = 1300;
@@ -563,7 +563,7 @@ internal class Qadim : MythwrightGambit
             case (int)TrashID.WyvernMatriarch:
                 //Wing Buffet
                 var wingBuffet = cls.Where(x => x.SkillId == WingBuffet);
-                foreach (AbstractCastEvent c in wingBuffet)
+                foreach (CastEvent c in wingBuffet)
                 {
                     int start = (int)c.Time;
                     int preCast = Math.Min(3500, c.ActualDuration);
@@ -580,7 +580,7 @@ internal class Qadim : MythwrightGambit
                 }
                 //Breath
                 var matBreath = cls.Where(x => x.SkillId == FireBreath);
-                foreach (AbstractCastEvent c in matBreath)
+                foreach (CastEvent c in matBreath)
                 {
                     int start = (int)c.Time;
                     uint radius = 1000;
@@ -597,7 +597,7 @@ internal class Qadim : MythwrightGambit
                 }
                 //Tail Swipe
                 var matSwipe = cls.Where(x => x.SkillId == TailSwipe);
-                foreach (AbstractCastEvent c in matSwipe)
+                foreach (CastEvent c in matSwipe)
                 {
                     int start = (int)c.Time;
                     uint maxRadius = 700;
@@ -622,13 +622,13 @@ internal class Qadim : MythwrightGambit
             case (int)TrashID.WyvernPatriarch:
                 //CC
                 var patCC = cls.Where(x => x.SkillId == PatriarchCC);
-                foreach (AbstractCastEvent c in patCC)
+                foreach (CastEvent c in patCC)
                 {
                     replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.4)", new AgentConnector(target)));
                 }
                 //Breath
                 var patBreath = cls.Where(x => x.SkillId == FireBreath);
-                foreach (AbstractCastEvent c in patBreath)
+                foreach (CastEvent c in patBreath)
                 {
                     int start = (int)c.Time;
                     uint radius = 1000;
@@ -645,7 +645,7 @@ internal class Qadim : MythwrightGambit
                 }
                 //Tail Swipe
                 var patSwipe = cls.Where(x => x.SkillId == TailSwipe);
-                foreach (AbstractCastEvent c in patSwipe)
+                foreach (CastEvent c in patSwipe)
                 {
                     int start = (int)c.Time;
                     uint maxRadius = 700;
@@ -668,7 +668,7 @@ internal class Qadim : MythwrightGambit
                 break;
             case (int)TrashID.ApocalypseBringer:
                 var jumpShockwave = cls.Where(x => x.SkillId == ShatteredEarth);
-                foreach (AbstractCastEvent c in jumpShockwave)
+                foreach (CastEvent c in jumpShockwave)
                 {
                     int start = (int)c.Time;
                     int delay = 1800;
@@ -679,7 +679,7 @@ internal class Qadim : MythwrightGambit
                     replay.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
                 }
                 var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp);
-                foreach (AbstractCastEvent c in stompShockwave)
+                foreach (CastEvent c in stompShockwave)
                 {
                     int start = (int)c.Time;
                     int delay = 1600;
@@ -697,13 +697,13 @@ internal class Qadim : MythwrightGambit
                 }
                 //CC
                 var summon = cls.Where(x => x.SkillId == SummonDestroyer);
-                foreach (AbstractCastEvent c in summon)
+                foreach (CastEvent c in summon)
                 {
                     replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
                 }
                 //Pizza
                 var forceWave = cls.Where(x => x.SkillId == WaveOfForce);
-                foreach (AbstractCastEvent c in forceWave)
+                foreach (CastEvent c in forceWave)
                 {
                     int start = (int)c.Time;
                     uint maxRadius = 1000;
@@ -735,7 +735,7 @@ internal class Qadim : MythwrightGambit
                 var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Value.Z, x.Time)).ToList();
                 var opacities = new List<ParametricPoint1D> { new(visibleOpacity, target.FirstAware) };
                 int velocityIndex = 0;
-                AbstractSingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
+                SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
                 HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);
                 long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
                 float threshold = 1f;
@@ -934,11 +934,11 @@ internal class Qadim : MythwrightGambit
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AbstractSingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
+        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
         return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    private static void AddManuallyAnimatedPlatformsToCombatReplay(AbstractSingleActor qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
+    private static void AddManuallyAnimatedPlatformsToCombatReplay(SingleActor qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
     {
         // We later use the target to find out the timing of the last move
         Debug.Assert(qadim.IsSpecies(TargetID.Qadim));
@@ -1405,11 +1405,11 @@ internal class Qadim : MythwrightGambit
     /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
     private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
     {
-        AbstractSingleActor qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
-        AbstractSingleActor hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.AncientInvokedHydra)).FirstOrDefault();
-        AbstractSingleActor bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.ApocalypseBringer)).FirstOrDefault();
-        AbstractSingleActor matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernMatriarch)).FirstOrDefault();
-        AbstractSingleActor patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernPatriarch)).FirstOrDefault();
+        SingleActor qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
+        SingleActor hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.AncientInvokedHydra)).FirstOrDefault();
+        SingleActor bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.ApocalypseBringer)).FirstOrDefault();
+        SingleActor matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernMatriarch)).FirstOrDefault();
+        SingleActor patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernPatriarch)).FirstOrDefault();
 
         if (qadim != null && hydra != null && bringer != null && matriarch != null && patriarch != null)
         {
@@ -1426,7 +1426,7 @@ internal class Qadim : MythwrightGambit
     /// Find out if the distance points between <paramref name="qadim"/> and an <paramref name="add"/> goes under 2000 range.
     /// </summary>
     /// <returns><see langword="true"/> if distance goes under 2000, otherwise <see langword="false"/>.</returns>
-    private static bool DistanceCheck(ParsedEvtcLog log, AbstractSingleActor qadim, AbstractSingleActor add)
+    private static bool DistanceCheck(ParsedEvtcLog log, SingleActor qadim, SingleActor add)
     {
         // Get positions of Ancient Invoked Hydra, Apocalypse Bringer, Wyvern Matriarch and Patriarch
         IReadOnlyList<ParametricPoint3D> addPositions = add.GetCombatReplayPolledPositions(log);

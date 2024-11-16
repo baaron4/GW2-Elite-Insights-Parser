@@ -15,7 +15,7 @@ internal class PhaseChartDataDto
     public PhaseChartDataDto(ParsedEvtcLog log, PhaseData phase, bool addCRData)
     {
         Players = PlayerChartDataDto.BuildPlayersGraphData(log, phase);
-        foreach (AbstractSingleActor target in phase.AllTargets)
+        foreach (SingleActor target in phase.AllTargets)
         {
             Targets.Add(new TargetChartDataDto(log, phase, target));
         }
@@ -24,7 +24,7 @@ internal class PhaseChartDataDto
             TargetsHealthStatesForCR = [];
             TargetsBreakbarPercentStatesForCR = [];
             TargetsBarrierStatesForCR = [];
-            foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
+            foreach (SingleActor target in log.FightData.Logic.Targets)
             {
                 TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));
                 TargetsBreakbarPercentStatesForCR.Add(ChartDataDto.BuildBreakbarPercentStates(log, target, phase));
