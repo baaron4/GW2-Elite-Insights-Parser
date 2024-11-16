@@ -1,58 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData.BuffSimulators
+namespace GW2EIEvtcParser.EIData.BuffSimulators;
+
+internal abstract class BuffSimulationItem : AbstractSimulationItem
 {
-    internal abstract class BuffSimulationItem : AbstractSimulationItem
+    //NOTE(Rennorb): I changed the element to have start + end instead of start + duration to fix a bug. 
+    // Apparently the original arc events have start + duration, so there might be value in returning it to the previous state.
+    // Apart form the bug there doesn't seem to be a performance penalty either way,
+    // however I did not investigate what penalty a fix for tat bug would incur (probably quite minor, something like one clamp).
+    public readonly long Start;
+    public long End;
+    public long Duration  => End - Start;
+
+    public BuffSimulationItem(long start, long end)
     {
-        public long Duration { get; protected set; }
-        public long Start { get; protected set; }
-        public long End => Start + Duration;
-
-        protected BuffSimulationItem(long start, long duration)
-        {
-            Start = start;
-            Duration = duration;
-        }
-
-        public long GetClampedDuration(long start, long end)
-        {
-            if (end > 0 && end - start > 0)
-            {
-                long startoffset = Math.Max(Math.Min(Duration, start - Start), 0);
-                long itemEnd = Start + Duration;
-                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end), 0);
-                return Duration - startoffset - endOffset;
-            }
-            return 0;
-        }
-
-        public Segment ToSegment()
-        {
-            return new Segment(Start, End, GetActiveStacks());
-        }
-
-        public Segment ToSegment(AbstractSingleActor actor)
-        {
-            return new Segment(Start, End, GetActiveStacks(actor));
-        }
-
-        public Segment ToDurationSegment()
-        {
-            return new Segment(Start, End, GetActualDuration());
-        }
-
-        public abstract void OverrideEnd(long end);
-        public abstract IReadOnlyList<long> GetActualDurationPerStack();
-        public abstract long GetActualDuration();
-
-        public abstract IReadOnlyList<AgentItem> GetSources();
-        public abstract IReadOnlyList<AgentItem> GetActiveSources();
-
-        public abstract int GetActiveStacks();
-        public abstract int GetStacks();
-        public abstract int GetActiveStacks(AbstractSingleActor actor);
-        public abstract int GetStacks(AbstractSingleActor actor);
+        Debug.Assert(start <= end);
+        this.Start = start;
+        this.End = end;
     }
+
+    public long GetClampedDuration(long start, long end)
+    {
+        Debug.Assert(this.Start <= this.End);
+        return Math.Max(0, Math.Clamp(this.End, start, end) - Math.Clamp(this.Start, start, end));
+    }
+
+    public Segment ToSegment()
+    {
+        return new Segment(Start, End, GetActiveStacks());
+    }
+
+    public Segment ToSegment(AbstractSingleActor actor)
+    {
+        return new Segment(Start, End, GetActiveStacks(actor));
+    }
+
+    public Segment ToDurationSegment()
+    {
+        return new Segment(Start, End, GetActualDuration());
+    }
+
+    public abstract void OverrideEnd(long end);
+    public abstract IEnumerable<long> GetActualDurationPerStack();
+    public abstract long GetActualDuration();
+
+    public abstract IEnumerable<AgentItem> GetSources();
+    public abstract IEnumerable<AgentItem> GetActiveSources();
+
+    public abstract int GetActiveStacks();
+    public abstract int GetStacks();
+    public abstract int GetActiveStacks(AbstractSingleActor actor);
+    public abstract int GetStacks(AbstractSingleActor actor);
 }

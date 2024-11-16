@@ -1,60 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Text.Json;
 using GW2EIGW2API.GW2API;
 
-namespace GW2EIGW2API
+namespace GW2EIGW2API;
+
+internal class GW2TraitAPIController
 {
-    internal class GW2TraitAPIController
+    private const string APIPath = "/v2/traits";
+
+
+    private GW2APIUtilities.APIItems<GW2APITrait> _apiTraits = new();
+    private static List<GW2APITrait> GetGW2APITraits()
     {
-        private const string APIPath = "/v2/traits";
+        Console.WriteLine("Getting traits from API");
+        return GW2APIUtilities.GetGW2APIItems<GW2APITrait>(APIPath);
+    }
 
-
-        private GW2APIUtilities.APIItems<GW2APITrait> _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>();
-        private static List<GW2APITrait> GetGW2APITraits()
+    internal GW2APIUtilities.APIItems<GW2APITrait> GetAPITraits(string cachePath)
+    {
+        if (_apiTraits.Items.Count == 0)
         {
-            Console.WriteLine("Getting traits from API");
-            return GW2APIUtilities.GetGW2APIItems<GW2APITrait>(APIPath);
+            SetAPITraits(cachePath);
+        }
+        return _apiTraits;
+    }
+
+    internal void WriteAPITraitsToFile(string filePath)
+    {
+        FileStream fcreate = File.Open(filePath, FileMode.Create);
+        fcreate.Close();
+
+        List<GW2APITrait> traitList = GetGW2APITraits();
+        using(var writer = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+        {
+            JsonSerializer.Serialize(writer, traitList, GW2APIUtilities.SerializerSettings);
         }
 
-        internal GW2APIUtilities.APIItems<GW2APITrait> GetAPITraits(string cachePath)
+        // refresh API cache
+        _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(traitList);
+    }
+    private void SetAPITraits(string filePath)
+    {
+        var fi = new FileInfo(filePath);
+        if (fi.Exists && fi.Length != 0)
         {
-            if (_apiTraits.Items.Count == 0)
+            Console.WriteLine("Reading Traitlist");
+            using (var reader = fi.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                SetAPITraits(cachePath);
+                var traitList = JsonSerializer.Deserialize<List<GW2APITrait>>(reader, GW2APIUtilities.DeserializerSettings);
+                _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(traitList);
             }
-            return _apiTraits;
         }
-
-        internal void WriteAPITraitsToFile(string filePath)
+        else
         {
-            FileStream fcreate = File.Open(filePath, FileMode.Create);
-            fcreate.Close();
-
-            List<GW2APITrait> traitList = GetGW2APITraits();
-            var writer = new StreamWriter(filePath);
-            GW2APIUtilities.Serializer.Serialize(writer, traitList);
-            writer.Close();
-
-            // refresh API cache
-            _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(traitList);
-        }
-        private void SetAPITraits(string filePath)
-        {
-            if (File.Exists(filePath) && new FileInfo(filePath).Length != 0)
-            {
-                Console.WriteLine("Reading Traitlist");
-                using (var reader = new StreamReader(filePath))
-                {
-                    var traitList = (List<GW2APITrait>)GW2APIUtilities.Deserializer.Deserialize(reader, typeof(List<GW2APITrait>));
-                    _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(traitList);
-                    reader.Close();
-                }
-            }
-            else
-            {
-                _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(GetGW2APITraits());
-            }
+            _apiTraits = new GW2APIUtilities.APIItems<GW2APITrait>(GetGW2APITraits());
         }
     }
 }

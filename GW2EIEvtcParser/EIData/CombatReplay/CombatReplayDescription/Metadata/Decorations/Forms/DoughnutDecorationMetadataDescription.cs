@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.DoughnutDecoration;
+﻿using static GW2EIEvtcParser.EIData.DoughnutDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
 {
-    internal class DoughnutDecorationMetadataDescription : FormDecorationMetadataDescription
+    public readonly uint InnerRadius;
+    public readonly uint OuterRadius;
+
+    internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration) : base(decoration)
     {
-        public uint InnerRadius { get; }
-        public uint OuterRadius { get; }
-
-        internal DoughnutDecorationMetadataDescription(DoughnutDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "Doughnut";
-            OuterRadius = decoration.OuterRadius;
-            InnerRadius = decoration.InnerRadius;
-        }
-
+        Type = "Doughnut";
+        OuterRadius = decoration.OuterRadius;
+        InnerRadius = decoration.InnerRadius;
     }
+
 }

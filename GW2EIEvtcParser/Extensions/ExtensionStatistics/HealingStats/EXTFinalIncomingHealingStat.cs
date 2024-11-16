@@ -1,42 +1,40 @@
 ﻿using GW2EIEvtcParser.EIData;
 using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
-namespace GW2EIEvtcParser.Extensions
-{
-    public class EXTFinalIncomingHealingStat
-    {
-        public int Healed { get; }
-        public int HealingPowerHealed { get; }
-        public int ConversionHealed { get; }
-        public int HybridHealed { get; }
-        public int DownedHealed { get; }
+namespace GW2EIEvtcParser.Extensions;
 
-        internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
+public class EXTFinalIncomingHealingStat
+{
+    public readonly int Healed;
+    public readonly int HealingPowerHealed;
+    public readonly int ConversionHealed;
+    public readonly int HybridHealed;
+    public readonly int DownedHealed;
+
+    internal EXTFinalIncomingHealingStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
+    {
+        foreach (EXTAbstractHealingEvent healingEvent in actor.EXTHealing.GetIncomingHealEvents(target, log, start, end))
         {
-            foreach (EXTAbstractHealingEvent healingEvent in actor.EXTHealing.GetIncomingHealEvents(target, log, start, end))
+            Healed += healingEvent.HealingDone;
+            switch (healingEvent.GetHealingType(log))
             {
-                Healed += healingEvent.HealingDone;
-                switch (healingEvent.GetHealingType(log))
-                {
-                    case EXTHealingType.ConversionBased:
-                        ConversionHealed += healingEvent.HealingDone;
-                        break;
-                    case EXTHealingType.Hybrid:
-                        HybridHealed += healingEvent.HealingDone;
-                        break;
-                    case EXTHealingType.HealingPower:
-                        HealingPowerHealed += healingEvent.HealingDone;
-                        break;
-                    default:
-                        break;
-                }
-                if (healingEvent.AgainstDowned)
-                {
-                    DownedHealed += healingEvent.HealingDone;
-                }
+                case EXTHealingType.ConversionBased:
+                    ConversionHealed += healingEvent.HealingDone;
+                    break;
+                case EXTHealingType.Hybrid:
+                    HybridHealed += healingEvent.HealingDone;
+                    break;
+                case EXTHealingType.HealingPower:
+                    HealingPowerHealed += healingEvent.HealingDone;
+                    break;
+                default:
+                    break;
+            }
+            if (healingEvent.AgainstDowned)
+            {
+                DownedHealed += healingEvent.HealingDone;
             }
         }
-
     }
 
 }

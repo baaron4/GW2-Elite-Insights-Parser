@@ -1,100 +1,114 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 
-namespace GW2EIEvtcParser.EIData.BuffSimulators
+namespace GW2EIEvtcParser.EIData.BuffSimulators;
+
+internal abstract class BuffSimulator : AbstractBuffSimulator
 {
-    internal abstract class BuffSimulator : AbstractBuffSimulator
+    protected List<BuffStackItem> BuffStack = new();
+    private readonly StackingLogic _logic;
+
+    private readonly int _capacity;
+
+    private static readonly QueueLogic _queueLogic = new();
+    private static readonly HealingLogic _healingLogic = new();
+    private static readonly ForceOverrideLogic _forceOverrideLogic = new();
+    private static readonly OverrideLogic _overrideLogic = new();
+    //private static readonly CappedDurationLogic _cappedDurationLogic = new CappedDurationLogic();
+
+    // Constructor
+    protected BuffSimulator(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
     {
-        protected List<BuffStackItem> BuffStack { get; set; } = new List<BuffStackItem>();
-        private StackingLogic _logic { get; }
-
-        private readonly int _capacity;
-
-        private static readonly QueueLogic _queueLogic = new QueueLogic();
-        private static readonly HealingLogic _healingLogic = new HealingLogic();
-        private static readonly ForceOverrideLogic _forceOverrideLogic = new ForceOverrideLogic();
-        private static readonly OverrideLogic _overrideLogic = new OverrideLogic();
-        //private static readonly CappedDurationLogic _cappedDurationLogic = new CappedDurationLogic();
-
-        // Constructor
-        protected BuffSimulator(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
+        _capacity = capacity;
+        switch (buff.StackType)
         {
-            _capacity = capacity;
-            switch (buff.StackType)
+            case BuffStackType.Queue:
+                _logic = _queueLogic;
+                break;
+            case BuffStackType.Regeneration:
+                _logic = _healingLogic;
+                break;
+            case BuffStackType.Force:
+                _logic = _forceOverrideLogic;
+                break;
+            case BuffStackType.Stacking:
+            case BuffStackType.StackingTargetUniqueSrc:
+            case BuffStackType.StackingConditionalLoss:
+                _logic = _overrideLogic;
+                break;
+            case BuffStackType.Unknown:
+            default:
+                throw new InvalidDataException("Buffs can not be typless");
+        }
+    }
+
+    protected bool IsFull => _logic.IsFull(BuffStack, _capacity);
+
+    protected override void AfterSimulate()
+    {
+        BuffStack.Clear();
+    }
+
+    private void Add(BuffStackItem toAdd, bool addedActive, long overridenDuration, uint overridenStackID)
+    {
+        // Find empty slot
+        if (!IsFull)
+        {
+            _logic.Add(Log, BuffStack, toAdd);
+        }
+        // Replace lowest value
+        else
+        {
+            if (!_logic.FindLowestValue(Log, toAdd, BuffStack, WasteSimulationResult, overridenDuration, overridenStackID))
             {
-                case BuffStackType.Queue:
-                    _logic = _queueLogic;
-                    break;
-                case BuffStackType.Regeneration:
-                    _logic = _healingLogic;
-                    break;
-                case BuffStackType.Force:
-                    _logic = _forceOverrideLogic;
-                    break;
-                case BuffStackType.Stacking:
-                case BuffStackType.StackingTargetUniqueSrc:
-                case BuffStackType.StackingConditionalLoss:
-                    _logic = _overrideLogic;
-                    break;
-                case BuffStackType.Unknown:
-                default:
-                    throw new InvalidDataException("Buffs can not be typless");
+                OverstackSimulationResult.Add(new BuffSimulationItemOverstack(toAdd.Src, toAdd.Duration, toAdd.Start));
             }
         }
-
-        protected bool IsFull => _logic.IsFull(BuffStack, _capacity);
-
-        protected override void Clear()
+        if (addedActive)
         {
-            BuffStack.Clear();
+            _logic.Activate(BuffStack, toAdd);
         }
+    }
+    protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
+    {
+        buffEvent.UpdateSimulator(this, true);
+    }
 
-        private void Add(BuffStackItem toAdd, bool addedActive, long overridenDuration, uint overridenStackID)
+    public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
+    {
+        var toAdd = new BuffStackItem(start, duration, src, stackID);
+        Add(toAdd, addedActive, overridenDuration, overridenStackID);
+    }
+
+    protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool addedActive, bool isExtension, uint stackID)
+    {
+        var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension, stackID);
+        Add(toAdd, addedActive, 0, 0);
+    }
+
+    public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
+    {
+        switch (removeType)
         {
-            // Find empty slot
-            if (!IsFull)
-            {
-                _logic.Add(Log, BuffStack, toAdd);
-            }
-            // Replace lowest value
-            else
-            {
-                if (!_logic.FindLowestValue(Log, toAdd, BuffStack, WasteSimulationResult, overridenDuration, overridenStackID))
+            case BuffRemove.All:
+                foreach (BuffStackItem stackItem in BuffStack)
                 {
-                    OverstackSimulationResult.Add(new BuffSimulationItemOverstack(toAdd.Src, toAdd.Duration, toAdd.Start));
+                    WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
+                    if (stackItem.Extensions.Count != 0)
+                    {
+                        foreach ((AgentItem src, long value) in stackItem.Extensions)
+                        {
+                            WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
+                        }
+                    }
                 }
-            }
-            if (addedActive)
-            {
-                _logic.Activate(BuffStack, toAdd);
-            }
-        }
-        protected override void UpdateSimulator(AbstractBuffEvent buffEvent)
-        {
-            buffEvent.UpdateSimulator(this, true);
-        }
-
-        public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
-        {
-            var toAdd = new BuffStackItem(start, duration, src, stackID);
-            Add(toAdd, addedActive, overridenDuration, overridenStackID);
-        }
-
-        protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool addedActive, bool isExtension, uint stackID)
-        {
-            var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension, stackID);
-            Add(toAdd, addedActive, 0, 0);
-        }
-
-        public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
-        {
-            switch (removeType)
-            {
-                case BuffRemove.All:
-                    foreach (BuffStackItem stackItem in BuffStack)
+                BuffStack.Clear();
+                break;
+            case BuffRemove.Single:
+                for (int i = 0; i < BuffStack.Count; i++)
+                {
+                    BuffStackItem stackItem = BuffStack[i];
+                    if (Math.Abs(removedDuration - stackItem.TotalDuration) < ParserHelper.BuffSimulatorDelayConstant)
                     {
                         WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
                         if (stackItem.Extensions.Count != 0)
@@ -104,40 +118,22 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators
                                 WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
                             }
                         }
+                        BuffStack.RemoveAt(i);
+                        return;
                     }
-                    BuffStack.Clear();
-                    break;
-                case BuffRemove.Single:
-                    for (int i = 0; i < BuffStack.Count; i++)
-                    {
-                        BuffStackItem stackItem = BuffStack[i];
-                        if (Math.Abs(removedDuration - stackItem.TotalDuration) < ParserHelper.BuffSimulatorDelayConstant)
-                        {
-                            WasteSimulationResult.Add(new BuffSimulationItemWasted(stackItem.Src, stackItem.Duration, time));
-                            if (stackItem.Extensions.Count != 0)
-                            {
-                                foreach ((AgentItem src, long value) in stackItem.Extensions)
-                                {
-                                    WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
-                                }
-                            }
-                            BuffStack.RemoveAt(i);
-                            return;
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
+                }
+                break;
+            default:
+                break;
         }
+    }
 
-        public override void Activate(uint id)
-        {
-            _logic.Activate(BuffStack, id);
-        }
-        public override void Reset(uint id, long toDuration)
-        {
-            _logic.Reset(BuffStack, id, toDuration);
-        }
+    public override void Activate(uint id)
+    {
+        _logic.Activate(BuffStack, id);
+    }
+    public override void Reset(uint id, long toDuration)
+    {
+        _logic.Reset(BuffStack, id, toDuration);
     }
 }

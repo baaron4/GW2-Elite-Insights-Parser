@@ -1,43 +1,36 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public abstract class GenericDecoration
 {
-    public abstract class GenericDecoration
+    internal abstract class GenericDecorationMetadata
     {
 
-        internal abstract class GenericDecorationMetadata
+        public abstract string GetSignature();
+
+        public abstract GenericDecorationMetadataDescription GetCombatReplayMetadataDescription();
+
+    }
+
+    internal abstract class GenericDecorationRenderingData
+    {
+        public readonly (int start, int end) Lifespan;
+
+        protected GenericDecorationRenderingData((long start, long end) lifespan)
         {
-
-            public abstract string GetSignature();
-
-            public abstract GenericDecorationMetadataDescription GetCombatReplayMetadataDescription();
-
+            Lifespan = ((int)lifespan.start, (int)lifespan.end);
         }
-        internal abstract class GenericDecorationRenderingData
-        {
-            public (int start, int end) Lifespan { get; }
+        public abstract GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature);
+    }
 
-            protected GenericDecorationRenderingData((long start, long end) lifespan)
-            {
-                Lifespan = ((int)lifespan.start, (int)lifespan.end);
-            }
-            public abstract GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature);
-        }
+    internal readonly GenericDecorationMetadata DecorationMetadata;
+    internal readonly GenericDecorationRenderingData DecorationRenderingData;
 
-        internal GenericDecorationMetadata DecorationMetadata { get; }
-        internal GenericDecorationRenderingData DecorationRenderingData { get; }
-
-        public (int start, int end) Lifespan => DecorationRenderingData.Lifespan;
-        internal GenericDecoration(GenericDecorationMetadata metaData, GenericDecorationRenderingData renderingData)
-        {
-            DecorationMetadata = metaData;
-            DecorationRenderingData = renderingData;
-        }
-        protected GenericDecoration()
-        {
-        }
-        //
-
+    public (int start, int end) Lifespan => DecorationRenderingData.Lifespan;
+    internal GenericDecoration(GenericDecorationMetadata metaData, GenericDecorationRenderingData renderingData)
+    {
+        DecorationMetadata = metaData;
+        DecorationRenderingData = renderingData;
     }
 }

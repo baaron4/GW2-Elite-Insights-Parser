@@ -1,56 +1,45 @@
 ﻿
 
-namespace GW2EIJSON
+namespace GW2EIJSON;
+
+/// <summary>
+/// Class representing general statistics
+/// </summary>
+public static class EXTJsonBarrierStatistics
 {
     /// <summary>
-    /// Class representing general statistics
+    /// Outgoing barrier statistics
     /// </summary>
-    public static class EXTJsonBarrierStatistics
+    public class EXTJsonOutgoingBarrierStatistics
     {
         /// <summary>
-        /// Outgoing barrier statistics
+        /// Total bps
         /// </summary>
-        public class EXTJsonOutgoingBarrierStatistics
-        {
-            /// <summary>
-            /// Total bps
-            /// </summary>
-            public int Bps { get; set; }
-            /// <summary>
-            /// Total barrier
-            /// </summary>
-            public int Barrier { get; set; }
+        public int Bps;
+        /// <summary>
+        /// Total barrier
+        /// </summary>
+        public int Barrier;
 
-
-            /// <summary>
-            /// Total actor only Bps
-            /// </summary>
-            public int ActorBps { get; set; }
-            /// <summary>
-            /// Total actor only barrier
-            /// </summary>
-            public int ActorBarrier { get; set; }
-
-            public EXTJsonOutgoingBarrierStatistics()
-            {
-
-            }
-        }
 
         /// <summary>
-        /// Incoming barrier statistics
+        /// Total actor only Bps
         /// </summary>
-        public class EXTJsonIncomingBarrierStatistics
-        {
-            /// <summary>
-            /// Total received Barrier
-            /// </summary>
-            public int Barrier { get; set; }
+        public int ActorBps;
+        /// <summary>
+        /// Total actor only barrier
+        /// </summary>
+        public int ActorBarrier;
+    }
 
-            public EXTJsonIncomingBarrierStatistics()
-            {
-
-            }
-        }
+    /// <summary>
+    /// Incoming barrier statistics
+    /// </summary>
+    public class EXTJsonIncomingBarrierStatistics
+    {
+        /// <summary>
+        /// Total received Barrier
+        /// </summary>
+        public int Barrier;
     }
 }

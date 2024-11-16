@@ -1,38 +1,36 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData.BuffSimulators
+namespace GW2EIEvtcParser.EIData.BuffSimulators;
+
+internal class ForceOverrideLogic : StackingLogic
 {
-    internal class ForceOverrideLogic : StackingLogic
+
+    protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
     {
+        // no sort
+    }
 
-        protected override void Sort(ParsedEvtcLog log, List<BuffStackItem> stacks)
+    public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem toAdd, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
+    {
+        if (stacks.Count == 0)
         {
-            // no sort
+            return false;
         }
-
-        public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem toAdd, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
+        BuffStackItem toRemove = stacks[0];
+        wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
+        if (toRemove.Extensions.Count > 0)
         {
-            if (stacks.Count == 0)
+            foreach ((AgentItem src, long value) in toRemove.Extensions)
             {
-                return false;
+                wastes.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
             }
-            BuffStackItem toRemove = stacks[0];
-            wastes.Add(new BuffSimulationItemWasted(toRemove.Src, toRemove.Duration, toRemove.Start));
-            if (toRemove.Extensions.Count > 0)
-            {
-                foreach ((AgentItem src, long value) in toRemove.Extensions)
-                {
-                    wastes.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
-                }
-            }
-            stacks[0] = toAdd;
-            return true;
         }
+        stacks[0] = toAdd;
+        return true;
+    }
 
-        public override bool IsFull(List<BuffStackItem> stacks, int capacity)
-        {
-            return stacks.Count == 1;
-        }
+    public override bool IsFull(List<BuffStackItem> stacks, int capacity)
+    {
+        return stacks.Count == 1;
     }
 }

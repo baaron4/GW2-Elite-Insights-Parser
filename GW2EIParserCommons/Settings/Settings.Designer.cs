@@ -8,577 +8,576 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GW2EIParser.Properties {
+namespace GW2EIParser.Properties; 
+
+
+[global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.2.0.0")]
+public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
     
+    private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
     
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.2.0.0")]
-    public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
-        public static Settings Default {
-            get {
-                return defaultInstance;
-            }
+    public static Settings Default {
+        get {
+            return defaultInstance;
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SaveAtOut {
-            get {
-                return ((bool)(this["SaveAtOut"]));
-            }
-            set {
-                this["SaveAtOut"] = value;
-            }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool SaveAtOut {
+        get {
+            return ((bool)(this["SaveAtOut"]));
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string OutLocation {
-            get {
-                return ((string)(this["OutLocation"]));
-            }
-            set {
-                this["OutLocation"] = value;
-            }
+        set {
+            this["SaveAtOut"] = value;
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SaveOutHTML {
-            get {
-                return ((bool)(this["SaveOutHTML"]));
-            }
-            set {
-                this["SaveOutHTML"] = value;
-            }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("")]
+    public string OutLocation {
+        get {
+            return ((string)(this["OutLocation"]));
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SaveOutCSV {
-            get {
-                return ((bool)(this["SaveOutCSV"]));
-            }
-            set {
-                this["SaveOutCSV"] = value;
-            }
+        set {
+            this["OutLocation"] = value;
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SingleThreaded {
-            get {
-                return ((bool)(this["SingleThreaded"]));
-            }
-            set {
-                this["SingleThreaded"] = value;
-            }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool SaveOutHTML {
+        get {
+            return ((bool)(this["SaveOutHTML"]));
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ParsePhases {
-            get {
-                return ((bool)(this["ParsePhases"]));
-            }
-            set {
-                this["ParsePhases"] = value;
-            }
+        set {
+            this["SaveOutHTML"] = value;
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool LightTheme {
-            get {
-                return ((bool)(this["LightTheme"]));
-            }
-            set {
-                this["LightTheme"] = value;
-            }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool SaveOutCSV {
+        get {
+            return ((bool)(this["SaveOutCSV"]));
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ParseCombatReplay {
-            get {
-                return ((bool)(this["ParseCombatReplay"]));
-            }
-            set {
-                this["ParseCombatReplay"] = value;
-            }
+        set {
+            this["SaveOutCSV"] = value;
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UploadToDPSReports {
-            get {
-                return ((bool)(this["UploadToDPSReports"]));
-            }
-            set {
-                this["UploadToDPSReports"] = value;
-            }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool SingleThreaded {
+        get {
+            return ((bool)(this["SingleThreaded"]));
         }
+        set {
+            this["SingleThreaded"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool ParsePhases {
+        get {
+            return ((bool)(this["ParsePhases"]));
+        }
+        set {
+            this["ParsePhases"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool LightTheme {
+        get {
+            return ((bool)(this["LightTheme"]));
+        }
+        set {
+            this["LightTheme"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool ParseCombatReplay {
+        get {
+            return ((bool)(this["ParseCombatReplay"]));
+        }
+        set {
+            this["ParseCombatReplay"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool UploadToDPSReports {
+        get {
+            return ((bool)(this["UploadToDPSReports"]));
+        }
+        set {
+            this["UploadToDPSReports"] = value;
+        }
+    }
 
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UploadToWingman
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool UploadToWingman
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["UploadToWingman"]));
-            }
-            set
-            {
-                this["UploadToWingman"] = value;
-            }
+            return ((bool)(this["UploadToWingman"]));
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DPSReportUserToken
+        set
         {
-            get
-            {
-                return ((string)(this["DPSReportUserToken"]));
-            }
-            set
-            {
-                this["DPSReportUserToken"] = value;
-            }
+            this["UploadToWingman"] = value;
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UploadToRaidar {
-            get {
-                return ((bool)(this["UploadToRaidar"]));
-            }
-            set {
-                this["UploadToRaidar"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SaveOutJSON {
-            get {
-                return ((bool)(this["SaveOutJSON"]));
-            }
-            set {
-                this["SaveOutJSON"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SaveOutXML {
-            get {
-                return ((bool)(this["SaveOutXML"]));
-            }
-            set {
-                this["SaveOutXML"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IndentJSON {
-            get {
-                return ((bool)(this["IndentJSON"]));
-            }
-            set {
-                this["IndentJSON"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IndentXML {
-            get {
-                return ((bool)(this["IndentXML"]));
-            }
-            set {
-                this["IndentXML"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool HtmlExternalScripts {
-            get {
-                return ((bool)(this["HtmlExternalScripts"]));
-            }
-            set {
-                this["HtmlExternalScripts"] = value;
-            }
-        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string HtmlExternalScriptsPath
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("")]
+    public string DPSReportUserToken
+    {
+        get
         {
-            get
-            {
-                return ((string)(this["HtmlExternalScriptsPath"]));
-            }
-            set
-            {
-                this["HtmlExternalScriptsPath"] = value;
-            }
+            return ((string)(this["DPSReportUserToken"]));
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string HtmlExternalScriptsCdn
+        set
         {
-            get
-            {
-                return ((string)(this["HtmlExternalScriptsCdn"]));
-            }
-            set
-            {
-                this["HtmlExternalScriptsCdn"] = value;
-            }
+            this["DPSReportUserToken"] = value;
         }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool UploadToRaidar {
+        get {
+            return ((bool)(this["UploadToRaidar"]));
+        }
+        set {
+            this["UploadToRaidar"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool SaveOutJSON {
+        get {
+            return ((bool)(this["SaveOutJSON"]));
+        }
+        set {
+            this["SaveOutJSON"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool SaveOutXML {
+        get {
+            return ((bool)(this["SaveOutXML"]));
+        }
+        set {
+            this["SaveOutXML"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool IndentJSON {
+        get {
+            return ((bool)(this["IndentJSON"]));
+        }
+        set {
+            this["IndentJSON"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool IndentXML {
+        get {
+            return ((bool)(this["IndentXML"]));
+        }
+        set {
+            this["IndentXML"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool HtmlExternalScripts {
+        get {
+            return ((bool)(this["HtmlExternalScripts"]));
+        }
+        set {
+            this["HtmlExternalScripts"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SkipFailedTries {
-            get {
-                return ((bool)(this["SkipFailedTries"]));
-            }
-            set {
-                this["SkipFailedTries"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoAdd {
-            get {
-                return ((bool)(this["AutoAdd"]));
-            }
-            set {
-                this["AutoAdd"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoParse {
-            get {
-                return ((bool)(this["AutoParse"]));
-            }
-            set {
-                this["AutoParse"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AutoAddPath {
-            get {
-                return ((string)(this["AutoAddPath"]));
-            }
-            set {
-                this["AutoAddPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Outdated {
-            get {
-                return ((bool)(this["Outdated"]));
-            }
-            set {
-                this["Outdated"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AddPoVProf {
-            get {
-                return ((bool)(this["AddPoVProf"]));
-            }
-            set {
-                this["AddPoVProf"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AddDuration {
-            get {
-                return ((bool)(this["AddDuration"]));
-            }
-            set {
-                this["AddDuration"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Anonymous {
-            get {
-                return ((bool)(this["Anonymous"]));
-            }
-            set {
-                this["Anonymous"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool SaveOutTrace
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("")]
+    public string HtmlExternalScriptsPath
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["SaveOutTrace"]));
-            }
-            set
-            {
-                this["SaveOutTrace"] = value;
-            }
+            return ((string)(this["HtmlExternalScriptsPath"]));
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool CompressRaw {
-            get {
-                return ((bool)(this["CompressRaw"]));
-            }
-            set {
-                this["CompressRaw"] = value;
-            }
-        }
-
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ComputeDamageModifiers
+        set
         {
-            get
-            {
-                return ((bool)(this["ComputeDamageModifiers"]));
-            }
-            set
-            {
-                this["ComputeDamageModifiers"] = value;
-            }
+            this["HtmlExternalScriptsPath"] = value;
         }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ParseMultipleLogs
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("")]
+    public string HtmlExternalScriptsCdn
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["ParseMultipleLogs"]));
-            }
-            set
-            {
-                this["ParseMultipleLogs"] = value;
-            }
+            return ((string)(this["HtmlExternalScriptsCdn"]));
         }
+        set
+        {
+            this["HtmlExternalScriptsCdn"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ApplicationTraces
-        {
-            get
-            {
-                return ((bool)(this["ApplicationTraces"]));
-            }
-            set
-            {
-                this["ApplicationTraces"] = value;
-            }
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool SkipFailedTries {
+        get {
+            return ((bool)(this["SkipFailedTries"]));
         }
+        set {
+            this["SkipFailedTries"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool AutoAdd {
+        get {
+            return ((bool)(this["AutoAdd"]));
+        }
+        set {
+            this["AutoAdd"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool AutoParse {
+        get {
+            return ((bool)(this["AutoParse"]));
+        }
+        set {
+            this["AutoParse"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("")]
+    public string AutoAddPath {
+        get {
+            return ((string)(this["AutoAddPath"]));
+        }
+        set {
+            this["AutoAddPath"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool Outdated {
+        get {
+            return ((bool)(this["Outdated"]));
+        }
+        set {
+            this["Outdated"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool AddPoVProf {
+        get {
+            return ((bool)(this["AddPoVProf"]));
+        }
+        set {
+            this["AddPoVProf"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool AddDuration {
+        get {
+            return ((bool)(this["AddDuration"]));
+        }
+        set {
+            this["AddDuration"] = value;
+        }
+    }
+    
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool Anonymous {
+        get {
+            return ((bool)(this["Anonymous"]));
+        }
+        set {
+            this["Anonymous"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoDiscordBatch
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool SaveOutTrace
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["AutoDiscordBatch"]));
-            }
-            set
-            {
-                this["AutoDiscordBatch"] = value;
-            }
+            return ((bool)(this["SaveOutTrace"]));
         }
+        set
+        {
+            this["SaveOutTrace"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool HtmlCompressJson
-        {
-            get
-            {
-                return ((bool)(this["HtmlCompressJson"]));
-            }
-            set
-            {
-                this["HtmlCompressJson"] = value;
-            }
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool CompressRaw {
+        get {
+            return ((bool)(this["CompressRaw"]));
         }
+        set {
+            this["CompressRaw"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool RawTimelineArrays
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool ComputeDamageModifiers
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["RawTimelineArrays"]));
-            }
-            set
-            {
-                this["RawTimelineArrays"] = value;
-            }
+            return ((bool)(this["ComputeDamageModifiers"]));
         }
+        set
+        {
+            this["ComputeDamageModifiers"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string WebhookURL
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool ParseMultipleLogs
+    {
+        get
         {
-            get
-            {
-                return ((string)(this["WebhookURL"]));
-            }
-            set
-            {
-                this["WebhookURL"] = value;
-            }
+            return ((bool)(this["ParseMultipleLogs"]));
         }
+        set
+        {
+            this["ParseMultipleLogs"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SendEmbedToWebhook
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool ApplicationTraces
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["SendEmbedToWebhook"]));
-            }
-            set
-            {
-                this["SendEmbedToWebhook"] = value;
-            }
+            return ((bool)(this["ApplicationTraces"]));
         }
+        set
+        {
+            this["ApplicationTraces"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SendSimpleMessageToWebhook
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool AutoDiscordBatch
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["SendSimpleMessageToWebhook"]));
-            }
-            set
-            {
-                this["SendSimpleMessageToWebhook"] = value;
-            }
+            return ((bool)(this["AutoDiscordBatch"]));
         }
+        set
+        {
+            this["AutoDiscordBatch"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2200")]
-        public long CustomTooShort
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool HtmlCompressJson
+    {
+        get
         {
-            get
-            {
-                return (long)this["CustomTooShort"];
-            }
-            set
-            {
-                this["CustomTooShort"] = value;
-            }
+            return ((bool)(this["HtmlCompressJson"]));
         }
+        set
+        {
+            this["HtmlCompressJson"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public long PopulateHourLimit
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("True")]
+    public bool RawTimelineArrays
+    {
+        get
         {
-            get
-            {
-                return (long)this["PopulateHourLimit"];
-            }
-            set
-            {
-                this["PopulateHourLimit"] = value;
-            }
+            return ((bool)(this["RawTimelineArrays"]));
         }
+        set
+        {
+            this["RawTimelineArrays"] = value;
+        }
+    }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DetailledWvW
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("")]
+    public string WebhookURL
+    {
+        get
         {
-            get
-            {
-                return ((bool)(this["DetailledWvW"]));
-            }
-            set
-            {
-                this["DetailledWvW"] = value;
-            }
+            return ((string)(this["WebhookURL"]));
         }
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int MemoryLimit
+        set
         {
-            get
-            {
-                return ((int)(this["MemoryLimit"]));
-            }
-            set
-            {
-                this["MemoryLimit"] = value;
-            }
+            this["WebhookURL"] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool SendEmbedToWebhook
+    {
+        get
+        {
+            return ((bool)(this["SendEmbedToWebhook"]));
+        }
+        set
+        {
+            this["SendEmbedToWebhook"] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool SendSimpleMessageToWebhook
+    {
+        get
+        {
+            return ((bool)(this["SendSimpleMessageToWebhook"]));
+        }
+        set
+        {
+            this["SendSimpleMessageToWebhook"] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("2200")]
+    public long CustomTooShort
+    {
+        get
+        {
+            return (long)this["CustomTooShort"];
+        }
+        set
+        {
+            this["CustomTooShort"] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("0")]
+    public long PopulateHourLimit
+    {
+        get
+        {
+            return (long)this["PopulateHourLimit"];
+        }
+        set
+        {
+            this["PopulateHourLimit"] = value;
+        }
+    }
+
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("False")]
+    public bool DetailledWvW
+    {
+        get
+        {
+            return ((bool)(this["DetailledWvW"]));
+        }
+        set
+        {
+            this["DetailledWvW"] = value;
+        }
+    }
+    [global::System.Configuration.UserScopedSettingAttribute()]
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    [global::System.Configuration.DefaultSettingValueAttribute("0")]
+    public int MemoryLimit
+    {
+        get
+        {
+            return ((int)(this["MemoryLimit"]));
+        }
+        set
+        {
+            this["MemoryLimit"] = value;
         }
     }
 }

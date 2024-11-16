@@ -1,56 +1,29 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿namespace GW2EIGW2API.GW2API;
 
-namespace GW2EIGW2API.GW2API
+public class GW2APISkill : GW2APIBaseItem
 {
-    public class GW2APISkill : GW2APIBaseItem
-    {
-        [JsonProperty]
-        public string Name { get; internal set; }
-        [JsonProperty]
-        public string Description { get; internal set; }
-        [JsonProperty]
-        public string Icon { get; internal set; }
-        [JsonProperty(PropertyName = "chat_link")]
-        public string ChatLink { get; internal set; }
-        [JsonProperty]
-        public string Type { get; internal set; }
-        [JsonProperty(PropertyName = "weapon_type")]
-        public string WeaponType { get; internal set; }
-        [JsonProperty]
-        public IReadOnlyList<string> Professions { get; internal set; }
-        [JsonProperty]
-        public IReadOnlyList<string> Flags { get; internal set; }
-        [JsonProperty]
-        public string Slot { get; internal set; }
-        [JsonProperty]
-        public IReadOnlyList<GW2APIFact> Facts { get; internal set; }
-        [JsonProperty(PropertyName = "traited_facts")]
-        public IReadOnlyList<GW2APITraitedFact> TraitedFacts { get; internal set; }
-        [JsonProperty]
-        public IReadOnlyList<string> Categories { get; internal set; }
-        [JsonProperty]
-        public string Attunement { get; internal set; }
-        [JsonProperty]
-        public int Cost { get; internal set; }
-        [JsonProperty(PropertyName = "dual_wield")]
-        public string DualWield { get; internal set; }
-        [JsonProperty(PropertyName = "flip_skill")]
-        public int FlipSkill { get; internal set; }
-        [JsonProperty]
-        public int Initiative { get; internal set; }
-        [JsonProperty(PropertyName = "next_chain")]
-        public int NextChain { get; internal set; }
-        [JsonProperty(PropertyName = "prev_chain")]
-        public int PrevChain { get; internal set; }
-        [JsonProperty(PropertyName = "transform_skills")]
-        public IReadOnlyList<long> TransformSkills { get; internal set; }
-        [JsonProperty(PropertyName = "bundle_skills")]
-        public IReadOnlyList<long> BundleSkills { get; internal set; }
+    public string Name;
+    public string Description;
+    public string Icon;
+    public string ChatLink;
+    public string Type;
+    public string WeaponType;
+    public IReadOnlyList<string> Professions;
+    public IReadOnlyList<string> Flags;
+    public string Slot;
+    public IReadOnlyList<GW2APIFact> Facts;
+    public IReadOnlyList<GW2APITraitedFact> TraitedFacts;
+    public IReadOnlyList<string> Categories;
+    public string Attunement;
+    public int Cost;
+    public string DualWield;
+    public int FlipSkill;
+    public int Initiative;
+    public int NextChain;
+    public int PrevChain;
+    public IReadOnlyList<long> TransformSkills;
+    public IReadOnlyList<long> BundleSkills;
 
-        [JsonProperty(PropertyName = "toolbelt_skill")]
-        public int ToolbeltSkill { get; internal set; }
-    }
-
+    public int ToolbeltSkill;
 }
 

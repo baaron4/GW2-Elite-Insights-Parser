@@ -1,29 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System.Numerics;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class PositionConnector(in Vector3 position) : GeographicalConnector
 {
-    internal class PositionConnector : GeographicalConnector
+    protected Vector3 Position = position;
+
+    public class PositionConnectorDescriptor : GeographicalConnectorDescriptor
     {
-        protected Point3D Position { get; set; }
-
-        public PositionConnector(Point3D position)
+        public readonly IReadOnlyList<float> Position;
+        public PositionConnectorDescriptor(PositionConnector connector, CombatReplayMap map) : base(connector, map)
         {
-            Position = position;
+            (float x, float y) = map.GetMapCoordRounded(connector.Position.XY());
+            Position = [ x, y ]; //TODO(Rennorb) @perf
         }
+    }
 
-        protected class PositionConnectorDescriptor : GeographicalConnectorDescriptor
-        {
-            public IReadOnlyList<float> Position { get; private set; }
-            public PositionConnectorDescriptor(PositionConnector connector, CombatReplayMap map) : base(connector, map)
-            {
-                (float x, float y) = map.GetMapCoord(connector.Position.X, connector.Position.Y);
-                Position = new List<float>() { x, y };
-            }
-        }
-
-        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
-        {
-            return new PositionConnectorDescriptor(this, map);
-        }
+    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+    {
+        return new PositionConnectorDescriptor(this, map);
     }
 }
