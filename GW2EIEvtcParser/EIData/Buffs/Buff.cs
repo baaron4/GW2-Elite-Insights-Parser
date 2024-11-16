@@ -155,7 +155,7 @@ public class Buff : IVersionable
         return Type switch
         {
             BuffType.Intensity => new BuffSimulatorIDIntensity(log, this, capacity),
-            BuffType.Duration => new BuffSimulatorIDDuration(log, this),
+            BuffType.Duration => new BuffSimulatorIDDuration(log, this, capacity),
             _ => throw new InvalidDataException("Buffs can not be stackless"),
         };
     }

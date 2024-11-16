@@ -44,6 +44,8 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
         {
             return;
         }
+        GenerationSimulation.Capacity = (int)(buffEvents.Count * 1.2);
+        WasteSimulationResult.Capacity = (int)(GenerationSimulation.Capacity / 2);
         long timePrev = buffEvents.Count > 0 ? Math.Min(buffEvents[0].Time, fightStart) : fightStart;
         foreach (BuffEvent buffEvent in buffEvents)
         {

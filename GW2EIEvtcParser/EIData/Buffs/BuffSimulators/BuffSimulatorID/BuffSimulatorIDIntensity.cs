@@ -7,7 +7,7 @@ internal class BuffSimulatorIDIntensity : BuffSimulatorID
 {
     private readonly int _capacity;
     // Constructor
-    public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
+    public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff, capacity)
     {
         _capacity = capacity;
     }

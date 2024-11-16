@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal abstract class BuffSimulator : AbstractBuffSimulator
 {
-    protected List<BuffStackItem> BuffStack = [];
+    protected readonly List<BuffStackItem> BuffStack;
     private readonly StackingLogic _logic;
 
     private readonly int _capacity;
@@ -40,6 +40,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
             default:
                 throw new InvalidDataException("Buffs can not be typless");
         }
+        BuffStack = new List<BuffStackItem>((int)Math.Max(Math.Min(_capacity * 1.2, 300), 4));
     }
 
     protected bool IsFull => _logic.IsFull(BuffStack, _capacity);

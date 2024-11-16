@@ -1,9 +1,10 @@
 ﻿using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal abstract class BuffSimulatorID(ParsedEvtcLog log, Buff buff) : AbstractBuffSimulator(log, buff)
+internal abstract class BuffSimulatorID : AbstractBuffSimulator
 {
     protected class BuffStackItemID : BuffStackItem
     {
@@ -36,7 +37,13 @@ internal abstract class BuffSimulatorID(ParsedEvtcLog log, Buff buff) : Abstract
         }
     }
 
-    protected readonly List<BuffStackItemID> BuffStack = [];
+    protected readonly List<BuffStackItemID> BuffStack;
+
+
+    protected BuffSimulatorID(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
+    {
+        BuffStack = new List<BuffStackItemID>((int)Math.Max(Math.Min(capacity * 1.2, 300), 4));
+    }
 
     protected override void AfterSimulate()
     {

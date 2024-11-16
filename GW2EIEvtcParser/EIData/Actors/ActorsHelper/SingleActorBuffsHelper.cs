@@ -203,7 +203,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, FinalActorBuffs> GetBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
     {
-        _buffStats ??= new(log, BuffEnum.Self, 8, 2, 4);  //TODO(Rennorb) @perf: find capacity dependenceis
+        var capacity = log.FightData.GetPhases(log).Count;
+        _buffStats ??= new(log, BuffEnum.Self, capacity, capacity, 4);
         if (!_buffStats.TryGetValue(start, end, type, out var pair))
         {
             pair = ComputeBuffs(log, start, end, type);
@@ -214,7 +215,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, FinalActorBuffs> GetActiveBuffs(BuffEnum type, ParsedEvtcLog log, long start, long end)
     {
-        _buffStats ??= new(log, BuffEnum.Self, 8, 2, 4); //TODO(Rennorb) @perf: find capacity dependenceis
+        var capacity = log.FightData.GetPhases(log).Count;
+        _buffStats ??= new(log, BuffEnum.Self, capacity, capacity, 4);
         if (!_buffStats.TryGetValue(start, end, type, out var value))
         {
             value = ComputeBuffs(log, start, end, type);
@@ -225,7 +227,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
     {
-        _buffVolumes ??= new(log, BuffEnum.Self, 4, 2, 4); //TODO(Rennorb) @perf: find capacity dependenceis
+        var capacity = log.FightData.GetPhases(log).Count;
+        _buffVolumes ??= new(log, BuffEnum.Self, capacity, capacity, 4);
         if (!_buffVolumes.TryGetValue(start, end, type, out var value))
         {
             value = ComputeBuffVolumes(log, start, end, type);
@@ -236,7 +239,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, FinalActorBuffVolumes> GetActiveBuffVolumes(BuffEnum type, ParsedEvtcLog log, long start, long end)
     {
-        _buffVolumes ??= new(log, BuffEnum.Self, 4, 2, 4);  //TODO(Rennorb) @perf: find capacity dependenceis
+        var capacity = log.FightData.GetPhases(log).Count;
+        _buffVolumes ??= new(log, BuffEnum.Self, capacity, capacity, 4);
         if (!_buffVolumes.TryGetValue(start, end, type, out var value))
         {
             value = ComputeBuffVolumes(log, start, end, type);
@@ -311,9 +315,10 @@ partial class SingleActor
         var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
 
         // Init status
-        _buffDistribution = new(log, 8, 2); //TODO(Rennorb) @perf: find capacity dependencies
-        _buffPresence     = new(log, 8, 2); //TODO(Rennorb) @perf: find capacity dependencies
-        _buffSimulators   = new(trackedBuffs.Count * 5);
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _buffDistribution = new(log, phaseCapacity, phaseCapacity);
+        _buffPresence     = new(log, phaseCapacity, phaseCapacity);
+        _buffSimulators   = new(trackedBuffs.Count * 2);
 
         foreach (Buff buff in trackedBuffs)
         {
@@ -473,7 +478,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
     {
-        _buffsDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _buffsDictionary ??= new(log, phaseCapacity, phaseCapacity);
         if (!_buffsDictionary.TryGetValue(start, end, out var value))
         {
             value = ComputeBuffsDictionaries(log, start, end);
@@ -484,7 +490,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, FinalBuffsDictionary> GetActiveBuffsDictionary(ParsedEvtcLog log, long start, long end)
     {
-        _buffsDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _buffsDictionary ??= new(log, phaseCapacity, phaseCapacity);
         if (!_buffsDictionary.TryGetValue(start, end, out var value))
         {
             value = ComputeBuffsDictionaries(log, start, end);
@@ -495,7 +502,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
     {
-        _buffVolumesDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _buffVolumesDictionary ??= new(log, phaseCapacity, phaseCapacity);
         if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
         {
             value = ComputeBuffVolumesDictionaries(log, start, end);
@@ -505,7 +513,8 @@ partial class SingleActor
     }
     public IReadOnlyDictionary<long, FinalBuffVolumesDictionary> GetActiveBuffVolumesDictionary(ParsedEvtcLog log, long start, long end)
     {
-        _buffVolumesDictionary ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _buffVolumesDictionary ??= new(log, phaseCapacity, phaseCapacity);
         if (!_buffVolumesDictionary.TryGetValue(start, end, out var value))
         {
             value = ComputeBuffVolumesDictionaries(log, start, end);

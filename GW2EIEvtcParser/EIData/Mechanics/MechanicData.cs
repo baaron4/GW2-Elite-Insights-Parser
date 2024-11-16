@@ -106,10 +106,12 @@ public class MechanicData
             return;
             #nullable restore
         }
-        _presentOnFriendliesMechanics = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
-        _presentOnEnemyMechanics      = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
-        _presentMechanics             = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
-        _enemyList                    = new(log, 1, 1); //TODO(Rennorb) @perf: find capacity dependencies
+
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _presentOnFriendliesMechanics = new(log, phaseCapacity, phaseCapacity);
+        _presentOnEnemyMechanics      = new(log, phaseCapacity, phaseCapacity);
+        _presentMechanics             = new(log, phaseCapacity, phaseCapacity);
+        _enemyList                    = new(log, phaseCapacity, phaseCapacity);
         ComputeMechanics(log);
         foreach (var (mechanic, events) in _mechanicLogs)
         {

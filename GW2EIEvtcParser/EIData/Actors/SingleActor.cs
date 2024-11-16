@@ -612,7 +612,8 @@ public abstract partial class SingleActor : Actor
 
     public FinalGameplayStats GetGameplayStats(ParsedEvtcLog log, long start, long end)
     {
-        _gameplayStats ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _gameplayStats ??= new(log, phaseCapacity, phaseCapacity); 
 
         if (!_gameplayStats.TryGetValue(start, end, out var value))
         {
@@ -654,7 +655,8 @@ public abstract partial class SingleActor : Actor
 
     public FinalToPlayersSupport GetToPlayerSupportStats(ParsedEvtcLog log, long start, long end)
     {
-        _toPlayerSupportStats ??= new(log, 4, 2); //TODO(Rennorb) @perf: find capacity dependencies
+        var phaseCapacity = log.FightData.GetPhases(log).Count;
+        _toPlayerSupportStats ??= new(log, phaseCapacity, phaseCapacity);
 
         if (!_toPlayerSupportStats.TryGetValue(start, end, out var value))
         {

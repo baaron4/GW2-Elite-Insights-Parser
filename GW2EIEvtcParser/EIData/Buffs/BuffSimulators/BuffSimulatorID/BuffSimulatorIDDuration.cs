@@ -8,7 +8,7 @@ internal class BuffSimulatorIDDuration : BuffSimulatorID
     private BuffStackItemID? _activeStack;
 
     // Constructor
-    public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff) : base(log, buff)
+    public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff, capacity)
     {
     }
 
