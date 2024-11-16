@@ -83,7 +83,7 @@ internal static class JsonDamageDistBuilder
         {
             if (!brlsByID.TryGetValue(pair.Key, out var brls))
             {
-                brls = new();
+                brls = [];
             }
 
             res.Add(BuildJsonDamageDist(pair.Key, pair.Value, brls, log, skillMap, buffMap));

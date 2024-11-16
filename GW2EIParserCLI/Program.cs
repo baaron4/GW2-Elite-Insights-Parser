@@ -2,7 +2,7 @@
 using System.Reflection;
 using GW2EIParserCommons;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIParser;
 
 internal static class Program

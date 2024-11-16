@@ -6,9 +6,9 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
 {
     // Fields
-    public readonly List<BuffSimulationItem>          GenerationSimulation      = new(); //TODO(Rennorb) @perf
-    public readonly List<BuffSimulationItemOverstack> OverstackSimulationResult = new(); //TODO(Rennorb) @perf
-    public readonly List<BuffSimulationItemWasted>    WasteSimulationResult     = new(); //TODO(Rennorb) @perf
+    public readonly List<BuffSimulationItem>          GenerationSimulation      = []; //TODO(Rennorb) @perf
+    public readonly List<BuffSimulationItemOverstack> OverstackSimulationResult = []; //TODO(Rennorb) @perf
+    public readonly List<BuffSimulationItemWasted>    WasteSimulationResult     = []; //TODO(Rennorb) @perf
 
     public readonly Buff Buff = buff;
 

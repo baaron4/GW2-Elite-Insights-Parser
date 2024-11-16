@@ -360,7 +360,7 @@ internal class SoullessHorror : HallOfChains
             AgentItem tank = c.To;
             if (!splitNecrosis.TryGetValue(tank, out var value))
             {
-                value = new();
+                value = [];
                 splitNecrosis.Add(tank, value);
             }
 

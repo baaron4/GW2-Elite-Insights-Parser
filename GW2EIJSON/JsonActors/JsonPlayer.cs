@@ -116,7 +116,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<double>>? BreakbarDamageTaken1S;
+    public IReadOnlyList<IReadOnlyList<double>?>? BreakbarDamageTaken1S;
 
     /// <summary>
     /// Array of int representing 1S damage points \n
@@ -156,7 +156,7 @@ public class JsonPlayer : JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<IReadOnlyList<double>>>? TargetBreakbarDamage1S;
+    public IReadOnlyList<IReadOnlyList<IReadOnlyList<double>?>>? TargetBreakbarDamage1S;
 
     /// <summary>
     /// Per Target Damage distribution array \n

@@ -1,6 +1,6 @@
 ﻿using GW2EIGW2API.GW2API;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIGW2API;
 
 public class GW2APIController

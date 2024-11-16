@@ -35,14 +35,9 @@ internal static class ScourgeHelper
         }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
-    {
-        // Investigate for Blood as Sand, add a custom buff like for weaver attunements/ virtuoso blades using effect events?
-    };
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly List<Buff> Buffs =
     [
@@ -60,7 +55,7 @@ internal static class ScourgeHelper
             var skill = new SkillModeDescriptor(player, Spec.Scourge, SandSwell, SkillModeCategory.Portal);
             foreach (var group in sandswellPortals)
             {
-                GenericAttachedDecoration first = null;
+                GenericAttachedDecoration? first = null;
                 foreach (EffectEvent effect in group)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000, player.AgentItem, PathUses);

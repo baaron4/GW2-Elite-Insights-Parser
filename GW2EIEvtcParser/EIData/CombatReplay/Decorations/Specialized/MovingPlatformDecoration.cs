@@ -28,7 +28,7 @@ internal class MovingPlatformDecoration : BackgroundDecoration
     }
     internal class MovingPlatformDecorationRenderingData((long, long) lifespan) : BackgroundDecorationRenderingData(lifespan)
     {
-        public readonly List<(float x, float y, float z, float angle, float opacity, long time)> Positions = new();
+        public readonly List<(float x, float y, float z, float angle, float opacity, long time)> Positions = [];
 
         public override GenericDecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {

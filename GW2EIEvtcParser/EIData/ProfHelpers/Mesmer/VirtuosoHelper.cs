@@ -42,9 +42,7 @@ internal static class VirtuosoHelper
         new BuffOnActorDamageModifier(DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly List<Buff> Buffs =
     [
@@ -99,7 +97,7 @@ internal static class VirtuosoHelper
         return res;
     }
 
-    private static HashSet<int> Minions = new();
+    private static HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

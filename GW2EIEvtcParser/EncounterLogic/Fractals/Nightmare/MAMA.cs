@@ -242,7 +242,7 @@ internal class MAMA : Nightmare
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Nightmare Miasma AoE Indicator
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaIndicator, out IReadOnlyList<EffectEvent> miasmaIndicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaIndicator, out var miasmaIndicators))
         {
             foreach (EffectEvent effect in miasmaIndicators)
             {
@@ -255,7 +255,7 @@ internal class MAMA : Nightmare
         }
 
         // Nightmare Miasma AoE Damage
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaDamage, out IReadOnlyList<EffectEvent> miasmaDamage))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.NightmareMiasmaDamage, out var miasmaDamage))
         {
             foreach (EffectEvent effect in miasmaDamage)
             {
@@ -265,7 +265,7 @@ internal class MAMA : Nightmare
         }
 
         // Arkk's Shield
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out IReadOnlyList<EffectEvent> shieldEffects))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArkkShieldIndicator, out var shieldEffects))
         {
             foreach (EffectEvent effect in shieldEffects)
             {
@@ -280,7 +280,7 @@ internal class MAMA : Nightmare
         }
 
         // Grenade Barrage
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MAMAGrenadeBarrageIndicator, out IReadOnlyList<EffectEvent> effects))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MAMAGrenadeBarrageIndicator, out var effects))
         {
             foreach (EffectEvent effect in effects)
             {

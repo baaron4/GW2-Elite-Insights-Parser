@@ -14,7 +14,7 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
 
     protected CheckedMechanic(string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
-        Checkers = new List<Checker>();
+        Checkers = [];
     }
 
     internal CheckedMechanic<Checkable> UsingChecker(Checker checker)
@@ -31,12 +31,15 @@ public abstract class CheckedMechanic<Checkable> : Mechanic
 
     protected void InsertMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, long time, AbstractSingleActor actor)
     {
-        long timeToUse = time;
-        if (_timeClamper != null)
+        if (actor != null)
         {
-            timeToUse = _timeClamper(time, log);
+            long timeToUse = time;
+            if (_timeClamper != null)
+            {
+                timeToUse = _timeClamper(time, log);
+            }
+            mechanicLogs[this].Add(new MechanicEvent(timeToUse, this, actor));
         }
-        mechanicLogs[this].Add(new MechanicEvent(timeToUse, this, actor));
     }
 
     protected virtual bool Keep(Checkable checkable, ParsedEvtcLog log)

@@ -421,8 +421,7 @@ partial class AbstractSingleActor
     {
         var trackedBuffs = GetTrackedBuffs(log);
         var buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count);
-        _buffGraphsPerAgent[by.AgentItem] = buffGraphs;
-        BuffDictionary buffMap = _buffMap;
+        _buffGraphsPerAgent![by.AgentItem] = buffGraphs;
         var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
         var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
         //
@@ -432,7 +431,7 @@ partial class AbstractSingleActor
         foreach (Buff buff in trackedBuffs)
         {
             long buffID = buff.ID;
-            if (_buffSimulators.TryGetValue(buff.ID, out AbstractBuffSimulator simulator) && !buffGraphs.ContainsKey(buffID))
+            if (_buffSimulators!.TryGetValue(buff.ID, out AbstractBuffSimulator simulator) && !buffGraphs.ContainsKey(buffID))
             {
                 bool updateBoonPresence = boonIds.Contains(buffID);
                 bool updateCondiPresence = condiIds.Contains(buffID);
@@ -559,7 +558,7 @@ partial class AbstractSingleActor
         var consumableList = new List<Buff>(log.Buffs.BuffsByClassification[BuffClassification.Nourishment]);
         consumableList.AddRange(log.Buffs.BuffsByClassification[BuffClassification.Enhancement]);
         consumableList.AddRange(log.Buffs.BuffsByClassification[BuffClassification.OtherConsumable]);
-        _consumeList = new List<Consumable>();
+        _consumeList = [];
         foreach (Buff consumable in consumableList)
         {
             foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(consumable.ID))

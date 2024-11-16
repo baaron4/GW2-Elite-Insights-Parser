@@ -158,7 +158,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         {
             if (_hasElementalMode)
             {
-                long darkModeStart = aiCastEvents.FirstOrDefault(x => (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent.Time).Time;
+                long darkModeStart = aiCastEvents.FirstOrDefault(x => (_china ? x.SkillID == AiDarkModeStartCN : x.SkillID == AiDarkModeStart) && x.Time >= darkModePhaseEvent!.Time).Time;
                 CombatItem invul895Loss = combatData.FirstOrDefault(x => x.Time <= darkModeStart && x.SkillID == Determined895 && x.IsBuffRemove == BuffRemove.All && x.SrcMatchesAgent(aiAgent) && x.Value > Determined895Duration);
                 long elementalLastAwareTime = (invul895Loss != null ? invul895Loss.Time : darkModeStart);
                 AgentItem darkAiAgent = agentData.AddCustomNPCAgent(elementalLastAwareTime, aiAgent.LastAware, aiAgent.Name, aiAgent.Spec, TargetID.AiKeeperOfThePeak2, false, aiAgent.Toughness, aiAgent.Healing, aiAgent.Condition, aiAgent.Concentration, aiAgent.HitboxWidth, aiAgent.HitboxHeight);
@@ -248,7 +248,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         if (_hasElementalMode)
         {
-            BuffApplyEvent invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, elementalAi.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+            BuffApplyEvent invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, elementalAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
             long eleStart = Math.Max(elementalAi.FirstAware, log.FightData.FightStart);
             long eleEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
             if (_hasDarkMode)
@@ -290,7 +290,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
         if (_hasDarkMode)
         {
-            BuffApplyEvent invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, darkAi.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+            BuffApplyEvent invul895Gain = log.CombatData.GetBuffDataByIDByDst(Determined895, darkAi!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
             long darkStart = Math.Max(darkAi.FirstAware, log.FightData.FightStart);
             long darkEnd = invul895Gain != null ? invul895Gain.Time : log.FightData.FightEnd;
             if (_hasElementalMode)
@@ -395,10 +395,10 @@ internal class AiKeeperOfThePeak : SunquaPeak
         }
     }
 
-    private AgentItem GetAiAgentAt(long time)
+    private AgentItem? GetAiAgentAt(long time)
     {
-        AgentItem elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak))?.AgentItem;
-        AgentItem darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2))?.AgentItem;
+        AgentItem? elementalAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak))?.AgentItem;
+        AgentItem? darkAi = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.AiKeeperOfThePeak2))?.AgentItem;
         if (elementalAi != null && elementalAi.InAwareTimes(time))
         {
             return elementalAi;
@@ -670,31 +670,34 @@ internal class AiKeeperOfThePeak : SunquaPeak
             long start = effect.Time - indicatorDuration;
             long end = effect.Time;
 
-            AgentItem ai = GetAiAgentAt(effect.Time);
-            ai.TryGetCurrentPosition(log, start, out var aiPos);
-            float dist = (aiPos - effect.Position).XY().Length();
+            AgentItem? ai = GetAiAgentAt(effect.Time);
+            if (ai != null)
+            {
+                ai.TryGetCurrentPosition(log, start, out var aiPos);
+                float dist = (aiPos - effect.Position).XY().Length();
 
-            // actual distances are 400, 670, 1080, 1630
-            uint radius;
-            if (dist > 1500f)
-            {
-                radius = 320;
+                // actual distances are 400, 670, 1080, 1630
+                uint radius;
+                if (dist > 1500f)
+                {
+                    radius = 320;
+                }
+                else if (dist > 900f)
+                {
+                    radius = 240;
+                }
+                else if (dist > 500f)
+                {
+                    radius = 160;
+                }
+                else
+                {
+                    radius = 100;
+                }
+                var position = new PositionConnector(effect.Position);
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (start, end), Colors.Orange, 0.15, position));
+                EnvironmentDecorations.Add(new CircleDecoration(radius, (end, end + damageDuration), Colors.Red, 0.15, position));
             }
-            else if (dist > 900f)
-            {
-                radius = 240;
-            }
-            else if (dist > 500f)
-            {
-                radius = 160;
-            }
-            else
-            {
-                radius = 100;
-            }
-            var position = new PositionConnector(effect.Position);
-            EnvironmentDecorations.Add(new CircleDecoration(radius, (start, end), Colors.Orange, 0.15, position));
-            EnvironmentDecorations.Add(new CircleDecoration(radius, (end, end + damageDuration), Colors.Red, 0.15, position));
         }
     }
 
@@ -705,7 +708,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
 
     private void AddMeteorDecorations(ParsedEvtcLog log)
     {
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorIndicatorGround, out IReadOnlyList<EffectEvent> groundIndicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorIndicatorGround, out var groundIndicators))
         {
             foreach (EffectEvent effect in groundIndicators)
             {
@@ -715,7 +718,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 EnvironmentDecorations.Add(new CircleDecoration(MeteorFullRadius, lifespan, Colors.Orange, 0.15, position).UsingGrowingEnd(lifespan.Item2));
             }
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorImpact, out IReadOnlyList<EffectEvent> impacts))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AiMeteorImpact, out var impacts))
         {
             foreach (EffectEvent effect in impacts)
             {

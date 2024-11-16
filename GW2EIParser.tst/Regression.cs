@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace GW2EIParser.tst;
 [TestFixture]
-class Regression
+sealed class Regression
 {
     [Test]
     public static void BuffUptime()
@@ -20,9 +20,9 @@ class Regression
         Assert.NotNull(log);
         Assert.Null(failureReason);
         var data = GW2EIBuilders.JsonModels.JsonLogBuilder.BuildJsonLog(log!, new(true), new Version(), [ ]);
-        var player = data.Players[0];
-        var mightData = player.BuffUptimes.First(d => d.Id == 740).BuffData;
-        var generationSelf = mightData[0].Generated[player.Name];
+        var player = data.Players![0];
+        var mightData = player.BuffUptimes!.First(d => d.Id == 740).BuffData;
+        var generationSelf = mightData![0].Generated![player.Name!];
         Assert.AreEqual(2.383, generationSelf, 0);
     }
 }

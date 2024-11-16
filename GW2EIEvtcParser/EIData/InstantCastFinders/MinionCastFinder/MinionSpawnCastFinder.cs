@@ -27,7 +27,7 @@ internal class MinionSpawnCastFinder : CheckedCastFinder<SpawnEvent>
             minions.AddRange(agentData.GetNPCsByID(id).Where(m => m.Master != null));
         }
         Tracing.Trace.TrackAverageStat("minions", minions.Count);
-        minions.Sort((a, b) => (int)(a.FirstAware - b.FirstAware));
+        minions.SortByFirstAware();
 
         foreach (var minionsByMaster in minions.GroupBy(x => x.GetFinalMaster()))
         {

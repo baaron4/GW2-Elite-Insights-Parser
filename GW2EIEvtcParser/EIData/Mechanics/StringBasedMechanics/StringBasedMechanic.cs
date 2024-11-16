@@ -3,7 +3,7 @@
 public abstract class StringBasedMechanic<Checkable> : CheckedMechanic<Checkable>
 {
 
-    protected readonly HashSet<GUID> MechanicIDs = new();
+    protected readonly HashSet<GUID> MechanicIDs = [];
 
     protected StringBasedMechanic(GUID mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {

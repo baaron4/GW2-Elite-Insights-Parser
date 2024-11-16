@@ -31,7 +31,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
             _vindicatorDodges.SortByTime();
         }
         
-        BuffInfoEvent buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
+        var buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
         if (buffDescription != null && buffDescription.DurationCap == 0)
         {
             if (Math.Abs(extension - ImperialImpactExtension) > ParserHelper.BuffSimulatorStackActiveDelayConstant)

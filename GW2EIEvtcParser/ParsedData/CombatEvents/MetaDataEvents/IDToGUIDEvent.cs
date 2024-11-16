@@ -5,11 +5,13 @@ public abstract class IDToGUIDEvent : AbstractMetaDataEvent
     public readonly GUID ContentGUID;
     public readonly long ContentID;
 
+    public bool IsValid => ContentID >= 0;
+
     internal IDToGUIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
         //TODO(Rennorb) @explain: Why do the source and destination get packed here?
-        this.ContentGUID = new(evtcItem.SrcAgent, evtcItem.DstAgent);
-        this.ContentID = evtcItem.SkillID;
+        ContentGUID = new(evtcItem.SrcAgent, evtcItem.DstAgent);
+        ContentID = evtcItem.SkillID;
     }
 
     internal IDToGUIDEvent() : base()

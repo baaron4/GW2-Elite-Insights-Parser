@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class MechanicHelper
 {
-    public static AbstractSingleActor FindEnemyActor(ParsedEvtcLog log, AgentItem a, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    public static AbstractSingleActor? FindEnemyActor(ParsedEvtcLog log, AgentItem a, Dictionary<int, AbstractSingleActor> regroupedMobs)
     {
         if (log.FightData.Logic.TargetAgents.Contains(a))
         {
@@ -24,7 +24,7 @@ internal static class MechanicHelper
         return null;
     }
 
-    public static AbstractSingleActor FindPlayerActor(ParsedEvtcLog log, AgentItem a)
+    public static AbstractSingleActor? FindPlayerActor(ParsedEvtcLog log, AgentItem a)
     {
         if (log.PlayerAgents.Contains(a))
         {

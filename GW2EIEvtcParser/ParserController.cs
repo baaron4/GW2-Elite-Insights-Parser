@@ -8,7 +8,7 @@ public abstract class ParserController
 
     protected ParserController()
     {
-        StatusList = new List<string>();
+        StatusList = [];
     }
 
     protected virtual void ThrowIfCanceled()

@@ -8,11 +8,11 @@ using GW2EIParserCommons.Exceptions;
 
 namespace GW2EIParser;
 
-internal partial class MainForm : Form
+internal sealed partial class MainForm : Form
 {
     private readonly SettingsForm _settingsForm;
     private readonly List<string> _logsFiles;
-    private List<ulong> _currentDiscordMessageIDs = new();
+    private List<ulong> _currentDiscordMessageIDs = [];
     private int _runningCount = 0;
     private bool _anyRunning => _runningCount > 0;
     private readonly Queue<FormOperationController> _logQueue = new();
@@ -35,7 +35,7 @@ internal partial class MainForm : Form
         //display version
         string version = Application.ProductVersion;
         LblVersion.Text = version;
-        _logsFiles = new List<string>();
+        _logsFiles = [];
         BtnCancelAll.Enabled = false;
         BtnParse.Enabled = false;
         UpdateWatchDirectory();
@@ -65,6 +65,7 @@ internal partial class MainForm : Form
     /// <param name="filesArray"></param>
     private void AddLogFiles(IEnumerable<string> filesArray)
     {
+        bool any = false;
         foreach (string file in filesArray)
         {
             if (_logsFiles.Contains(file))
@@ -72,7 +73,7 @@ internal partial class MainForm : Form
                 //Don't add doubles
                 continue;
             }
-
+            any = true;
             _logsFiles.Add(file);
             AddTraceMessage("UI: Added " + file);
 
@@ -88,7 +89,7 @@ internal partial class MainForm : Form
             SortDgvFiles();
         }
 
-        BtnParse.Enabled = !_anyRunning && filesArray.Any();
+        BtnParse.Enabled = !_anyRunning && any;
     }
 
     private void _RunOperation(FormOperationController operation)
@@ -627,7 +628,7 @@ internal partial class MainForm : Form
 
     private string DiscordBatch(out List<ulong> ids)
     {
-        ids = new List<ulong>();
+        ids = [];
         AddTraceMessage("Discord: Sending batch to Discord");
         if (_programHelper.Settings.WebhookURL == null)
         {

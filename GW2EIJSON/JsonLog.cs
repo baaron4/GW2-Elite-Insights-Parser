@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIJSON;
 
 

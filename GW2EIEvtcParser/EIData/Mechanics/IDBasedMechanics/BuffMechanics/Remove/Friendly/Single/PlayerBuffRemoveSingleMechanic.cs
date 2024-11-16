@@ -21,7 +21,7 @@ internal abstract class PlayerBuffRemoveSingleMechanic : PlayerBuffRemoveMechani
             {
                 if (c is AbstractBuffRemoveEvent abre && Keep(abre, log))
                 {
-                    AbstractSingleActor amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
+                    AbstractSingleActor? amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
                     if (amp != null)
                     {
                         if (abre is BuffRemoveAllEvent brae)

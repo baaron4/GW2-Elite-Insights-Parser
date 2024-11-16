@@ -118,8 +118,8 @@ public class HealingStatsExtensionHandler : AbstractExtensionHandler
         EssenceOfLivingShadows,
     ];
 
-    private readonly List<EXTAbstractHealingEvent> _healingEvents = new();
-    private readonly List<EXTAbstractBarrierEvent> _barrierEvents = new();
+    private readonly List<EXTAbstractHealingEvent> _healingEvents = [];
+    private readonly List<EXTAbstractBarrierEvent> _barrierEvents = [];
     internal HealingStatsExtensionHandler(CombatItem c, uint revision) : base(EXT_HealingStats, "Healing Stats")
     {
         Revision = revision;

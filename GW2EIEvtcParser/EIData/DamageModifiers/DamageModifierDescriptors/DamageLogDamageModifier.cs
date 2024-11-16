@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 internal class DamageLogDamageModifier : DamageModifierDescriptor
 {
 
-    internal DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, DamageLogChecker checker, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, ByPresence, mode)
+    internal DamageLogDamageModifier(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, DamageLogChecker checker, DamageModifierMode mode) : base(name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, ByPresence, mode)
     {
         base.UsingChecker(checker);
     }

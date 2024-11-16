@@ -18,7 +18,7 @@ internal class EXTHealingStatsPlayerChartDto
         {
             Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.All),
             Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
-            Targets = new()
+            Targets = []
         };
         //
         var hybridHealingPower = new List<int>(p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.HealingPower));
@@ -37,14 +37,14 @@ internal class EXTHealingStatsPlayerChartDto
         {
             Total = hybridHealingPower,
             Taken = hybridHealingPowerReceived,
-            Targets = new()
+            Targets = []
         };
         //
         ConversionBasedHealing = new PlayerDamageChartDto<int>()
         {
             Total = p.EXTHealing.Get1SHealingList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
             Taken = p.EXTHealing.Get1SHealingReceivedList(log, phase.Start, phase.End, null, HealingStatsExtensionHandler.EXTHealingType.ConversionBased),
-            Targets = new()
+            Targets = []
         };
         //
         /*HybridHealing = new PlayerDamageChartDto<int>()

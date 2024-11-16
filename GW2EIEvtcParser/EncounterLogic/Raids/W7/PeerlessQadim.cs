@@ -437,7 +437,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Rain of Chaos
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessRainOfChaos, out IReadOnlyList<EffectEvent> rainOfChaos))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessRainOfChaos, out var rainOfChaos))
         {
             foreach (EffectEvent effect in rainOfChaos)
             {
@@ -457,7 +457,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Residual Impact Fires
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessResidualImpactFireAoE, out IReadOnlyList<EffectEvent> residualImpact))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessResidualImpactFireAoE, out var residualImpact))
         {
             foreach (EffectEvent effect in residualImpact)
             {
@@ -469,7 +469,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Chaos Called (Electric Shark)
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessChaosCalledElectricShark, out IReadOnlyList<EffectEvent> chaosCalled))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessChaosCalledElectricShark, out var chaosCalled))
         {
             foreach (EffectEvent effect in chaosCalled)
             {
@@ -481,7 +481,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Ether Strikes - AoEs
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessEtherStrikesAoEs, out IReadOnlyList<EffectEvent> etherStrikes))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessEtherStrikesAoEs, out var etherStrikes))
         {
             foreach (EffectEvent effect in etherStrikes)
             {
@@ -492,10 +492,10 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Caught orb
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessShowerOfChaosAoE, out IReadOnlyList<EffectEvent> whiteOrbAoEs))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessShowerOfChaosAoE, out var whiteOrbAoEs))
         {
             // Missed orb - Explosion
-            log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessShowerOfChaosExplosion, out IReadOnlyList<EffectEvent> landedOrbExplosions);
+            log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessShowerOfChaosExplosion, out var landedOrbExplosions);
             foreach (EffectEvent effect in whiteOrbAoEs)
             {
                 bool failedOrb = false;
@@ -518,7 +518,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Meteor Illusion - 40/30/20 % CM Orbs
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMeteorIllusion2, out IReadOnlyList<EffectEvent> meteorIllusionOrbs))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMeteorIllusion2, out var meteorIllusionOrbs))
         {
             foreach (EffectEvent effect in meteorIllusionOrbs)
             {
@@ -531,7 +531,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Brandstorm Lightning
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessBrandstormLightning2, out IReadOnlyList<EffectEvent> brandstormLightning))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessBrandstormLightning2, out var brandstormLightning))
         {
             foreach (EffectEvent effect in brandstormLightning)
             {
@@ -543,7 +543,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Magma Drop warning
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMagmaWarningAoE, out IReadOnlyList<EffectEvent> magmaWarnings))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMagmaWarningAoE, out var magmaWarnings))
         {
             var dict = new Dictionary<long, List<EffectEvent>>(magmaWarnings.Count);
             long previousTime = int.MinValue;
@@ -553,7 +553,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 {
                     previousTime = effect.Time;
                     //TODO(Rennorb) @perf
-                    dict[previousTime] = new List<EffectEvent>();
+                    dict[previousTime] = [];
                 }
                 dict[previousTime].Add(effect);
             }
@@ -576,7 +576,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         }
 
         // Magma Drop Activated
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMagmaDamagingAoE, out IReadOnlyList<EffectEvent> magmas))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.QadimPeerlessMagmaDamagingAoE, out var magmas))
         {
             var dict = new Dictionary<long, List<EffectEvent>>();
             long previousTime = int.MinValue;
@@ -585,7 +585,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 if (effect.Time - previousTime > 1000)
                 {
                     previousTime = effect.Time;
-                    dict[previousTime] = new List<EffectEvent>();
+                    dict[previousTime] = [];
                 }
                 dict[previousTime].Add(effect);
             }

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public class NPC : AbstractSingleActor
 {
-    private IReadOnlyList<(long hpValue, double percent)> HpDistribution;
+    private IReadOnlyList<(long hpValue, double percent)>? HpDistribution;
     // Constructors
     internal NPC(AgentItem agent) : base(agent)
     {
@@ -28,7 +28,7 @@ public class NPC : AbstractSingleActor
         }
     }
 
-    public override IReadOnlyList<(long hpValue, double percent)> GetHealthDistribution()
+    public override IReadOnlyList<(long hpValue, double percent)>? GetHealthDistribution()
     {
         return HpDistribution;
     }
@@ -90,7 +90,7 @@ public class NPC : AbstractSingleActor
         AgentItem master = AgentItem.GetFinalMaster();
         if (master != AgentItem && master.IsPlayer)
         {
-            AbstractSingleActor masterActor = log.FindActor(master);
+            AbstractSingleActor masterActor = log.FindActor(master)!;
             // Basic linkage
             CombatReplay.Decorations.Add(new LineDecoration((CombatReplay.TimeOffsets.start, CombatReplay.TimeOffsets.end), Colors.Green, 0.5, new AgentConnector(this), new AgentConnector(masterActor)));
             // Prof specific treatment

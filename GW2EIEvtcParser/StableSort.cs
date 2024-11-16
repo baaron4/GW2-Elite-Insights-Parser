@@ -104,7 +104,7 @@ public static unsafe class StableSort<T>
     static void parity_swap_six(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
     {
       int pta = 0, ptl, ptr;
-      int x, y;
+      int x;
 
       branchless_swap(array, pta, cmp); pta++;
       branchless_swap(array, pta, cmp); pta += 3;
@@ -136,7 +136,6 @@ public static unsafe class StableSort<T>
 
     static void parity_swap_seven(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
     {
-        T tmp;
         int pta = 0, ptl, ptr;
         int x, y;
 
@@ -300,7 +299,7 @@ public static unsafe class StableSort<T>
         T tmp;
         int count, nmemb = array.Length;
         int pta, pts;
-        int v1, v2, v3, v4, x;
+        int v1, v2, v3, v4;
         pta = 0;
 
         count = nmemb / 8;

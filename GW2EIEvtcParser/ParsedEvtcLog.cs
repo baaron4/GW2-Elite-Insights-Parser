@@ -29,7 +29,7 @@ public class ParsedEvtcLog
 
     private readonly ParserController _operation;
 
-    private Dictionary<AgentItem, AbstractSingleActor> _agentToActorDictionary;
+    private Dictionary<AgentItem, AbstractSingleActor>? _agentToActorDictionary;
 
     internal ParsedEvtcLog(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, SkillData skillData,
             IReadOnlyList<CombatItem> combatItems, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, EvtcParserSettings parserSettings, ParserController operation)
@@ -122,7 +122,7 @@ public class ParsedEvtcLog
 
     private void AddToDictionary(AbstractSingleActor actor)
     {
-        _agentToActorDictionary[actor.AgentItem] = actor;
+        _agentToActorDictionary![actor.AgentItem] = actor;
         /*foreach (Minions minions in actor.GetMinions(this).Values)
         {
             foreach (NPC npc in minions.MinionList)
@@ -137,7 +137,7 @@ public class ParsedEvtcLog
         if (_agentToActorDictionary == null)
         {
             _operation.UpdateProgressWithCancellationCheck("Parsing: Initializing Actor dictionary");
-            _agentToActorDictionary = new Dictionary<AgentItem, AbstractSingleActor>();
+            _agentToActorDictionary = [];
             foreach (AbstractSingleActor p in Friendlies)
             {
                 AddToDictionary(p);
@@ -153,16 +153,11 @@ public class ParsedEvtcLog
     /// Find the corresponding actor, creates one otherwise
     /// </summary>
     /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="AbstractSingleActor"/> for</param>
-    /// <param name="excludePlayers">returns null if true and agentItem is a player or has a player master</param>
     /// <returns></returns>
-    public AbstractSingleActor? FindActor(AgentItem agentItem, bool excludePlayers = false)
+    public AbstractSingleActor FindActor(AgentItem agentItem)
     {
-        if (agentItem == null || (excludePlayers && agentItem.GetFinalMaster().Type == AgentItem.AgentType.Player))
-        {
-            return null;
-        }
         InitActorDictionaries();
-        if (!_agentToActorDictionary.TryGetValue(agentItem, out AbstractSingleActor actor))
+        if (!_agentToActorDictionary!.TryGetValue(agentItem, out AbstractSingleActor actor))
         {
             if (agentItem.Type == AgentItem.AgentType.Player)
             {
@@ -181,6 +176,21 @@ public class ParsedEvtcLog
             //throw new EIException("Requested actor with id " + a.ID + " and name " + a.Name + " is missing");
         }
         return actor;
+    }
+
+    /// <summary>
+    /// Find the corresponding actor, creates one otherwise
+    /// </summary>
+    /// <param name="agentItem"><see cref="AgentItem"/> to find an <see cref="AbstractSingleActor"/> for</param>
+    /// <param name="excludePlayers">returns null if true and agentItem is a player or has a player master</param>
+    /// <returns></returns>
+    public AbstractSingleActor? FindActor(AgentItem agentItem, bool excludePlayers)
+    {
+        if (excludePlayers && agentItem.GetFinalMaster().Type == AgentItem.AgentType.Player)
+        {
+            return null;
+        }
+        return FindActor(agentItem);
     }
 
 

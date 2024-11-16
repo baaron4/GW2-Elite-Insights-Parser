@@ -15,7 +15,7 @@ internal abstract class BuffRemoveMechanic<T> : IDBasedMechanic<T> where T : Abs
     }
 
     protected abstract AgentItem GetAgentItem(T brae);
-    protected abstract AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
+    protected abstract AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
     protected virtual void AddMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, T brae, AbstractSingleActor actor)
     {
@@ -30,7 +30,7 @@ internal abstract class BuffRemoveMechanic<T> : IDBasedMechanic<T> where T : Abs
             {
                 if (c is T brae && Keep(brae, log))
                 {
-                    AbstractSingleActor amp = GetActor(log, GetAgentItem(brae), regroupedMobs);
+                    AbstractSingleActor? amp = GetActor(log, GetAgentItem(brae), regroupedMobs);
                     if (amp != null)
                     {
                         AddMechanic(log, mechanicLogs, brae, amp);

@@ -26,19 +26,19 @@ public class MechanicData
                 if (!errorMechanicConfig.TryGetValue(m.PlotlySetting.Symbol, out var colorDict))
                 {
                     //TODO(Rennorb) @perf
-                    colorDict = new Dictionary<string, Dictionary<int, List<Mechanic>>>();
+                    colorDict = [];
                     errorMechanicConfig[m.PlotlySetting.Symbol] = colorDict;
                 }
                 if (!colorDict.TryGetValue(m.PlotlySetting.Color, out var sizeDict))
                 {
                     //TODO(Rennorb) @perf
-                    sizeDict = new Dictionary<int, List<Mechanic>>();
+                    sizeDict = [];
                     colorDict[m.PlotlySetting.Color] = sizeDict;
                 }
                 if (!sizeDict.TryGetValue(m.PlotlySetting.Size, out var mList))
                 {
                     //TODO(Rennorb) @perf
-                    mList = new List<Mechanic>();
+                    mList = [];
                     sizeDict[m.PlotlySetting.Size] = mList;
                 }
                 mList.Add(m);
@@ -51,19 +51,19 @@ public class MechanicData
                 if (!errorMechanicNaming.TryGetValue(m.FullName, out var shortNameDict))
                 {
                     //TODO(Rennorb) @perf
-                    shortNameDict = new Dictionary<string, Dictionary<string, List<Mechanic>>>();
+                    shortNameDict = [];
                     errorMechanicNaming[m.FullName] = shortNameDict;
                 }
                 if (!shortNameDict.TryGetValue(m.ShortName, out var descriptionDict))
                 {
                     //TODO(Rennorb) @perf
-                    descriptionDict = new Dictionary<string, List<Mechanic>>();
+                    descriptionDict = [];
                     shortNameDict[m.ShortName] = descriptionDict;
                 }
                 if (!descriptionDict.TryGetValue(m.Description, out var mList))
                 {
                     //TODO(Rennorb) @perf
-                    mList = new List<Mechanic>();
+                    mList = [];
                     descriptionDict[m.Description] = mList;
                 }
                 mList.Add(m);
@@ -73,7 +73,7 @@ public class MechanicData
                 }
             }
             //TODO(Rennorb) @perf
-            _mechanicLogs.Add(m, new List<MechanicEvent>());
+            _mechanicLogs.Add(m, []);
         }
 
         Tracing.Trace.TrackAverageStat("errorMechanicConfig", errorMechanicConfig.Count);
@@ -180,10 +180,10 @@ public class MechanicData
                 enemyHash.Add(mechanicEvent.Actor);
             }
         }
-        _presentMechanics.Set(start, end, presentMechanics);
-        _presentOnEnemyMechanics.Set(start, end, presentOnEnemyMechanics);
-        _presentOnFriendliesMechanics.Set(start, end, presentOnFriendliesMechanics);
-        _enemyList.Set(start, end, new List<AbstractSingleActor>(enemyHash));
+        _presentMechanics!.Set(start, end, presentMechanics);
+        _presentOnEnemyMechanics!.Set(start, end, presentOnEnemyMechanics);
+        _presentOnFriendliesMechanics!.Set(start, end, presentOnFriendliesMechanics);
+        _enemyList!.Set(start, end, new List<AbstractSingleActor>(enemyHash));
     }
 
     public IReadOnlyCollection<Mechanic> GetPresentEnemyMechs(ParsedEvtcLog log, long start, long end)

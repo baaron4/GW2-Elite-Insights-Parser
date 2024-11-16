@@ -357,7 +357,7 @@ internal class Qadim : MythwrightGambit
         return phases;
     }
 
-    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    protected override List<TrashID> GetTrashMobsIDs()
     {
         return
         [

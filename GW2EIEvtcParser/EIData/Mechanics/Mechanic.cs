@@ -76,7 +76,7 @@ public abstract class Mechanic
         Description = description;
         InternalCooldown = internalCoolDown;
         ShowOnTable = true;
-        _enableConditions = new List<Keeper>();
+        _enableConditions = [];
     }
 
     internal abstract void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs);

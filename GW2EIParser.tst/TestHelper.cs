@@ -40,7 +40,7 @@ public static class TestHelper
         }
     }
 
-    public static ParsedEvtcLog? ParseLog(string location, GW2EIGW2API.GW2APIController apiController)
+    public static ParsedEvtcLog? ParseLog(string location, GW2APIController apiController)
     {
         var parser = new EvtcParser(ParserSettings, apiController);
 
@@ -72,7 +72,7 @@ public static class TestHelper
         builder.CreateCSV(sw);
         sw.Close();
 
-        return sw.ToString();
+        return sw.ToString()!;
     }
 
     public static string HtmlString(ParsedEvtcLog log)
@@ -81,7 +81,7 @@ public static class TestHelper
         var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
         var builder = new HTMLBuilder(log, htmlSettings, htmlAssets, Version, new UploadResults());
 
-        builder.CreateHTML(sw, null);
+        builder.CreateHTML(sw, "");
         sw.Close();
 
         return Encoding.UTF8.GetString(ms.ToArray());
@@ -108,24 +108,24 @@ public static class TestHelper
     public static StringBuilder CompareObjects(JObject source, JObject target)
     {
         var returnString = new StringBuilder();
-        foreach (KeyValuePair<string, JToken> sourcePair in source)
+        foreach (var sourcePair in source)
         {
-            if (sourcePair.Value.Type == JTokenType.Object)
+            if (sourcePair.Value!.Type == JTokenType.Object)
             {
                 if (target.GetValue(sourcePair.Key) == null)
                 {
                     returnString.Append("Key " + sourcePair.Key
                                         + " not found" + Environment.NewLine);
                 }
-                else if (target.GetValue(sourcePair.Key).Type != JTokenType.Object)
+                else if (target.GetValue(sourcePair.Key)!.Type != JTokenType.Object)
                 {
                     returnString.Append("Key " + sourcePair.Key
                                         + " is not an object in target" + Environment.NewLine);
                 }
                 else
                 {
-                    returnString.Append(CompareObjects(sourcePair.Value.ToObject<JObject>(),
-                        target.GetValue(sourcePair.Key).ToObject<JObject>()));
+                    returnString.Append(CompareObjects(sourcePair.Value.ToObject<JObject>()!,
+                        target.GetValue(sourcePair.Key)!.ToObject<JObject>()!));
                 }
             }
             else if (sourcePair.Value.Type == JTokenType.Array)
@@ -137,14 +137,14 @@ public static class TestHelper
                 }
                 else
                 {
-                    returnString.Append(CompareArrays(sourcePair.Value.ToObject<JArray>(),
-                        target.GetValue(sourcePair.Key).ToObject<JArray>(), sourcePair.Key));
+                    returnString.Append(CompareArrays(sourcePair.Value.ToObject<JArray>()!,
+                        target.GetValue(sourcePair.Key)!.ToObject<JArray>()!, sourcePair.Key));
                 }
             }
             else
             {
                 JToken expected = sourcePair.Value;
-                JToken actual = target.SelectToken("['" + sourcePair.Key + "']");
+                JToken? actual = target.SelectToken("['" + sourcePair.Key + "']");
                 if (actual == null)
                 {
                     returnString.Append("Key " + sourcePair.Key
@@ -156,7 +156,7 @@ public static class TestHelper
                     {
                         returnString.Append("Key " + sourcePair.Key + ": "
                                             + sourcePair.Value + " !=  "
-                                            + target.Property(sourcePair.Key).Value
+                                            + target.Property(sourcePair.Key)!.Value
                                             + Environment.NewLine);
                     }
                 }
@@ -182,8 +182,8 @@ public static class TestHelper
             if (expected.Type == JTokenType.Object)
             {
                 JToken actual = (index >= target.Count) ? new JObject() : target[index];
-                returnString.Append(CompareObjects(expected.ToObject<JObject>(),
-                    actual.ToObject<JObject>()));
+                returnString.Append(CompareObjects(expected.ToObject<JObject>()!,
+                    actual.ToObject<JObject>()!));
             }
             else
             {

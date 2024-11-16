@@ -8,7 +8,7 @@ internal abstract class CastMechanic : IDBasedMechanic<AbstractCastEvent>
 
     protected abstract long GetTime(AbstractCastEvent evt);
 
-    protected abstract AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
+    protected abstract AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
     public CastMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([mechanicID], inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
@@ -26,7 +26,7 @@ internal abstract class CastMechanic : IDBasedMechanic<AbstractCastEvent>
             {
                 if (Keep(c, log))
                 {
-                    AbstractSingleActor amp = GetActor(log, c.Caster, regroupedMobs);
+                    AbstractSingleActor? amp = GetActor(log, c.Caster, regroupedMobs);
                     if (amp != null)
                     {
                         InsertMechanic(log, mechanicLogs, GetTime(c), amp);

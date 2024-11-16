@@ -41,7 +41,7 @@ internal abstract class InstantCastFinder : IVersionable
     protected InstantCastFinder(long skillID)
     {
         SkillID = skillID;
-        _enableConditions = new List<InstantCastEnableChecker>();
+        _enableConditions = [];
     }
 
     internal InstantCastFinder WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)

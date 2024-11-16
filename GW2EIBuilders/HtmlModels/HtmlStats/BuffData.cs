@@ -7,7 +7,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats;
 internal class BuffData
 {
     public double Avg { get; set; }
-    public List<List<object>> Data { get; set; } = new List<List<object>>();
+    public List<List<object>> Data { get; set; } = [];
 
     private BuffData(IReadOnlyDictionary<long, FinalActorBuffs> buffs, IReadOnlyList<Buff> listToUse, double avg)
     {

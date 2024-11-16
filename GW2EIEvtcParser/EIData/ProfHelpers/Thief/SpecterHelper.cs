@@ -29,9 +29,7 @@ internal static class SpecterHelper
         return _shroudTransform.Contains(id);
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
     [

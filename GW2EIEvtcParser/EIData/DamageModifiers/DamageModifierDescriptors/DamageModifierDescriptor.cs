@@ -22,7 +22,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public bool SkillBased => GainComputer.SkillBased;
 
     public bool Approximate { get; protected set; } = false;
-    public readonly ParserHelper.Source Src;
+    public readonly Source Src;
     public readonly string Icon;
     public readonly string Name;
     public string InitialTooltip { get; protected set; }
@@ -30,7 +30,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
     internal readonly DamageModifierMode Mode = DamageModifierMode.All;
     private List<DamageLogChecker> _dlCheckers;
 
-    internal DamageModifierDescriptor(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
+    internal DamageModifierDescriptor(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
     {
         InitialTooltip = tooltip;
         Name = name;
@@ -46,7 +46,7 @@ internal abstract class DamageModifierDescriptor : IVersionable
         Icon = icon;
         GainComputer = gainComputer;
         Mode = mode;
-        _dlCheckers = new List<DamageLogChecker>();
+        _dlCheckers = [];
     }
 
     internal DamageModifierDescriptor WithBuilds(ulong minBuild, ulong maxBuild = GW2Builds.EndOfLife)

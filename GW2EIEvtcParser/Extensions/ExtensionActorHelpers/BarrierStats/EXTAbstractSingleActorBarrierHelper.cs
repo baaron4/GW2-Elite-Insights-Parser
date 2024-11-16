@@ -26,7 +26,7 @@ public class EXTAbstractSingleActorBarrierHelper : EXTActorBarrierHelper
             throw new InvalidOperationException("Healing Stats extension not present");
         }
 
-        if (BarrierEvents == null)
+        if (BarrierEvents == null || BarrierEventsByDst == null)
         {
             BarrierEvents = new List<EXTAbstractBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
             IReadOnlyDictionary<long, Minions> minions = _actor.GetMinions(log); //TODO(Rennorb) @perf: Find average complexity for reserving elements in barrier events
@@ -60,7 +60,7 @@ public class EXTAbstractSingleActorBarrierHelper : EXTActorBarrierHelper
             throw new InvalidOperationException("Healing Stats extension not present");
         }
 
-        if (BarrierReceivedEvents == null)
+        if (BarrierReceivedEvents == null || BarrierReceivedEventsBySrc == null)
         {
             BarrierReceivedEvents = new List<EXTAbstractBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
             BarrierReceivedEvents.SortByTime();
@@ -82,7 +82,7 @@ public class EXTAbstractSingleActorBarrierHelper : EXTActorBarrierHelper
         return BarrierReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public IEnumerable<EXTAbstractBarrierEvent> GetJustActorOutgoingBarrierEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end)
+    public IEnumerable<EXTAbstractBarrierEvent> GetJustActorOutgoingBarrierEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         return GetOutgoingBarrierEvents(target, log, start, end).Where(x => x.From == _agentItem);
     }

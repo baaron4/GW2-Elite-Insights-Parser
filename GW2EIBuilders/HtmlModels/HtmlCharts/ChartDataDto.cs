@@ -5,29 +5,29 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
 internal class ChartDataDto
 {
-    public readonly List<PhaseChartDataDto> Phases = new();
-    public readonly List<MechanicChartDataDto> Mechanics = new();
+    public readonly List<PhaseChartDataDto> Phases = [];
+    public readonly List<MechanicChartDataDto> Mechanics = [];
 
-    private static List<object[]>? BuildGraphStates(IReadOnlyList<GenericSegment<double>> segments, PhaseData phase, bool nullable, double defaultState)
+    private static List<double[]>? BuildGraphStates(IReadOnlyList<GenericSegment<double>> segments, PhaseData phase, bool nullable, double defaultState)
     {
         if (!segments.Any())
         {
             return nullable ? null :
             [
-                new object[] { 0.0, defaultState},
-                new object[] { Math.Round(phase.DurationInMS/1000.0, 3), defaultState},
+                [0.0, defaultState],
+                [Math.Round(phase.DurationInMS/1000.0, 3), defaultState],
             ];
         }
         var subSegments = segments.Where(x => x.End >= phase.Start && x.Start <= phase.End).ToList();
         return subSegments.ToObjectList(phase.Start, phase.End);
     }
 
-    public static List<object[]>? BuildHealthStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
+    public static List<double[]>? BuildHealthStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase, bool nullable)
     {
         return BuildGraphStates(actor.GetHealthUpdates(log), phase, nullable, 100.0);
     }
 
-    public static List<object[]>? BuildBarrierStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
+    public static List<double[]>? BuildBarrierStates(ParsedEvtcLog log, AbstractSingleActor actor, PhaseData phase)
     {
         var barriers = new List<GenericSegment<double>>(actor.GetBarrierUpdates(log));
         if (!barriers.Any(x => x.Value > 0))
@@ -37,7 +37,7 @@ internal class ChartDataDto
         return BuildGraphStates(barriers, phase, true, 0.0);
     }
 
-    public static List<object[]>? BuildBreakbarPercentStates(ParsedEvtcLog log, AbstractSingleActor npc, PhaseData phase)
+    public static List<double[]>? BuildBreakbarPercentStates(ParsedEvtcLog log, AbstractSingleActor npc, PhaseData phase)
     {
         return BuildGraphStates(npc.GetBreakbarPercentUpdates(log), phase, true, 100.0);
     }

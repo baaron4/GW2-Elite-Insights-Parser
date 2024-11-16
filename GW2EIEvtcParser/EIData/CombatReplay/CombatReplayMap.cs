@@ -13,7 +13,7 @@ public class CombatReplayMap
     }
 
     public IReadOnlyList<MapItem> Maps => _maps;
-    private readonly List<MapItem> _maps = new();
+    private readonly List<MapItem> _maps = [];
     private (int width, int height) _urlPixelSize;
     private (double topX, double topY, double bottomX, double bottomY) _rectInMap;
     //private (int topX, int topY, int bottomX, int bottomY) _fullRect;

@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal class BuffSimulatorIDDuration : BuffSimulatorID
 {
-    private BuffStackItemID _activeStack;
+    private BuffStackItemID? _activeStack;
 
     // Constructor
     public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff) : base(log, buff)

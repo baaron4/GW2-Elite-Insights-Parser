@@ -37,12 +37,12 @@ public class EvtcParser
     {
         _apiController = apiController;
         _parserSettings = parserSettings;
-        _allAgentsList = new List<AgentItem>();
-        _combatItems = new List<CombatItem>();
-        _playerList = new List<Player>();
+        _allAgentsList = [];
+        _combatItems = [];
+        _playerList = [];
         _logStartTime = 0;
         _logEndTime = 0;
-        _enabledExtensions = new Dictionary<uint, AbstractExtensionHandler>();
+        _enabledExtensions = [];
     }
 
     #region Main Parse Method
@@ -652,7 +652,7 @@ public class EvtcParser
             // Can't be ExtensionCombat
             if (combatItem.Pad == 0 && combatItem.IsStateChange == ArcDPSEnums.StateChange.Extension)
             {
-                AbstractExtensionHandler handler = ExtensionHelper.GetExtensionHandler(combatItem);
+                AbstractExtensionHandler? handler = ExtensionHelper.GetExtensionHandler(combatItem);
                 if (handler != null)
                 {
                     _enabledExtensions[handler.Signature] = handler;

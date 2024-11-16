@@ -14,7 +14,7 @@ internal enum OperationState
     Queued = 6,
     UnComplete = 7,
 }
-internal class FormOperationController : OperationController
+internal sealed class FormOperationController : OperationController
 {
 
     private CancellationTokenSource _cancelTokenSource;
@@ -26,15 +26,15 @@ internal class FormOperationController : OperationController
     /// <summary>
     /// State of the button
     /// </summary>
-    public string ButtonText { get; protected set; }
+    public string ButtonText { get; private set; }
     /// <summary>
     /// State of the reparse button
     /// </summary>
-    public string ReParseText { get; protected set; }
+    public string ReParseText { get; private set; }
     /// <summary>
     /// Operation state
     /// </summary>
-    public OperationState State { get; protected set; }
+    public OperationState State { get; private set; }
 
     public FormOperationController(string location, string status, DataGridView dgv, BindingSource bindingSource) : base(location, status)
     {

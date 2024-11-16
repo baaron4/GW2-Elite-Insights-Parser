@@ -27,11 +27,15 @@ public abstract class AbstractEffectEvent : AbstractStatusEvent
     /// <summary>
     /// Whether the effect location is following <see cref="Dst"/> or located at <see cref="Position"/>.
     /// </summary>
-    public bool IsAroundDst => Dst != null;
+    public bool IsAroundDst => _dst != null;
     /// <summary>
     /// The agent the effect is located at, if <see cref="IsAroundDst"/> is <c>true</c>.
     /// </summary>
-    public readonly AgentItem? Dst = null;
+    private readonly AgentItem? _dst = null;
+    /// <summary>
+    /// The agent the effect is located at, if <see cref="IsAroundDst"/> is <c>true</c>.
+    /// </summary>
+    public AgentItem Dst => IsAroundDst ? _dst! : _unknownAgent;
 
     /// <summary>
     /// Unique id for tracking a created effect.
@@ -42,7 +46,7 @@ public abstract class AbstractEffectEvent : AbstractStatusEvent
     {
         if (evtcItem.DstAgent != 0)
         {
-            Dst = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
+            _dst = agentData.GetAgent(evtcItem.DstAgent, evtcItem.Time);
         }
         else
         {

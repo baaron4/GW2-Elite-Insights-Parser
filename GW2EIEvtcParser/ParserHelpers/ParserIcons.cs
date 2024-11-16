@@ -838,7 +838,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="TargetID"/> to the corresponding icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<TargetID, string> TargetNPCIcons = new Dictionary<ArcDPSEnums.TargetID, string>()
+    internal readonly static IReadOnlyDictionary<TargetID, string> TargetNPCIcons = new Dictionary<TargetID, string>()
     {
         { TargetID.WorldVersusWorld, TargetWorldVersusWorld },
         { TargetID.Mordremoth, TargetMordremoth },
@@ -933,7 +933,7 @@ internal static class ParserIcons
     /// <summary>
     /// Translates a <see cref="TrashID"/> to the corresponding icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<TrashID, string> TrashNPCIcons = new Dictionary<ArcDPSEnums.TrashID, string>()
+    internal readonly static IReadOnlyDictionary<TrashID, string> TrashNPCIcons = new Dictionary<TrashID, string>()
     {
         { TrashID.Canach, TrashCanach },
         { TrashID.Braham, TrashBraham },
@@ -1278,7 +1278,7 @@ internal static class ParserIcons
     /// <summary>
     /// Dictionary matching a <see cref="MinionID"/> to their icon.
     /// </summary>
-    internal readonly static IReadOnlyDictionary<MinionID, string> MinionNPCIcons = new Dictionary<ArcDPSEnums.MinionID, string>()
+    internal readonly static IReadOnlyDictionary<MinionID, string> MinionNPCIcons = new Dictionary<MinionID, string>()
     {
         { MinionID.HoundOfBalthazar, MinionHoundOfBalthazar },
         { MinionID.SnowWurm, MinionCallWurm },

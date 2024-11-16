@@ -6,7 +6,7 @@ namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
 internal class BuffVolumeData
 {
-    public List<List<object>> Data { get; set; } = new List<List<object>>();
+    public List<List<object>> Data { get; set; } = [];
 
     private BuffVolumeData(IReadOnlyDictionary<long, FinalActorBuffVolumes> buffVolumes, IReadOnlyList<Buff> listToUse)
     {

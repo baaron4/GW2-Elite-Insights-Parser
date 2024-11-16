@@ -23,7 +23,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (HealEventsByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -46,7 +46,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (HealEventsByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
             }
@@ -82,7 +82,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (HealReceivedEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -105,7 +105,7 @@ public class EXTMinionsHealingHelper : EXTActorHealingHelper
         }
         if (target != null)
         {
-            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (HealReceivedEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
             }

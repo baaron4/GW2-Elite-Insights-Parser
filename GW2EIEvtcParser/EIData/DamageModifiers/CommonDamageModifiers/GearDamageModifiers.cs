@@ -43,21 +43,21 @@ internal static class GearDamageModifiers
         // Relics
         new BuffOnFoeDamageModifier(RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter", "10% after trap hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheDragonhunter, DamageModifierMode.All).UsingChecker((x, log) =>
         {
-            AgentItem src = x.From;
-            AgentItem dst = x.To;
-            return log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfTheDragonhunterTargetBuff, x.Time);
+            var src = log.FindActor(x.From);
+            var dst = log.FindActor(x.To);
+            return dst.HasBuff(log, src, RelicOfTheDragonhunterTargetBuff, x.Time);
         }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnFoeDamageModifier(RelicOfIsgarrenTargetBuff, "Relic of Isgarren", "10% after evade", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfIsgarren, DamageModifierMode.All).UsingChecker((x, log) =>
         {
-            AgentItem src = x.From;
-            AgentItem dst = x.To;
-            return log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfIsgarrenTargetBuff, x.Time);
+            var src = log.FindActor(x.From);
+            var dst = log.FindActor(x.To);
+            return dst.HasBuff(log, src, RelicOfIsgarrenTargetBuff, x.Time);
         }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnFoeDamageModifier(RelicOfPeithaTargetBuff, "Relic of Peitha", "10% after blade hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfPeitha, DamageModifierMode.All).UsingChecker((x, log) =>
         {
-            AgentItem src = x.From;
-            AgentItem dst = x.To;
-            return log.FindActor(dst).HasBuff(log, log.FindActor(src), RelicOfPeithaTargetBuff, x.Time);
+            var src = log.FindActor(x.From);
+            var dst = log.FindActor(x.To);
+            return dst.HasBuff(log, src, RelicOfPeithaTargetBuff, x.Time);
         }).WithBuilds(GW2Builds.November2023Balance).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
         new BuffOnActorDamageModifier(RelicOfTheThief, "Relic of the Thief", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByStack, BuffImages.RelicOfTheThief, DamageModifierMode.All),
         new BuffOnActorDamageModifier(RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),

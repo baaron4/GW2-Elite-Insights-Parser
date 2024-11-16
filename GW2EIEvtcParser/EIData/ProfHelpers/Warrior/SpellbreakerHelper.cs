@@ -41,9 +41,7 @@ internal static class SpellbreakerHelper
         }).WithBuilds(GW2Builds.August2022Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly List<Buff> Buffs =
     [

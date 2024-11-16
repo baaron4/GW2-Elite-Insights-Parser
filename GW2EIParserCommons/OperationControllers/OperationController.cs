@@ -73,8 +73,8 @@ public abstract class OperationController : ParserController
     {
         Status = status;
         InputFile = location;
-        _GeneratedFiles = new List<string>();
-        _OpenableFiles = new List<string>();
+        _GeneratedFiles = [];
+        _OpenableFiles = [];
     }
 
     public override void Reset()

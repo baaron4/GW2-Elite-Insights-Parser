@@ -5,7 +5,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal abstract class BuffSimulator : AbstractBuffSimulator
 {
-    protected List<BuffStackItem> BuffStack = new();
+    protected List<BuffStackItem> BuffStack = [];
     private readonly StackingLogic _logic;
 
     private readonly int _capacity;
@@ -86,7 +86,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
         Add(toAdd, addedActive, 0, 0);
     }
 
-    public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, ArcDPSEnums.BuffRemove removeType, uint stackID)
+    public override void Remove(AgentItem by, long removedDuration, int removedStacks, long time, BuffRemove removeType, uint stackID)
     {
         switch (removeType)
         {

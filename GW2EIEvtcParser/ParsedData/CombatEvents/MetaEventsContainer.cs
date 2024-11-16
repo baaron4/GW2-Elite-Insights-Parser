@@ -7,20 +7,20 @@ internal class MetaEventsContainer
     public LanguageEvent? LanguageEvent { get; set; }
     public LogEndEvent? LogEndEvent { get; set; }
     public LogStartEvent? LogStartEvent { get; set; }
-    public readonly List<LogNPCUpdateEvent> LogNPCUpdateEvents = new();
-    public readonly List<MapIDEvent> MapIDEvents = new();
-    public readonly List<ShardEvent> ShardEvents = new();
-    public readonly List<TickRateEvent> TickRateEvents = new();
+    public readonly List<LogNPCUpdateEvent> LogNPCUpdateEvents = [];
+    public readonly List<MapIDEvent> MapIDEvents = [];
+    public readonly List<ShardEvent> ShardEvents = [];
+    public readonly List<TickRateEvent> TickRateEvents = [];
     public PointOfViewEvent? PointOfViewEvent { get; set; }
     public FractalScaleEvent? FractalScaleEvent { get; set; }
     public EvtcVersionEvent? EvtcVersionEvent { get; set; }
-    public readonly Dictionary<AgentItem, List<GuildEvent>> GuildEvents = new();
-    public readonly Dictionary<long, BuffInfoEvent> BuffInfoEvents = new();
-    public readonly Dictionary<byte, List<BuffInfoEvent>> BuffInfoEventsByCategory = new();
-    public readonly Dictionary<long, SkillInfoEvent> SkillInfoEvents = new();
-    public readonly List<ErrorEvent> ErrorEvents = new();
-    public readonly Dictionary<long, EffectGUIDEvent> EffectGUIDEventsByEffectID = new();
-    public readonly Dictionary<GUID, EffectGUIDEvent> EffectGUIDEventsByGUID = new();
-    public readonly Dictionary<long, MarkerGUIDEvent> MarkerGUIDEventsByMarkerID = new();
-    public readonly Dictionary<GUID, MarkerGUIDEvent> MarkerGUIDEventsByGUID = new();
+    public readonly Dictionary<AgentItem, List<GuildEvent>> GuildEvents = [];
+    public readonly Dictionary<long, BuffInfoEvent> BuffInfoEvents = [];
+    public readonly Dictionary<byte, List<BuffInfoEvent>> BuffInfoEventsByCategory = [];
+    public readonly Dictionary<long, SkillInfoEvent> SkillInfoEvents = [];
+    public readonly List<ErrorEvent> ErrorEvents = [];
+    public readonly Dictionary<long, EffectGUIDEvent> EffectGUIDEventsByEffectID = [];
+    public readonly Dictionary<GUID, EffectGUIDEvent> EffectGUIDEventsByGUID = [];
+    public readonly Dictionary<long, MarkerGUIDEvent> MarkerGUIDEventsByMarkerID = [];
+    public readonly Dictionary<GUID, MarkerGUIDEvent> MarkerGUIDEventsByGUID = [];
 }

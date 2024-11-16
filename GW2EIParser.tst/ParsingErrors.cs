@@ -33,6 +33,6 @@ public class ParsingErrors
 
         _ = parser.ParseLog(new TestHelper.TestOperationController(), file, out var failureReason, false);
         Assert.NotNull(failureReason, "Expected an error to occur");
-        Assert.True(failureReason.Reason.Contains(expectedInErrorMessage), $"Expected\n'{failureReason.Reason}'\n\n to contain\n'{expectedInErrorMessage}'");
+        Assert.True(failureReason!.Reason.Contains(expectedInErrorMessage), $"Expected\n'{failureReason.Reason}'\n\n to contain\n'{expectedInErrorMessage}'");
     }
 }

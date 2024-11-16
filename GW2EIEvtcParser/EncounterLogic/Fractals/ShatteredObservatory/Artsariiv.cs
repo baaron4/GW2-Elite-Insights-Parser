@@ -253,7 +253,7 @@ internal class Artsariiv : ShatteredObservatory
         AddCorporealReassignmentDecorations(log);
 
         // Beaming Smile
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmileIndicator, out IReadOnlyList<EffectEvent> beamIndicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmileIndicator, out var beamIndicators))
         {
             foreach (EffectEvent effect in beamIndicators)
             {
@@ -262,7 +262,7 @@ internal class Artsariiv : ShatteredObservatory
                 AddBeamingSmileDecoration(effect, (start, end), Colors.Orange, 0.2);
             }
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmile, out IReadOnlyList<EffectEvent> beams))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ArtsariivBeamingSmile, out var beams))
         {
             foreach (EffectEvent effect in beams)
             {

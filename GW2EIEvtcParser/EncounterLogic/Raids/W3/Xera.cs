@@ -374,7 +374,7 @@ internal class Xera : StrongholdOfTheFaithful
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Intervention Bubble
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out IReadOnlyList<EffectEvent> intervention))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.XeraIntervention1, out var intervention))
         {
             foreach (EffectEvent effect in intervention)
             {

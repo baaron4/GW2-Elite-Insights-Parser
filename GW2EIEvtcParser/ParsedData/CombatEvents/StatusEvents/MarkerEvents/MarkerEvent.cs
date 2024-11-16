@@ -10,7 +10,7 @@ public class MarkerEvent : AbstractStatusEvent
     /// <summary>
     /// GUID event of the effect
     /// </summary>
-    public MarkerGUIDEvent? GUIDEvent { get; private set; }
+    public MarkerGUIDEvent GUIDEvent { get; private set; } = MarkerGUIDEvent.DummyMarkerGUID;
 
     /// <summary>
     /// Time at which marker has been removed.

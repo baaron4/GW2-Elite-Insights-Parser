@@ -8,7 +8,7 @@ public class NonDirectHealthDamageEvent : AbstractHealthDamageEvent
 
     public bool IsLifeLeech => _cycle == BuffCycle.NotCycle_DamageToTargetOnHit || _cycle == BuffCycle.NotCycle_DamageToTargetOnStackRemove;
 
-    internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ArcDPSEnums.ConditionResult result) : base(evtcItem, agentData, skillData)
+    internal NonDirectHealthDamageEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData, ConditionResult result) : base(evtcItem, agentData, skillData)
     {
         HealthDamage = evtcItem.BuffDmg;
         IsAbsorbed = result == ConditionResult.InvulByBuff ||

@@ -135,7 +135,7 @@ internal static class CombatEventFactory
                     }
                     else
                     {
-                        metaDataEvents.BuffInfoEventsByCategory[buffInfoEvent.CategoryByte] = new List<BuffInfoEvent> { buffInfoEvent };
+                        metaDataEvents.BuffInfoEventsByCategory[buffInfoEvent.CategoryByte] = [buffInfoEvent];
                     }
                 }
                 break;
@@ -266,7 +266,7 @@ internal static class CombatEventFactory
                 break;
             case StateChange.Effect_45:
             case StateChange.Effect_51:
-                EffectEvent effectEvt = null;
+                EffectEvent? effectEvt = null;
                 switch (stateChangeEvent.IsStateChange)
                 {
                     case StateChange.Effect_45:
@@ -302,7 +302,7 @@ internal static class CombatEventFactory
                 Add(statusEvents.EffectEventsByEffectID, effectEvt.EffectID, effectEvt);
                 if (effectEvt.IsAroundDst)
                 {
-                    Add(statusEvents.EffectEventsByDst, effectEvt.Dst, effectEvt);
+                    Add(statusEvents.EffectEventsByDst!, effectEvt.Dst, effectEvt);
                 }
                 break;
             case StateChange.EffectIDToGUID:
@@ -471,7 +471,7 @@ internal static class CombatEventFactory
 
     public static void AddDirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, List<BreakbarDamageEvent> brkBarDamage, List<CrowdControlEvent> crowdControlEvents, AgentData agentData, SkillData skillData)
     {
-        ArcDPSEnums.PhysicalResult result = GetPhysicalResult(damageEvent.Result);
+        PhysicalResult result = GetPhysicalResult(damageEvent.Result);
         switch (result)
         {
             case PhysicalResult.BreakbarDamage:
@@ -491,7 +491,7 @@ internal static class CombatEventFactory
 
     public static void AddIndirectDamageEvent(CombatItem damageEvent, List<AbstractHealthDamageEvent> hpDamage, AgentData agentData, SkillData skillData)
     {
-        ArcDPSEnums.ConditionResult result = GetConditionResult(damageEvent.Result);
+        ConditionResult result = GetConditionResult(damageEvent.Result);
         switch (result)
         {
             case ConditionResult.Unknown:

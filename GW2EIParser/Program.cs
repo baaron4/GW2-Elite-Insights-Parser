@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using GW2EIParserCommons;
 using System.Windows.Forms;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIParser;
 
 internal static class Program

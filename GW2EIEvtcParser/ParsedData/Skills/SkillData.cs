@@ -3,7 +3,7 @@
 public class SkillData
 {
     // Fields
-    private readonly Dictionary<long, SkillItem> _skills = new();
+    private readonly Dictionary<long, SkillItem> _skills = [];
     private readonly GW2EIGW2API.GW2APIController _apiController;
     public readonly long DodgeId;
     public readonly long GenericBreakbarId;
@@ -25,20 +25,20 @@ public class SkillData
         return _skills[ID];
     }
 
-    internal HashSet<long> NotAccurate = new();
+    internal HashSet<long> NotAccurate = [];
 
     public bool IsNotAccurate(long ID)
     {
         return NotAccurate.Contains(ID);
     }
 
-    internal HashSet<long> GearProc = new();
+    internal HashSet<long> GearProc = [];
     public bool IsGearProc(long ID)
     {
         return GearProc.Contains(ID);
     }
 
-    internal HashSet<long> TraitProc = new();
+    internal HashSet<long> TraitProc = [];
     public bool IsTraitProc(long ID)
     {
         return TraitProc.Contains(ID);

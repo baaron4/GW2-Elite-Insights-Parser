@@ -178,7 +178,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Frost Patch
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieFrozenPatch, out IReadOnlyList<EffectEvent> frozenPatches))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieFrozenPatch, out var frozenPatches))
         {
             foreach (EffectEvent effect in frozenPatches)
             {
@@ -191,7 +191,7 @@ internal class Freezie : FestivalStrikeMissionLogic
 
         // This effect is the orange AoE spawned by the Giant Snowball and the AoEs during the healing phase and last phase
         // The effect for the snowball last 1000, the others 2700
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieOrangeAoE120, out IReadOnlyList<EffectEvent> orangeAoEs))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieOrangeAoE120, out var orangeAoEs))
         {
             foreach (EffectEvent effect in orangeAoEs)
             {
@@ -204,7 +204,7 @@ internal class Freezie : FestivalStrikeMissionLogic
         }
 
         // Blizzard Ring
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieDoughnutRing, out IReadOnlyList<EffectEvent> blizzards))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.FreezieDoughnutRing, out var blizzards))
         {
             foreach (EffectEvent effect in blizzards)
             {

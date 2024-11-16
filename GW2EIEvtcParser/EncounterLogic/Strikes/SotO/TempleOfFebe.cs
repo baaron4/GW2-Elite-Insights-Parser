@@ -41,8 +41,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             new PlayerDstHitMechanic(PetrifyDamage, "Petrify", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "Pet.H", "Hit by Petrify", "Petrify Hit", 0),
             new GenericCombatEventListMechanic<AbstractTimeCombatEvent>("Unbounded Optimism", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.RedSkin), "UnbOpt.Achiv", "Achievement Eligibility: Unbounded Optimism", "Unbounded Optimism", 0, false, (log, agentItem) =>
                 {
-                    AbstractSingleActor actor = log.FindActor(agentItem);
+                    AbstractSingleActor? actor = log.FindActor(agentItem);
                     var eligibilityRemovedEvents = new List<AbstractTimeCombatEvent>();
+                    if (actor == null)
+                    {
+                        return eligibilityRemovedEvents;
+                    }
                     eligibilityRemovedEvents.AddRange(actor.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => UnboundOptimismSkillIDs.Contains(x.SkillId) && x.HasHit));
                     IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(agentItem);
                     // In case player is dead but death event did not happen during encounter
@@ -64,7 +68,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     {
                         eligibilityRemovedEvents.AddRange(despawns);
                     }
-                    eligibilityRemovedEvents = eligibilityRemovedEvents.OrderBy(x => x.Time).ToList();
+                    eligibilityRemovedEvents.SortByTime();
                     return eligibilityRemovedEvents;
                 })
                 .UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM)

@@ -22,9 +22,9 @@ internal static class BuffInfoSolver
         private ulong _maxBuild = GW2Builds.EndOfLife;
         private int _minEvtcBuild = ArcDPSBuilds.StartOfLife;
         private int _maxEvtcBuild = ArcDPSBuilds.EndOfLife;
-        private readonly ArcDPSEnums.BuffAttribute _result;
+        private readonly BuffAttribute _result;
 
-        public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, long buffSelf, int buffSrc, ArcDPSEnums.BuffAttribute result)
+        public BuffFormulaDescriptor(float constantOffset, float levelOffset, float variable, int traitSelf, int traitSrc, long buffSelf, int buffSrc, BuffAttribute result)
         {
             _constantOffset = constantOffset;
             _levelOffset = levelOffset;
@@ -64,7 +64,7 @@ internal static class BuffInfoSolver
             return false;
         }
 
-        public bool Match(BuffFormula formula, Dictionary<byte, ArcDPSEnums.BuffAttribute> toFill)
+        public bool Match(BuffFormula formula, Dictionary<byte, BuffAttribute> toFill)
         {
             // No need to match anything if we already associated the result
             if (toFill.ContainsValue(_result))
@@ -227,7 +227,7 @@ internal static class BuffInfoSolver
 
     public static void AdjustBuffs(CombatData combatData, IReadOnlyDictionary<long, Buff> buffsByID, ParserController operation)
     {
-        var solved = new Dictionary<byte, ArcDPSEnums.BuffAttribute>();
+        var solved = new Dictionary<byte, BuffAttribute>();
         foreach (KeyValuePair<BuffFormulaDescriptor, long> pair in _recognizer)
         {
             if (!pair.Key.Available(combatData))
@@ -236,7 +236,7 @@ internal static class BuffInfoSolver
             }
             if (buffsByID.TryGetValue(pair.Value, out Buff buff))
             {
-                BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(buff.ID);
+                BuffInfoEvent? buffInfoEvent = combatData.GetBuffInfoEvent(buff.ID);
                 if (buffInfoEvent != null)
                 {
                     foreach (BuffFormula formula in buffInfoEvent.Formulas)
@@ -260,7 +260,7 @@ internal static class BuffInfoSolver
         }
         foreach (KeyValuePair<long, Buff> pair in buffsByID)
         {
-            BuffInfoEvent buffInfoEvent = combatData.GetBuffInfoEvent(pair.Key);
+            var buffInfoEvent = combatData.GetBuffInfoEvent(pair.Key);
             if (buffInfoEvent != null)
             {
                 pair.Value.VerifyBuffInfoEvent(buffInfoEvent, operation);

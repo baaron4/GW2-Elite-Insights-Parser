@@ -17,10 +17,10 @@ internal class EXTHealingStatsPlayerDetailsDto
     {
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
-            HealingDistributions = new List<EXTHealingStatsHealingDistributionDto>(),
-            HealingDistributionsTargets = new List<List<EXTHealingStatsHealingDistributionDto>>(),
-            IncomingHealingDistributions = new List<EXTHealingStatsHealingDistributionDto>(),
-            Minions = new List<EXTHealingStatsPlayerDetailsDto>(),
+            HealingDistributions = [],
+            HealingDistributionsTargets = [],
+            IncomingHealingDistributions = [],
+            Minions = [],
         };
         foreach (PhaseData phase in log.FightData.GetPhases(log))
         {
@@ -45,8 +45,8 @@ internal class EXTHealingStatsPlayerDetailsDto
     {
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
-            HealingDistributions = new List<EXTHealingStatsHealingDistributionDto>(),
-            HealingDistributionsTargets = new List<List<EXTHealingStatsHealingDistributionDto>>()
+            HealingDistributions = [],
+            HealingDistributionsTargets = []
         };
         foreach (PhaseData phase in log.FightData.GetPhases(log))
         {

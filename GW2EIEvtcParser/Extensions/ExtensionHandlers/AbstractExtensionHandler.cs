@@ -16,7 +16,7 @@ public abstract class AbstractExtensionHandler
     {
         Signature = sig;
         Name = name;
-        RunningExtensionInternal = new();
+        RunningExtensionInternal = [];
     }
 
     internal abstract bool HasTime(CombatItem c);

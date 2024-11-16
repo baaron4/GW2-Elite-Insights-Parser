@@ -106,7 +106,7 @@ public class StatisticsHelper
         var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault());
         foreach (Player player in players)
         {
-            _presentRemainingBuffsPerPlayer[player] = new HashSet<Buff>();
+            _presentRemainingBuffsPerPlayer[player] = [];
             foreach (AbstractBuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
             {
                 if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
@@ -141,25 +141,22 @@ public class StatisticsHelper
 
     //
 
-    private readonly List<Buff> _presentBoons = new();//Used only for Boon tables
-    private readonly List<Buff> _presentConditions = new();//Used only for Condition tables
-    private readonly List<Buff> _presentOffbuffs = new();//Used only for Off Buff tables
-    private readonly List<Buff> _presentSupbuffs = new();//Used only for Off Buff tables
-    private readonly List<Buff> _presentDefbuffs = new();//Used only for Def Buff tables
-    private readonly List<Buff> _presentDebuffs = new();//Used only for Debuff tables
-    private readonly List<Buff> _presentGearbuffs = new();//Used only for Gear Buff tables
-    private readonly List<Buff> _presentNourishments = new();
-    private readonly List<Buff> _presentEnhancements = new();
-    private readonly List<Buff> _presentOtherConsumables = new();
-    private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer = new();
+    private readonly List<Buff> _presentBoons = [];//Used only for Boon tables
+    private readonly List<Buff> _presentConditions = [];//Used only for Condition tables
+    private readonly List<Buff> _presentOffbuffs = [];//Used only for Off Buff tables
+    private readonly List<Buff> _presentSupbuffs = [];//Used only for Off Buff tables
+    private readonly List<Buff> _presentDefbuffs = [];//Used only for Def Buff tables
+    private readonly List<Buff> _presentDebuffs = [];//Used only for Debuff tables
+    private readonly List<Buff> _presentGearbuffs = [];//Used only for Gear Buff tables
+    private readonly List<Buff> _presentNourishments = [];
+    private readonly List<Buff> _presentEnhancements = [];
+    private readonly List<Buff> _presentOtherConsumables = [];
+    private readonly Dictionary<Player, HashSet<Buff>> _presentRemainingBuffsPerPlayer = [];
 
 
     //Positions for group
     private List<ParametricPoint3D?>? _stackCenterPositions = null;
     private List<ParametricPoint3D?>? _stackCommanderPositions = null;
-
-    //TODO(Rennorb) @cleanup: So ... why are these parametric points, but we still add null values between them?
-    // Since they already have a time component we don't need the "gaps", or if we just have one value per sample we don't need parametric points.
 
     /// <summary> Returns a list of center positions of the squad which are null in places where all players are dead or disconnected. One entry for each polling. </summary>
     public IReadOnlyList<ParametricPoint3D?> GetStackCenterPositions(ParsedEvtcLog log)

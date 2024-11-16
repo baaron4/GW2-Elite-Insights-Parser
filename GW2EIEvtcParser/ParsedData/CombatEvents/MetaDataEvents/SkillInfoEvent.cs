@@ -13,7 +13,7 @@ public class SkillInfoEvent : AbstractMetaDataEvent
     public float TooltipTime { get; protected set; }
     public IReadOnlyList<SkillTiming> SkillTimings => _SkillTimings;
 
-    private readonly List<SkillTiming> _SkillTimings = new();
+    private readonly List<SkillTiming> _SkillTimings = [];
 
     internal SkillInfoEvent(CombatItem evtcItem) : base(evtcItem)
     {

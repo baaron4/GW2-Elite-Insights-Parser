@@ -15,13 +15,13 @@ public class BuffInfoEvent : AbstractMetaDataEvent
     public byte CategoryByte { get; private set; }
 
     public byte StackingTypeByte { get; private set; } = 6;
-    public ArcDPSEnums.BuffStackType StackingType { get; private set; } = BuffStackType.Unknown;
+    public BuffStackType StackingType { get; private set; } = BuffStackType.Unknown;
 
     public bool ProbablyResistance { get; private set; }
 
     public ushort MaxStacks { get; private set; }
     public uint DurationCap { get; private set; }
-    public readonly List<BuffFormula> Formulas = new();
+    public readonly List<BuffFormula> Formulas = [];
 
     internal BuffInfoEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {
@@ -65,7 +65,7 @@ public class BuffInfoEvent : AbstractMetaDataEvent
         ProbablyResistance = evtcItem.Pad2 > 0;
     }
 
-    internal void AdjustBuffInfo(Dictionary<byte, ArcDPSEnums.BuffAttribute> solved)
+    internal void AdjustBuffInfo(Dictionary<byte, BuffAttribute> solved)
     {
         Formulas.Sort((x, y) => (x.SortKey).CompareTo(y.SortKey));
         if (solved.Count == 0)

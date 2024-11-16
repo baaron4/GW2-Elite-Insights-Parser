@@ -26,7 +26,7 @@ internal class IconOverheadDecoration : IconDecoration
         public IconOverheadDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
         }
-        public override void UsingSkillMode(SkillModeDescriptor skill)
+        public override void UsingSkillMode(SkillModeDescriptor? skill)
         {
         }
 

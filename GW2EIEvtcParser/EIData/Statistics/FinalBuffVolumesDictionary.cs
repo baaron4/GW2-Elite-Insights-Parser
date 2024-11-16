@@ -5,9 +5,9 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalBuffVolumesDictionary
 {
-    private Dictionary<AbstractSingleActor, double> _incomingBy = new();
+    private Dictionary<AbstractSingleActor, double> _incomingBy = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> IncomingBy => _incomingBy;
-    private Dictionary<AbstractSingleActor, double> _incomingByExtensionBy = new();
+    private Dictionary<AbstractSingleActor, double> _incomingByExtensionBy = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> IncomingByExtensionBy => _incomingByExtensionBy;
 
 

@@ -30,7 +30,7 @@ internal class LineDecoration : FormDecoration
         public override void UsingFilled(bool filled)
         {
         }
-        public override void UsingRotationConnector(RotationConnector rotationConnectedTo)
+        public override void UsingRotationConnector(RotationConnector? rotationConnectedTo)
         {
         }
 

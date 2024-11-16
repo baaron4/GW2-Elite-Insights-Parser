@@ -126,7 +126,7 @@ function addMechanicsToGraph(data, phase, phaseIndex) {
                 if (tarId >= 0) {
                     var target = logData.targets[tarId];
                     for (var k = 0; k < pts.length; k++) {
-                        var time = pts[k];
+                        var time = pts[k][0];
                         chart.x.push(time);
                         chart.text.push(time + 's: ' + target.name);
                     }
@@ -143,7 +143,7 @@ function addMechanicsToGraph(data, phase, phaseIndex) {
                 var pts = mech.points[phaseIndex][j];
                 var player = logData.players[j];
                 for (var k = 0; k < pts.length; k++) {
-                    var time = pts[k];
+                    var time = pts[k][0];
                     chart.x.push(time);
                     chart.text.push(time + 's: ' + player.name);
                 }
@@ -178,7 +178,7 @@ function updateMechanicsYValues(res, phase, phaseIndex, phaseGraphData, max) {
             for (var j = 0; j < mech.points[phaseIndex].length; j++) {
                 var pts = mech.points[phaseIndex][j];
                 for (var k = 0; k < pts.length; k++) {
-                    var time = pts[k];
+                    var time = pts[k][0];
                     var ftime = Math.floor(time);
                     var y = res[j][ftime];
                     var yp1 = res[j][ftime + 1];

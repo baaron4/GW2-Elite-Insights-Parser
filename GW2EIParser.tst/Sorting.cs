@@ -4,19 +4,22 @@ using System.Collections;
 
 namespace GW2EIEvtcParser.tst.Internals;
 
-class Sorting
+sealed class Sorting
 {
-    public class TestEvent(long t, int order) : AbstractTimeCombatEvent(t)
+    public sealed class TestEvent(long t, int order) : AbstractTimeCombatEvent(t)
     {
         public int Order = order;
 
         public override string ToString() => $"({Time} {Order})";
 
 
-        public class Comparer : IComparer
+        public sealed class Comparer : IComparer
         {
             public static readonly Comparer Instance = new();
-            public int Compare(object x, object y) => (int)(((TestEvent)x).Time.CompareTo(((TestEvent)y).Time));
+            public int Compare(object? x, object? y)
+            {
+                return (int)((TestEvent)x!).Time.CompareTo(((TestEvent)y!).Time);
+            }
         }
     }
 
@@ -44,7 +47,7 @@ class Sorting
     }
 
 
-    class TestCombatItem(long t, int v) : CombatItem(t, default, default, v, default, default, default, default, default, default, default, 
+    sealed class TestCombatItem(long t, int v) : CombatItem(t, default, default, v, default, default, default, default, default, default, default, 
             default, default, default, default, default, default, default, default, default, default, default, default, default)
     {
         public override string ToString()
@@ -77,7 +80,7 @@ class Sorting
     }
 
 #pragma warning disable CS0618 // Type or member is obsolete
-    class TestCastEvent(long t, bool swap, int order) : AbstractCastEvent(t, new(swap), null!)
+    sealed class TestCastEvent(long t, bool swap, int order) : AbstractCastEvent(t, new(swap), null!)
     {
         public int Order = order;
 
@@ -169,8 +172,8 @@ class Sorting
 }
 
 
-[TestFixtureSource(typeof(Sort_Generated), nameof(Sort_Generated.GenerateTests))]
-class Sort_Generated
+[TestFixtureSource(typeof(Sort_Generated), nameof(GenerateTests))]
+sealed class Sort_Generated
 {
     public static IEnumerable GenerateTests
     {

@@ -4,17 +4,17 @@ namespace GW2EIEvtcParser.EIData;
 
 public class FinalBuffsDictionary
 {
-    private readonly Dictionary<AbstractSingleActor, double> _generatedBy = new();
+    private readonly Dictionary<AbstractSingleActor, double> _generatedBy = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> GeneratedBy => _generatedBy;
-    private readonly Dictionary<AbstractSingleActor, double> _overstackedBy = new();
+    private readonly Dictionary<AbstractSingleActor, double> _overstackedBy = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> OverstackedBy => _overstackedBy;
-    private readonly Dictionary<AbstractSingleActor, double> _wastedFrom = new();
+    private readonly Dictionary<AbstractSingleActor, double> _wastedFrom = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> WastedFrom => _wastedFrom;
-    private readonly Dictionary<AbstractSingleActor, double> _unknownExtensionFrom = new();
+    private readonly Dictionary<AbstractSingleActor, double> _unknownExtensionFrom = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> UnknownExtensionFrom => _unknownExtensionFrom;
-    private readonly Dictionary<AbstractSingleActor, double> _extensionBy = new();
+    private readonly Dictionary<AbstractSingleActor, double> _extensionBy = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> ExtensionBy => _extensionBy;
-    private readonly Dictionary<AbstractSingleActor, double> _extendedFrom = new();
+    private readonly Dictionary<AbstractSingleActor, double> _extendedFrom = [];
     public IReadOnlyDictionary<AbstractSingleActor, double> ExtendedFrom => _extendedFrom;
 
 

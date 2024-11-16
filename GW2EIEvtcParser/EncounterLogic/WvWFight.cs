@@ -235,7 +235,8 @@ internal class WvWFight : FightLogic
             var modes = new List<AbstractBuffEvent>(log.CombatData.GetBuffData(GuildHallPvEMode));
             modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
             modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
-            var usedModes = modes.OrderBy(x => x.Time).Select(x => x.BuffID).Distinct().ToList();
+            modes.SortByTime();
+            var usedModes = modes.Select(x => x.BuffID).Distinct().ToList();
             foreach (long buffID in usedModes)
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));

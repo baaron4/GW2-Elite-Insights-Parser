@@ -103,7 +103,7 @@ public class Player : AbstractPlayer
                 var commanderMarkerStates = new List<GenericSegment<GUID>>(markerEvents.Count);
                 foreach (MarkerEvent markerEvent in markerEvents)
                 {
-                    MarkerGUIDEvent marker = markerEvent.GUIDEvent;
+                    MarkerGUIDEvent marker = markerEvent.GUIDEvent!;
                     if (marker.IsValid)
                     {
                         if (marker.IsCommanderTag)
@@ -130,7 +130,7 @@ public class Player : AbstractPlayer
 
             if (!statesByPlayer.ContainsKey(this))
             {
-                CommanderStates = new();
+                CommanderStates = [];
                 return CommanderStates;
             }
 

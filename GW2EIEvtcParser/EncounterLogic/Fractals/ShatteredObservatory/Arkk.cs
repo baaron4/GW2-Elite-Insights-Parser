@@ -359,7 +359,7 @@ internal class Arkk : ShatteredObservatory
         AddCorporealReassignmentDecorations(log);
 
         // Horizon Strike
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HorizonStrikeArkk, out IReadOnlyList<EffectEvent> strikes))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HorizonStrikeArkk, out var strikes))
         {
             foreach (EffectEvent effect in strikes)
             {

@@ -206,7 +206,7 @@ internal class Eparch : LonelyTower
         AddGlobuleDecorations(log);
 
         // rain of despair pools
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchDespairPool, out IReadOnlyList<EffectEvent> pools))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchDespairPool, out var pools))
         {
             foreach (EffectEvent effect in pools)
             {
@@ -220,7 +220,7 @@ internal class Eparch : LonelyTower
         }
 
         // rage wave
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageImpact, out IReadOnlyList<EffectEvent> rageWaves))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageImpact, out var rageWaves))
         {
             const float velocity = 450.0f; // units per second
             const uint maxRange = 1300;
@@ -235,7 +235,7 @@ internal class Eparch : LonelyTower
         }
 
         // rage fissures
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageFissure, out IReadOnlyList<EffectEvent> fissures))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchRageFissure, out var fissures))
         {
             const uint width = 40;
             const uint length = 220;
@@ -249,7 +249,7 @@ internal class Eparch : LonelyTower
         }
 
         // envy arrow indicators
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchArrowIndicator, out IReadOnlyList<EffectEvent> envyArrows))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchArrowIndicator, out var envyArrows))
         {
             const uint width = 60;
             const uint length = 800;
@@ -264,7 +264,7 @@ internal class Eparch : LonelyTower
         }
 
         // inhale indicator
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchInhale, out IReadOnlyList<EffectEvent> inhales))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchInhale, out var inhales))
         {
             foreach (EffectEvent effect in inhales)
             {
@@ -275,7 +275,7 @@ internal class Eparch : LonelyTower
         }
 
         // spike of malice
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchCircleIndicator, out IReadOnlyList<EffectEvent> spikeIndicators))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchCircleIndicator, out var spikeIndicators))
         {
             foreach (EffectEvent effect in spikeIndicators)
             {
@@ -288,7 +288,7 @@ internal class Eparch : LonelyTower
                 EnvironmentDecorations.Add(circleFiller);
             }
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchSpikeOfMalice, out IReadOnlyList<EffectEvent> spikes))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EparchSpikeOfMalice, out var spikes))
         {
             foreach (EffectEvent effect in spikes)
             {

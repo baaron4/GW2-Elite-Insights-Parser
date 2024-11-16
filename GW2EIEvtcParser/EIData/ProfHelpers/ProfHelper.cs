@@ -431,7 +431,7 @@ internal static class ProfHelper
             var skill = new SkillModeDescriptor(player, PortalExitWhiteMantleWatchwork, SkillModeCategory.Portal);
             foreach (var group in whiteMantlePortalActive)
             {
-                GenericAttachedDecoration first = null;
+                GenericAttachedDecoration? first = null;
                 foreach (EffectEvent effect in group)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUsesWhiteMantleWatchwork);

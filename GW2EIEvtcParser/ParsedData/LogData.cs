@@ -8,8 +8,8 @@ public class LogData
     private const string DefaultTimeValue = "MISSING";
 
     // Fields
-    public readonly string ArcVersion;
-    public readonly string ArcVersionBuild;
+    public readonly string ArcVersion = "";
+    public readonly string ArcVersionBuild = "";
     public readonly int EvtcBuild;
     public readonly int EvtcRevision;
     public readonly string Language = "N/A";
@@ -30,7 +30,7 @@ public class LogData
     public readonly IReadOnlyList<AbstractExtensionHandler> UsedExtensions;
 
     public IReadOnlyList<string> LogErrors => _logErrors;
-    private readonly List<string> _logErrors = new();
+    private readonly List<string> _logErrors = [];
 
     // Constructors
     internal LogData(EvtcVersionEvent evtcVersion, CombatData combatData, long evtcLogDuration, IReadOnlyList<Player> playerList, IReadOnlyDictionary<uint, AbstractExtensionHandler> extensions, ParserController operation)
@@ -45,7 +45,7 @@ public class LogData
         double unixStart = 0;
         double unixEnd = 0;
         //
-        PointOfViewEvent povEvt = combatData.GetPointOfViewEvent();
+        PointOfViewEvent? povEvt = combatData.GetPointOfViewEvent();
         if (povEvt != null)
         {
             SetPOV(povEvt.PoV, playerList);
@@ -55,7 +55,7 @@ public class LogData
         GW2Build = combatData.GetGW2BuildEvent().Build;
         operation.UpdateProgressWithCancellationCheck("Parsing: GW2 Build " + GW2Build);
         //
-        LanguageEvent langEvt = combatData.GetLanguageEvent();
+        LanguageEvent? langEvt = combatData.GetLanguageEvent();
         if (langEvt != null)
         {
             Language = langEvt.ToString();
@@ -63,7 +63,7 @@ public class LogData
         }
         operation.UpdateProgressWithCancellationCheck("Parsing: Language " + Language);
         //
-        LogStartEvent logStr = combatData.GetLogStartEvent();
+        LogStartEvent? logStr = combatData.GetLogStartEvent();
         if (logStr != null)
         {
             SetLogStart(logStr.ServerUnixTimeStamp);
@@ -71,7 +71,7 @@ public class LogData
             unixStart = logStr.ServerUnixTimeStamp;
         }
         //
-        LogEndEvent logEnd = combatData.GetLogEndEvent();
+        LogEndEvent? logEnd = combatData.GetLogEndEvent();
         if (logEnd != null)
         {
             SetLogEnd(logEnd.ServerUnixTimeStamp);
@@ -98,7 +98,7 @@ public class LogData
         }
         operation.UpdateProgressWithCancellationCheck("Parsing: Log Start " + LogStartStd);
         operation.UpdateProgressWithCancellationCheck("Parsing: Log End " + LogEndStd);
-        InstanceStartEvent instanceStart = combatData.GetInstanceStartEvent();
+        InstanceStartEvent? instanceStart = combatData.GetInstanceStartEvent();
         if (instanceStart != null)
         {
             long instanceStartSeconds = instanceStart.TimeOffsetFromInstanceCreation / 1000;

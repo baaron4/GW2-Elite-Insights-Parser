@@ -142,7 +142,7 @@ internal class Golem : FightLogic
             }
             phases.AddRange(GetPhasesByHealthPercent(log, mainTarget, thresholds));
         }
-        AgentItem pov = log.LogData.PoV;
+        AgentItem? pov = log.LogData.PoV;
         if (pov != null)
         {
             int combatPhase = 0;

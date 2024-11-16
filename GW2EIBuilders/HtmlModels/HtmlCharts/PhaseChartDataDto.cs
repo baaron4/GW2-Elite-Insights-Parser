@@ -5,12 +5,12 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
 internal class PhaseChartDataDto
 {
-    public List<PlayerChartDataDto> Players { get; set; } = new List<PlayerChartDataDto>();
-    public List<TargetChartDataDto> Targets { get; set; } = new List<TargetChartDataDto>();
+    public List<PlayerChartDataDto> Players { get; set; } = [];
+    public List<TargetChartDataDto> Targets { get; set; } = [];
 
-    public List<List<object[]>>? TargetsHealthStatesForCR { get; set; } = null;
-    public List<List<object[]>>? TargetsBreakbarPercentStatesForCR { get; set; } = null;
-    public List<List<object[]>>? TargetsBarrierStatesForCR { get; set; } = null;
+    public List<List<double[]>?>? TargetsHealthStatesForCR { get; set; } = null;
+    public List<List<double[]>?>? TargetsBreakbarPercentStatesForCR { get; set; } = null;
+    public List<List<double[]>?>? TargetsBarrierStatesForCR { get; set; } = null;
 
     public PhaseChartDataDto(ParsedEvtcLog log, PhaseData phase, bool addCRData)
     {
@@ -21,9 +21,9 @@ internal class PhaseChartDataDto
         }
         if (addCRData)
         {
-            TargetsHealthStatesForCR = new List<List<object[]>>();
-            TargetsBreakbarPercentStatesForCR = new List<List<object[]>>();
-            TargetsBarrierStatesForCR = new List<List<object[]>>();
+            TargetsHealthStatesForCR = [];
+            TargetsBreakbarPercentStatesForCR = [];
+            TargetsBarrierStatesForCR = [];
             foreach (AbstractSingleActor target in log.FightData.Logic.Targets)
             {
                 TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));

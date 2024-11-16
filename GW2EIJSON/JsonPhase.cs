@@ -40,7 +40,7 @@ public class JsonPhase
 
     /// <summary>
     /// Indicates that the phase is a breakbar phase \n
-    /// Only one target will be present in <see cref="JsonPhase.Targets"/> \n
+    /// Only one target will be present in <see cref="Targets"/> \n
     /// The targets breakbar will be active 2 seconds after the start of the phase
     /// </summary>
     public bool BreakbarPhase;

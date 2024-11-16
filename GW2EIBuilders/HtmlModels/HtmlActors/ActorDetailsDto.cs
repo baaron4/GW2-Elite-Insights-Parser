@@ -79,9 +79,9 @@ internal class ActorDetailsDto
         return dto;
     }
 
-    static readonly List<List<BuffChartDataDto>> EmptyBuffChartList = new();
-    static readonly List<SkillCastDto>           EmptyRotationList  = new();
-    static readonly List<BuffChartDataDto>       EmptyBoonGraphList = new();
+    static readonly List<List<BuffChartDataDto>> EmptyBuffChartList = [];
+    static readonly List<SkillCastDto>           EmptyRotationList  = [];
+    static readonly List<BuffChartDataDto>       EmptyBoonGraphList = [];
 
     public static ActorDetailsDto BuildTargetData(ParsedEvtcLog log, AbstractSingleActor target, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, bool cr)
     {

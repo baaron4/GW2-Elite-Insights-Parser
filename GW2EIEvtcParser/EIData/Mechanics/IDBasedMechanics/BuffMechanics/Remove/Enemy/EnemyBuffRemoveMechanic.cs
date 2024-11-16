@@ -13,7 +13,7 @@ internal abstract class EnemyBuffRemoveMechanic<T> : BuffRemoveMechanic<T> where
     public EnemyBuffRemoveMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
     }
-    protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    protected override AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
     {
         return MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
     }

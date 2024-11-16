@@ -23,9 +23,7 @@ internal static class MirageHelper
         new BuffOnActorDamageModifier(SharpEdges, "Sharp Edges", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Mirage, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.sPvPWvW),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly List<Buff> Buffs =
     [
@@ -35,7 +33,7 @@ internal static class MirageHelper
         new Buff("Sharp Edges", SharpEdges, Source.Mirage, BuffClassification.Other, BuffImages.MonsterSkill),
     ];
 
-    private static HashSet<int> Minions = new();
+    private static HashSet<int> Minions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return Minions.Contains(id);

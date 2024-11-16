@@ -31,10 +31,10 @@ internal abstract class SkillMechanic : IDBasedMechanic<AbstractHealthDamageEven
         {
             agentItem = agentItem.GetFinalMaster();
         }
-        return agentItem;
+        return agentItem!;
     }
 
-    protected abstract AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
+    protected abstract AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs);
 
     internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
     {
@@ -42,7 +42,7 @@ internal abstract class SkillMechanic : IDBasedMechanic<AbstractHealthDamageEven
         {
             foreach (AbstractHealthDamageEvent ahde in log.CombatData.GetDamageData(skillID))
             {
-                AbstractSingleActor amp = null;
+                AbstractSingleActor? amp = null;
                 if (Keep(ahde, log))
                 {
                     amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);

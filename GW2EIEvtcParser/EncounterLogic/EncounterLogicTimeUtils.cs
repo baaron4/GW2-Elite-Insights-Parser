@@ -89,8 +89,8 @@ internal static class EncounterLogicTimeUtils
             targetExits.Add(exitCombat);
             lastTargetDamages.Add(lastDamage);
         }
-        ExitCombatEvent lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
-        AbstractHealthDamageEvent lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
+        ExitCombatEvent? lastTargetExit = targetExits.Count > 0 ? targetExits.MaxBy(x => x.Time) : null;
+        AbstractHealthDamageEvent? lastDamageTaken = lastTargetDamages.Count > 0 ? lastTargetDamages.MaxBy(x => x.Time) : null;
         // Make sure the last damage has been done before last combat exit
         if (lastTargetExit != null && lastDamageTaken != null && lastTargetExit.Time + ParserHelper.TimeThresholdConstant >= lastDamageTaken.Time)
         {

@@ -62,7 +62,7 @@ internal static class JsonActorBuilder
             var damage1S = new IReadOnlyList<int>[phases.Count];
             var powerDamage1S = new IReadOnlyList<int>[phases.Count];
             var conditionDamage1S = new IReadOnlyList<int>[phases.Count];
-            var breakbarDamage1S = new IReadOnlyList<double>[phases.Count];
+            var breakbarDamage1S = new IReadOnlyList<double>?[phases.Count];
             for (int i = 0; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];

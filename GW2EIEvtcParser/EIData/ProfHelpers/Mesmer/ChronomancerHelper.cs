@@ -31,9 +31,7 @@ internal static class ChronomancerHelper
         new BuffOnActorDamageModifier(Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
 
     internal static readonly List<Buff> Buffs =
@@ -43,7 +41,7 @@ internal static class ChronomancerHelper
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
     ];
 
-    private static HashSet<int> NonCloneMinions = new();
+    private static HashSet<int> NonCloneMinions = [];
     internal static bool IsKnownMinionID(int id)
     {
         return NonCloneMinions.Contains(id);

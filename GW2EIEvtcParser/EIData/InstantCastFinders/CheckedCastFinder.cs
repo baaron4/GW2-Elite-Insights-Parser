@@ -9,7 +9,7 @@ internal abstract class CheckedCastFinder<Event> : InstantCastFinder
 
     protected CheckedCastFinder(long skillID) : base(skillID)
     {
-        _checkers = new List<Checker>();
+        _checkers = [];
     }
 
     internal CheckedCastFinder<Event> UsingChecker(Checker checker)

@@ -170,7 +170,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         phases.AddRange(preBurnPhase);
         phases.Sort((x, y) => x.Start.CompareTo(y.Start));
         // add leftover phases
-        PhaseData cur = null;
+        PhaseData? cur = null;
         int leftOverCount = 1;
         var leftOverPhases = new List<PhaseData>();
         for (int i = 0; i < phases.Count; i++)

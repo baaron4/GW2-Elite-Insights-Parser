@@ -13,7 +13,7 @@ internal abstract class EnemyBuffRemoveSingleMechanic : EnemyBuffRemoveMechanic<
     public EnemyBuffRemoveSingleMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, 0)
     {
     }
-    protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
+    protected override AbstractSingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
     {
         return MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
     }
@@ -25,7 +25,7 @@ internal abstract class EnemyBuffRemoveSingleMechanic : EnemyBuffRemoveMechanic<
             {
                 if (c is AbstractBuffRemoveEvent abre && Keep(abre, log))
                 {
-                    AbstractSingleActor amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
+                    AbstractSingleActor? amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
                     if (amp != null)
                     {
                         if (abre is BuffRemoveAllEvent brae)

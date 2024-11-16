@@ -15,7 +15,7 @@ internal abstract class GenericAttachedDecoration : GenericDecoration
             ConnectedTo = connector;
         }
 
-        public virtual void UsingRotationConnector(RotationConnector rotationConnectedTo)
+        public virtual void UsingRotationConnector(RotationConnector? rotationConnectedTo)
         {
             RotationConnectedTo = rotationConnectedTo;
         }
@@ -26,7 +26,7 @@ internal abstract class GenericAttachedDecoration : GenericDecoration
         /// </summary>
         /// <param name="skill">Skill information</param>
         /// <returns></returns>
-        public virtual void UsingSkillMode(SkillModeDescriptor skill)
+        public virtual void UsingSkillMode(SkillModeDescriptor? skill)
         {
             SkillMode = skill;
         }
@@ -54,7 +54,7 @@ internal abstract class GenericAttachedDecoration : GenericDecoration
         return LineTo(other, color.WithAlpha(opacity).ToString(true));
     }
 
-    public GenericAttachedDecoration UsingRotationConnector(RotationConnector rotationConnectedTo)
+    public GenericAttachedDecoration UsingRotationConnector(RotationConnector? rotationConnectedTo)
     {
         DecorationRenderingData.UsingRotationConnector(rotationConnectedTo);
         return this;
@@ -66,7 +66,7 @@ internal abstract class GenericAttachedDecoration : GenericDecoration
     /// </summary>
     /// <param name="skill">Skill information</param>
     /// <returns></returns>
-    public GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor skill)
+    public GenericAttachedDecoration UsingSkillMode(SkillModeDescriptor? skill)
     {
         DecorationRenderingData.UsingSkillMode(skill);
         return this;

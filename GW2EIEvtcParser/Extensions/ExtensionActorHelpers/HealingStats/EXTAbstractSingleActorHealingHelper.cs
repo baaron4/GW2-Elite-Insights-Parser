@@ -8,10 +8,10 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
 {
     private readonly AbstractSingleActor _actor;
 
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>? _typedSelfHealEvents = new();
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>>? _typedSelfHealEvents = [];
 
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healing1S = new();
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healingReceived1S = new();
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healing1S = [];
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healingReceived1S = [];
 
     private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>? _outgoingHealStats;
     private CachingCollectionWithTarget<EXTFinalIncomingHealingStat>? _incomingHealStats;
@@ -41,7 +41,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (HealEventsByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -63,20 +63,20 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
             throw new InvalidOperationException("Healing Stats extension not present");
         }
 
-        if (this.HealEvents == null)
+        if (HealEvents == null)
         {
-            this.HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_actor.AgentItem).Where(x => x.ToFriendly));
+            HealEvents = new List<EXTAbstractHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_actor.AgentItem).Where(x => x.ToFriendly));
             foreach (var minion in _actor.GetMinions(log).Values)
             {
-                minion.EXTHealing.AppendOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd, this.HealEvents);
+                minion.EXTHealing.AppendOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd, HealEvents);
             }
-            this.HealEvents.SortByTime();
-            this.HealEventsByDst = this.HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
+            HealEvents.SortByTime();
+            HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         if (target != null)
         {
-            if (this.HealEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (HealEventsByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
             }
@@ -84,7 +84,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
             return;
         }
 
-        healEventsList.AddRange(this.HealEvents.Where(x => x.Time >= start && x.Time <= end));
+        healEventsList.AddRange(HealEvents.Where(x => x.Time >= start && x.Time <= end));
 
         return;
     }
@@ -103,7 +103,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
 
         if (target != null)
         {
-            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (HealReceivedEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -163,7 +163,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
 
     internal IReadOnlyList<EXTAbstractHealingEvent> GetJustActorTypedOutgoingHealEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
     {
-        if (!_typedSelfHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
+        if (!_typedSelfHealEvents!.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
             healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>(log);
             _typedSelfHealEvents[healingType] = healEventsPerPhasePerTarget;
@@ -207,7 +207,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
 
     public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, EXTHealingType healingType = EXTHealingType.All)
     {
-        if (!_healing1S.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
+        if (!_healing1S!.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _healing1S[healingType] = graphs;
@@ -223,7 +223,7 @@ public class EXTAbstractSingleActorHealingHelper : EXTActorHealingHelper
 
     public IReadOnlyList<int> Get1SHealingReceivedList(ParsedEvtcLog log, long start, long end, AbstractSingleActor? target, EXTHealingType healingType = EXTHealingType.All)
     {
-        if (!_healingReceived1S.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
+        if (!_healingReceived1S!.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _healingReceived1S[healingType] = graphs;

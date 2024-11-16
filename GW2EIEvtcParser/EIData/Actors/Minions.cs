@@ -46,7 +46,7 @@ public class Minions : AbstractActor
 
         if (target != null)
         {
-            if (DamageEventByDst.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+            if (DamageEventByDst!.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -60,7 +60,7 @@ public class Minions : AbstractActor
     }
     public override IEnumerable<AbstractHealthDamageEvent> GetDamageTakenEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (DamageTakenEvents == null)
+        if (DamageTakenEvents == null || DamageTakenEventsBySrc == null)
         {
             DamageTakenEvents = new List<AbstractHealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
@@ -103,7 +103,7 @@ public class Minions : AbstractActor
 
         if (target != null)
         {
-            if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+            if (BreakbarDamageEventsByDst!.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -131,7 +131,7 @@ public class Minions : AbstractActor
 
         if (target != null)
         {
-            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+            if (BreakbarDamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -163,7 +163,7 @@ public class Minions : AbstractActor
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -191,7 +191,7 @@ public class Minions : AbstractActor
 
         if (target != null)
         {
-            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+            if (IncomingCrowdControlEventsBySrc!.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }

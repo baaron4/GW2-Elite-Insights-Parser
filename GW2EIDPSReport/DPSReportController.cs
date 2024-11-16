@@ -2,7 +2,7 @@
 using GW2EIDPSReport.DPSReportJsons;
 using System.Text.Json;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIDPSReport;
 
 /// <summary>
@@ -302,7 +302,6 @@ public static class DPSReportController
                 finally
                 {
                     requestMessage.Dispose();
-                    forceTimeOutTokenSource.Dispose();
                 }
             }
         }

@@ -134,8 +134,8 @@ internal class KainengOverlook : EndOfDragonsStrike
     {
         if (targets.All(x => x != null))
         {
-            EnterCombatEvent cbtEnter = null;
-            foreach (NPC target in targets)
+            EnterCombatEvent? cbtEnter = null;
+            foreach (AbstractSingleActor target in targets)
             {
                 cbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
                 if (cbtEnter != null)
@@ -238,7 +238,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         }
         else
         {
-            greenEndEffectEvents = new List<EffectEvent>();
+            greenEndEffectEvents = [];
         }
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(p.AgentItem, EffectGUIDs.KainengOverlookSharedDestructionGreen, out var greenApplyEffectEvents))
         {

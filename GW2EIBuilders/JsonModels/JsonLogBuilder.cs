@@ -118,7 +118,7 @@ internal static class JsonLogBuilder
         jsonLog.UploadLinks = uploadLinks;
         jsonLog.Language = log.LogData.Language;
         jsonLog.LanguageID = (byte)log.LogData.LanguageID;
-        jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
+        jsonLog.FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
         jsonLog.IsCM = log.FightData.IsCM || log.FightData.IsLegendaryCM;
         jsonLog.IsLegendaryCM = log.FightData.IsLegendaryCM;
         jsonLog.IsLateStart = log.FightData.IsLateStart;

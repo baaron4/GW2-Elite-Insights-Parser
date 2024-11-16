@@ -339,7 +339,7 @@ internal static class MesmerHelper
             var skill = new SkillModeDescriptor(player, Spec.Mesmer, PortalExeunt, SkillModeCategory.Portal);
             foreach (var group in portalActives)
             {
-                GenericAttachedDecoration first = null;
+                GenericAttachedDecoration? first = null;
                 foreach (EffectEvent effect in group)
                 {
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUses);

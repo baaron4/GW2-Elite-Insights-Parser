@@ -9,11 +9,11 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
 {
     private BuffsTracker? _trackerSource = null;
     private GainComputer? _gainComputerSource = null;
-    internal BuffOnFoeDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
+    internal BuffOnFoeDamageModifier(long id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
 
-    internal BuffOnFoeDamageModifier(HashSet<long> ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, ParserHelper.Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
+    internal BuffOnFoeDamageModifier(HashSet<long> ids, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
 
@@ -47,7 +47,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
 
     protected bool CheckActor(IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource, long time)
     {
-        return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource.GetStack(bgmsSource, time)) > 0.0;
+        return _gainComputerSource == null || _gainComputerSource.ComputeGain(1.0, _trackerSource!.GetStack(bgmsSource, time)) > 0.0;
     }
 
     internal override bool Keep(FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
@@ -65,7 +65,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         IReadOnlyDictionary<long, BuffsGraphModel> bgmsSource = actor.GetBuffGraphs(log);
         if (_trackerSource != null)
         {
-            if (Skip(_trackerSource, bgmsSource, _gainComputerSource))
+            if (Skip(_trackerSource, bgmsSource, _gainComputerSource!))
             {
                 return [];
             }
@@ -75,7 +75,7 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
         var ignoredTargets = new HashSet<AbstractSingleActor>();
         foreach (AbstractHealthDamageEvent evt in typeHits)
         {
-            AbstractSingleActor? target = log.FindActor(damageModifier.GetFoe(evt));
+            AbstractSingleActor target = log.FindActor(damageModifier.GetFoe(evt));
             if (ignoredTargets.Contains(target))
             {
                 continue;

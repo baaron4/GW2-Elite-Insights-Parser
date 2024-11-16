@@ -30,7 +30,7 @@ internal class Deimos : BastionOfThePenitent
         {
         new PlayerDstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Black), "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
         new PlayerDstFirstHitMechanic(RapidDecay, "Rapid Decay", new MechanicPlotlySetting(Symbols.Circle,Colors.Black), "Oil T.","Rapid Decay Trigger (Black expanding oil)", "Black Oil Trigger",0).UsingChecker((ce, log) => {
-            AbstractSingleActor actor = log.FindActor(ce.To);
+            AbstractSingleActor? actor = log.FindActor(ce.To);
             if (actor == null)
             {
                 return false;
@@ -220,7 +220,7 @@ internal class Deimos : BastionOfThePenitent
         }
     }
 
-    private static AgentItem GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
+    private static AgentItem? GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
     {
         CombatItem shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate);
         if (shackledPrisonerMaxHP != null)
@@ -248,7 +248,7 @@ internal class Deimos : BastionOfThePenitent
                 start = Math.Max(start, spawnProtectionRemove.Time);
                 if (start - genericStart > PreEventConsiderationConstant)
                 {
-                    AgentItem shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+                    AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
                     if (shackledPrisoner != null)
                     {
                         CombatItem firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
@@ -292,7 +292,7 @@ internal class Deimos : BastionOfThePenitent
     {
         bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
         bool needsDummy = !needsRefresh;
-        AgentItem shackledPrisoner = GetShackledPrisoner(agentData, combatData);
+        AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
         AgentItem saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
         if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
         {
@@ -326,7 +326,7 @@ internal class Deimos : BastionOfThePenitent
             .Where(x => x.Item3 != null && x.Item3.Type == AgentItem.AgentType.Gadget)
             .FirstOrDefault();
         long deimos10PercentTargetable = long.MaxValue;
-        AgentItem deimosStructBody = null;
+        AgentItem? deimosStructBody = null;
         var gadgetAgents = new HashSet<AgentItem>();
         if (targetable != default)
         {

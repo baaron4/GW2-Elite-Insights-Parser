@@ -321,8 +321,8 @@ internal static class WeaverHelper
             DualAirAttunement,
             DualEarthAttunement
         };
-        HashSet<long> major = null;
-        HashSet<long> minor = null;
+        HashSet<long>? major = null;
+        HashSet<long>? minor = null;
         foreach (BuffApplyEvent c in buffApplies)
         {
             if (duals.Contains(c.BuffID))

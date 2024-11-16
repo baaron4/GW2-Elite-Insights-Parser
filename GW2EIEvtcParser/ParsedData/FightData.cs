@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.ParsedData;
 public class FightData
 {
     // Fields
-    private List<PhaseData> _phases = new();
+    private List<PhaseData> _phases = [];
     public readonly int TriggerID;
     public readonly FightLogic Logic;
     public long FightEnd { get; private set; } = long.MaxValue;

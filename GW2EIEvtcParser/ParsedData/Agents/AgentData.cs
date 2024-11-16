@@ -53,12 +53,12 @@ public class AgentData
         return agent;
     }
 
-    internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, ArcDPSEnums.TrashID ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
+    internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, TrashID ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
     {
         return AddCustomNPCAgent(start, end, name, spec, (int)ID, isFake, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight);
     }
 
-    internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, ArcDPSEnums.TargetID ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
+    internal AgentItem AddCustomNPCAgent(long start, long end, string name, ParserHelper.Spec spec, TargetID ID, bool isFake, ushort toughness = 0, ushort healing = 0, ushort condition = 0, ushort concentration = 0, uint hitboxWidth = 0, uint hitboxHeight = 0)
     {
         return AddCustomNPCAgent(start, end, name, spec, (int)ID, isFake, toughness, healing, condition, concentration, hitboxWidth, hitboxHeight);
     }
@@ -98,29 +98,29 @@ public class AgentData
         return GetNPCsByID(id).Where(x => x.Agent == agent).ToList();
     }
 
-    public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.TrashID id)
+    public IReadOnlyList<AgentItem> GetNPCsByID(TrashID id)
     {
         return GetNPCsByID((int)id);
     }
-    public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.TrashID id, ulong agent)
+    public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(TrashID id, ulong agent)
     {
         return GetNPCsByIDAndAgent((int)id, agent);
     }
 
-    public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.TargetID id)
+    public IReadOnlyList<AgentItem> GetNPCsByID(TargetID id)
     {
         return GetNPCsByID((int)id);
     }
-    public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.TargetID id, ulong agent)
+    public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(TargetID id, ulong agent)
     {
         return GetNPCsByIDAndAgent((int)id, agent);
     }
 
-    public IReadOnlyList<AgentItem> GetNPCsByID(ArcDPSEnums.MinionID id)
+    public IReadOnlyList<AgentItem> GetNPCsByID(MinionID id)
     {
         return GetNPCsByID((int)id);
     }
-    public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(ArcDPSEnums.MinionID id, ulong agent)
+    public IReadOnlyList<AgentItem> GetNPCsByIDAndAgent(MinionID id, ulong agent)
     {
         return GetNPCsByIDAndAgent((int)id, agent);
     }
@@ -135,21 +135,21 @@ public class AgentData
         return new List<AgentItem>();
     }
 
-    public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.TrashID id)
+    public IReadOnlyList<AgentItem> GetGadgetsByID(TrashID id)
     {
         return GetGadgetsByID((int)id);
     }
 
-    public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.TargetID id)
+    public IReadOnlyList<AgentItem> GetGadgetsByID(TargetID id)
     {
         return GetGadgetsByID((int)id);
     }
-    public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.MinionID id)
+    public IReadOnlyList<AgentItem> GetGadgetsByID(MinionID id)
     {
         return GetGadgetsByID((int)id);
     }
 
-    public IReadOnlyList<AgentItem> GetGadgetsByID(ArcDPSEnums.ChestID id)
+    public IReadOnlyList<AgentItem> GetGadgetsByID(ChestID id)
     {
         return GetGadgetsByID((int)id);
     }

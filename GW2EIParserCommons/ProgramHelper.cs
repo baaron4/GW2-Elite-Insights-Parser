@@ -299,7 +299,7 @@ public class ProgramHelper
                                         APIController);
 
             //Process evtc here
-            ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out GW2EIEvtcParser.ParserHelpers.ParsingFailureReason failureReason, !Settings.SingleThreaded && HasFormat());
+            ParsedEvtcLog log = parser.ParseLog(operation, fInfo, out ParsingFailureReason failureReason, !Settings.SingleThreaded && HasFormat());
             if (failureReason != null)
             {
                 failureReason.Throw();

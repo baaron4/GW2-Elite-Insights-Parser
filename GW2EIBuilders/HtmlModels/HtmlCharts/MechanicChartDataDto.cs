@@ -9,7 +9,7 @@ internal class MechanicChartDataDto
     public readonly string Symbol;
     public readonly int Size;
     public readonly string Color;
-    public readonly List<List<List<object>>> Points;
+    public readonly List<List<List<(double time, string? name)>>> Points;
     public readonly bool Visible;
 
     private MechanicChartDataDto(ParsedEvtcLog log, Mechanic mech)
@@ -21,23 +21,23 @@ internal class MechanicChartDataDto
         Points = BuildMechanicGraphPointData(log, log.MechanicData.GetMechanicLogs(log, mech, log.FightData.FightStart, log.FightData.FightEnd), mech.IsEnemyMechanic);
     }
 
-    private static List<List<object>> GetMechanicChartPoints(IReadOnlyList<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
+    private static List<List<(double time, string? name)>> GetMechanicChartPoints(IReadOnlyList<MechanicEvent> mechanicLogs, PhaseData phase, ParsedEvtcLog log, bool enemyMechanic)
     {
-        var res = new List<List<object>>();
+        var res = new List<List<(double time, string? name)>>();
         if (!enemyMechanic)
         {
             var playerIndex = new Dictionary<AbstractSingleActor, int>();
             for (int p = 0; p < log.Friendlies.Count; p++)
             {
                 playerIndex.Add(log.Friendlies[p], p);
-                res.Add(new List<object>());
+                res.Add([]);
             }
             foreach (MechanicEvent ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
             {
                 double time = (ml.Time - phase.Start) / 1000.0;
                 if (playerIndex.TryGetValue(ml.Actor, out int p))
                 {
-                    res[p].Add(time);
+                    res[p].Add((time, null));
                 }
             }
         }
@@ -47,28 +47,28 @@ internal class MechanicChartDataDto
             for (int p = 0; p < phase.AllTargets.Count; p++)
             {
                 targetIndex.Add(phase.AllTargets[p], p);
-                res.Add(new List<object>());
+                res.Add([]);
             }
-            res.Add(new List<object>());
+            res.Add([]);
             foreach (MechanicEvent ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
             {
                 double time = (ml.Time - phase.Start) / 1000.0;
                 if (targetIndex.TryGetValue(ml.Actor, out int p))
                 {
-                    res[p].Add(time);
+                    res[p].Add((time, null));
                 }
                 else
                 {
-                    res[res.Count - 1].Add(new object[] { time, ml.Actor.Character });
+                    res[^1].Add((time, ml.Actor.Character ));
                 }
             }
         }
         return res;
     }
 
-    private static List<List<List<object>>> BuildMechanicGraphPointData(ParsedEvtcLog log, IReadOnlyList<MechanicEvent> mechanicLogs, bool enemyMechanic)
+    private static List<List<List<(double time, string? name)>>> BuildMechanicGraphPointData(ParsedEvtcLog log, IReadOnlyList<MechanicEvent> mechanicLogs, bool enemyMechanic)
     {
-        var list = new List<List<List<object>>>();
+        var list = new List<List<List<(double time, string? name)>>>();
         foreach (PhaseData phase in log.FightData.GetPhases(log))
         {
             list.Add(GetMechanicChartPoints(mechanicLogs, phase, log, enemyMechanic));

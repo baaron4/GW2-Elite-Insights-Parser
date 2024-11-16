@@ -1328,12 +1328,12 @@ public class SkillItem
     public bool IsSwap => ID == WeaponSwap || ElementalistHelper.IsElementalSwap(ID) || RevenantHelper.IsLegendSwap(ID) || HarbingerHelper.IsHarbingerShroudTransform(ID);
     public bool IsDodge(SkillData skillData) => IsAnimatedDodge(skillData) || ID == MirageCloakDodge;
     public bool IsAnimatedDodge(SkillData skillData) => ID == skillData.DodgeId || VindicatorHelper.IsVindicatorDodge(ID);
-    public readonly string Name;
-    public readonly string Icon;
-    private readonly WeaponDescriptor _weaponDescriptor;
+    public readonly string Name = "";
+    public readonly string Icon = "";
+    private readonly WeaponDescriptor? _weaponDescriptor;
     public bool IsWeaponSkill => _weaponDescriptor != null;
-    internal readonly GW2APISkill ApiSkill;
-    private SkillInfoEvent _skillInfo;
+    internal readonly GW2APISkill? ApiSkill;
+    private SkillInfoEvent? _skillInfo;
 
     internal const string DefaultName = "UNKNOWN";
 
@@ -1380,11 +1380,11 @@ public class SkillItem
         AA = (ApiSkill?.Slot == "Weapon_1" || ApiSkill?.Slot == "Downed_1");
         if (AA)
         {
-            if (ApiSkill.Categories != null)
+            if (ApiSkill?.Categories != null)
             {
                 AA = AA && !ApiSkill.Categories.Contains("StealthAttack") && !ApiSkill.Categories.Contains("Ambush"); // Ambush in case one day it's added
             }
-            if (ApiSkill.Description != null)
+            if (ApiSkill?.Description != null)
             {
                 AA = AA && !ApiSkill.Description.Contains("Ambush.");
             }
@@ -1417,7 +1417,7 @@ public class SkillItem
     internal bool EstimateWeapons(WeaponSets weaponSets, int swapped, bool validForCurrentSwap)
     {
         bool keep = WeaponSetIDs.IsWeaponSet(swapped);
-        if (_weaponDescriptor == null || !keep || !validForCurrentSwap)
+        if (_weaponDescriptor == null || !keep || !validForCurrentSwap || ApiSkill == null)
         {
             return false;
         }

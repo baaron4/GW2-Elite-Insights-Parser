@@ -5,9 +5,9 @@ namespace GW2EIEvtcParser.EIData.BuffSourceFinders;
 internal abstract class BuffSourceFinder
 {
     private List<AbstractCastEvent>? _extensionSkills = null;
-    private readonly HashSet<long>? _boonIds = null;
-    protected HashSet<long> ExtensionIDS = new();
-    protected Dictionary<long, HashSet<long>> DurationToIDs = new();
+    private readonly HashSet<long> _boonIds;
+    protected HashSet<long> ExtensionIDS = [];
+    protected Dictionary<long, HashSet<long>> DurationToIDs = [];
     // non trackable times
     protected long EssenceOfSpeed = int.MinValue;
     protected long ImbuedMelodies = int.MinValue;
@@ -22,7 +22,7 @@ internal abstract class BuffSourceFinder
     {
         if (_extensionSkills == null)
         {
-            _extensionSkills = new List<AbstractCastEvent>();
+            _extensionSkills = [];
             foreach (Player p in log.PlayerList)
             {
                 _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != AbstractCastEvent.AnimationStatus.Interrupted));

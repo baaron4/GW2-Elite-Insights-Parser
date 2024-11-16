@@ -544,13 +544,13 @@ internal class HarvestTemple : EndOfDragonsStrike
         //
         int purificationID = 0;
         bool needRedirect = false;
-        (HashSet<ulong> jormagDamagingAgents   , NPC? jormag   ) = (new(), null);
-        (HashSet<ulong> primordusDamagingAgents, NPC? primordus) = (new(), null);
-        (HashSet<ulong> kralkDamagingAgents    , NPC? kralk    ) = (new(), null);
-        (HashSet<ulong> mordDamagingAgents     , NPC? mord     ) = (new(), null);
-        (HashSet<ulong> zhaitanDamagingAgents  , NPC? zhaitan  ) = (new(), null);
-        (HashSet<ulong> soowonDamagingAgents   , NPC? soowon   ) = (new(), null);
-        foreach (NPC target in Targets)
+        (HashSet<ulong> jormagDamagingAgents   , AbstractSingleActor? jormag   ) = ([], null);
+        (HashSet<ulong> primordusDamagingAgents, AbstractSingleActor? primordus) = ([], null);
+        (HashSet<ulong> kralkDamagingAgents    , AbstractSingleActor? kralk    ) = ([], null);
+        (HashSet<ulong> mordDamagingAgents     , AbstractSingleActor? mord     ) = ([], null);
+        (HashSet<ulong> zhaitanDamagingAgents  , AbstractSingleActor? zhaitan  ) = ([], null);
+        (HashSet<ulong> soowonDamagingAgents   , AbstractSingleActor? soowon   ) = ([], null);
+        foreach (AbstractSingleActor target in Targets)
         {
             switch (target.ID)
             {
@@ -649,27 +649,27 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         continue;
                     }
-                    if (jormagDamagingAgents.Any(x => cbt.SrcAgent == x && jormag.FirstAware <= cbt.Time && cbt.Time <= jormag.LastAware))
+                    if (jormag != null && jormagDamagingAgents.Any(x => cbt.SrcAgent == x && jormag.FirstAware <= cbt.Time && cbt.Time <= jormag.LastAware))
                     {
                         cbt.OverrideSrcAgent(jormag.AgentItem.Agent);
                     }
-                    else if (primordusDamagingAgents.Any(x => cbt.SrcAgent == x && primordus.FirstAware <= cbt.Time && cbt.Time <= primordus.LastAware))
+                    else if (primordus != null && primordusDamagingAgents.Any(x => cbt.SrcAgent == x && primordus.FirstAware <= cbt.Time && cbt.Time <= primordus.LastAware))
                     {
                         cbt.OverrideSrcAgent(primordus.AgentItem.Agent);
                     }
-                    else if (kralkDamagingAgents.Any(x => cbt.SrcAgent == x && kralk.FirstAware <= cbt.Time && cbt.Time <= kralk.LastAware))
+                    else if (kralk != null && kralkDamagingAgents.Any(x => cbt.SrcAgent == x && kralk.FirstAware <= cbt.Time && cbt.Time <= kralk.LastAware))
                     {
                         cbt.OverrideSrcAgent(kralk.AgentItem.Agent);
                     }
-                    else if (mordDamagingAgents.Any(x => cbt.SrcAgent == x && mord.FirstAware <= cbt.Time && cbt.Time <= mord.LastAware))
+                    else if (mord != null && mordDamagingAgents.Any(x => cbt.SrcAgent == x && mord.FirstAware <= cbt.Time && cbt.Time <= mord.LastAware))
                     {
                         cbt.OverrideSrcAgent(mord.AgentItem.Agent);
                     }
-                    else if (zhaitanDamagingAgents.Any(x => cbt.SrcAgent == x && zhaitan.FirstAware <= cbt.Time && cbt.Time <= zhaitan.LastAware))
+                    else if (zhaitan != null && zhaitanDamagingAgents.Any(x => cbt.SrcAgent == x && zhaitan.FirstAware <= cbt.Time && cbt.Time <= zhaitan.LastAware))
                     {
                         cbt.OverrideSrcAgent(zhaitan.AgentItem.Agent);
                     }
-                    else if (soowonDamagingAgents.Any(x => cbt.SrcAgent == x && soowon.FirstAware <= cbt.Time && cbt.Time <= soowon.LastAware))
+                    else if (soowon != null && soowonDamagingAgents.Any(x => cbt.SrcAgent == x && soowon.FirstAware <= cbt.Time && cbt.Time <= soowon.LastAware))
                     {
                         cbt.OverrideSrcAgent(soowon.AgentItem.Agent);
                     }

@@ -23,10 +23,10 @@ internal class ActorOrientationDecoration : GenericAttachedDecoration
             RotationConnectedTo = new AgentFacingConnector(agent);
         }
 
-        public override void UsingRotationConnector(RotationConnector rotationConnectedTo)
+        public override void UsingRotationConnector(RotationConnector? rotationConnectedTo)
         {
         }
-        public override void UsingSkillMode(SkillModeDescriptor skill)
+        public override void UsingSkillMode(SkillModeDescriptor? skill)
         {
         }
 

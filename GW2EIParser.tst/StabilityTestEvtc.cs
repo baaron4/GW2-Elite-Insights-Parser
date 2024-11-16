@@ -6,14 +6,14 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIParser.tst;
 
 
 [TestFixture]
 public class StabilityTestEvtc
 {
-    internal class EVTCTestItem
+    internal sealed class EVTCTestItem
     {
         public readonly string File;
         public bool Failed { get; private set; }
@@ -32,10 +32,13 @@ public class StabilityTestEvtc
     {
         try
         {
-            ParsedEvtcLog log = TestHelper.ParseLog(evtcTestItem.File, TestHelper.APIController);
-            TestHelper.JsonString(log);
-            TestHelper.HtmlString(log);
-            TestHelper.CsvString(log);
+            ParsedEvtcLog? log = TestHelper.ParseLog(evtcTestItem.File, TestHelper.APIController);
+            if (log != null)
+            {
+                TestHelper.JsonString(log);
+                TestHelper.HtmlString(log);
+                TestHelper.CsvString(log);
+            }
         }
         catch (ProgramException canc)
         {
@@ -116,7 +119,7 @@ public class StabilityTestEvtc
         var sizeSortedLogFiles = new List<EVTCTestItem>(logFiles);
         for (int i = 0; i < splitCount; i++)
         {
-            splitLogFiles.Add(new List<EVTCTestItem>());
+            splitLogFiles.Add([]);
         }
         sizeSortedLogFiles.Sort((x, y) =>
         {

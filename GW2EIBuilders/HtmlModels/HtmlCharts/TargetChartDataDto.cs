@@ -8,7 +8,7 @@ internal class TargetChartDataDto : ActorChartDataDto
     public readonly IReadOnlyList<int> Total;
     public readonly IReadOnlyList<int> TotalPower;
     public readonly IReadOnlyList<int> TotalCondition;
-    public readonly List<object[]>? BreakbarPercentStates;
+    public readonly List<double[]>? BreakbarPercentStates;
 
     public TargetChartDataDto(ParsedEvtcLog log, PhaseData phase, AbstractSingleActor target) : base(log, phase, target, false)
     {

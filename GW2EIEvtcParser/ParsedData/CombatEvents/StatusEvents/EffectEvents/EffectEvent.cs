@@ -11,7 +11,7 @@ public abstract class EffectEvent : AbstractEffectEvent
     /// <summary>
     /// GUID event of the effect
     /// </summary>
-    public EffectGUIDEvent? GUIDEvent { get; private set; }
+    public EffectGUIDEvent GUIDEvent { get; private set; } = EffectGUIDEvent.DummyEffectGUID;
 
     /// <summary>
     /// End of the effect, provided by an <see cref="EffectEndEvent"/>
@@ -64,7 +64,7 @@ public abstract class EffectEvent : AbstractEffectEvent
         }
         if (associatedBuff != null)
         {
-            BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent)
+            BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent!)
                 .OfType<BuffRemoveAllEvent>()
                 .FirstOrDefault(x => x.Time >= Time);
             if (remove != null)

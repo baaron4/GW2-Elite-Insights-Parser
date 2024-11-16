@@ -17,10 +17,10 @@ internal class EXTBarrierStatsPlayerDetailsDto
     {
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
-            BarrierDistributions = new List<EXTBarrierStatsBarrierDistributionDto>(),
-            BarrierDistributionsTargets = new List<List<EXTBarrierStatsBarrierDistributionDto>>(),
-            IncomingBarrierDistributions = new List<EXTBarrierStatsBarrierDistributionDto>(),
-            Minions = new List<EXTBarrierStatsPlayerDetailsDto>(),
+            BarrierDistributions = [],
+            BarrierDistributionsTargets = [],
+            IncomingBarrierDistributions = [],
+            Minions = [],
         };
         foreach (PhaseData phase in log.FightData.GetPhases(log))
         {
@@ -45,8 +45,8 @@ internal class EXTBarrierStatsPlayerDetailsDto
     {
         var dto = new EXTBarrierStatsPlayerDetailsDto
         {
-            BarrierDistributions = new List<EXTBarrierStatsBarrierDistributionDto>(),
-            BarrierDistributionsTargets = new List<List<EXTBarrierStatsBarrierDistributionDto>>()
+            BarrierDistributions = [],
+            BarrierDistributionsTargets = []
         };
         foreach (PhaseData phase in log.FightData.GetPhases(log))
         {

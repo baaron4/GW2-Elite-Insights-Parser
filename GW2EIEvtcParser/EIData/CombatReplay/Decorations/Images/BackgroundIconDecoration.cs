@@ -29,7 +29,7 @@ internal class BackgroundIconDecoration : GenericIconDecoration
             Opacities = opacities;
             Heights = heights;
         }
-        public override void UsingSkillMode(SkillModeDescriptor skill)
+        public override void UsingSkillMode(SkillModeDescriptor? skill)
         {
         }
 

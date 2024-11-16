@@ -12,8 +12,8 @@ internal class Instance : FightLogic
 {
     public bool StartedLate { get; private set; }
     public bool EndedBeforeExpectedEnd { get; private set; }
-    private readonly List<FightLogic> _subLogics = new();
-    private readonly List<int> _targetIDs = new();
+    private readonly List<FightLogic> _subLogics = [];
+    private readonly List<int> _targetIDs = [];
     public Instance(int id) : base(id)
     {
         Extension = "instance";
@@ -110,7 +110,7 @@ internal class Instance : FightLogic
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        InstanceStartEvent evt = combatData.GetInstanceStartEvent();
+        InstanceStartEvent? evt = combatData.GetInstanceStartEvent();
         if (evt == null)
         {
             return FightData.EncounterStartStatus.Normal;

@@ -107,13 +107,9 @@ internal static class FirebrandHelper
     }
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = new()
-    {
-    };
+    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly List<Buff> Buffs =
     [

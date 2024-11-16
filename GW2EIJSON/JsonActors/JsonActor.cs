@@ -141,7 +141,7 @@ public abstract class JsonActor
     /// If the duration of the phase in seconds is non integer, the last point of this array will correspond to the last point  \n
     /// ex: duration === 15250ms, the array will have 17 elements [0, 1000,...,15000,15250]
     /// </remarks>
-    public IReadOnlyList<IReadOnlyList<double>>? BreakbarDamage1S;
+    public IReadOnlyList<IReadOnlyList<double>?>? BreakbarDamage1S;
 
     /// <summary>
     /// Array of int[2] that represents the number of conditions \n

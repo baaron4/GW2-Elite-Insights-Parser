@@ -13,7 +13,7 @@ partial class AbstractSingleActor
     private Dictionary<string, DamageModifierStat>? ComputeDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         // Check if damage mods against target
-        if (_outgoingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
+        if (_outgoingDamageModifierEventsPerTargets!.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
         {
             var res = new Dictionary<string, DamageModifierStat>();
             foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
@@ -27,23 +27,23 @@ partial class AbstractSingleActor
                     res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
                 }
             }
-            _outgoingDamageModifiersPerTargets.Set(start, end, target, res);
+            _outgoingDamageModifiersPerTargets!.Set(start, end, target, res);
             return res;
         }
         // Check if we already filled the cache, that means no damage modifiers against given target
         else if (_outgoingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, null, out events))
         {
             var res = new Dictionary<string, DamageModifierStat>();
-            _outgoingDamageModifiersPerTargets.Set(start, end, target, res);
+            _outgoingDamageModifiersPerTargets!.Set(start, end, target, res);
             return res;
         }
 
         return null;
     }
 
-    public IReadOnlyDictionary<string, DamageModifierStat>? GetOutgoingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
+        if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
         {
             return new Dictionary<string, DamageModifierStat>();
         }
@@ -97,7 +97,7 @@ partial class AbstractSingleActor
 
 
         var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
-        _outgoingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
+        _outgoingDamageModifierEventsPerTargets!.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
 
         foreach (var modsByActor in damageModifierEvents.GroupBy(x => x.Dst))
         {
@@ -106,7 +106,7 @@ partial class AbstractSingleActor
             _outgoingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), events);
         }
         
-        return ComputeDamageModifierStats(target, log, start, end);
+        return ComputeDamageModifierStats(target, log, start, end)!;
     }
 
     public IReadOnlyCollection<string> GetPresentOutgoingDamageModifier(ParsedEvtcLog log)
@@ -117,7 +117,7 @@ partial class AbstractSingleActor
     private Dictionary<string, DamageModifierStat>? ComputeIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         // Check if damage mods against target
-        if (_incomingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
+        if (_incomingDamageModifierEventsPerTargets!.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
         {
             var res = new Dictionary<string, DamageModifierStat>(events.Count);
             foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
@@ -131,7 +131,7 @@ partial class AbstractSingleActor
                     res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
                 }
             }
-            _incomingDamageModifiersPerTargets.Set(start, end, target, res);
+            _incomingDamageModifiersPerTargets!.Set(start, end, target, res);
 
             return res;
         }
@@ -139,13 +139,13 @@ partial class AbstractSingleActor
         else if (_incomingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, null, out events))
         {
             var res = new Dictionary<string, DamageModifierStat>();
-            _incomingDamageModifiersPerTargets.Set(start, end, target, res);
+            _incomingDamageModifiersPerTargets!.Set(start, end, target, res);
             return res;
         }
         return null;
     }
 
-    public IReadOnlyDictionary<string, DamageModifierStat>? GetIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
+    public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
         {
@@ -208,7 +208,7 @@ partial class AbstractSingleActor
             _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), events);
         }
 
-        return ComputeIncomingDamageModifierStats(target, log, start, end);
+        return ComputeIncomingDamageModifierStats(target, log, start, end)!;
     }
 
     public IReadOnlyCollection<string> GetPresentIncomingDamageModifier(ParsedEvtcLog log)

@@ -132,7 +132,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         SkillItem claimSkill = skillData.Get(ClaimSAK);
         SkillItem dispelSkill = skillData.Get(DispelSAK);
 
-        if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerClaimMarker, out IReadOnlyList<EffectEvent> claims))
+        if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerClaimMarker, out var claims))
         {
             skillData.NotAccurate.Add(ClaimSAK);
             foreach (EffectEvent effect in claims)
@@ -145,7 +145,7 @@ internal class MursaatOverseer : BastionOfThePenitent
             }
         }
 
-        if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerDispelProjectile, out IReadOnlyList<EffectEvent> dispels))
+        if (combatData.TryGetEffectEventsByGUID(EffectGUIDs.MursaarOverseerDispelProjectile, out var dispels))
         {
             skillData.NotAccurate.Add(DispelSAK);
             foreach (EffectEvent effect in dispels)

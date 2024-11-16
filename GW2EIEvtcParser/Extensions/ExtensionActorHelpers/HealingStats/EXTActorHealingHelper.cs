@@ -12,8 +12,8 @@ public abstract class EXTActorHealingHelper
     protected Dictionary<AgentItem, List<EXTAbstractHealingEvent>>? HealReceivedEventsBySrc;
 
     //TODO(Rennorb) @perf
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedHealEvents = new ();
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedIncomingHealEvents = new();
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedHealEvents = [];
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTAbstractHealingEvent>>> _typedIncomingHealEvents = [];
 
     internal EXTActorHealingHelper()
     {

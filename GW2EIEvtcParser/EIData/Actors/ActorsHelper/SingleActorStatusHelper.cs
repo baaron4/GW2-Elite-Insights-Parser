@@ -128,13 +128,13 @@ partial class AbstractSingleActor
         {
             EstimateWeapons(log);
         }
-        return _weaponSets;
+        return _weaponSets!;
     }
 
     private void EstimateWeapons(ParsedEvtcLog log)
     {
         _weaponSets = new WeaponSets();
-        if (!(this is AbstractPlayer))
+        if (this is not AbstractPlayer)
         {
             return;
         }
@@ -177,7 +177,7 @@ partial class AbstractSingleActor
         {
             SetDeathRecaps(log);
         }
-        return _deathRecaps;
+        return _deathRecaps!;
     }
     private void SetDeathRecaps(ParsedEvtcLog log)
     {

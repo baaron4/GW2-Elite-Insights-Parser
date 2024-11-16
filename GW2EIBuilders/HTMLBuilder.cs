@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using Tracing;
 using GW2EIEvtcParser.EIData;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIBuilders;
 
 // compile-time generated serialization logic
@@ -49,8 +49,8 @@ public class HTMLBuilder
     private readonly bool _cr;
     private readonly bool _light;
     private readonly bool _externalScripts;
-    private readonly string _externalScriptsPath;
-    private readonly string _externalScriptsCdn;
+    private readonly string? _externalScriptsPath;
+    private readonly string? _externalScriptsCdn;
     private readonly bool _compressJson;
 
     private readonly string[] _uploadLink;
@@ -207,7 +207,7 @@ public class HTMLBuilder
         return;
     }
 
-    private static string CreateAssetFile(string externalPath, string cdnPath, string fileName, string content)
+    private static string CreateAssetFile(string? externalPath, string? cdnPath, string fileName, string content)
     {
         bool externalNull = string.IsNullOrEmpty(externalPath);
         bool cdnNull = string.IsNullOrEmpty(cdnPath);
@@ -250,7 +250,7 @@ public class HTMLBuilder
         return "file://" + filePath;
     }
 
-    private string BuildCombatReplayJS(string externalPath, string cdnPath)
+    private string BuildCombatReplayJS(string? externalPath, string? cdnPath)
     {
         if (!_cr)
         {
@@ -271,7 +271,7 @@ public class HTMLBuilder
         }
     }
 
-    private string BuildHealingExtensionJS(string externalPath, string cdnPath)
+    private string BuildHealingExtensionJS(string? externalPath, string? cdnPath)
     {
         if (!_log.CombatData.HasEXTHealing)
         {
@@ -292,7 +292,7 @@ public class HTMLBuilder
         }
     }
 
-    private string BuildCss(string externalPath, string cdnPath)
+    private string BuildCss(string? externalPath, string? cdnPath)
     {
         string scriptContent = Properties.Resources.css;
         bool externalNull = string.IsNullOrEmpty(externalPath);
@@ -309,7 +309,7 @@ public class HTMLBuilder
         }
     }
 
-    private string BuildEIJs(string externalPath, string cdnPath)
+    private string BuildEIJs(string? externalPath, string? cdnPath)
     {
         string scriptContent = _eiJS;
         bool externalNull = string.IsNullOrEmpty(externalPath);

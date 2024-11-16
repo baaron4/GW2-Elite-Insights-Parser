@@ -20,7 +20,7 @@ internal abstract class ShatteredObservatory : FractalLogic
     {
         if (target == null)
         {
-            return new HashSet<AgentItem>();
+            return [];
         }
         var participatingPlayerAgents = new HashSet<AgentItem>(combatData.GetDamageTakenData(target.AgentItem).Where(x => playerAgents.Contains(x.From.GetFinalMaster())).Select(x => x.From.GetFinalMaster()));
         participatingPlayerAgents.UnionWith(combatData.GetDamageData(target.AgentItem).Where(x => playerAgents.Contains(x.To.GetFinalMaster())).Select(x => x.To.GetFinalMaster()));
@@ -64,14 +64,14 @@ internal abstract class ShatteredObservatory : FractalLogic
     protected void AddCorporealReassignmentDecorations(ParsedEvtcLog log)
     {
         // Corporeal Reassignment domes & explosions
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentDome, out IReadOnlyList<EffectEvent> domes))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentDome, out var domes))
         {
             foreach (EffectEvent effect in domes)
             {
                 EnvironmentDecorations.Add(new CircleDecoration(220, effect.ComputeDynamicLifespan(log, 0), Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingFilled(false));
             }
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out IReadOnlyList<EffectEvent> domeExplosions))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosionDome, out var domeExplosions))
         {
             foreach (EffectEvent effect in domeExplosions)
             {
@@ -79,7 +79,7 @@ internal abstract class ShatteredObservatory : FractalLogic
                 EnvironmentDecorations.Add(new CircleDecoration(220, lifespan, Colors.LightBlue, 0.4, new PositionConnector(effect.Position)).UsingGrowingEnd(lifespan.end));
             }
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out IReadOnlyList<EffectEvent> explosions))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CorporealReassignmentExplosion1, out var explosions))
         {
             foreach (EffectEvent effect in explosions)
             {

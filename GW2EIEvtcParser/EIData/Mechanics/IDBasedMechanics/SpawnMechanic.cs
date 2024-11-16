@@ -21,7 +21,7 @@ internal class SpawnMechanic : IDBasedMechanic<AbstractSingleActor>
         {
             foreach (AgentItem a in log.AgentData.GetNPCsByID((int)mechanicID))
             {
-                AbstractSingleActor amp = MechanicHelper.FindEnemyActor(log, a, regroupedMobs);
+                AbstractSingleActor? amp = MechanicHelper.FindEnemyActor(log, a, regroupedMobs);
                 if (amp != null && Keep(amp, log))
                 {
                     InsertMechanic(log, mechanicLogs, a.FirstAware, amp);

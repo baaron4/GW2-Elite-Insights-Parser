@@ -149,7 +149,7 @@ internal class ValeGuardian : SpiritVale
     {
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out IReadOnlyList<EffectEvent> distributedMagicEvents))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianDistributedMagic, out var distributedMagicEvents))
         {
             int distributedMagicDuration = 6700;
             //knownEffectsIDs.Add(distributedMagicGUIDEvent.ContentID);
@@ -163,7 +163,7 @@ internal class ValeGuardian : SpiritVale
                 EnvironmentDecorations.Add(circle.Copy().UsingGrowingEnd(expectedEnd));
             }
         }
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out IReadOnlyList<EffectEvent> magicSpikeEvents))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.ValeGuardianMagicSpike, out var magicSpikeEvents))
         {
             //knownEffectsIDs.Add(magicSpikeGUIDEvent.ContentID);
             foreach (EffectEvent magicSpike in magicSpikeEvents)

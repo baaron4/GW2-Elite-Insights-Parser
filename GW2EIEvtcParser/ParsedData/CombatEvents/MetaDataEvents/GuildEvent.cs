@@ -54,5 +54,5 @@ public class GuildEvent : AbstractMetaDataEvent
         _anomymous = true;
     }
 
-    public string APIString => _anomymous ? null : _guildKey;
+    public string APIString => _anomymous ? "" : _guildKey;
 }

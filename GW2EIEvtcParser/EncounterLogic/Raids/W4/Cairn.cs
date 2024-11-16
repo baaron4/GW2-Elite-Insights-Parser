@@ -93,7 +93,7 @@ internal class Cairn : BastionOfThePenitent
     {
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDisplacement, out IReadOnlyList<EffectEvent> displacementEffects))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.CairnDisplacement, out var displacementEffects))
         {
             foreach (EffectEvent displacement in displacementEffects)
             {

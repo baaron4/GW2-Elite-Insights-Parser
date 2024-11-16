@@ -23,8 +23,8 @@ public abstract class AbstractActor
     // Damage
     protected List<AbstractHealthDamageEvent>? DamageEvents;
     protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>>? DamageEventByDst;
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageEvents = new();
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageTakenEvents = new();
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageEvents = [];
+    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedHitDamageTakenEvents = [];
     protected List<AbstractHealthDamageEvent>? DamageTakenEvents;
     protected Dictionary<AgentItem, List<AbstractHealthDamageEvent>>? DamageTakenEventsBySrc;
     // Breakbar Damage
@@ -197,6 +197,6 @@ public static partial class ListExt
 {
     public static void SortByFirstAware<T>(this List<T> list)  where T : AbstractActor
     {
-        list.Sort((a, b) => (int)(a.FirstAware - b.FirstAware));
+        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.FirstAware.CompareTo(b.FirstAware));
     }
 }

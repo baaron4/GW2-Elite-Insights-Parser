@@ -503,7 +503,7 @@ internal class Skorvald : ShatteredObservatory
         base.ComputeEnvironmentCombatReplayDecorations(log);
 
         // Mist Bomb - Both for Skorvald and Flux Anomalies
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out IReadOnlyList<EffectEvent> mistBombs))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.MistBomb, out var mistBombs))
         {
             foreach (EffectEvent effect in mistBombs)
             {
@@ -516,7 +516,7 @@ internal class Skorvald : ShatteredObservatory
         AddDistanceCorrectedOrbDecorations(log, EnvironmentDecorations, EffectGUIDs.SolarBoltIndicators, TargetID.Skorvald, 310, 1800, 1300);
 
         // Solar Bolt - Damage
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SkorvaldSolarBoltDamage, out IReadOnlyList<EffectEvent> solarBolts))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.SkorvaldSolarBoltDamage, out var solarBolts))
         {
             foreach (EffectEvent effect in solarBolts)
             {
@@ -526,7 +526,7 @@ internal class Skorvald : ShatteredObservatory
         }
 
         // Solar Cyclone
-        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KickGroundEffect, out IReadOnlyList<EffectEvent> kickEffects))
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.KickGroundEffect, out var kickEffects))
         {
             foreach (EffectEvent effect in kickEffects)
             {

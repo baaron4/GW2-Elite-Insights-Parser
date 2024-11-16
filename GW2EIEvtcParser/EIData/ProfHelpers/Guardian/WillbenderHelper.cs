@@ -11,9 +11,7 @@ namespace GW2EIEvtcParser.EIData;
 internal static class WillbenderHelper
 {
 
-    internal static readonly List<InstantCastFinder> InstantCastFinder = new()
-    {
-    };
+    internal static readonly List<InstantCastFinder> InstantCastFinder = [];
 
     internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
     [

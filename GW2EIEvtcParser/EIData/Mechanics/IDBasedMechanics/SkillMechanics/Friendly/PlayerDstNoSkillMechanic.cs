@@ -36,7 +36,7 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
                 {
                     time = lastTime;
                 }
-                AbstractSingleActor amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
+                AbstractSingleActor? amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
                 if (amp != null)
                 {
                     if (regroupedSkillDst.TryGetValue(time, out HashSet<AbstractSingleActor> set))
@@ -55,7 +55,7 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
         var regroupedNeverSkillDst = new Dictionary<long, HashSet<AbstractSingleActor>>();
         foreach (KeyValuePair<long, HashSet<AbstractSingleActor>> pair in regroupedSkillDst)
         {
-            regroupedNeverSkillDst[pair.Key] = new HashSet<AbstractSingleActor>();
+            regroupedNeverSkillDst[pair.Key] = [];
             foreach (AbstractSingleActor p in allPlayers.Except(pair.Value))
             {
                 if (!regroupedSkillDst.Any(x => x.Value != pair.Value && x.Value.Contains(p)))

@@ -21,8 +21,8 @@ public abstract partial class AbstractSingleActor : AbstractActor
     // Minions
     private Dictionary<long, Minions>? _minions;
     // Replay
-    private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = new();
-    protected CombatReplay? CombatReplay;
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<AbstractHealthDamageEvent>>> _typedSelfHitDamageEvents = [];
+    protected CombatReplay CombatReplay;
     // Statistics
     private CachingCollectionWithTarget<FinalDPS>? _dpsStats;
     private CachingCollectionWithTarget<FinalDefenses>? _defenseStats;
@@ -174,7 +174,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
     {
         if (_minions == null)
         {
-            _minions = new Dictionary<long, Minions>();
+            _minions = [];
             // npcs, species id based
             var combatMinion = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.Master != null && x.GetFinalMaster() == AgentItem).ToList();
             var auxMinions = new Dictionary<long, Minions>();
@@ -603,9 +603,9 @@ public abstract partial class AbstractSingleActor : AbstractActor
         return value;
     }
 
-    public FinalDefensesAll? GetDefenseStats(ParsedEvtcLog log, long start, long end)
+    public FinalDefensesAll GetDefenseStats(ParsedEvtcLog log, long start, long end)
     {
-        return GetDefenseStats(null, log, start, end) as FinalDefensesAll;
+        return (GetDefenseStats(null, log, start, end) as FinalDefensesAll)!;
     }
 
     // Gameplay Stats
@@ -635,9 +635,9 @@ public abstract partial class AbstractSingleActor : AbstractActor
     }
 
     // Support stats
-    public FinalSupportAll? GetSupportStats(ParsedEvtcLog log, long start, long end)
+    public FinalSupportAll GetSupportStats(ParsedEvtcLog log, long start, long end)
     {
-        return GetSupportStats(null, log, start, end) as FinalSupportAll;
+        return (GetSupportStats(null, log, start, end) as FinalSupportAll)!;
     }
 
     public FinalSupport GetSupportStats(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
@@ -668,7 +668,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
     #region DAMAGE
     public override IEnumerable<AbstractHealthDamageEvent> GetDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (DamageEvents == null)
+        if (DamageEvents == null || DamageEventByDst == null)
         {
             DamageEvents = new List<AbstractHealthDamageEvent>(log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly));
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
@@ -711,7 +711,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
         if (target != null)
         {
-            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
+            if (DamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out List<AbstractHealthDamageEvent> list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -728,7 +728,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
     /// <summary>
     /// cached method for damage modifiers
     /// </summary>
-    internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
+    internal IReadOnlyList<AbstractHealthDamageEvent> GetJustActorHitDamageEvents(AbstractSingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
     {
         if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<AbstractHealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
         {
@@ -768,7 +768,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
         if (target != null)
         {
-            if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageEventsByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -792,7 +792,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
         if (target != null)
         {
-            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -832,7 +832,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -856,7 +856,7 @@ public abstract partial class AbstractSingleActor : AbstractActor
 
         if (target != null)
         {
-            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out var list))
+            if (IncomingCrowdControlEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;

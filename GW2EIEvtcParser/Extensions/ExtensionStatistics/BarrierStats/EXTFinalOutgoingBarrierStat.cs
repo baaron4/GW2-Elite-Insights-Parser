@@ -14,7 +14,7 @@ public class EXTFinalOutgoingBarrierStat
     private readonly int ActorDownedBps;
     private readonly int ActorDownedBarrier;
 
-    internal EXTFinalOutgoingBarrierStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor target)
+    internal EXTFinalOutgoingBarrierStat(ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? target)
     {
         (Barrier, DownedBarrier) = ComputeBarrierFrom(actor.EXTBarrier.GetOutgoingBarrierEvents(target, log, start, end));
         (ActorBarrier, ActorDownedBarrier) = ComputeBarrierFrom(actor.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, start, end));

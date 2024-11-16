@@ -11,7 +11,7 @@ internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
     // Spec specific checks
     protected override int CouldBeEssenceOfSpeed(AgentItem dst, long buffID, long time, long extension, ParsedEvtcLog log)
     {
-        BuffInfoEvent buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
+        var buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
         if (buffDescription != null && buffDescription.DurationCap == 0)
         {
             return base.CouldBeEssenceOfSpeed(dst, buffID, time, extension, log);
@@ -40,7 +40,7 @@ internal class BuffSourceFinder20210511 : BuffSourceFinder20191001
 
     protected override HashSet<long> GetIDs(ParsedEvtcLog log, long buffID, long extension)
     {
-        BuffInfoEvent buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
+        var buffDescription = log.CombatData.GetBuffInfoEvent(buffID);
         if (buffDescription != null && buffDescription.DurationCap == 0)
         {
             return base.GetIDs(log, buffID, extension);

@@ -39,7 +39,7 @@ public class Buff : IVersionable
     public readonly string Name;
     public readonly long ID;
     public readonly BuffClassification Classification;
-    public readonly ParserHelper.Source Source;
+    public readonly Source Source;
     public readonly BuffStackType StackType;
     public BuffType Type => this.StackType switch
     {
@@ -71,7 +71,7 @@ public class Buff : IVersionable
     /// <param name="capacity">Maximun amount of buff in stack</param>
     /// <param name="nature">Nature of the buff, dictates in which category the buff will appear <see cref="BuffClassification"/></param>
     /// <param name="link">URL to the icon of the buff</param>
-    internal Buff(string name, long id, ParserHelper.Source source, BuffStackType type, int capacity, BuffClassification nature, string link)
+    internal Buff(string name, long id, Source source, BuffStackType type, int capacity, BuffClassification nature, string link)
     {
         Name = name;
         ID = id;
@@ -82,7 +82,7 @@ public class Buff : IVersionable
         Link = link;
     }
 
-    internal Buff(string name, long id, ParserHelper.Source source, BuffClassification nature, string link) : this(name, id, source, BuffStackType.Force, 1, nature, link)
+    internal Buff(string name, long id, Source source, BuffClassification nature, string link) : this(name, id, source, BuffStackType.Force, 1, nature, link)
     {
     }
 

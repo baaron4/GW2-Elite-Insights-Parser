@@ -320,7 +320,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         {
             tormentedAgents.AddRange(log.AgentData.GetNPCsByID(tormentedID));
         }
-        tormentedAgents = tormentedAgents.OrderBy(x => x.FirstAware).ToList();
+        tormentedAgents.SortByFirstAware();
         var tormentedGroups = new List<List<AgentItem>>();
         var processedAgents = new HashSet<AgentItem>();
         foreach (AgentItem tormentedAgent in tormentedAgents)

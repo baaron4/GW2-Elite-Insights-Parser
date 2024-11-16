@@ -20,7 +20,7 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
     {
         foreach (var guid in MechanicIDs)
         {
-            if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> effects))
+            if (log.CombatData.TryGetEffectEventsByGUID(guid, out var effects))
             {
                 foreach (EffectEvent effectEvent in effects)
                 {
@@ -38,18 +38,22 @@ internal abstract class EffectMechanic : StringBasedMechanic<EffectEvent>
     {
         foreach (var guid in MechanicIDs)
         {
-            if (log.CombatData.TryGetEffectEventsByGUID(guid, out IReadOnlyList<EffectEvent> effects))
+            if (log.CombatData.TryGetEffectEventsByGUID(guid, out var effects))
             {
                 foreach (EffectEvent effectEvent in effects)
                 {
                     AgentItem agentItem = GetAgentItem(effectEvent, log.AgentData);
                     if (agentItem.IsSpecies(ArcDPSEnums.TrashID.Environment) && Keep(effectEvent, log))
                     {
-                        InsertMechanic(log, mechanicLogs, effectEvent.Time, log.FindActor(agentItem, true));
+                        AbstractSingleActor? actor = log.FindActor(agentItem, true);
+                        if (actor != null)
+                        {
+                            InsertMechanic(log, mechanicLogs, effectEvent.Time, actor);
+                        }
                     }
                     else
                     {
-                        AbstractSingleActor actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
+                        AbstractSingleActor? actor = MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
                         if (actor != null && Keep(effectEvent, log))
                         {
                             InsertMechanic(log, mechanicLogs, effectEvent.Time, actor);

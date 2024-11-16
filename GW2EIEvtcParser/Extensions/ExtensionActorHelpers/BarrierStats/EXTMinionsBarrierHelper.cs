@@ -29,7 +29,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierEventsByDst.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
+            if (BarrierEventsByDst!.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -57,7 +57,7 @@ public class EXTMinionsBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierReceivedEventsBySrc.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
+            if (BarrierReceivedEventsBySrc!.TryGetValue(target.AgentItem, out List<EXTAbstractBarrierEvent> list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }

@@ -31,7 +31,7 @@ public class EffectEventCBTS45 : EffectEvent
     {
         if (associatedBuff != null)
         {
-            BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent)
+            BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent!)
                 .OfType<BuffRemoveAllEvent>()
                 .FirstOrDefault(x => x.Time >= Time);
             if (remove != null)

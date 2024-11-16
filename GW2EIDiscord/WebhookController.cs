@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Webhook;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIDiscord;
 
 public static class WebhookController

@@ -24,7 +24,7 @@ internal class BuffStackItem
         }
     }
 
-    public readonly List<(AgentItem src, long value)> Extensions = new();
+    public readonly List<(AgentItem src, long value)> Extensions = [];
 
     public BuffStackItem(long start, long boonDuration, AgentItem src, AgentItem seedSrc, bool isExtension, long stackID)
     {

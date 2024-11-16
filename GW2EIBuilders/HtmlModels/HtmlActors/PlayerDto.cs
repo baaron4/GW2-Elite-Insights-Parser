@@ -15,10 +15,10 @@ internal class PlayerDto : ActorDto
 
     public bool IsCommander;
     public List<string[]>? CommanderStates;
-    public readonly List<string> L1Set = new();
-    public readonly List<string> L2Set = new();
-    public readonly List<string> A1Set = new();
-    public readonly List<string> A2Set = new();
+    public readonly List<string> L1Set = [];
+    public readonly List<string> L2Set = [];
+    public readonly List<string> A1Set = [];
+    public readonly List<string> A2Set = [];
     public string ColTarget;
     public string ColCleave;
     public string ColTotal;

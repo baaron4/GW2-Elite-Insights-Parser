@@ -16,7 +16,7 @@ internal class BuffDto : AbstractSkillDto
         Stacking = (buff.Type == Buff.BuffType.Intensity);
         Consumable = (buff.Classification == Buff.BuffClassification.Nourishment || buff.Classification == Buff.BuffClassification.Enhancement || buff.Classification == Buff.BuffClassification.OtherConsumable);
         FightSpecific = (buff.Source == ParserHelper.Source.FightSpecific || buff.Source == ParserHelper.Source.FractalInstability);
-        BuffInfoEvent buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
+        BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(buff.ID);
         if (buffInfoEvent != null)
         {
             var descriptions = new List<string>() {

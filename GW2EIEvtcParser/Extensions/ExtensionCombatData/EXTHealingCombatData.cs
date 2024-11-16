@@ -10,7 +10,7 @@ public class EXTHealingCombatData
     private readonly Dictionary<AgentItem, List<EXTAbstractHealingEvent>> _healReceivedData;
     private readonly Dictionary<long, List<EXTAbstractHealingEvent>> _healDataById;
 
-    private readonly Dictionary<long, EXTHealingType> EncounteredIDs = new(); //TODO(Rennorb) @perf
+    private readonly Dictionary<long, EXTHealingType> EncounteredIDs = []; //TODO(Rennorb) @perf
 
     private readonly IReadOnlyCollection<long> _hybridHealIDs;
 

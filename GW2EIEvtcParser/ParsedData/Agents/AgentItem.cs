@@ -353,7 +353,11 @@ public class AgentItem
     /// </summary>
     public bool HasBuff(ParsedEvtcLog log, long buffId, long time, long window = 0)
     {
-        AbstractSingleActor actor = log.FindActor(this);
+        AbstractSingleActor? actor = log.FindActor(this);
+        if (actor == null)
+        {
+            return false;
+        }
         return actor.HasBuff(log, buffId, time, window);
     }
 
@@ -563,5 +567,10 @@ public static partial class ListExt
             }
         }
         return result.Agent;
+    }
+
+    public static void SortByFirstAware<T>(this List<T> list) where T : AgentItem
+    {
+        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.FirstAware.CompareTo(b.FirstAware));
     }
 }

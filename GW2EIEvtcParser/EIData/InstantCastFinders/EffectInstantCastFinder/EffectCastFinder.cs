@@ -17,7 +17,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 
     protected AgentItem? GetAgent(EffectEvent effectEvent)
     {
-        return Minions ? GetKeyAgent(effectEvent).GetFinalMaster() : GetKeyAgent(effectEvent);
+        return Minions ? GetKeyAgent(effectEvent)?.GetFinalMaster() : GetKeyAgent(effectEvent);
     }
 
     protected virtual AgentItem? GetKeyAgent(EffectEvent effectEvent)
@@ -133,7 +133,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
             var effects = combatData.GetEffectEventsByEffectID(effectGUIDEvent.ContentID).GroupBy(GetAgent);
             foreach (var group in effects)
             {
-                if (group.Key == ParserHelper._unknownAgent)
+                if (group.Key == _unknownAgent)
                 {
                     continue;
                 }
@@ -149,7 +149,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                         }
                         lastTime = effectEvent.Time;
                         var caster = group.Key;
-                        if (_speciesId > 0 && caster.IsUnamedSpecies())
+                        if (_speciesId > 0 && caster!.IsUnamedSpecies())
                         {
                             AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
                             if (agent != null)
@@ -157,7 +157,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                                 caster = agent;
                             }
                         }
-                        res.Add(new InstantCastEvent(GetTime(effectEvent, caster, combatData), skillData.Get(SkillID), caster));
+                        res.Add(new InstantCastEvent(GetTime(effectEvent, caster!, combatData), skillData.Get(SkillID), caster!));
                     }
                 }
             }

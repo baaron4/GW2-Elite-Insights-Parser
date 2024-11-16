@@ -36,7 +36,7 @@ internal abstract class BuffSimulatorID(ParsedEvtcLog log, Buff buff) : Abstract
         }
     }
 
-    protected readonly List<BuffStackItemID> BuffStack = new();
+    protected readonly List<BuffStackItemID> BuffStack = [];
 
     protected override void AfterSimulate()
     {

@@ -37,7 +37,7 @@ public class CombatData
     private readonly Dictionary<AgentItem, List<AbstractHealthDamageEvent>> _damageTakenData;
     private readonly Dictionary<AgentItem, List<BreakbarDamageEvent>> _breakbarDamageTakenData;
     private readonly Dictionary<AgentItem, List<CrowdControlEvent>> _crowControlTakenData;
-    private readonly List<RewardEvent> _rewardEvents = new();
+    private readonly List<RewardEvent> _rewardEvents = [];
     // EXTENSIONS
     public EXTHealingCombatData EXTHealingCombatData { get; internal set; }
     public EXTBarrierCombatData EXTBarrierCombatData { get; internal set; }
@@ -295,14 +295,14 @@ public class CombatData
             bool setDeads = false;
             if (!_statusEvents.DeadEvents.TryGetValue(agent, out var agentDeaths))
             {
-                agentDeaths = new();
+                agentDeaths = [];
                 setDeads = true;
             }
 
             bool setDowns = false;
             if (!_statusEvents.DownEvents.TryGetValue(agent, out var agentDowns))
             {
-                agentDowns = new();
+                agentDowns = [];
                 setDowns = true;
             }
 
@@ -523,8 +523,8 @@ public class CombatData
         _weaponSwapData = wepSwaps.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         _animatedCastData = animatedCastData.GroupBy(x => x.Caster).ToDictionary(x => x.Key, x => x.ToList());
         //TODO(Rennorb) @perf
-        _instantCastData = new();
-        _instantCastDataById = new();
+        _instantCastData = [];
+        _instantCastDataById = [];
         _animatedCastDataById = animatedCastData.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
         //
         operation.UpdateProgressWithCancellationCheck("Parsing: Creating Buff Events");
@@ -655,17 +655,17 @@ public class CombatData
         return _statusEvents.MaxHealthUpdateEvents.GetValueOrEmpty(src);
     }
 
-    public PointOfViewEvent GetPointOfViewEvent()
+    public PointOfViewEvent? GetPointOfViewEvent()
     {
         return _metaDataEvents.PointOfViewEvent;
     }
 
     public EvtcVersionEvent GetEvtcVersionEvent()
     {
-        return _metaDataEvents.EvtcVersionEvent;
+        return _metaDataEvents.EvtcVersionEvent!;
     }
 
-    public FractalScaleEvent GetFractalScaleEvent()
+    public FractalScaleEvent? GetFractalScaleEvent()
     {
         return _metaDataEvents.FractalScaleEvent;
     }
@@ -730,7 +730,7 @@ public class CombatData
     /// <param name="markerEvents">Found marker events</param>
     public bool TryGetMarkerEventsBySrcWithGUID(AgentItem agent, GUID marker, [NotNullWhen(true)] out IReadOnlyList<MarkerEvent>? markerEvents)
     {
-        if (TryGetMarkerEventsByGUID(marker, out IReadOnlyList<MarkerEvent> markers))
+        if (TryGetMarkerEventsByGUID(marker, out var markers))
         {
             markerEvents = markers.Where(effect => effect.Src == agent).ToList();
             return true;
@@ -763,17 +763,17 @@ public class CombatData
         return _metaDataEvents.GW2BuildEvent;
     }
 
-    public LanguageEvent GetLanguageEvent()
+    public LanguageEvent? GetLanguageEvent()
     {
         return _metaDataEvents.LanguageEvent;
     }
 
-    public InstanceStartEvent GetInstanceStartEvent()
+    public InstanceStartEvent? GetInstanceStartEvent()
     {
         return _metaDataEvents.InstanceStartEvent;
     }
 
-    public LogStartEvent GetLogStartEvent()
+    public LogStartEvent? GetLogStartEvent()
     {
         return _metaDataEvents.LogStartEvent;
     }
@@ -783,7 +783,7 @@ public class CombatData
         return _metaDataEvents.LogNPCUpdateEvents;
     }
 
-    public LogEndEvent GetLogEndEvent()
+    public LogEndEvent? GetLogEndEvent()
     {
         return _metaDataEvents.LogEndEvent;
     }
@@ -846,7 +846,7 @@ public class CombatData
     /// <summary>
     /// Returns list of buff events applied on agent for given id
     /// </summary>
-    public IReadOnlyList<AbstractBuffEvent> GetBuffDataByIDByDst(long buffID, AgentItem? dst)
+    public IReadOnlyList<AbstractBuffEvent> GetBuffDataByIDByDst(long buffID, AgentItem dst)
     {
         if (_buffDataByIDByDst.TryGetValue(buffID, out var agentDict))
         {
@@ -1181,7 +1181,7 @@ public class CombatData
     /// <returns>true on success</returns>
     public bool TryGetEffectEventsByMasterWithGUIDs(AgentItem agent, Span<GUID> effects, out List<EffectEvent> effectEvents)
     {
-        effectEvents = new List<EffectEvent>();
+        effectEvents = [];
         foreach (var effectGUID in effects)
         {
             AppendEffectEventsByMasterWithGUID(agent, effectGUID, effectEvents);
@@ -1358,7 +1358,7 @@ public class CombatData
             .Any();
     }
 
-    public bool HasLostBuffStack(long buffID, AgentItem? agent, long time, long epsilon = ServerDelayConstant)
+    public bool HasLostBuffStack(long buffID, AgentItem agent, long time, long epsilon = ServerDelayConstant)
     {
         return FindRelatedEvents(GetBuffDataByIDByDst(buffID, agent).OfType<AbstractBuffRemoveEvent>(), time, epsilon)
             .Any();

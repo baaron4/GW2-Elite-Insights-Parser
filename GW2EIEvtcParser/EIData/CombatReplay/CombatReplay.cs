@@ -6,12 +6,12 @@ namespace GW2EIEvtcParser.EIData;
 public class CombatReplay
 {
     //TODO(Rennorb) @perf: capacity
-    internal readonly List<ParametricPoint3D> Positions = new();
-    internal readonly List<ParametricPoint3D> PolledPositions = new();
-    internal readonly List<ParametricPoint3D> Velocities = new();
-    internal readonly List<ParametricPoint3D> Rotations = new();
-    internal readonly List<ParametricPoint3D> PolledRotations = new();
-    internal readonly List<Segment> Hidden = new();
+    internal readonly List<ParametricPoint3D> Positions = [];
+    internal readonly List<ParametricPoint3D> PolledPositions = [];
+    internal readonly List<ParametricPoint3D> Velocities = [];
+    internal readonly List<ParametricPoint3D> Rotations = [];
+    internal readonly List<ParametricPoint3D> PolledRotations = [];
+    internal readonly List<Segment> Hidden = [];
     private long _start = -1;
     private long _end = -1;
     internal (long start, long end) TimeOffsets => (_start, _end);

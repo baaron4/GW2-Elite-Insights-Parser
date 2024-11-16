@@ -19,9 +19,9 @@ internal class EnemyDamageMechanic : DamageMechanic
             {
                 if (Keep(c, log))
                 {
-                    AbstractSingleActor actorToUse = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
+                    AbstractSingleActor? actorToUse = MechanicHelper.FindEnemyActor(log, actor.AgentItem, regroupedMobs);
                     // no need to null check, we are already iterating over an existing actor list
-                    InsertMechanic(log, mechanicLogs, c.Time, actorToUse);
+                    InsertMechanic(log, mechanicLogs, c.Time, actorToUse!);
                 }
             }
         }

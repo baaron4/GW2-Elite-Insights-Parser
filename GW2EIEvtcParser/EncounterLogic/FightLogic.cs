@@ -44,16 +44,16 @@ public abstract class FightLogic
     public IReadOnlyList<AbstractSingleActor> NonPlayerFriendlies => _nonPlayerFriendlies;
     public IReadOnlyList<AbstractSingleActor> Targets => _targets;
     public IReadOnlyList<AbstractSingleActor> Hostiles => _hostiles;
-    protected List<NPC> _trashMobs { get; private set; } = new();
-    protected List<AbstractSingleActor> _nonPlayerFriendlies { get; private set; } = new();
-    protected List<AbstractSingleActor> _targets { get; private set; } = new();
-    protected List<AbstractSingleActor> _hostiles { get; private set; } = new();
+    protected List<NPC> _trashMobs { get; private set; } = [];
+    protected List<AbstractSingleActor> _nonPlayerFriendlies { get; private set; } = [];
+    protected List<AbstractSingleActor> _targets { get; private set; } = [];
+    protected List<AbstractSingleActor> _hostiles { get; private set; } = [];
 
-    internal readonly Dictionary<string, GenericDecorationMetadata> DecorationCache = new();
+    internal readonly Dictionary<string, GenericDecorationMetadata> DecorationCache = [];
 
-    internal CombatReplayDecorationContainer? EnvironmentDecorations = null;
+    internal CombatReplayDecorationContainer EnvironmentDecorations;
 
-    protected ArcDPSEnums.ChestID ChestID = ChestID.None;
+    protected ChestID ChestID = ChestID.None;
 
     protected List<(Buff buff, int stack)>? InstanceBuffs { get; private set; } = null;
 
@@ -103,7 +103,7 @@ public abstract class FightLogic
     [MemberNotNull(nameof(InstanceBuffs))]
     protected virtual void SetInstanceBuffs(ParsedEvtcLog log)
     {
-        InstanceBuffs = new List<(Buff buff, int stack)>();
+        InstanceBuffs = [];
         foreach (Buff fractalInstability in log.Buffs.BuffsBySource[Source.FractalInstability])
         {
             if (log.CombatData.GetBuffData(fractalInstability.ID).Any(x => x.To.IsPlayer))

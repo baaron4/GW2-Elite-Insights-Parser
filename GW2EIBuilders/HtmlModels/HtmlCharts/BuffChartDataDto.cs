@@ -8,39 +8,35 @@ internal class BuffChartDataDto
     public long Id { get; set; }
     public string Color { get; set; }
     public bool Visible { get; set; }
-    public List<object[]> States { get; set; }
+    public List<double[]> States { get; set; }
 
     private static string GetBuffColor(string name)
     {
-        switch (name)
+        return name switch
         {
-
-            case "Aegis": return "rgb(102,255,255)";
-            case "Fury": return "rgb(255,153,0)";
-            case "Might": return "rgb(153,0,0)";
-            case "Protection": return "rgb(102,255,255)";
-            case "Quickness": return "rgb(255,0,255)";
-            case "Regeneration": return "rgb(0,204,0)";
-            case "Resistance": return "rgb(255, 153, 102)";
-            case "Retaliation": return "rgb(255, 51, 0)";
-            case "Resolution": return "rgb(255, 51, 0)";
-            case "Stability": return "rgb(153, 102, 0)";
-            case "Swiftness": return "rgb(255,255,0)";
-            case "Vigor": return "rgb(102, 153, 0)";
-            case "Alacrity": return "rgb(0,102,255)";
-
-            case "Glyph of Empowerment": return "rgb(204, 153, 0)";
-            case "Sun Spirit": return "rgb(255, 102, 0)";
-            case "Banner of Strength": return "rgb(153, 0, 0)";
-            case "Banner of Discipline": return "rgb(0, 51, 0)";
-            case "Spotter": return "rgb(0,255,0)";
-            case "Stone Spirit": return "rgb(204, 102, 0)";
-            case "Storm Spirit": return "rgb(102, 0, 102)";
-            case "Empower Allies": return "rgb(255, 153, 0)";
-            default:
-                return "";
-        }
-
+            "Aegis" => "rgb(102,255,255)",
+            "Fury" => "rgb(255,153,0)",
+            "Might" => "rgb(153,0,0)",
+            "Protection" => "rgb(102,255,255)",
+            "Quickness" => "rgb(255,0,255)",
+            "Regeneration" => "rgb(0,204,0)",
+            "Resistance" => "rgb(255, 153, 102)",
+            "Retaliation" => "rgb(255, 51, 0)",
+            "Resolution" => "rgb(255, 51, 0)",
+            "Stability" => "rgb(153, 102, 0)",
+            "Swiftness" => "rgb(255,255,0)",
+            "Vigor" => "rgb(102, 153, 0)",
+            "Alacrity" => "rgb(0,102,255)",
+            "Glyph of Empowerment" => "rgb(204, 153, 0)",
+            "Sun Spirit" => "rgb(255, 102, 0)",
+            "Banner of Strength" => "rgb(153, 0, 0)",
+            "Banner of Discipline" => "rgb(0, 51, 0)",
+            "Spotter" => "rgb(0,255,0)",
+            "Stone Spirit" => "rgb(204, 102, 0)",
+            "Storm Spirit" => "rgb(102, 0, 102)",
+            "Empower Allies" => "rgb(255, 153, 0)",
+            _ => "",
+        };
     }
 
     private BuffChartDataDto(BuffsGraphModel bgm, IReadOnlyList<GenericSegment<double>> bChart, PhaseData phase)

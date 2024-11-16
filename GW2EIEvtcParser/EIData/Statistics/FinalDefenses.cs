@@ -27,7 +27,7 @@ public class FinalDefenses
     public readonly int ReceivedCrowdControl;
     public readonly double ReceivedCrowdControlDuration;
 
-    private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor from, bool excludeSelf)
+    private static (int, double) GetStripData(IReadOnlyList<Buff> buffs, ParsedEvtcLog log, long start, long end, AbstractSingleActor actor, AbstractSingleActor? from, bool excludeSelf)
     {
         double stripTime = 0;
         int strip = 0;

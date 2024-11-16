@@ -78,9 +78,9 @@ public static class SegmentExt {
     }
 
     //TODO(Rennorb) @cleanup @perf
-    public static List<object[]> ToObjectList(this IReadOnlyList<Segment> segments, long start, long end)
+    public static List<double[]> ToObjectList(this IReadOnlyList<Segment> segments, long start, long end)
     {
-        var res = new List<object[]>(segments.Count + 1);
+        var res = new List<double[]>(segments.Count + 1);
         foreach (Segment seg in segments)
         {
             double segStart = Math.Round(Math.Max(seg.Start - start, 0) / 1000.0, ParserHelper.TimeDigit);

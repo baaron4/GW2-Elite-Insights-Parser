@@ -4,7 +4,7 @@ using GW2EIWingman.WingmanUploadJsons;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-[assembly: System.CLSCompliant(false)]
+[assembly: CLSCompliant(false)]
 namespace GW2EIWingman;
 
 /// <summary>

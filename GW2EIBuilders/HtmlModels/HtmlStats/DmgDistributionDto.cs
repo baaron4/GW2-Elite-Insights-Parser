@@ -175,7 +175,7 @@ internal class DmgDistributionDto
         var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         var dto = new DmgDistributionDto
         {
-            Distribution = new List<object[]>(),
+            Distribution = [],
             ContributedDamage = incomingDamageStats.DamageTaken,
             ContributedShieldDamage = incomingDamageStats.DamageBarrier,
             ContributedBreakbarDamage = incomingDamageStats.BreakbarDamageTaken

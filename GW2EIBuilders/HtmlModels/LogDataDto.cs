@@ -18,35 +18,35 @@ namespace GW2EIBuilders.HtmlModels;
 //TODO(Rennorb) @perf
 internal class LogDataDto
 {
-    public List<TargetDto> Targets = new();
-    public List<PlayerDto> Players = new();
-    public List<EnemyDto> Enemies = new();
-    public List<PhaseDto> Phases = new();
+    public List<TargetDto> Targets = [];
+    public List<PlayerDto> Players = [];
+    public List<EnemyDto> Enemies = [];
+    public List<PhaseDto> Phases = [];
     // Present buffs and damamge modifiers
-    public List<long> Boons = new();
-    public List<long> OffBuffs = new();
-    public List<long> SupBuffs = new();
-    public List<long> DefBuffs = new();
-    public List<long> Debuffs = new();
-    public List<long> GearBuffs = new();
-    public List<long> Nourishments = new();
-    public List<long> Enhancements = new();
-    public List<long> OtherConsumables = new();
-    public List<object[]> InstanceBuffs = new();
-    public List<long> DmgModifiersItem = new();
-    public List<long> DmgIncModifiersItem = new();
-    public List<long> DmgModifiersCommon = new();
-    public List<long> DmgIncModifiersCommon = new();
-    public Dictionary<string, List<long>> DmgModifiersPers = new();
-    public Dictionary<string, List<long>> DmgIncModifiersPers = new();
-    public Dictionary<string, List<long>> PersBuffs = new();
-    public List<long> Conditions = new();
+    public List<long> Boons = [];
+    public List<long> OffBuffs = [];
+    public List<long> SupBuffs = [];
+    public List<long> DefBuffs = [];
+    public List<long> Debuffs = [];
+    public List<long> GearBuffs = [];
+    public List<long> Nourishments = [];
+    public List<long> Enhancements = [];
+    public List<long> OtherConsumables = [];
+    public List<object[]> InstanceBuffs = [];
+    public List<long> DmgModifiersItem = [];
+    public List<long> DmgIncModifiersItem = [];
+    public List<long> DmgModifiersCommon = [];
+    public List<long> DmgIncModifiersCommon = [];
+    public Dictionary<string, List<long>> DmgModifiersPers = [];
+    public Dictionary<string, List<long>> DmgIncModifiersPers = [];
+    public Dictionary<string, List<long>> PersBuffs = [];
+    public List<long> Conditions = [];
     // Dictionaries
-    public Dictionary<string, SkillDto> SkillMap = new();
-    public Dictionary<string, BuffDto> BuffMap = new();
-    public Dictionary<string, DamageModDto> DamageModMap = new();
-    public Dictionary<string, DamageModDto> DamageIncModMap = new();
-    public List<MechanicDto> MechanicMap = new();
+    public Dictionary<string, SkillDto> SkillMap = [];
+    public Dictionary<string, BuffDto> BuffMap = [];
+    public Dictionary<string, DamageModDto> DamageModMap = [];
+    public Dictionary<string, DamageModDto> DamageIncModMap = [];
+    public List<MechanicDto> MechanicMap = [];
     // Extra components
     public CombatReplayDto? CrData;
     public ChartDataDto? GraphData;
@@ -100,12 +100,12 @@ internal class LogDataDto
         Parser = "Elite Insights " + parserVersion.ToString();
         RecordedBy = log.LogData.PoVName;
         RecordedAccountBy = log.LogData.PoVAccount;
-        FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent().Scale : 0;
+        FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
         UploadLinks = uploadLinks.ToList();
         if (log.LogData.UsedExtensions.Any())
         {
-            UsedExtensions = new List<string>();
-            PlayersRunningExtensions = new List<List<string>>();
+            UsedExtensions = [];
+            PlayersRunningExtensions = [];
             foreach (AbstractExtensionHandler extension in log.LogData.UsedExtensions)
             {
                 UsedExtensions.Add(extension.Name + " - " + extension.Version);
@@ -168,7 +168,7 @@ internal class LogDataDto
         }
         foreach (KeyValuePair<Spec, IReadOnlyList<Buff>> pair in boonsBySpec)
         {
-            persBuffDict[pair.Key.ToString()] = new List<long>();
+            persBuffDict[pair.Key.ToString()] = [];
             foreach (Buff boon in pair.Value)
             {
                 persBuffDict[pair.Key.ToString()].Add(boon.ID);
@@ -198,7 +198,7 @@ internal class LogDataDto
         }
         foreach (KeyValuePair<Spec, IReadOnlyList<OutgoingDamageModifier>> pair in damageModBySpecs)
         {
-            dgmModDict[pair.Key.ToString()] = new List<long>();
+            dgmModDict[pair.Key.ToString()] = [];
             foreach (OutgoingDamageModifier mod in pair.Value)
             {
                 dgmModDict[pair.Key.ToString()].Add(mod.ID);
@@ -228,7 +228,7 @@ internal class LogDataDto
         }
         foreach (KeyValuePair<Spec, IReadOnlyList<IncomingDamageModifier>> pair in damageModBySpecs)
         {
-            dgmModDict[pair.Key.ToString()] = new List<long>();
+            dgmModDict[pair.Key.ToString()] = [];
             foreach (IncomingDamageModifier mod in pair.Value)
             {
                 dgmModDict[pair.Key.ToString()].Add(mod.ID);
