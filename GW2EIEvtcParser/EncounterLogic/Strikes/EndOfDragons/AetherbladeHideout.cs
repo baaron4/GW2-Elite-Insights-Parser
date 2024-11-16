@@ -195,7 +195,7 @@ namespace GW2EIEvtcParser.EncounterLogic
                     var initialPoint = new Point3D(3138.17456f, 1639.60657f, -1852.15894f); // The first cirle always spawns on the bomb on north east.
 
                     // Filted bombs to select only 1 bomb per puzzle, with the max last aware
-                    var groupedBombs = AgentData.GetGroupedAgentsByTimeCondition(Targets.Where(x => x.IsSpecies(TrashID.FerrousBomb)).Select(x => x.AgentItem), (agent) => agent.FirstAware);
+                    IEnumerable<IEnumerable<AgentItem>> groupedBombs = AgentData.GetGroupedAgentsByTimeCondition(Targets.Where(x => x.IsSpecies(TrashID.FerrousBomb)).Select(x => x.AgentItem), (agent) => agent.FirstAware);
                     var filteredBombs = groupedBombs.Select(x => x.MaxBy(y => y.LastAware));
 
                     // Filter the detonations, we use them only for the end time
