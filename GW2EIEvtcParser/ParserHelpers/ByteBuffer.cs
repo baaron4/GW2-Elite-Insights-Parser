@@ -7,7 +7,7 @@ internal ref struct ByteBuffer
     public int Offset;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly Span<byte> AsUsedSpan() => this.Span[..this.Offset];
+    public readonly Span<byte> AsUsedSpan() => Span[..Offset];
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Span<byte>(in ByteBuffer _this) => _this.Span[.._this.Offset];
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -18,24 +18,24 @@ internal ref struct ByteBuffer
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ByteBuffer(Span<byte> buffer)
     {
-        this.Span = buffer;
-        this.Offset = 0;
+        Span = buffer;
+        Offset = 0;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe void PushNative<T>(T value) where T : unmanaged
     {
-        fixed(byte* ptr = &this.Span[this.Offset]) { *(T*)ptr = value; }
-        this.Offset += sizeof(T);
+        fixed(byte* ptr = &Span[Offset]) { *(T*)ptr = value; }
+        Offset += sizeof(T);
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe void PushNative(byte value)
     {
-        this.Span[this.Offset++] = value;
+        Span[Offset++] = value;
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public unsafe void PushNative(sbyte value)
     {
-        this.Span[this.Offset++] = unchecked((byte)value);
+        Span[Offset++] = unchecked((byte)value);
     }
 }

@@ -121,7 +121,7 @@ partial class SingleActor
 
         if (!graphs.TryGetValue(start, end, target, out var graph))
         {
-            graph = ComputeDamageGraph(this.GetHitDamageEvents(target, log, start, end, damageType), start, end);
+            graph = ComputeDamageGraph(GetHitDamageEvents(target, log, start, end, damageType), start, end);
             //
             graphs.Set(start, end, target, graph);
         }
@@ -139,7 +139,7 @@ partial class SingleActor
 
         if (!graphs.TryGetValue(start, end, target, out var graph))
         {
-            graph = ComputeDamageGraph(this.GetHitDamageTakenEvents(target, log, start, end, damageType), start, end);
+            graph = ComputeDamageGraph(GetHitDamageTakenEvents(target, log, start, end, damageType), start, end);
             //
             graphs.Set(start, end, target, graph); ;
         }
@@ -190,7 +190,7 @@ partial class SingleActor
             return res;
         }
 
-        var brkDmgList = ComputeBreakbarDamageGraph(this.GetBreakbarDamageEvents(target, log, start, end), start, end);
+        var brkDmgList = ComputeBreakbarDamageGraph(GetBreakbarDamageEvents(target, log, start, end), start, end);
         _breakbarDamageList1S.Set(start, end, target, brkDmgList);
         return brkDmgList;
     }
@@ -209,7 +209,7 @@ partial class SingleActor
             return res;
         }
 
-        var brkDmgList = ComputeBreakbarDamageGraph(this.GetBreakbarDamageTakenEvents(target, log, start, end), start, end);
+        var brkDmgList = ComputeBreakbarDamageGraph(GetBreakbarDamageTakenEvents(target, log, start, end), start, end);
         _breakbarDamageTakenList1S.Set(start, end, target, brkDmgList);
         return brkDmgList;
     }

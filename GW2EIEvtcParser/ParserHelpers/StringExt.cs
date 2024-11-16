@@ -12,8 +12,8 @@ internal static class StringExt
 
         public SplitResult(ReadOnlySpan<char> tail, ReadOnlySpan<char> head)
         {
-            this.Tail = tail;
-            this.Head = head;
+            Tail = tail;
+            Head = head;
         }
     }
 

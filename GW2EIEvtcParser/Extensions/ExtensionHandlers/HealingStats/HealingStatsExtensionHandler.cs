@@ -280,7 +280,7 @@ public class HealingStatsExtensionHandler : ExtensionHandler
                 }
             }
             var healDataById = _healingEvents.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
-            combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, this.HybridHealIDs);
+            combatData.EXTHealingCombatData = new EXTHealingCombatData(healData, healReceivedData, healDataById, HybridHealIDs);
             operation.UpdateProgressWithCancellationCheck("Parsing: Attached " + _healingEvents.Count + " heal events to CombatData");
         }
         //

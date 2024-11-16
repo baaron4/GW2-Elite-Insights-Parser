@@ -16,14 +16,14 @@ internal abstract class BuffSimulationItem : AbstractSimulationItem
     public BuffSimulationItem(long start, long end)
     {
         Debug.Assert(start <= end);
-        this.Start = start;
-        this.End = end;
+        Start = start;
+        End = end;
     }
 
     public long GetClampedDuration(long start, long end)
     {
-        Debug.Assert(this.Start <= this.End);
-        return Math.Max(0, Math.Clamp(this.End, start, end) - Math.Clamp(this.Start, start, end));
+        Debug.Assert(Start <= End);
+        return Math.Max(0, Math.Clamp(End, start, end) - Math.Clamp(Start, start, end));
     }
 
     public Segment ToSegment()

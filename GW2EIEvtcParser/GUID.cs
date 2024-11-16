@@ -22,8 +22,8 @@ public readonly struct GUID : IEquatable<GUID>
         Debug.Assert(bytes.Length >= 16);
         fixed(byte* ptr = bytes)
         {
-            this.first8 = *(UInt64*)ptr;
-            this.last8 = *(((UInt64*)ptr) + 1);
+            first8 = *(UInt64*)ptr;
+            last8 = *(((UInt64*)ptr) + 1);
         }
     }
 
@@ -64,25 +64,25 @@ public readonly struct GUID : IEquatable<GUID>
 
     public readonly unsafe string ToHex()
     {
-        fixed(UInt64* ptr = &this.first8)
+        fixed(UInt64* ptr = &first8)
         {
             return ParserHelper.ToHexString(new ReadOnlySpan<byte>(ptr, 16));
         }
     }
     public readonly unsafe string ToBase64()
     {
-        fixed(UInt64* ptr = &this.first8)
+        fixed(UInt64* ptr = &first8)
         {
             return Convert.ToBase64String(new ReadOnlySpan<byte>(ptr, 16));
         }
     }
 
-    public readonly bool Equals(GUID other) => this.first8 == other.first8 && this.last8 == other.last8;
-    public override readonly bool Equals(object obj) => obj is GUID other && this.Equals(other);
+    public readonly bool Equals(GUID other) => first8 == other.first8 && last8 == other.last8;
+    public override readonly bool Equals(object obj) => obj is GUID other && Equals(other);
     public static bool operator==(in GUID l, in GUID r) => l.Equals(r);
     public static bool operator!=(in GUID l, in GUID r) => !l.Equals(r);
 
-    public override readonly int GetHashCode() => HashCode.Combine(this.first8.GetHashCode(), this.last8.GetHashCode());
+    public override readonly int GetHashCode() => HashCode.Combine(first8.GetHashCode(), last8.GetHashCode());
 
-    public override readonly string ToString() => this.ToHex();
+    public override readonly string ToString() => ToHex();
 }

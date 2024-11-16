@@ -213,35 +213,25 @@ public class Player : PlayerActor
     {
         if (CombatReplay == null)
         {
-            this.InitCombatReplay(log);
+            InitCombatReplay(log);
         }
 
-        var (deads, _, dcs) = this.GetStatus(log);
-        var positions = this.GetCombatReplayPolledPositions(log);
+        var (deads, _, dcs) = GetStatus(log);
+        var positions = GetCombatReplayPolledPositions(log);
         var activePositions = new List<ParametricPoint3D?>(positions.Count);
         for (int i = 0; i < positions.Count; i++)
         {
             var cur = positions[i]!;
-            foreach (Segment seg in deads)
+            if (deads.Any(x => x.ContainsPoint(cur.Time)) 
+                || dcs.Any(x => x.ContainsPoint(cur.Time))
+            )
             {
-                if (seg.ContainsPoint(cur.Time))
-                {
-                    activePositions.Add(null);
-                    goto double_break;
-                }
-            }
-
-            foreach (Segment seg in dcs)
+                activePositions.Add(null);
+            } 
+            else
             {
-                if (seg.ContainsPoint(cur.Time))
-                {
-                    activePositions.Add(null);
-                    goto double_break;
-                }
+                activePositions.Add(positions[i]);
             }
-
-            activePositions.Add(positions[i]);
-            double_break:;
         }
         return activePositions;
     }

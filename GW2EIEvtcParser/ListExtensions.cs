@@ -122,7 +122,7 @@ public static partial class ListExt
             readonly object IEnumerator.Current => _maybeValue!;
 
             int moved = 0;
-            public bool MoveNext() => this.Current != null  && this.moved++ == 0;
+            public bool MoveNext() => Current != null  && moved++ == 0;
 
             public readonly void Reset() { }
             public readonly void Dispose() { }

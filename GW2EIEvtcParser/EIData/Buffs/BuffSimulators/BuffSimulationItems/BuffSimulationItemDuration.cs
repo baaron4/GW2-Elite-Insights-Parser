@@ -7,7 +7,7 @@ internal class BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) :
     public override void OverrideEnd(long end)
     {
         Stacks[0].OverrideEnd(end);
-        this.End = end;
+        End = end;
     }
 
     public override int GetActiveStacks()

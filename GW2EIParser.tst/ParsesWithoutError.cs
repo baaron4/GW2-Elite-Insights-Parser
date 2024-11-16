@@ -40,7 +40,7 @@ public class ParsesSuccessfully
     {
         var parser = new EvtcParser(TestHelper.ParserSettings, TestHelper.APIController);
 
-        _ = parser.ParseLog(new TestHelper.TestOperationController(), new FileInfo(this.path), out var failureReason, false);
+        _ = parser.ParseLog(new TestHelper.TestOperationController(), new FileInfo(path), out var failureReason, false);
         Assert.Null(failureReason, Path.GetFileName(path));
     }
 }

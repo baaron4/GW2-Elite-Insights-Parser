@@ -86,7 +86,7 @@ partial class SingleActor
             damageMods.AddRange(list);
         }
 
-        damageMods.AddRange(log.DamageModifiers.GetOutgoingModifiersPerSpec(this.Spec));
+        damageMods.AddRange(log.DamageModifiers.GetOutgoingModifiersPerSpec(Spec));
 
         var damageModifierEvents = new List<DamageModifierEvent>(damageMods.Count * 150);
         foreach (OutgoingDamageModifier damageMod in damageMods)
@@ -147,7 +147,7 @@ partial class SingleActor
 
     public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
-        if (!log.ParserSettings.ComputeDamageModifiers || this.IsFakeActor)
+        if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
         {
             return new Dictionary<string, DamageModifierStat>();
         }
@@ -189,7 +189,7 @@ partial class SingleActor
         {
             damageMods.AddRange(list);
         }
-        damageMods.AddRange(log.DamageModifiers.GetIncomingModifiersPerSpec(this.Spec));
+        damageMods.AddRange(log.DamageModifiers.GetIncomingModifiersPerSpec(Spec));
         
         var damageModifierEvents = new List<DamageModifierEvent>(damageMods.Count * 60);
         foreach (IncomingDamageModifier damageMod in damageMods)

@@ -51,8 +51,8 @@ public struct AutoTrace : IDisposable
     {
         this.name = name;
         this.isAveraging = isAveraging;
-        this.stopwatch = new();
-        this.stopwatch.Start();
+        stopwatch = new();
+        stopwatch.Start();
         if(!isAveraging) {
             if(s_parentTrace.Value.Count > 0)
             {
@@ -70,7 +70,7 @@ public struct AutoTrace : IDisposable
     public void Log(string message)
     {
         var elapsed = stopwatch.ElapsedMilliseconds;
-        Console.WriteLine($"[{Environment.CurrentManagedThreadId}] {this.name} @ {elapsed,5}ms -> {message}: {elapsed - lstMsgMs,5}ms");
+        Console.WriteLine($"[{Environment.CurrentManagedThreadId}] {name} @ {elapsed,5}ms -> {message}: {elapsed - lstMsgMs,5}ms");
         lstMsgMs = stopwatch.ElapsedMilliseconds;
     }
 
@@ -93,28 +93,28 @@ public struct AutoTrace : IDisposable
 
     void IDisposable.Dispose()
     {
-        this.stopwatch.Stop();
+        stopwatch.Stop();
         var parents = s_parentTrace.Value;
         parents.Pop(); // pop ourself
 
-        if(this.isAveraging)
+        if(isAveraging)
         {
-            Trace.TrackAverageStat(this.name, stopwatch.ElapsedMilliseconds);
+            Trace.TrackAverageStat(name, stopwatch.ElapsedMilliseconds);
         }
 
         if(parents.Count > 0)
         {
-            if(!this.isAveraging)
+            if(!isAveraging)
             {
                 var parent = parents.Peek();
-                Console.WriteLine($"[{Environment.CurrentManagedThreadId}] {parent.name} @ {parent.stopwatch.ElapsedMilliseconds,5}ms <- exit  {this.name}: {this.stopwatch.ElapsedMilliseconds,5}ms");
+                Console.WriteLine($"[{Environment.CurrentManagedThreadId}] {parent.name} @ {parent.stopwatch.ElapsedMilliseconds,5}ms <- exit  {name}: {stopwatch.ElapsedMilliseconds,5}ms");
             }
         }
         else
         {
-            if(!this.isAveraging)
+            if(!isAveraging)
             {
-                Console.WriteLine($"[{Environment.CurrentManagedThreadId}] exit  {this.name}: {this.stopwatch.ElapsedMilliseconds,5}ms");
+                Console.WriteLine($"[{Environment.CurrentManagedThreadId}] exit  {name}: {stopwatch.ElapsedMilliseconds,5}ms");
             }
 
             #if EI_TRACING_STATS

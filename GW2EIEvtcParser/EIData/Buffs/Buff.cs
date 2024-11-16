@@ -41,7 +41,7 @@ public class Buff : IVersionable
     public readonly BuffClassification Classification;
     public readonly Source Source;
     public readonly BuffStackType StackType;
-    public BuffType Type => this.StackType switch
+    public BuffType Type => StackType switch
     {
         BuffStackType.Queue or
         BuffStackType.Regeneration or

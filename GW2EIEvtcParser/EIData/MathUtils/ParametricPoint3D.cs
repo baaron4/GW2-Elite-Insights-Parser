@@ -18,7 +18,7 @@ public readonly struct ParametricPoint3D(in Vector3 value, long time)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly ParametricPoint3D WithChangedTime(long newTime) => new(this.Value, newTime);
+    public readonly ParametricPoint3D WithChangedTime(long newTime) => new(Value, newTime);
 
     public class Converter : JsonConverter<ParametricPoint3D>
     {

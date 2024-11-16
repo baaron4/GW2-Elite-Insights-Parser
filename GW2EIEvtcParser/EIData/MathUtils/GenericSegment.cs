@@ -16,18 +16,18 @@ public struct GenericSegment<T>(long start, long end, T? value)
     public GenericSegment(long start, long end) : this(start, end, default) { }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly GenericSegment<O> WithOtherType<O>(O? value = default) => new(this.Start, this.End, value);
+    public readonly GenericSegment<O> WithOtherType<O>(O? value = default) => new(Start, End, value);
 
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool IsEmpty() => this.Start == this.End;
+    public readonly bool IsEmpty() => Start == End;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Intersects(in GenericSegment<T> other) => Intersects(other.Start, other.End);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool Intersects(long start, long end) => !(end < this.Start || this.End < start);
+    public readonly bool Intersects(long start, long end) => !(end < Start || End < start);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly bool ContainsPoint(long time) => this.Start <= time && time <= this.End;
+    public readonly bool ContainsPoint(long time) => Start <= time && time <= End;
 }

@@ -52,7 +52,7 @@ internal class BuffStackItem
         Duration -= durationShift;
         if (Duration == 0 && Extensions.Count != 0)
         {
-            (this.Src, this.Duration) = Extensions[0];
+            (Src, Duration) = Extensions[0];
             Extensions.RemoveAt(0);
             IsExtension = true;
         }

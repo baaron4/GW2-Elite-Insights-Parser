@@ -50,9 +50,9 @@ partial class SingleActor
     public long GetTimeSpentInCombat(ParsedEvtcLog log, long start, long end)
     {
         long timeInCombat = 0;
-        foreach (EnterCombatEvent enTe in log.CombatData.GetEnterCombatEvents(this.AgentItem))
+        foreach (EnterCombatEvent enTe in log.CombatData.GetEnterCombatEvents(AgentItem))
         {
-            ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(this.AgentItem).FirstOrDefault(x => x.Time > enTe.Time);
+            ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(AgentItem).FirstOrDefault(x => x.Time > enTe.Time);
             if (exCe != null)
             {
                 timeInCombat += Math.Max(Math.Min(exCe.Time, end) - Math.Max(enTe.Time, start), 0);
@@ -64,7 +64,7 @@ partial class SingleActor
         }
         if (timeInCombat == 0)
         {
-            ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(this.AgentItem).FirstOrDefault(x => x.Time > start);
+            ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(AgentItem).FirstOrDefault(x => x.Time > start);
             if (exCe != null)
             {
                 timeInCombat += Math.Max(Math.Min(exCe.Time, end) - start, 0);
@@ -93,7 +93,7 @@ partial class SingleActor
         var remainingFightTime = new Segment(curTime, log.FightData.FightEnd);
 
         // return false if actor currently above 90 or already downed
-        if (this.GetCurrentHealthPercent(log, curTime) > 90 || this.IsDowned(log, curTime))
+        if (GetCurrentHealthPercent(log, curTime) > 90 || IsDowned(log, curTime))
         {
             return false;
         }
@@ -105,7 +105,7 @@ partial class SingleActor
             return false;
         }
 
-        IReadOnlyList<Segment> healthUpdatesBeforeEnd = this.GetHealthUpdates(log).Where(update => update.Start > curTime).ToList();
+        IReadOnlyList<Segment> healthUpdatesBeforeEnd = GetHealthUpdates(log).Where(update => update.Start > curTime).ToList();
         Segment? next90 = healthUpdatesBeforeEnd.FirstOrNull((in Segment update) => update.Value > 90);
        
         // If there are no more 90 events before combat end and the actor has a down event remaining then the actor must down before next 90
@@ -138,7 +138,7 @@ partial class SingleActor
         {
             return;
         }
-        var casting = this.GetCastEvents(log, log.FightData.LogStart, log.FightData.LogEnd);
+        var casting = GetCastEvents(log, log.FightData.LogStart, log.FightData.LogEnd);
         int swapped = WeaponSetIDs.NoSet;
         long swappedTime = log.FightData.FightStart;
         List<(int swappedTo, int swappedFrom)> swaps = log.CombatData.GetWeaponSwapData(AgentItem).Select(x =>
@@ -181,12 +181,12 @@ partial class SingleActor
     }
     private void SetDeathRecaps(ParsedEvtcLog log)
     {
-        IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(this.AgentItem);
-        IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(this.AgentItem);
-        IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(this.AgentItem);
+        IReadOnlyList<DeadEvent> deads = log.CombatData.GetDeadEvents(AgentItem);
+        IReadOnlyList<DownEvent> downs = log.CombatData.GetDownEvents(AgentItem);
+        IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
         _deathRecaps = new List<DeathRecap>(deads.Count);
         long lastDeathTime = 0;
-        var damageLogs = this.GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var damageLogs = GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
         foreach (DeadEvent dead in deads)
         {
             _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));

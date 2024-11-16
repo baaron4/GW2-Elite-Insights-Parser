@@ -206,7 +206,7 @@ partial class SingleActor
         _buffStats ??= new(log, BuffEnum.Self, 8, 2, 4);  //TODO(Rennorb) @perf: find capacity dependenceis
         if (!_buffStats.TryGetValue(start, end, type, out var pair))
         {
-            pair = this.ComputeBuffs(log, start, end, type);
+            pair = ComputeBuffs(log, start, end, type);
             _buffStats.Set(start, end, type, pair);
         }
         return pair.Buffs;
@@ -217,7 +217,7 @@ partial class SingleActor
         _buffStats ??= new(log, BuffEnum.Self, 8, 2, 4); //TODO(Rennorb) @perf: find capacity dependenceis
         if (!_buffStats.TryGetValue(start, end, type, out var value))
         {
-            value = this.ComputeBuffs(log, start, end, type);
+            value = ComputeBuffs(log, start, end, type);
             _buffStats.Set(start, end, type, value);
         }
         return value.ActiveBuffs;
@@ -228,7 +228,7 @@ partial class SingleActor
         _buffVolumes ??= new(log, BuffEnum.Self, 4, 2, 4); //TODO(Rennorb) @perf: find capacity dependenceis
         if (!_buffVolumes.TryGetValue(start, end, type, out var value))
         {
-            value = this.ComputeBuffVolumes(log, start, end, type);
+            value = ComputeBuffVolumes(log, start, end, type);
             _buffVolumes.Set(start, end, type, value);
         }
         return value.Volumes;
@@ -239,7 +239,7 @@ partial class SingleActor
         _buffVolumes ??= new(log, BuffEnum.Self, 4, 2, 4);  //TODO(Rennorb) @perf: find capacity dependenceis
         if (!_buffVolumes.TryGetValue(start, end, type, out var value))
         {
-            value = this.ComputeBuffVolumes(log, start, end, type);
+            value = ComputeBuffVolumes(log, start, end, type);
             _buffVolumes.Set(start, end, type, value);
         }
         return value.ActiveVolumes;
@@ -259,17 +259,17 @@ partial class SingleActor
     internal void ComputeBuffMap(ParsedEvtcLog log)
     {
         _buffMap = new BuffDictionary(64, 256, 32, 1);
-        if (this.AgentItem == _unknownAgent)
+        if (AgentItem == _unknownAgent)
         {
-            _buffMap.Finalize(log, this.AgentItem, out _trackedBuffs);
+            _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
             return;
         }
         // Fill in Boon Map
 #if DEBUG
-        var test = log.CombatData.GetBuffDataByDst(this.AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
-        var test2 = log.CombatData.GetBuffDataByDst(this.AgentItem).Where(x => log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+        var test = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => !log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
+        var test2 = log.CombatData.GetBuffDataByDst(AgentItem).Where(x => log.Buffs.BuffsByIds.ContainsKey(x.BuffID)).GroupBy(x => x.BuffSkill.Name).ToDictionary(x => x.Key, x => x.ToList());
 #endif
-        foreach (var buffEvent in log.CombatData.GetBuffDataByDst(this.AgentItem))
+        foreach (var buffEvent in log.CombatData.GetBuffDataByDst(AgentItem))
         {
             if (!log.Buffs.BuffsByIds.TryGetValue(buffEvent.BuffID, out var buff))
             {
@@ -285,7 +285,7 @@ partial class SingleActor
                 _buffMap.AddRegen(log, buff, buffEvent);
             }
         }
-        _buffMap.Finalize(log, this.AgentItem, out _trackedBuffs);
+        _buffMap.Finalize(log, AgentItem, out _trackedBuffs);
     }
 
 
@@ -304,8 +304,8 @@ partial class SingleActor
         _buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count + 5);
         var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
         var activeCombatMinionsGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfActiveCombatMinions]);
-        var numberOfClonesGraph = ProfHelper.CanSummonClones(this.Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
-        var numberOfRangerPets = ProfHelper.CanUseRangerPets(this.Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]) : null;
+        var numberOfClonesGraph = ProfHelper.CanSummonClones(Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfClones]) : null;
+        var numberOfRangerPets = ProfHelper.CanUseRangerPets(Spec) ? new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfRangerPets]) : null;
         var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
         var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
         var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
@@ -337,7 +337,7 @@ partial class SingleActor
                 catch (EIBuffSimulatorIDException e)
                 {
                     // get rid of logs invalid for HasStackIDs false
-                    log.UpdateProgressWithCancellationCheck("Parsing: Failed id based simulation on " + this.Character + " for " + buff.Name + " because " + e.Message);
+                    log.UpdateProgressWithCancellationCheck("Parsing: Failed id based simulation on " + Character + " for " + buff.Name + " because " + e.Message);
                     buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
                     simulator = buff.CreateSimulator(log, true);
                     simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
@@ -381,7 +381,7 @@ partial class SingleActor
 
         _buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
         _buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
-        foreach (Minions minions in this.GetMinions(log).Values)
+        foreach (Minions minions in GetMinions(log).Values)
         {
             IReadOnlyList<IReadOnlyList<Segment>> segments = minions.GetLifeSpanSegments(log);
             foreach (IReadOnlyList<Segment> minionsSegments in segments)
@@ -520,7 +520,7 @@ partial class SingleActor
         var rates = new Dictionary<long, FinalBuffsDictionary>();
         var ratesActive = new Dictionary<long, FinalBuffsDictionary>();
         long duration = end - start;
-        long activeDuration = this.GetActiveDuration(log, start, end);
+        long activeDuration = GetActiveDuration(log, start, end);
 
         foreach (Buff buff in GetTrackedBuffs(log))
         {
