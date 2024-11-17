@@ -186,14 +186,14 @@ public abstract class EffectEvent : AbstractEffectEvent
         long start = Time;
         long end = start + Duration;
 
-        foreach (SingleActor target in targets.Where(x => x.IsAnySpecies(species)))
+        foreach (SingleActor target in targets.Where(x => x.IsAnySpecies(species) && x.FirstAware <= start && x.LastAware >= start))
         {
-            DeadEvent deadEvent = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
-            DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(target.AgentItem).FirstOrDefault();
+            DeadEvent? deadEvent = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
             if (deadEvent != null)
             {
                 end = Math.Min(deadEvent.Time, end);
             }
+            DespawnEvent? despawnEvent = log.CombatData.GetDespawnEvents(target.AgentItem).FirstOrDefault();
             if (despawnEvent != null)
             {
                 end = Math.Min(despawnEvent.Time, end);
