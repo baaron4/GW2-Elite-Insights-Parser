@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
@@ -876,8 +877,10 @@ public class EvtcParser
         using var _t = new AutoTrace("Linking Agents to list");
         var allAgentValues = new HashSet<ulong>(
             _combatItems.Where(x => x.SrcIsAgent())
-            .Concat(_combatItems.Where(x => x.DstIsAgent()))
             .Select(x => x.SrcAgent)
+            .Concat(_combatItems.Where(x => x.DstIsAgent())
+                    .Select(x => x.DstAgent)
+                    )
         );
         allAgentValues.ExceptWith(_allAgentsList.Select(x => x.Agent));
         allAgentValues.Remove(0);
