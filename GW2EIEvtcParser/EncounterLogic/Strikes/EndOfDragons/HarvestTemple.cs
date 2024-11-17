@@ -1758,7 +1758,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         foreach (EffectEvent effect in spreadEffects)
         {
             long duration = 5000;
-            (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, duration) : effect.ComputeLifespan(log, duration);
+            (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
             long growing = lifespan.start + duration;
             SingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
             if (dragonVoid == null)
@@ -1781,7 +1781,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         foreach (EffectEvent effect in redPuddleEffects)
         {
             long inactiveDuration = 1500;
-            (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
+            (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
             long growing = lifespan.start + inactiveDuration;
             SingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
             if (dragonVoid == null)
@@ -1803,7 +1803,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         foreach (EffectEvent green in greenEffects)
         {
             long duration = 6250;
-            (long start, long end) lifespan = green.ComputeDynamicLifespan(log, duration);
+            (long start, long end) lifespan = green.ComputeLifespan(log, duration);
             long growing = green.Time + duration;
             SingleActor dragonVoid = FindActiveOrNextDragonVoid(green.Time);
             if (dragonVoid == null)
