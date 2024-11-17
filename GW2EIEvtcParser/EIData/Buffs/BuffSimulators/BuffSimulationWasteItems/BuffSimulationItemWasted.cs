@@ -9,14 +9,14 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
     {
     }
 
-    public override bool SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
         AgentItem agent = Src;
         long value = GetValue(start, end);
         if (value == 0)
         {
-            return false;
+            return value;
         }
         if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
         {
@@ -28,6 +28,6 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
                 0,
                 0, value, 0, 0, 0));
         }
-        return true;
+        return value;
     }
 }

@@ -28,7 +28,7 @@ internal class BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) :
         return GetActualDurationPerStack().Sum();
     }*/
 
-    public override bool SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
     {
         return Stacks.First().SetBuffDistributionItem(distribs, start, end, boonid);
     }

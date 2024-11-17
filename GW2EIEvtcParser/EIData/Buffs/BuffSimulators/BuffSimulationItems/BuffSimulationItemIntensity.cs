@@ -40,17 +40,17 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
         return GetActualDurationPerStack().Max();
     }*/
 
-    public override bool SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
     {
         long cDur = GetClampedDuration(start, end);
         if (cDur == 0)
         {
-            return false;
+            return cDur;
         }
         foreach (BuffSimulationItemBase item in Stacks)
         {
             item.SetBuffDistributionItem(distribs, start, end, boonid);
         }
-        return true;
+        return cDur;
     }
 }

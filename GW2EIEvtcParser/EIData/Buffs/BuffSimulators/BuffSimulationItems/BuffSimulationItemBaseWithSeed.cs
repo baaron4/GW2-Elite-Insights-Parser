@@ -10,11 +10,11 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
     {
         _seedSrc       = buffStackItem.SeedSrc;
     }
-    public override bool SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
-        if (base.SetBuffDistributionItem(distribs, start, end, buffID))
+        long cDur = base.SetBuffDistributionItem(distribs, start, end, buffID);
+        if (cDur > 0)
         {
-            long cDur = GetClampedDuration(start, end);
             Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
             if (distribution.TryGetValue(_seedSrc, out var toModify))
             {
@@ -39,8 +39,8 @@ internal class BuffSimulationItemBaseWithSeed : BuffSimulationItemBase
                         0, 0, cDur, 0, 0));
                 }
             }
-            return true;
+            return cDur;
         }
-        return false;
+        return cDur;
     }
 }

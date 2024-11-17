@@ -61,12 +61,12 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         return GetSources();
     }
 
-    public override bool SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long cDur = GetClampedDuration(start, end);
         if (cDur == 0)
         {
-            return false;
+            return cDur;
         }
 
         Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
@@ -80,6 +80,6 @@ internal class BuffSimulationItemBase : BuffSimulationItem
                 cDur,
                 0, 0, 0, 0, 0));
         }
-        return true;
+        return cDur;
     }
 }
