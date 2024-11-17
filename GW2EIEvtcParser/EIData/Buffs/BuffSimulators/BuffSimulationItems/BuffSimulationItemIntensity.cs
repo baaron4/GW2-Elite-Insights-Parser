@@ -35,21 +35,22 @@ internal class BuffSimulationItemIntensity : BuffSimulationItemStack
     {
         return GetStacks(actor);
     }
-    public override long GetActualDuration()
+    /*public override long GetActualDuration()
     {
         return GetActualDurationPerStack().Max();
-    }
+    }*/
 
-    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
+    public override bool SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
     {
         long cDur = GetClampedDuration(start, end);
         if (cDur == 0)
         {
-            return;
+            return false;
         }
         foreach (BuffSimulationItemBase item in Stacks)
         {
             item.SetBuffDistributionItem(distribs, start, end, boonid);
         }
+        return true;
     }
 }

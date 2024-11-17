@@ -36,14 +36,14 @@ internal abstract class BuffSimulationItem : AbstractSimulationItem
         return new Segment(Start, End, GetActiveStacks(actor));
     }
 
-    public Segment ToDurationSegment()
+    /*public Segment ToDurationSegment()
     {
         return new Segment(Start, End, GetActualDuration());
-    }
+    }*/
 
     public abstract void OverrideEnd(long end);
-    public abstract IEnumerable<long> GetActualDurationPerStack();
-    public abstract long GetActualDuration();
+    //public abstract IEnumerable<long> GetActualDurationPerStack();
+    //public abstract long GetActualDuration();
 
     public abstract IEnumerable<AgentItem> GetSources();
     public abstract IEnumerable<AgentItem> GetActiveSources();
