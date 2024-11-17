@@ -24,7 +24,6 @@ internal class BuffSimulationItemBaseWithExtension : BuffSimulationItemBase
                     0,
                     0, 0, 0, cDur, 0));
             }
-            return cDur;
         }
         return cDur;
     }

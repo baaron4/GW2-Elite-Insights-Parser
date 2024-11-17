@@ -64,22 +64,21 @@ internal class BuffSimulationItemBase : BuffSimulationItem
     public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long cDur = GetClampedDuration(start, end);
-        if (cDur == 0)
+        if (cDur > 0)
         {
-            return cDur;
+            Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
+            if (distribution.TryGetValue(_src, out BuffDistributionItem toModify))
+            {
+                toModify.IncrementValue(cDur);
+            }
+            else
+            {
+                distribution.Add(_src, new BuffDistributionItem(
+                    cDur,
+                    0, 0, 0, 0, 0));
+            }
         }
 
-        Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-        if (distribution.TryGetValue(_src, out BuffDistributionItem toModify))
-        {
-            toModify.IncrementValue(cDur);
-        }
-        else
-        {
-            distribution.Add(_src, new BuffDistributionItem(
-                cDur,
-                0, 0, 0, 0, 0));
-        }
         return cDur;
     }
 }
