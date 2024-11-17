@@ -10,7 +10,7 @@ internal class ForceOverrideLogic : StackingLogic
         // no sort
     }
 
-    public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem toAdd, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
+    public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItemPool pool, BuffStackItem toAdd, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
     {
         if (stacks.Count == 0)
         {
@@ -25,6 +25,7 @@ internal class ForceOverrideLogic : StackingLogic
                 wastes.Add(new BuffSimulationItemWasted(src, value, toRemove.Start));
             }
         }
+        pool.ReleaseBuffStackItem(toRemove);
         stacks[0] = toAdd;
         return true;
     }
