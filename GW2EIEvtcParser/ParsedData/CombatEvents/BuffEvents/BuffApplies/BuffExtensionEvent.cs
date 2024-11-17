@@ -100,6 +100,12 @@ public class BuffExtensionEvent : AbstractBuffApplyEvent
         }
     }
 
+
+    internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
+    {
+        return base.IsBuffSimulatorCompliant(useBuffInstanceSimulator) && NewDuration >= 0;
+    }
+
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)
     {
         if (ExtendedDuration <= 1)

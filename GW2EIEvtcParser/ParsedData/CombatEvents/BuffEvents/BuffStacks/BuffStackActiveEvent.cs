@@ -9,9 +9,9 @@ public class BuffStackActiveEvent : BuffStackEvent
     {
         BuffInstance = (uint)evtcItem.DstAgent;
     }
-    internal override bool IsBuffSimulatorCompliant(bool hasStackIDs)
+    internal override bool IsBuffSimulatorCompliant(bool useBuffInstanceSimulator)
     {
-        return BuffInstance != 0 && base.IsBuffSimulatorCompliant(hasStackIDs);
+        return BuffInstance != 0 && base.IsBuffSimulatorCompliant(useBuffInstanceSimulator) && (useBuffInstanceSimulator || BuffID == SkillIDs.Regeneration);
     }
 
     internal override void UpdateSimulator(AbstractBuffSimulator simulator, bool forceStackType4ToBeActive)

@@ -1,5 +1,8 @@
-﻿#define EI_TRACING
+﻿
+#if DEBUG2
+#define EI_TRACING
 #define EI_TRACING_STATS
+#endif
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -133,6 +136,8 @@ public struct AutoTrace : IDisposable
     }
 #else
     public AutoTrace(string name) { }
+
+    public void SetAverageTimeStart() { }
     public void Log(string message) { }
     public void TrackAverageTime(string name) { }
     void IDisposable.Dispose() { }
