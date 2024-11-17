@@ -6,11 +6,19 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Version>0.59.0</Version>
-        <Configurations>Debug;Release;NoRewards</Configurations>
+        <Configurations>Debug;Release;NoRewards;Trace</Configurations>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>DEBUG</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
+        <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">
         <DefineConstants>DEBUG</DefineConstants>
     </PropertyGroup>
 

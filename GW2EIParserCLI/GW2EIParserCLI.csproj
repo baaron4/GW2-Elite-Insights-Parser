@@ -13,7 +13,19 @@
         <AssemblyTitle>EliteInsights-CLI</AssemblyTitle>
         <Product>EliteInsights-CLI</Product>
         <Copyright>Copyright ©  2024</Copyright>
-        <Configurations>Debug;Release;NoRewards</Configurations>
+        <Configurations>Debug;Release;NoRewards;Trace</Configurations>
+
+        <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+            <DefineConstants>DEBUG</DefineConstants>
+        </PropertyGroup>
+
+        <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
+            <DefineConstants>TRACE</DefineConstants>
+        </PropertyGroup>
+
+        <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">
+            <DefineConstants>DEBUG</DefineConstants>
+        </PropertyGroup>
 
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>

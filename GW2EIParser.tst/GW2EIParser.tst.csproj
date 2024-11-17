@@ -14,19 +14,25 @@
         <Product>GW2 Elite Insights</Product>
         <Copyright>Copyright ©  2020</Copyright>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <Configurations>Debug;Release;NoRewards</Configurations>
+        <Configurations>Debug;Release;NoRewards;Trace</Configurations>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DebugType>none</DebugType>
         <DebugSymbols>false</DebugSymbols>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
+      <DebugType>none</DebugType>
+      <DefineConstants>TRACE</DefineConstants>
+      <DebugSymbols>false</DebugSymbols>
+      <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DefineConstants>DEBUG</DefineConstants>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DefineConstants>DEBUG</DefineConstants>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
     <PropertyGroup>
