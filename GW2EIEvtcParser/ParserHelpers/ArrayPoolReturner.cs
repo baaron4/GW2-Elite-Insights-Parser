@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.InteropServices;
 
 namespace GW2EIEvtcParser.ParserHelpers;
 
@@ -76,8 +74,6 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
     /// lots of overhead for unused array sizes.
     /// </summary>
     private readonly SharedArrayPoolPartitions?[] _buckets = new SharedArrayPoolPartitions[NumBuckets];
-    /// <summary>Whether the callback to trim arrays in response to memory pressure has been created.</summary>
-    private int _trimCallbackCreated;
 
     /// <summary>Allocate a new <see cref="SharedArrayPoolPartitions"/> and try to store it into the <see cref="_buckets"/> array.</summary>
     private unsafe SharedArrayPoolPartitions CreatePerCorePartitions(int bucketIndex)
@@ -155,7 +151,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
         // this if the array being returned is erroneous or too large for the pool, but the
         // former condition is an error we don't need to optimize for, and the latter is incredibly
         // rare, given a max size of 1B elements.
-        SharedArrayPoolThreadLocalArray[] tlsBuckets = t_tlsBuckets ?? InitializeTlsBucketsAndTrimming();
+        SharedArrayPoolThreadLocalArray[] tlsBuckets = t_tlsBuckets ?? InitializeTlsBuckets();
 
         if ((uint)bucketIndex < (uint)tlsBuckets.Length)
         {
@@ -184,78 +180,6 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             }
         }
     }
-
-    public bool Trim()
-    {
-        int currentMilliseconds = Environment.TickCount;
-        var pressure = MemoryWatchdog.GetMemoryPressure();
-
-        // Trim each of the per-core buckets.
-        SharedArrayPoolPartitions?[] perCoreBuckets = _buckets;
-        for (int i = 0; i < perCoreBuckets.Length; i++)
-        {
-            perCoreBuckets[i]?.Trim(currentMilliseconds, pressure);
-        }
-
-        // Trim each of the TLS buckets. Note that threads may be modifying their TLS slots concurrently with
-        // this trimming happening. We do not force synchronization with those operations, so we accept the fact
-        // that we may end up firing a trimming event even if an array wasn't trimmed, and potentially
-        // trim an array we didn't need to.  Both of these should be rare occurrences.
-
-        // Under high pressure, release all thread locals.
-        if (pressure == MemoryWatchdog.MemoryPressure.High)
-        {
-            foreach (var tlsBuckets in _allTlsBuckets)
-            {
-                SharedArrayPoolThreadLocalArray[] buckets = tlsBuckets.Key;
-                for (int i = 0; i < buckets.Length; i++)
-                {
-                    Interlocked.Exchange(ref buckets[i].Array, null);
-                }
-            }
-        }
-        else
-        {
-            // Otherwise, release thread locals based on how long we've observed them to be stored. This time is
-            // approximate, with the time set not when the array is stored but when we see it during a Trim, so it
-            // takes at least two Trim calls (and thus two gen2 GCs) to drop an array, unless we're in high memory
-            // pressure. These values have been set arbitrarily; we could tune them in the future.
-            uint millisecondsThreshold = pressure switch
-            {
-                MemoryWatchdog.MemoryPressure.Medium => 15_000,
-                _ => 30_000,
-            };
-
-            foreach (var tlsBuckets in _allTlsBuckets)
-            {
-                var buckets = tlsBuckets.Key;
-                for (int i = 0; i < buckets.Length; i++)
-                {
-                    if (buckets[i].Array is null)
-                    {
-                        continue;
-                    }
-
-                    // We treat 0 to mean it hasn't yet been seen in a Trim call. In the very rare case where Trim records 0,
-                    // it'll take an extra Trim call to remove the array.
-                    int lastSeen = buckets[i].MillisecondsTimeStamp;
-                    if (lastSeen == 0)
-                    {
-                        buckets[i].MillisecondsTimeStamp = currentMilliseconds;
-                    }
-                    else if ((currentMilliseconds - lastSeen) >= millisecondsThreshold)
-                    {
-                        // Time noticeably wrapped, or we've surpassed the threshold.
-                        // Clear out the array, and log its being trimmed if desired.
-                        Interlocked.Exchange(ref buckets[i].Array, null);
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
     /// <summary> Clears all arrays in the pool. Noticeably does not destroy the arrays, only clear any remaining references they hold. </summary>
     public void ClearAll()
     {
@@ -280,7 +204,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
         }
     }
 
-    private SharedArrayPoolThreadLocalArray[] InitializeTlsBucketsAndTrimming()
+    private SharedArrayPoolThreadLocalArray[] InitializeTlsBuckets()
     {
         Debug.Assert(t_tlsBuckets is null, $"Non-null {nameof(t_tlsBuckets)}");
 
@@ -288,10 +212,6 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
         t_tlsBuckets = tlsBuckets;
 
         _allTlsBuckets.Add(tlsBuckets, null);
-        if (Interlocked.Exchange(ref _trimCallbackCreated, 1) == 0)
-        {
-            Gen2GcCallback.Register(s => ((ClearableSharedArrayPool<T>)s).Trim(), this);
-        }
 
         return tlsBuckets;
     }
@@ -313,107 +233,6 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
         int maxSize = 16 << binIndex;
         Debug.Assert(maxSize >= 0);
         return maxSize;
-    }
-
-    // Why does everything useful on this planet have to be in private classes.... - R
-    internal sealed class Gen2GcCallback : CriticalFinalizerObject
-    {
-        private readonly Func<bool>? _callback0;
-        private readonly Func<object, bool>? _callback1;
-        private GCHandle _weakTargetObj;
-
-        private Gen2GcCallback(Func<bool> callback)
-        {
-            _callback0 = callback;
-        }
-
-        private Gen2GcCallback(Func<object, bool> callback, object targetObj)
-        {
-            _callback1 = callback;
-            _weakTargetObj = GCHandle.Alloc(targetObj, GCHandleType.Weak);
-        }
-
-        /// <summary>
-        /// Schedule 'callback' to be called in the next GC.  If the callback returns true it is
-        /// rescheduled for the next Gen 2 GC.  Otherwise the callbacks stop.
-        /// </summary>
-        public static void Register(Func<bool> callback)
-        {
-            // Create a unreachable object that remembers the callback function and target object.
-            new Gen2GcCallback(callback);
-        }
-
-        /// <summary>
-        /// Schedule 'callback' to be called in the next GC.  If the callback returns true it is
-        /// rescheduled for the next Gen 2 GC.  Otherwise the callbacks stop.
-        ///
-        /// NOTE: This callback will be kept alive until either the callback function returns false,
-        /// or the target object dies.
-        /// </summary>
-        public static void Register(Func<object, bool> callback, object targetObj)
-        {
-            // Create a unreachable object that remembers the callback function and target object.
-            _ = new Gen2GcCallback(callback, targetObj);
-        }
-
-        ~Gen2GcCallback()
-        {
-            if (_weakTargetObj.IsAllocated)
-            {
-                // Check to see if the target object is still alive.
-                object? targetObj = _weakTargetObj.Target;
-                if (targetObj == null)
-                {
-                    // The target object is dead, so this callback object is no longer needed.
-                    _weakTargetObj.Free();
-                    return;
-                }
-
-                // Execute the callback method.
-                try
-                {
-                    Debug.Assert(_callback1 != null);
-                    if (!_callback1(targetObj))
-                    {
-                        // If the callback returns false, this callback object is no longer needed.
-                        _weakTargetObj.Free();
-                        return;
-                    }
-                }
-                catch
-                {
-                    // Ensure that we still get a chance to resurrect this object, even if the callback throws an exception.
-#if DEBUG
-                    // Except in DEBUG, as we really shouldn't be hitting any exceptions here.
-                    throw;
-#endif
-                }
-            }
-            else
-            {
-                // Execute the callback method.
-                try
-                {
-                    Debug.Assert(_callback0 != null);
-                    if (!_callback0())
-                    {
-                        // If the callback returns false, this callback object is no longer needed.
-                        return;
-                    }
-                }
-                catch
-                {
-                    // Ensure that we still get a chance to resurrect this object, even if the callback throws an exception.
-#if DEBUG
-                    // Except in DEBUG, as we really shouldn't be hitting any exceptions here.
-                    throw;
-#endif
-                }
-            }
-
-            // Resurrect ourselves by re-registering for finalization.
-            GC.ReRegisterForFinalize(this);
-        }
     }
 }
 
@@ -489,15 +308,6 @@ internal sealed class SharedArrayPoolPartitions
         return null;
     }
 
-    public void Trim(int currentMilliseconds, MemoryWatchdog.MemoryPressure pressure)
-    {
-        Partition[] partitions = _partitions;
-        for (int i = 0; i < partitions.Length; i++)
-        {
-            partitions[i].Trim(currentMilliseconds, pressure);
-        }
-    }
-
     public void Clear()
     {
         Partition[] partitions = _partitions;
@@ -514,8 +324,6 @@ internal sealed class SharedArrayPoolPartitions
         private readonly Array?[] _arrays = new Array[SharedArrayPoolStatics.s_maxArraysPerPartition];
         /// <summary>Number of arrays stored in <see cref="_arrays"/>.</summary>
         private int _count;
-        /// <summary>Timestamp set by Trim when it sees this as 0.</summary>
-        private int _millisecondsTimestamp;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryPush(Array array)
@@ -526,13 +334,6 @@ internal sealed class SharedArrayPoolPartitions
             int count = _count;
             if ((uint)count < (uint)arrays.Length)
             {
-                if (count == 0)
-                {
-                    // Reset the time stamp now that we're transitioning from empty to non-empty.
-                    // Trim will see this as 0 and initialize it to the current time when Trim is called.
-                    _millisecondsTimestamp = 0;
-                }
-
                 arrays[count] = array;
                 _count = count + 1;
                 enqueued = true;
@@ -557,60 +358,6 @@ internal sealed class SharedArrayPoolPartitions
             Monitor.Exit(this);
             return arr;
         }
-
-        public void Trim(int currentMilliseconds, MemoryWatchdog.MemoryPressure pressure)
-        {
-            const int TrimAfterMS = 60 * 1000;                                  // Trim after 60 seconds for low/moderate pressure
-            const int HighTrimAfterMS = 10 * 1000;                              // Trim after 10 seconds for high pressure
-
-            if (_count == 0)
-            {
-                return;
-            }
-
-            int trimMilliseconds = pressure == MemoryWatchdog.MemoryPressure.High ? HighTrimAfterMS : TrimAfterMS;
-
-            lock (this)
-            {
-                if (_count == 0)
-                {
-                    return;
-                }
-
-                if (_millisecondsTimestamp == 0)
-                {
-                    _millisecondsTimestamp = currentMilliseconds;
-                    return;
-                }
-
-                if ((currentMilliseconds - _millisecondsTimestamp) <= trimMilliseconds)
-                {
-                    return;
-                }
-
-                // We've elapsed enough time since the first item went into the partition.
-                // Drop the top item(s) so they can be collected.
-
-                int trimCount = pressure switch
-                {
-                    MemoryWatchdog.MemoryPressure.High => SharedArrayPoolStatics.s_maxArraysPerPartition,
-                    MemoryWatchdog.MemoryPressure.Medium => 2,
-                    _ => 1,
-                };
-
-                while (_count > 0 && trimCount-- > 0)
-                {
-                    Array? array = _arrays[--_count];
-                    Debug.Assert(array is not null, "No nulls should have been present in slots < _count.");
-                    _arrays[_count] = null;
-                }
-
-                _millisecondsTimestamp = _count > 0 ?
-                    _millisecondsTimestamp + (trimMilliseconds / 4) : // Give the remaining items a bit more time
-                    0;
-            }
-        }
-
         public void Clear()
         {
             if(_count == 0) {  return; }
