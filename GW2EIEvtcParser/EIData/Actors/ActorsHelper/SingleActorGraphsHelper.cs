@@ -1,209 +1,251 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+partial class SingleActor
 {
-    internal class SingleActorGraphsHelper : AbstractSingleActorHelper
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = [];
+    private readonly Dictionary<DamageType, CachingCollectionWithTarget<int[]>> _damageTakenList1S = [];
+
+    private CachingCollectionWithTarget<double[]>? _breakbarDamageList1S;
+    private CachingCollectionWithTarget<double[]>? _breakbarDamageTakenList1S;
+    private IReadOnlyList<Segment>? _healthUpdates;
+    private IReadOnlyList<Segment>? _breakbarPercentUpdates;
+    private IReadOnlyList<Segment>? _barrierUpdates;
+
+
+
+    public IReadOnlyList<Segment> GetHealthUpdates(ParsedEvtcLog log)
     {
-        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageList1S = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>>();
-        private readonly Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>> _damageTakenList1S = new Dictionary<ParserHelper.DamageType, CachingCollectionWithTarget<int[]>>();
-
-        private CachingCollectionWithTarget<double[]> _breakbarDamageList1S;
-        private CachingCollectionWithTarget<double[]> _breakbarDamageTakenList1S;
-        private List<Segment> _healthUpdates { get; set; }
-        private List<Segment> _breakbarPercentUpdates { get; set; }
-        private List<Segment> _barrierUpdates { get; set; }
-
-        public SingleActorGraphsHelper(AbstractSingleActor actor) : base(actor)
+        if (_healthUpdates == null)
         {
+            var events = log.CombatData.GetHealthUpdateEvents(AgentItem);
+            _healthUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
         }
 
+        return _healthUpdates;
+    }
 
-
-        public IReadOnlyList<Segment> GetHealthUpdates(ParsedEvtcLog log)
+    public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
+    {
+        if (_breakbarPercentUpdates == null)
         {
-            if (_healthUpdates == null)
+            var events = log.CombatData.GetBreakbarPercentEvents(AgentItem);
+            _breakbarPercentUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+        }
+
+        return _breakbarPercentUpdates;
+    }
+
+    public IReadOnlyList<Segment> GetBarrierUpdates(ParsedEvtcLog log)
+    {
+        if (_barrierUpdates == null)
+        {
+            var events = log.CombatData.GetBarrierUpdateEvents(AgentItem);
+            _barrierUpdates = ListFromStates(events.Select(x => x.ToState()), events.Count, log.FightData.FightStart, log.FightData.FightEnd);
+        }
+
+        return _barrierUpdates;
+    }
+
+    //TODO(Rennorb) @cleanup
+    static IReadOnlyList<Segment> ListFromStates(IEnumerable<(long Start, double State)> states, int stateCount, long min, long max)
+    {
+        if (stateCount == 0)
+        {
+            return [ ];
+        }
+
+        //TODO(Rennorb) @perf
+        var res = new List<Segment>(stateCount);
+        double lastValue = states.First().State;
+        foreach ((long start, double state) in states)
+        {
+            long end = Math.Min(Math.Max(start, min), max);
+            if (res.Count == 0)
             {
-                _healthUpdates = Segment.FromStates(log.CombatData.GetHealthUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+                res.Add(new Segment(0, end, lastValue));
             }
-            return _healthUpdates;
-        }
-
-        public IReadOnlyList<Segment> GetBreakbarPercentUpdates(ParsedEvtcLog log)
-        {
-            if (_breakbarPercentUpdates == null)
+            else
             {
-                _breakbarPercentUpdates = Segment.FromStates(log.CombatData.GetBreakbarPercentEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
+                res.Add(new Segment(res.Last().End, end, lastValue));
             }
-            return _breakbarPercentUpdates;
+            lastValue = state;
         }
+        res.Add(new Segment(res.Last().End, max, lastValue));
+        
+        //TODO(Rennorb) @perf
+        res.RemoveAll(x => x.Start >= x.End);
+        res.FuseConsecutive();
 
-        public IReadOnlyList<Segment> GetBarrierUpdates(ParsedEvtcLog log)
-        {
-            if (_barrierUpdates == null)
-            {
-                _barrierUpdates = Segment.FromStates(log.CombatData.GetBarrierUpdateEvents(AgentItem).Select(x => x.ToState()).ToList(), log.FightData.FightStart, log.FightData.FightEnd);
-            }
-            return _barrierUpdates;
-        }
+        return res;
+    }
 
-        private static int[] ComputeDamageGraph(IReadOnlyList<AbstractHealthDamageEvent> dls, long start, long end)
+    private static int[] ComputeDamageGraph(IEnumerable<HealthDamageEvent> dls, long start, long end)
+    {
+        int durationInMS = (int)(end - start);
+        int durationInS = durationInMS / 1000;
+        var graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
+        // fill the graph
+        int previousTime = 0;
+        foreach (HealthDamageEvent dl in dls)
         {
-            int durationInMS = (int)(end - start);
-            int durationInS = durationInMS / 1000;
-            var graph = durationInS * 1000 != durationInMS ? new int[durationInS + 2] : new int[durationInS + 1];
-            // fill the graph
-            int previousTime = 0;
-            foreach (AbstractHealthDamageEvent dl in dls)
+            int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+            if (time != previousTime)
             {
-                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
-                if (time != previousTime)
+                for (int i = previousTime + 1; i <= time; i++)
                 {
-                    for (int i = previousTime + 1; i <= time; i++)
-                    {
-                        graph[i] = graph[previousTime];
-                    }
+                    graph[i] = graph[previousTime];
                 }
-                previousTime = time;
-                graph[time] += dl.HealthDamage;
             }
-            for (int i = previousTime + 1; i < graph.Length; i++)
-            {
-                graph[i] = graph[previousTime];
-            }
-            return graph;
+            previousTime = time;
+            graph[time] += dl.HealthDamage;
         }
 
-        public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = DamageType.All)
+        for (int i = previousTime + 1; i < graph.Length; i++)
         {
-            if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
-            {
-                graphs = new CachingCollectionWithTarget<int[]>(log);
-                _damageList1S[damageType] = graphs;
-            }
-            if (!graphs.TryGetValue(start, end, target, out int[] graph))
-            {
-                graph = ComputeDamageGraph(Actor.GetHitDamageEvents(target, log, start, end, damageType), start, end);
-                //
-                graphs.Set(start, end, target, graph);
-            }
-            return graph;
+            graph[i] = graph[previousTime];
         }
 
-        public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target, ParserHelper.DamageType damageType = DamageType.All)
+        return graph;
+    }
+
+    public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
+    {
+        if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
         {
-            if (!_damageTakenList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
-            {
-                graphs = new CachingCollectionWithTarget<int[]>(log);
-                _damageTakenList1S[damageType] = graphs;
-            }
-            if (!graphs.TryGetValue(start, end, target, out int[] graph))
-            {
-                graph = ComputeDamageGraph(Actor.GetHitDamageTakenEvents(target, log, start, end, damageType), start, end);
-                //
-                graphs.Set(start, end, target, graph); ;
-            }
-            return graph;
+            graphs = new CachingCollectionWithTarget<int[]>(log);
+            _damageList1S[damageType] = graphs;
         }
 
-        private static double[] ComputeBreakbarDamageGraph(IReadOnlyList<BreakbarDamageEvent> dls, long start, long end)
+        if (!graphs.TryGetValue(start, end, target, out var graph))
         {
-            int durationInMS = (int)(end - start);
-            int durationInS = durationInMS / 1000;
-            double[] graph = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
-            // fill the graph
-            int previousTime = 0;
-            foreach (BreakbarDamageEvent dl in dls)
+            graph = ComputeDamageGraph(GetHitDamageEvents(target, log, start, end, damageType), start, end);
+            //
+            graphs.Set(start, end, target, graph);
+        }
+
+        return graph;
+    }
+
+    public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
+    {
+        if (!_damageTakenList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
+        {
+            graphs = new CachingCollectionWithTarget<int[]>(log);
+            _damageTakenList1S[damageType] = graphs;
+        }
+
+        if (!graphs.TryGetValue(start, end, target, out var graph))
+        {
+            graph = ComputeDamageGraph(GetHitDamageTakenEvents(target, log, start, end, damageType), start, end);
+            //
+            graphs.Set(start, end, target, graph); ;
+        }
+
+        return graph;
+    }
+
+    private static double[] ComputeBreakbarDamageGraph(IEnumerable<BreakbarDamageEvent> dls, long start, long end)
+    {
+        int durationInMS = (int)(end - start);
+        int durationInS = durationInMS / 1000;
+        double[] graph = durationInS * 1000 != durationInMS ? new double[durationInS + 2] : new double[durationInS + 1];
+        // fill the graph
+        int previousTime = 0;
+        foreach (BreakbarDamageEvent dl in dls)
+        {
+            int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
+            if (time != previousTime)
             {
-                int time = (int)Math.Ceiling((dl.Time - start) / 1000.0);
-                if (time != previousTime)
+                for (int i = previousTime + 1; i <= time; i++)
                 {
-                    for (int i = previousTime + 1; i <= time; i++)
-                    {
-                        graph[i] = graph[previousTime];
-                    }
+                    graph[i] = graph[previousTime];
                 }
-                previousTime = time;
-                graph[time] += dl.BreakbarDamage;
             }
-            for (int i = previousTime + 1; i < graph.Length; i++)
-            {
-                graph[i] = graph[previousTime];
-            }
-            return graph;
+            previousTime = time;
+            graph[time] += dl.BreakbarDamage;
         }
 
-        public IReadOnlyList<double> Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        for (int i = previousTime + 1; i < graph.Length; i++)
         {
-            if (!log.CombatData.HasBreakbarDamageData)
-            {
-                return null;
-            }
-            if (_breakbarDamageList1S == null)
-            {
-                _breakbarDamageList1S = new CachingCollectionWithTarget<double[]>(log);
-            }
-            if (_breakbarDamageList1S.TryGetValue(start, end, target, out double[] res))
-            {
-                return res;
-            }
-            var brkDmgList = ComputeBreakbarDamageGraph(Actor.GetBreakbarDamageEvents(target, log, start, end), start, end);
-            _breakbarDamageList1S.Set(start, end, target, brkDmgList);
-            return brkDmgList;
+            graph[i] = graph[previousTime];
         }
 
-        public IReadOnlyList<double> Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, AbstractSingleActor target)
+        return graph;
+    }
+
+    public IReadOnlyList<double>? Get1SBreakbarDamageList(ParsedEvtcLog log, long start, long end, SingleActor? target)
+    {
+        if (!log.CombatData.HasBreakbarDamageData)
         {
-            if (!log.CombatData.HasBreakbarDamageData)
-            {
-                return null;
-            }
-            if (_breakbarDamageTakenList1S == null)
-            {
-                _breakbarDamageTakenList1S = new CachingCollectionWithTarget<double[]>(log);
-            }
-            if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out double[] res))
-            {
-                return res;
-            }
-            var brkDmgList = ComputeBreakbarDamageGraph(Actor.GetBreakbarDamageTakenEvents(target, log, start, end), start, end);
-            _breakbarDamageTakenList1S.Set(start, end, target, brkDmgList);
-            return brkDmgList;
+            return null;
         }
 
-        private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
+        _breakbarDamageList1S ??= new CachingCollectionWithTarget<double[]>(log);
+
+        if (_breakbarDamageList1S.TryGetValue(start, end, target, out var res))
         {
-            int foundIndex = Segment.BinarySearchRecursive(segments, time, 0, segments.Count - 1);
-            Segment found = segments[foundIndex];
-            if (found.ContainsPoint(time))
-            {
-                return found.Value;
-            }
+            return res;
+        }
+
+        var brkDmgList = ComputeBreakbarDamageGraph(GetBreakbarDamageEvents(target, log, start, end), start, end);
+        _breakbarDamageList1S.Set(start, end, target, brkDmgList);
+        return brkDmgList;
+    }
+
+    public IReadOnlyList<double>? Get1SBreakbarDamageTakenList(ParsedEvtcLog log, long start, long end, SingleActor? target)
+    {
+        if (!log.CombatData.HasBreakbarDamageData)
+        {
+            return null;
+        }
+
+        _breakbarDamageTakenList1S ??= new CachingCollectionWithTarget<double[]>(log);
+
+        if (_breakbarDamageTakenList1S.TryGetValue(start, end, target, out var res))
+        {
+            return res;
+        }
+
+        var brkDmgList = ComputeBreakbarDamageGraph(GetBreakbarDamageTakenEvents(target, log, start, end), start, end);
+        _breakbarDamageTakenList1S.Set(start, end, target, brkDmgList);
+        return brkDmgList;
+    }
+
+    private static double GetPercentValue(IReadOnlyList<Segment> segments, long time)
+    {
+        int foundIndex = segments.BinarySearchRecursive(time, 0, segments.Count - 1);
+        Segment found = segments[foundIndex];
+        if (found.ContainsPoint(time))
+        {
+            return found.Value;
+        }
+
+        return -1.0;
+    }
+
+    public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
+    {
+        IReadOnlyList<Segment> hps = GetHealthUpdates(log);
+        if (!hps.Any())
+        {
             return -1.0;
         }
 
-        public double GetCurrentHealthPercent(ParsedEvtcLog log, long time)
-        {
-            IReadOnlyList<Segment> hps = GetHealthUpdates(log);
-            if (!hps.Any())
-            {
-                return -1.0;
-            }
-            return GetPercentValue(hps, time);
-        }
-
-        public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
-        {
-            IReadOnlyList<Segment> barriers = GetBarrierUpdates(log);
-            if (!barriers.Any())
-            {
-                return -1.0;
-            }
-            return GetPercentValue(barriers, time);
-        }
-
+        return GetPercentValue(hps, time);
     }
+
+    public double GetCurrentBarrierPercent(ParsedEvtcLog log, long time)
+    {
+        IReadOnlyList<Segment> barriers = GetBarrierUpdates(log);
+        if (!barriers.Any())
+        {
+            return -1.0;
+        }
+
+        return GetPercentValue(barriers, time);
+    }
+
 }

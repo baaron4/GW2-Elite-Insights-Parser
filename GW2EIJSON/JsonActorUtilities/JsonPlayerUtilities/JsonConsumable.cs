@@ -1,38 +1,30 @@
 ﻿
 
-namespace GW2EIJSON
+namespace GW2EIJSON;
+
+/// <summary>
+/// Class representing consumables
+/// </summary>
+public class JsonConsumable
 {
     /// <summary>
-    /// Class representing consumables
+    /// Number of stacks
     /// </summary>
-    public class JsonConsumable
-    {
+    public int Stack;
 
-        /// <summary>
-        /// Number of stacks
-        /// </summary>
-        public int Stack { get; set; }
+    /// <summary>
+    /// Duration of the consumable
+    /// </summary>
+    public int Duration;
 
-        /// <summary>
-        /// Duration of the consumable
-        /// </summary>
-        public int Duration { get; set; }
+    /// <summary>
+    /// Time of application of the consumable
+    /// </summary>
+    public long Time;
 
-        /// <summary>
-        /// Time of application of the consumable
-        /// </summary>
-        public long Time { get; set; }
-
-        /// <summary>
-        /// ID of the consumable
-        /// </summary>
-        /// <seealso cref="JsonLog.BuffMap"/>
-        public long Id { get; set; }
-
-
-        public JsonConsumable()
-        {
-
-        }
-    }
+    /// <summary>
+    /// ID of the consumable
+    /// </summary>
+    /// <seealso cref="JsonLog.BuffMap"/>
+    public long Id;
 }

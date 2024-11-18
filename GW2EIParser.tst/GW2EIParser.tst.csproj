@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8</TargetFramework>
-        <LangVersion>10.0</LangVersion>
-        <Nullable>disable</Nullable>
+        <LangVersion>12.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
         <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
@@ -13,19 +14,25 @@
         <Product>GW2 Elite Insights</Product>
         <Copyright>Copyright ©  2020</Copyright>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <Configurations>Debug;Release;NoRewards</Configurations>
+        <Configurations>Debug;Release;NoRewards;Trace</Configurations>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DebugType>none</DebugType>
         <DebugSymbols>false</DebugSymbols>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
+      <DebugType>none</DebugType>
+      <DefineConstants>TRACE</DefineConstants>
+      <DebugSymbols>false</DebugSymbols>
+      <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DefineConstants>DEBUG</DefineConstants>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <DefineConstants>DEBUG</DefineConstants>
         <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
     <PropertyGroup>
@@ -47,5 +54,8 @@
         <ProjectReference Include="..\GW2EIEvtcParser\GW2EIEvtcParser.csproj" />
         <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
         <ProjectReference Include="..\GW2EIParserCommons\GW2EIParserCommons.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="TestInput\**" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>

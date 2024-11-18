@@ -1,13 +1,12 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData;
+
+public class MapIDEvent : MetaDataEvent
 {
-    public class MapIDEvent : AbstractMetaDataEvent
+    public readonly int MapID;
+
+    internal MapIDEvent(CombatItem evtcItem) : base(evtcItem)
     {
-        public int MapID { get; }
-
-        internal MapIDEvent(CombatItem evtcItem) : base(evtcItem)
-        {
-            MapID = (int)evtcItem.SrcAgent;
-        }
-
+        MapID = (int)evtcItem.SrcAgent;
     }
+
 }

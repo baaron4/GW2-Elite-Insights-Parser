@@ -1,45 +1,51 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.GenericDecoration;
+﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EIData.Decoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+internal class CombatReplayDecorationContainer
 {
-    internal class CombatReplayDecorationContainer
+    private readonly Dictionary<string, _DecorationMetadata> DecorationCache;
+    private readonly List<(_DecorationMetadata metadata, _DecorationRenderingData renderingData)> Decorations;
+
+    internal CombatReplayDecorationContainer(Dictionary<string, _DecorationMetadata> cache, int capacity = 0)
     {
-        private Dictionary<string, GenericDecorationMetadata> DecorationCache { get; }
-        private List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)> Decorations { get; }
+        DecorationCache = cache;
+        Decorations = new(capacity);
+    }
 
-        internal CombatReplayDecorationContainer(Dictionary<string, GenericDecorationMetadata> cache)
+    public void Add(Decoration decoration)
+    {
+        if (decoration.Lifespan.end <= decoration.Lifespan.start)
         {
-            DecorationCache = cache;
-            Decorations = new List<(GenericDecorationMetadata metadata, GenericDecorationRenderingData renderingData)>();
+            return;
         }
 
-        public void Add(GenericDecoration decoration)
+        _DecorationMetadata constantPart = decoration.DecorationMetadata;
+        var id = constantPart.GetSignature();
+        if (!DecorationCache.TryGetValue(id, out _DecorationMetadata cached))
         {
-            if (decoration.Lifespan.end <= decoration.Lifespan.start)
-            {
-                return;
-            }
-            GenericDecorationMetadata constantPart = decoration.DecorationMetadata;
-            var id = constantPart.GetSignature();
-            if (!DecorationCache.TryGetValue(id, out GenericDecorationMetadata cached))
-            {
-                cached = constantPart;
-                DecorationCache[id] = constantPart;
-            }
-            Decorations.Add((cached, decoration.DecorationRenderingData));
+            cached = constantPart;
+            DecorationCache[id] = constantPart;
         }
+        Decorations.Add((cached, decoration.DecorationRenderingData));
+    }
 
-        public List<GenericDecorationRenderingDescription> GetCombatReplayRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    public void ReserveAdditionalCapacity(int additionalCapacity)
+    {
+        if(Decorations.Capacity >= Decorations.Count + additionalCapacity) { return; }
+
+        Decorations.Capacity = (int)(Decorations.Capacity * 1.4f);
+    }
+
+    public List<DecorationRenderingDescription> GetCombatReplayRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    {
+        var result = new List<DecorationRenderingDescription>(Decorations.Count);
+        foreach (var (constant, renderingData) in Decorations)
         {
-            var result = new List<GenericDecorationRenderingDescription>();
-            foreach ((GenericDecorationMetadata constant, GenericDecorationRenderingData renderingData) in Decorations)
-            {
-                result.Add(renderingData.GetCombatReplayRenderingDescription(map, log, usedSkills, usedBuffs, constant.GetSignature()));
-            }
-            return result;
+            result.Add(renderingData.GetCombatReplayRenderingDescription(map, log, usedSkills, usedBuffs, constant.GetSignature()));
         }
+        return result;
     }
 }
 

@@ -1,50 +1,48 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+
+internal abstract class EnemyBuffRemoveSingleMechanic : EnemyBuffRemoveMechanic<AbstractBuffRemoveEvent>
 {
 
-    internal abstract class EnemyBuffRemoveSingleMechanic : EnemyBuffRemoveMechanic<AbstractBuffRemoveEvent>
+    public EnemyBuffRemoveSingleMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, 0)
     {
+    }
 
-        public EnemyBuffRemoveSingleMechanic(long mechanicID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicID, inGameName, plotlySetting, shortName, description, fullName, 0)
+    public EnemyBuffRemoveSingleMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, 0)
+    {
+    }
+    protected override SingleActor? GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, SingleActor> regroupedMobs)
+    {
+        return MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
+    }
+    internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, SingleActor> regroupedMobs)
+    {
+        foreach (long mechanicID in MechanicIDs)
         {
-        }
-
-        public EnemyBuffRemoveSingleMechanic(long[] mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName) : base(mechanicIDs, inGameName, plotlySetting, shortName, description, fullName, 0)
-        {
-        }
-        protected override AbstractSingleActor GetActor(ParsedEvtcLog log, AgentItem agentItem, Dictionary<int, AbstractSingleActor> regroupedMobs)
-        {
-            return MechanicHelper.FindEnemyActor(log, agentItem, regroupedMobs);
-        }
-        internal override void CheckMechanic(ParsedEvtcLog log, Dictionary<Mechanic, List<MechanicEvent>> mechanicLogs, Dictionary<int, AbstractSingleActor> regroupedMobs)
-        {
-            foreach (long mechanicID in MechanicIDs)
+            foreach (BuffEvent c in log.CombatData.GetBuffData(mechanicID))
             {
-                foreach (AbstractBuffEvent c in log.CombatData.GetBuffData(mechanicID))
+                if (c is AbstractBuffRemoveEvent abre && Keep(abre, log))
                 {
-                    if (c is AbstractBuffRemoveEvent abre && Keep(abre, log))
+                    SingleActor? amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
+                    if (amp != null)
                     {
-                        AbstractSingleActor amp = GetActor(log, GetAgentItem(abre), regroupedMobs);
-                        if (amp != null)
+                        if (abre is BuffRemoveAllEvent brae)
                         {
-                            if (abre is BuffRemoveAllEvent brae)
+                            for (int i = 0; i < brae.RemovedStacks; i++)
                             {
-                                for (int i = 0; i < brae.RemovedStacks; i++)
-                                {
-                                    AddMechanic(log, mechanicLogs, brae, amp);
-                                }
+                                AddMechanic(log, mechanicLogs, brae, amp);
                             }
-                            else if (abre is BuffRemoveSingleEvent brse)
-                            {
-                                AddMechanic(log, mechanicLogs, brse, amp);
-                            }
+                        }
+                        else if (abre is BuffRemoveSingleEvent brse)
+                        {
+                            AddMechanic(log, mechanicLogs, brse, amp);
                         }
                     }
                 }
             }
         }
-
     }
+
 }

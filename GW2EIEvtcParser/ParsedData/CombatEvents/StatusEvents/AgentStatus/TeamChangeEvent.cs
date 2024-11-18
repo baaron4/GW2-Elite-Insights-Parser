@@ -1,29 +1,28 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData;
+
+public class TeamChangeEvent : StatusEvent
 {
-    public class TeamChangeEvent : AbstractStatusEvent
+    public readonly ulong TeamIDComingFrom;
+
+    public readonly ulong TeamIDInto;
+
+    internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData)
     {
-        public ulong TeamIDComingFrom { get; }
-
-        public ulong TeamIDInto { get; }
-
-        internal TeamChangeEvent(CombatItem evtcItem, AgentData agentData, EvtcVersionEvent evtcVersion) : base(evtcItem, agentData)
+        TeamIDInto = GetTeamIDInto(evtcItem);
+        if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
         {
-            TeamIDInto = GetTeamIDInto(evtcItem);
-            if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
-            {
-                TeamIDComingFrom = GetTeamIDComingFrom(evtcItem);
-            }
+            TeamIDComingFrom = GetTeamIDComingFrom(evtcItem);
         }
-
-        internal static ulong GetTeamIDInto(CombatItem evtcItem)
-        {
-            return evtcItem.DstAgent;
-        }
-
-        internal static ulong GetTeamIDComingFrom(CombatItem evtcItem)
-        {
-            return (ulong)evtcItem.Value;
-        }
-
     }
+
+    internal static ulong GetTeamIDInto(CombatItem evtcItem)
+    {
+        return evtcItem.DstAgent;
+    }
+
+    internal static ulong GetTeamIDComingFrom(CombatItem evtcItem)
+    {
+        return (ulong)evtcItem.Value;
+    }
+
 }

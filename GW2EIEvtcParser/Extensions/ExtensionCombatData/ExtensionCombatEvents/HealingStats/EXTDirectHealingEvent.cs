@@ -1,14 +1,13 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.Extensions
-{
-    public class EXTDirectHealingEvent : EXTAbstractHealingEvent
-    {
+namespace GW2EIEvtcParser.Extensions;
 
-        internal EXTDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
-        {
-            HealingDone = -evtcItem.Value;
-            AgainstDowned = AgainstDowned || (evtcItem.IsOffcycle & ~(byte)HealingExtensionOffcycleBits.PeerMask) == 1;
-        }
+public class EXTDirectHealingEvent : EXTHealingEvent
+{
+
+    internal EXTDirectHealingEvent(CombatItem evtcItem, AgentData agentData, SkillData skillData) : base(evtcItem, agentData, skillData)
+    {
+        HealingDone = -evtcItem.Value;
+        AgainstDowned = AgainstDowned || (evtcItem.IsOffcycle & ~(byte)HealingExtensionOffcycleBits.PeerMask) == 1;
     }
 }

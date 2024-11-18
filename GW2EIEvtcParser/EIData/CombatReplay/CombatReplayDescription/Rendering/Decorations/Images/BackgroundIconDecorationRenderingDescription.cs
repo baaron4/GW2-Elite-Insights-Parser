@@ -1,33 +1,31 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.EIData.BackgroundIconDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class BackgroundIconDecorationRenderingDescription : ImageDecorationRenderingDescription
 {
-    internal class BackgroundIconDecorationRenderingDescription : GenericIconDecorationRenderingDescription
+
+    public IReadOnlyList<float> Opacities { get; private set; }
+    public IReadOnlyList<float> Heights { get; private set; }
+    internal BackgroundIconDecorationRenderingDescription(ParsedEvtcLog log, BackgroundIconDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
-
-        public IReadOnlyList<float> Opacities { get; private set; }
-        public IReadOnlyList<float> Heights { get; private set; }
-        internal BackgroundIconDecorationRenderingDescription(ParsedEvtcLog log, BackgroundIconDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
+        Type = "BackgroundIconDecoration"; //TODO(Rennorb) @cleanup: enum
+        IsMechanicOrSkill = false;
+        var opacities = new List<float>(decoration.Opacities.Count * 2);
+        foreach (ParametricPoint1D opacity in decoration.Opacities)
         {
-            Type = "BackgroundIconDecoration";
-            IsMechanicOrSkill = false;
-            var opacities = new List<float>();
-            var heights = new List<float>();
-            foreach (ParametricPoint1D opacity in decoration.Opacities)
-            {
-                opacities.Add(opacity.X);
-                opacities.Add(opacity.Time);
-            }
-            foreach (ParametricPoint1D height in decoration.Heights)
-            {
-                heights.Add(height.X);
-                heights.Add(height.Time);
-            }
-            Opacities = opacities;
-            Heights = heights;
+            opacities.Add(opacity.X);
+            opacities.Add(opacity.Time);
         }
-    }
+        Opacities = opacities;
 
+        var heights = new List<float>(decoration.Heights.Count * 2);
+        foreach (ParametricPoint1D height in decoration.Heights)
+        {
+            heights.Add(height.X);
+            heights.Add(height.Time);
+        }
+        Heights = heights;
+    }
 }

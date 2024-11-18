@@ -1,61 +1,55 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 
-namespace GW2EIEvtcParser.EncounterLogic
+namespace GW2EIEvtcParser.EncounterLogic;
+
+internal abstract class RaidLogic : FightLogic
 {
-    internal abstract class RaidLogic : FightLogic
+
+    protected RaidLogic(int triggerID) : base(triggerID)
     {
+        ParseMode = ParseModeEnum.Instanced10;
+        SkillMode = SkillModeEnum.PvE;
+        EncounterCategoryInformation.Category = FightCategory.Raid;
+        EncounterID |= EncounterIDs.EncounterMasks.RaidMask;
+    }
 
-        protected RaidLogic(int triggerID) : base(triggerID)
+    internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    {
+        var raidRewardsTypes = new HashSet<int>();
+        if (combatData.GetGW2BuildEvent().Build < GW2Builds.June2019RaidRewards)
         {
-            ParseMode = ParseModeEnum.Instanced10;
-            SkillMode = SkillModeEnum.PvE;
-            EncounterCategoryInformation.Category = FightCategory.Raid;
-            EncounterID |= EncounterIDs.EncounterMasks.RaidMask;
+            raidRewardsTypes = [RewardTypes.OldRaidReward1, RewardTypes.OldRaidReward2];
         }
+        else
+        {
+            raidRewardsTypes = [RewardTypes.CurrentRaidReward];
+        }
+        IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
+        RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > fightData.FightStart);
+        if (reward != null)
+        {
+            fightData.SetSuccess(true, reward.Time);
+        }
+        else
+        {
+            NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
+        }
+    }
 
-        internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
+    {
+        if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
         {
-            var raidRewardsTypes = new HashSet<int>();
-            if (combatData.GetGW2BuildEvent().Build < GW2Builds.June2019RaidRewards)
-            {
-                raidRewardsTypes = new HashSet<int> { RewardTypes.OldRaidReward1, RewardTypes.OldRaidReward2 };
-            }
-            else
-            {
-                raidRewardsTypes = new HashSet<int> { RewardTypes.CurrentRaidReward };
-            }
-            IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-            RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > fightData.FightStart);
-            if (reward != null)
-            {
-                fightData.SetSuccess(true, reward.Time);
-            }
-            else
-            {
-                NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
-            }
+            return FightData.EncounterStartStatus.Late;
         }
+        return FightData.EncounterStartStatus.Normal;
+    }
 
-        internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
-        {
-            if (TargetHPPercentUnderThreshold(GenericTriggerID, fightData.FightStart, combatData, Targets))
-            {
-                return FightData.EncounterStartStatus.Late;
-            }
-            return FightData.EncounterStartStatus.Normal;
-        }
-
-        protected override HashSet<int> GetUniqueNPCIDs()
-        {
-            return new HashSet<int>
-            {
-                GenericTriggerID
-            };
-        }
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    {
+        return new [] { GenericTriggerID };
     }
 }

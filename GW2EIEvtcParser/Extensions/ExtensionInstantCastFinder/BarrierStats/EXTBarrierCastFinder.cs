@@ -1,47 +1,45 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.Extensions
+namespace GW2EIEvtcParser.Extensions;
+
+internal class EXTBarrierCastFinder : CheckedCastFinder<EXTBarrierEvent>
 {
-    internal class EXTBarrierCastFinder : CheckedCastFinder<EXTAbstractBarrierEvent>
+
+    private readonly long _damageSkillID;
+    public EXTBarrierCastFinder(long skillID, long damageSkillID) : base(skillID)
     {
+        UsingNotAccurate(true);
+        UsingEnable((combatData) => combatData.HasEXTBarrier);
+        _damageSkillID = damageSkillID;
+    }
 
-        private readonly long _damageSkillID;
-        public EXTBarrierCastFinder(long skillID, long damageSkillID) : base(skillID)
+    public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
+    {
+        var res = new List<InstantCastEvent>();
+        var heals = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From);
+        foreach (var group in heals)
         {
-            UsingNotAccurate(true);
-            UsingEnable((combatData) => combatData.HasEXTBarrier);
-            _damageSkillID = damageSkillID;
-        }
-
-        public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
-        {
-            var res = new List<InstantCastEvent>();
-            var heals = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (KeyValuePair<AgentItem, List<EXTAbstractBarrierEvent>> pair in heals)
+            var groupedHeals = group.ToList();
+            long lastTime = int.MinValue;
+            if (!HealingStatsExtensionHandler.SanitizeForSrc(groupedHeals))
             {
-                long lastTime = int.MinValue;
-                if (!HealingStatsExtensionHandler.SanitizeForSrc(pair.Value))
+                continue;
+            }
+            foreach (EXTBarrierEvent be in groupedHeals)
+            {
+                if (be.Time - lastTime < ICD)
                 {
+                    lastTime = be.Time;
                     continue;
                 }
-                foreach (EXTAbstractBarrierEvent be in pair.Value)
+                if (CheckCondition(be, combatData, agentData, skillData))
                 {
-                    if (be.Time - lastTime < ICD)
-                    {
-                        lastTime = be.Time;
-                        continue;
-                    }
-                    if (CheckCondition(be, combatData, agentData, skillData))
-                    {
-                        lastTime = be.Time;
-                        res.Add(new InstantCastEvent(GetTime(be, be.From, combatData), skillData.Get(SkillID), be.From));
-                    }
+                    lastTime = be.Time;
+                    res.Add(new InstantCastEvent(GetTime(be, be.From, combatData), skillData.Get(SkillID), be.From));
                 }
             }
-            return res;
         }
+        return res;
     }
 }

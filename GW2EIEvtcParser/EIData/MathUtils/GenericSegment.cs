@@ -1,52 +1,33 @@
-﻿using System;
+﻿/// <summary> A segment of time with type <see cref="double"/> with inclusive start and inclusive end. </summary>
+global using Segment = GW2EIEvtcParser.EIData.GenericSegment<double>;
 
-namespace GW2EIEvtcParser.EIData
+using System.Runtime.CompilerServices;
+
+namespace GW2EIEvtcParser.EIData;
+
+/// <summary> A generic segment of time with inclusive start and inclusive end. </summary>
+public struct GenericSegment<T>(long start, long end, T? value)
 {
-    public class GenericSegment<T>
-    {
-        public long Start { get; internal set; }
-        public long End { get; internal set; }
-        public T Value { get; internal set; }
+    public long Start = start;
+    public long End   = end;
+    public T?   Value = value; //TODO(Rennorb) @perf @cleanup
 
-        public GenericSegment(long start, long end, T value)
-        {
-            Start = start;
-            End = end;
-            Value = value;
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public GenericSegment(long start, long end) : this(start, end, default) { }
 
-        public GenericSegment(long start, long end) : this(start, end, default)
-        {
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly GenericSegment<O> WithOtherType<O>(O? value = default) => new(Start, End, value);
 
-        public GenericSegment(GenericSegment<T> other) : this(other.Start, other.End, other.Value)
-        {
 
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool IsEmpty() => Start == End;
 
-        public bool IntersectSegment(GenericSegment<T> seg)
-        {
-            return IntersectSegment(seg.Start, seg.End);
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool Intersects(in GenericSegment<T> other) => Intersects(other.Start, other.End);
 
-        public bool IntersectSegment(long start, long end)
-        {
-            if (Start > End)
-            {
-                return false;
-            }
-            else if (Start == End)
-            {
-                return ContainsPoint(start);
-            }
-            long maxStart = Math.Max(start, Start);
-            long minEnd = Math.Min(end, End);
-            return minEnd - maxStart >= 0;
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool Intersects(long start, long end) => !(end < Start || End < start);
 
-        public bool ContainsPoint(long time)
-        {
-            return Start <= time && End >= time;
-        }
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly bool ContainsPoint(long time) => Start <= time && time <= End;
 }

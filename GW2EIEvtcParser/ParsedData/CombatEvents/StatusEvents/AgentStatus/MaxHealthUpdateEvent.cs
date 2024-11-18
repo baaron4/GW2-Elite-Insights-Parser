@@ -1,18 +1,17 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData;
+
+public class MaxHealthUpdateEvent : StatusEvent
 {
-    public class MaxHealthUpdateEvent : AbstractStatusEvent
+    public readonly int MaxHealth;
+
+    internal MaxHealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
-        public int MaxHealth { get; }
-
-        internal MaxHealthUpdateEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
-        {
-            MaxHealth = GetMaxHealth(evtcItem);
-        }
-
-        internal static int GetMaxHealth(CombatItem evtcItem)
-        {
-            return (int)evtcItem.DstAgent;
-        }
-
+        MaxHealth = GetMaxHealth(evtcItem);
     }
+
+    internal static int GetMaxHealth(CombatItem evtcItem)
+    {
+        return (int)evtcItem.DstAgent;
+    }
+
 }

@@ -1,33 +1,32 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class AgentConnector : GeographicalConnector
 {
-    internal class AgentConnector : GeographicalConnector
+    public readonly AgentItem Agent;
+
+    public AgentConnector(SingleActor agent)
     {
-        public AgentItem Agent { get; }
+        Agent = agent.AgentItem;
+    }
 
-        public AgentConnector(AbstractSingleActor agent)
-        {
-            Agent = agent.AgentItem;
-        }
+    public AgentConnector(AgentItem agent)
+    {
+        Agent = agent;
+    }
 
-        public AgentConnector(AgentItem agent)
+    public class AgentConnectorDescriptor : GeographicalConnectorDescriptor
+    {
+        public int MasterId { get; private set; }
+        public AgentConnectorDescriptor(AgentConnector connector, CombatReplayMap map) : base(connector, map)
         {
-            Agent = agent;
+            MasterId = connector.Agent.UniqueID;
         }
+    }
 
-        protected class AgentConnectorDescriptor : GeographicalConnectorDescriptor
-        {
-            public int MasterId { get; private set; }
-            public AgentConnectorDescriptor(AgentConnector connector, CombatReplayMap map) : base(connector, map)
-            {
-                MasterId = connector.Agent.UniqueID;
-            }
-        }
-
-        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
-        {
-            return new AgentConnectorDescriptor(this, map);
-        }
+    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+    {
+        return new AgentConnectorDescriptor(this, map);
     }
 }

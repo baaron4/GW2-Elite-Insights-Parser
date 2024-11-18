@@ -1,57 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Numerics;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public abstract class GeographicalConnector : Connector
 {
-    internal abstract class GeographicalConnector : Connector
+    private Vector3? Offset;
+
+    private bool OffsetAfterRotation;
+    private bool _invertYOffset = false;
+    public abstract class GeographicalConnectorDescriptor
     {
-        private Point3D Offset { get; set; }
+        public readonly IReadOnlyList<float>? Offset;
+        public readonly bool OffsetAfterRotation;
 
-        private bool OffsetAfterRotation { get; set; }
-
-        private bool _invertYOffset = false;
-        public abstract class GeographicalConnectorDescriptor
+        public GeographicalConnectorDescriptor(GeographicalConnector connector, CombatReplayMap map)
         {
-            public IReadOnlyList<float> Offset { get; private set; }
-            public bool OffsetAfterRotation { get; private set; }
-
-            public GeographicalConnectorDescriptor(GeographicalConnector connector, CombatReplayMap map)
+            if (connector.Offset.HasValue)
             {
-                //
-                if (connector.Offset != null)
-                {
-                    OffsetAfterRotation = connector.OffsetAfterRotation;
-                    var positions = new List<float>
-                    {
-                        connector.Offset.X,
-                        connector._invertYOffset ? -connector.Offset.Y : connector.Offset.Y,
-                    };
-                    Offset = positions;
-                }
+                OffsetAfterRotation = connector.OffsetAfterRotation;
+                Offset = [
+                    connector.Offset.Value.X,
+                    connector._invertYOffset ? -connector.Offset.Value.Y : connector.Offset.Value.Y,
+                ];
             }
         }
+    }
 
-        /// <summary>
-        /// Adds an offset by the specified amount in the orientation given in <b>radians</b>. 
-        /// </summary>
-        public GeographicalConnector WithOffset(float orientation, float amount, bool afterRotation)
-        {
-            orientation *= -1; // game is indirect
-            Point3D offset = amount * new Point3D((float)Math.Cos(orientation), (float)Math.Sin(orientation));
-            Offset = offset;
-            OffsetAfterRotation = afterRotation;
-            return this;
-        }
+    /// <summary>
+    /// Adds an offset by the specified amount in the orientation given in <b>radians</b>. 
+    /// </summary>
+    public GeographicalConnector WithOffset(float orientation, float amount, bool afterRotation)
+    {
+        orientation *= -1; // game is indirect
+        Offset = amount * new Vector3((float)Math.Cos(orientation), (float)Math.Sin(orientation), 0);
+        OffsetAfterRotation = afterRotation;
+        return this;
+    }
 
-        /// <summary>
-        /// Adds an offset by the specified Point3D. 
-        /// </summary>
-        public GeographicalConnector WithOffset(Point3D offset, bool afterRotation, bool invertY = false)
-        {
-            Offset = offset;
-            OffsetAfterRotation = afterRotation;
-            _invertYOffset = invertY;
-            return this;
-        }
+    /// <summary>
+    /// Adds an offset by the specified Point3D. 
+    /// </summary>
+    public GeographicalConnector WithOffset(Vector3 offset, bool afterRotation, bool invertY = false) //TODO(Rennorb) @cleanup: should this jsut be vec2 ?
+    {
+        Offset = offset;
+        OffsetAfterRotation = afterRotation;
+        _invertYOffset = invertY;
+        return this;
     }
 }

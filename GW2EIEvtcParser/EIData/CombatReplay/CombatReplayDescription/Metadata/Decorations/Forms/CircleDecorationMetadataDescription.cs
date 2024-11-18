@@ -1,20 +1,16 @@
-﻿using System.Collections.Generic;
-using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.CircleDecoration;
+﻿using static GW2EIEvtcParser.EIData.CircleDecoration;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class CircleDecorationMetadataDescription : FormDecorationMetadataDescription
 {
-    internal class CircleDecorationMetadataDescription : FormDecorationMetadataDescription
+    public readonly uint Radius;
+    public readonly uint MinRadius;
+
+    internal CircleDecorationMetadataDescription(CircleDecorationMetadata decoration) : base(decoration)
     {
-        public uint Radius { get; }
-        public uint MinRadius { get; }
-
-        internal CircleDecorationMetadataDescription(CircleDecorationMetadata decoration) : base(decoration)
-        {
-            Type = "Circle";
-            Radius = decoration.Radius;
-            MinRadius = decoration.MinRadius;
-        }
+        Type = "Circle";
+        Radius = decoration.Radius;
+        MinRadius = decoration.MinRadius;
     }
-
 }

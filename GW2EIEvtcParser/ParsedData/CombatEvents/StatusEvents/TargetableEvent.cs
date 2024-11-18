@@ -1,13 +1,12 @@
-﻿namespace GW2EIEvtcParser.ParsedData
+﻿namespace GW2EIEvtcParser.ParsedData;
+
+public class TargetableEvent : StatusEvent
 {
-    public class TargetableEvent : AbstractStatusEvent
+    public readonly bool Targetable;
+
+    internal TargetableEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
     {
-        public bool Targetable { get; }
-
-        internal TargetableEvent(CombatItem evtcItem, AgentData agentData) : base(evtcItem, agentData)
-        {
-            Targetable = evtcItem.DstAgent == 1;
-        }
-
+        Targetable = evtcItem.DstAgent == 1;
     }
+
 }

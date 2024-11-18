@@ -1,25 +1,23 @@
-﻿using System;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+internal class BuffExtendCastFinder : BuffCastFinder<BuffExtensionEvent>
 {
-    internal class BuffExtendCastFinder : BuffCastFinder<BuffExtensionEvent>
+
+    public BuffExtendCastFinder(long skillID, long buffID) : base(skillID, buffID)
     {
+    }
 
-        public BuffExtendCastFinder(long skillID, long buffID) : base(skillID, buffID)
-        {
-        }
+    protected override AgentItem GetKeyAgent(BuffExtensionEvent evt)
+    {
+        return evt.To;
+    }
 
-        protected override AgentItem GetKeyAgent(BuffExtensionEvent evt)
-        {
-            return evt.To;
-        }
-
-        internal BuffExtendCastFinder UsingDurationChecker(int duration, long epsilon = ServerDelayConstant)
-        {
-            UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.ExtendedDuration - duration) < epsilon);
-            return this;
-        }
+    internal BuffExtendCastFinder UsingDurationChecker(int duration, long epsilon = ServerDelayConstant)
+    {
+        UsingChecker((evt, combatData, agentData, skillData) => Math.Abs(evt.ExtendedDuration - duration) < epsilon);
+        return this;
     }
 }

@@ -1,24 +1,23 @@
 ﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+public class SkillConnector : Connector
 {
-    internal class SkillConnector : Connector
+    public readonly AgentItem Agent;
+
+    public SkillConnector(SingleActor agent)
     {
-        public AgentItem Agent { get; }
+        Agent = agent.AgentItem;
+    }
 
-        public SkillConnector(AbstractSingleActor agent)
-        {
-            Agent = agent.AgentItem;
-        }
+    public SkillConnector(AgentItem agent)
+    {
+        Agent = agent;
+    }
 
-        public SkillConnector(AgentItem agent)
-        {
-            Agent = agent;
-        }
-
-        public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
-        {
-            return Agent.UniqueID;
-        }
+    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+    {
+        return Agent.UniqueID;
     }
 }

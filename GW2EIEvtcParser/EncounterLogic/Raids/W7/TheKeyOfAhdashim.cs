@@ -1,14 +1,13 @@
 ﻿
 using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 
-namespace GW2EIEvtcParser.EncounterLogic
+namespace GW2EIEvtcParser.EncounterLogic;
+
+internal abstract class TheKeyOfAhdashim : RaidLogic
 {
-    internal abstract class TheKeyOfAhdashim : RaidLogic
+    public TheKeyOfAhdashim(int triggerID) : base(triggerID)
     {
-        public TheKeyOfAhdashim(int triggerID) : base(triggerID)
-        {
-            EncounterCategoryInformation.SubCategory = SubFightCategory.TheKeyOfAhdashim;
-            EncounterID |= EncounterIDs.RaidWingMasks.TheKeyOfAhdashimMask;
-        }
+        EncounterCategoryInformation.SubCategory = SubFightCategory.TheKeyOfAhdashim;
+        EncounterID |= EncounterIDs.RaidWingMasks.TheKeyOfAhdashimMask;
     }
 }

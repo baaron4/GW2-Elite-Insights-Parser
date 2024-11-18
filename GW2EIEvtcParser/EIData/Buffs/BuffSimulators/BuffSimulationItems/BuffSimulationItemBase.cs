@@ -1,132 +1,129 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData.BuffSimulators
+namespace GW2EIEvtcParser.EIData.BuffSimulators;
+
+internal class BuffSimulationItemBase : BuffSimulationItem
 {
-    internal class BuffSimulationItemBase : BuffSimulationItem
+    internal readonly AgentItem _src;
+    internal readonly AgentItem _seedSrc;
+    internal readonly long _totalDuration;
+    internal readonly bool _isExtension;
+
+    protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Start + buffStackItem.Duration)
     {
-        private readonly AgentItem _src;
-        private readonly AgentItem _seedSrc;
-        private readonly bool _isExtension;
-        private long _totalDuration { get; }
+        //NOTE(Rennorb): We need to copy these because for some ungodly reason buffsStackItems can change after this initializer runs.
+        // this only influences buff uptime values, so it can be difficult to spot.
+        // There is a regression test for this in Tests/Regression.cs:BuffUptime.
+        _src           = buffStackItem.Src;
+        _seedSrc       = buffStackItem.SeedSrc;
+        _totalDuration = buffStackItem.TotalDuration;
+        _isExtension   = buffStackItem.IsExtension;
+    }
 
-        protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Duration)
+    public override void OverrideEnd(long end)
+    {
+        End = end;
+    }
+
+    public override int GetActiveStacks()
+    {
+        return GetStacks();
+    }
+
+    public override int GetStacks()
+    {
+        return 1;
+    }
+
+    public override int GetActiveStacks(SingleActor actor)
+    {
+        return GetStacks(actor);
+    }
+
+    public override int GetStacks(SingleActor actor)
+    {
+        return GetActiveSources().Any(x => x == actor.AgentItem) ? 1 : 0;
+    }
+
+    public override IEnumerable<long> GetActualDurationPerStack()
+    {
+        return [ GetActualDuration() ];
+    }
+
+    public override long GetActualDuration()
+    {
+        return _totalDuration;
+    }
+
+    public override IEnumerable<AgentItem> GetSources()
+    {
+        return [ _src ];
+    }
+
+    public override IEnumerable<AgentItem> GetActiveSources()
+    {
+        return GetSources();
+    }
+
+    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    {
+        long cDur = GetClampedDuration(start, end);
+        if (cDur == 0)
         {
-            _src = buffStackItem.Src;
-            _seedSrc = buffStackItem.SeedSrc;
-            _isExtension = buffStackItem.IsExtension;
-            _totalDuration = buffStackItem.TotalDuration;
+            return;
         }
 
-        public override void OverrideEnd(long end)
+        Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
+        if (distribution.TryGetValue(_src, out BuffDistributionItem toModify))
         {
-            Duration = Math.Min(Math.Max(end - Start, 0), Duration);
+            toModify.IncrementValue(cDur);
+        }
+        else
+        {
+            distribution.Add(_src, new BuffDistributionItem(
+                cDur,
+                0, 0, 0, 0, 0));
         }
 
-        public override int GetActiveStacks()
+        if (_isExtension)
         {
-            return GetStacks();
-        }
-
-        public override int GetStacks()
-        {
-            return 1;
-        }
-
-        public override int GetActiveStacks(AbstractSingleActor actor)
-        {
-            return GetStacks(actor);
-        }
-
-        public override int GetStacks(AbstractSingleActor actor)
-        {
-            if (GetActiveSources().Any(x => x == actor.AgentItem))
+            if (distribution.TryGetValue(_src, out toModify))
             {
-                return 1;
-            }
-            return 0;
-        }
-
-        public override IReadOnlyList<long> GetActualDurationPerStack()
-        {
-            return new List<long>() { GetActualDuration() };
-        }
-
-        public override long GetActualDuration()
-        {
-            return _totalDuration;
-        }
-
-        public override IReadOnlyList<AgentItem> GetSources()
-        {
-            return new List<AgentItem>() { _src };
-        }
-
-        public override IReadOnlyList<AgentItem> GetActiveSources()
-        {
-            return GetSources();
-        }
-
-        public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
-        {
-            long cDur = GetClampedDuration(start, end);
-            if (cDur == 0)
-            {
-                return;
-            }
-            Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
-            AgentItem agent = _src;
-            AgentItem seedAgent = _seedSrc;
-            if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
-            {
-                toModify.IncrementValue(cDur);
+                toModify.IncrementExtension(cDur);
             }
             else
             {
-                distrib.Add(agent, new BuffDistributionItem(
-                    cDur,
-                    0, 0, 0, 0, 0));
+                distribution.Add(_src, new BuffDistributionItem(
+                    0,
+                    0, 0, 0, cDur, 0));
             }
-            if (_isExtension)
+        }
+
+        if (_src != _seedSrc)
+        {
+            if (distribution.TryGetValue(_seedSrc, out toModify))
             {
-                if (distrib.TryGetValue(agent, out toModify))
-                {
-                    toModify.IncrementExtension(cDur);
-                }
-                else
-                {
-                    distrib.Add(agent, new BuffDistributionItem(
-                        0,
-                        0, 0, 0, cDur, 0));
-                }
+                toModify.IncrementExtended(cDur);
             }
-            if (agent != seedAgent)
+            else
             {
-                if (distrib.TryGetValue(seedAgent, out toModify))
-                {
-                    toModify.IncrementExtended(cDur);
-                }
-                else
-                {
-                    distrib.Add(seedAgent, new BuffDistributionItem(
-                        0,
-                        0, 0, 0, 0, cDur));
-                }
+                distribution.Add(_seedSrc, new BuffDistributionItem(
+                    0,
+                    0, 0, 0, 0, cDur));
             }
-            if (agent == ParserHelper._unknownAgent)
+        }
+
+        if (_src == ParserHelper._unknownAgent)
+        {
+            if (distribution.TryGetValue(_seedSrc, out toModify))
             {
-                if (distrib.TryGetValue(seedAgent, out toModify))
-                {
-                    toModify.IncrementUnknownExtension(cDur);
-                }
-                else
-                {
-                    distrib.Add(seedAgent, new BuffDistributionItem(
-                        0,
-                        0, 0, cDur, 0, 0));
-                }
+                toModify.IncrementUnknownExtension(cDur);
+            }
+            else
+            {
+                distribution.Add(_seedSrc, new BuffDistributionItem(
+                    0,
+                    0, 0, cDur, 0, 0));
             }
         }
     }

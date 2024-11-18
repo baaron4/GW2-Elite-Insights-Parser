@@ -1,27 +1,25 @@
-﻿using System.Linq;
-using GW2EIEvtcParser.ParsedData;
+﻿using GW2EIEvtcParser.ParsedData;
 
-namespace GW2EIEvtcParser.EIData
+namespace GW2EIEvtcParser.EIData;
+
+
+internal abstract class SrcEffectMechanic : EffectMechanic
 {
 
-    internal abstract class SrcEffectMechanic : EffectMechanic
+    protected override AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData)
     {
-
-        protected override AgentItem GetAgentItem(EffectEvent effectEvt, AgentData agentData)
+        if (effectEvt.Src.IsUnamedSpecies())
         {
-            if (effectEvt.Src.IsUnamedSpecies())
-            {
-                return agentData.GetNPCsByID(ArcDPSEnums.TrashID.Environment).FirstOrDefault();
-            }
-            return effectEvt.Src;
+            return agentData.GetNPCsByID(ArcDPSEnums.TrashID.Environment).FirstOrDefault();
         }
+        return effectEvt.Src;
+    }
 
-        public SrcEffectMechanic(string effectGUID, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this(new string[] { effectGUID }, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
-        {
-        }
+    public SrcEffectMechanic(GUID effect, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : this([ effect ], inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    {
+    }
 
-        public SrcEffectMechanic(string[] effectGUIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effectGUIDs, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
-        {
-        }
+    public SrcEffectMechanic(ReadOnlySpan<GUID> effects, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(effects, inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
+    {
     }
 }
