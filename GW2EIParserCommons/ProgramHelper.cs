@@ -185,11 +185,11 @@ public sealed class ProgramHelper : IDisposable
                         originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Benchmark
                         );
         //Upload Process
-        string[] uploadresult = new string[2] { "", "" };
+        string[] uploadresult = ["", ""];
         if (Settings.UploadToDPSReports)
         {
             originalController.UpdateProgressWithCancellationCheck("DPSReport: Uploading");
-            DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress("DPSReport: " + str), Settings.DPSReportUserToken,
+            DPSReportUploadObject? response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress("DPSReport: " + str), Settings.DPSReportUserToken,
             originalLog.ParserSettings.AnonymousPlayers,
             originalLog.ParserSettings.DetailedWvWParse);
             uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
@@ -218,7 +218,7 @@ public sealed class ProgramHelper : IDisposable
             } 
             else
             {
-                string? accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
+                string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : "-";
 
                 if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.FightData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                 {

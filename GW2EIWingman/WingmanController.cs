@@ -27,15 +27,15 @@ public static class WingmanController
 
     ///////////////// URL Utilities
     private const string BaseURL = "https://gw2wingman.nevermindcreations.de/";
-    private readonly static string TestConnectionURL = BaseURL + "testConnection";
+    private const string TestConnectionURL = BaseURL + "testConnection";
 
     private const string BaseAPIURL = BaseURL + "api/";
-    private readonly static string EIVersionURL = BaseAPIURL + "EIversion";
-    private readonly static string ImportLogQueuedURL = BaseAPIURL + "importLogQueued";
-    private readonly static string CheckLogQueuedURL = BaseAPIURL + "checkLogQueued";
-    private readonly static string CheckLogQueuedOrDBURL = BaseAPIURL + "checkLogQueuedOrDB";
-    private readonly static string CheckUploadURL = BaseURL + "checkUpload";
-    private readonly static string UploadProcessedURL = BaseURL + "uploadProcessed";
+    private const string EIVersionURL = BaseAPIURL + "EIversion";
+    private const string ImportLogQueuedURL = BaseAPIURL + "importLogQueued";
+    private const string CheckLogQueuedURL = BaseAPIURL + "checkLogQueued";
+    private const string CheckLogQueuedOrDBURL = BaseAPIURL + "checkLogQueuedOrDB";
+    private const string CheckUploadURL = BaseURL + "checkUpload";
+    private const string UploadProcessedURL = BaseURL + "uploadProcessed";
 
     private static bool IsDPSReportLinkValid(string dpsReportLink, TraceHandler traceHandler)
     {
@@ -72,7 +72,7 @@ public static class WingmanController
 
     private static bool VerifyEIVersion(Version parserVersion, TraceHandler traceHandler)
     {
-        string returnedVersion = _GetWingmanResponse("EIVersionURL", EIVersionURL, traceHandler, HttpMethod.Get);
+        string? returnedVersion = _GetWingmanResponse("EIVersionURL", EIVersionURL, traceHandler, HttpMethod.Get);
         if (returnedVersion == null)
         {
             traceHandler("Could not fetch version from Wingman");
@@ -90,13 +90,13 @@ public static class WingmanController
         return true;
     }
 
-    public static bool CanBeUsed(Version parserVersion, TraceHandler traceHandler)
+    public static bool CanBeUsed(Version? parserVersion, TraceHandler traceHandler)
     {
         return CheckConnection(traceHandler) && (parserVersion == null || VerifyEIVersion(parserVersion, traceHandler));
     }
     //
 
-    public static WingmanCheckLogQueuedOrDBObject GetCheckLogQueuedOrDB(string dpsReportLink, TraceHandler traceHandler)
+    public static WingmanCheckLogQueuedOrDBObject? GetCheckLogQueuedOrDB(string dpsReportLink, TraceHandler traceHandler)
     {
         if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
         {
@@ -104,7 +104,7 @@ public static class WingmanController
         }
         try
         {
-            return JsonConvert.DeserializeObject<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post), new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<WingmanCheckLogQueuedOrDBObject>(GetWingmanResponse("CheckLogQueuedOrDB", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = DefaultJsonContractResolver,
@@ -118,7 +118,7 @@ public static class WingmanController
         }
     }
 
-    public static WingmanCheckLogQueuedObject GetCheckLogQueued(string dpsReportLink, TraceHandler traceHandler)
+    public static WingmanCheckLogQueuedObject? GetCheckLogQueued(string dpsReportLink, TraceHandler traceHandler)
     {
         if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
         {
@@ -126,7 +126,7 @@ public static class WingmanController
         }
         try
         {
-            return JsonConvert.DeserializeObject<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post), new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<WingmanCheckLogQueuedObject>(GetWingmanResponse("CheckLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = DefaultJsonContractResolver,
@@ -140,7 +140,7 @@ public static class WingmanController
         }
     }
 
-    public static WingmanImportLogQueuedObject ImportLogQueued(string dpsReportLink, TraceHandler traceHandler)
+    public static WingmanImportLogQueuedObject? ImportLogQueued(string dpsReportLink, TraceHandler traceHandler)
     {
         if (!IsDPSReportLinkValid(dpsReportLink, traceHandler))
         {
@@ -148,7 +148,7 @@ public static class WingmanController
         }
         try
         {
-            return JsonConvert.DeserializeObject<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post), new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<WingmanImportLogQueuedObject>(GetWingmanResponse("ImportLogQueued", GetCheckLogQueuedOrDBURL(dpsReportLink), traceHandler, null, HttpMethod.Post)!, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = DefaultJsonContractResolver,
@@ -165,7 +165,7 @@ public static class WingmanController
     public static bool UploadToWingmanUsingImportLogQueued(string dpsReportLink, TraceHandler traceHandler)
     {
         // Check if the URL is already present on Wingman
-        WingmanCheckLogQueuedOrDBObject wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traceHandler);
+        WingmanCheckLogQueuedOrDBObject? wingmanCheck = GetCheckLogQueuedOrDB(dpsReportLink, traceHandler);
         if (wingmanCheck != null)
         {
             if (wingmanCheck.InDB || wingmanCheck.InQueue)
@@ -175,7 +175,7 @@ public static class WingmanController
             }
             else
             {
-                WingmanImportLogQueuedObject wingmanUpload = ImportLogQueued(dpsReportLink, traceHandler);
+                WingmanImportLogQueuedObject? wingmanUpload = ImportLogQueued(dpsReportLink, traceHandler);
                 if (wingmanUpload != null)
                 {
                     if (wingmanUpload.Success != 1)
@@ -205,7 +205,7 @@ public static class WingmanController
             { "file", fi.Name } ,
             { "triggerID", triggerID.ToString() }
         };
-        Func<HttpContent> contentCreator = () =>
+        HttpContent contentCreator()
         {
             var multiPartContent = new MultipartFormDataContent();
             foreach (KeyValuePair<string, string> pair in data)
@@ -214,7 +214,7 @@ public static class WingmanController
                 multiPartContent.Add(content, pair.Key);
             }
             return multiPartContent;
-        };
+        }
         return GetWingmanResponse("CheckUploadPossible", CheckUploadURL, traceHandler, null, HttpMethod.Post, contentCreator) == "True";
     }
     public static bool UploadProcessed(FileInfo fi, string account, byte[] jsonFile, byte[] htmlFile, string suffix, TraceHandler traceHandler, Version parserVersion)
@@ -247,12 +247,12 @@ public static class WingmanController
             return multiPartContent;
         };
 
-        string response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traceHandler, null, HttpMethod.Post, contentCreator);
+        string? response = GetWingmanResponse("UploadProcessed", UploadProcessedURL, traceHandler, null, HttpMethod.Post, contentCreator);
         return response != null && response != "False";
     }
 
     //
-    private static string _GetWingmanResponse(string requestName, string url, TraceHandler traceHandler, HttpMethod method, Func<HttpContent> content = null)
+    private static string? _GetWingmanResponse(string requestName, string url, TraceHandler traceHandler, HttpMethod method, Func<HttpContent>? content = null)
     {
         const int tentatives = 3;
         for (int i = 0; i < tentatives; i++)
@@ -306,7 +306,7 @@ public static class WingmanController
     }
 
 
-    private static string GetWingmanResponse(string requestName, string url, TraceHandler traceHandler, Version parserVersion, HttpMethod method, Func<HttpContent> content = null)
+    private static string? GetWingmanResponse(string requestName, string url, TraceHandler traceHandler, Version? parserVersion, HttpMethod method, Func<HttpContent>? content = null)
     {
         if (!CanBeUsed(parserVersion, traceHandler))
         {

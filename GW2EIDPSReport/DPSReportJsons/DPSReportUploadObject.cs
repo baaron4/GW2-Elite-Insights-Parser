@@ -39,14 +39,14 @@ public class DPSReportUploadObject
     {
         get
         {
-            var json = PlayersJson.ToString();
+            var json = PlayersJson.ToString()!;
             try
             {
-                return JsonSerializer.Deserialize<Dictionary<string, DPSReportUploadPlayerObject>>(json);
+                return JsonSerializer.Deserialize<Dictionary<string, DPSReportUploadPlayerObject>>(json)!;
             }
             catch
             {
-                return new Dictionary<string, DPSReportUploadPlayerObject>();
+                return [];
             }
         }
     }
