@@ -60,11 +60,11 @@ internal class SuperKodanBrothers : Bjora
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             AgentItem mainTarget = (agentData.GetNPCsByID(ArcDPSEnums.TargetID.ClawOfTheFallen).FirstOrDefault() ?? agentData.GetNPCsByID(ArcDPSEnums.TargetID.VoiceOfTheFallen).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
-            CombatItem firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
+            CombatItem? firstCast = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mainTarget) && x.IsActivation != ArcDPSEnums.Activation.None && x.Time <= logStartNPCUpdate.Time && x.SkillID != WeaponStow && x.SkillID != WeaponDraw);
             if (firstCast != null && combatData.Any(x => x.SrcMatchesAgent(mainTarget) && x.Time > logStartNPCUpdate.Time + TimeThresholdConstant))
             {
                 startToUse = firstCast.Time;
@@ -89,8 +89,8 @@ internal class SuperKodanBrothers : Bjora
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor voice = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ClawOfTheFallen));
-        SingleActor claw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceOfTheFallen));
+        SingleActor? voice = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ClawOfTheFallen));
+        SingleActor? claw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceOfTheFallen));
         if (voice == null || claw == null)
         {
             throw new MissingKeyActorsException("Claw or Voice not found");
@@ -116,7 +116,7 @@ internal class SuperKodanBrothers : Bjora
         int voiceAndClawCount = 0;
         foreach (SingleActor voiceAndClaw in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw)))
         {
-            EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
+            EnterCombatEvent? enterCombat = log.CombatData.GetEnterCombatEvents(voiceAndClaw.AgentItem).FirstOrDefault();
             long phaseStart = 0;
             if (enterCombat != null)
             {
@@ -126,7 +126,7 @@ internal class SuperKodanBrothers : Bjora
             {
                 phaseStart = voiceAndClaw.FirstAware;
             }
-            PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > phaseStart);
+            PhaseData? nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > phaseStart);
             long phaseEnd = Math.Min(fightEnd, voiceAndClaw.LastAware);
             if (nextUnmergedPhase != null)
             {
@@ -143,7 +143,7 @@ internal class SuperKodanBrothers : Bjora
         foreach (CastEvent teleport in teleports)
         {
             long preTPPhaseEnd = Math.Min(teleport.Time, log.FightData.FightEnd);
-            SingleActor voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
+            SingleActor? voiceAndClaw = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.VoiceAndClaw) && x.FirstAware >= preTPPhaseStart);
             if (voiceAndClaw != null)
             {
                 long oldEnd = preTPPhaseEnd;
@@ -151,7 +151,7 @@ internal class SuperKodanBrothers : Bjora
                 // To handle position phase after merge phase end
                 if (oldEnd != preTPPhaseEnd)
                 {
-                    PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > voiceAndClaw.LastAware);
+                    PhaseData? nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > voiceAndClaw.LastAware);
                     if (nextUnmergedPhase != null)
                     {
                         long postMergedStart = nextUnmergedPhase.Start + 1;
@@ -175,7 +175,7 @@ internal class SuperKodanBrothers : Bjora
         }
 
         //
-        BuffEvent enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent? enrage = log.CombatData.GetBuffData(EnragedVC).FirstOrDefault(x => x is BuffApplyEvent);
         if (enrage != null)
         {
             var phase = new PhaseData(enrage.Time, log.FightData.FightEnd, "Enrage");
@@ -184,7 +184,7 @@ internal class SuperKodanBrothers : Bjora
         }
         // Missing final position event
         {
-            PhaseData nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > preTPPhaseStart);
+            PhaseData? nextUnmergedPhase = unmergedPhases.FirstOrDefault(x => x.Start > preTPPhaseStart);
             long finalStart = preTPPhaseStart;
             long finalPositionEnd = log.FightData.FightEnd;
             if (nextUnmergedPhase != null)

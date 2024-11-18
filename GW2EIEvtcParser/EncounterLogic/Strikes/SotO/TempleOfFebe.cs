@@ -199,14 +199,14 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             }
         }
         // Enraged Smash phase - After 10% bar is broken
-        CastEvent enragedSmash = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).FirstOrDefault();
+        CastEvent? enragedSmash = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).FirstOrDefault();
         if (enragedSmash != null)
         {
             var phase = new PhaseData(enragedSmash.Time, log.FightData.FightEnd, "Enraged Smash");
             phase.AddTarget(mainTarget);
             phases.Add(phase);
             // Sub Phase for 50%-10%
-            PhaseData phase3 = invulnPhases.LastOrDefault(x => x.InInterval(enragedSmash.Time));
+            PhaseData? phase3 = invulnPhases.LastOrDefault(x => x.InInterval(enragedSmash.Time));
             if (phase3 != null)
             {
                 var phase50_10 = new PhaseData(phase3.Start, enragedSmash.Time, "50%-10%");
@@ -274,7 +274,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             switch (target.ID)
             {
                 case (int)TrashID.EmbodimentOfDespair:
-                    CombatItem despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? despair = combatData.FirstOrDefault(x => x.SkillID == EmpoweredDespairEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[0]++ + ")");
                     if (despair != null && Math.Abs(target.FirstAware - despair.Time) <= ServerDelayConstant)
                     {
@@ -282,7 +282,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     }
                     break;
                 case (int)TrashID.EmbodimentOfEnvy:
-                    CombatItem envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? envy = combatData.FirstOrDefault(x => x.SkillID == EmpoweredEnvyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[1]++ + ")");
                     if (envy != null && Math.Abs(target.FirstAware - envy.Time) <= ServerDelayConstant)
                     {
@@ -290,7 +290,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     }
                     break;
                 case (int)TrashID.EmbodimentOfGluttony:
-                    CombatItem gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? gluttony = combatData.FirstOrDefault(x => x.SkillID == EmpoweredGluttonyEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[2]++ + ")");
                     if (gluttony != null && Math.Abs(target.FirstAware - gluttony.Time) <= ServerDelayConstant)
                     {
@@ -298,7 +298,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     }
                     break;
                 case (int)TrashID.EmbodimentOfMalice:
-                    CombatItem malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? malice = combatData.FirstOrDefault(x => x.SkillID == EmpoweredMaliceEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[3]++ + ")");
                     if (malice != null && Math.Abs(target.FirstAware - malice.Time) <= ServerDelayConstant)
                     {
@@ -306,7 +306,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     }
                     break;
                 case (int)TrashID.EmbodimentOfRage:
-                    CombatItem rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? rage = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRageEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[4]++ + ")");
                     if (rage != null && Math.Abs(target.FirstAware - rage.Time) <= ServerDelayConstant)
                     {
@@ -314,7 +314,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     }
                     break;
                 case (int)TrashID.EmbodimentOfRegret:
-                    CombatItem regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
+                    CombatItem? regret = combatData.FirstOrDefault(x => x.SkillID == EmpoweredRegretEmbodiment && x.DstMatchesAgent(target.AgentItem) && x.IsBuffApply());
                     target.OverrideName(target.Character + " (P" + curEmbodiments[5]++ + ")");
                     if (regret != null && Math.Abs(target.FirstAware - regret.Time) <= ServerDelayConstant)
                     {
@@ -545,7 +545,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
         long invisibleStart = log.FightData.LogStart;
         bool startTrimmed = false;
 
-        SingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+        SingleActor? cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
         var invulnsApply = new List<BuffApplyEvent>();
         if (cerus != null)
         {
@@ -755,7 +755,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <returns>The computed lifespan.</returns>
     private static (long start, long end) ComputeMechanicLifespanWithCancellationTime(AgentItem target, ParsedEvtcLog log, (long start, long end) lifespan)
     {
-        SingleActor cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
+        SingleActor? cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
         if (cerus != null)
         {
             // If Cerus is casting a mechanic, cancel it when he begins casting Petrify
@@ -804,7 +804,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
 
         if (log.FightData.IsCM || log.FightData.IsLegendaryCM)
         {
-            AgentItem cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
+            AgentItem? cerus = log.AgentData.GetNPCsByID((int)TargetID.Cerus).FirstOrDefault();
             if (cerus != null)
             {
                 var empoweredBuffs = new List<long>()

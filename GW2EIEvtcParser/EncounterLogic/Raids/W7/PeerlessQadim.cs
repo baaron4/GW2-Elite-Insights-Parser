@@ -129,7 +129,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(ForceOfRetaliationCast);
         if (pushes.Count > 0)
         {
-            CastEvent push = pushes[0];
+            CastEvent? push = pushes[0];
             phaseStarts.Add(push.Time);
             foreach (long magmaDrop in phaseEnds)
             {

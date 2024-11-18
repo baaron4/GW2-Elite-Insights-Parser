@@ -41,7 +41,7 @@ internal class Adina : TheKeyOfAhdashim
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
@@ -75,7 +75,7 @@ internal class Adina : TheKeyOfAhdashim
         attackTargetEvents = attackTargetEvents.Where(x =>
         {
             AgentItem atAgent = x.AttackTarget;
-            if (targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
+            if (targetableEvents.TryGetValue(atAgent, out var targetables))
             {
                 return targetables.Any(y => y.Targetable);
             }
@@ -88,7 +88,7 @@ internal class Adina : TheKeyOfAhdashim
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
         {
             AgentItem atAgent = attackTargetEvent.AttackTarget;
-            if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
+            if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out var targetables))
             {
                 continue;
             }
@@ -98,7 +98,7 @@ internal class Adina : TheKeyOfAhdashim
             var copyEventsFrom = new List<AgentItem>() { hand };
             var attackOns = targetables.Where(x => x.Targetable).ToList();
             var attackOffs = targetables.Where(x => !x.Targetable).ToList();
-            CombatItem posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+            CombatItem? posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
             ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
             if (posEvt != null)
             {
@@ -113,7 +113,7 @@ internal class Adina : TheKeyOfAhdashim
             {
                 long start = targetableEvent.Time;
                 long end = final;
-                TargetableEvent attackOff = attackOffs.FirstOrDefault(x => x.Time > start);
+                TargetableEvent? attackOff = attackOffs.FirstOrDefault(x => x.Time > start);
                 if (attackOff != null)
                 {
                     end = attackOff.Time;
@@ -250,7 +250,7 @@ internal class Adina : TheKeyOfAhdashim
         phases[0].AddTarget(adina);
         var handIds = new ArcDPSEnums.TrashID[] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption };
         var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList(); //TODO(Rennorb) @perf
-        BuffEvent lastInvuln = invuls.LastOrDefault();
+        BuffEvent? lastInvuln = invuls.LastOrDefault();
         long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart));
         if (!requirePhases)
@@ -297,7 +297,7 @@ internal class Adina : TheKeyOfAhdashim
                 mainPhaseEnds.Add(pair.Key);
             }
         }
-        CastEvent boulderBarrage = adina.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
+        CastEvent? boulderBarrage = adina.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).FirstOrDefault(x => x.SkillId == BoulderBarrage && x.Time < 6000);
         start = boulderBarrage == null ? 0 : boulderBarrage.EndTime;
         if (mainPhaseEnds.Count != 0)
         {
@@ -373,7 +373,7 @@ internal class Adina : TheKeyOfAhdashim
                 PhaseData phaseData = phases[i];
                 if (mainPhases.Contains(phaseData))
                 {
-                    if (mainPhasesMap.Contains(crMaps.LastOrDefault()))
+                    if (mainPhasesMap.Contains(crMaps.LastOrDefault()!))
                     {
                         splitPhaseIndex++;
                     }
@@ -381,7 +381,7 @@ internal class Adina : TheKeyOfAhdashim
                 }
                 else
                 {
-                    if (splitPhasesMap.Contains(crMaps.LastOrDefault()))
+                    if (splitPhasesMap.Contains(crMaps.LastOrDefault()!))
                     {
                         mainPhaseIndex++;
                     }

@@ -132,7 +132,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000).ToList();
             if (buffApplies.Count == 3)
             {
-                fightData.SetSuccess(true, buffApplies.LastOrDefault().Time);
+                fightData.SetSuccess(true, buffApplies.LastOrDefault()!.Time);
             }
         }
     }
@@ -185,7 +185,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-        MapIDEvent map = combatData.GetMapIDEvents().FirstOrDefault();
+        MapIDEvent? map = combatData.GetMapIDEvents().FirstOrDefault();
         if (map != null && map.MapID == 1434)
         {
             return FightData.EncounterMode.Story;
@@ -201,7 +201,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             sanctuary.OverrideType(AgentItem.AgentType.NPC);
             sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism);
-            sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.FirstOrDefault().Time : fightData.LogEnd);
+            sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.FirstOrDefault()!.Time : fightData.LogEnd);
         }
         agentData.Refresh();
         ComputeFightTargets(agentData, combatData, extensions);
@@ -224,7 +224,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         foreach (AgentItem agent in agents)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(agent).GetBuffGraphs(log);
-            if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out BuffsGraphModel bgm))
+            if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out var bgm))
             {
                 if (bgm.BuffChart.Any(x => x.Value == 6)) { return true; }
             }
@@ -420,7 +420,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out BuffsGraphModel value))
+        if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out var value))
         {
             foreach (Segment segment in value.BuffChart)
             {

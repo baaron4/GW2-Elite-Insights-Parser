@@ -135,17 +135,20 @@ internal class KainengOverlook : EndOfDragonsStrike
         if (targets.All(x => x != null))
         {
             EnterCombatEvent? cbtEnter = null;
-            foreach (SingleActor target in targets)
+            foreach (SingleActor? target in targets)
             {
-                cbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
-                if (cbtEnter != null)
+                if (target != null)
                 {
-                    break;
+                    cbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
+                    if (cbtEnter != null)
+                    {
+                        break;
+                    }
                 }
             }
             if (cbtEnter != null)
             {
-                BuffEvent nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
+                BuffEvent? nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
                 long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
                 var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                 addPhase.AddTargets(targets);
@@ -206,7 +209,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
+        SingleActor? ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
         return ministerLiCM != null ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 

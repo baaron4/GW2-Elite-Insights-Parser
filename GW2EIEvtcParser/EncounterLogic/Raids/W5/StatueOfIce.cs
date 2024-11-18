@@ -38,15 +38,15 @@ internal class StatueOfIce : HallOfChains
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.BrokenKing, out AgentItem brokenKing))
+        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.BrokenKing, out var brokenKing))
         {
             throw new MissingKeyActorsException("Broken King not found");
         }
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            CombatItem initialCast = combatData.FirstOrDefault(x => x.StartCasting() && x.SkillID == BrokenKingFirstCast && x.SrcMatchesAgent(brokenKing));
+            CombatItem? initialCast = combatData.FirstOrDefault(x => x.StartCasting() && x.SkillID == BrokenKingFirstCast && x.SrcMatchesAgent(brokenKing));
             if (initialCast != null)
             {
                 startToUse = initialCast.Time;
@@ -66,7 +66,7 @@ internal class StatueOfIce : HallOfChains
         foreach (BuffEvent c in green)
         {
             int duration = 45000;
-            BuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(FrozenWind).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+            BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllData(FrozenWind).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
             int start = (int)c.Time;
             int end = start + duration;
             if (removedBuff != null)
@@ -146,7 +146,7 @@ internal class StatueOfIce : HallOfChains
                 // Ice Breaker - Failed Greens
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.BrokenKingIceBreakerGreenExplosion, out var failedGreens))
                 {
-                    EffectEvent failedGreen = failedGreens.FirstOrDefault(x => (x.Position - green.Position).XY().Length() < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
+                    EffectEvent? failedGreen = failedGreens.FirstOrDefault(x => (x.Position - green.Position).XY().Length() < 1e-6 && Math.Abs(x.Time - green.Time - 15000) <= 650);
                     if (failedGreen != null)
                     {
                         color = Colors.DarkRed;

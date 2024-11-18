@@ -626,7 +626,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
             if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()!) == 100)
             {
-                hpUpdates.Last().OverrideDstAgent(hpUpdates[hpUpdates.Count - 2].DstAgent);
+                hpUpdates.Last().OverrideDstAgent(hpUpdates[^2].DstAgent);
             }
         }
         int curHP = 1;
@@ -1030,7 +1030,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
     private static List<Segment> GetBuffSegments(IReadOnlyDictionary<long, BuffsGraphModel> bgms, long buff, List<Segment> segments)
     {
-        if (bgms != null && bgms.TryGetValue(buff, out BuffsGraphModel bgm))
+        if (bgms != null && bgms.TryGetValue(buff, out var bgm))
         {
             foreach (Segment s in bgm.BuffChart)
             {

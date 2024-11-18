@@ -144,7 +144,7 @@ internal class TwinLargos : MythwrightGambit
                     // P1 and P2 merged
                     if (p1.Start == p2.Start)
                     {
-                        HealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
                         if (hit != null)
                         {
                             p2.OverrideStart(hit.Time);
@@ -166,7 +166,7 @@ internal class TwinLargos : MythwrightGambit
                     // P1 and P2 merged
                     if (p1.Start == p2.Start)
                     {
-                        HealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p1.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
                         if (hit != null)
                         {
                             p2.OverrideStart(hit.Time);
@@ -181,7 +181,7 @@ internal class TwinLargos : MythwrightGambit
                     // P1/P2 and P3 are merged
                     if (p1.Start == p3.Start || p2.Start == p3.Start)
                     {
-                        HealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+                        HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= p2.End + 5000 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
                         if (hit != null)
                         {
                             p3.OverrideStart(hit.Time);
@@ -201,7 +201,7 @@ internal class TwinLargos : MythwrightGambit
         if (!firstPhaseAt0 && phases.Count > 0 && phases.First().Start == 0)
         {
             PhaseData p1 = phases[0];
-            HealthDamageEvent hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
+            HealthDamageEvent? hit = log.CombatData.GetDamageTakenData(target.AgentItem).FirstOrDefault(x => x.Time >= 0 && pAgents.Contains(x.From.GetFinalMaster()) && x.HealthDamage > 0 && x is DirectHealthDamageEvent);
             if (hit != null)
             {
                 p1.OverrideStart(hit.Time);
@@ -219,7 +219,7 @@ internal class TwinLargos : MythwrightGambit
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor nikare = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Nikare)) ?? throw new MissingKeyActorsException("Nikare not found");
         phases[0].AddTarget(nikare);
-        SingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
         if (kenut != null)
         {
             phases[0].AddTarget(kenut);
@@ -264,7 +264,7 @@ internal class TwinLargos : MythwrightGambit
                 lastHPUpdate.OverrideSrcAgent(0);
             }
         }
-        SingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
         if (kenut != null)
         {
             var kenutHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(kenut.AgentItem)).ToList();
@@ -392,7 +392,7 @@ internal class TwinLargos : MythwrightGambit
             return FightData.EncounterMode.CM;
         }
         FightData.EncounterMode mode = (nikare.GetHealth(combatData) > 18e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal; //Health of Nikare;
-        SingleActor kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
+        SingleActor? kenut = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Kenut));
         if (kenut != null)
         {
             if (combatData.GetAnimatedCastData(kenut.AgentItem).Any(x => x.SkillId == AquaticDomain)) // aquatic domain only present in CM

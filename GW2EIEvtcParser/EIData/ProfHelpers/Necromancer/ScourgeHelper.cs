@@ -35,9 +35,9 @@ internal static class ScourgeHelper
         }).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [

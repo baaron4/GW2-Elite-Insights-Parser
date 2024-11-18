@@ -14,7 +14,7 @@ public class DamageModifiersContainer
 
     internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
-        IEnumerable<List<DamageModifierDescriptor>> allOutgoingDamageModifiers = 
+        IEnumerable<IReadOnlyList<DamageModifierDescriptor>> allOutgoingDamageModifiers = 
         [
             ItemDamageModifiers.OutgoingDamageModifiers,
             EncounterDamageModifiers.OutgoingDamageModifiers,
@@ -80,7 +80,7 @@ public class DamageModifiersContainer
             return first;
         });
         //
-        IEnumerable<List<DamageModifierDescriptor>> allIncomingDamageModifiers =
+        IEnumerable<IReadOnlyList<DamageModifierDescriptor>> allIncomingDamageModifiers =
         [
             ItemDamageModifiers.IncomingDamageModifiers,
             EncounterDamageModifiers.IncomingDamageModifiers,

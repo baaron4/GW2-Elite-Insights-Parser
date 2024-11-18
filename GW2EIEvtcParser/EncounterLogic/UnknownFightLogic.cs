@@ -29,10 +29,10 @@ internal class UnknownFightLogic : FightLogic
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? agentData.GetGadgetsByID(GenericTriggerID).FirstOrDefault();
+            AgentItem? target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? agentData.GetGadgetsByID(GenericTriggerID).FirstOrDefault();
             return GetFirstDamageEventTime(fightData, agentData, combatData, target);
         }
         return GetGenericFightOffset(fightData);
@@ -41,7 +41,7 @@ internal class UnknownFightLogic : FightLogic
     internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         int id = GenericTriggerID;
-        AgentItem agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
+        AgentItem? agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
         // Trigger ID is not NPC
         if (agentItem == null)
         {

@@ -14,7 +14,7 @@ internal static class EncounterLogicTimeUtils
 
     }
 
-    internal static long GetPostLogStartNPCUpdateDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, AgentItem mainTarget)
+    internal static long GetPostLogStartNPCUpdateDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, AgentItem? mainTarget)
     {
         if (mainTarget == null)
         {
@@ -28,7 +28,7 @@ internal static class EncounterLogicTimeUtils
         return upperLimit;
     }
 
-    internal static long GetFirstDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, AgentItem mainTarget)
+    internal static long GetFirstDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, AgentItem? mainTarget)
     {
         if (mainTarget == null)
         {
