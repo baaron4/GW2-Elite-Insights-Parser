@@ -153,9 +153,9 @@ public class DamageModifiersContainer
         var res = new List<OutgoingDamageModifier>(srcs.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (ParserHelper.Source src in srcs)
         {
-            if (OutgoingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<OutgoingDamageModifier> list))
+            if (OutgoingDamageModifiersPerSource.TryGetValue(src, out var damageMods))
             {
-                res.AddRange(list);
+                res.AddRange(damageMods);
             }
         }
         return res;
@@ -167,9 +167,9 @@ public class DamageModifiersContainer
         var res = new List<IncomingDamageModifier>(srcs.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (ParserHelper.Source src in srcs)
         {
-            if (IncomingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<IncomingDamageModifier> list))
+            if (IncomingDamageModifiersPerSource.TryGetValue(src, out var damageMods))
             {
-                res.AddRange(list);
+                res.AddRange(damageMods);
             }
         }
         return res;

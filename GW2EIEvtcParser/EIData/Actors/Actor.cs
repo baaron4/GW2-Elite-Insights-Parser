@@ -144,7 +144,7 @@ public abstract class Actor
     }
     public IEnumerable<HealthDamageEvent> GetHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
-        if (!_typedHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<HealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
+        if (!_typedHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
         {
             hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
             _typedHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
@@ -161,7 +161,7 @@ public abstract class Actor
 
     public IEnumerable<HealthDamageEvent> GetHitDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, ParserHelper.DamageType damageType)
     {
-        if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<HealthDamageEvent>> hitDamageTakenEventsPerPhasePerTarget))
+        if (!_typedHitDamageTakenEvents.TryGetValue(damageType, out var hitDamageTakenEventsPerPhasePerTarget))
         {
             hitDamageTakenEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
             _typedHitDamageTakenEvents[damageType] = hitDamageTakenEventsPerPhasePerTarget;

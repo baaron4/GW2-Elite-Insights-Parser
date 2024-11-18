@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net8</TargetFramework>
         <LangVersion>12.0</LangVersion>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -34,10 +34,6 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">
         <DefineConstants>DEBUG;NO_REWARDS</DefineConstants>
     </PropertyGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Shim.System.Numerics" Version="6.0.0" />
-    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />

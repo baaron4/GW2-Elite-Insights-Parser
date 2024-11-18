@@ -21,7 +21,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         new PlayerDstHitMechanic(HailOfFury, "Hail of Fury", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
         new EnemyDstBuffApplyMechanic(Compromised, "Compromised", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
         new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0).UsingChecker( (de, log) => {
-            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
+            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
             if (phases.Count < 2)
             {
                 // no 33% magic blast
@@ -30,7 +30,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             return de.Time >= phases[1].End;
         }),
         new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0).UsingChecker((de, log) => {
-            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
+            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
             if (phases.Count < 1)
             {
                 // no 66% magic blast
@@ -176,7 +176,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         for (int i = 0; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            if (phase.Name.Contains("%"))
+            if (phase.Name.Contains('%'))
             {
                 cur = phase;
             }
@@ -184,7 +184,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             {
                 if (cur != null)
                 {
-                    if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
+                    if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains('%')))
                     {
                         var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
                         leftOverPhase.AddTarget(mainTarget);

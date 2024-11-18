@@ -183,7 +183,7 @@ internal class Gorseval : SpiritVale
                                 break;
                             }
                         }
-                        if (pos == null)
+                        if (pos == default)
                         {
                             break;
                         }

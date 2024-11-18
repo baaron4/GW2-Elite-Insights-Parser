@@ -417,7 +417,7 @@ internal static class MesmerHelper
                 if (buffApply != null)
                 {
                     AgentItem portal = buffApply.To;
-                    DespawnEvent despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
+                    DespawnEvent? despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
                     // Security
                     if (despawn != null)
                     {

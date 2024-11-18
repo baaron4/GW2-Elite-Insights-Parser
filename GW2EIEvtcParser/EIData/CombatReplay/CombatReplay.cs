@@ -550,7 +550,7 @@ public class CombatReplay
 
         foreach (BuffApplyEvent buffApply in buffApplies)
         {
-            BuffRemoveAllEvent remove = buffRemoves.FirstOrDefault(x => x.Time > buffApply.Time);
+            BuffRemoveAllEvent? remove = buffRemoves.FirstOrDefault(x => x.Time > buffApply.Time);
             long removalTime = remove != null ? remove.Time : log.FightData.LogEnd;
             (long, long) lifespan = (buffApply.Time, removalTime);
 
@@ -604,7 +604,7 @@ public class CombatReplay
     /// <param name="radius">Radius of the circle.</param>
     internal void AddProjectile(in Vector3 startingPoint, in Vector3 endingPoint, (long start, long end) lifespan, string color, uint radius = 50)
     {
-        if (startingPoint == null || endingPoint == null)
+        if (startingPoint == default || endingPoint == default)
         {
             return;
         }

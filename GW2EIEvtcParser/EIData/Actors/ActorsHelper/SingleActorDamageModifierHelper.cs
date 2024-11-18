@@ -50,8 +50,8 @@ partial class SingleActor
 
         if (_outgoingDamageModifiersPerTargets == null)
         {
-            _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log, 8, 2);
-            _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log, 1, 1);
+            _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
+            _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
         }
 
         if (_outgoingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
@@ -66,7 +66,7 @@ partial class SingleActor
         }
 
         var damageMods = new List<OutgoingDamageModifier>(40);
-        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<OutgoingDamageModifier> list))
+        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Item, out var list))
         {
             damageMods.AddRange(list);
         }
@@ -154,8 +154,8 @@ partial class SingleActor
 
         if (_incomingDamageModifiersPerTargets == null)
         {
-            _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log, 8, 2);
-            _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log, 1, 1);
+            _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
+            _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
         }
 
         if (_incomingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
@@ -170,7 +170,7 @@ partial class SingleActor
         }
 
         var damageMods = new List<IncomingDamageModifier>(32);
-        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<IncomingDamageModifier> list))
+        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out var list))
         {
             damageMods.AddRange(list);
         }

@@ -1007,7 +1007,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)ArcDPSEnums.TrashID.VoidAmalgamate:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.HarvestTempleInfluenceOfTheVoidPool, out var poolEffects))
                 {
-                    if (poolEffects.Any())
+                    if (poolEffects.Count != 0)
                     {
                         // To be safe
                         poolEffects = poolEffects.OrderBy(x => x.Time).ToList();

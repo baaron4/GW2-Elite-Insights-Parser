@@ -55,13 +55,13 @@ public abstract partial class SingleActor : Actor
             IReadOnlyList<MaxHealthUpdateEvent> maxHpUpdates = combatData.GetMaxHealthUpdateEvents(AgentItem);
             if (maxHpUpdates.Any())
             {
-                HealthDamageEvent lastDamage = combatData.GetDamageTakenData(AgentItem).LastOrDefault(x => x.HealthDamage > 0);
+                HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(AgentItem).LastOrDefault(x => x.HealthDamage > 0);
                 long timeCheck = (FirstAware + LastAware) / 2;
                 if (lastDamage != null)
                 {
                     timeCheck = Math.Max(timeCheck, Math.Max(FirstAware, lastDamage.Time - 5000));
                 }
-                MaxHealthUpdateEvent hpEvent = maxHpUpdates.LastOrDefault(x => x.Time < timeCheck + ServerDelayConstant);
+                MaxHealthUpdateEvent? hpEvent = maxHpUpdates.LastOrDefault(x => x.Time < timeCheck + ServerDelayConstant);
                 Health = hpEvent != null ? hpEvent.MaxHealth : maxHpUpdates.Max(x => x.MaxHealth);
             }
         }
@@ -184,7 +184,7 @@ public abstract partial class SingleActor : Actor
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)
                 {
-                    if (auxMinions.TryGetValue(id, out Minions values))
+                    if (auxMinions.TryGetValue(id, out var values))
                     {
                         values.AddMinion(npc);
                     }
@@ -210,7 +210,7 @@ public abstract partial class SingleActor : Actor
                 var singleActor = log.FindActor(agent);
                 if (singleActor is NPC npc)
                 {
-                    if (auxGadgetMinions.TryGetValue(id, out Minions values))
+                    if (auxGadgetMinions.TryGetValue(id, out var values))
                     {
                         values.AddMinion(npc);
                     }
@@ -345,10 +345,10 @@ public abstract partial class SingleActor : Actor
     protected static void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay, AgentItem agentItem)
     {
         // Trim
-        DespawnEvent despawnCheck = log.CombatData.GetDespawnEvents(agentItem).LastOrDefault();
-        SpawnEvent spawnCheck = log.CombatData.GetSpawnEvents(agentItem).LastOrDefault();
-        DeadEvent deathCheck = log.CombatData.GetDeadEvents(agentItem).LastOrDefault();
-        AliveEvent aliveCheck = log.CombatData.GetAliveEvents(agentItem).LastOrDefault();
+        DespawnEvent? despawnCheck = log.CombatData.GetDespawnEvents(agentItem).LastOrDefault();
+        SpawnEvent? spawnCheck = log.CombatData.GetSpawnEvents(agentItem).LastOrDefault();
+        DeadEvent? deathCheck = log.CombatData.GetDeadEvents(agentItem).LastOrDefault();
+        AliveEvent? aliveCheck = log.CombatData.GetAliveEvents(agentItem).LastOrDefault();
         if (deathCheck != null && (aliveCheck == null || aliveCheck.Time < deathCheck.Time))
         {
             replay.Trim(agentItem.FirstAware, deathCheck.Time);
@@ -404,7 +404,7 @@ public abstract partial class SingleActor : Actor
             {
                 foreach (MarkerEvent markerEvent in markerEvents)
                 {
-                    if (ParserIcons.SquadMarkerToIcon.TryGetValue(squadMarker, out string icon))
+                    if (ParserIcons.SquadMarkerToIcon.TryGetValue(squadMarker, out var icon))
                     {
                         CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, icon, 240f, 16, 1);
                     }
@@ -534,7 +534,7 @@ public abstract partial class SingleActor : Actor
         {
             SetCastEvents(log);
         }
-        return CastEvents.Where(x => x.Time >= start && x.Time <= end);
+        return CastEvents!.Where(x => x.Time >= start && x.Time <= end);
 
     }
     public override IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
@@ -543,7 +543,7 @@ public abstract partial class SingleActor : Actor
         {
             SetCastEvents(log);
         }
-        return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
+        return CastEvents!.Where(x => KeepIntersectingCastLog(x, start, end));
 
     }
     protected void SetCastEvents(ParsedEvtcLog log)
@@ -612,8 +612,7 @@ public abstract partial class SingleActor : Actor
 
     public FinalGameplayStats GetGameplayStats(ParsedEvtcLog log, long start, long end)
     {
-        var phaseCapacity = log.FightData.GetPhases(log).Count;
-        _gameplayStats ??= new(log, phaseCapacity, phaseCapacity); 
+        _gameplayStats ??= new(log); 
 
         if (!_gameplayStats.TryGetValue(start, end, out var value))
         {
@@ -655,8 +654,7 @@ public abstract partial class SingleActor : Actor
 
     public FinalToPlayersSupport GetToPlayerSupportStats(ParsedEvtcLog log, long start, long end)
     {
-        var phaseCapacity = log.FightData.GetPhases(log).Count;
-        _toPlayerSupportStats ??= new(log, phaseCapacity, phaseCapacity);
+        _toPlayerSupportStats ??= new(log);
 
         if (!_toPlayerSupportStats.TryGetValue(start, end, out var value))
         {
@@ -684,9 +682,9 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (DamageEventByDst.TryGetValue(target.AgentItem, out List<HealthDamageEvent> list))
+            if (DamageEventByDst.TryGetValue(target.AgentItem, out var damageEvents))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                return damageEvents.Where(x => x.Time >= start && x.Time <= end);
             }
             else
             {
@@ -713,11 +711,11 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (DamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out List<HealthDamageEvent> list))
+            if (DamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out var damageTakenEvents))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
-                return list.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
+                return damageTakenEvents.Where(x => x.Time >= start && x.Time >= targetStart && x.Time <= end && x.Time <= targetEnd);
             }
             else
             {
@@ -732,7 +730,7 @@ public abstract partial class SingleActor : Actor
     /// </summary>
     internal IReadOnlyList<HealthDamageEvent> GetJustActorHitDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, DamageType damageType)
     {
-        if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out CachingCollectionWithTarget<List<HealthDamageEvent>> hitDamageEventsPerPhasePerTarget))
+        if (!_typedSelfHitDamageEvents.TryGetValue(damageType, out var hitDamageEventsPerPhasePerTarget))
         {
             hitDamageEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<HealthDamageEvent>>(log);
             _typedSelfHitDamageEvents[damageType] = hitDamageEventsPerPhasePerTarget;
@@ -834,9 +832,9 @@ public abstract partial class SingleActor : Actor
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out var ccList))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                return ccList.Where(x => x.Time >= start && x.Time <= end);
             }
             else
             {

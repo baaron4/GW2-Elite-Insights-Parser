@@ -62,7 +62,7 @@ public class AgentItem
                 HitboxWidth = 48;
                 HitboxHeight = 240;
                 string[] splitStr = Name.Split('\0');
-                if (splitStr.Length < 2 || (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains("-")))
+                if (splitStr.Length < 2 || (splitStr[1].Length == 0 || splitStr[2].Length == 0 || splitStr[0].Contains('-')))
                 {
                     Type = AgentType.NonSquadPlayer;
                 }

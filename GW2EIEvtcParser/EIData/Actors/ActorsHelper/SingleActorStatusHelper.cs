@@ -52,7 +52,7 @@ partial class SingleActor
         long timeInCombat = 0;
         foreach (EnterCombatEvent enTe in log.CombatData.GetEnterCombatEvents(AgentItem))
         {
-            ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(AgentItem).FirstOrDefault(x => x.Time > enTe.Time);
+            ExitCombatEvent? exCe = log.CombatData.GetExitCombatEvents(AgentItem).FirstOrDefault(x => x.Time > enTe.Time);
             if (exCe != null)
             {
                 timeInCombat += Math.Max(Math.Min(exCe.Time, end) - Math.Max(enTe.Time, start), 0);
@@ -64,7 +64,7 @@ partial class SingleActor
         }
         if (timeInCombat == 0)
         {
-            ExitCombatEvent exCe = log.CombatData.GetExitCombatEvents(AgentItem).FirstOrDefault(x => x.Time > start);
+            ExitCombatEvent? exCe = log.CombatData.GetExitCombatEvents(AgentItem).FirstOrDefault(x => x.Time > start);
             if (exCe != null)
             {
                 timeInCombat += Math.Max(Math.Min(exCe.Time, end) - start, 0);

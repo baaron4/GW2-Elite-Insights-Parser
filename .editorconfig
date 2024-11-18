@@ -221,6 +221,8 @@ dotnet_diagnostic.CA1707.severity = none
 
 dotnet_diagnostic.CA1008.severity = none
 
+dotnet_diagnostic.CA1859.severity = none
+
 dotnet_diagnostic.CA1715.severity = none
 
 dotnet_diagnostic.CA1815.severity = suggestion
@@ -234,6 +236,7 @@ dotnet_diagnostic.CA1014.severity = suggestion
 
 
 dotnet_diagnostic.CS8618.severity = suggestion
+dotnet_diagnostic.CS8714.severity = none
 
 csharp_using_directive_placement = outside_namespace:silent
 csharp_prefer_simple_using_statement = true:suggestion

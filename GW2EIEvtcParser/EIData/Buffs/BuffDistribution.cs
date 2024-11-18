@@ -61,7 +61,7 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
 
     internal Dictionary<AgentItem, BuffDistributionItem> GetDistrib(long buffID)
     {
-        if (!_distribution.TryGetValue(buffID, out Dictionary<AgentItem, BuffDistributionItem> distrib))
+        if (!_distribution.TryGetValue(buffID, out var distrib))
         {
             distrib = new Dictionary<AgentItem, BuffDistributionItem>(_initialSecondaryCapacity);
             _distribution.Add(buffID, distrib);

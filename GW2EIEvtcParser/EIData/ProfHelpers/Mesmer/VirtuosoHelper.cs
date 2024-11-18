@@ -77,7 +77,7 @@ internal static class VirtuosoHelper
             {
                 uint removedInstance = 0;
                 long elapsedTime = 0;
-                if (lastAddedBuffInstance.TryGetValue(blade.BuffID, out BuffApplyEvent apply))
+                if (lastAddedBuffInstance.TryGetValue(blade.BuffID, out var apply))
                 {
                     removedInstance = apply.BuffInstance;
                     elapsedTime = brae.Time - apply.Time;

@@ -790,7 +790,7 @@ public class EvtcParser
             var greenTeams = new List<ulong>();
             foreach (AgentItem a in squadPlayers)
             {
-                if (teamChangeDict.TryGetValue(a.Agent, out List<CombatItem> teamChangeList))
+                if (teamChangeDict.TryGetValue(a.Agent, out var teamChangeList))
                 {
                     greenTeams.AddRange(teamChangeList.Where(x => x.SrcMatchesAgent(a)).Select(TeamChangeEvent.GetTeamIDInto));
                     if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
@@ -811,7 +811,7 @@ public class EvtcParser
             var uniqueNonSquadPlayers = new List<AgentItem>();
             foreach (AgentItem nonSquadPlayer in nonSquadPlayerAgents)
             {
-                if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out List<CombatItem> teamChangeList))
+                if (teamChangeDict.TryGetValue(nonSquadPlayer.Agent, out var teamChangeList))
                 {
                     var team = teamChangeList.Where(x => x.SrcMatchesAgent(nonSquadPlayer)).Select(TeamChangeEvent.GetTeamIDInto).ToList();
                     if (_evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.TeamChangeOnDespawn)
@@ -829,7 +829,7 @@ public class EvtcParser
                 else
                 {
                     // we merge
-                    AgentItem mainPlayer = uniqueNonSquadPlayers.FirstOrDefault(x => x.InstID == nonSquadPlayer.InstID);
+                    AgentItem mainPlayer = uniqueNonSquadPlayers.FirstOrDefault(x => x.InstID == nonSquadPlayer.InstID)!;
                     playersToMerge[nonSquadPlayer] = mainPlayer;
                     agentsToPlayersToMerge[nonSquadPlayer.Agent] = nonSquadPlayer;
                 }
@@ -838,7 +838,7 @@ public class EvtcParser
             {
                 foreach (CombatItem c in _combatItems)
                 {
-                    if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out AgentItem nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer, _enabledExtensions))
+                    if (agentsToPlayersToMerge.TryGetValue(c.SrcAgent, out var nonSquadPlayer) && c.SrcMatchesAgent(nonSquadPlayer, _enabledExtensions))
                     {
                         AgentItem mainPlayer = playersToMerge[nonSquadPlayer];
                         c.OverrideSrcAgent(mainPlayer.Agent);
@@ -897,7 +897,7 @@ public class EvtcParser
         {
             if (c.SrcIsAgent())
             {
-                if (agentsLookup.TryGetValue(c.SrcAgent, out List<AgentItem> agents))
+                if (agentsLookup.TryGetValue(c.SrcAgent, out var agents))
                 {
                     bool updatedAgent = false;
                     foreach (AgentItem agent in agents)
@@ -917,7 +917,7 @@ public class EvtcParser
             }
             if (c.DstIsAgent())
             {
-                if (agentsLookup.TryGetValue(c.DstAgent, out List<AgentItem> agents))
+                if (agentsLookup.TryGetValue(c.DstAgent, out var agents))
                 {
                     bool updatedAgent = false;
                     foreach (AgentItem agent in agents)
@@ -984,7 +984,7 @@ public class EvtcParser
             {
                 if (combatItem.IsExtension)
                 {
-                    if (_enabledExtensions.TryGetValue(combatItem.Pad, out ExtensionHandler handler))
+                    if (_enabledExtensions.TryGetValue(combatItem.Pad, out var handler))
                     {
                         handler.AdjustCombatEvent(combatItem, _agentData);
                     }
@@ -1058,7 +1058,7 @@ public class EvtcParser
                 if (p.FirstAware > 100)
                 {
                     // look for a spawn event close to first aware
-                    CombatItem spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn
+                    CombatItem? spawnEvent = _combatItems.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Spawn
                         && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
                     if (spawnEvent != null)
                     {

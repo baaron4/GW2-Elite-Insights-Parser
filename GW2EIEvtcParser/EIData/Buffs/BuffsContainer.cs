@@ -173,11 +173,11 @@ public class BuffsContainer
                     var removeSinglesPerInstanceID = buffs.OfType<BuffRemoveSingleEvent>().Where(x => !x.OverstackOrNaturalEnd).GroupBy(x => x.BuffInstance);
                     foreach (var removePair in removeSinglesPerInstanceID)
                     {
-                        if (appliesPerInstanceID.TryGetValue(removePair.Key, out List<BuffApplyEvent> applyList))
+                        if (appliesPerInstanceID.TryGetValue(removePair.Key, out var applyList))
                         {
                             foreach (BuffRemoveSingleEvent remove in removePair)
                             {
-                                BuffApplyEvent apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
+                                BuffApplyEvent? apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
                                 if (apply != null && apply.OriginalAppliedDuration == remove.RemovedDuration)
                                 {
                                     int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;
@@ -208,9 +208,9 @@ public class BuffsContainer
         var result = new List<Buff>();
         foreach (ParserHelper.Source src in ParserHelper.SpecToSources(spec))
         {
-            if (BuffsBySource.TryGetValue(src, out IReadOnlyList<Buff> list))
+            if (BuffsBySource.TryGetValue(src, out var buffs))
             {
-                result.AddRange(list.Where(x => x.Classification == BuffClassification.Other));
+                result.AddRange(buffs.Where(x => x.Classification == BuffClassification.Other));
             }
         }
         return result;

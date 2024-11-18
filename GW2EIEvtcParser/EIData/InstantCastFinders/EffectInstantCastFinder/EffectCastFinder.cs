@@ -151,7 +151,7 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                         var caster = group.Key;
                         if (_speciesId > 0 && caster!.IsUnamedSpecies())
                         {
-                            AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
+                            AgentItem? agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
                             if (agent != null)
                             {
                                 caster = agent;

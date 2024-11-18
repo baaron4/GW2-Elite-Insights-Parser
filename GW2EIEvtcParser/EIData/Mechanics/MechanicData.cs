@@ -107,11 +107,10 @@ public class MechanicData
             #nullable restore
         }
 
-        var phaseCapacity = log.FightData.GetPhases(log).Count;
-        _presentOnFriendliesMechanics = new(log, phaseCapacity, phaseCapacity);
-        _presentOnEnemyMechanics      = new(log, phaseCapacity, phaseCapacity);
-        _presentMechanics             = new(log, phaseCapacity, phaseCapacity);
-        _enemyList                    = new(log, phaseCapacity, phaseCapacity);
+        _presentOnFriendliesMechanics = new(log);
+        _presentOnEnemyMechanics      = new(log);
+        _presentMechanics             = new(log);
+        _enemyList                    = new(log);
         ComputeMechanics(log);
         foreach (var (mechanic, events) in _mechanicLogs)
         {

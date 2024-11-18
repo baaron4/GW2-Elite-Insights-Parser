@@ -67,12 +67,12 @@ public class PhaseData
         _targets.Remove(target);
     }
 
-    internal void AddTargets(IEnumerable<SingleActor> targets)
+    internal void AddTargets(IEnumerable<SingleActor?> targets)
     {
-        _targets.AddRange(targets.Where(x => x != null));
+        _targets.AddRange(targets.Where(x => x != null)!);
     }
 
-    internal void AddSecondaryTarget(SingleActor target)
+    internal void AddSecondaryTarget(SingleActor? target)
     {
         if (target == null || _secondaryTargets.Contains(target))
         {
@@ -93,9 +93,9 @@ public class PhaseData
         RefreshAllTargetsList();
     }
 
-    internal void AddSecondaryTargets(IEnumerable<SingleActor> targets)
+    internal void AddSecondaryTargets(IEnumerable<SingleActor?> targets)
     {
-        _secondaryTargets.AddRange(targets.Where(x => x != null));
+        _secondaryTargets.AddRange(targets.Where(x => x != null)!);
         RefreshAllTargetsList();
     }
 
@@ -143,12 +143,12 @@ public class PhaseData
             foreach (SingleActor target in Targets)
             {
                 long startTime = target.FirstAware;
-                SpawnEvent spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
+                SpawnEvent? spawned = log.CombatData.GetSpawnEvents(target.AgentItem).FirstOrDefault();
                 if (spawned != null)
                 {
                     startTime = spawned.Time;
                 }
-                EnterCombatEvent enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
+                EnterCombatEvent? enterCombat = log.CombatData.GetEnterCombatEvents(target.AgentItem).FirstOrDefault();
                 if (enterCombat != null)
                 {
                     startTime = enterCombat.Time;
@@ -170,7 +170,7 @@ public class PhaseData
             foreach (SingleActor target in Targets)
             {
                 long deadTime = target.LastAware;
-                DeadEvent died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
+                DeadEvent? died = log.CombatData.GetDeadEvents(target.AgentItem).FirstOrDefault();
                 if (died != null)
                 {
                     deadTime = died.Time;

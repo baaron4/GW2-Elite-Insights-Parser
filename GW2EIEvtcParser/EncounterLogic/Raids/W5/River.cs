@@ -182,7 +182,7 @@ internal class River : HallOfChains
 
             case (int)ArcDPSEnums.TrashID.RiverOfSouls:
                 ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Value != default);
-                if (firstRiverMovement.Value != null)
+                if (firstRiverMovement.Value != default)
                 {
                     replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
                 }

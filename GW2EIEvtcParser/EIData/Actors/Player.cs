@@ -22,7 +22,7 @@ public class Player : PlayerActor
         {
             throw new EvtcAgentException("Name problem on Player");
         }
-        if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains("-"))
+        if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains('-'))
         {
             throw new EvtcAgentException("Missing Group on Player");
         }
@@ -200,7 +200,7 @@ public class Player : PlayerActor
     {
         foreach (var seg in GetCommanderStates(log))
         {
-            if (ParserIcons.CommanderTagToIcon.TryGetValue(seg.Value, out string icon))
+            if (ParserIcons.CommanderTagToIcon.TryGetValue(seg.Value, out var icon))
             {
                 CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, icon, 180f, 15);
             }

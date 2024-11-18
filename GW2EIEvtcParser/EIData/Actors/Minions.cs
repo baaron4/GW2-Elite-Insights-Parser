@@ -46,7 +46,7 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (DamageEventByDst!.TryGetValue(target.AgentItem, out List<HealthDamageEvent> list))
+            if (DamageEventByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -73,7 +73,7 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out List<HealthDamageEvent> list))
+            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -103,7 +103,7 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (BreakbarDamageEventsByDst!.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+            if (BreakbarDamageEventsByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -131,7 +131,7 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (BreakbarDamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out List<BreakbarDamageEvent> list))
+            if (BreakbarDamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -163,7 +163,7 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -191,7 +191,7 @@ public class Minions : Actor
 
         if (target != null)
         {
-            if (IncomingCrowdControlEventsBySrc!.TryGetValue(target.AgentItem, out List<CrowdControlEvent> list))
+            if (IncomingCrowdControlEventsBySrc!.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -222,7 +222,7 @@ public class Minions : Actor
         {
             InitCastEvents(log);
         }
-        return CastEvents.Where(x => x.Time >= start && x.Time <= end);
+        return CastEvents!.Where(x => x.Time >= start && x.Time <= end);
     }
 
     public override IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
@@ -231,7 +231,7 @@ public class Minions : Actor
         {
             InitCastEvents(log);
         }
-        return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
+        return CastEvents!.Where(x => KeepIntersectingCastLog(x, start, end));
     }
     #endregion CAST
 
@@ -274,12 +274,12 @@ public class Minions : Actor
             long start = Math.Max(minion.FirstAware, 0);
             // Find end
             long end = minion.LastAware;
-            DeadEvent dead = log.CombatData.GetDeadEvents(minion.AgentItem).LastOrDefault();
+            DeadEvent? dead = log.CombatData.GetDeadEvents(minion.AgentItem).LastOrDefault();
             if (dead != null)
             {
                 end = Math.Min(dead.Time, end);
             }
-            DespawnEvent despawn = log.CombatData.GetDespawnEvents(minion.AgentItem).LastOrDefault();
+            DespawnEvent? despawn = log.CombatData.GetDespawnEvents(minion.AgentItem).LastOrDefault();
             if (despawn != null)
             {
                 end = Math.Min(despawn.Time, end);

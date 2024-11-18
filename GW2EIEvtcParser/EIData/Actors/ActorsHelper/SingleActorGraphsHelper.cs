@@ -113,7 +113,7 @@ partial class SingleActor
 
     public IReadOnlyList<int> Get1SDamageList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
     {
-        if (!_damageList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
+        if (!_damageList1S.TryGetValue(damageType, out var graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _damageList1S[damageType] = graphs;
@@ -131,7 +131,7 @@ partial class SingleActor
 
     public IReadOnlyList<int> Get1SDamageTakenList(ParsedEvtcLog log, long start, long end, SingleActor? target, DamageType damageType = DamageType.All)
     {
-        if (!_damageTakenList1S.TryGetValue(damageType, out CachingCollectionWithTarget<int[]> graphs))
+        if (!_damageTakenList1S.TryGetValue(damageType, out var graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _damageTakenList1S[damageType] = graphs;
