@@ -101,7 +101,7 @@ public class HTMLBuilder
         _compressJson = settings.CompressJson;
     }
 
-    private (string?, string?) BuildAssetPaths(string path)
+    private (string?, string?) BuildAssetPaths(string? path)
     {
         string? cdn = null;
         string? external = null;
@@ -173,7 +173,7 @@ public class HTMLBuilder
     /// <param name="p"></param>
     /// <param name="phaseIndex"></param>
 
-    public void CreateHTML(StreamWriter sw, string path)
+    public void CreateHTML(StreamWriter sw, string? path)
     {
         using var _t = new AutoTrace("Create HTML (write to stream)");
 

@@ -81,7 +81,7 @@ public static class TestHelper
         var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
         var builder = new HTMLBuilder(log, htmlSettings, htmlAssets, Version, new UploadResults());
 
-        builder.CreateHTML(sw, "");
+        builder.CreateHTML(sw, null);
         sw.Close();
 
         return Encoding.UTF8.GetString(ms.ToArray());

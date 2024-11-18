@@ -25,7 +25,7 @@
         <AssemblyTitle>EliteInsights</AssemblyTitle>
         <Product>EliteInsights</Product>
         <Copyright>Copyright ©  2020</Copyright>
-        <Configurations>Debug;Release;NoRewards</Configurations>
+        <Configurations>Debug;Release;NoRewards;Trace</Configurations>
 
         <UseWindowsForms>true</UseWindowsForms>
         <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
@@ -52,6 +52,12 @@
         <DebugType>none</DebugType>
         <DebugSymbols>false</DebugSymbols>
         <PlatformTarget>AnyCPU</PlatformTarget>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
+      <DebugType>none</DebugType>
+      <DebugSymbols>false</DebugSymbols>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+      <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
     <PropertyGroup>
         <AnalysisMode>AllEnabledByDefault</AnalysisMode>
