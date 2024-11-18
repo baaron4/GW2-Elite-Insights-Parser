@@ -113,7 +113,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
             }
         }
 
-        return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
+        return HealReceivedEvents!.Where(x => x.Time >= start && x.Time <= end);
     }
 
     /// <param name="healEventsList">Append to this list</param>
@@ -140,7 +140,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
             return;
         }
 
-        healEventsList.AddRange(HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end));
+        healEventsList.AddRange(HealReceivedEvents!.Where(x => x.Time >= start && x.Time <= end));
 
         return;
     }

@@ -938,8 +938,12 @@ internal class Qadim : MythwrightGambit
         return (target.GetHealth(combatData) > 21e6) ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
-    private static void AddManuallyAnimatedPlatformsToCombatReplay(SingleActor qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
+    private static void AddManuallyAnimatedPlatformsToCombatReplay(SingleActor? qadim, ParsedEvtcLog log, CombatReplayDecorationContainer decorations)
     {
+        if (qadim == null)
+        {
+            return;
+        }
         // We later use the target to find out the timing of the last move
         Debug.Assert(qadim.IsSpecies(TargetID.Qadim));
 
