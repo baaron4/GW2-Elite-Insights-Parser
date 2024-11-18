@@ -359,7 +359,6 @@ public static partial class ListExt
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByTime<T>(this List<T> list)  where T : CombatItem
     {
-        var str = string.Join(",", list.Select(x => x.Time));
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.Time.CompareTo(b.Time));
+        list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time));
     }
 }

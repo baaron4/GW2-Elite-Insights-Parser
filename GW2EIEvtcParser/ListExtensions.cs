@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser;
 
@@ -144,6 +145,17 @@ public static partial class ListExt
     public static void ReserveAdditional<T>(this HashSet<T> set, int count)
     {
         set.EnsureCapacity(set.Count + count);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void SortStable<T>(this Span<T> span, Func<T, T, int> cmp)
+    {
+        StableSort<T>.fluxsort(span, cmp);
+        //TODO(Rennorb) @correctness: wire this up with settings
+        if(!typeof(T).IsValueType && MemoryWatchdog.GetMemoryPressure(1L * 1024*1024*1024) >= MemoryWatchdog.MemoryPressure.Medium)
+        {
+            ClearableSharedArrayPool<T>.Shared.ClearAll();
+        }
     }
 
     //TODO(Rennorb) @cleanup @unstable

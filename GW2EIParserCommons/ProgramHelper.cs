@@ -101,18 +101,19 @@ public class ProgramHelper
         RunningMemoryCheck = new CancellationTokenSource();// Prepare task
         Task.Run(async () =>
         {
-            using (var proc = Process.GetCurrentProcess())
+            using var proc = Process.GetCurrentProcess();
+
+            while (true)
             {
-                while (true)
+                await Task.Delay(500).ConfigureAwait(false);
+                //NOTE(Rennorb): cannot wait for GC here because this is just a task (not a thread) and we would potentially be blocking other things from happening.
+                proc.Refresh();
+                if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1024L * 1024L)
                 {
-                    await Task.Delay(500).ConfigureAwait(false);
-                    proc.Refresh();
-                    if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1e6)
-                    {
-                        Environment.Exit(2);
-                    }
+                    Environment.Exit(2);
                 }
             }
+
         }, RunningMemoryCheck.Token);
     }
 

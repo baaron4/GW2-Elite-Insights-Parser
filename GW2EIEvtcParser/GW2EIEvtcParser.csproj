@@ -28,6 +28,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Shim.System.Numerics" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\GW2EIGW2API\GW2EIGW2API.csproj" />
     </ItemGroup>
 

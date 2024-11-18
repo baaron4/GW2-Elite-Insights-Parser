@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Buffers;
+using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser;
@@ -8,6 +9,14 @@ namespace GW2EIEvtcParser;
 
 public static unsafe class StableSort<T>
 {
+    // This Selector exists to be able to clear the pool after sorting large arrays of reference types, since the pooled buffers would keep the objects alive otherwise.
+    //NOTE(Rennorb): This custom pool impl might not be worth it;
+    // This could be replaced with a bool = true for reference types that is then passed and stored into PoolReturners where it would clear all arrays when returning them to the default pool.
+    // In measuring that approach i found it to be marginally slower than the external clearing i implemented.
+    // The current version is still a bit "better", but i was surprised with how close the two options are performance wise.
+    // Changing this to just use the boolean would get rid of the whole ClearableSharedArrayPool implementation since it only exists for the sorting of large event (AbstractBuffEvent) arrays.
+    public static readonly ArrayPool<T> Pool = typeof(T).IsValueType ? ArrayPool<T>.Shared : ClearableSharedArrayPool<T>.Shared;
+
     // quadsort 1.2.1.3 - Igor van den Hoven ivdhoven@gmail.com
 
 
@@ -296,7 +305,7 @@ public static unsafe class StableSort<T>
 
     static int quad_swap(Span<T> array, Func<T, T, int> cmp)
     {
-        using var swap = new ArrayPoolReturner<T>(32);
+        using var swap = new ArrayPoolReturner<T>(32, StableSort<T>.Pool);
         T tmp;
         int count, nmemb = array.Length;
         int pta, pts;
@@ -1116,7 +1125,7 @@ public static unsafe class StableSort<T>
     {
         if (array.Length < 32)
         {
-            using var swap = new ArrayPoolReturner<T>(32);
+            using var swap = new ArrayPoolReturner<T>(32, StableSort<T>.Pool);
             tail_swap(array, swap, cmp);
         }
         else if (quad_swap(array, cmp) == 0)
@@ -1125,10 +1134,10 @@ public static unsafe class StableSort<T>
 
             if (nmemb > 4194304) { for (swap_size = 4194304 ; swap_size * 8 <= nmemb ; swap_size *= 4) {} }
 
-            using var swap = new ArrayPoolReturner<T>(swap_size);
+            using var swap = new ArrayPoolReturner<T>(swap_size, StableSort<T>.Pool);
             if (swap.Length == 0) //TODO(Rennorb) 
             {
-                using var sswap = new ArrayPoolReturner<T>(512);
+                using var sswap = new ArrayPoolReturner<T>(512, StableSort<T>.Pool);
                 block = quad_merge(array, sswap, 32, cmp);
                 rotate_merge(array, sswap, block, cmp);
                 return;
@@ -1394,7 +1403,7 @@ public static unsafe class StableSort<T>
 
     static T median_of_nine(Span<T> array, int nmemb, Func<T, T, int> cmp)
     {
-        using var swap = new ArrayPoolReturner<T>(9);
+        using var swap = new ArrayPoolReturner<T>(9, StableSort<T>.Pool);
         int pta;
         int x, y, z;
 
@@ -1627,7 +1636,7 @@ public static unsafe class StableSort<T>
         }
         else
         {
-            using var mem = new ArrayPoolReturner<T>(array.Length);
+            using var mem = new ArrayPoolReturner<T>(array.Length, StableSort<T>.Pool);
             var swap = mem.AsSpan();
             if (swap == null) //TODO(Rennorb) 
             {
@@ -1637,8 +1646,7 @@ public static unsafe class StableSort<T>
             flux_analyze(array, swap, cmp);
         }
     }
-
-    static void fluxsort_swap(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
+    public static void fluxsort_swap(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
     {
         if (array.Length <= 132)
         {
