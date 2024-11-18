@@ -40,7 +40,7 @@ internal class EXTHealingStatsHealingDistributionDto
         {
             if (!usedBoons.ContainsKey(skill.ID))
             {
-                if (boons.BuffsByIds.TryGetValue(skill.ID, out Buff buff))
+                if (boons.BuffsByIds.TryGetValue(skill.ID, out var buff))
                 {
                     usedBoons.Add(buff.ID, buff);
                 }
@@ -54,10 +54,7 @@ internal class EXTHealingStatsHealingDistributionDto
         }
         else
         {
-            if (!usedSkills.ContainsKey(skill.ID))
-            {
-                usedSkills.Add(skill.ID, skill);
-            }
+            usedSkills.TryAdd(skill.ID, skill);
         }
 
         IEnumerable<CastEvent>? clList = null;

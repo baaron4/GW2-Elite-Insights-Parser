@@ -109,7 +109,7 @@ internal class DmgDistributionDto
         {
             if (!usedBoons.ContainsKey(skill.ID))
             {
-                if (boons.BuffsByIds.TryGetValue(skill.ID, out Buff buff))
+                if (boons.BuffsByIds.TryGetValue(skill.ID, out var buff))
                 {
                     usedBoons.Add(buff.ID, buff);
                 }
@@ -123,10 +123,7 @@ internal class DmgDistributionDto
         }
         else
         {
-            if (!usedSkills.ContainsKey(skill.ID))
-            {
-                usedSkills.Add(skill.ID, skill);
-            }
+            usedSkills.TryAdd(skill.ID, skill);
         }
 
         long timeSpentCasting = 0;
@@ -239,10 +236,7 @@ internal class DmgDistributionDto
         // breakbar only
         foreach (var (skill, events) in breakbarLogsBySkill)
         {
-            if (!usedSkills.ContainsKey(skill.ID))
-            {
-                usedSkills.Add(skill.ID, skill);
-            }
+            usedSkills.TryAdd(skill.ID, skill);
             double breakbarDamage = Math.Round(events.Sum(x => x.BreakbarDamage), 1);
 
             object[] skillData = [

@@ -8,6 +8,10 @@ public class HTMLAssets
 
     internal readonly string EICRJavascriptCode;
     internal readonly string EIHealingExtJavascriptCode;
+    private static readonly string[] separatorTemplate = ["<template>"];
+    private static readonly string[] separatorScript = ["<script>"];
+    private static readonly string[] separatorTemplateEnd = ["</template>"];
+    private static readonly string[] separatorScriptENd = ["</script>"];
 
     public HTMLAssets()
     {
@@ -59,8 +63,8 @@ public class HTMLAssets
         {
             throw new InvalidDataException("Not a template");
         }
-        string html = template.Split(new string[] { "<template>" }, StringSplitOptions.None)[1].Split(new string[] { "</template>" }, StringSplitOptions.None)[0];
-        string js = template.Split(new string[] { "<script>" }, StringSplitOptions.None)[1].Split(new string[] { "</script>" }, StringSplitOptions.None)[0];
+        string html = template.Split(separatorTemplate, StringSplitOptions.None)[1].Split(separatorTemplateEnd, StringSplitOptions.None)[0];
+        string js = template.Split(separatorScript, StringSplitOptions.None)[1].Split(separatorScriptENd, StringSplitOptions.None)[0];
         js = js.Replace("${template}", Regex.Replace(html, @"\t|\n|\r", ""));
         js = "{" + js + "}";
         return js;

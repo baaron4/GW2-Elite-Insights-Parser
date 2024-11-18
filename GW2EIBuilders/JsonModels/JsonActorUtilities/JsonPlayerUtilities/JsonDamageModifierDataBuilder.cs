@@ -48,9 +48,9 @@ internal static class JsonDamageModifierDataBuilder
                 }
                 if (profEnums.Contains(dMod.Src))
                 {
-                    if (personalDamageMods.TryGetValue(player.Spec.ToString(), out HashSet<long> hashSet))
+                    if (personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
                     {
-                        hashSet.Add(iKey);
+                        personalDamageModSet.Add(iKey);
                     }
                     else
                     {
@@ -60,9 +60,9 @@ internal static class JsonDamageModifierDataBuilder
                             ];
                     }
                 }
-                if (dict.TryGetValue(iKey, out List<JsonDamageModifierItem> list))
+                if (dict.TryGetValue(iKey, out var jsonDamageModList))
                 {
-                    list.Add(BuildJsonDamageModifierItem(damageModDict[key]));
+                    jsonDamageModList.Add(BuildJsonDamageModifierItem(damageModDict[key]));
                 }
                 else
                 {
@@ -98,9 +98,9 @@ internal static class JsonDamageModifierDataBuilder
                 }
                 if (profEnums.Contains(dMod.Src))
                 {
-                    if (personalDamageMods.TryGetValue(player.Spec.ToString(), out HashSet<long> hashSet))
+                    if (personalDamageMods.TryGetValue(player.Spec.ToString(), out var personalDamageModSet))
                     {
-                        hashSet.Add(iKey);
+                        personalDamageModSet.Add(iKey);
                     }
                     else
                     {
@@ -110,9 +110,9 @@ internal static class JsonDamageModifierDataBuilder
                             ];
                     }
                 }
-                if (dict.TryGetValue(iKey, out List<JsonDamageModifierItem> list))
+                if (dict.TryGetValue(iKey, out var jsonDamageModList))
                 {
-                    list.Add(BuildJsonDamageModifierItem(damageModDict[key]));
+                    jsonDamageModList.Add(BuildJsonDamageModifierItem(damageModDict[key]));
                 }
                 else
                 {

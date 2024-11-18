@@ -18,7 +18,7 @@ using Tracing;
 [assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons;
 
-public class ProgramHelper
+public sealed class ProgramHelper : IDisposable
 {
 
     public ProgramHelper(Version parserVersion, ProgramSettings settings)
@@ -69,6 +69,16 @@ public class ProgramHelper
     public static readonly GW2APIController APIController = new(SkillAPICacheLocation, SpecAPICacheLocation, TraitAPICacheLocation);
 
     private CancellationTokenSource? RunningMemoryCheck = null;
+
+    public void Dispose()
+    {
+        if (RunningMemoryCheck != null)
+        {
+            RunningMemoryCheck.Cancel();
+            RunningMemoryCheck.Dispose();
+            RunningMemoryCheck = null;
+        }
+    }
 
     public int GetMaxParallelRunning()
     {
@@ -526,5 +536,4 @@ public class ProgramHelper
         }
         operation.UpdateProgressWithCancellationCheck($"Completed for {result}ed {log.FightData.Logic.Extension}");
     }
-
 }

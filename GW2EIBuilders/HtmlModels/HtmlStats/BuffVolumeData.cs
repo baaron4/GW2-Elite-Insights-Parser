@@ -15,7 +15,7 @@ internal class BuffVolumeData
             var buffVals = new List<object>();
             Data.Add(buffVals);
 
-            if (buffVolumes.TryGetValue(buff.ID, out FinalActorBuffVolumes volume))
+            if (buffVolumes.TryGetValue(buff.ID, out var volume))
             {
                 buffVals.Add(volume.Incoming);
                 buffVals.Add(volume.IncomingByExtension);
@@ -28,7 +28,7 @@ internal class BuffVolumeData
     {
         foreach (Buff buff in listToUse)
         {
-            if (buffVolumes.TryGetValue(buff.ID, out FinalBuffVolumesDictionary toUse) && toUse.IncomingBy.ContainsKey(actor))
+            if (buffVolumes.TryGetValue(buff.ID, out var toUse) && toUse.IncomingBy.ContainsKey(actor))
             {
                 Data.Add(
                     [
@@ -51,7 +51,7 @@ internal class BuffVolumeData
     {
         foreach (Buff buff in listToUse)
         {
-            if (volumes.TryGetValue(buff.ID, out FinalActorBuffVolumes volume))
+            if (volumes.TryGetValue(buff.ID, out var volume))
             {
                 Data.Add(
                     [
@@ -76,7 +76,7 @@ internal class BuffVolumeData
         {
             var boonVals = new List<object>();
             Data.Add(boonVals);
-            if (volumes.TryGetValue(buff.ID, out FinalActorBuffVolumes volume))
+            if (volumes.TryGetValue(buff.ID, out var volume))
             {
                 boonVals.Add(volume.Incoming);
                 boonVals.Add(volume.IncomingByExtension);

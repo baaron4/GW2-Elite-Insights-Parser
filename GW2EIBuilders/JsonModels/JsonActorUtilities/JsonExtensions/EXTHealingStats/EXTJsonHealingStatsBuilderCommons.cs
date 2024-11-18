@@ -57,7 +57,7 @@ internal static class EXTJsonHealingStatsBuilderCommons
         {
             if (!buffMap.ContainsKey(id))
             {
-                if (log.Buffs.BuffsByIds.TryGetValue(id, out Buff buff))
+                if (log.Buffs.BuffsByIds.TryGetValue(id, out var buff))
                 {
                     buffMap[id] = buff;
                 }

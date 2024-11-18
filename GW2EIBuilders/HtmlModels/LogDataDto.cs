@@ -154,7 +154,7 @@ internal class LogDataDto
                     IReadOnlyDictionary<long, FinalActorBuffs> boons = actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     foreach (Buff boon in log.StatisticsHelper.GetPresentRemainingBuffsOnPlayer(actor))
                     {
-                        if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+                        if (boons.TryGetValue(boon.ID, out var uptime))
                         {
                             if (uptime.Uptime > 0 && specBoonIds.Contains(boon.ID))
                             {
@@ -305,7 +305,7 @@ internal class LogDataDto
         {
             allDamageMods.UnionWith(actor.GetPresentOutgoingDamageModifier(log));
         }
-        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<OutgoingDamageModifier> list))
+        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Common, out var list))
         {
             foreach (OutgoingDamageModifier dMod in list)
             {
@@ -362,7 +362,7 @@ internal class LogDataDto
         {
             allIncDamageMods.UnionWith(actor.GetPresentIncomingDamageModifier(log));
         }
-        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<IncomingDamageModifier> list))
+        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Common, out var list))
         {
             foreach (IncomingDamageModifier dMod in list)
             {
