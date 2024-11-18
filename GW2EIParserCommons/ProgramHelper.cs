@@ -349,14 +349,12 @@ public class ProgramHelper
         using (FileStream outFile =
                     File.Create(outputFile))
         {
-            using (var Compress =
+            using var Compress =
                 new GZipStream(outFile,
-                CompressionMode.Compress))
-            {
-                // Copy the source file into 
-                // the compression stream.
-                Compress.Write(data, 0, data.Length);
-            }
+                CompressionMode.Compress);
+            // Copy the source file into 
+            // the compression stream.
+            Compress.Write(data, 0, data.Length);
         }
         operation.AddFile(outputFile);
     }
@@ -364,12 +362,12 @@ public class ProgramHelper
     private DirectoryInfo GetSaveDirectory(FileInfo fInfo)
     {
         //save location
-        DirectoryInfo saveDirectory;
+        DirectoryInfo? saveDirectory;
         if (Settings.SaveAtOut || Settings.OutLocation == null)
         {
             //Default save directory
             saveDirectory = fInfo.Directory;
-            if (!saveDirectory.Exists)
+            if (saveDirectory == null || !saveDirectory.Exists)
             {
                 throw new InvalidOperationException("Save directory does not exist");
             }
@@ -422,7 +420,7 @@ public class ProgramHelper
 
         string result = log.FightData.Success ? "kill" : "fail";
         string encounterLengthTerm = Settings.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
-        string PoVClassTerm = Settings.AddPoVProf && log.LogData.PoV != null ? "_" + log.LogData.PoV.Spec.ToString().ToLower() : "";
+        string PoVClassTerm = Settings.AddPoVProf && log.LogData.PoV != null ? "_" + log.LogData.PoV.Spec.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture) : "";
         string fName = Path.GetFileNameWithoutExtension(fInfo.FullName);
         fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
