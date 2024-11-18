@@ -2,11 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <LangVersion>10.0</LangVersion>
+        <LangVersion>12.0</LangVersion>
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>GW2EIGW2API</RootNamespace>
-        <Version>2.4.1</Version>
+        <Version>3.0.0</Version>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
