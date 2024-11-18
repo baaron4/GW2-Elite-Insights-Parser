@@ -1,4 +1,5 @@
-﻿using static GW2EIEvtcParser.ArcDPSEnums;
+﻿using System.Diagnostics.CodeAnalysis;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -278,7 +279,7 @@ public class AgentData
     /// <param name="targetID">The ID of the target to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given  <see cref="TargetID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(TargetID targetID, out AgentItem? agentItem)
+    public bool TryGetFirstAgentItem(TargetID targetID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)targetID, out agentItem);
     }
@@ -289,7 +290,7 @@ public class AgentData
     /// <param name="trashID">The ID of the trash to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="TrashID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(TrashID trashID, out AgentItem? agentItem)
+    public bool TryGetFirstAgentItem(TrashID trashID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)trashID, out agentItem);
     }
@@ -300,7 +301,7 @@ public class AgentData
     /// <param name="minionID">The ID of the minion to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="MinionID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(MinionID minionID, out AgentItem? agentItem)
+    public bool TryGetFirstAgentItem(MinionID minionID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)minionID, out agentItem);
     }
@@ -311,7 +312,7 @@ public class AgentData
     /// <param name="chestID">The ID of the chest to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="ChestID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(ChestID chestID, out AgentItem? agentItem)
+    public bool TryGetFirstAgentItem(ChestID chestID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)chestID, out agentItem);
     }
@@ -322,7 +323,7 @@ public class AgentData
     /// <param name="agentId">The ID of the agent to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <paramref name="agentId"/>; otherwise, <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(int agentId, out AgentItem? agentItem)
+    public bool TryGetFirstAgentItem(int agentId, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         agentItem = GetNPCsByID(agentId).FirstOrDefault();
         if (agentItem != null)
