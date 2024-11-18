@@ -139,7 +139,7 @@ internal static class MesmerHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Signets
         new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfTheEther),
@@ -412,7 +412,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in dimensionalApertures)
             {
                 // The buff can be quite delayed
-                BuffEvent buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
+                var buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
                 // Security
                 if (buffApply != null)
                 {

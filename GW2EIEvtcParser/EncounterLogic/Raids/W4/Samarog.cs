@@ -244,7 +244,7 @@ internal class Samarog : BastionOfThePenitent
         foreach (Segment seg in fixatedGuldhem)
         {
             long mid = (seg.Start + seg.End) / 2;
-            SingleActor guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
+            SingleActor? guldhem = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Guldhem) && mid >= x.FirstAware && mid <= x.LastAware);
             if (guldhem != null)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.Orange, 0.3, new AgentConnector(p), new AgentConnector(guldhem)));
@@ -255,7 +255,7 @@ internal class Samarog : BastionOfThePenitent
         foreach (Segment seg in fixatedRigom)
         {
             long mid = (seg.Start + seg.End) / 2;
-            SingleActor rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
+            SingleActor? rigom = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Rigom) && mid >= x.FirstAware && mid <= x.LastAware);
             if (rigom != null)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.Red, 0.3, new AgentConnector(p), new AgentConnector(rigom)));

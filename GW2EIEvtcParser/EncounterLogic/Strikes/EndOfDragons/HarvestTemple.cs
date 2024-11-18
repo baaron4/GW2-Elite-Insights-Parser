@@ -144,7 +144,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 case (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon:
                     phases[0].AddTarget(target);
                     subPhasesData.Add((target.FirstAware, mainPhaseEnd, "Soo-Won", target, true));
-                    AttackTargetEvent attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
+                    AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
                         var targetables = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= target.FirstAware).ToList();
@@ -155,7 +155,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         {
                             long start = targetOn.Time;
                             long end = log.FightData.FightEnd;
-                            TargetableEvent targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                            TargetableEvent? targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                             if (targetOff != null)
                             {
                                 end = targetOff.Time;
@@ -201,10 +201,10 @@ internal class HarvestTemple : EndOfDragonsStrike
         foreach (NPC voidAmal in Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)))
         {
             long end;
-            DeadEvent deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
+            DeadEvent? deadEvent = log.CombatData.GetDeadEvents(voidAmal.AgentItem).LastOrDefault();
             if (deadEvent == null)
             {
-                DespawnEvent despawnEvent = log.CombatData.GetDespawnEvents(voidAmal.AgentItem).LastOrDefault();
+                DespawnEvent? despawnEvent = log.CombatData.GetDespawnEvents(voidAmal.AgentItem).LastOrDefault();
                 if (despawnEvent == null)
                 {
                     end = voidAmal.LastAware;
@@ -239,7 +239,7 @@ internal class HarvestTemple : EndOfDragonsStrike
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             AgentItem firstAmalgamate = agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).MinBy(x => x.FirstAware);
@@ -330,10 +330,10 @@ internal class HarvestTemple : EndOfDragonsStrike
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         // no bouny chest detection, the reward is delayed
-        SingleActor soowon = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.TheDragonVoidSooWon));
+        SingleActor? soowon = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.TheDragonVoidSooWon));
         if (soowon != null)
         {
-            AttackTargetEvent attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
+            AttackTargetEvent? attackTargetEvent = combatData.GetAttackTargetEvents(soowon.AgentItem).FirstOrDefault();
             if (attackTargetEvent == null)
             {
                 return;
@@ -342,7 +342,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             var targetOffs = targetables.Where(x => !x.Targetable).ToList();
             if (targetOffs.Count == 2)
             {
-                HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(soowon.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken != null)
                 {
                     bool isSuccess = false;
@@ -414,7 +414,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         attackTargetEvents = attackTargetEvents.Where(x =>
         {
             AgentItem atAgent = x.AttackTarget;
-            if (targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
+            if (targetableEvents.TryGetValue(atAgent, out var targetables))
             {
                 return targetables.Any(y => y.Targetable);
             }
@@ -427,7 +427,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             AgentItem atAgent = attackTargetEvent.AttackTarget;
             // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
             // There are only two relevant attack targets, one represents the first five and the last one Soo Won
-            if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out List<TargetableEvent> targetables))
+            if (processedAttackTargets.Contains(atAgent) || !targetableEvents.TryGetValue(atAgent, out var targetables))
             {
                 continue;
             }
@@ -447,7 +447,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 ArcDPSEnums.TargetID id = idsToUse[index++];
                 long start = targetOn.Time;
                 long end = dragonVoid.LastAware;
-                TargetableEvent targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
+                TargetableEvent? targetOff = targetOffs.FirstOrDefault(x => x.Time > start);
                 // Don't split Soo won into two
                 if (targetOff != null && id != ArcDPSEnums.TargetID.TheDragonVoidSooWon)
                 {
@@ -494,7 +494,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             needRefreshAgentPool = true;
         }
         // Gravity Ball - Timecaster gadget
-        if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out AgentItem timecaster))
+        if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out var timecaster))
         {
             if (maxHPEvents.TryGetValue(14940, out var potentialGravityBallHPs))
             {
@@ -512,7 +512,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             }
         }
         {
-            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.TheDragonVoidJormag, out AgentItem jormagAgent))
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.TheDragonVoidJormag, out var jormagAgent))
             {
                 var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                     .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
@@ -845,7 +845,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                 }
                 // Breakbar Active
-                BreakbarStateEvent breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
+                BreakbarStateEvent? breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
                 if (breakbar != null)
                 {
                     (long start, long end) lifespan = (breakbar.Time, target.LastAware);
@@ -881,7 +881,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeam:
             case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth:
             case (int)ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter:
-                VelocityEvent frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
+                VelocityEvent? frostBeamMoveStartVelocity = log.CombatData.GetMovementData(target.AgentItem).OfType<VelocityEvent>().FirstOrDefault(x => x.GetPoint3D().Length() > 0);
                 // Beams are immobile at spawn for around 3 seconds
                 if (frostBeamMoveStartVelocity != null)
                 {
@@ -1025,7 +1025,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         EffectEvent lastEffect = poolEffects.Last();
                         (long start, long end) lifespan = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTempleVoidPoolOrbGettingReadyToBeDangerous);
                         (long start, long end) lifespanPuriOrb = lastEffect.ComputeLifespanWithSecondaryEffectNoSrcCheck(log, EffectGUIDs.HarvestTemplePurificationOrbSpawns);
-                        SingleActor nextPurificationOrb = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)).FirstOrDefault(x => x.FirstAware > lastEffect.Time - ServerDelayConstant);
+                        SingleActor? nextPurificationOrb = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PushableVoidAmalgamate) || x.IsSpecies(ArcDPSEnums.TrashID.KillableVoidAmalgamate)).FirstOrDefault(x => x.FirstAware > lastEffect.Time - ServerDelayConstant);
                         long nextPurifcationOrbStart = long.MaxValue;
                         if (nextPurificationOrb != null)
                         {
@@ -1131,7 +1131,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         if (clawVoidOrbs.Count > 0 && clawVoidOrbsAoEs.Count > 0)
                         {
                             // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
-                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault().Time).ToList();
+                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault()!.Time).ToList();
                             orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
                             aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
                         }
@@ -1324,7 +1324,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     foreach (CastEvent c in brandedArtillery)
                     {
                         int castDuration = 2500;
-                        EffectEvent brandedArtilleryAoE = brandedArtilleryAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration + 100);
+                        EffectEvent? brandedArtilleryAoE = brandedArtilleryAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration + 100);
                         if (brandedArtilleryAoE != null && target.TryGetCurrentPosition(log, c.Time, out var brandbomberPosition, 1000))
                         {
                             // Shooting animation
@@ -1441,7 +1441,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         replay.AddDecorationWithGrowing(circleIndicator, lifespan.start);
                         replay.Decorations.Add(circleWhirlpool);
                         // The whirlpools increase in size every set of 3, find if there is a next effect within 500ms.
-                        EffectEvent nextWhirlpool = hydroBurstWhirlpools.FirstOrDefault(x => Math.Abs(x.Time - effect.Time) < 500 && x.Time > effect.Time);
+                        EffectEvent? nextWhirlpool = hydroBurstWhirlpools.FirstOrDefault(x => Math.Abs(x.Time - effect.Time) < 500 && x.Time > effect.Time);
                         radius = counter % 3 == 0 ? radius + 10 : radius;
                         // if there isn't a next one, reset the radius to the starting value
                         if (nextWhirlpool == null)
@@ -1629,7 +1629,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     foreach (CastEvent c in firebombs)
                     {
                         long castDuration = 1500;
-                        EffectEvent bombAoE = firebombAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration);
+                        EffectEvent? bombAoE = firebombAoEs.FirstOrDefault(x => x.Time > c.Time && x.Time < c.Time + castDuration);
                         if (bombAoE != null && target.TryGetCurrentPosition(log, c.Time, out var obliteratorPosition))
                         {
                             // Shooting animation
@@ -1681,7 +1681,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         }
     }
 
-    private SingleActor FindActiveOrNextDragonVoid(long time)
+    private SingleActor? FindActiveOrNextDragonVoid(long time)
     {
         var dragonVoidIDs = new List<int> {
             (int)ArcDPSEnums.TargetID.TheDragonVoidJormag,
@@ -1691,8 +1691,8 @@ internal class HarvestTemple : EndOfDragonsStrike
             (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
             (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
         };
-        SingleActor activeDragon = FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
-        return activeDragon ?? FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware >= time);
+        SingleActor? activeDragon = FirstAwareSortedTargets!.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
+        return activeDragon ?? FirstAwareSortedTargets!.FirstOrDefault(x => x.FirstAware >= time);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
@@ -1733,7 +1733,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             long duration = 7000;
             (long start, long end) lifespan = effect.HasDynamicEndTime ? effect.ComputeDynamicLifespan(log, 7936) : (effect.Time, effect.Time + duration);
             long growing = lifespan.start + duration;
-            SingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
+            SingleActor? dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
             if (dragonVoid == null)
             {
                 continue;
@@ -1760,7 +1760,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             long duration = 5000;
             (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
             long growing = lifespan.start + duration;
-            SingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
+            SingleActor? dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
             if (dragonVoid == null)
             {
                 continue;
@@ -1783,7 +1783,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             long inactiveDuration = 1500;
             (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
             long growing = lifespan.start + inactiveDuration;
-            SingleActor dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
+            SingleActor? dragonVoid = FindActiveOrNextDragonVoid(effect.Time);
             if (dragonVoid == null)
             {
                 continue;
@@ -1805,7 +1805,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             long duration = 6250;
             (long start, long end) lifespan = green.ComputeLifespan(log, duration);
             long growing = green.Time + duration;
-            SingleActor dragonVoid = FindActiveOrNextDragonVoid(green.Time);
+            SingleActor? dragonVoid = FindActiveOrNextDragonVoid(green.Time);
             if (dragonVoid == null)
             {
                 continue;
@@ -1887,7 +1887,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         foreach (AgentItem orb in orbs)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(orb).GetBuffGraphs(log);
-            if (bgms != null && bgms.TryGetValue(VoidEmpowerment, out BuffsGraphModel bgm))
+            if (bgms != null && bgms.TryGetValue(VoidEmpowerment, out var bgm))
             {
                 if (bgm.BuffChart.Any(x => x.Value >= 3))
                 {

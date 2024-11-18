@@ -44,7 +44,7 @@ internal static class VindicatorHelper
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Legendary Alliance Stance", LegendaryAllianceStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAllianceStance),
         new Buff("Urn of Saint Viktor", UrnOfSaintViktorBuff, Source.Vindicator, BuffClassification.Other, BuffImages.UrnOfSaintViktor),

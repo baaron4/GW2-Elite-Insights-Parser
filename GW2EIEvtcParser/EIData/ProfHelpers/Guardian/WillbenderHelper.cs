@@ -18,7 +18,7 @@ internal static class WillbenderHelper
         new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.All)
             .UsingChecker( (x, log) => {
                 AgentItem src = x.From;
-                BuffEvent effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
+                var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
                 if (effectApply != null)
                 {
                    return x.Time - effectApply.Time < 6000;
@@ -151,7 +151,7 @@ internal static class WillbenderHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Virtues
         new Buff("Rushing Justice", RushingJusticeBuff, Source.Willbender, BuffClassification.Other, BuffImages.RushingJustice),

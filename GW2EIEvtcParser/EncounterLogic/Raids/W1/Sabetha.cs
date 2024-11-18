@@ -92,7 +92,7 @@ internal class Sabetha : SpiritVale
                 if (phase.Targets.Count > 0)
                 {
                     SingleActor phaseTar = phase.Targets[0];
-                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
+                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out var phaseName) ? phaseName : "Unknown";
                 }
                 switch (phaseID)
                 {

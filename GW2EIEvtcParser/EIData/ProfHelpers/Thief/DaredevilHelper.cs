@@ -42,7 +42,7 @@ internal static class DaredevilHelper
         new BuffOnActorDamageModifier(UnhinderedCombatant, "Unhindered Combatant", "-10%", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.UnhinderedCombatant, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Palm Strike", PalmStrike, Source.Daredevil, BuffClassification.Other, BuffImages.PalmStrike),
         new Buff("Pulmonary Impact", PulmonaryImpactBuff, Source.Daredevil, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PalmStrike),

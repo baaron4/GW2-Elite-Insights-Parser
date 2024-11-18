@@ -127,7 +127,7 @@ internal class Slothasor : SalvationPass
                 long lastDeadTime = long.MinValue;
                 foreach (CombatItem aliveEvent in aliveUpdates)
                 {
-                    CombatItem deadEvent = deadUpdates.FirstOrDefault(x => x.Time > lastDeadTime && x.Time > aliveEvent.Time);
+                    CombatItem? deadEvent = deadUpdates.FirstOrDefault(x => x.Time > lastDeadTime && x.Time > aliveEvent.Time);
                     if (deadEvent == null)
                     {
                         lastDeadTime = Math.Min(fightData.LogEnd, mushroom.LastAware);

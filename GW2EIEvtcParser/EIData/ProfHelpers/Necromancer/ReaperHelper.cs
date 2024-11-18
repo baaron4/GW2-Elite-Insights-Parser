@@ -49,7 +49,7 @@ internal static class ReaperHelper
         // Rise is unclear, I don't see any inc damage reducing fact for Dark Bond
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Reaper's Shroud", ReapersShroud, Source.Reaper, BuffClassification.Other, BuffImages.ReapersShroud),
         new Buff("Infusing Terror", InfusingTerrorBuff, Source.Reaper, BuffClassification.Other, BuffImages.InfusingTerror),

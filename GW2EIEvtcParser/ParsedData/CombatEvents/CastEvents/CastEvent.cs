@@ -30,7 +30,7 @@ public abstract class CastEvent : TimeCombatEvent
         Caster = agentData.GetAgent(baseItem.SrcAgent, baseItem.Time);
     }
 
-    public CastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
+    protected CastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
     {
         Skill = skill;
         Caster = caster;

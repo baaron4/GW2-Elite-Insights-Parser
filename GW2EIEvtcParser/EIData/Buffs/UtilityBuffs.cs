@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class UtilityBuffs
 {
-    internal static readonly List<Buff> Utilities =
+    internal static readonly IReadOnlyList<Buff> Utilities =
     [     
         // UTILITIES 
         // 1h versions have the same ID as 30 min versions 
@@ -63,7 +63,7 @@ internal static class UtilityBuffs
         new Buff("Decade Enhancement", DecadeEnhancement, Source.Item, BuffClassification.Enhancement, BuffImages.DecadeEnhancement),
     ];
 
-    internal static readonly List<Buff> OtherConsumables =
+    internal static readonly IReadOnlyList<Buff> OtherConsumables =
     [       
         // Reinforce Armor Canister / Anvil
         new Buff("Reinforced Armor", ReinforcedArmor, Source.Item, BuffClassification.OtherConsumable, BuffImages.ReinforcedArmor).WithBuilds(GW2Builds.June2022Balance),
@@ -87,7 +87,7 @@ internal static class UtilityBuffs
         new Buff("Chatoyant Elixir", ChatoyantElixir, Source.Item, BuffClassification.OtherConsumable, BuffImages.PowerfulPotionOfDredgeSlaying),
     ];
 
-    internal static readonly List<Buff> Writs =
+    internal static readonly IReadOnlyList<Buff> Writs =
     [
         new Buff("Writ of Basic Strength", WritOfBasicStrength, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfBasicStrength),
         new Buff("Writ of Strength", WritOfStrength, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfStrength),
@@ -112,7 +112,7 @@ internal static class UtilityBuffs
         new Buff("Writ of Masterful Speed", WritOfMasterfulSpeed, Source.Item, BuffClassification.Enhancement, BuffImages.WritOfMasterfulSpeed),
     ];
 
-    internal static readonly List<Buff> SlayingPotions =
+    internal static readonly IReadOnlyList<Buff> SlayingPotions =
     [
         // Branded
         new Buff("Minor Potion of Branded Slaying", MinorPotionOfBrandedSlaying, Source.Item, BuffClassification.Enhancement, BuffImages.MinorPotionOfBrandedSlaying),
@@ -244,7 +244,7 @@ internal static class UtilityBuffs
         new Buff("Powerful Potion of Mordrem Slaying", PowerfulPotionOfMordremSlaying, Source.Item, BuffClassification.Enhancement, BuffImages.PowerfulPotionOfMordremSlaying),
     ];
 
-    internal static readonly List<Buff> UtilityProcs =
+    internal static readonly IReadOnlyList<Buff> UtilityProcs =
     [
         // Buffs on revival
         new Buff("Ghoul's Grasp", GhoulsGrasp, Source.Item, BuffClassification.Support, BuffImages.GhoulsGrasp),

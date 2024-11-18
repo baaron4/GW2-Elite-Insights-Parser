@@ -37,7 +37,7 @@ internal static class SpecterHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Shadow Shroud", ShadowShroud, Source.Specter, BuffClassification.Other, BuffImages.EnterShadowShroud),
         new Buff("Endless Night", EndlessNight, Source.Specter, BuffClassification.Other, BuffImages.EndlessNight),

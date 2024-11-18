@@ -54,7 +54,7 @@ internal static class RenegadeHelper
         new BuffOnActorDamageModifier(KallasFervor, "Righteous Rebel", "-4% per stack", DamageSource.NoPets, -4.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceBuff, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),
         new Buff("Breakrazor's Bastion", BreakrazorsBastionBuff, Source.Renegade, BuffClassification.Defensive, BuffImages.BreakrazorsBastion),

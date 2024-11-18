@@ -66,7 +66,7 @@ internal static class CatalystHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Flame Wheel", FlameWheelBuff, Source.Catalyst, BuffClassification.Other, BuffImages.FlameWheel)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),

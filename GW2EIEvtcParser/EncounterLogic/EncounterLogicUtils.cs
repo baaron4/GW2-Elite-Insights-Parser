@@ -27,14 +27,14 @@ internal static class EncounterLogicUtils
 
     internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {
-        SingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
+        SingleActor? target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
         if (target == null)
         {
             // If tracked target is missing, then 0% hp
             return true;
         }
         long minTime = Math.Max(target.FirstAware, time);
-        HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HealthPercent > 0));
+        HealthUpdateEvent? hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HealthPercent > 0));
         var targetTotalHP = target.GetHealth(combatData);
         if (hpUpdate == null || targetTotalHP < 0)
         {

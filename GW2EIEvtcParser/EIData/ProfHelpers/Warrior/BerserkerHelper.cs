@@ -40,7 +40,7 @@ internal static class BerserkerHelper
         new CounterOnActorDamageModifier(FeelNoPainSavageInstinct, "Feel No Pain", "-100%", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, BuffImages.SavageInstinct, DamageModifierMode.All)
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Berserk", BerserkBuff, Source.Berserker, BuffClassification.Other, BuffImages.Berserk),
         new Buff("Flames of War", FlamesOfWar, Source.Berserker, BuffClassification.Other, BuffImages.FlamesOfWarWarrior).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),

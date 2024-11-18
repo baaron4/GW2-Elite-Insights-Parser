@@ -118,7 +118,7 @@ internal class Qadim : MythwrightGambit
             .GroupBy(x => x.MaxHealth).ToDictionary(x => x.Key, x => x.ToList());
         if (evtcVersion.Build >= ArcDPSBuilds.FunctionalEffect2Events)
         {
-            if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialPlatformAgentMaxHPs))
+            if (maxHPUpdates.TryGetValue(14940, out var potentialPlatformAgentMaxHPs))
             {
                 var any = false;
                 var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
@@ -134,7 +134,7 @@ internal class Qadim : MythwrightGambit
         }
         IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
         // Lamps
-        if (maxHPUpdates.TryGetValue(14940, out List<MaxHealthUpdateEvent> potentialLampAgentMaxHPs))
+        if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
         {
             var any = false;
             var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
@@ -152,7 +152,7 @@ internal class Qadim : MythwrightGambit
         var resolutionRetaliationPyrePositions = new Vector2[] { new(-8951, 9429), new(-5716, 9325), new(-7846, 10612) };
         foreach (AgentItem pyre in pyres)
         {
-            CombatItem positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
+            CombatItem? positionEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(pyre) && x.IsStateChange == StateChange.Position);
             if (positionEvt != null)
             {
                 var position = MovementEvent.GetPoint3D(positionEvt).XY();
@@ -227,7 +227,7 @@ internal class Qadim : MythwrightGambit
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out var qadim))
         {
             throw new MissingKeyActorsException("Qadim not found");
         }
@@ -256,12 +256,12 @@ internal class Qadim : MythwrightGambit
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // Find target
-        if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out AgentItem qadim))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Qadim, out var qadim))
         {
             throw new MissingKeyActorsException("Qadim not found");
         }
-        CombatItem startCast = combatData.FirstOrDefault(x => x.SkillID == QadimInitialCast && x.StartCasting());
-        CombatItem sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == FlameSlash3 || x.SkillID == FlameSlash || x.SkillID == FlameWave) && x.StartCasting());
+        CombatItem? startCast = combatData.FirstOrDefault(x => x.SkillID == QadimInitialCast && x.StartCasting());
+        CombatItem? sanityCheckCast = combatData.FirstOrDefault(x => (x.SkillID == FlameSlash3 || x.SkillID == FlameSlash || x.SkillID == FlameWave) && x.StartCasting());
         if (startCast == null || sanityCheckCast == null)
         {
             return fightData.LogStart;
@@ -440,7 +440,7 @@ internal class Qadim : MythwrightGambit
             {
                 var positions = orbs.Select(x => x.Position.XY()).ToList();
                 var middle = positions.FirstOrDefault(x => x.IsInTriangle(positions.Where(y => y != x).ToList()));
-                EffectEvent middleEvent = orbs.FirstOrDefault(x => x.Position.XY() == middle);
+                EffectEvent? middleEvent = orbs.FirstOrDefault(x => x.Position.XY() == middle);
                 if (middleEvent != null)
                 {
                     foreach (EffectEvent effect in orbs)
@@ -736,7 +736,7 @@ internal class Qadim : MythwrightGambit
                 var opacities = new List<ParametricPoint1D> { new(visibleOpacity, target.FirstAware) };
                 int velocityIndex = 0;
                 SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
-                HealthUpdateEvent below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);
+                HealthUpdateEvent? below21Percent = log.CombatData.GetHealthUpdateEvents(qadim.AgentItem).FirstOrDefault(x => x.HealthPercent < 21);
                 long finalPhasePlatformSwapTime = below21Percent != null ? below21Percent.Time + 9000 : log.FightData.LogEnd;
                 float threshold = 1f;
                 switch (target.Character)
@@ -811,7 +811,7 @@ internal class Qadim : MythwrightGambit
                                 {
                                     if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.QadimJumpingBlueOrbs, out var blueOrbs))
                                     {
-                                        EffectEvent lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time);
+                                        EffectEvent? lastBlueOrb = blueOrbs.FirstOrDefault(x => x.Time > opacities.Last().Time);
                                         if (lastBlueOrb != null)
                                         {
                                             (long start, long end) = lastBlueOrb.ComputeDynamicLifespan(log, lastBlueOrb.Duration);
@@ -1405,11 +1405,11 @@ internal class Qadim : MythwrightGambit
     /// <returns><see langword="true"/> if eligible, otherwise <see langword="false"/>.</returns>
     private static bool CustomCheckManipulateTheManipulator(ParsedEvtcLog log)
     {
-        SingleActor qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
-        SingleActor hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.AncientInvokedHydra)).FirstOrDefault();
-        SingleActor bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.ApocalypseBringer)).FirstOrDefault();
-        SingleActor matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernMatriarch)).FirstOrDefault();
-        SingleActor patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernPatriarch)).FirstOrDefault();
+        SingleActor? qadim = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TargetID.Qadim)).FirstOrDefault();
+        SingleActor? hydra = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.AncientInvokedHydra)).FirstOrDefault();
+        SingleActor? bringer = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.ApocalypseBringer)).FirstOrDefault();
+        SingleActor? matriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernMatriarch)).FirstOrDefault();
+        SingleActor? patriarch = log.FightData.Logic.Targets.Where(x => x.IsSpecies(TrashID.WyvernPatriarch)).FirstOrDefault();
 
         if (qadim != null && hydra != null && bringer != null && matriarch != null && patriarch != null)
         {

@@ -154,7 +154,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             if (invul is BuffApplyEvent)
             {
                 end = invul.Time;
-                PhaseData prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
+                PhaseData? prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
                 if (prevPhase != null)
                 {
                     start = (prevPhase.End >= end ? prevPhase.Start : prevPhase.End) + 1;

@@ -137,7 +137,7 @@ internal class MursaatOverseer : BastionOfThePenitent
             skillData.NotAccurate.Add(ClaimSAK);
             foreach (EffectEvent effect in claims)
             {
-                BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
+                BuffApplyEvent? src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
                 if (src != null)
                 {
                     res.Add(new InstantCastEvent(effect.Time, claimSkill, src.To));
@@ -150,7 +150,7 @@ internal class MursaatOverseer : BastionOfThePenitent
             skillData.NotAccurate.Add(DispelSAK);
             foreach (EffectEvent effect in dispels)
             {
-                BuffApplyEvent src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
+                BuffApplyEvent? src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
                 if (src != null)
                 {
                     res.Add(new InstantCastEvent(effect.Time, dispelSkill, src.To));

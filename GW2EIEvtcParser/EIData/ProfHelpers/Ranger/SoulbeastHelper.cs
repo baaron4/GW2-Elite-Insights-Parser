@@ -67,7 +67,7 @@ internal static class SoulbeastHelper
         new BuffOnActorDamageModifier(DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.DolyakStance, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Dolyak Stance", DolyakStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.DolyakStance),
         new Buff("Griffon Stance", GriffonStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.GriffonStance),

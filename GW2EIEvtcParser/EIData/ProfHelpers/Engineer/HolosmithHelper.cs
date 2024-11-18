@@ -50,7 +50,7 @@ internal static class HolosmithHelper
         new BuffOnActorDamageModifier(PhotonForge, "Light Density Amplifier", "-15%", DamageSource.NoPets, -15, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LightDensityAmplifier, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Cooling Vapor", CoolingVapor, Source.Holosmith, BuffClassification.Other, BuffImages.CoolantBlast),
         new Buff("Photon Wall Deployed", PhotonWallDeployed, Source.Holosmith, BuffClassification.Other, BuffImages.PhotonWall),

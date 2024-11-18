@@ -45,7 +45,7 @@ public abstract class EXTActorHealingHelper
 
     public IReadOnlyList<EXTHealingEvent> GetTypedOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
     {
-        if (!_typedHealEvents.TryGetValue(healingType, out CachingCollectionWithTarget<List<EXTHealingEvent>> healEventsPerPhasePerTarget))
+        if (!_typedHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
             healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTHealingEvent>>(log);
             _typedHealEvents[healingType] = healEventsPerPhasePerTarget;
@@ -61,7 +61,7 @@ public abstract class EXTActorHealingHelper
 
     public IReadOnlyList<EXTHealingEvent> GetTypedIncomingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
     {
-        if (!_typedIncomingHealEvents.TryGetValue(healingType, out CachingCollectionWithTarget<List<EXTHealingEvent>> healEventsPerPhasePerTarget))
+        if (!_typedIncomingHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
             healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTHealingEvent>>(log);
             _typedIncomingHealEvents[healingType] = healEventsPerPhasePerTarget;

@@ -70,7 +70,7 @@ internal static class ThiefHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Skills
         new Buff("Shadow Portal (Prepared)", ShadowPortalPreparedBuff, Source.Thief, BuffClassification.Other, BuffImages.PrepareShadowPortal),
@@ -166,7 +166,7 @@ internal static class ThiefHelper
                 var connector = new PositionConnector(exit.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
                 AttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
-                AttachedDecoration entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
+                AttachedDecoration? entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
                 if (entranceDecoration != null)
                 {
                     replay.Decorations.Add(entranceDecoration.LineTo(icon, color, 0.5).UsingSkillMode(skill));

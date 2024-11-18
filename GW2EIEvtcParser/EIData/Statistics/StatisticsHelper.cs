@@ -109,7 +109,7 @@ public class StatisticsHelper
             _presentRemainingBuffsPerPlayer[player] = [];
             foreach (BuffEvent item in combatData.GetBuffDataByDst(player.AgentItem))
             {
-                if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out Buff boon))
+                if (item is BuffApplyEvent && item.To == player.AgentItem && remainingBuffsByIds.TryGetValue(item.BuffID, out var boon))
                 {
                     _presentRemainingBuffsPerPlayer[player].Add(boon);
                 }

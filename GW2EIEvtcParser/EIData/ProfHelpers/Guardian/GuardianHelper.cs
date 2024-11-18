@@ -122,7 +122,7 @@ internal static class GuardianHelper
         new CounterOnActorDamageModifier(RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Guardian, BuffImages.RenewedFocus, DamageModifierMode.All)
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [        
         // Skills
         new Buff("Zealot's Flame", ZealotsFlameBuff, Source.Guardian, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ZealotsFlame),

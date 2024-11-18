@@ -151,7 +151,7 @@ internal class Deimos : BastionOfThePenitent
         {
             if (bfe is BuffApplyEvent ba)
             {
-                BuffEvent removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
+                BuffEvent? removal = signets.FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > bfe.Time && x.Time < bfe.Time + 30000);
                 if (removal == null)
                 {
                     res.Add(new BuffRemoveAllEvent(_unknownAgent, target.AgentItem, ba.Time + ba.AppliedDuration, 0, skillData.Get(UnnaturalSignet), ArcDPSEnums.IFF.Unknown, 1, 0));
@@ -160,7 +160,7 @@ internal class Deimos : BastionOfThePenitent
             }
             else if (bfe is BuffRemoveAllEvent)
             {
-                BuffEvent apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
+                BuffEvent? apply = signets.FirstOrDefault(x => x is BuffApplyEvent && x.Time < bfe.Time && x.Time > bfe.Time - 30000);
                 if (apply == null)
                 {
                     res.Add(new BuffApplyEvent(_unknownAgent, target.AgentItem, bfe.Time - 10000, 10000, skillData.Get(UnnaturalSignet), ArcDPSEnums.IFF.Unknown, uint.MaxValue, true));
@@ -176,7 +176,7 @@ internal class Deimos : BastionOfThePenitent
         if (!fightData.Success && _deimos10PercentTime > 0)
         {
             SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
-            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.Saul, out AgentItem saul))
+            if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.Saul, out var saul))
             {
                 throw new MissingKeyActorsException("Saul not found");
             }
@@ -191,12 +191,12 @@ internal class Deimos : BastionOfThePenitent
             }
             AgentItem attackTarget = attackTargets.Last().AttackTarget;
             // sanity check
-            TargetableEvent attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ServerDelayConstant);
+            TargetableEvent? attackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => x.Targetable && x.Time > _deimos10PercentTime - ServerDelayConstant);
             if (attackableEvent == null)
             {
                 return;
             }
-            TargetableEvent notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > attackableEvent.Time);
+            TargetableEvent? notAttackableEvent = combatData.GetTargetableEvents(attackTarget).LastOrDefault(x => !x.Targetable && x.Time > attackableEvent.Time);
             if (notAttackableEvent == null)
             {
                 return;
@@ -206,11 +206,11 @@ internal class Deimos : BastionOfThePenitent
             {
                 return;
             }
-            HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
+            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && playerAgents.Contains(x.From.GetFinalMaster()) && !x.ToFriendly);
             if (lastDamageTaken != null)
             {
                 // This means Deimos received damage after becoming non attackable, that means it did not die
-                HealthDamageEvent friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && x.Time > lastDamageTaken.Time && x.ToFriendly);
+                HealthDamageEvent? friendlyDamageToDeimos = combatData.GetDamageTakenData(deimos.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && x.Time > _deimos10PercentTime && x.Time > lastDamageTaken.Time && x.ToFriendly);
                 if (friendlyDamageToDeimos != null || !AtLeastOnePlayerAlive(combatData, fightData, notAttackableEvent.Time, playerAgents))
                 {
                     return;
@@ -222,7 +222,7 @@ internal class Deimos : BastionOfThePenitent
 
     private static AgentItem? GetShackledPrisoner(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate);
+        CombatItem? shackledPrisonerMaxHP = combatData.FirstOrDefault(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1000980 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate);
         if (shackledPrisonerMaxHP != null)
         {
             AgentItem shackledPrisoner = agentData.GetAgent(shackledPrisonerMaxHP.SrcAgent, shackledPrisonerMaxHP.Time);
@@ -242,7 +242,7 @@ internal class Deimos : BastionOfThePenitent
         foreach (AgentItem deimos in deimosAgents)
         {
             // enter combat
-            CombatItem spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == SpawnProtection);
+            CombatItem? spawnProtectionRemove = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos) && x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SkillID == SpawnProtection);
             if (spawnProtectionRemove != null)
             {
                 start = Math.Max(start, spawnProtectionRemove.Time);
@@ -251,8 +251,8 @@ internal class Deimos : BastionOfThePenitent
                     AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
                     if (shackledPrisoner != null)
                     {
-                        CombatItem firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
-                        CombatItem firstHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(shackledPrisoner));
+                        CombatItem? firstGreen = combatData.FirstOrDefault(x => x.IsBuffApply() && x.SkillID == DeimosSelectedByGreen);
+                        CombatItem? firstHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && x.SrcMatchesAgent(shackledPrisoner));
                         if (firstGreen != null && firstGreen.Time < start && firstHPUpdate != null && HealthUpdateEvent.GetHealthPercent(firstHPUpdate) == 100) // sanity check
                         {
                             _hasPreEvent = true;
@@ -293,7 +293,7 @@ internal class Deimos : BastionOfThePenitent
         bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
         bool needsDummy = !needsRefresh;
         AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
-        AgentItem saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
+        AgentItem? saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
         if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
         {
             shackledPrisoner.OverrideID(ArcDPSEnums.TrashID.ShackledPrisoner);
@@ -324,7 +324,7 @@ internal class Deimos : BastionOfThePenitent
                     .Select(attackTargetEvent => attackTargetEvent.Src).FirstOrDefault())
                    )
             .Where(x => x.Item3 != null && x.Item3.Type == AgentItem.AgentType.Gadget)
-            .FirstOrDefault();
+            .FirstOrDefault()!;
         long deimos10PercentTargetable = long.MaxValue;
         AgentItem? deimosStructBody = null;
         var gadgetAgents = new HashSet<AgentItem>();
@@ -332,10 +332,10 @@ internal class Deimos : BastionOfThePenitent
         {
             TargetableEvent targetableEvent = targetable.evt;
             AgentItem attackTargetAgent = targetable.attackTargetAgent;
-            deimosStructBody = targetable.targetedAgent;
+            deimosStructBody = targetable.targetedAgent!;
             deimos10PercentTargetable = targetableEvent.Time;
             gadgetAgents.Add(deimosStructBody);
-            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos10PercentTargetable && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0);
+            CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos10PercentTargetable && x.IsDamage() && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.SrcAgent != 0 && x.SrcInstid != 0);
             if (armDeimosDamageEvent != null)
             {
                 gadgetAgents.Add(agentData.GetAgent(armDeimosDamageEvent.SrcAgent, armDeimosDamageEvent.Time));
@@ -345,7 +345,7 @@ internal class Deimos : BastionOfThePenitent
         // Deimos gadgets via legacy, when attack targets fail
         if (deimosStructBody == null)
         {
-            CombatItem armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamage());
+            CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamage());
             if (armDeimosDamageEvent != null)
             {
                 var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();
@@ -359,7 +359,7 @@ internal class Deimos : BastionOfThePenitent
             }
         }
         // invul correction
-        CombatItem invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApply() && x.SkillID == Determined762);
+        CombatItem? invulApp = combatData.FirstOrDefault(x => x.DstMatchesAgent(deimos.AgentItem) && x.IsBuffApply() && x.SkillID == Determined762);
         if (invulApp != null)
         {
             invulApp.OverrideValue((int)(Math.Min(deimos10PercentTargetable, deimos.LastAware) - invulApp.Time));
@@ -426,7 +426,7 @@ internal class Deimos : BastionOfThePenitent
     private List<PhaseData> AddBossPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget)
     {
         // Determined + additional data on inst change
-        BuffEvent invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, mainTarget.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent? invulDei = log.CombatData.GetBuffDataByIDByDst(Determined762, mainTarget.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
 
         if (invulDei != null || _deimos10PercentTime > 0)
         {
@@ -438,7 +438,7 @@ internal class Deimos : BastionOfThePenitent
             }
             else if (log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).Any())
             {
-                HealthUpdateEvent prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
+                HealthUpdateEvent? prevHPUpdate = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem).LastOrDefault(x => x.Time <= _deimos10PercentTime);
                 if (prevHPUpdate != null)
                 {
                     mainDeimosPhaseName = $"100% - {Math.Round(prevHPUpdate.HealthPercent)}%";
@@ -595,7 +595,7 @@ internal class Deimos : BastionOfThePenitent
                 replay.Decorations.Add(new CircleDecoration(200, (start + delayOil, end), Colors.Black, 0.5, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.ShackledPrisoner:
-                SingleActor Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
+                SingleActor? Saul = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.Saul));
                 if (Saul != null)
                 {
                     replay.Trim(replay.TimeOffsets.start, Saul.FirstAware);
@@ -605,7 +605,7 @@ internal class Deimos : BastionOfThePenitent
                 replay.Trim(replay.TimeOffsets.start, _deimos100PercentTime);
                 var demonicCenter = new Vector3(-8092.57f, 4176.98f, 0);
                 replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Teal, 0.4, new AgentConnector(target), new PositionConnector(demonicCenter)));
-                SingleActor shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
+                SingleActor? shackledPrisoner = NonPlayerFriendlies.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.ShackledPrisoner));
                 if (shackledPrisoner != null)
                 {
                     if (shackledPrisoner.TryGetCurrentPosition(log, replay.TimeOffsets.start + ServerDelayConstant, out var shackledPos))

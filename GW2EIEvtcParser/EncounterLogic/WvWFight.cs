@@ -96,7 +96,7 @@ internal class WvWFight : FightLogic
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
         {
             return base.GetCombatMapInternal(log);
@@ -122,7 +122,7 @@ internal class WvWFight : FightLogic
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        MapIDEvent mapID = combatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapID = combatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
         {
             return _defaultName;
@@ -279,7 +279,7 @@ internal class WvWFight : FightLogic
             {
                 if (c.IsDamage(extensions))
                 {
-                    if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out List<AgentItem> srcs))
+                    if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out var srcs))
                     {
                         foreach (AgentItem src in srcs)
                         {
@@ -290,7 +290,7 @@ internal class WvWFight : FightLogic
                             }
                         }
                     }
-                    if (enemyPlayerDicts.TryGetValue(c.DstAgent, out List<AgentItem> dsts))
+                    if (enemyPlayerDicts.TryGetValue(c.DstAgent, out var dsts))
                     {
                         foreach (AgentItem dst in dsts)
                         {
@@ -304,7 +304,7 @@ internal class WvWFight : FightLogic
                 }
             }
         }
-        CombatItem modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
+        CombatItem? modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
         if (modeEvent != null)
         {
             _foundSkillMode = true;

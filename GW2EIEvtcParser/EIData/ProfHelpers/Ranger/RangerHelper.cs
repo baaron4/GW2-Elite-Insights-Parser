@@ -233,7 +233,7 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Counterattack", Counterattack, Source.Ranger, BuffClassification.Other, BuffImages.Counterattack),
         // Signets

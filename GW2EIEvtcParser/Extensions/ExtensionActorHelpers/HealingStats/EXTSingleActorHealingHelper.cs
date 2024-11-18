@@ -207,7 +207,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 
     public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, SingleActor? target, EXTHealingType healingType = EXTHealingType.All)
     {
-        if (!_healing1S!.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
+        if (!_healing1S!.TryGetValue(healingType, out var graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _healing1S[healingType] = graphs;
@@ -223,7 +223,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 
     public IReadOnlyList<int> Get1SHealingReceivedList(ParsedEvtcLog log, long start, long end, SingleActor? target, EXTHealingType healingType = EXTHealingType.All)
     {
-        if (!_healingReceived1S!.TryGetValue(healingType, out CachingCollectionWithTarget<int[]> graphs))
+        if (!_healingReceived1S!.TryGetValue(healingType, out var graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _healingReceived1S[healingType] = graphs;

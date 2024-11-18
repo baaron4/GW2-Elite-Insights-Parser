@@ -21,8 +21,8 @@ public class DeathRecap
     {
         //TODO(Rennorb) @perf
         DeathTime = dead.Time;
-        DownEvent downed;
-        AliveEvent upped = ups.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
+        DownEvent? downed;
+        AliveEvent? upped = ups.LastOrDefault(x => x.Time <= dead.Time && x.Time >= lastDeathTime);
         if (upped != null)
         {
             downed = downs.LastOrDefault(x => x.Time <= dead.Time && x.Time >= upped.Time);

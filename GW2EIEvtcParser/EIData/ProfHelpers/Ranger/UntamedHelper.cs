@@ -51,7 +51,7 @@ internal static class UntamedHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Ferocious Symbiosis", FerociousSymbiosis, Source.Untamed, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.FerociousSymbiosis),
         new Buff("Unleashed", Unleashed, Source.Untamed, BuffClassification.Other, BuffImages.UnleashRanger),

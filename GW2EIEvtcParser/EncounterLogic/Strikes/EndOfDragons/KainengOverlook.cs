@@ -130,7 +130,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
-    private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<SingleActor> targets, SingleActor ministerLi, ParsedEvtcLog log, int phaseID)
+    private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<SingleActor?> targets, SingleActor ministerLi, ParsedEvtcLog log, int phaseID)
     {
         if (targets.All(x => x != null))
         {

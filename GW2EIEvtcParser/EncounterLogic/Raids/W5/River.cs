@@ -72,7 +72,7 @@ internal class River : HallOfChains
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator);
@@ -91,7 +91,7 @@ internal class River : HallOfChains
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Desmina, out AgentItem desmina))
+        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Desmina, out var desmina))
         {
             throw new MissingKeyActorsException("Desmina not found");
         }
@@ -116,7 +116,7 @@ internal class River : HallOfChains
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {

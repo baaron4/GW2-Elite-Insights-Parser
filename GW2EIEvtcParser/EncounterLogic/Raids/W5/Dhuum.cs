@@ -68,7 +68,7 @@ internal class Dhuum : HallOfChains
         new PlayerSrcBuffApplyMechanic(DhuumsMessengerFixationBuff, "Messenger Fixation", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Brown), "Mess Fix", "Fixated by Messenger", "Messenger Fixation", 10).UsingChecker((bae, log) =>
         {
             // Additional buff applications can happen, filting them out
-            BuffEvent firstAggroEvent = log.CombatData.GetBuffDataByIDByDst(DhuumsMessengerFixationBuff, bae.To).FirstOrDefault();
+            BuffEvent? firstAggroEvent = log.CombatData.GetBuffDataByIDByDst(DhuumsMessengerFixationBuff, bae.To).FirstOrDefault();
             if (firstAggroEvent != null && bae.Time > firstAggroEvent.Time + ServerDelayConstant && bae.Initial)
             {
                 return false;
@@ -117,13 +117,13 @@ internal class Dhuum : HallOfChains
     //TODO(Rennorb) @perf
     private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<CastEvent> castLogs, long fightDuration, long start)
     {
-        CastEvent shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
+        CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
         // Dhuum brought down to 10%
         if (shield != null)
         {
             long end = shield.Time;
             phases.Add(new PhaseData(start, end, "Dhuum Fight"));
-            CastEvent firstDamageable = castLogs.FirstOrDefault(x => x.SkillId == DhuumVulnerableLast10Percent && x.Time >= end);
+            CastEvent? firstDamageable = castLogs.FirstOrDefault(x => x.SkillId == DhuumVulnerableLast10Percent && x.Time >= end);
             // ritual started
             if (firstDamageable != null)
             {
@@ -194,7 +194,7 @@ internal class Dhuum : HallOfChains
         else
         {
             // full fight contains the pre event
-            BuffEvent invulDhuum = log.CombatData.GetBuffDataByIDByDst(Determined762, dhuum.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > 115000);
+            BuffEvent? invulDhuum = log.CombatData.GetBuffDataByIDByDst(Determined762, dhuum.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > 115000);
             // pre event done
             if (invulDhuum != null)
             {
@@ -206,9 +206,9 @@ internal class Dhuum : HallOfChains
         }
         bool hasRitual = phases.Last().Name == "Ritual";
         // present if not bugged and pre-event done
-        PhaseData mainFight = phases.Find(x => x.Name == "Main Fight");
+        PhaseData? mainFight = phases.Find(x => x.Name == "Main Fight");
         // if present, Dhuum was at least at 10%
-        PhaseData dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
+        PhaseData? dhuumFight = phases.Find(x => x.Name == "Dhuum Fight");
         if (mainFight != null)
         {
             mainFight.CanBeSubPhase = dhuumFight == null;
@@ -257,7 +257,7 @@ internal class Dhuum : HallOfChains
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             AgentItem messenger = agentData.GetNPCsByID(TrashID.Messenger).MinBy(x => x.FirstAware);
@@ -271,7 +271,7 @@ internal class Dhuum : HallOfChains
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out AgentItem dhuum))
+        if (!agentData.TryGetFirstAgentItem(TargetID.Dhuum, out var dhuum))
         {
             throw new MissingKeyActorsException("Dhuum not found");
         }
@@ -344,7 +344,7 @@ internal class Dhuum : HallOfChains
             case (int)TargetID.Dhuum: {
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
                 var deathmark = cls.Where(x => x.SkillId == DeathMark);
-                CastEvent majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
+                CastEvent? majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
                 // Using new effects method for logs that contain them
                 if (!log.CombatData.HasEffectData)
                 {
@@ -545,7 +545,7 @@ internal class Dhuum : HallOfChains
                 {
                     if (_greenStart == 0)
                     {
-                        BuffEvent greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                        BuffEvent? greenTaken = log.CombatData.GetBuffData(FracturedSpirit).Where(x => x is BuffApplyEvent).FirstOrDefault();
                         if (greenTaken != null)
                         {
                             _greenStart = (int)greenTaken.Time - 5000;
@@ -619,7 +619,7 @@ internal class Dhuum : HallOfChains
             {
                 duration = 30000;
             }
-            BuffEvent removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
+            BuffEvent? removedBuff = log.CombatData.GetBuffRemoveAllData(MortalCoilDhuum).FirstOrDefault(x => x.To == p.AgentItem && x.Time > c.Time && x.Time < c.Time + duration);
             int start = (int)c.Time;
             int end = start + duration;
             if (removedBuff != null)

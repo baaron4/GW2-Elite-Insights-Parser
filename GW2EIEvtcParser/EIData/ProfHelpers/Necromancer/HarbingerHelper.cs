@@ -45,7 +45,7 @@ internal static class HarbingerHelper
         new BuffOnActorDamageModifier(ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, BuffImages.ImplacableFoe, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Harbinger Shroud", HarbingerShroud, Source.Harbinger, BuffClassification.Other, BuffImages.HarbingerShroud),
         new Buff("Blight", Blight, Source.Harbinger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Blight),

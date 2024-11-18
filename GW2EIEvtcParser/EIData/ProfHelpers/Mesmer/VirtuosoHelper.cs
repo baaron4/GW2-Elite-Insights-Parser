@@ -44,7 +44,7 @@ internal static class VirtuosoHelper
 
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, BuffImages.DeadlyBlades),
         new Buff("Bladeturn", Bladeturn, Source.Virtuoso, BuffClassification.Other, BuffImages.BladeturnRequiem),
@@ -63,7 +63,7 @@ internal static class VirtuosoHelper
             VirtuosoBlade4,
             VirtuosoBlade5,
         };
-        var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID)).ToList();
+        var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID));
         SkillItem skill = skillData.Get(VirtuosoBlades);
         var lastAddedBuffInstance = new Dictionary<long, BuffApplyEvent>();
         foreach (BuffEvent blade in blades)

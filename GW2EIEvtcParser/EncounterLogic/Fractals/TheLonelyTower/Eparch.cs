@@ -318,16 +318,16 @@ internal class Eparch : LonelyTower
             const int globuleHealth = 14_940;
             const uint globuleWidth = 16;
             const uint globuleHeight = 160;
-            MaxHealthUpdateEvent health = log.CombatData.GetMaxHealthUpdateEvents(gadget).LastOrDefault(); // may have max health 0 initially
+            MaxHealthUpdateEvent? health = log.CombatData.GetMaxHealthUpdateEvents(gadget).LastOrDefault(); // may have max health 0 initially
             if (gadget.HitboxWidth == globuleWidth && gadget.HitboxHeight == globuleHeight && health?.MaxHealth == globuleHealth)
             {
-                SpawnEvent spawn = log.CombatData.GetSpawnEvents(gadget).FirstOrDefault();
-                DespawnEvent despawn = log.CombatData.GetDespawnEvents(gadget).FirstOrDefault();
+                SpawnEvent? spawn = log.CombatData.GetSpawnEvents(gadget).FirstOrDefault();
+                DespawnEvent? despawn = log.CombatData.GetDespawnEvents(gadget).FirstOrDefault();
                 if (spawn != null && despawn != null)
                 {
                     const long globuleDelay = 700;
-                    AnimatedCastEvent lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
-                    if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out Color color))
+                    AnimatedCastEvent? lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
+                    if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out var color))
                     {
                         if (gadget.TryGetCurrentPosition(log, gadget.LastAware, out var position))
                         {

@@ -10,7 +10,7 @@ internal static class EncounterBuffs
 {
 
 
-    internal static readonly List<Buff> FractalInstabilities =
+    internal static readonly IReadOnlyList<Buff> FractalInstabilities =
     [
         // Legacy
         new Buff("Mistlock Instability: Fleeting Precision", MistlockInstabilityFleetingPrecision, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
@@ -54,7 +54,7 @@ internal static class EncounterBuffs
         new Buff("Flux Bomb Target", FluxBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
     ];
 
-    internal static readonly List<Buff> FightSpecific =
+    internal static readonly IReadOnlyList<Buff> FightSpecific =
         [
             // Generic
             new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, BuffImages.Emboldened),

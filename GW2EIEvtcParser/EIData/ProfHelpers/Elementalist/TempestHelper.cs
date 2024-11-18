@@ -48,7 +48,7 @@ internal static class TempestHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Rebound", Rebound, Source.Tempest, BuffClassification.Defensive, BuffImages.Rebound),
         new Buff("Harmonious Conduit", HarmoniousConduit, Source.Tempest, BuffClassification.Other, BuffImages.HarmoniousConduit)

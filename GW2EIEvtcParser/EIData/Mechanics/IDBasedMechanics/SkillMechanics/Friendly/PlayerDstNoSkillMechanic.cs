@@ -39,9 +39,9 @@ internal class PlayerDstNoSkillMechanic : PlayerSkillMechanic
                 SingleActor? amp = GetActor(log, GetCreditedAgentItem(ahde), regroupedMobs);
                 if (amp != null)
                 {
-                    if (regroupedSkillDst.TryGetValue(time, out HashSet<SingleActor> set))
+                    if (regroupedSkillDst.TryGetValue(time, out var actorSet))
                     {
-                        set.Add(amp);
+                        actorSet.Add(amp);
                     }
                     else
                     {

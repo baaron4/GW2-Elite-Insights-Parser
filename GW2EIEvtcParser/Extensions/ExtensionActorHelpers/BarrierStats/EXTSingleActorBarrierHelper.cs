@@ -40,9 +40,9 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
 
         if (target != null)
         {
-            if (BarrierEventsByDst.TryGetValue(target.AgentItem, out List<EXTBarrierEvent> list))
+            if (BarrierEventsByDst.TryGetValue(target.AgentItem, out var barrierEvents))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end);
+                return barrierEvents.Where(x => x.Time >= start && x.Time <= end);
             }
             else
             {

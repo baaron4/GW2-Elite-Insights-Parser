@@ -14,7 +14,7 @@ internal static class MechanicHelper
         // We regroup trash mobs by their ID
         if (log.FightData.Logic.TrashMobAgents.Contains(a))
         {
-            if (!regroupedMobs.TryGetValue(a.ID, out SingleActor amp))
+            if (!regroupedMobs.TryGetValue(a.ID, out var amp))
             {
                 amp = log.FightData.Logic.TrashMobs.First(x => x.AgentItem == a);
                 regroupedMobs.Add(amp.ID, amp);

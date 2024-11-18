@@ -249,7 +249,7 @@ internal static class WeaverHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Dual Fire Attunement", DualFireAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireAttunement),
         new Buff("Fire Water Attunement", FireWaterAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireWaterAttunement),

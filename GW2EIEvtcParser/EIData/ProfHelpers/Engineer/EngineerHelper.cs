@@ -23,7 +23,7 @@ internal static class EngineerHelper
                 {
                     return false;
                 }
-                WeaponSwapEvent nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
+                WeaponSwapEvent? nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
                 long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
                 var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
                 return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
@@ -184,7 +184,7 @@ internal static class EngineerHelper
         new BuffOnActorDamageModifier(IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.NoPets, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, BuffImages.IronBlooded, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, BuffImages.StaticShield),
         new Buff("Absorb", Absorb, Source.Engineer, BuffClassification.Other, BuffImages.Absorb),

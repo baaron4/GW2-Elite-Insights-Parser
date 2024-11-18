@@ -9,9 +9,9 @@ internal abstract class EffectEndEvent : AbstractEffectEvent
 
     protected void SetEndEventOnStartEvent(IReadOnlyDictionary<long, List<EffectEvent>> effectEventsByTrackingID)
     {
-        if (effectEventsByTrackingID.TryGetValue(TrackingID, out List<EffectEvent> effectEvents))
+        if (effectEventsByTrackingID.TryGetValue(TrackingID, out var effectEvents))
         {
-            EffectEvent startEvent = effectEvents.LastOrDefault(x => x.Time <= Time);
+            EffectEvent? startEvent = effectEvents.LastOrDefault(x => x.Time <= Time);
             if (startEvent != null)
             {
                 startEvent.SetDynamicEndTime(this);

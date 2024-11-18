@@ -66,8 +66,8 @@ internal class Freezie : FestivalStrikeMissionLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Freezie));
-        SingleActor heartTarget = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.FreeziesFrozenHeart));
+        SingleActor? mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Freezie));
+        SingleActor? heartTarget = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.FreeziesFrozenHeart));
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Freezie not found");
@@ -97,7 +97,7 @@ internal class Freezie : FestivalStrikeMissionLogic
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward1 && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.OldRaidReward1 && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
@@ -106,13 +106,20 @@ internal class Freezie : FestivalStrikeMissionLogic
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        AgentItem heart = agentData.GetNPCsByID(TrashID.FreeziesFrozenHeart).FirstOrDefault();
-        AgentItem freezie = agentData.GetNPCsByID(TargetID.Freezie).FirstOrDefault();
-        HealthUpdateEvent heartHpUpdate = combatData.GetHealthUpdateEvents(heart).FirstOrDefault(x => x.Time >= freezie.FirstAware);
-        HealthUpdateEvent freezieHpUpdate = combatData.GetHealthUpdateEvents(freezie).FirstOrDefault(x => x.Time >= freezie.FirstAware);
-        if (heartHpUpdate.HealthPercent > 0 || freezieHpUpdate.HealthPercent <= 90)
+        AgentItem freezie = agentData.GetNPCsByID(TargetID.Freezie).FirstOrDefault() ?? throw new EvtcAgentException("Freezie not found");
+        HealthUpdateEvent? freezieHpUpdate = combatData.GetHealthUpdateEvents(freezie).FirstOrDefault(x => x.Time >= freezie.FirstAware);
+        if ((freezieHpUpdate != null && freezieHpUpdate.HealthPercent <= 90))
         {
             return FightData.EncounterStartStatus.Late;
+        }
+        AgentItem? heart = agentData.GetNPCsByID(TrashID.FreeziesFrozenHeart).FirstOrDefault();
+        if (heart != null)
+        {
+            HealthUpdateEvent? heartHpUpdate = combatData.GetHealthUpdateEvents(heart).FirstOrDefault(x => x.Time >= freezie.FirstAware);
+            if ((heartHpUpdate != null && heartHpUpdate.HealthPercent > 0) )
+            {
+                return FightData.EncounterStartStatus.Late;
+            }
         }
         return FightData.EncounterStartStatus.Normal;
     }

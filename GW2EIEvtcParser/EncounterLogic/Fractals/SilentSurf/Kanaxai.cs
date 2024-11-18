@@ -157,7 +157,7 @@ internal class Kanaxai : SilentSurf
         List<PhaseData> encounterPhases = GetPhasesByInvul(log, DeterminedToDestroy, kanaxai, true, true);
 
         var worldCleaverPhaseStarts = log.CombatData.GetBuffDataByIDByDst(DeterminedToDestroy, kanaxai.AgentItem).OfType<BuffApplyEvent
-            >().Select(x => x.Time).ToList();
+            >().Select(x => x.Time);
         int worldCleaverCount = 0;
         int repeatedCount = 0;
         var isRepeatedWorldCleaverPhase = new List<bool>();
@@ -263,7 +263,7 @@ internal class Kanaxai : SilentSurf
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM)) ?? throw new MissingKeyActorsException("Kanaxai not found");
-        BuffApplyEvent invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
+        BuffApplyEvent? invul762Gain = combatData.GetBuffDataByIDByDst(Determined762, kanaxai.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault(x => x.Time > 0);
         if (invul762Gain != null && !combatData.GetDespawnEvents(kanaxai.AgentItem).Any(x => Math.Abs(x.Time - invul762Gain.Time) < ServerDelayConstant))
         {
             fightData.SetSuccess(true, invul762Gain.Time);
@@ -284,8 +284,8 @@ internal class Kanaxai : SilentSurf
         {
             tetherAspect = apply.By == _unknownAgent ? tetherAspect : apply.By;
             int start = (int)apply.Time;
-            BuffApplyEvent replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
-            BuffRemoveAllEvent remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
+            BuffApplyEvent? replace = tetherApplies.FirstOrDefault(x => x.Time >= apply.Time && x.By != tetherAspect);
+            BuffRemoveAllEvent? remove = tetherRemoves.FirstOrDefault(x => x.Time >= apply.Time);
             long end = Math.Min(replace?.Time ?? maxEnd, remove?.Time ?? maxEnd);
             replay.Decorations.Add(new LineDecoration((start, (int)end), Colors.Yellow, 0.5, new AgentConnector(tetherAspect), new AgentConnector(player)));
         }
@@ -319,7 +319,7 @@ internal class Kanaxai : SilentSurf
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
         switch (target.ID)
         {
@@ -440,33 +440,36 @@ internal class Kanaxai : SilentSurf
         if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AxeGroundAoE, out var axeAoEs))
         {
             // Get World Cleaver casts
-            SingleActor kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
-            var casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
-
-            // Get Axe AoE Buffs
-            //TODO(Rennorb) @perf: find average complexity
-            var axes = new List<BuffEvent>(50);
-            axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1).OfType<BuffRemoveAllEvent>());
-            axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2).OfType<BuffRemoveAllEvent>());
-            axes.SortByTime();
-
-            foreach (EffectEvent aoe in axeAoEs)
+            SingleActor? kanaxai = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.KanaxaiScytheOfHouseAurkusCM));
+            if (kanaxai != null)
             {
-                // Find the first cast time event present after the AoE effect time
-                var cast = casts.Where(x => x.SkillId == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
-                long worldCleaverTime = cast?.Time ?? 0;
+                var casts = kanaxai.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
-                // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
-                // World Cleaver is the time-limit of when the AoEs reset, in third phase we use FightEnd
-                if (worldCleaverTime != 0)
+                // Get Axe AoE Buffs
+                //TODO(Rennorb) @perf: find average complexity
+                var axes = new List<BuffEvent>(50);
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff1).OfType<BuffRemoveAllEvent>());
+                axes.AddRange(log.CombatData.GetBuffData(RendingStormAxeTargetBuff2).OfType<BuffRemoveAllEvent>());
+                axes.SortByTime();
+
+                foreach (EffectEvent aoe in axeAoEs)
                 {
-                    var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
-                    AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime);
-                }
-                else
-                {
-                    var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time);
-                    AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd);
+                    // Find the first cast time event present after the AoE effect time
+                    var cast = casts.Where(x => x.SkillId == WorldCleaver).FirstOrDefault(x => x.Time > aoe.Time);
+                    long worldCleaverTime = cast?.Time ?? 0;
+
+                    // Find the first BuffRemoveAllEvent after the AoE effect Time or next World Cleaver cast time
+                    // World Cleaver is the time-limit of when the AoEs reset, in third phase we use FightEnd
+                    if (worldCleaverTime != 0)
+                    {
+                        var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time && buff.Time < worldCleaverTime);
+                        AddAxeAoeDecoration(aoe, axeBuffRemoval, worldCleaverTime);
+                    }
+                    else
+                    {
+                        var axeBuffRemoval = axes.FirstOrDefault(buff => buff.Time > aoe.Time);
+                        AddAxeAoeDecoration(aoe, axeBuffRemoval, log.FightData.FightEnd);
+                    }
                 }
             }
         }

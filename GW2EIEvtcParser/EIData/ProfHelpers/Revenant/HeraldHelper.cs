@@ -50,7 +50,7 @@ internal static class HeraldHelper
         new BuffOnActorDamageModifier(HardeningPersistence, "Hardening Persistence", "-1.5% per stack", DamageSource.NoPets, -1.5, DamageType.Strike, DamageType.All, Source.Herald, ByStack, BuffImages.HardeningPersistence, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [         
         // Skills
         new Buff("Crystal Hibernation", CrystalHibernation, Source.Herald, BuffClassification.Other, BuffImages.CrystalHibernation).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),

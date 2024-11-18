@@ -130,7 +130,10 @@ public class BuffsGraphModel
                         node = node.Next;
                         start = curEnd;
                     }
-                    node = node.Next;
+                    if (node != null)
+                    {
+                        node = node.Next;
+                    }
                 }
             }
             _buffChart = segmentsToFill.ToList();

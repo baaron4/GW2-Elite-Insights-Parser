@@ -43,7 +43,7 @@ internal static class SpellbreakerHelper
 
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Sight beyond Sight", SightBeyondSightBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.SightBeyondSight),
         new Buff("Full Counter", FullCounterBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.FullCounter),

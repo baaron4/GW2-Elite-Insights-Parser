@@ -157,7 +157,7 @@ public class ParsedEvtcLog
     public SingleActor FindActor(AgentItem agentItem)
     {
         InitActorDictionaries();
-        if (!_agentToActorDictionary!.TryGetValue(agentItem, out SingleActor actor))
+        if (!_agentToActorDictionary!.TryGetValue(agentItem, out var actor))
         {
             if (agentItem.Type == AgentItem.AgentType.Player)
             {

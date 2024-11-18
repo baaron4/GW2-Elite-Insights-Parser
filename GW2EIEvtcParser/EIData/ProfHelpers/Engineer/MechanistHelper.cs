@@ -73,7 +73,7 @@ internal static class MechanistHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Rectifier Signet", RectifierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.RectifierSignet),
         new Buff("Barrier Signet", BarrierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.BarrierSignet),

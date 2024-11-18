@@ -228,35 +228,35 @@ internal abstract class FractalLogic : FightLogic
     /// <param name="onDistanceFailDuration">Duration of the AoE effects farther away from the caster.</param>
     protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, GUID effect, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
     {
-        if (!log.AgentData.TryGetFirstAgentItem(target, out AgentItem agent))
+        if (!log.AgentData.TryGetFirstAgentItem(target, out var agent))
         {
             return;
         }
 
-        if (log.CombatData.TryGetEffectEventsByGUID(effect, out var events))
+        if (log.CombatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
         {
-            foreach (EffectEvent @event in events)
+            foreach (EffectEvent effectEvent in effectEvents)
             {
-                (long start, long end) lifespan = (@event.Time, @event.Time + @event.Duration);
+                (long start, long end) lifespan = (effectEvent.Time, effectEvent.Time + effectEvent.Duration);
                 // Correcting the duration of the effects for CTBS 45, based on the distance from the target casting the mechanic.
-                if (@event is EffectEventCBTS45)
+                if (effectEvent is EffectEventCBTS45)
                 {
-                    if (!agent.TryGetCurrentPosition(log, @event.Time, out var agentPos))
+                    if (!agent!.TryGetCurrentPosition(log, effectEvent.Time, out var agentPos))
                     {
                         continue;
                     }
 
-                    var distance = (@event.Position - agentPos).Length();
+                    var distance = (effectEvent.Position - agentPos).Length();
                     if (distance < distanceThreshold)
                     {
-                        lifespan.end = @event.Time + onDistanceSuccessDuration;
+                        lifespan.end = effectEvent.Time + onDistanceSuccessDuration;
                     }
                     else
                     {
-                        lifespan.end = @event.Time + onDistanceFailDuration;
+                        lifespan.end = effectEvent.Time + onDistanceFailDuration;
                     }
                 }
-                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(@event.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(effectEvent.Position)));
             }
         }
     }

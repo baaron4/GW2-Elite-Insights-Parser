@@ -183,7 +183,7 @@ internal class Ensolyss : Nightmare
                 // 100% to 66% Doughnut
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut100_66, out var miasmaEffects))
                 {
-                    EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
+                    EffectEvent? miasmaEffect = miasmaEffects.FirstOrDefault();
                     if (miasmaEffect != null)
                     {
                         if (percent66treshhold != null)
@@ -203,7 +203,7 @@ internal class Ensolyss : Nightmare
                 // 66% to 15% Doughnut
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut66_15, out miasmaEffects))
                 {
-                    EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
+                    EffectEvent? miasmaEffect = miasmaEffects.FirstOrDefault();
                     if (miasmaEffect != null)
                     {
                         // Check if the Arkk's shield attack has been skipped with high dps
@@ -224,7 +224,7 @@ internal class Ensolyss : Nightmare
                 // 15% to 0% Doughnut
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.EnsolyssMiasmaDoughnut15_0, out miasmaEffects))
                 {
-                    EffectEvent miasmaEffect = miasmaEffects.FirstOrDefault();
+                    EffectEvent? miasmaEffect = miasmaEffects.FirstOrDefault();
                     if (miasmaEffect != null)
                     {
                         // If Arkk's shield has been skipped at 15% this decoration should never be added

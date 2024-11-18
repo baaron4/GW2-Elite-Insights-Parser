@@ -63,7 +63,7 @@ internal static class DragonhunterHelper
         new BuffOnActorDamageModifier(NumberOfConditions, "Hunter's Fortification", "-10%", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByAbsence, BuffImages.HuntersFortification, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Justice (Dragonhunter)", JusticeDragonhunter, Source.Dragonhunter, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SpearOfLight),
         new Buff("Shield of Courage (Active)", ShieldOfCourageActive, Source.Dragonhunter, BuffClassification.Defensive, BuffImages.ShieldOfCourage),

@@ -41,7 +41,7 @@ internal static class BladeswornHelper
 
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Gunsaber Mode", GunsaberMode, Source.Bladesworn, BuffClassification.Other, BuffImages.UnsheatheGunsaber),
         new Buff("Dragon Trigger", DragonTrigger, Source.Bladesworn, BuffClassification.Other, BuffImages.DragonTrigger),

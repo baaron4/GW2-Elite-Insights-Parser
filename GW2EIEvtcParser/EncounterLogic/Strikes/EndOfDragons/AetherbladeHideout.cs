@@ -130,9 +130,12 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).ToList();
 
                 // Visually removing Mai Trin from the Combat Replay when we get the last HP update.
-                HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault();
-                long maiTrinEnd = lastHPUpdate.Time;
-                replay.Trim(replay.TimeOffsets.start, maiTrinEnd);
+                HealthUpdateEvent? lastHPUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault();
+                if (lastHPUpdate != null)
+                {
+                    long maiTrinEnd = lastHPUpdate.Time;
+                    replay.Trim(replay.TimeOffsets.start, maiTrinEnd);
+                }
 
                 // Nightmare Fusillade - Cone Attack
                 var nightmareFusilladeMain = casts.Where(x => x.SkillId == NightmareFusilladeMain).ToList();
@@ -215,7 +218,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
 
                     if (last60HpUpdate != null && Math.Abs(bomb.FirstAware - last60HpUpdate.Value.Start) < threshold)
                     {
-                        EffectEvent detonation = filteredDetonations.Where(x => Math.Abs(bomb.LastAware - x.Time) < threshold).FirstOrDefault();
+                        EffectEvent? detonation = filteredDetonations.Where(x => Math.Abs(bomb.LastAware - x.Time) < threshold).FirstOrDefault();
                         if (detonation != null)
                         {
                             lifespanFirstCircle = (last60HpUpdate.Value.Start, Math.Min(bomb.LastAware, detonation.Time));
@@ -227,7 +230,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     }
                     else if (last20HpUpdate != null)
                     {
-                        EffectEvent detonation = filteredDetonations.Where(x => Math.Abs(bomb.LastAware - x.Time) < threshold).FirstOrDefault();
+                        EffectEvent? detonation = filteredDetonations.Where(x => Math.Abs(bomb.LastAware - x.Time) < threshold).FirstOrDefault();
                         if (detonation != null)
                         {
                             lifespanFirstCircle = (last20HpUpdate.Value.Start, Math.Min(bomb.LastAware, detonation.Time));
@@ -430,11 +433,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             const uint radiusFromCenter = 375; // Found by calculating distance between detonation effect and echo position, original value is 374.999969
             const uint innerRadius = 160;
             const uint outerRadius = 480;
-            SingleActor echo = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM));
+            SingleActor? echo = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM));
             foreach (EffectEvent effect in puzzleNM)
             {
                 // The effect position is outside of the arena, take the position of the Echo as central point.
-                SingleActor phantom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
+                SingleActor? phantom = Targets.FirstOrDefault(x => x.IsSpecies(TrashID.ScarletPhantomBeamNM) && effect.Time <= x.LastAware);
                 if (echo != null && phantom != null)
                 {
                     if (echo.TryGetCurrentPosition(log, effect.Time, out var echoPosition) 
@@ -490,7 +493,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
     }
 
-    private SingleActor GetEchoOfScarletBriar(FightData fightData)
+    private SingleActor? GetEchoOfScarletBriar(FightData fightData)
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)TargetID.EchoOfScarletBriarCM : (int)TargetID.EchoOfScarletBriarNM));
     }
@@ -500,11 +503,11 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            SingleActor echoOfScarlet = GetEchoOfScarletBriar(fightData);
+            SingleActor? echoOfScarlet = GetEchoOfScarletBriar(fightData);
             if (echoOfScarlet != null)
             {
                 SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
-                BuffApplyEvent buffApply = combatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+                BuffApplyEvent? buffApply = combatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
                 if (buffApply != null && buffApply.Time > echoOfScarlet.FirstAware)
                 {
                     fightData.SetSuccess(true, buffApply.Time);
@@ -523,7 +526,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor maiTrin = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.MaiTrinStrike)) ?? throw new MissingKeyActorsException("Mai Trin not found");
         phases[0].AddTarget(maiTrin);
-        SingleActor echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
+        SingleActor? echoOfScarlet = GetEchoOfScarletBriar(log.FightData);
         if (echoOfScarlet != null)
         {
             phases[0].AddTarget(echoOfScarlet);
@@ -534,33 +537,36 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         }
         if (log.CombatData.GetDamageTakenData(maiTrin.AgentItem).Any())
         {
-            HealthUpdateEvent lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
-            long maiTrinEnd = lastHPUpdate.Time;
-            long maiTrinStart = 0;
-            BuffRemoveAllEvent buffRemove = log.CombatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffRemoveAllEvent>().Where(x => x.Time > maiTrinStart).FirstOrDefault();
-            if (buffRemove != null)
+            HealthUpdateEvent? lastHPUpdate = log.CombatData.GetHealthUpdateEvents(maiTrin.AgentItem).LastOrDefault();
+            if (lastHPUpdate != null)
             {
-                maiTrinStart = buffRemove.Time;
-            }
-            var mainPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
-            mainPhase.AddTarget(maiTrin);
-            phases.Add(mainPhase);
-            List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd);
-            for (int i = 0; i < maiPhases.Count; i++)
-            {
-                PhaseData subPhase = maiPhases[i];
-                if ((i % 2) == 0)
+                long maiTrinEnd = lastHPUpdate.Time;
+                long maiTrinStart = 0;
+                BuffRemoveAllEvent? buffRemove = log.CombatData.GetBuffDataByIDByDst(Determined895, maiTrin.AgentItem).OfType<BuffRemoveAllEvent>().Where(x => x.Time > maiTrinStart).FirstOrDefault();
+                if (buffRemove != null)
                 {
-                    subPhase.Name = "Mai Trin Phase " + ((i / 2) + 1);
-                    subPhase.AddTarget(maiTrin);
+                    maiTrinStart = buffRemove.Time;
                 }
-                else
+                var mainPhase = new PhaseData(0, maiTrinEnd, "Mai Trin");
+                mainPhase.AddTarget(maiTrin);
+                phases.Add(mainPhase);
+                List<PhaseData> maiPhases = GetPhasesByInvul(log, Untargetable, maiTrin, true, true, maiTrinStart, maiTrinEnd);
+                for (int i = 0; i < maiPhases.Count; i++)
                 {
-                    subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
-                    subPhase.AddTargets(GetHPScarletPhantoms(subPhase));
+                    PhaseData subPhase = maiPhases[i];
+                    if ((i % 2) == 0)
+                    {
+                        subPhase.Name = "Mai Trin Phase " + ((i / 2) + 1);
+                        subPhase.AddTarget(maiTrin);
+                    }
+                    else
+                    {
+                        subPhase.Name = "Mai Trin Split Phase " + ((i / 2) + 1);
+                        subPhase.AddTargets(GetHPScarletPhantoms(subPhase));
+                    }
                 }
+                phases.AddRange(maiPhases);
             }
-            phases.AddRange(maiPhases);
         }
         if (echoOfScarlet != null)
         {
@@ -618,7 +624,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         foreach (SingleActor echoOfScarlet in echoesOfScarlet)
         {
             var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
-            if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()) == 100)
+            if (hpUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(hpUpdates.LastOrDefault()!) == 100)
             {
                 hpUpdates.Last().OverrideDstAgent(hpUpdates[hpUpdates.Count - 2].DstAgent);
             }

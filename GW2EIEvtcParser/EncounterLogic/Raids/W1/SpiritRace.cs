@@ -67,7 +67,7 @@ internal class SpiritRace : SpiritVale
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
@@ -88,7 +88,7 @@ internal class SpiritRace : SpiritVale
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
 
-        AgentItem wallOfGhosts = agentData.GetNPCsByID(ArcDPSEnums.TrashID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetNPCsByID(ArcDPSEnums.TrashID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts == null)
         {
             return FightData.EncounterStartStatus.Late;
@@ -105,7 +105,7 @@ internal class SpiritRace : SpiritVale
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        AgentItem wallOfGhosts = agentData.GetNPCsByID(ArcDPSEnums.TrashID.WallOfGhosts).FirstOrDefault();
+        AgentItem? wallOfGhosts = agentData.GetNPCsByID(ArcDPSEnums.TrashID.WallOfGhosts).FirstOrDefault();
         if (wallOfGhosts != null)
         {
             foreach(var @event in combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(wallOfGhosts)))
@@ -189,7 +189,7 @@ internal class SpiritRace : SpiritVale
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.EtherealBarrier:
-                HealthUpdateEvent hpZeroUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent == 0);
+                HealthUpdateEvent? hpZeroUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.HealthPercent == 0);
                 if (hpZeroUpdate != null)
                 {
                     replay.Trim(replay.TimeOffsets.start, hpZeroUpdate.Time);

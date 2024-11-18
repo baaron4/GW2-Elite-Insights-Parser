@@ -93,7 +93,7 @@ internal class SoullessHorror : HallOfChains
         if (!fightData.Success)
         {
             SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
-            BuffEvent buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
+            BuffEvent? buffOnDeath = combatData.GetBuffDataByIDByDst(Determined895, mainTarget.AgentItem).Where(x => x is BuffApplyEvent).LastOrDefault();
             if (buffOnDeath != null)
             {
                 if (agentData.GetNPCsByID(TargetID.Desmina).Any(x => x.FirstAware <= buffOnDeath.Time + ServerDelayConstant && x.LastAware >= buffOnDeath.Time))
@@ -112,7 +112,7 @@ internal class SoullessHorror : HallOfChains
         ComputeFightTargets(agentData, combatData, extensions);
         // discard hp update events after determined apply
         SingleActor soullessHorror = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.SoullessHorror)) ?? throw new MissingKeyActorsException("Soulless Horror not found");
-        CombatItem determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
+        CombatItem? determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
         if (determined895Apply != null)
         {
             combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time).ToList().ForEach(x => x.OverrideSrcAgent(0));

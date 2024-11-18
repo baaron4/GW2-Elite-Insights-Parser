@@ -19,7 +19,7 @@ public class BuffsContainer
 
     internal BuffsContainer(CombatData combatData, ParserController operation)
     {
-        var AllBuffs = new List<List<Buff>>()
+        var AllBuffs = new List<IReadOnlyList<Buff>>()
         {
             CommonBuffs.Boons,
             CommonBuffs.Conditions,
@@ -192,7 +192,7 @@ public class BuffsContainer
         }
     }
 
-    public bool TryGetBuffByName(string name, out Buff buff)
+    public bool TryGetBuffByName(string name, out Buff? buff)
     {
         return _buffsByName.TryGetValue(name, out buff);
     }

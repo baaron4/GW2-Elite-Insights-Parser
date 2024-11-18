@@ -76,23 +76,23 @@ internal class BanditTrio : SalvationPass
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             startToUse = long.MaxValue;
-            if (!agentData.TryGetFirstAgentItem(TargetID.Berg, out AgentItem berg))
+            if (!agentData.TryGetFirstAgentItem(TargetID.Berg, out var berg))
             {
                 throw new MissingKeyActorsException("Berg not found");
             }
             
             startToUse = Math.Min(berg.FirstAware, startToUse);
-            if (!agentData.TryGetFirstAgentItem(TargetID.Zane, out AgentItem zane))
+            if (!agentData.TryGetFirstAgentItem(TargetID.Zane, out var zane))
             {
                 throw new MissingKeyActorsException("Zane not found");
             }
             
             startToUse = Math.Min(zane.FirstAware, startToUse);
-            if (!agentData.TryGetFirstAgentItem(TargetID.Narella, out AgentItem narella))
+            if (!agentData.TryGetFirstAgentItem(TargetID.Narella, out var narella))
             {
                 throw new MissingKeyActorsException("Narella not found");
             }
@@ -133,7 +133,7 @@ internal class BanditTrio : SalvationPass
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Cage
-        AgentItem cage = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
+        AgentItem? cage = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
         if (cage != null)
         {
             cage.OverrideType(AgentItem.AgentType.NPC);
@@ -161,7 +161,7 @@ internal class BanditTrio : SalvationPass
         {
             return FightData.EncounterStartStatus.Late;
         }
-        if (agentData.TryGetFirstAgentItem(TargetID.Berg, out AgentItem berg) && combatData.GetLogNPCUpdateEvents().Count > 0)
+        if (agentData.TryGetFirstAgentItem(TargetID.Berg, out var berg) && combatData.GetLogNPCUpdateEvents().Count > 0)
         {
             var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration).ToList();
             if (movements.Count != 0)
@@ -179,11 +179,11 @@ internal class BanditTrio : SalvationPass
 
     private static void SetPhasePerTarget(SingleActor target, List<PhaseData> phases, ParsedEvtcLog log)
     {
-        EnterCombatEvent phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
+        EnterCombatEvent? phaseStart = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
         if (phaseStart != null)
         {
             long start = phaseStart.Time;
-            DeadEvent phaseEnd = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
+            DeadEvent? phaseEnd = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
             long end = log.FightData.FightEnd;
             if (phaseEnd != null)
             {

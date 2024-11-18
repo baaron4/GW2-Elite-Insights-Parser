@@ -34,7 +34,7 @@ internal static class ChronomancerHelper
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
         new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ContinuumSplit),

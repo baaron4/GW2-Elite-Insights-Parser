@@ -84,7 +84,7 @@ internal static class WarriorHelper
         new BuffOnActorDamageModifier(DolyakSignetBuff, "Dolyak Signet", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.DolyakSignet, DamageModifierMode.All).WithBuilds(GW2Builds.October2024Balance),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Skills
         new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),

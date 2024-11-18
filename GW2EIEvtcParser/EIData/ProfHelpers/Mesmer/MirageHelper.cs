@@ -25,7 +25,7 @@ internal static class MirageHelper
 
     internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Mirage Cloak", MirageCloak, Source.Mirage, BuffClassification.Other, BuffImages.MirageCloak),
         new Buff("False Oasis", FalseOasis, Source.Mirage, BuffClassification.Other, BuffImages.FalseOasis),

@@ -6,7 +6,7 @@ public abstract class TimeCombatEvent
 {
     public long Time { get; protected set; }
 
-    public TimeCombatEvent(long time)
+    protected TimeCombatEvent(long time)
     {
         Time = time;
     }

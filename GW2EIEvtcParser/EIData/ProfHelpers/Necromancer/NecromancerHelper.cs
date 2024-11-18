@@ -73,7 +73,7 @@ internal static class NecromancerHelper
             .WithBuilds(GW2Builds.October2019Balance),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [     
         // Forms
         new Buff("Lich Form", LichForm, Source.Necromancer, BuffClassification.Other, BuffImages.LichForm),
@@ -232,10 +232,10 @@ internal static class NecromancerHelper
                 SkillModeDescriptor skill;
                 string icon;
                 bool fromDodge = false;
-                var markCastsOnEffect = markCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
-                if (markCastsOnEffect.Count == 1)
+                var markCastsOnEffect = markCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant);
+                if (markCastsOnEffect.Count() == 1)
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.FirstOrDefault().SkillId);
+                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.FirstOrDefault()!.SkillId);
                     if (skill.SkillID != MarkOfBlood && skill.SkillID != Chillblains)
                     {
                         fromDodge = true;
