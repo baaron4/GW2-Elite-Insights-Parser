@@ -24,6 +24,12 @@ public class HTMLSettings
         ExternalHtmlScriptsCdn = externalHTMLScriptsCdn;
     }
 
+
+    public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, bool compressJson) : this(htmlLightTheme, externalHTMLScripts)
+    {
+        CompressJson = compressJson;
+    }
+
     public HTMLSettings(bool htmlLightTheme, bool externalHTMLScripts, string externalHTMLScriptsPath, string externalHTMLScriptsCdn, bool compressJson) : this(htmlLightTheme, externalHTMLScripts, externalHTMLScriptsPath, externalHTMLScriptsCdn)
     {
         CompressJson = compressJson;

@@ -207,7 +207,7 @@ public class ProgramHelper
             } 
             else
             {
-                string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
+                string? accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
 
                 if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.FightData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                 {
@@ -228,7 +228,7 @@ public class ProgramHelper
                             // We need to create a parser that matches Wingman's expected settings
                             var parser = new EvtcParser(expectedSettings, APIController);
                             originalController.UpdateProgressWithCancellationCheck("Wingman: Setting mismatch, creating a new ParsedEvtcLog, this will extend total processing duration if file generation is also requested");
-                            logToUse = parser.ParseLog(originalController, fInfo, out ParsingFailureReason failureReason, !Settings.SingleThreaded);
+                            logToUse = parser.ParseLog(originalController, fInfo, out ParsingFailureReason? failureReason, !Settings.SingleThreaded)!;
                         }
 
                         byte[] jsonFile, htmlFile;
@@ -247,7 +247,7 @@ public class ProgramHelper
                         {
                             var ms = new MemoryStream();
                             var sw = new StreamWriter(ms, NoBOMEncodingUTF8);
-                            var builder = new HTMLBuilder(logToUse, new HTMLSettings(false, false, null, null, true), htmlAssets, ParserVersion, uploadResult);
+                            var builder = new HTMLBuilder(logToUse, new HTMLSettings(false, false, true), htmlAssets, ParserVersion, uploadResult);
 
                             builder.CreateHTML(sw, null);
                             sw.Close();
