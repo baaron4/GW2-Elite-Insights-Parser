@@ -571,6 +571,6 @@ public static partial class ListExt
 
     public static void SortByFirstAware<T>(this List<T> list) where T : AgentItem
     {
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.FirstAware.CompareTo(b.FirstAware));
+        list.AsSpan().SortStable((a, b) => a.FirstAware.CompareTo(b.FirstAware));
     }
 }

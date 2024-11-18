@@ -1120,7 +1120,7 @@ public static unsafe class StableSort<T>
     //└─────────────────────────────────────────────────────────────────────────┘//
     ///////////////////////////////////////////////////////////////////////////////
 
-    public static void quadsort(Span<T> array, Func<T, T, int> cmp)
+    static void quadsort(Span<T> array, Func<T, T, int> cmp)
     {
         if (array.Length < 32)
         {
@@ -1645,7 +1645,7 @@ public static unsafe class StableSort<T>
             flux_analyze(array, swap, cmp);
         }
     }
-    public static void fluxsort_swap(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
+    static void fluxsort_swap(Span<T> array, Span<T> swap, Func<T, T, int> cmp)
     {
         if (array.Length <= 132)
         {
