@@ -69,6 +69,13 @@ Sabir: 0x020702
 
 Qadim the Peerless: 0x020703
 
+### Wing 8
+Greer, the Blightbringer: 0x020801
+
+Decima, the Stormsinger: 0x020802
+
+Ura, the Steamshrieker: 0x020803
+
 ## Fractals
 ### Nightmare
 MAMA: 0x030101
