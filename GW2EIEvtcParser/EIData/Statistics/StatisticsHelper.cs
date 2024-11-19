@@ -103,7 +103,7 @@ public class StatisticsHelper
         }
 
         // All class specific boons
-        var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault());
+        var remainingBuffsByIds = buffs.BuffsByClassification[BuffClassification.Other].GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.FirstOrDefault()!);
         foreach (Player player in players)
         {
             _presentRemainingBuffsPerPlayer[player] = [];

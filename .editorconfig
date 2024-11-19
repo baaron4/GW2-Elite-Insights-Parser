@@ -68,6 +68,7 @@ tab_width = 4
 end_of_line = crlf
 dotnet_style_prefer_collection_expression = true:suggestion
 dotnet_diagnostic.CA1416.severity = suggestion
+dotnet_diagnostic.CA2201.severity = suggestion
 ############################### 
 # C# Coding Conventions       # 
 ############################### 
@@ -254,6 +255,7 @@ csharp_style_expression_bodied_local_functions = false:silent
 dotnet_diagnostic.IDE0002.severity = warning
 dotnet_diagnostic.IDE0305.severity = silent
 csharp_style_prefer_primary_constructors = true:suggestion
+csharp_prefer_system_threading_lock = true:suggestion
 
 [*.vb] 
 # Modifier preferences 

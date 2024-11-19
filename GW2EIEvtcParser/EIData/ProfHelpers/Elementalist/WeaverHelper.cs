@@ -329,13 +329,13 @@ internal static class WeaverHelper
             {
                 return c.BuffID;
             }
-            if (_majorsTranslation.ContainsKey(c.BuffID))
+            if (_majorsTranslation.TryGetValue(c.BuffID, out var potentialMajors))
             {
-                major = _majorsTranslation[c.BuffID];
+                major = potentialMajors;
             }
-            else if (_minorsTranslation.ContainsKey(c.BuffID))
+            else if (_minorsTranslation.TryGetValue(c.BuffID, out var potentialMinors))
             {
-                minor = _minorsTranslation[c.BuffID];
+                minor = potentialMinors;
             }
         }
         if (major == null || minor == null)

@@ -3,6 +3,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers;
 
+#pragma warning disable CA1823 // Unused field
 internal static class ParserIcons
 {
     /// <summary>
@@ -1563,3 +1564,5 @@ internal static class ParserIcons
         { MarkerGUIDs.WhiteCatmanderTag, WhiteCatmanderTagOverhead },
     };
 }
+
+#pragma warning restore CA1823 // Unused field

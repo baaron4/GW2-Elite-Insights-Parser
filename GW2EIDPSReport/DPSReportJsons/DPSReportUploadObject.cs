@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GW2EIDPSReport.DPSReportJsons;
 
+#pragma warning disable CS0649 // field never assigned to
 public class DPSReportUploadObject
 {
     
@@ -58,3 +59,4 @@ public class DPSReportUploadObject
     
     public string TempApiId;
 }
+#pragma warning restore CS0649 // field never assigned to

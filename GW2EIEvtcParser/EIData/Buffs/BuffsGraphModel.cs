@@ -119,8 +119,11 @@ public class BuffsGraphModel
                     {
                         segmentsToFill.AddAfter(node, new Segment(start, end, curVal + presence));
                         node = node.Next;
-                        segmentsToFill.AddAfter(node, new Segment(end, curEnd, curVal));
-                        node = node.Next;
+                        if (node != null)
+                        {
+                            segmentsToFill.AddAfter(node, new Segment(end, curEnd, curVal));
+                            node = node.Next;
+                        }
                         break;
                     }
                     else

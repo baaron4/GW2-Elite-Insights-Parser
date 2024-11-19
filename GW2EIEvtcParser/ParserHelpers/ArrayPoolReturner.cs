@@ -7,6 +7,9 @@ using System.Runtime.InteropServices;
 
 namespace GW2EIEvtcParser.ParserHelpers;
 
+
+#pragma warning disable CA2002 // weak identity lock
+
 internal struct ArrayPoolReturner<T> : IDisposable
 {
     public readonly ArrayPool<T> Pool;
@@ -339,8 +342,10 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
         /// </summary>
         public static void Register(Func<bool> callback)
         {
+#pragma warning disable CA1806 // unused new instance
             // Create a unreachable object that remembers the callback function and target object.
             new Gen2GcCallback(callback);
+#pragma warning restore CA1806 // unused new instance
         }
 
         /// <summary>
@@ -691,3 +696,4 @@ internal static class SharedArrayPoolStatics
         return false;
     }
 }
+#pragma warning restore CA2002 // weak identity lock
