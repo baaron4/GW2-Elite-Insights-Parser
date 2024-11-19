@@ -115,7 +115,7 @@ internal class Dhuum : HallOfChains
     }
 
     //TODO(Rennorb) @perf
-    private static void ComputeFightPhases(List<PhaseData> phases, IReadOnlyList<CastEvent> castLogs, long fightDuration, long start)
+    private static void ComputeFightPhases(List<PhaseData> phases, IEnumerable<CastEvent> castLogs, long fightDuration, long start)
     {
         CastEvent? shield = castLogs.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
         // Dhuum brought down to 10%
@@ -145,10 +145,10 @@ internal class Dhuum : HallOfChains
 
     private static List<PhaseData> GetInBetweenSoulSplits(ParsedEvtcLog log, SingleActor dhuum, long mainStart, long mainEnd, bool hasRitual)
     {
-        var cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
-        var cataCycles = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
+        var cls = dhuum.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var cataCycles = cls.Where(x => x.SkillId == CataclysmicCycle);
         var gDeathmarks = cls.Where(x => x.SkillId == GreaterDeathMark).ToList();
-        if (gDeathmarks.Count < cataCycles.Count)
+        if (gDeathmarks.Count < cataCycles.Count())
         {
             // anomaly, don't do sub phases
             return [ ];
@@ -189,7 +189,7 @@ internal class Dhuum : HallOfChains
         if (!_hasPrevent)
         {
             // full fight does not contain the pre event
-            ComputeFightPhases(phases, castLogs.ToList(), fightDuration, 0);
+            ComputeFightPhases(phases, castLogs, fightDuration, 0);
         }
         else
         {
@@ -201,7 +201,7 @@ internal class Dhuum : HallOfChains
                 long end = invulDhuum.Time;
                 phases.Add(new PhaseData(0, end, "Pre Event"));
                 phases.Add(new PhaseData(end, fightDuration, "Main Fight") { CanBeSubPhase = false });
-                ComputeFightPhases(phases, castLogs.ToList(), fightDuration, end);
+                ComputeFightPhases(phases, castLogs, fightDuration, end);
             }
         }
         bool hasRitual = phases.Last().Name == "Ritual";
@@ -227,7 +227,7 @@ internal class Dhuum : HallOfChains
         // Add enforcers as secondary target to the phases
         foreach (PhaseData phase in phases)
         {
-            var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase).ToList();
+            var enforcers = Targets.Where(x => x.IsSpecies(TrashID.Enforcer) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase);
             phase.AddSecondaryTargets(enforcers);
         }
         return phases;
@@ -342,7 +342,7 @@ internal class Dhuum : HallOfChains
         switch (target.ID)
         {
             case (int)TargetID.Dhuum: {
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var deathmark = cls.Where(x => x.SkillId == DeathMark);
                 CastEvent? majorSplit = cls.FirstOrDefault(x => x.SkillId == MajorSoulSplit);
                 // Using new effects method for logs that contain them
@@ -405,7 +405,7 @@ internal class Dhuum : HallOfChains
                 }
 
                 // Cataclysmic Cycle - Suction during Major Soul Split
-                var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle).ToList();
+                var cataCycle = cls.Where(x => x.SkillId == CataclysmicCycle);
                 foreach (CastEvent c in cataCycle)
                 {
                     var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
@@ -416,7 +416,7 @@ internal class Dhuum : HallOfChains
                 // Using new effects method for logs that contain them
                 if (!log.CombatData.HasEffectData)
                 {
-                    var slash = cls.Where(x => x.SkillId == ConeSlash).ToList();
+                    var slash = cls.Where(x => x.SkillId == ConeSlash);
                     foreach (CastEvent c in slash)
                     {
                         start = (int)c.Time;
@@ -536,7 +536,7 @@ internal class Dhuum : HallOfChains
             case (int)TrashID.Deathling:
                 break;
             case (int)TrashID.UnderworldReaper:
-                var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in stealths)
                 {
                     replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
@@ -611,7 +611,7 @@ internal class Dhuum : HallOfChains
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // spirit transform
-        var spiritTransform = log.CombatData.GetBuffDataByIDByDst(FracturedSpirit, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
+        var spiritTransform = log.CombatData.GetBuffDataByIDByDst(FracturedSpirit, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in spiritTransform)
         {
             int duration = 15000;
@@ -632,7 +632,7 @@ internal class Dhuum : HallOfChains
             replay.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
-        var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in bombDhuum)
         {
             var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
@@ -650,7 +650,7 @@ internal class Dhuum : HallOfChains
         replay.AddTether(shacklesDmg, Colors.Yellow, 0.5);
 
         // Soul split
-        IReadOnlyList<AgentItem> souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem).ToList();
+        var souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
 
         // check Hastened Demise
         foreach (AgentItem soul in souls)

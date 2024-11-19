@@ -279,13 +279,13 @@ internal class Deimos : BastionOfThePenitent
     private static bool HandleDemonicBonds(AgentData agentData, List<CombatItem> combatData)
     {
         var maxHPUpdates = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 239040 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).ToList();
-        var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+        var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem demonicBond in demonicBonds)
         {
             demonicBond.OverrideID(ArcDPSEnums.TrashID.DemonicBond);
             demonicBond.OverrideType(AgentItem.AgentType.NPC);
         }
-        return demonicBonds.Count != 0;
+        return demonicBonds.Any();
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
@@ -313,8 +313,8 @@ internal class Deimos : BastionOfThePenitent
         // Find target
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         // Deimos gadgets via attack targets
-        var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData)).ToList();
-        var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware).Select(x => new TargetableEvent(x, agentData)).ToList();
+        var attackTargetEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.AttackTarget).Select(x => new AttackTargetEvent(x, agentData));
+        var targetableEvents = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Targetable && x.DstAgent > 0 && x.Time >= deimos.FirstAware).Select(x => new TargetableEvent(x, agentData));
         (TargetableEvent evt, AgentItem attackTargetAgent, AgentItem targetedAgent) targetable = targetableEvents
             .Select(targetableEvent => (
                 targetableEvent, 
@@ -348,8 +348,8 @@ internal class Deimos : BastionOfThePenitent
             CombatItem? armDeimosDamageEvent = combatData.FirstOrDefault(x => x.Time >= deimos.LastAware && (x.SkillID == DemonicShockWaveRight || x.SkillID == DemonicShockWaveCenter || x.SkillID == DemonicShockWaveLeft) && x.IsDamage());
             if (armDeimosDamageEvent != null)
             {
-                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time).ToList();
-                if (deimosGadgets.Count > 0)
+                var deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.Name.Contains("Deimos") && x.LastAware > armDeimosDamageEvent.Time);
+                if (deimosGadgets.Any())
                 {
                     deimos10PercentTargetable = deimosGadgets.Max(x => x.FirstAware);
                     gadgetAgents = new HashSet<AgentItem>(deimosGadgets);
@@ -481,7 +481,7 @@ internal class Deimos : BastionOfThePenitent
 
     private static List<PhaseData> AddBurstPhases(List<PhaseData> phases, ParsedEvtcLog log, SingleActor mainTarget)
     {
-        var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var signets = mainTarget.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         int burstID = 1;
         foreach (Segment signet in signets)
         {
@@ -528,7 +528,7 @@ internal class Deimos : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Deimos:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var mindCrush = cls.Where(x => x.SkillId == MindCrush);
                 foreach (CastEvent c in mindCrush)
                 {
@@ -658,7 +658,7 @@ internal class Deimos : BastionOfThePenitent
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // teleport zone
-        var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var tpDeimos = p.GetBuffStatus(log, DeimosSelectedByGreen, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in tpDeimos)
         {
             var circle = new CircleDecoration(180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p));

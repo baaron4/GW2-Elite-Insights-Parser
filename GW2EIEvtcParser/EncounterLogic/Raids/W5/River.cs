@@ -155,7 +155,7 @@ internal class River : HallOfChains
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Desmina:
-                var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var asylum in asylums)
                 {
                     replay.Decorations.Add(new CircleDecoration(300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
@@ -169,7 +169,7 @@ internal class River : HallOfChains
                     replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                 }
 
-                var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls).ToList();
+                var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls);
                 foreach (CastEvent bomb in bomberman)
                 {
                     int startCast = (int)bomb.Time;

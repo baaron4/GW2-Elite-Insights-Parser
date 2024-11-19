@@ -115,7 +115,10 @@ internal class SoullessHorror : HallOfChains
         CombatItem? determined895Apply = combatData.LastOrDefault(x => x.SkillID == Determined895 && x.IsBuffApply() && x.DstMatchesAgent(soullessHorror.AgentItem));
         if (determined895Apply != null)
         {
-            combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time).ToList().ForEach(x => x.OverrideSrcAgent(0));
+            foreach (var combatEvent in combatData.Where(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(soullessHorror.AgentItem) && x.Time >= determined895Apply.Time))
+            {
+                combatEvent.OverrideSrcAgent(0);
+            }
         }
 
         // Add number to the spawned Tormented Deads
@@ -144,7 +147,7 @@ internal class SoullessHorror : HallOfChains
         {
             return phases;
         }
-        var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == HowlingDeath).ToList();
+        var howling = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == HowlingDeath);
         long start = 0;
         int i = 1;
         foreach (CastEvent c in howling)
@@ -164,7 +167,7 @@ internal class SoullessHorror : HallOfChains
         // Add Tormented Deads as secondary target to the phases
         foreach (PhaseData phase in phases)
         {
-            var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase).ToList();
+            var tormentedDeads = Targets.Where(x => x.IsSpecies(TrashID.TormentedDead) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase);
             phase.AddSecondaryTargets(tormentedDeads);
         }
 
@@ -178,7 +181,7 @@ internal class SoullessHorror : HallOfChains
         switch (target.ID)
         {
             case (int)TargetID.SoullessHorror:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 // arena reduction
                 var center = new Vector3(-10581, 825, -817);
                 List<(double, uint, uint)> destroyedRings;
@@ -348,8 +351,8 @@ internal class SoullessHorror : HallOfChains
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        var necrosis = combatData.GetBuffData(Necrosis).Where(x => x is BuffApplyEvent).ToList();
-        if (necrosis.Count == 0)
+        var necrosis = combatData.GetBuffData(Necrosis).Where(x => x is BuffApplyEvent);
+        if (!necrosis.Any())
         {
             return 0;
         }

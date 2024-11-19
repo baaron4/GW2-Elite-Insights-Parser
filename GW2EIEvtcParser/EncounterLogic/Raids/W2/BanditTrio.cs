@@ -141,7 +141,7 @@ internal class BanditTrio : SalvationPass
         }
 
         // Bombs
-        var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 240).ToList();
+        var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 240);
         foreach (AgentItem bomb in bombs)
         {
             bomb.OverrideType(AgentItem.AgentType.NPC);
@@ -163,8 +163,8 @@ internal class BanditTrio : SalvationPass
         }
         if (agentData.TryGetFirstAgentItem(TargetID.Berg, out var berg) && combatData.GetLogNPCUpdateEvents().Count > 0)
         {
-            var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration).ToList();
-            if (movements.Count != 0)
+            var movements = combatData.GetMovementData(berg).Where(x => x.Time > berg.FirstAware + MinimumInCombatDuration);
+            if (movements.Any())
             {
                 MovementEvent firstMove = movements.First();
                 // two minutes
@@ -294,7 +294,7 @@ internal class BanditTrio : SalvationPass
             } break;
             case (int)TargetID.Zane: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var bulletHail = casts.Where(x => x.SkillId == HailOfBulletsZane).ToList();
+                var bulletHail = casts.Where(x => x.SkillId == HailOfBulletsZane);
                 foreach (CastEvent c in bulletHail)
                 {
                     long start = c.Time;

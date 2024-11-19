@@ -277,14 +277,14 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         int start = (int)replay.TimeOffsets.start;
         int end = (int)replay.TimeOffsets.end;
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.KeepConstruct:
 
-                var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in kcOrbCollect)
                 {
                     replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
@@ -420,7 +420,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Bombs
-        var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in xeraFury)
         {
             replay.AddDecorationWithGrowing(new CircleDecoration(550, seg, Colors.Orange, 0.2, new AgentConnector(p)), seg.End);

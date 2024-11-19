@@ -133,8 +133,8 @@ internal class Samarog : BastionOfThePenitent
         // With lingering agents, last aware of the spears are properly set
         if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.LingeringAgents)
         {
-            var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
-            if (spearAgents.Count != 0)
+            var spearAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 104580 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
+            if (spearAgents.Any())
             {
                 foreach (AgentItem spear in spearAgents)
                 {
@@ -184,7 +184,7 @@ internal class Samarog : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Samarog:
-                var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in brutalize)
                 {
                     replay.Decorations.Add(new CircleDecoration(120, seg, Colors.LightBlue, 0.3, new AgentConnector(target)));
@@ -214,7 +214,7 @@ internal class Samarog : BastionOfThePenitent
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // big bomb
-        var bigbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalBig, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
+        var bigbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalBig, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in bigbomb)
         {
             int bigStart = (int)c.Time;
@@ -223,7 +223,7 @@ internal class Samarog : BastionOfThePenitent
             replay.AddDecorationWithGrowing(circle, bigEnd);
         }
         // small bomb
-        var smallbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalSmall, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
+        var smallbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalSmall, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in smallbomb)
         {
             int smallStart = (int)c.Time;
@@ -231,7 +231,7 @@ internal class Samarog : BastionOfThePenitent
             replay.Decorations.Add(new CircleDecoration(80, (smallStart, smallEnd), "rgba(80, 150, 0, 0.3)", new AgentConnector(p)));
         }
         // fixated Samarog
-        var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedSam)
         {
             replay.Decorations.Add(new CircleDecoration(80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
@@ -240,7 +240,7 @@ internal class Samarog : BastionOfThePenitent
         var fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
         replay.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
         //fixated Guldhem
-        var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedGuldhem)
         {
             long mid = (seg.Start + seg.End) / 2;
@@ -251,7 +251,7 @@ internal class Samarog : BastionOfThePenitent
             }
         }
         //fixated Rigom
-        var fixatedRigom = p.GetBuffStatus(log, FixatedRigom, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var fixatedRigom = p.GetBuffStatus(log, FixatedRigom, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedRigom)
         {
             long mid = (seg.Start + seg.End) / 2;

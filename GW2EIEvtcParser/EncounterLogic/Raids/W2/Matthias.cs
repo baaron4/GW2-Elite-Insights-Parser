@@ -157,7 +157,7 @@ internal class Matthias : SalvationPass
         // has breakbar state into
         if (combatData.Any(x => x.IsStateChange == ArcDPSEnums.StateChange.BreakbarState))
         {
-            var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && !x.IsExtension && (x.IsBuffRemove == ArcDPSEnums.BuffRemove.All || x.IsBuffApply())).ToList();
+            var sacrificeList = combatData.Where(x => x.SkillID == MatthiasSacrifice && !x.IsExtension && (x.IsBuffRemove == ArcDPSEnums.BuffRemove.All || x.IsBuffApply()));
             var sacrificeStartList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.None).ToList();
             var sacrificeEndList = sacrificeList.Where(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All).ToList();
             var copies = new List<CombatItem>();
@@ -247,7 +247,7 @@ internal class Matthias : SalvationPass
 
     private static void AddMatthiasBubbles(long buffID, NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var shields = target.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in shields)
         {
             replay.Decorations.Add(new CircleDecoration(250, seg, Colors.Magenta, 0.5, new AgentConnector(target)));
@@ -261,7 +261,7 @@ internal class Matthias : SalvationPass
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Matthias:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 AddMatthiasBubbles(BloodShield, target, log, replay);
                 AddMatthiasBubbles(BloodShieldAbo, target, log, replay);
                 var rageShards = cls.Where(x => x.SkillId == ShardsOfRageHuman || x.SkillId == ShardsOfRageAbomination);
@@ -322,7 +322,7 @@ internal class Matthias : SalvationPass
             replay.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
         }
         // Well of profane
-        var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in wellMatthias)
         {
             int wellMatthiasEnd = (int)seg.End;
@@ -337,13 +337,13 @@ internal class Matthias : SalvationPass
         var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
                 // Sacrifice
-        var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sacrificeMatthias)
         {
             replay.AddDecorationWithGrowing(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
         }
                 // Bombs
-        var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
+        var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in zealousBenediction)
         {
             int zealousStart = (int)c.Time;

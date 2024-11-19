@@ -97,10 +97,10 @@ internal class Escort : StrongholdOfTheFaithful
         {
             return phases;
         }
-        IReadOnlyList<SingleActor> wargs = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound)).ToList();
+        var wargs = Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.WargBloodhound));
         if (_hasPreEvent)
         {
-            var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware).ToList();
+            var preEventWargs = wargs.Where(x => x.FirstAware <= mcLeod.LastAware);
             var preEventPhase = new PhaseData(log.FightData.FightStart, mcLeod.FirstAware)
             {
                 Name = "Escort",
@@ -110,8 +110,8 @@ internal class Escort : StrongholdOfTheFaithful
             phases.Add(preEventPhase);
         }
         phases.AddRange(GetMcLeodPhases(mcLeod, log));
-        var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware).ToList();
-        if (mcLeodWargs.Count != 0)
+        var mcLeodWargs = wargs.Where(x => x.FirstAware >= mcLeod.FirstAware && x.FirstAware <= mcLeod.LastAware);
+        if (mcLeodWargs.Any())
         {
             var phase = new PhaseData(log.FightData.FightStart, log.FightData.FightEnd)
             {
@@ -134,7 +134,7 @@ internal class Escort : StrongholdOfTheFaithful
         }
         bool needsRefresh = FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         //
-        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300).ToList();
+        var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
         foreach (AgentItem mine in mineAgents)
         {
             mine.OverrideID(ArcDPSEnums.TrashID.Mine);

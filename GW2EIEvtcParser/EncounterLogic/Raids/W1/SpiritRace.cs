@@ -123,7 +123,7 @@ internal class SpiritRace : SpiritVale
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var maxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 1494000).ToList();
+        var maxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 1494000);
         bool needRefresh = false;
         foreach (CombatItem maxHP in maxHPs)
         {
@@ -154,7 +154,7 @@ internal class SpiritRace : SpiritVale
             switch (target.ID)
             {
                 case (int)ArcDPSEnums.TargetID.EtherealBarrier:
-                    var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY).ToList();
+                    var posititions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(target.AgentItem)).Select(MovementEvent.GetPointXY);
                     if (posititions.Any(x => (x - position1).Length() < 10)) {
                         target.OverrideName(target.Character + " 1" );
                     } 

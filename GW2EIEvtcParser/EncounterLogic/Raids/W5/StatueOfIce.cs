@@ -62,7 +62,7 @@ internal class StatueOfIce : HallOfChains
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var green = log.CombatData.GetBuffDataByIDByDst(FrozenWind, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
+        var green = log.CombatData.GetBuffDataByIDByDst(FrozenWind, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in green)
         {
             int duration = 45000;
@@ -83,7 +83,7 @@ internal class StatueOfIce : HallOfChains
         {
             case (int)ArcDPSEnums.TargetID.BrokenKing:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards).ToList();
+                var Cone = cls.Where(x => x.SkillId == KingsWrathConeShards);
                 foreach (CastEvent c in Cone)
                 {
                     var start = c.Time;

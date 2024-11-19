@@ -87,7 +87,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         {
             case (int)ArcDPSEnums.TrashID.Jade:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint shieldRadius = 100;
                 foreach (var seg in shields)
                 {
@@ -126,8 +126,8 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
 
-        var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
-        var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();
+        var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>();
+        var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>();
 
         SkillItem claimSkill = skillData.Get(ClaimSAK);
         SkillItem dispelSkill = skillData.Get(DispelSAK);

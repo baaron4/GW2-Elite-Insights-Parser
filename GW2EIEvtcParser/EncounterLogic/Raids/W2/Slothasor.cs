@@ -87,7 +87,7 @@ internal class Slothasor : SalvationPass
         {
             return phases;
         }
-        var sleepy = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == NarcolepsySkill).ToList();
+        var sleepy = mainTarget.GetCastEvents(log, log.FightData.FightStart, fightEnd).Where(x => x.SkillId == NarcolepsySkill);
         long start = 0;
         int i = 1;
         foreach (CastEvent c in sleepy)
@@ -109,9 +109,8 @@ internal class Slothasor : SalvationPass
         var mushroomAgents = combatData
             .Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
-            .Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300)
-            .ToList();
-        if (mushroomAgents.Count != 0)
+            .Where(x => x.Type == AgentItem.AgentType.Gadget && (x.HitboxWidth == 146 || x.HitboxWidth == 210) && x.HitboxHeight == 300);
+        if (mushroomAgents.Any())
         {
             int idToKeep = mushroomAgents.GroupBy(x => x.ID).Select(x => (x.Key, x.Count())).MaxBy(x => x.Item2).Key;
             foreach (AgentItem mushroom in mushroomAgents)
@@ -121,9 +120,9 @@ internal class Slothasor : SalvationPass
                     continue;
                 }
                 var copyEventsFrom = new List<AgentItem>() { mushroom };
-                var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate).ToList();
+                var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(mushroom) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate);
                 var aliveUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 100);
-                var deadUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0).ToList();
+                var deadUpdates = hpUpdates.Where(x => HealthUpdateEvent.GetHealthPercent(x) == 0);
                 long lastDeadTime = long.MinValue;
                 foreach (CombatItem aliveEvent in aliveUpdates)
                 {
@@ -151,7 +150,7 @@ internal class Slothasor : SalvationPass
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Slothasor:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill);
                 foreach (CastEvent c in sleepy)
                 {
@@ -202,7 +201,7 @@ internal class Slothasor : SalvationPass
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Poison
-        var poisonToDrop = p.GetBuffStatus(log, VolatilePoisonBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var poisonToDrop = p.GetBuffStatus(log, VolatilePoisonBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in poisonToDrop)
         {
             int toDropStart = (int)seg.Start;
@@ -216,13 +215,13 @@ internal class Slothasor : SalvationPass
             replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
         // Transformation
-        var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in slubTrans)
         {
             replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(p)));
         }
         // Fixated
-        var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var fixatedSloth = p.GetBuffStatus(log, FixatedSlothasor, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedSloth)
         {
             replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
