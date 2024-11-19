@@ -151,7 +151,7 @@ internal class Arkk : ShatteredObservatory
                 bloomPhases.Add(new PhaseData(start, end));
             }
         }
-        var invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true).ToList();
+        var invuls = GetFilteredList(log.CombatData, Determined762, arkk, true, true);
         for (int i = 0; i < bloomPhases.Count; i++)
         {
             PhaseData phase = bloomPhases[i];
@@ -165,7 +165,7 @@ internal class Arkk : ShatteredObservatory
         // Add anomalies as secondary target to the phases
         foreach (PhaseData phase in phases)
         {
-            var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase).ToList();
+            var anomalies = Targets.Where(x => x.IsSpecies(TrashID.TemporalAnomalyArkk) && phase.IntersectsWindow(x.FirstAware, x.LastAware) && phase.CanBeSubPhase);
             phase.AddSecondaryTargets(anomalies);
         }
 
@@ -203,8 +203,8 @@ internal class Arkk : ShatteredObservatory
         // removes should be present
         if (SetSuccessByBuffCount(combatData, fightData, adjustedPlayers, target, Determined762, 10))
         {
-            var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>().ToList();
-            if (invulsRemoveTarget.Count == 5)
+            var invulsRemoveTarget = combatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffRemoveAllEvent>();
+            if (invulsRemoveTarget.Count() == 5)
             {
                 SetSuccessByCombatExit([ target ], combatData, fightData, adjustedPlayers);
             }
@@ -292,7 +292,7 @@ internal class Arkk : ShatteredObservatory
                                 break;
                             }
 
-                            var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time).ToList();
+                            var applies = log.CombatData.GetBuffDataByDst(target.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > cast.Time);
                             BuffApplyEvent? nextInvul = applies.FirstOrDefault(x => x.BuffID == Determined762);
                             BuffApplyEvent? nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
                             long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);

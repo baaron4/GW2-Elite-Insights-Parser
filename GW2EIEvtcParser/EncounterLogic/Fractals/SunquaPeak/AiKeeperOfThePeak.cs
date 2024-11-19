@@ -436,7 +436,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                     const long sorrowFullCastDuration = 11840;
                     const long sorrowHitDelay = 400;
                     const uint sorrowIndicatorSize = 2000;
-                    var detonates = casts.Where(x => x.SkillId == OverwhelmingSorrowDetonate).ToList();
+                    var detonates = casts.Where(x => x.SkillId == OverwhelmingSorrowDetonate);
                     foreach (AnimatedCastEvent cast in casts)
                     {
                         if (cast.SkillId == OverwhelmingSorrowWindup)

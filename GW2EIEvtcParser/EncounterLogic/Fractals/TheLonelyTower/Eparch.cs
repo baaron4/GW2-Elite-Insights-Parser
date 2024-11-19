@@ -50,17 +50,20 @@ internal class Eparch : LonelyTower
         var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
         {
             return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.StartCasting() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
-        }).ToList();
-        dummyEparchs.ForEach(x => x.OverrideID(TrashID.EparchLonelyTowerDummy));
-        //
-        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000).ToList();
-        riftAgents.ForEach(x =>
-        {
-            x.OverrideID(TrashID.KryptisRift);
-            x.OverrideType(AgentItem.AgentType.NPC);
         });
+        foreach (var dummyEparch in dummyEparchs)
+        {
+            dummyEparch.OverrideID(TrashID.EparchLonelyTowerDummy);
+        }
         //
-        if (riftAgents.Count != 0 || dummyEparchs.Count != 0)
+        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000);
+        foreach (var riftAgent in riftAgents)
+        {
+            riftAgent.OverrideID(TrashID.KryptisRift);
+            riftAgent.OverrideType(AgentItem.AgentType.NPC);
+        }
+        //
+        if (riftAgents.Any() || dummyEparchs.Any())
         {
             agentData.Refresh();
         }
