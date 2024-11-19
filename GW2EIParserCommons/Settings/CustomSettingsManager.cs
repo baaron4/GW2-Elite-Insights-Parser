@@ -33,13 +33,11 @@ public static class CustomSettingsManager
 
     private static void ReadConfFile(string filename)
     {
-        using (var sr = new StreamReader(filename))
+        using var sr = new StreamReader(filename);
+        string? line;
+        while ((line = sr.ReadLine()) != null)
         {
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                ProcessSettingsLine(line.Trim());
-            }
+            ProcessSettingsLine(line.Trim());
         }
     }
 
@@ -55,12 +53,12 @@ public static class CustomSettingsManager
 
     private static void ProcessSettingsLine(string line)
     {
-        if (line.StartsWith("#"))
+        if (line.StartsWith('#'))
         {
             return; // commented out line
         }
 
-        int equalsPos = line.IndexOf("=");
+        int equalsPos = line.IndexOf('=');
         if (equalsPos <= 0)
         {
             Console.WriteLine("Warning: invalid setting line \"" + line + "\"");
@@ -68,7 +66,7 @@ public static class CustomSettingsManager
         }
         string name = line.Substring(0, equalsPos).Trim();
         string value = line.Substring(equalsPos + 1).Trim();
-        if (value.StartsWith("\"") && value.EndsWith("\""))
+        if (value.StartsWith('\"') && value.EndsWith('\"'))
         {
             value = value.Trim('\"');
         }

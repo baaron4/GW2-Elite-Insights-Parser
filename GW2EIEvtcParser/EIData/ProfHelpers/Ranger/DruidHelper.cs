@@ -32,17 +32,17 @@ internal static class DruidHelper
         return _celestialAvatar.Contains(id);
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnActorDamageModifier(NaturalBalance, "Natural Balance", "10% after leaving or entering Celestial Avatar", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Druid, ByPresence, BuffImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(NaturalBalance, "Natural Balance", "-10% after leaving or entering Celestial Avatar", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Druid, ByPresence, BuffImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance, GW2Builds.March2024BalanceAndCerusLegendary),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
         new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),

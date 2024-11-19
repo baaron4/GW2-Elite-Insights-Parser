@@ -8,7 +8,7 @@ namespace GW2EIEvtcParser.EIData.Buffs;
 
 internal static class WvWBuffs
 {
-    internal static readonly List<Buff> Commons =
+    internal static readonly IReadOnlyList<Buff> Commons =
     [
         new Buff("Minor Borderlands Bloodlust", MinorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),
         new Buff("Major Borderlands Bloodlust", MajorBorderlandsBloodlust, Source.Common, BuffClassification.Support, BuffImages.BorderlandBloodlust),

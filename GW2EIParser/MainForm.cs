@@ -560,8 +560,8 @@ internal sealed partial class MainForm : Form
                 {
                     if (Properties.Settings.Default.PopulateHourLimit > 0)
                     {
-                        var fileList = new DirectoryInfo(path).EnumerateFiles("*" + format, SearchOption.AllDirectories).ToList();
-                        var toKeep = fileList.Where(x => (currentTime - x.CreationTime).TotalHours < Properties.Settings.Default.PopulateHourLimit).ToList();
+                        var fileList = new DirectoryInfo(path).EnumerateFiles("*" + format, SearchOption.AllDirectories);
+                        var toKeep = fileList.Where(x => (currentTime - x.CreationTime).TotalHours < Properties.Settings.Default.PopulateHourLimit);
                         toAdd.AddRange(toKeep.Select(x => x.FullName));
                     }
                     else

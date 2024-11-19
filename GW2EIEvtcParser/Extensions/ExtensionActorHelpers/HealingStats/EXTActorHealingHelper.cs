@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
@@ -18,6 +19,14 @@ public abstract class EXTActorHealingHelper
     internal EXTActorHealingHelper()
     {
     }
+
+    [MemberNotNull(nameof(HealEvents))]
+    [MemberNotNull(nameof(HealEventsByDst))]
+    protected abstract void InitHealEvents(ParsedEvtcLog log);
+
+    [MemberNotNull(nameof(HealReceivedEvents))]
+    [MemberNotNull(nameof(HealReceivedEventsBySrc))]
+    protected abstract void InitIncomingHealEvents(ParsedEvtcLog log);
 
     public abstract IEnumerable<EXTHealingEvent> GetOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end);
 
@@ -45,7 +54,7 @@ public abstract class EXTActorHealingHelper
 
     public IReadOnlyList<EXTHealingEvent> GetTypedOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
     {
-        if (!_typedHealEvents.TryGetValue(healingType, out CachingCollectionWithTarget<List<EXTHealingEvent>> healEventsPerPhasePerTarget))
+        if (!_typedHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
             healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTHealingEvent>>(log);
             _typedHealEvents[healingType] = healEventsPerPhasePerTarget;
@@ -61,7 +70,7 @@ public abstract class EXTActorHealingHelper
 
     public IReadOnlyList<EXTHealingEvent> GetTypedIncomingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
     {
-        if (!_typedIncomingHealEvents.TryGetValue(healingType, out CachingCollectionWithTarget<List<EXTHealingEvent>> healEventsPerPhasePerTarget))
+        if (!_typedIncomingHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
             healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTHealingEvent>>(log);
             _typedIncomingHealEvents[healingType] = healEventsPerPhasePerTarget;

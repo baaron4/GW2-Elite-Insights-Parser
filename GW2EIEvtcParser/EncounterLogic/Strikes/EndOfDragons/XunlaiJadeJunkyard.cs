@@ -129,10 +129,10 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         if (!fightData.Success)
         {
             SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-            var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000).ToList();
-            if (buffApplies.Count == 3)
+            var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000);
+            if (buffApplies.Count() == 3)
             {
-                fightData.SetSuccess(true, buffApplies.LastOrDefault().Time);
+                fightData.SetSuccess(true, buffApplies.Last().Time);
             }
         }
     }
@@ -185,7 +185,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
         SingleActor ankka = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Ankka)) ?? throw new MissingKeyActorsException("Ankka not found");
-        MapIDEvent map = combatData.GetMapIDEvents().FirstOrDefault();
+        MapIDEvent? map = combatData.GetMapIDEvents().FirstOrDefault();
         if (map != null && map.MapID == 1434)
         {
             return FightData.EncounterMode.Story;
@@ -195,13 +195,13 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16).ToList();
+        var sanctuaryPrism = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 16);
         foreach (AgentItem sanctuary in sanctuaryPrism)
         {
             IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             sanctuary.OverrideType(AgentItem.AgentType.NPC);
             sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism);
-            sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.FirstOrDefault().Time : fightData.LogEnd);
+            sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.First().Time : fightData.LogEnd);
         }
         agentData.Refresh();
         ComputeFightTargets(agentData, combatData, extensions);
@@ -224,7 +224,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         foreach (AgentItem agent in agents)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = log.FindActor(agent).GetBuffGraphs(log);
-            if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out BuffsGraphModel bgm))
+            if (bgms != null && bgms.TryGetValue(PowerOfTheVoid, out var bgm))
             {
                 if (bgm.BuffChart.Any(x => x.Value == 6)) { return true; }
             }
@@ -265,7 +265,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                             radius = 380;
                         }
                         
-                        var effects = deathsEmbraceEffects.Where(x => x.Time >= deathEmbrace.Time && x.Time <= deathEmbrace.EndTime).ToList();
+                        var effects = deathsEmbraceEffects.Where(x => x.Time >= deathEmbrace.Time && x.Time <= deathEmbrace.EndTime);
                         foreach (EffectEvent effectEvt in effects)
                         {
                             AddDeathEmbraceDecoration(replay, (int)deathEmbrace.Time, deathsEmbraceCastDuration, radius, (int)(effectEvt.Time - deathEmbrace.Time), effectEvt.Position);
@@ -356,7 +356,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
             case (int)ArcDPSEnums.TrashID.QuaggansHallucinationNM: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM).ToList();
+                var waveOfTormentNM = casts.Where(x => x.SkillId == WaveOfTormentNM);
                 foreach (CastEvent c in waveOfTormentNM)
                 {
                     int castTime = 2800;
@@ -368,7 +368,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
 
             case (int)ArcDPSEnums.TrashID.QuaggansHallucinationCM: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var waveOfTormentCM = casts.Where(x => x.SkillId == WaveOfTormentCM).ToList();
+                var waveOfTormentCM = casts.Where(x => x.SkillId == WaveOfTormentCM);
                 foreach (CastEvent c in waveOfTormentCM)
                 {
                     int castTime = 5600;
@@ -381,7 +381,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             case (int)ArcDPSEnums.TrashID.ZhaitansReach: {
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 // Thrash - Circle that pulls in
-                var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashXJJ1 || x.SkillId == ZhaitansReachThrashXJJ2).ToList();
+                var thrash = casts.Where(x => x.SkillId == ZhaitansReachThrashXJJ1 || x.SkillId == ZhaitansReachThrashXJJ2);
                 foreach (CastEvent c in thrash)
                 {
                     int castTime = 1900;
@@ -389,7 +389,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 500, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
                 // Ground Slam - AoE that knocks out
-                var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamXJJ).ToList();
+                var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamXJJ);
                 foreach (CastEvent c in groundSlam)
                 {
                     int castTime = 0;
@@ -420,7 +420,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out BuffsGraphModel value))
+        if (p.GetBuffGraphs(log).TryGetValue(DeathsHandSpreadBuff, out var value))
         {
             foreach (Segment segment in value.BuffChart)
             {

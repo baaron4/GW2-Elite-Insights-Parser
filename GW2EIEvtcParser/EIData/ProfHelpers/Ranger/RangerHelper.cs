@@ -130,16 +130,16 @@ internal static class RangerHelper
         new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
-        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs.ToList()).UsingNotAccurate(true),
+        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs).UsingNotAccurate(true),
     ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Skills
         new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "40%", DamageSource.NoPets, 40.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.PvE).UsingChecker((x, log) => {
             AgentItem src = x.From;
-            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
+            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent && y.To == src).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -148,7 +148,7 @@ internal static class RangerHelper
         }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
             AgentItem src = x.From;
-            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -157,7 +157,7 @@ internal static class RangerHelper
         }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(SicEmBuff, "Sic 'Em!", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.SicEm, DamageModifierMode.All).UsingChecker( (x, log) => {
             AgentItem src = x.From;
-            BuffEvent effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
+            var effectApply = log.CombatData.GetBuffDataByIDByDst(SicEmBuff, src).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
                 return x.To == effectApply.By.GetMainAgentWhenAttackTarget(log, x.Time);
@@ -226,14 +226,14 @@ internal static class RangerHelper
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.NoPets, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.OakheartSalve, DamageModifierMode.All),
         new DamageLogDamageModifier("Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Counterattack", Counterattack, Source.Ranger, BuffClassification.Other, BuffImages.Counterattack),
         // Signets
@@ -293,15 +293,16 @@ internal static class RangerHelper
         // entangle works fine already
         HashSet<AgentItem> jacarandaEmbraces = GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
         HashSet<AgentItem> blackHoles = GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
-        var rangers = players.Where(x => x.BaseSpec == Spec.Ranger).ToList();
+        var rangers = players.Where(x => x.BaseSpec == Spec.Ranger);
+        var rangersCount = rangers.Count();
         // if only one ranger, could only be that one
-        if (rangers.Count == 1)
+        if (rangersCount == 1)
         {
-            Player ranger = rangers[0];
+            Player ranger = rangers.First();
             SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
             SetGadgetMaster(blackHoles, ranger.AgentItem);
         }
-        else if (rangers.Count > 1)
+        else if (rangersCount > 1)
         {
             AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { JacarandasEmbraceSkill }, 1000);
             AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { BlackHoleSkill }, 1000);

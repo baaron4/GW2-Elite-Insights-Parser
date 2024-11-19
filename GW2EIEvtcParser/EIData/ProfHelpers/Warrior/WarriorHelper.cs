@@ -31,7 +31,7 @@ internal static class WarriorHelper
     }
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Peak Performance
         new BuffOnActorDamageModifier(PeakPerformance, "Peak Performance", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.PeakPerformace, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2018Balance, GW2Builds.May2021Balance),
@@ -75,7 +75,7 @@ internal static class WarriorHelper
 
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new CounterOnActorDamageModifier(EnduringPainBuff, "Endure Pain", "-100%", DamageSource.NoPets, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.EndurePain, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Resolution, "Hardened Armor", "-10% under resolution", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.HardenedArmor, DamageModifierMode.All).WithBuilds(GW2Builds.March2020Balance),
@@ -84,7 +84,7 @@ internal static class WarriorHelper
         new BuffOnActorDamageModifier(DolyakSignetBuff, "Dolyak Signet", "-10%", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.DolyakSignet, DamageModifierMode.All).WithBuilds(GW2Builds.October2024Balance),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Skills
         new Buff("Riposte", Riposte, Source.Warrior, BuffClassification.Other, BuffImages.Riposte),
@@ -157,18 +157,19 @@ internal static class WarriorHelper
             disBanners = GetBannerAgents(combatData, BannerOfDisciplineBuff, playerAgents),
             tacBanners = GetBannerAgents(combatData, BannerOfTacticsBuff, playerAgents);
         //battleBanner = FindBattleStandards(buffData, playerAgents);
-        var warriors = players.Where(x => x.BaseSpec == Spec.Warrior).ToList();
+        var warriors = players.Where(x => x.BaseSpec == Spec.Warrior);
+        var warriorsCount = warriors.Count();
         // if only one warrior, could only be that one
-        if (warriors.Count == 1)
+        if (warriorsCount == 1)
         {
-            Player warrior = warriors[0];
+            Player warrior = warriors.First();
             ProfHelper.SetGadgetMaster(strBanners, warrior.AgentItem);
             ProfHelper.SetGadgetMaster(disBanners, warrior.AgentItem);
             ProfHelper.SetGadgetMaster(tacBanners, warrior.AgentItem);
             ProfHelper.SetGadgetMaster(defBanners, warrior.AgentItem);
             //SetBannerMaster(battleBanner, warrior.AgentItem);
         }
-        else if (warriors.Count > 1)
+        else if (warriorsCount > 1)
         {
             // land and under water cast ids
             ProfHelper.AttachMasterToGadgetByCastData(combatData, strBanners, new List<long> { BannerOfStrengthSkill, BannerOfStrengthSkillUW }, 1000);

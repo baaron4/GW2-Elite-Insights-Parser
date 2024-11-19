@@ -160,7 +160,7 @@ public static partial class ListExt
     //TODO(Rennorb) @cleanup @unstable
     public static Span<T> AsSpan<T>(this List<T> list)
     {
-        var array = (T[])ListInternals<T>.ItemsField.GetValue(list);
+        var array = (T[])ListInternals<T>.ItemsField.GetValue(list)!;
         return array.AsSpan(0, list.Count);
     }
 
@@ -169,7 +169,7 @@ public static partial class ListExt
         public static FieldInfo ItemsField;
         static ListInternals()
         {
-            ItemsField = typeof(List<T>).GetField("_items", BindingFlags.Instance | BindingFlags.NonPublic);
+            ItemsField = typeof(List<T>).GetField("_items", BindingFlags.Instance | BindingFlags.NonPublic)!;
             Debug.Assert(ItemsField != null);
         }
     }

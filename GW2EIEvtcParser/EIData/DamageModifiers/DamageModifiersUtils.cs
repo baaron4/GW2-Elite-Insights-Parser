@@ -20,7 +20,7 @@ internal static class DamageModifiersUtils
     internal static double VulnerabilityAdjuster(HealthDamageEvent dl, ParsedEvtcLog log)
     {
         var target = log.FindActor(dl.To);
-        if (target.GetBuffGraphs(log).TryGetValue(Vulnerability, out BuffsGraphModel bgm))
+        if (target.GetBuffGraphs(log).TryGetValue(Vulnerability, out var bgm))
         {
             return 1.0 / (1.0 + 0.01 * bgm.GetStackCount(dl.Time));
         }

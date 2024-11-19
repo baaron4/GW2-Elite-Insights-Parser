@@ -19,8 +19,11 @@ public class FinalBuffVolumesDictionary
         var buffs = new FinalBuffVolumesDictionary();
         var buffsActive = new FinalBuffVolumesDictionary();
 
-        var applies = log.CombatData.GetBuffDataByIDByDst(buff.ID, dstActor.AgentItem).OfType<AbstractBuffApplyEvent>().ToList();
-        applies.ForEach(x => x.TryFindSrc(log)); //TODO(Rennorb) @perf
+        var applies = log.CombatData.GetBuffDataByIDByDst(buff.ID, dstActor.AgentItem).OfType<AbstractBuffApplyEvent>();
+        foreach ( var appliesEvent in applies)
+        {
+            appliesEvent.TryFindSrc(log);
+        }
         var appliesBySrc = applies.GroupBy(x => x.CreditedBy);
         foreach (var group in appliesBySrc)
         {

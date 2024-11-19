@@ -19,7 +19,7 @@ public class BuffsContainer
 
     internal BuffsContainer(CombatData combatData, ParserController operation)
     {
-        var AllBuffs = new List<List<Buff>>()
+        var AllBuffs = new List<IReadOnlyList<Buff>>()
         {
             CommonBuffs.Boons,
             CommonBuffs.Conditions,
@@ -89,8 +89,7 @@ public class BuffsContainer
         }
         _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
         {
-            var list = x.ToList();
-            if (list.Count > 1)
+            if (x.Count() > 1)
             {
                 throw new InvalidDataException("Same name present multiple times in buffs - " + x.First().Name);
             }
@@ -98,9 +97,9 @@ public class BuffsContainer
         });
         // Unknown consumables
         var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
-        var foodInfoEvents = FoodBuffs.NormalFoods.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList();
-        foodInfoEvents.AddRange(FoodBuffs.AscendedFood.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null));
-        var foodIDs = foodInfoEvents.Select(x => x!.CategoryByte).Distinct().ToList();
+        List<BuffInfoEvent> foodInfoEvents = FoodBuffs.NormalFoods.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList()!;
+        foodInfoEvents.AddRange(FoodBuffs.AscendedFood.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null)!);
+        var foodIDs = foodInfoEvents.Select(x => x.CategoryByte).Distinct().ToList();
         if (foodIDs.Count == 1)
         {
             var foodID = foodIDs[0];
@@ -113,10 +112,10 @@ public class BuffsContainer
                 }
             }
         }
-        var enhancementInfoEvents = UtilityBuffs.Utilities.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList();
-        enhancementInfoEvents.AddRange(UtilityBuffs.Writs.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null));
-        enhancementInfoEvents.AddRange(UtilityBuffs.SlayingPotions.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null));
-        var enhancementIDs = enhancementInfoEvents.Select(x => x!.CategoryByte).Distinct().ToList();
+        List<BuffInfoEvent> enhancementInfoEvents = UtilityBuffs.Utilities.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList()!;
+        enhancementInfoEvents.AddRange(UtilityBuffs.Writs.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null)!);
+        enhancementInfoEvents.AddRange(UtilityBuffs.SlayingPotions.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null)!);
+        var enhancementIDs = enhancementInfoEvents.Select(x => x.CategoryByte).Distinct().ToList();
         if (enhancementIDs.Count == 1)
         {
             var enhancementID = enhancementIDs[0];
@@ -132,8 +131,7 @@ public class BuffsContainer
         //
         BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
         {
-            var list = x.ToList();
-            if (list.Count > 1 && x.Key != SkillIDs.NoBuff && x.Key != SkillIDs.Unknown)
+            if (x.Count() > 1 && x.Key != SkillIDs.NoBuff && x.Key != SkillIDs.Unknown)
             {
                 throw new InvalidDataException("Same id present multiple times in buffs - " + x.First().ID);
             }
@@ -162,7 +160,7 @@ public class BuffsContainer
         // Band aid for the stack type 0 situation
         if (combatData.HasStackIDs)
         {
-            var stackType0Buffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss).ToList();
+            var stackType0Buffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss);
             foreach (Buff buff in stackType0Buffs)
             {
                 IReadOnlyList<BuffEvent> buffData = combatData.GetBuffData(buff.ID);
@@ -173,11 +171,11 @@ public class BuffsContainer
                     var removeSinglesPerInstanceID = buffs.OfType<BuffRemoveSingleEvent>().Where(x => !x.OverstackOrNaturalEnd).GroupBy(x => x.BuffInstance);
                     foreach (var removePair in removeSinglesPerInstanceID)
                     {
-                        if (appliesPerInstanceID.TryGetValue(removePair.Key, out List<BuffApplyEvent> applyList))
+                        if (appliesPerInstanceID.TryGetValue(removePair.Key, out var applyList))
                         {
                             foreach (BuffRemoveSingleEvent remove in removePair)
                             {
-                                BuffApplyEvent apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
+                                BuffApplyEvent? apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
                                 if (apply != null && apply.OriginalAppliedDuration == remove.RemovedDuration)
                                 {
                                     int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;
@@ -192,7 +190,7 @@ public class BuffsContainer
         }
     }
 
-    public bool TryGetBuffByName(string name, out Buff buff)
+    public bool TryGetBuffByName(string name, out Buff? buff)
     {
         return _buffsByName.TryGetValue(name, out buff);
     }
@@ -208,9 +206,9 @@ public class BuffsContainer
         var result = new List<Buff>();
         foreach (ParserHelper.Source src in ParserHelper.SpecToSources(spec))
         {
-            if (BuffsBySource.TryGetValue(src, out IReadOnlyList<Buff> list))
+            if (BuffsBySource.TryGetValue(src, out var buffs))
             {
-                result.AddRange(list.Where(x => x.Classification == BuffClassification.Other));
+                result.AddRange(buffs.Where(x => x.Classification == BuffClassification.Other));
             }
         }
         return result;

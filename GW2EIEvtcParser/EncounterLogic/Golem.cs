@@ -91,7 +91,7 @@ internal class Golem : FightLogic
     }
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
+        AgentItem target = agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault() ?? throw new EvtcAgentException("Golem not found");
         foreach (CombatItem c in combatData)
         {
             // redirect all attacks to the main golem
@@ -129,7 +129,7 @@ internal class Golem : FightLogic
             // Fifth number would the equivalent of full fight phase
             for (int j = 0; j < thresholds.Count - 1; j++)
             {
-                HealthUpdateEvent hpUpdate = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[j]);
+                HealthUpdateEvent? hpUpdate = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[j]);
                 if (hpUpdate != null)
                 {
                     var phase = new PhaseData(log.FightData.FightStart, hpUpdate.Time, numberNames[j])
@@ -146,8 +146,8 @@ internal class Golem : FightLogic
         if (pov != null)
         {
             int combatPhase = 0;
-            EnterCombatEvent firstEnterCombat = log.CombatData.GetEnterCombatEvents(pov).FirstOrDefault();
-            ExitCombatEvent firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
+            EnterCombatEvent? firstEnterCombat = log.CombatData.GetEnterCombatEvents(pov).FirstOrDefault();
+            ExitCombatEvent? firstExitCombat = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault();
             if (firstExitCombat != null && (log.FightData.FightEnd - firstExitCombat.Time) > 1000 && (firstEnterCombat == null || firstEnterCombat.Time >= firstExitCombat.Time))
             {
                 var phase = new PhaseData(log.FightData.FightStart, firstExitCombat.Time, "In Combat " + (++combatPhase))
@@ -159,7 +159,7 @@ internal class Golem : FightLogic
             }
             foreach (EnterCombatEvent ece in log.CombatData.GetEnterCombatEvents(pov))
             {
-                ExitCombatEvent exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
+                ExitCombatEvent? exce = log.CombatData.GetExitCombatEvents(pov).FirstOrDefault(x => x.Time >= ece.Time);
                 long phaseEndTime = exce != null ? exce.Time : log.FightData.FightEnd;
                 var phase = new PhaseData(Math.Max(ece.Time, log.FightData.FightStart), Math.Min(phaseEndTime, log.FightData.FightEnd), "PoV in Combat " + (++combatPhase))
                 {
@@ -175,10 +175,10 @@ internal class Golem : FightLogic
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            AgentItem golem = agentData.GetNPCsByIDAndAgent(GenericTriggerID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault();
+            AgentItem golem = (agentData.GetNPCsByIDAndAgent(GenericTriggerID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(GenericTriggerID).FirstOrDefault()) ?? throw new EvtcAgentException("Golem not found");
             return GetFirstDamageEventTime(fightData, agentData, combatData, golem);
         }
         return GetGenericFightOffset(fightData);
@@ -189,7 +189,7 @@ internal class Golem : FightLogic
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Golem not found");
         long fightEndLogTime = fightData.FightEnd;
         bool success = false;
-        DeadEvent deadEvt = combatData.GetDeadEvents(mainTarget.AgentItem).LastOrDefault();
+        DeadEvent? deadEvt = combatData.GetDeadEvents(mainTarget.AgentItem).LastOrDefault();
         if (deadEvt != null)
         {
             fightEndLogTime = deadEvt.Time;
@@ -200,7 +200,7 @@ internal class Golem : FightLogic
             IReadOnlyList<HealthUpdateEvent> hpUpdates = combatData.GetHealthUpdateEvents(mainTarget.AgentItem);
             if (hpUpdates.Count > 0)
             {
-                HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
+                HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => x.HealthDamage > 0);
                 success = hpUpdates.Last().HealthPercent < 2.00;
                 if (success && lastDamageTaken != null)
                 {

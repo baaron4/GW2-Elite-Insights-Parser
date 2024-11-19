@@ -26,7 +26,7 @@ internal static class UntamedHelper
             .WithMinions(true),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnActorDamageModifier(FerociousSymbiosis, "Ferocious Symbiosis", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, BuffImages.FerociousSymbiosis, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.November2022Balance),
         new BuffOnActorDamageModifier(FerociousSymbiosis, "Ferocious Symbiosis", "4% per stack", DamageSource.NoPets, 4.0, DamageType.Strike, DamageType.All, Source.Untamed, ByStack, BuffImages.FerociousSymbiosis, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
@@ -40,7 +40,7 @@ internal static class UntamedHelper
         new BuffOnActorDamageModifier(Unleashed, "Vow of the Untamed", "10% when unleashed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Untamed, ByPresence, BuffImages.VowOfTheUntamed, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023BalanceHotFix),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new CounterOnActorDamageModifier(PerilousGift, "Perilous Gift", "No damage from incoming attacks or conditions", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.StrikeAndCondition, Source.Untamed, BuffImages.PerilousGift, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4),
@@ -51,7 +51,7 @@ internal static class UntamedHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Ferocious Symbiosis", FerociousSymbiosis, Source.Untamed, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.FerociousSymbiosis),
         new Buff("Unleashed", Unleashed, Source.Untamed, BuffClassification.Other, BuffImages.UnleashRanger),

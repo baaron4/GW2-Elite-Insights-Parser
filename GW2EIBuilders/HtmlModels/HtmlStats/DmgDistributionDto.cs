@@ -109,7 +109,7 @@ internal class DmgDistributionDto
         {
             if (!usedBoons.ContainsKey(skill.ID))
             {
-                if (boons.BuffsByIds.TryGetValue(skill.ID, out Buff buff))
+                if (boons.BuffsByIds.TryGetValue(skill.ID, out var buff))
                 {
                     usedBoons.Add(buff.ID, buff);
                 }
@@ -123,10 +123,7 @@ internal class DmgDistributionDto
         }
         else
         {
-            if (!usedSkills.ContainsKey(skill.ID))
-            {
-                usedSkills.Add(skill.ID, skill);
-            }
+            usedSkills.TryAdd(skill.ID, skill);
         }
 
         long timeSpentCasting = 0;
@@ -239,10 +236,7 @@ internal class DmgDistributionDto
         // breakbar only
         foreach (var (skill, events) in breakbarLogsBySkill)
         {
-            if (!usedSkills.ContainsKey(skill.ID))
-            {
-                usedSkills.Add(skill.ID, skill);
-            }
+            usedSkills.TryAdd(skill.ID, skill);
             double breakbarDamage = Math.Round(events.Sum(x => x.BreakbarDamage), 1);
 
             object[] skillData = [
@@ -273,7 +267,7 @@ internal class DmgDistributionDto
     private static DmgDistributionDto BuildDMGDistDataInternal(ParsedEvtcLog log, FinalDPS dps, SingleActor p, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new DmgDistributionDto();
-        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
+        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
         var damageLogs = p.GetJustActorDamageEvents(target, log, phase.Start, phase.End);
         var breakbarLogs = p.GetJustActorBreakbarDamageEvents(target, log, phase.Start, phase.End);
         dto.ContributedDamage = dps.ActorDamage;
@@ -302,9 +296,9 @@ internal class DmgDistributionDto
 
     private static DmgDistributionDto BuildDMGDistDataMinionsInternal(ParsedEvtcLog log, FinalDPS dps, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
-        var damageLogs = minions.GetDamageEvents(target, log, phase.Start, phase.End).ToList();
-        var brkDamageLogs = minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End).ToList();
+        var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
+        var damageLogs = minions.GetDamageEvents(target, log, phase.Start, phase.End);
+        var brkDamageLogs = minions.GetBreakbarDamageEvents(target, log, phase.Start, phase.End);
         var dto = new DmgDistributionDto
         {
             ContributedDamage = damageLogs.Sum(x => x.HealthDamage),

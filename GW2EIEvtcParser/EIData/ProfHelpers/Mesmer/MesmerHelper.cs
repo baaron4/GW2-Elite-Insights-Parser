@@ -80,7 +80,7 @@ internal static class MesmerHelper
     ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Domination
         // Empowered illusions require knowing all illusion species ID
@@ -133,13 +133,13 @@ internal static class MesmerHelper
         new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new CounterOnActorDamageModifier(DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Signets
         new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfTheEther),
@@ -408,16 +408,16 @@ internal static class MesmerHelper
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.MesmerDimensionalAperturePortal, out var dimensionalApertures))
         {
             var skill = new SkillModeDescriptor(player, Spec.Mesmer, DimensionalApertureSkill, SkillModeCategory.Portal);
-            var applies = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem).ToList();
+            var applies = log.CombatData.GetBuffData(DimensionalAperturePortalBuff).Where(x => x.CreditedBy == player.AgentItem);
             foreach (EffectEvent effect in dimensionalApertures)
             {
                 // The buff can be quite delayed
-                BuffEvent buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
+                var buffApply = applies.Where(x => x.Time >= effect.Time - ServerDelayConstant && x.Time <= effect.Time + 100).FirstOrDefault();
                 // Security
                 if (buffApply != null)
                 {
                     AgentItem portal = buffApply.To;
-                    DespawnEvent despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
+                    DespawnEvent? despawn = log.CombatData.GetDespawnEvents(portal).FirstOrDefault();
                     // Security
                     if (despawn != null)
                     {

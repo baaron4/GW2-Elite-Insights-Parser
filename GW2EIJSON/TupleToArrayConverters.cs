@@ -43,6 +43,6 @@ public class Tuple2ToArrayConverterFactory : JsonConverterFactory
     {
         var tupleTypes = typeToConvert.GenericTypeArguments;
         var converterType = typeof(Tuple2ToArrayConverter<,>).MakeGenericType(tupleTypes);
-        return (JsonConverter)converterType.GetField(nameof(Tuple2ToArrayConverter<int,int>.Instance), BindingFlags.Public | BindingFlags.Static).GetValue(null);
+        return (JsonConverter?)converterType.GetField(nameof(Tuple2ToArrayConverter<int,int>.Instance), BindingFlags.Public | BindingFlags.Static)!.GetValue(null);
     }
 }

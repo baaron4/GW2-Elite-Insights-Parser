@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net8</TargetFramework>
         <LangVersion>12.0</LangVersion>
-        <Nullable>disable</Nullable>
+        <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;Release;NoRewards;Trace</Configurations>
     </PropertyGroup>

@@ -72,7 +72,7 @@ internal static class ElementalistHelper
         new BuffGainCastFinder(EnergizeSkill, EnergizeBuff),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Fire
         new BuffOnActorDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
@@ -134,7 +134,7 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.February2024NewWeapons),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
         new BuffOnActorDamageModifier([EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.StoneFlesh, DamageModifierMode.All),
@@ -146,7 +146,7 @@ internal static class ElementalistHelper
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [       
         // Signets
         new Buff("Signet of Restoration", SignetOfRestoration, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfRestoration),
@@ -355,15 +355,15 @@ internal static class ElementalistHelper
         // Firestorm
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistFirestorm, out var firestorms))
         {
-            var firestormCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == FirestormGlyphOfStorms || x.SkillId == FirestormFieryGreatsword).ToList();
+            var firestormCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == FirestormGlyphOfStorms || x.SkillId == FirestormFieryGreatsword);
             foreach (EffectEvent effect in firestorms)
             {
                 SkillModeDescriptor skill;
                 string icon;
-                var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
-                if (firestormCastsOnEffect.Count == 1)
+                var firestormCastsOnEffect = firestormCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant);
+                if (firestormCastsOnEffect.Count() == 1)
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.FirstOrDefault().SkillId);
+                    skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.First().SkillId);
                     icon = skill.SkillID == FirestormGlyphOfStorms ? ParserIcons.EffectFirestormGlyph : ParserIcons.EffectFirestormFieryGreatsword;
                 }
                 else

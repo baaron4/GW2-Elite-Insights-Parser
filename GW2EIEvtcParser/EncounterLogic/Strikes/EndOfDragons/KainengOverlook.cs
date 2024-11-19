@@ -130,22 +130,25 @@ internal class KainengOverlook : EndOfDragonsStrike
         ];
     }
 
-    private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<SingleActor> targets, SingleActor ministerLi, ParsedEvtcLog log, int phaseID)
+    private static void AddSplitPhase(List<PhaseData> phases, IReadOnlyList<SingleActor?> targets, SingleActor ministerLi, ParsedEvtcLog log, int phaseID)
     {
         if (targets.All(x => x != null))
         {
             EnterCombatEvent? cbtEnter = null;
-            foreach (SingleActor target in targets)
+            foreach (SingleActor? target in targets)
             {
-                cbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
-                if (cbtEnter != null)
+                if (target != null)
                 {
-                    break;
+                    cbtEnter = log.CombatData.GetEnterCombatEvents(target.AgentItem).LastOrDefault();
+                    if (cbtEnter != null)
+                    {
+                        break;
+                    }
                 }
             }
             if (cbtEnter != null)
             {
-                BuffEvent nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
+                BuffEvent? nextPhaseStartEvt = log.CombatData.GetBuffDataByIDByDst(Determined762, ministerLi.AgentItem).FirstOrDefault(x => x is BuffRemoveAllEvent && x.Time > cbtEnter.Time);
                 long phaseEnd = nextPhaseStartEvt != null ? nextPhaseStartEvt.Time : log.FightData.FightEnd;
                 var addPhase = new PhaseData(cbtEnter.Time, phaseEnd, "Split Phase " + phaseID);
                 addPhase.AddTargets(targets);
@@ -154,7 +157,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         }
     }
 
-    private SingleActor GetMinisterLi(FightData fightData)
+    private SingleActor? GetMinisterLi(FightData fightData)
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(fightData.IsCM ? (int)ArcDPSEnums.TargetID.MinisterLiCM : (int)ArcDPSEnums.TargetID.MinisterLi));
     }
@@ -165,11 +168,11 @@ internal class KainengOverlook : EndOfDragonsStrike
         SingleActor ministerLi = GetMinisterLi(log.FightData) ?? throw new MissingKeyActorsException("Minister Li not found");
         phases[0].AddTarget(ministerLi);
         //
-        SingleActor enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
-        SingleActor mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
-        SingleActor mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
-        SingleActor sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
-        SingleActor ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
+        SingleActor? enforcer = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheEnforcerCM : (int)ArcDPSEnums.TrashID.TheEnforcer));
+        SingleActor? mindblade = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMindbladeCM : (int)ArcDPSEnums.TrashID.TheMindblade));
+        SingleActor? mechRider = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheMechRiderCM : (int)ArcDPSEnums.TrashID.TheMechRider));
+        SingleActor? sniper = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheSniperCM : (int)ArcDPSEnums.TrashID.TheSniper));
+        SingleActor? ritualist = Targets.LastOrDefault(x => x.IsSpecies(log.FightData.IsCM ? (int)ArcDPSEnums.TrashID.TheRitualistCM : (int)ArcDPSEnums.TrashID.TheRitualist));
         //
         phases[0].AddSecondaryTarget(enforcer);
         phases[0].AddSecondaryTarget(mindblade);
@@ -197,16 +200,16 @@ internal class KainengOverlook : EndOfDragonsStrike
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor ministerLi = GetMinisterLi(fightData) ?? throw new MissingKeyActorsException("Minister Li not found");
-        var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
-        if (buffApplies.Count != 0)
+        var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>();
+        if (buffApplies.Any())
         {
-            fightData.SetSuccess(true, buffApplies[0].Time);
+            fightData.SetSuccess(true, buffApplies.First().Time);
         }
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        SingleActor ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
+        SingleActor? ministerLiCM = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.MinisterLiCM));
         return ministerLiCM != null ? FightData.EncounterMode.CM : FightData.EncounterMode.Normal;
     }
 
@@ -353,7 +356,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
             case (int)ArcDPSEnums.TrashID.TheMechRider:
             case (int)ArcDPSEnums.TrashID.TheMechRiderCM: {
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 // Small Cone
                 var fallOfTheAxeSmall = casts.Where(x => x.SkillId == FallOfTheAxeSmallConeNM || x.SkillId == FallOfTheAxeSmallConeCM);
                 foreach (CastEvent c in fallOfTheAxeSmall)

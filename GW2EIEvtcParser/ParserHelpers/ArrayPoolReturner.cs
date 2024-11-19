@@ -5,6 +5,9 @@ using System.Runtime.CompilerServices;
 
 namespace GW2EIEvtcParser.ParserHelpers;
 
+
+#pragma warning disable CA2002 // weak identity lock
+
 internal struct ArrayPoolReturner<T> : IDisposable
 {
     public readonly ArrayPool<T> Pool;
@@ -438,3 +441,4 @@ internal static class SharedArrayPoolStatics
         return false;
     }
 }
+#pragma warning restore CA2002 // weak identity lock

@@ -11,7 +11,7 @@ internal class BuffsTrackerSingle : BuffsTracker
 
     public override int GetStack(IReadOnlyDictionary<long, BuffsGraphModel> bgms, long time)
     {
-        return bgms.TryGetValue(_id, out BuffsGraphModel bgm) ? bgm.GetStackCount(time) : 0;
+        return bgms.TryGetValue(_id, out var bgm) ? bgm.GetStackCount(time) : 0;
     }
 
     public override bool Has(IReadOnlyDictionary<long, BuffsGraphModel> bgms)
