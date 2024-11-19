@@ -367,7 +367,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 AddCryOfRageDecoration(target, log, replay, casts);
                 AddEnviousGazeDecoration(target, log, replay, casts);
                 AddMaliciousIntentDecoration(target, log, replay, casts);
-                var enragedSmash = casts.Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM).ToList();
+                var enragedSmash = casts.Where(x => x.SkillId == EnragedSmashNM || x.SkillId == EnragedSmashCM);
                 foreach (CastEvent cast in enragedSmash)
                 {
                     // Cast time is 750, we only show a quick pulse of damage
@@ -541,15 +541,15 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
     /// <param name="castDuration">The cast duration of the mechanic, roughly +- 20ms leeway.</param>
     private static void AddHiddenWhileNotCasting(NPC target, ParsedEvtcLog log, CombatReplay replay, long castDuration)
     {
-        var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId != WeaponStow && x.SkillId != WeaponSwap && x.SkillId != WeaponDraw).ToList();
+        var castEvents = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId != WeaponStow && x.SkillId != WeaponSwap && x.SkillId != WeaponDraw);
         long invisibleStart = log.FightData.LogStart;
         bool startTrimmed = false;
 
         SingleActor? cerus = log.FightData.GetMainTargets(log).Where(x => x.IsSpecies(TargetID.Cerus)).FirstOrDefault();
-        var invulnsApply = new List<BuffApplyEvent>();
+        IEnumerable<BuffApplyEvent> invulnsApply = [];
         if (cerus != null)
         {
-            invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>().ToList();
+            invulnsApply = GetFilteredList(log.CombatData, InvulnerabilityCerus, cerus, true, true).OfType<BuffApplyEvent>();
         }
 
         foreach (CastEvent cast in castEvents)

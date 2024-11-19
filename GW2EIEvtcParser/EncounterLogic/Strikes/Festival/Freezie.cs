@@ -53,7 +53,7 @@ internal class Freezie : FestivalStrikeMissionLogic
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Snow Piles
-        var snowPiles = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 2 && x.HitboxHeight == 300).ToList();
+        var snowPiles = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 2 && x.HitboxHeight == 300);
         foreach (AgentItem pile in snowPiles)
         {
             pile.OverrideType(AgentItem.AgentType.NPC);
@@ -172,11 +172,11 @@ internal class Freezie : FestivalStrikeMissionLogic
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Fixation Aurora Beam
-        var fixatedBeam = p.GetBuffStatus(log, AuroraBeamTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var fixatedBeam = p.GetBuffStatus(log, AuroraBeamTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(fixatedBeam, p, ParserIcons.FixationPurpleOverhead);
 
         // Fixation Giant Snowball
-        var fixated = p.GetBuffStatus(log, GiantSnowballFreezieTargetBuff1, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var fixated = p.GetBuffStatus(log, GiantSnowballFreezieTargetBuff1, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(fixated, p, ParserIcons.FixationYellowOverhead);
     }
 

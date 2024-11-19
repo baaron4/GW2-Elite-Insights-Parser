@@ -143,9 +143,9 @@ internal class LogDataDto
     {
         var boonsBySpec = new Dictionary<Spec, IReadOnlyList<Buff>>();
         // Collect all personal buffs by spec
-        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
+        foreach (var pair in log.FriendliesListBySpec)
         {
-            List<SingleActor> friendlies = pair.Value;
+            var friendlies = pair.Value;
             var specBoonIds = new HashSet<long>(log.Buffs.GetPersonalBuffsList(pair.Key).Select(x => x.ID));
             var boonToUse = new HashSet<Buff>();
             foreach (SingleActor actor in friendlies)
@@ -183,7 +183,7 @@ internal class LogDataDto
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>>();
         // Collect all personal damage mods by spec
-        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
+        foreach (var pair in log.FriendliesListBySpec)
         {
             var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetOutgoingModifiersPerSpec(pair.Key).Select(x => x.Name));
             var damageModsToUse = new HashSet<OutgoingDamageModifier>();
@@ -213,7 +213,7 @@ internal class LogDataDto
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>>();
         // Collect all personal damage mods by spec
-        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
+        foreach (var pair in log.FriendliesListBySpec)
         {
             var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetIncomingModifiersPerSpec(pair.Key).Select(x => x.Name));
             var damageModsToUse = new HashSet<IncomingDamageModifier>();

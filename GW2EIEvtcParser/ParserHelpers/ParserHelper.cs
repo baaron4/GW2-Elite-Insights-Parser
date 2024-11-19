@@ -133,7 +133,7 @@ public static class ParserHelper
     }
     public enum BuffEnum { Self, Group, OffGroup, Squad };
 
-    internal static Dictionary<long, List<T>> GroupByTime<T>(IReadOnlyList<T> list) where T : TimeCombatEvent
+    internal static Dictionary<long, List<T>> GroupByTime<T>(IEnumerable<T> list) where T : TimeCombatEvent
     {
         var groupByTime = new Dictionary<long, List<T>>();
         foreach (T c in list)
@@ -323,8 +323,8 @@ public static class ParserHelper
         }
         // Copy attack targets
         var attackTargetAgents = new HashSet<AgentItem>();
-        var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
-        var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1).ToList();
+        var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom));
+        var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1);
         foreach (CombatItem c in attackTargets)
         {
             var cExtra = new CombatItem(c);

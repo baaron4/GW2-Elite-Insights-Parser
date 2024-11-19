@@ -127,7 +127,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         switch (target.ID)
         {
             case (int)TargetID.MaiTrinStrike:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd);
 
                 // Visually removing Mai Trin from the Combat Replay when we get the last HP update.
                 HealthUpdateEvent? lastHPUpdate = log.CombatData.GetHealthUpdateEvents(target.AgentItem).LastOrDefault();
@@ -138,7 +138,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 }
 
                 // Nightmare Fusillade - Cone Attack
-                var nightmareFusilladeMain = casts.Where(x => x.SkillId == NightmareFusilladeMain).ToList();
+                var nightmareFusilladeMain = casts.Where(x => x.SkillId == NightmareFusilladeMain);
                 foreach (CastEvent cast in nightmareFusilladeMain)
                 {
                     int castDuration = 1767;
@@ -149,7 +149,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 }
 
                 // Heartpiercer - Arrow attack with dash
-                var heartpiercer = casts.Where(x => x.SkillId == Heartpiercer).ToList();
+                var heartpiercer = casts.Where(x => x.SkillId == Heartpiercer);
                 foreach (CastEvent cast in heartpiercer)
                 {
                     int castDuration = 2500;
@@ -170,7 +170,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 break;
             case (int)TrashID.MaiTrinStrikeDuringEcho:
                 // Nightmare Fusillade - Cone Attack
-                var nightmareFusilladeSide = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == NightmareFusilladeSide).ToList();
+                var nightmareFusilladeSide = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == NightmareFusilladeSide);
                 foreach (CastEvent cast in nightmareFusilladeSide)
                 {
                     int castDuration = 3167;
@@ -279,7 +279,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 break;
             case (int)TrashID.ScarletPhantomBeamNM:
                 // Flanking Shot - Normal Mode Puzzle - Rectangular Beam
-                var flankingShot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == FlankingShot).ToList();
+                var flankingShot = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.LogEnd).Where(x => x.SkillId == FlankingShot);
                 foreach (CastEvent cast in flankingShot)
                 {
                     int duration = 500;
@@ -324,7 +324,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetBlue, 60, 150);
 
         // Ley Breach - Visualizing the blue beam on the targetted player.
-        var segments = player.GetBuffStatus(log, LeyBreachTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var segments = player.GetBuffStatus(log, LeyBreachTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         var offset = new Vector3(0, -100, 0);
         foreach (Segment segment in segments)
         {
@@ -597,7 +597,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         // Ferrous Bombs
-        var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+        var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem bomb in bombs)
         {
             bomb.OverrideType(AgentItem.AgentType.NPC);
@@ -620,7 +620,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
         }
         ComputeFightTargets(agentData, combatData, extensions);
-        var echoesOfScarlet = Targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM)).ToList();
+        var echoesOfScarlet = Targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM));
         foreach (SingleActor echoOfScarlet in echoesOfScarlet)
         {
             var hpUpdates = combatData.Where(x => x.SrcMatchesAgent(echoOfScarlet.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
@@ -669,7 +669,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     {
         const uint width = 320;
         const uint length = 2000;
-        var segments = actor.GetBuffStatus(log, skillId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var segments = actor.GetBuffStatus(log, skillId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
 
         // If the actor is a player, add the overhead bomb icon.
         if (actor.AgentItem.IsPlayer)
@@ -914,7 +914,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
     {
         const uint width = 320;
         const uint length = 2000;
-        var segments = actor.GetBuffStatus(log, skillId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var segments = actor.GetBuffStatus(log, skillId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         // If the actor is a player, add the overhead bomb icon.
         if (actor.AgentItem.IsPlayer)
         {

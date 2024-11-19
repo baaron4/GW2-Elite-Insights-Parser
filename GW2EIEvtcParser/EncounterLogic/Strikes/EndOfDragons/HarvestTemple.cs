@@ -16,7 +16,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 {
 
     private static readonly Vector3 GrandStrikeChestPosition = new(605.31f, -20400.5f, -15420.1f);
-    private IReadOnlyList<SingleActor> FirstAwareSortedTargets = [];
+    private IEnumerable<SingleActor> FirstAwareSortedTargets = [];
     public HarvestTemple(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange([
@@ -147,9 +147,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                     AttackTargetEvent? attackTargetEvent = log.CombatData.GetAttackTargetEvents(target.AgentItem).FirstOrDefault();
                     if (attackTargetEvent != null)
                     {
-                        var targetables = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= target.FirstAware).ToList();
-                        var targetOns = targetables.Where(x => x.Targetable).ToList();
-                        var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+                        var targetables = log.CombatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= target.FirstAware);
+                        var targetOns = targetables.Where(x => x.Targetable);
+                        var targetOffs = targetables.Where(x => !x.Targetable);
                         int id = 0;
                         foreach (TargetableEvent targetOn in targetOns)
                         {
@@ -338,7 +338,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             {
                 return;
             }
-            var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware).ToList();
+            var targetables = combatData.GetTargetableEvents(attackTargetEvent.AttackTarget).Where(x => x.Time >= soowon.FirstAware);
             var targetOffs = targetables.Where(x => !x.Targetable).ToList();
             if (targetOffs.Count == 2)
             {
@@ -352,7 +352,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     }
                     else
                     {
-                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant).ToList();
+                        var determinedApplies = combatData.GetBuffData(Determined895).OfType<BuffApplyEvent>().Where(x => x.To.IsPlayer && Math.Abs(x.AppliedDuration - 10000) < ServerDelayConstant);
                         IReadOnlyList<AnimatedCastEvent> liftOffs = combatData.GetAnimatedCastData(HarvestTempleLiftOff);
                         foreach (AnimatedCastEvent liffOff in liftOffs)
                         {
@@ -422,7 +422,7 @@ internal class HarvestTemple : EndOfDragonsStrike
         });
         int index = 0;
         var processedAttackTargets = new HashSet<AgentItem>();
-        foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents.ToList()) //TODO(Rennorb) @perf: avoid creating the list. has to be for now because we modifiy the collection later on. 
+        foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
         {
             AgentItem atAgent = attackTargetEvent.AttackTarget;
             // We take attack events, filter out the first one, present at spawn, that is always a non targetable event
@@ -434,8 +434,8 @@ internal class HarvestTemple : EndOfDragonsStrike
             AgentItem dragonVoid = attackTargetEvent.Src;
             var copyEventsFrom = new List<AgentItem>() { dragonVoid };
             processedAttackTargets.Add(atAgent);
-            var targetOns = targetables.Where(x => x.Targetable).ToList();
-            var targetOffs = targetables.Where(x => !x.Targetable).ToList();
+            var targetOns = targetables.Where(x => x.Targetable);
+            var targetOffs = targetables.Where(x => !x.Targetable);
             //
             foreach (TargetableEvent targetOn in targetOns)
             {
@@ -498,8 +498,8 @@ internal class HarvestTemple : EndOfDragonsStrike
         {
             if (maxHPEvents.TryGetValue(14940, out var potentialGravityBallHPs))
             {
-                var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src).ToList();
-                var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y))).ToList();
+                var gravityBalls = potentialGravityBallHPs.Where(x => x.Src.Type == AgentItem.AgentType.Gadget && x.Src.HitboxHeight == 300 && x.Src.HitboxWidth == 100 && x.Src.Master == null && x.Src.FirstAware > timecaster.FirstAware && x.Src.FirstAware < timecaster.LastAware + 2000).Select(x => x.Src);
+                var candidateVelocities = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && gravityBalls.Any(y => x.SrcMatchesAgent(y)));
                 const int referenceLength = 200;
                 var gravityBalls_ = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(MovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
                 foreach (AgentItem ball in gravityBalls_)
@@ -517,8 +517,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 var frostBeams = combatData.Where(evt => evt.SrcIsAgent() && agentData.GetAgent(evt.SrcAgent, evt.Time).IsNonIdentifiedSpecies())
                     .Select(evt => agentData.GetAgent(evt.SrcAgent, evt.Time))
                     .Distinct()
-                    .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && MovementEvent.GetPointXY(evt) != default) > 2)
-                    .ToList();
+                    .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && MovementEvent.GetPointXY(evt) != default) > 2);
                 foreach (AgentItem frostBeam in frostBeams)
                 {
                     frostBeam.OverrideID(ArcDPSEnums.TrashID.JormagMovingFrostBeam);
@@ -677,7 +676,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 }
             }
         }
-        FirstAwareSortedTargets = Targets.OrderBy(x => x.FirstAware).ToList();
+        FirstAwareSortedTargets = Targets.OrderBy(x => x.FirstAware);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
@@ -719,7 +718,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); //TODO(Rennorb) @perf
+        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
 
         switch (target.ID)
         {
@@ -727,7 +726,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 // Purification Zones
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTemplePurificationZones, out var purificationZoneEffects))
                 {
-                    var voidShells = log.CombatData.GetBuffDataByIDByDst(VoidShell, target.AgentItem).ToList();
+                    var voidShells = log.CombatData.GetBuffDataByIDByDst(VoidShell, target.AgentItem);
                     var voidShellRemovals = voidShells.Where(x => x is BuffRemoveSingleEvent || x is BuffRemoveAllEvent).ToList();
                     int voidShellAppliesCount = voidShells.Where(x => x is BuffApplyEvent).Count();
                     int voidShellRemovalOffset = 0;
@@ -1131,7 +1130,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         if (clawVoidOrbs.Count > 0 && clawVoidOrbsAoEs.Count > 0)
                         {
                             // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
-                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.First().Time).ToList();
+                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.First().Time);
                             orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
                             aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
                         }
@@ -1234,7 +1233,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         foreach (EffectEvent tailSlamEffect in tailSlamEffects)
                         {
                             // Filtering the effects
-                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tailSlamEffect.Time) < 2000 && x.Time < tailSlamEffect.Time + 10000).ToList();
+                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tailSlamEffect.Time) < 2000 && x.Time < tailSlamEffect.Time + 10000);
 
                             // Tail Slam AoE
                             (long start, long end) lifespanTail = tailSlamEffect.ComputeLifespan(log, 1600);
@@ -1261,7 +1260,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         foreach (EffectEvent tsunamiSlamEffect in tsunamiSlamIndicators)
                         {
                             // Filtering the effects
-                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tsunamiSlamEffect.Time) < 2000 && x.Time < tsunamiSlamEffect.Time + 10000).ToList();
+                            var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tsunamiSlamEffect.Time) < 2000 && x.Time < tsunamiSlamEffect.Time + 10000);
 
                             (long start, long end) lifespanClawAoE = tsunamiSlamEffect.ComputeLifespan(log, 1600);
                             replay.AddDecorationWithGrowing(new CircleDecoration(235, lifespanClawAoE, Colors.Red, 0.2, new PositionConnector(tsunamiSlamEffect.Position)), lifespanClawAoE.end);

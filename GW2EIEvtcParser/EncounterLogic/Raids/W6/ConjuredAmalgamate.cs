@@ -54,8 +54,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // time starts at first smash
-        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).ToList();
-        if (effectIDToGUIDs.Count > 0)
+        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID);
+        if (effectIDToGUIDs.Any())
         {
             CombatItem? armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => new GUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);
             if (armSmashGUID != null)
@@ -180,7 +180,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint CAShieldRadius = 500;
                 foreach (Segment seg in shieldCA)
                 {
@@ -193,7 +193,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                 break;
             case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint ShieldShieldRadius = 100;
                 foreach (Segment seg in shieldShield)
                 {
@@ -257,7 +257,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             return [];
         }
-        var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).ToList();
+        var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem);
         var attackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent c in attackTargetsAgents) // 3rd one is weird
         {

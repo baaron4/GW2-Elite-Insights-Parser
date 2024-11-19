@@ -33,10 +33,10 @@ internal class WvWFight : FightLogic
                 {
                     return new List<HealthDamageEvent>();
                 }
-                return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); //TODO(Rennorb) @perf
+                return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
             }).UsingChecker((x, log) => x.HasKilled && (x.To.Type == AgentItem.AgentType.NonSquadPlayer || x.To.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))),
             new EnemyDamageMechanic("Killing Blows received by enemies", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Kllng.Blw.Enemy", "Killing Blows inflicted enemy Players by Squad Players", "Killing Blows received by enemies", 0, (log, a) => {
-                return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); //TODO(Rennorb) @perf
+                return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
             }).UsingChecker((x, log) => x.HasKilled && x.CreditedFrom.Type == AgentItem.AgentType.Player),
         ]);
     }
@@ -236,7 +236,7 @@ internal class WvWFight : FightLogic
             modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
             modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
             modes.SortByTime();
-            var usedModes = modes.Select(x => x.BuffID).Distinct().ToList();
+            var usedModes = modes.Select(x => x.BuffID).Distinct();
             foreach (long buffID in usedModes)
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));
@@ -273,7 +273,7 @@ internal class WvWFight : FightLogic
         if (!_detailed)
         {
             var friendlyAgents = new HashSet<AgentItem>(NonPlayerFriendlies.Select(x => x.AgentItem));
-            var enemyPlayerList = aList.Where(x => !friendlyAgents.Contains(x)).ToList();
+            var enemyPlayerList = aList.Where(x => !friendlyAgents.Contains(x));
             var enemyPlayerDicts = enemyPlayerList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
             foreach (CombatItem c in combatData)
             {
@@ -322,9 +322,7 @@ internal class WvWFight : FightLogic
             }
         }
         ComputeFightTargets(agentData, combatData, extensions);
-        auxFriendlies = auxFriendlies.OrderBy(x => x.Character).ToList();
-        _nonPlayerFriendlies.AddRange(auxFriendlies);
-        auxTargets = auxTargets.OrderBy(x => x.Character).ToList();
-        _targets.AddRange(auxTargets);
+        _nonPlayerFriendlies.AddRange(auxFriendlies.OrderBy(x => x.Character));
+        _targets.AddRange(auxTargets.OrderBy(x => x.Character));
     }
 }

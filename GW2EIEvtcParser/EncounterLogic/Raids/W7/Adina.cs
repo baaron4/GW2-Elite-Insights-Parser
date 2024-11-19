@@ -80,8 +80,7 @@ internal class Adina : TheKeyOfAhdashim
                 return targetables.Any(y => y.Targetable);
             }
             return false;
-        })
-            .ToList(); //NOTE(Rennorb): Unfortunate ToList because we have to insert into the collection we iterate. 
+        });
         long final = fightData.FightEnd;
         var handOfEruptionPositions = new Vector2[] { new(15570.5f, -693.117f), new(14277.2f, -2202.52f) }; // gadget locations
         var processedAttackTargets = new HashSet<AgentItem>();
@@ -96,8 +95,8 @@ internal class Adina : TheKeyOfAhdashim
             processedAttackTargets.Add(atAgent);
             AgentItem hand = attackTargetEvent.Src;
             var copyEventsFrom = new List<AgentItem>() { hand };
-            var attackOns = targetables.Where(x => x.Targetable).ToList();
-            var attackOffs = targetables.Where(x => !x.Targetable).ToList();
+            var attackOns = targetables.Where(x => x.Targetable);
+            var attackOffs = targetables.Where(x => !x.Targetable);
             CombatItem? posEvt = combatData.FirstOrDefault(x => x.SrcMatchesAgent(hand) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
             ArcDPSEnums.TrashID id = ArcDPSEnums.TrashID.HandOfErosion;
             if (posEvt != null)
@@ -162,7 +161,7 @@ internal class Adina : TheKeyOfAhdashim
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in radiantBlindnesses)
         {
             replay.Decorations.Add(new CircleDecoration(90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
@@ -177,7 +176,7 @@ internal class Adina : TheKeyOfAhdashim
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Adina:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var doubleQuantumQuakes = casts.Where(x => x.SkillId == DoubleRotatingEarthRays);
                 foreach (CastEvent c in doubleQuantumQuakes)
                 {
@@ -221,13 +220,13 @@ internal class Adina : TheKeyOfAhdashim
                     replay.AddShockwave(connector, lifespan, Colors.LightOrange, 0.6, radius);
                 }
                 //
-                var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in diamondPalisades)
                 {
                     replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
                 }
                 //
-                var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage).ToList();
+                var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage);
                 foreach (CastEvent c in boulderBarrages)
                 {
                     long start = c.Time;
@@ -249,7 +248,7 @@ internal class Adina : TheKeyOfAhdashim
         SingleActor adina = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Adina)) ?? throw new MissingKeyActorsException("Adina not found");
         phases[0].AddTarget(adina);
         var handIds = new ArcDPSEnums.TrashID[] { ArcDPSEnums.TrashID.HandOfErosion, ArcDPSEnums.TrashID.HandOfEruption };
-        var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList(); //TODO(Rennorb) @perf
+        var invuls = GetFilteredList(log.CombatData, Determined762, adina, true, true).ToList();
         BuffEvent? lastInvuln = invuls.LastOrDefault();
         long lastBossPhaseStart = lastInvuln is BuffRemoveAllEvent ? lastInvuln.Time : log.FightData.LogEnd; // if log ends with any boss phase, ignore hands after that point
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(handIds) && x.FirstAware < lastBossPhaseStart));
@@ -287,7 +286,7 @@ internal class Adina : TheKeyOfAhdashim
         }
         // Main phases
         var mainPhases = new List<PhaseData>();
-        var pillarApplies = log.CombatData.GetBuffDataByIDByDst(PillarPandemonium, adina.AgentItem).OfType<BuffApplyEvent>().ToList();
+        var pillarApplies = log.CombatData.GetBuffDataByIDByDst(PillarPandemonium, adina.AgentItem).OfType<BuffApplyEvent>();
         Dictionary<long, List<BuffApplyEvent>> pillarAppliesGroupByTime = GroupByTime(pillarApplies);
         var mainPhaseEnds = new List<long>();
         foreach (KeyValuePair<long, List<BuffApplyEvent>> pair in pillarAppliesGroupByTime)
@@ -367,7 +366,7 @@ internal class Adina : TheKeyOfAhdashim
             int mainPhaseIndex = 0;
             int splitPhaseIndex = 0;
             var phases = log.FightData.GetPhases(log).Where(x => !x.BreakbarPhase).ToList();
-            var mainPhases = phases.Where(x => x.Name.Contains("Phase")).ToList();
+            var mainPhases = phases.Where(x => x.Name.Contains("Phase"));
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phaseData = phases[i];

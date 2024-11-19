@@ -230,7 +230,7 @@ public class AgentData
 
     public static IEnumerable<IEnumerable<AgentItem>> GetGroupedAgentsByTimeCondition(IEnumerable<AgentItem> agents, AgentGroupingTimeFetchet timeFetcher, long epsilon = ParserHelper.ServerDelayConstant)
     {
-        var groupedAgents = new List<List<AgentItem>>();
+        var groupedAgents = new List<IEnumerable<AgentItem>>();
         var processedTimes = new HashSet<long>();
         foreach (var agent in agents)
         {
@@ -239,7 +239,7 @@ public class AgentData
             {
                 continue;
             }
-            var group = agents.Where(otherAgent => timeFetcher(otherAgent) >= time && timeFetcher(otherAgent) < time + epsilon).ToList();
+            var group = agents.Where(otherAgent => timeFetcher(otherAgent) >= time && timeFetcher(otherAgent) < time + epsilon);
             foreach (var groupedAgent in group)
             {
                 processedTimes.Add(timeFetcher(groupedAgent));

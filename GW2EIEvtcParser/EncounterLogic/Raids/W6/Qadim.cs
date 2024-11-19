@@ -438,7 +438,7 @@ internal class Qadim : MythwrightGambit
         {
             foreach (var orbs in cmOrbs)
             {
-                var positions = orbs.Select(x => x.Position.XY()).ToList();
+                var positions = orbs.Select(x => x.Position.XY());
                 var middle = positions.FirstOrDefault(x => x.IsInTriangle(positions.Where(y => y != x).ToList()));
                 EffectEvent? middleEvent = orbs.FirstOrDefault(x => x.Position.XY() == middle);
                 if (middleEvent != null)
@@ -499,7 +499,7 @@ internal class Qadim : MythwrightGambit
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         uint ccRadius = 200;
         switch (target.ID)
         {
@@ -732,7 +732,7 @@ internal class Qadim : MythwrightGambit
                 const float hiddenOpacity = 0.1f;
                 const float visibleOpacity = 1f;
                 const float noOpacity = -1f;
-                var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Value.Z, x.Time)).ToList();
+                var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Value.Z, x.Time));
                 var opacities = new List<ParametricPoint1D> { new(visibleOpacity, target.FirstAware) };
                 int velocityIndex = 0;
                 SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
@@ -1373,7 +1373,7 @@ internal class Qadim : MythwrightGambit
         foreach (Player p in log.PlayerList)
         {
             IReadOnlyList<ParametricPoint3D> positions = p.GetCombatReplayPolledPositions(log);
-            var exitBuffs = log.CombatData.GetBuffDataByIDByDst(PowerOfTheLamp, p.AgentItem).OfType<BuffApplyEvent>().ToList();
+            var exitBuffs = log.CombatData.GetBuffDataByIDByDst(PowerOfTheLamp, p.AgentItem).OfType<BuffApplyEvent>();
 
             // Count the times the player has entered and exited the lamp.
             // A player that has entered the lamp but never exites and remains alive is elible for the achievement.

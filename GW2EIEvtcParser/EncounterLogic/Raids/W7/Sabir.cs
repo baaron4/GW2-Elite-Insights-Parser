@@ -80,7 +80,7 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
-        NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem).ToList());
+        NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem));
         return [];
     }
 
@@ -94,7 +94,7 @@ internal class Sabir : TheKeyOfAhdashim
             return phases;
         }
 
-        var casts = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         var wallopingWinds = casts.Where(x => x.SkillId == WallopingWind);
         long start = 0;
         int i = 0;
@@ -134,7 +134,7 @@ internal class Sabir : TheKeyOfAhdashim
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         uint boltBreakRadius = 180;
         foreach (Segment seg in boltBreaks)
         {
@@ -150,7 +150,7 @@ internal class Sabir : TheKeyOfAhdashim
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Sabir:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in repulsionFields)
                 {

@@ -1062,8 +1062,8 @@ public class EvtcParser
                         && x.SrcMatchesAgent(p.AgentItem) && x.Time <= p.FirstAware + 500);
                     if (spawnEvent != null)
                     {
-                        var damageEvents = _combatItems.Where(x => x.IsDamage() && x.SrcMatchesAgent(p.AgentItem)).ToList();
-                        if (damageEvents.Count == 0)
+                        var damageEvents = _combatItems.Where(x => x.IsDamage() && x.SrcMatchesAgent(p.AgentItem));
+                        if (!damageEvents.Any())
                         {
                             agentsToRemove.Add(p.AgentItem);
                             operation.UpdateProgressWithCancellationCheck("Parsing: Removing player from player list (spawned after fight start in 10 men content)");

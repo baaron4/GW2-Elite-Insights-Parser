@@ -200,10 +200,10 @@ internal class KainengOverlook : EndOfDragonsStrike
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         SingleActor ministerLi = GetMinisterLi(fightData) ?? throw new MissingKeyActorsException("Minister Li not found");
-        var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>().ToList();
-        if (buffApplies.Count != 0)
+        var buffApplies = combatData.GetBuffDataByIDByDst(Resurrection, ministerLi.AgentItem).OfType<BuffApplyEvent>();
+        if (buffApplies.Any())
         {
-            fightData.SetSuccess(true, buffApplies[0].Time);
+            fightData.SetSuccess(true, buffApplies.First().Time);
         }
     }
 
@@ -356,7 +356,7 @@ internal class KainengOverlook : EndOfDragonsStrike
 
             case (int)ArcDPSEnums.TrashID.TheMechRider:
             case (int)ArcDPSEnums.TrashID.TheMechRiderCM: {
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 // Small Cone
                 var fallOfTheAxeSmall = casts.Where(x => x.SkillId == FallOfTheAxeSmallConeNM || x.SkillId == FallOfTheAxeSmallConeCM);
                 foreach (CastEvent c in fallOfTheAxeSmall)

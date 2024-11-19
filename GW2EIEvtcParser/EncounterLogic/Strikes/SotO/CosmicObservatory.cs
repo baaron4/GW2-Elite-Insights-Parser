@@ -63,7 +63,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         switch (target.ID)
         {
             case (int)TargetID.Dagda:
-                var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
 
                 // Red AoE during 75-50-25 % phases
                 var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast);
@@ -135,11 +135,11 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Lost Control
-        var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(lostControls, p, ParserIcons.CallTarget);
 
         // Shooting Stars Target Overhead
-        var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(shootingStarsTarget, p, ParserIcons.TargetOverhead);
 
         // Target Order (CM)
@@ -151,9 +151,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
         // Tethering the player to the Soul Feast.
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
-        var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda)).ToList();
-        var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem).ToList();
-        var agentsToTether = log.AgentData.GetNPCsByID(TrashID.SoulFeast).ToList();
+        var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda));
+        var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem);
+        var agentsToTether = log.AgentData.GetNPCsByID(TrashID.SoulFeast);
 
         foreach (BuffApplyEvent buffApply in buffAppliesPlayer)
         {

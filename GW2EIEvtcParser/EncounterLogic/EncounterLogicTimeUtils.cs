@@ -115,7 +115,7 @@ internal static class EncounterLogicTimeUtils
         }
     }
 
-    internal static void SetSuccessByDeath(IReadOnlyList<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
+    internal static void SetSuccessByDeath(IEnumerable<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
     {
         if (!targets.Any())
         {
@@ -138,7 +138,7 @@ internal static class EncounterLogicTimeUtils
                 maxTime = Math.Max(time, maxTime);
             }
         }
-        if ((all && success == targets.Count) || (!all && success > 0))
+        if ((all && success == targets.Count()) || (!all && success > 0))
         {
             fightData.SetSuccess(true, maxTime);
         }

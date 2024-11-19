@@ -134,7 +134,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     (int)TargetID.PrototypeArsenite,
                 ];
             }
-            SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)).ToList(), combatData, fightData, playerAgents, true);
+            SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)), combatData, fightData, playerAgents, true);
         }
     }
 

@@ -1055,7 +1055,7 @@ public class CombatData
     /// Returns effect events by the given agent and effect GUID.
     /// </summary>
     /// <returns>true on found effect with entries > 0</returns>
-    public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
@@ -1087,7 +1087,7 @@ public class CombatData
     /// Returns effect events on the given agent and effect GUID.
     /// </summary>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
@@ -1148,7 +1148,7 @@ public class CombatData
     /// Returns effect events by the given agent <b>including</b> minions and the given effect GUID.
     /// </summary>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
@@ -1203,8 +1203,6 @@ public class CombatData
             groupedEffectEvents = null;
             return false;
         }
-
-        effects.SortByTime();
         groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
 
         return true;

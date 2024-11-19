@@ -53,7 +53,7 @@ internal static class EncounterLogicUtils
         return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);
     }
 
-    internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)
+    internal static void NegateDamageAgainstBarrier(CombatData combatData, IEnumerable<AgentItem> agentItems)
     {
         var dmgEvts = new List<HealthDamageEvent>();
         foreach (AgentItem agentItem in agentItems)
@@ -326,7 +326,7 @@ internal static class EncounterLogicUtils
     /// <param name="startEffects">List of the initial effects for the positions.</param>
     /// <param name="endEffects">List of the final effects for the positions.</param>
     /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
-    internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
+    internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IEnumerable<EffectEvent> startEffects, IEnumerable<EffectEvent> endEffects)
     {
         var matchedEffects = new List<(EffectEvent, EffectEvent, float)>(); //TODO(Rennorb) @perf
         foreach (EffectEvent startEffect in startEffects)
