@@ -17,7 +17,7 @@ public class DeathRecap
     public readonly List<DeathRecapDamageItem>? ToDown;
     public readonly List<DeathRecapDamageItem>? ToKill;
 
-    internal DeathRecap(ParsedEvtcLog log, IReadOnlyList<HealthDamageEvent> damageLogs, DeadEvent dead, IReadOnlyList<DownEvent> downs, IReadOnlyList<AliveEvent> ups, long lastDeathTime)
+    internal DeathRecap(ParsedEvtcLog log, IEnumerable<HealthDamageEvent> damageLogs, DeadEvent dead, IReadOnlyList<DownEvent> downs, IReadOnlyList<AliveEvent> ups, long lastDeathTime)
     {
         //TODO(Rennorb) @perf
         DeathTime = dead.Time;

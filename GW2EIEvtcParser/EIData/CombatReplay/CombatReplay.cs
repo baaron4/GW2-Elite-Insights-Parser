@@ -543,10 +543,10 @@ public class CombatReplay
     /// <param name="firstAwareThreshold">Time threshold in case the agent spawns before the buff application.</param>
     internal void AddTetherByThirdPartySrcBuff(ParsedEvtcLog log, PlayerActor player, long buffId, int buffSrcAgentId, int toTetherAgentId, string color, int firstAwareThreshold = 2000)
     {
-        var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffId, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentId)).ToList();
-        var buffApplies = buffEvents.OfType<BuffApplyEvent>().ToList();
-        var buffRemoves = buffEvents.OfType<BuffRemoveAllEvent>().ToList();
-        var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentId).ToList();
+        var buffEvents = log.CombatData.GetBuffDataByIDByDst(buffId, player.AgentItem).Where(x => x.CreditedBy.IsSpecies(buffSrcAgentId));
+        var buffApplies = buffEvents.OfType<BuffApplyEvent>();
+        var buffRemoves = buffEvents.OfType<BuffRemoveAllEvent>();
+        var agentsToTether = log.AgentData.GetNPCsByID(toTetherAgentId);
 
         foreach (BuffApplyEvent buffApply in buffApplies)
         {

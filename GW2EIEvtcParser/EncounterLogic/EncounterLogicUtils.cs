@@ -202,7 +202,7 @@ internal static class EncounterLogicUtils
             }
 
             return false;
-        }).ToList();
+        });
 
         var velocities = combatData.Where(evt => {
             if (evt.IsStateChange == ArcDPSEnums.StateChange.Velocity)
@@ -215,7 +215,7 @@ internal static class EncounterLogicUtils
                 return positions.Any(x => x.SrcMatchesAgent(agent));
             }
             return false;
-        }).ToList();
+        });
 
         var candidates = positions.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
         // Remove all candidates who moved, chests can not move
@@ -331,8 +331,8 @@ internal static class EncounterLogicUtils
         var matchedEffects = new List<(EffectEvent, EffectEvent, float)>(); //TODO(Rennorb) @perf
         foreach (EffectEvent startEffect in startEffects)
         {
-            var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
-            if (candidateEffectEvents.Count != 0)
+            var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000);
+            if (candidateEffectEvents.Any())
             {
                 EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => (x.Position - startEffect.Position).LengthSquared()); //TODO(Rennorb) @perf
                 float minimalDistance = (matchedEffect.Position - startEffect.Position).Length();

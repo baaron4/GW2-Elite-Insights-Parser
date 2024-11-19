@@ -89,8 +89,7 @@ public class BuffsContainer
         }
         _buffsByName = currentBuffs.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
         {
-            var list = x.ToList();
-            if (list.Count > 1)
+            if (x.Count() > 1)
             {
                 throw new InvalidDataException("Same name present multiple times in buffs - " + x.First().Name);
             }
@@ -132,8 +131,7 @@ public class BuffsContainer
         //
         BuffsByIds = currentBuffs.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
         {
-            var list = x.ToList();
-            if (list.Count > 1 && x.Key != SkillIDs.NoBuff && x.Key != SkillIDs.Unknown)
+            if (x.Count() > 1 && x.Key != SkillIDs.NoBuff && x.Key != SkillIDs.Unknown)
             {
                 throw new InvalidDataException("Same id present multiple times in buffs - " + x.First().ID);
             }
@@ -162,7 +160,7 @@ public class BuffsContainer
         // Band aid for the stack type 0 situation
         if (combatData.HasStackIDs)
         {
-            var stackType0Buffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss).ToList();
+            var stackType0Buffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss);
             foreach (Buff buff in stackType0Buffs)
             {
                 IReadOnlyList<BuffEvent> buffData = combatData.GetBuffData(buff.ID);

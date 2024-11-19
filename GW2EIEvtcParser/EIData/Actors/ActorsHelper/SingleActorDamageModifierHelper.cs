@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Xml.Schema;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
@@ -21,10 +22,17 @@ partial class SingleActor
                 DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                 if (damageMod != null)
                 {
-                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end);
+                    double sum = 0;
+                    int count = 0;
+                    foreach (var damageEvent in eventsToUse)
+                    {
+                        sum += damageEvent.DamageGain;
+                        count++;
+                    }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
                     var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
-                    res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
+                    res[pair.Key] = new DamageModifierStat(count, typeHits.Count(), sum, totalDamage);
                 }
             }
             _outgoingDamageModifiersPerTargets!.Set(start, end, target, res);
@@ -125,10 +133,17 @@ partial class SingleActor
                 DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                 if (damageMod != null)
                 {
-                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end);
+                    double sum = 0;
+                    int count = 0;
+                    foreach (var damageEvent in eventsToUse)
+                    {
+                        sum += damageEvent.DamageGain;
+                        count++;
+                    }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
                     var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
-                    res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
+                    res[pair.Key] = new DamageModifierStat(count, typeHits.Count(), sum, totalDamage);
                 }
             }
             _incomingDamageModifiersPerTargets!.Set(start, end, target, res);

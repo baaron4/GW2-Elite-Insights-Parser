@@ -130,7 +130,7 @@ internal static class RangerHelper
         new EffectCastFinderByDst(QuickeningZephyr, EffectGUIDs.RangerQuickeningZephyr).UsingDstBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(SignetOfRenewalSkill, EffectGUIDs.RangerSignetOfRenewal).UsingDstBaseSpecChecker(Spec.Ranger),
         new EffectCastFinderByDst(SignetOfTheHuntSkill, EffectGUIDs.RangerSignetOfTheHunt).UsingDstBaseSpecChecker(Spec.Ranger),
-        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs.ToList()).UsingNotAccurate(true),
+        new MinionSpawnCastFinder(RangerPetSpawned, JuvenilePetIDs).UsingNotAccurate(true),
     ];
 
 
@@ -293,15 +293,16 @@ internal static class RangerHelper
         // entangle works fine already
         HashSet<AgentItem> jacarandaEmbraces = GetOffensiveGadgetAgents(combatData, JacarandasEmbraceMinion, playerAgents);
         HashSet<AgentItem> blackHoles = GetOffensiveGadgetAgents(combatData, BlackHoleMinion, playerAgents);
-        var rangers = players.Where(x => x.BaseSpec == Spec.Ranger).ToList();
+        var rangers = players.Where(x => x.BaseSpec == Spec.Ranger);
+        var rangersCount = rangers.Count();
         // if only one ranger, could only be that one
-        if (rangers.Count == 1)
+        if (rangersCount == 1)
         {
-            Player ranger = rangers[0];
+            Player ranger = rangers.First();
             SetGadgetMaster(jacarandaEmbraces, ranger.AgentItem);
             SetGadgetMaster(blackHoles, ranger.AgentItem);
         }
-        else if (rangers.Count > 1)
+        else if (rangersCount > 1)
         {
             AttachMasterToGadgetByCastData(combatData, jacarandaEmbraces, new List<long> { JacarandasEmbraceSkill }, 1000);
             AttachMasterToGadgetByCastData(combatData, blackHoles, new List<long> { BlackHoleSkill }, 1000);

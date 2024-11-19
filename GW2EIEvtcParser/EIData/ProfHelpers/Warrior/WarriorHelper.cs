@@ -157,18 +157,19 @@ internal static class WarriorHelper
             disBanners = GetBannerAgents(combatData, BannerOfDisciplineBuff, playerAgents),
             tacBanners = GetBannerAgents(combatData, BannerOfTacticsBuff, playerAgents);
         //battleBanner = FindBattleStandards(buffData, playerAgents);
-        var warriors = players.Where(x => x.BaseSpec == Spec.Warrior).ToList();
+        var warriors = players.Where(x => x.BaseSpec == Spec.Warrior);
+        var warriorsCount = warriors.Count();
         // if only one warrior, could only be that one
-        if (warriors.Count == 1)
+        if (warriorsCount == 1)
         {
-            Player warrior = warriors[0];
+            Player warrior = warriors.First();
             ProfHelper.SetGadgetMaster(strBanners, warrior.AgentItem);
             ProfHelper.SetGadgetMaster(disBanners, warrior.AgentItem);
             ProfHelper.SetGadgetMaster(tacBanners, warrior.AgentItem);
             ProfHelper.SetGadgetMaster(defBanners, warrior.AgentItem);
             //SetBannerMaster(battleBanner, warrior.AgentItem);
         }
-        else if (warriors.Count > 1)
+        else if (warriorsCount > 1)
         {
             // land and under water cast ids
             ProfHelper.AttachMasterToGadgetByCastData(combatData, strBanners, new List<long> { BannerOfStrengthSkill, BannerOfStrengthSkillUW }, 1000);

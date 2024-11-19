@@ -59,9 +59,9 @@ internal static class EncounterLogicTimeUtils
         return mainTarget.FirstAware;
     }
 
-    internal static void SetSuccessByCombatExit(IReadOnlyList<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal static void SetSuccessByCombatExit(IEnumerable<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (targets.Count == 0)
+        if (!targets.Any())
         {
             return;
         }

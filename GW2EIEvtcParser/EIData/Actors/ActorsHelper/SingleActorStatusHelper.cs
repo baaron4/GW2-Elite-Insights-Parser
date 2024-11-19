@@ -105,7 +105,7 @@ partial class SingleActor
             return false;
         }
 
-        IReadOnlyList<Segment> healthUpdatesBeforeEnd = GetHealthUpdates(log).Where(update => update.Start > curTime).ToList();
+        var healthUpdatesBeforeEnd = GetHealthUpdates(log).Where(update => update.Start > curTime);
         Segment? next90 = healthUpdatesBeforeEnd.FirstOrNull((in Segment update) => update.Value > 90);
        
         // If there are no more 90 events before combat end and the actor has a down event remaining then the actor must down before next 90
@@ -186,7 +186,7 @@ partial class SingleActor
         IReadOnlyList<AliveEvent> ups = log.CombatData.GetAliveEvents(AgentItem);
         _deathRecaps = new List<DeathRecap>(deads.Count);
         long lastDeathTime = 0;
-        var damageLogs = GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var damageLogs = GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd);
         foreach (DeadEvent dead in deads)
         {
             _deathRecaps.Add(new DeathRecap(log, damageLogs, dead, downs, ups, lastDeathTime));

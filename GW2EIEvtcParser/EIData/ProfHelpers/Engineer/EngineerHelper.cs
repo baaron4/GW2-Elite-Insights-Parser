@@ -245,11 +245,12 @@ internal static class EngineerHelper
         HashSet<AgentItem> healingTurrets = GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
         healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
-        var engineers = players.Where(x => x.BaseSpec == Spec.Engineer).ToList();
+        var engineers = players.Where(x => x.BaseSpec == Spec.Engineer);
+        var engineersCount = engineers.Count();
         // if only one engineer, could only be that one
-        if (engineers.Count == 1)
+        if (engineersCount == 1)
         {
-            Player engineer = engineers[0];
+            Player engineer = engineers.First();
             SetGadgetMaster(flameTurrets, engineer.AgentItem);
             SetGadgetMaster(netTurrets, engineer.AgentItem);
             SetGadgetMaster(rocketTurrets, engineer.AgentItem);
@@ -258,7 +259,7 @@ internal static class EngineerHelper
             SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
             SetGadgetMaster(healingTurrets, engineer.AgentItem);
         }
-        else if (engineers.Count > 1)
+        else if (engineersCount > 1)
         {
             AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { FlameTurretCast, SupplyCrate }, 1000);
             AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { RifleTurretCast }, 1000);

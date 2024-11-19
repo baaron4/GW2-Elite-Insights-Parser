@@ -456,9 +456,9 @@ public abstract class FightLogic
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
     }
 
-    protected IReadOnlyList<SingleActor> GetSuccessCheckTargets()
+    protected IEnumerable<SingleActor> GetSuccessCheckTargets()
     {
-        return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID)).ToList();
+        return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID));
     }
 
     protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

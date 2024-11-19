@@ -137,13 +137,13 @@ public class MechanicData
         return _mechanicLogs.Values;
     }
 
-    public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
+    public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
     {
         ProcessMechanics(log);
         return _mechanicLogs.TryGetValue(mech, out var list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : [];
     }
 
-    public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, SingleActor actor, long start, long end)
+    public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, SingleActor actor, long start, long end)
     {
         return GetMechanicLogs(log, mech, start, end).Where(x => x.Actor == actor).ToList();
     }

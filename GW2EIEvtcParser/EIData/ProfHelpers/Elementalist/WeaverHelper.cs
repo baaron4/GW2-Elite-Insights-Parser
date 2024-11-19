@@ -305,7 +305,7 @@ internal static class WeaverHelper
         { EarthMajorAttunement, new HashSet<long> { EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement }},
     };
 
-    private static long TranslateWeaverAttunement(List<BuffApplyEvent> buffApplies)
+    private static long TranslateWeaverAttunement(IEnumerable<BuffApplyEvent> buffApplies)
     {
         // check if more than 3 ids are present
         // Seems to happen when the attunement bug happens
@@ -394,15 +394,15 @@ internal static class WeaverHelper
         };
         // first we get rid of standard attunements
         var toClean = new HashSet<long>();
-        var attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
+        var attuns = buffs.Where(x => attunements.Contains(x.BuffID));
         foreach (BuffEvent c in attuns)
         {
             toClean.Add(c.BuffID);
             c.Invalidate(skillData);
         }
         // get all weaver attunements ids and group them by time
-        var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
-        if (weaverAttuns.Count == 0)
+        var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID));
+        if (!weaverAttuns.Any())
         {
             return res;
         }
@@ -410,7 +410,7 @@ internal static class WeaverHelper
         long prevID = 0;
         foreach (KeyValuePair<long, List<BuffEvent>> pair in groupByTime)
         {
-            var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
+            var applies = pair.Value.OfType<BuffApplyEvent>();
             long curID = TranslateWeaverAttunement(applies);
             foreach (BuffEvent c in pair.Value)
             {
