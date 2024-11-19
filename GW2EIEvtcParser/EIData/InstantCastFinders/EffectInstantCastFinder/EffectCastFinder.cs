@@ -15,12 +15,12 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
         return this;
     }
 
-    protected AgentItem? GetAgent(EffectEvent effectEvent)
+    protected AgentItem GetAgent(EffectEvent effectEvent)
     {
-        return Minions ? GetKeyAgent(effectEvent)?.GetFinalMaster() : GetKeyAgent(effectEvent);
+        return Minions ? GetKeyAgent(effectEvent).GetFinalMaster() : GetKeyAgent(effectEvent);
     }
 
-    protected virtual AgentItem? GetKeyAgent(EffectEvent effectEvent)
+    protected virtual AgentItem GetKeyAgent(EffectEvent effectEvent)
     {
         return effectEvent.Src;
     }
@@ -105,10 +105,10 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
 
     protected virtual bool DebugEffectChecker(EffectEvent evt, CombatData combatData, AgentData agentData, SkillData skillData)
     {
-        var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
-        var testGUIDs = test.Select(x => x.GUIDEvent.ContentGUID).ToList();
-        var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID).ToList();
-        var test2GUIDs = test2.Select(x => x.GUIDEvent.ContentGUID).ToList();
+        var test = combatData.GetEffectEventsBySrc(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
+        var testGUIDs = test.Select(x => x.GUIDEvent.ContentGUID);
+        var test2 = combatData.GetEffectEventsByDst(evt.Src).Where(x => Math.Abs(x.Time - evt.Time) <= ServerDelayConstant && x.EffectID != evt.EffectID);
+        var test2GUIDs = test2.Select(x => x.GUIDEvent.ContentGUID);
         return true;
     }
 
@@ -149,9 +149,9 @@ internal class EffectCastFinder : CheckedCastFinder<EffectEvent>
                         }
                         lastTime = effectEvent.Time;
                         var caster = group.Key;
-                        if (_speciesId > 0 && caster!.IsUnamedSpecies())
+                        if (_speciesId > 0 && caster.IsUnamedSpecies())
                         {
-                            AgentItem agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
+                            AgentItem? agent = agentData.GetNPCsByID(_speciesId).FirstOrDefault(x => x.LastAware >= effectEvent.Time && x.FirstAware <= effectEvent.Time);
                             if (agent != null)
                             {
                                 caster = agent;

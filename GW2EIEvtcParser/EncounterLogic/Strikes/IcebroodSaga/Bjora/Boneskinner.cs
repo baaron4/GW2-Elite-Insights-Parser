@@ -67,7 +67,7 @@ internal class Boneskinner : Bjora
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250).ToList();
+        var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250);
         foreach (AgentItem torch in torches)
         {
             torch.OverrideType(AgentItem.AgentType.NPC);
@@ -94,7 +94,7 @@ internal class Boneskinner : Bjora
         switch (target.ID)
         {
             case (int)TargetID.Boneskinner:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 // Death Wind
                 var deathWind = casts.Where(x => x.SkillId == DeathWind);
                 foreach (CastEvent c in deathWind)
@@ -133,7 +133,7 @@ internal class Boneskinner : Bjora
                 }
 
                 // Douse in Darkness
-                var douseInDarkness = casts.Where(x => x.SkillId == DouseInDarkness).ToList();
+                var douseInDarkness = casts.Where(x => x.SkillId == DouseInDarkness);
                 foreach (CastEvent c in douseInDarkness)
                 {
                     int jumpTime = 2500;

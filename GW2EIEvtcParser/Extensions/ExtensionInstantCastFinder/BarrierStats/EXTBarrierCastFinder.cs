@@ -17,16 +17,16 @@ internal class EXTBarrierCastFinder : CheckedCastFinder<EXTBarrierEvent>
     public override List<InstantCastEvent> ComputeInstantCast(CombatData combatData, SkillData skillData, AgentData agentData)
     {
         var res = new List<InstantCastEvent>();
-        var heals = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From);
-        foreach (var group in heals)
+        var barriers = combatData.EXTBarrierCombatData.GetBarrierData(_damageSkillID).GroupBy(x => x.From);
+        foreach (var group in barriers)
         {
-            var groupedHeals = group.ToList();
+            var groupedBarriers = group.ToList();
             long lastTime = int.MinValue;
-            if (!HealingStatsExtensionHandler.SanitizeForSrc(groupedHeals))
+            if (!HealingStatsExtensionHandler.SanitizeForSrc(groupedBarriers))
             {
                 continue;
             }
-            foreach (EXTBarrierEvent be in groupedHeals)
+            foreach (EXTBarrierEvent be in groupedBarriers)
             {
                 if (be.Time - lastTime < ICD)
                 {

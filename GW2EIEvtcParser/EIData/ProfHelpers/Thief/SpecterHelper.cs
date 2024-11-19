@@ -29,15 +29,15 @@ internal static class SpecterHelper
         return _shroudTransform.Contains(id);
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, BuffImages.EnterShadowShroud, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Shadow Shroud", ShadowShroud, Source.Specter, BuffClassification.Other, BuffImages.EnterShadowShroud),
         new Buff("Endless Night", EndlessNight, Source.Specter, BuffClassification.Other, BuffImages.EndlessNight),

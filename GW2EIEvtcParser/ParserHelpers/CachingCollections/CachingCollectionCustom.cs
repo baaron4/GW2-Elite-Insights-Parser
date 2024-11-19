@@ -2,22 +2,22 @@
 
 namespace GW2EIEvtcParser;
 
-public class CachingCollectionCustom<Q, T>(ParsedEvtcLog log, Q nullValue, int initialPrimaryCapacity, int initialSecondaryCapacity, int initialTertiaryCapacity) 
+public class CachingCollectionCustom<Q, T>(ParsedEvtcLog log, Q nullValue, int initialTertiaryCapacity) 
     : AbstractCachingCollection<T>(log)
 {
-    private readonly int _initialSecondaryCapacity = initialSecondaryCapacity;
+    private readonly int _initialSecondaryCapacity = log.FightData.GetPhases(log).Count;
     private readonly int _initialTertiaryCapacity = initialTertiaryCapacity;
     private readonly Q _nullValue = nullValue;
 
-    internal readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new(initialPrimaryCapacity);
+    internal readonly Dictionary<long, Dictionary<long, Dictionary<Q, T>>> _cache = new(log.FightData.GetPhases(log).Count);
 
     public bool TryGetValue(long start, long end, Q? q, [NotNullWhen(true)] out T? value)
     {
         (start, end) = SanitizeTimes(start, end);
         q = q == null ? _nullValue : q;
-        if (_cache.TryGetValue(start, out Dictionary<long, Dictionary<Q, T>> subCache))
+        if (_cache.TryGetValue(start, out var subCache))
         {
-            if (subCache.TryGetValue(end, out Dictionary<Q, T> subSubCache))
+            if (subCache.TryGetValue(end, out var subSubCache))
             {
                 if (subSubCache.TryGetValue(q, out value!))
                 {
@@ -34,13 +34,13 @@ public class CachingCollectionCustom<Q, T>(ParsedEvtcLog log, Q nullValue, int i
         (start, end) = SanitizeTimes(start, end);
         q = q == null ? _nullValue : q;
 
-        if (!_cache.TryGetValue(start, out Dictionary<long, Dictionary<Q, T>> subCache))
+        if (!_cache.TryGetValue(start, out var subCache))
         {
             _cache[start] = new Dictionary<long, Dictionary<Q, T>>(_initialSecondaryCapacity);
             subCache = _cache[start];
         }
 
-        if (!subCache.TryGetValue(end, out Dictionary<Q, T> subSubCache))
+        if (!subCache.TryGetValue(end, out var subSubCache))
         {
             subCache[end] = new Dictionary<Q, T>(_initialTertiaryCapacity);
             subSubCache = subCache[end];

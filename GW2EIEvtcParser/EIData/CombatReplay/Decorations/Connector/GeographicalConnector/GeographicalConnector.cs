@@ -13,7 +13,7 @@ public abstract class GeographicalConnector : Connector
         public readonly IReadOnlyList<float>? Offset;
         public readonly bool OffsetAfterRotation;
 
-        public GeographicalConnectorDescriptor(GeographicalConnector connector, CombatReplayMap map)
+        protected GeographicalConnectorDescriptor(GeographicalConnector connector, CombatReplayMap map)
         {
             if (connector.Offset.HasValue)
             {

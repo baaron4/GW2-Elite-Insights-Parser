@@ -18,7 +18,7 @@ using Tracing;
 [assembly: CLSCompliant(false)]
 namespace GW2EIParserCommons;
 
-public class ProgramHelper
+public sealed class ProgramHelper : IDisposable
 {
 
     public ProgramHelper(Version parserVersion, ProgramSettings settings)
@@ -70,6 +70,16 @@ public class ProgramHelper
 
     private CancellationTokenSource? RunningMemoryCheck = null;
 
+    public void Dispose()
+    {
+        if (RunningMemoryCheck != null)
+        {
+            RunningMemoryCheck.Cancel();
+            RunningMemoryCheck.Dispose();
+            RunningMemoryCheck = null;
+        }
+    }
+
     public int GetMaxParallelRunning()
     {
         return Settings.GetMaxParallelRunning();
@@ -101,18 +111,19 @@ public class ProgramHelper
         RunningMemoryCheck = new CancellationTokenSource();// Prepare task
         Task.Run(async () =>
         {
-            using (var proc = Process.GetCurrentProcess())
+            using var proc = Process.GetCurrentProcess();
+
+            while (true)
             {
-                while (true)
+                await Task.Delay(500).ConfigureAwait(false);
+                //NOTE(Rennorb): cannot wait for GC here because this is just a task (not a thread) and we would potentially be blocking other things from happening.
+                proc.Refresh();
+                if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1024L * 1024L)
                 {
-                    await Task.Delay(500).ConfigureAwait(false);
-                    proc.Refresh();
-                    if (proc.PrivateMemorySize64 > Math.Max(Settings.MemoryLimit, 100) * 1e6)
-                    {
-                        Environment.Exit(2);
-                    }
+                    Environment.Exit(2);
                 }
             }
+
         }, RunningMemoryCheck.Token);
     }
 
@@ -174,11 +185,11 @@ public class ProgramHelper
                         originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Benchmark
                         );
         //Upload Process
-        string[] uploadresult = new string[2] { "", "" };
+        string[] uploadresult = ["", ""];
         if (Settings.UploadToDPSReports)
         {
             originalController.UpdateProgressWithCancellationCheck("DPSReport: Uploading");
-            DPSReportUploadObject response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress("DPSReport: " + str), Settings.DPSReportUserToken,
+            DPSReportUploadObject? response = DPSReportController.UploadUsingEI(fInfo, str => originalController.UpdateProgress("DPSReport: " + str), Settings.DPSReportUserToken,
             originalLog.ParserSettings.AnonymousPlayers,
             originalLog.ParserSettings.DetailedWvWParse);
             uploadresult[0] = response != null ? response.Permalink : "Upload process failed";
@@ -207,7 +218,7 @@ public class ProgramHelper
             } 
             else
             {
-                string? accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : null;
+                string accName = originalLog.LogData.PoV != null ? originalLog.LogData.PoVAccount : "-";
 
                 if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.FightData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                 {
@@ -348,14 +359,12 @@ public class ProgramHelper
         using (FileStream outFile =
                     File.Create(outputFile))
         {
-            using (var Compress =
+            using var Compress =
                 new GZipStream(outFile,
-                CompressionMode.Compress))
-            {
-                // Copy the source file into 
-                // the compression stream.
-                Compress.Write(data, 0, data.Length);
-            }
+                CompressionMode.Compress);
+            // Copy the source file into 
+            // the compression stream.
+            Compress.Write(data, 0, data.Length);
         }
         operation.AddFile(outputFile);
     }
@@ -363,12 +372,12 @@ public class ProgramHelper
     private DirectoryInfo GetSaveDirectory(FileInfo fInfo)
     {
         //save location
-        DirectoryInfo saveDirectory;
+        DirectoryInfo? saveDirectory;
         if (Settings.SaveAtOut || Settings.OutLocation == null)
         {
             //Default save directory
             saveDirectory = fInfo.Directory;
-            if (!saveDirectory.Exists)
+            if (saveDirectory == null || !saveDirectory.Exists)
             {
                 throw new InvalidOperationException("Save directory does not exist");
             }
@@ -421,7 +430,7 @@ public class ProgramHelper
 
         string result = log.FightData.Success ? "kill" : "fail";
         string encounterLengthTerm = Settings.AddDuration ? "_" + (log.FightData.FightDuration / 1000).ToString() + "s" : "";
-        string PoVClassTerm = Settings.AddPoVProf && log.LogData.PoV != null ? "_" + log.LogData.PoV.Spec.ToString().ToLower() : "";
+        string PoVClassTerm = Settings.AddPoVProf && log.LogData.PoV != null ? "_" + log.LogData.PoV.Spec.ToString().ToLower(System.Globalization.CultureInfo.CurrentCulture) : "";
         string fName = Path.GetFileNameWithoutExtension(fInfo.FullName);
         fName = $"{fName}{PoVClassTerm}_{log.FightData.Logic.Extension}{encounterLengthTerm}_{result}";
 
@@ -527,5 +536,4 @@ public class ProgramHelper
         }
         operation.UpdateProgressWithCancellationCheck($"Completed for {result}ed {log.FightData.Logic.Extension}");
     }
-
 }

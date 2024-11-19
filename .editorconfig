@@ -68,6 +68,7 @@ tab_width = 4
 end_of_line = crlf
 dotnet_style_prefer_collection_expression = true:suggestion
 dotnet_diagnostic.CA1416.severity = suggestion
+dotnet_diagnostic.CA2201.severity = suggestion
 ############################### 
 # C# Coding Conventions       # 
 ############################### 
@@ -158,6 +159,10 @@ dotnet_diagnostic.CA2237.severity = none
 # CA1062: Validate arguments of public methods
 dotnet_diagnostic.CA1062.severity = silent
 
+dotnet_diagnostic.CA1051.severity = silent
+
+dotnet_diagnostic.CA1852.severity = suggestion
+
 # CA1819: Properties should not return arrays
 dotnet_diagnostic.CA1819.severity = none
 
@@ -217,15 +222,26 @@ dotnet_diagnostic.CA1707.severity = none
 
 dotnet_diagnostic.CA1008.severity = none
 
+dotnet_diagnostic.CA1859.severity = none
+
 dotnet_diagnostic.CA1715.severity = none
+
+dotnet_diagnostic.CA1815.severity = suggestion
+
+dotnet_diagnostic.CA2241.severity = silent
 
 
 dotnet_diagnostic.CA2225.severity = none
 
 dotnet_diagnostic.CA1014.severity = suggestion
+dotnet_diagnostic.CA1810.severity = silent
+dotnet_diagnostic.CA1851.severity = suggestion
 
 
 dotnet_diagnostic.CS8618.severity = suggestion
+dotnet_diagnostic.CS8714.severity = none
+dotnet_diagnostic.CS8606.severity = suggestion
+# dotnet_diagnostic.CS8604.severity = suggestion
 
 csharp_using_directive_placement = outside_namespace:silent
 csharp_prefer_simple_using_statement = true:suggestion
@@ -239,6 +255,7 @@ csharp_style_expression_bodied_local_functions = false:silent
 dotnet_diagnostic.IDE0002.severity = warning
 dotnet_diagnostic.IDE0305.severity = silent
 csharp_style_prefer_primary_constructors = true:suggestion
+csharp_prefer_system_threading_lock = true:suggestion
 
 [*.vb] 
 # Modifier preferences 

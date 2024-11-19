@@ -27,14 +27,14 @@ internal static class VindicatorHelper
         return _dodges.Contains(id);
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnActorDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta2, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(ForerunnerOfDeath, "Forerunner of Death", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Vindicator, ByPresence, BuffImages.ForerunnerOfDeath, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(UrnOfSaintViktorBuff, "Urn of Saint Viktor", "-50%", DamageSource.NoPets, -50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Vindicator, ByPresence, BuffImages.UrnOfSaintViktor, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2024LonelyTowerFractalRelease),
@@ -44,7 +44,7 @@ internal static class VindicatorHelper
             .WithBuilds(GW2Builds.May2024LonelyTowerFractalRelease),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Legendary Alliance Stance", LegendaryAllianceStanceBuff, Source.Revenant, BuffClassification.Other, BuffImages.LegendaryAllianceStance),
         new Buff("Urn of Saint Viktor", UrnOfSaintViktorBuff, Source.Vindicator, BuffClassification.Other, BuffImages.UrnOfSaintViktor),

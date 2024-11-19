@@ -9,7 +9,7 @@ public class BuffFormula
 {
     private static string GetAttributeString(ArcDPSEnums.BuffAttribute attribute)
     {
-        return BuffAttributesStrings.TryGetValue(attribute, out string output) ? output : "";
+        return BuffAttributesStrings.TryGetValue(attribute, out var output) ? output : "";
     }
 
     private static string GetVariableStat(ArcDPSEnums.BuffAttribute attribute, int type)
@@ -36,7 +36,7 @@ public class BuffFormula
         {
             return "%";
         }
-        return BuffAttributesPercent.TryGetValue(attribute1, out string value) ? value : "";
+        return BuffAttributesPercent.TryGetValue(attribute1, out var value) ? value : "";
     }
 
     // Effect type
@@ -160,7 +160,7 @@ public class BuffFormula
         }
         if (IsExtraNumberBuffID)
         {
-            if (buffsByIds.TryGetValue(ExtraNumber, out Buff otherBuff))
+            if (buffsByIds.TryGetValue(ExtraNumber, out var otherBuff))
             {
                 stat1 += " (" + otherBuff.Name + ")";
             }

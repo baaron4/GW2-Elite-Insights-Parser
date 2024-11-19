@@ -91,7 +91,7 @@ internal class StatueOfDarkness : HallOfChains
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             IReadOnlyList<AgentItem> lightThieves = agentData.GetNPCsByID(ArcDPSEnums.TrashID.LightThieves);
@@ -106,7 +106,7 @@ internal class StatueOfDarkness : HallOfChains
     private static List<PhaseData> GetSubPhases(SingleActor eye, ParsedEvtcLog log)
     {
         var res = new List<PhaseData>();
-        BuffRemoveAllEvent det762Loss = log.CombatData.GetBuffDataByIDByDst(Determined762, eye.AgentItem).OfType<BuffRemoveAllEvent>().FirstOrDefault();
+        BuffRemoveAllEvent? det762Loss = log.CombatData.GetBuffDataByIDByDst(Determined762, eye.AgentItem).OfType<BuffRemoveAllEvent>().FirstOrDefault();
         if (det762Loss != null)
         {
             int count = 0;
@@ -145,8 +145,8 @@ internal class StatueOfDarkness : HallOfChains
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate));
-        SingleActor eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement));
+        SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate));
+        SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement));
         if (eyeJudgement == null || eyeFate == null)
         {
             throw new MissingKeyActorsException("Eyes not found");
@@ -163,8 +163,8 @@ internal class StatueOfDarkness : HallOfChains
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            SingleActor eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate));
-            SingleActor eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement));
+            SingleActor? eyeFate = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfFate));
+            SingleActor? eyeJudgement = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.EyeOfJudgement));
             if (eyeJudgement == null || eyeFate == null)
             {
                 throw new MissingKeyActorsException("Eyes not found");

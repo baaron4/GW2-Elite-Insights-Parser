@@ -54,16 +54,16 @@ internal class ConjuredAmalgamate : MythwrightGambit
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // time starts at first smash
-        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID).ToList();
-        if (effectIDToGUIDs.Count > 0)
+        var effectIDToGUIDs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID);
+        if (effectIDToGUIDs.Any())
         {
-            CombatItem armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => new GUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);
+            CombatItem? armSmashGUID = effectIDToGUIDs.FirstOrDefault(x => new GUID(x.SrcAgent, x.DstAgent) == EffectGUIDs.CAArmSmash);
             if (armSmashGUID != null)
             {
-                CombatItem firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);
+                CombatItem? firstArmSmash = combatData.FirstOrDefault(x => x.IsEffect && x.SkillID == armSmashGUID.SkillID);
                 if (firstArmSmash != null)
                 {
-                    CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+                    CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
                     if (logStartNPCUpdate != null)
                     {
                         // we couldn't have hit CA before the initial smash
@@ -180,7 +180,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.ConjuredAmalgamate:
-                var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var shieldCA = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint CAShieldRadius = 500;
                 foreach (Segment seg in shieldCA)
                 {
@@ -193,7 +193,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             case (int)ArcDPSEnums.TrashID.ConjuredGreatsword:
                 break;
             case (int)ArcDPSEnums.TrashID.ConjuredShield:
-                var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var shieldShield = target.GetBuffStatus(log, ShieldedCA, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint ShieldShieldRadius = 100;
                 foreach (Segment seg in shieldShield)
                 {
@@ -210,27 +210,27 @@ internal class ConjuredAmalgamate : MythwrightGambit
         base.CheckSuccess(combatData, agentData, fightData, playerAgents);
         if (!fightData.Success)
         {
-            SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
-            SingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
-            SingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
+            SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate));
+            SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
+            SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
             if (target == null)
             {
                 throw new MissingKeyActorsException("Conjured Amalgamate not found");
             }
-            AgentItem zommoros = agentData.GetNPCsByID(ArcDPSEnums.TrashID.ChillZommoros).LastOrDefault();
+            AgentItem? zommoros = agentData.GetNPCsByID(ArcDPSEnums.TrashID.ChillZommoros).LastOrDefault();
             if (zommoros == null)
             {
                 return;
             }
-            SpawnEvent npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
-            HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Contains(x.From.GetFinalMaster()));
+            SpawnEvent? npcSpawn = combatData.GetSpawnEvents(zommoros).LastOrDefault();
+            HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && !x.ToFriendly && playerAgents.Contains(x.From.GetFinalMaster()));
             if (lastDamageTaken == null)
             {
                 return;
             }
             if (rightArm != null)
             {
-                HealthDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(rightArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                HealthDamageEvent? lastDamageTakenArm = combatData.GetDamageTakenData(rightArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTakenArm != null)
                 {
                     lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
@@ -238,7 +238,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             }
             if (leftArm != null)
             {
-                HealthDamageEvent lastDamageTakenArm = combatData.GetDamageTakenData(leftArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                HealthDamageEvent? lastDamageTakenArm = combatData.GetDamageTakenData(leftArm.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTakenArm != null)
                 {
                     lastDamageTaken = lastDamageTaken.Time > lastDamageTakenArm.Time ? lastDamageTaken : lastDamageTakenArm;
@@ -257,7 +257,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
         {
             return [];
         }
-        var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem).ToList();
+        var attackTargetsAgents = log.CombatData.GetAttackTargetEvents(target.AgentItem);
         var attackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent c in attackTargetsAgents) // 3rd one is weird
         {
@@ -280,8 +280,8 @@ internal class ConjuredAmalgamate : MythwrightGambit
     {
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor ca = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.ConjuredAmalgamate)) ?? throw new MissingKeyActorsException("Conjured Amalgamate not found");
-        SingleActor leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
-        SingleActor rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
+        SingleActor? leftArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CALeftArm));
+        SingleActor? rightArm = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.CARightArm));
         phases[0].AddTarget(ca);
         phases[0].AddSecondaryTarget(leftArm);
         phases[0].AddSecondaryTarget(rightArm);

@@ -234,7 +234,7 @@ internal static class BuffInfoSolver
             {
                 continue;
             }
-            if (buffsByID.TryGetValue(pair.Value, out Buff buff))
+            if (buffsByID.TryGetValue(pair.Value, out var buff))
             {
                 BuffInfoEvent? buffInfoEvent = combatData.GetBuffInfoEvent(buff.ID);
                 if (buffInfoEvent != null)

@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -18,7 +19,7 @@ public class ParsedEvtcLog
     public readonly IReadOnlyCollection<AgentItem> PlayerAgents;
     public readonly IReadOnlyCollection<AgentItem> FriendlyAgents;
     public bool IsBenchmarkMode => FightData.Logic.ParseMode == FightLogic.ParseModeEnum.Benchmark;
-    public readonly IReadOnlyDictionary<ParserHelper.Spec, List<SingleActor>> FriendliesListBySpec;
+    public readonly IReadOnlyDictionary<ParserHelper.Spec, IReadOnlyList<SingleActor>> FriendliesListBySpec;
     public readonly DamageModifiersContainer DamageModifiers;
     public readonly BuffsContainer Buffs;
     public readonly EvtcParserSettings ParserSettings;
@@ -89,7 +90,7 @@ public class ParsedEvtcLog
         friendlies.AddRange(PlayerList);
         friendlies.AddRange(fightData.Logic.NonPlayerFriendlies);
         Friendlies = friendlies;
-        FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => x.ToList());
+        FriendliesListBySpec = friendlies.GroupBy(x => x.Spec).ToDictionary(x => x.Key, x => (IReadOnlyList<SingleActor>)x.ToList());
         FriendlyAgents = new HashSet<AgentItem>(Friendlies.Select(x => x.AgentItem));
         //
         _operation.UpdateProgressWithCancellationCheck("Parsing: Checking Success");
@@ -131,7 +132,7 @@ public class ParsedEvtcLog
             }
         }*/
     }
-
+    [MemberNotNull(nameof(_agentToActorDictionary))]
     private void InitActorDictionaries()
     {
         if (_agentToActorDictionary == null)
@@ -157,7 +158,7 @@ public class ParsedEvtcLog
     public SingleActor FindActor(AgentItem agentItem)
     {
         InitActorDictionaries();
-        if (!_agentToActorDictionary!.TryGetValue(agentItem, out SingleActor actor))
+        if (!_agentToActorDictionary.TryGetValue(agentItem, out var actor))
         {
             if (agentItem.Type == AgentItem.AgentType.Player)
             {
@@ -221,7 +222,7 @@ public class ParsedEvtcLog
                 }
             }
         }
-        foreach (SingleActor actor in fromNonFriendliesSet.ToList())
+        foreach (SingleActor actor in fromNonFriendliesSet)
         {
             if ((actor.LastAware - actor.FirstAware < 200) || !actor.HasCombatReplayPositions(this))
             {

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using GW2EIEvtcParser.ParserHelpers;
 
 namespace GW2EIEvtcParser;
 
@@ -146,10 +147,21 @@ public static partial class ListExt
         set.EnsureCapacity(set.Count + count);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void SortStable<T>(this Span<T> span, Func<T, T, int> cmp)
+    {
+        StableSort<T>.fluxsort(span, cmp);
+        //TODO(Rennorb) @correctness: wire this up with settings
+        if(!typeof(T).IsValueType && MemoryWatchdog.GetMemoryPressure(1L * 1024*1024*1024) >= MemoryWatchdog.MemoryPressure.Medium)
+        {
+            ClearableSharedArrayPool<T>.Shared.ClearAll();
+        }
+    }
+
     //TODO(Rennorb) @cleanup @unstable
     public static Span<T> AsSpan<T>(this List<T> list)
     {
-        var array = (T[])ListInternals<T>.ItemsField.GetValue(list);
+        var array = (T[])ListInternals<T>.ItemsField.GetValue(list)!;
         return array.AsSpan(0, list.Count);
     }
 
@@ -158,7 +170,7 @@ public static partial class ListExt
         public static FieldInfo ItemsField;
         static ListInternals()
         {
-            ItemsField = typeof(List<T>).GetField("_items", BindingFlags.Instance | BindingFlags.NonPublic);
+            ItemsField = typeof(List<T>).GetField("_items", BindingFlags.Instance | BindingFlags.NonPublic)!;
             Debug.Assert(ItemsField != null);
         }
     }

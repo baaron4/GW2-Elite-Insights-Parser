@@ -50,7 +50,7 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
@@ -70,7 +70,7 @@ internal class Sabir : TheKeyOfAhdashim
             new EffectCastFinder(FlashDischargeSAK, EffectGUIDs.SabirFlashDischarge)
                 .UsingChecker((effect, combatData, agentData, skillData) =>
                 {
-                    BuffRemoveAllEvent buffRemove = combatData.GetBuffRemoveAllData(ViolentCurrents)
+                    BuffRemoveAllEvent? buffRemove = combatData.GetBuffRemoveAllData(ViolentCurrents)
                         .Where(x => Math.Abs(effect.Time - x.Time) < ServerDelayConstant && x.To == effect.Src)
                         .FirstOrDefault();
                     return buffRemove != null;
@@ -80,7 +80,7 @@ internal class Sabir : TheKeyOfAhdashim
 
     internal override List<HealthDamageEvent> SpecialDamageEventProcess(CombatData combatData, SkillData skillData)
     {
-        NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem).ToList());
+        NegateDamageAgainstBarrier(combatData, Targets.Select(x => x.AgentItem));
         return [];
     }
 
@@ -94,7 +94,7 @@ internal class Sabir : TheKeyOfAhdashim
             return phases;
         }
 
-        var casts = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = mainTarget.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         var wallopingWinds = casts.Where(x => x.SkillId == WallopingWind);
         long start = 0;
         int i = 0;
@@ -103,7 +103,7 @@ internal class Sabir : TheKeyOfAhdashim
             var phase = new PhaseData(start, wallopingWind.Time, "Phase " + (i + 1));
             phase.AddTarget(mainTarget);
             phases.Add(phase);
-            CastEvent nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
+            CastEvent? nextAttack = casts.FirstOrDefault(x => x.Time >= wallopingWind.EndTime && (x.SkillId == StormsEdgeRightHand || x.SkillId == StormsEdgeLeftHand || x.SkillId == ChainLightning));
             if (nextAttack == null)
             {
                 break;
@@ -134,7 +134,7 @@ internal class Sabir : TheKeyOfAhdashim
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var boltBreaks = p.GetBuffStatus(log, BoltBreak, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         uint boltBreakRadius = 180;
         foreach (Segment seg in boltBreaks)
         {
@@ -150,7 +150,7 @@ internal class Sabir : TheKeyOfAhdashim
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Sabir:
-                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in repulsionFields)
                 {
@@ -200,21 +200,21 @@ internal class Sabir : TheKeyOfAhdashim
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         // Find target
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Sabir, out AgentItem sabir))
+        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Sabir, out var sabir))
         {
             throw new MissingKeyActorsException("Sabir not found");
         }
-        CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(sabir));
+        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(sabir));
         if (enterCombat == null)
         {
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+            CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
             if (logStartNPCUpdate == null)
             {
                 return GetGenericFightOffset(fightData);
             }
             else
             {
-                CombatItem firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(sabir) && x.IsDamagingDamage());
+                CombatItem? firstDamageEvent = combatData.FirstOrDefault(x => x.DstMatchesAgent(sabir) && x.IsDamagingDamage());
                 if (firstDamageEvent != null)
                 {
                     return firstDamageEvent.Time;

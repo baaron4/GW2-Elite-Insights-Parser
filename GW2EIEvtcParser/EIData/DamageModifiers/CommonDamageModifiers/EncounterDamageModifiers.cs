@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class EncounterDamageModifiers
 {
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnFoeDamageModifier(UnnaturalSignet, "Unnatural Signet", "200%, stacks additively with Vulnerability", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.UnnaturalSignet, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
         new BuffOnFoeDamageModifier(Compromised, "Compromised", "75% per stack", DamageSource.All, 75.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Compromised, DamageModifierMode.PvE),
@@ -133,7 +133,7 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(Enraged_300_strike_75_reduc, "Enraged (-75%)", "-75%, stacks additively with Vulnerability", DamageSource.All, -75, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
 
         new BuffOnActorDamageModifier(ConjuredProtection, "Conjured Protection", "-10% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Fractured, DamageModifierMode.PvE)

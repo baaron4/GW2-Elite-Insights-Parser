@@ -66,7 +66,7 @@ public abstract class EffectEvent : AbstractEffectEvent
         }
         if (associatedBuff != null)
         {
-            BuffRemoveAllEvent remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent!)
+            BuffRemoveAllEvent? remove = log.CombatData.GetBuffDataByIDByDst(associatedBuff.Value, agent!)
                 .OfType<BuffRemoveAllEvent>()
                 .FirstOrDefault(x => x.Time >= Time);
             if (remove != null)
@@ -122,7 +122,7 @@ public abstract class EffectEvent : AbstractEffectEvent
         long end = start + Duration;
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffect, out var effects))
         {
-            EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
+            EffectEvent? firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
             if (firstEffect != null)
             {
                 end = firstEffect.Time;
@@ -143,7 +143,7 @@ public abstract class EffectEvent : AbstractEffectEvent
         long end = start + Duration;
         if (log.CombatData.TryGetEffectEventsByGUID(secondaryEffect, out var effects))
         {
-            EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
+            EffectEvent? firstEffect = effects.FirstOrDefault(x => x.Time >= Time);
             if (firstEffect != null)
             {
                 end = firstEffect.Time;
@@ -164,7 +164,7 @@ public abstract class EffectEvent : AbstractEffectEvent
         long end = start + Duration;
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(Src, secondaryEffect, out var effects))
         {
-            EffectEvent firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !x.IsAroundDst && (x.Position - Position).Length() < minDistance);
+            EffectEvent? firstEffect = effects.FirstOrDefault(x => x.Time >= Time && !x.IsAroundDst && (x.Position - Position).Length() < minDistance);
             if (firstEffect != null)
             {
                 end = firstEffect.Time;

@@ -107,11 +107,10 @@ public class MechanicData
             #nullable restore
         }
 
-        var phaseCapacity = log.FightData.GetPhases(log).Count;
-        _presentOnFriendliesMechanics = new(log, phaseCapacity, phaseCapacity);
-        _presentOnEnemyMechanics      = new(log, phaseCapacity, phaseCapacity);
-        _presentMechanics             = new(log, phaseCapacity, phaseCapacity);
-        _enemyList                    = new(log, phaseCapacity, phaseCapacity);
+        _presentOnFriendliesMechanics = new(log);
+        _presentOnEnemyMechanics      = new(log);
+        _presentMechanics             = new(log);
+        _enemyList                    = new(log);
         ComputeMechanics(log);
         foreach (var (mechanic, events) in _mechanicLogs)
         {
@@ -138,13 +137,13 @@ public class MechanicData
         return _mechanicLogs.Values;
     }
 
-    public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
+    public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, long start, long end)
     {
         ProcessMechanics(log);
         return _mechanicLogs.TryGetValue(mech, out var list) ? list.Where(x => x.Time >= start && x.Time <= end).ToList() : [];
     }
 
-    public List<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, SingleActor actor, long start, long end)
+    public IReadOnlyList<MechanicEvent> GetMechanicLogs(ParsedEvtcLog log, Mechanic mech, SingleActor actor, long start, long end)
     {
         return GetMechanicLogs(log, mech, start, end).Where(x => x.Actor == actor).ToList();
     }

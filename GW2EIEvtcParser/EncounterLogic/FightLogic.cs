@@ -114,7 +114,7 @@ public abstract class FightLogic
         long end = log.FightData.Success ? log.FightData.FightEnd : (log.FightData.FightEnd + log.FightData.FightStart) / 2;
         int emboldenedStacks = (int)log.PlayerList.Select(x =>
         {
-            if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
+            if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
             {
                 return graph.BuffChart.Where(y => y.Intersects(log.FightData.FightStart, end)).Max(y => y.Value);
             }
@@ -185,7 +185,7 @@ public abstract class FightLogic
 
     internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
+        SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
         if (target == null)
         {
             return "UNKNOWN";
@@ -417,7 +417,7 @@ public abstract class FightLogic
         {
             foreach (var squadMarkerEvent in log.CombatData.GetSquadMarkerEvents(squadMarker))
             {
-                if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out string icon))
+                if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out var icon))
                 {
                     EnvironmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
                 }
@@ -456,9 +456,9 @@ public abstract class FightLogic
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
     }
 
-    protected IReadOnlyList<SingleActor> GetSuccessCheckTargets()
+    protected IEnumerable<SingleActor> GetSuccessCheckTargets()
     {
-        return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID)).ToList();
+        return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID));
     }
 
     protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

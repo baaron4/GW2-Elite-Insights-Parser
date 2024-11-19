@@ -72,7 +72,7 @@ internal class River : HallOfChains
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             IReadOnlyList<AgentItem> enervators = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Enervator);
@@ -91,7 +91,7 @@ internal class River : HallOfChains
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Desmina, out AgentItem desmina))
+        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Desmina, out var desmina))
         {
             throw new MissingKeyActorsException("Desmina not found");
         }
@@ -116,7 +116,7 @@ internal class River : HallOfChains
 
     internal override FightLogic AdjustLogic(AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         // Handle potentially wrongly associated logs
         if (logStartNPCUpdate != null)
         {
@@ -155,7 +155,7 @@ internal class River : HallOfChains
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Desmina:
-                var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var asylums = target.GetBuffStatus(log, FollowersAsylum, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var asylum in asylums)
                 {
                     replay.Decorations.Add(new CircleDecoration(300, asylum, "rgba(0, 160, 255, 0.3)", new AgentConnector(target)));
@@ -169,7 +169,7 @@ internal class River : HallOfChains
                     replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                 }
 
-                var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls).ToList();
+                var bomberman = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == BombShellRiverOfSouls);
                 foreach (CastEvent bomb in bomberman)
                 {
                     int startCast = (int)bomb.Time;
@@ -182,7 +182,7 @@ internal class River : HallOfChains
 
             case (int)ArcDPSEnums.TrashID.RiverOfSouls:
                 ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Value != default);
-                if (firstRiverMovement.Value != null)
+                if (firstRiverMovement.Value != default)
                 {
                     replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
                 }

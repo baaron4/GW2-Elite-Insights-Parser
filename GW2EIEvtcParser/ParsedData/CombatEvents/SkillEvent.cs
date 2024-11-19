@@ -28,7 +28,7 @@ public abstract class SkillEvent : TimeCombatEvent
 
     public bool ConditionDamageBased(ParsedEvtcLog log)
     {
-        if (_isCondi == -1 && log.Buffs.BuffsByIds.TryGetValue(SkillId, out Buff b))
+        if (_isCondi == -1 && log.Buffs.BuffsByIds.TryGetValue(SkillId, out var b))
         {
             _isCondi = b.Classification == Buff.BuffClassification.Condition ? 1 : 0;
         }

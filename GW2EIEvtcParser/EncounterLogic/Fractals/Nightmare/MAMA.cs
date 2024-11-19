@@ -56,13 +56,13 @@ internal class MAMA : Nightmare
         if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
         {
             // players may enter combat with knights or an invisible hitbox before
-            AgentItem mama = agentData.GetNPCsByID(TargetID.MAMA).FirstOrDefault();
+            AgentItem? mama = agentData.GetNPCsByID(TargetID.MAMA).FirstOrDefault();
             if (mama != null)
             {
                 // attempt to use mama combat enter to determine start
                 // logs that start with an outgoing/incoming hit on mama may not have combat enter for mama
                 // but logs that start with an earlier player combat enter should
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mama) && x.IsStateChange == StateChange.EnterCombat && x.Time >= startToUse);
+                CombatItem? enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(mama) && x.IsStateChange == StateChange.EnterCombat && x.Time >= startToUse);
                 if (enterCombat != null)
                 {
                     return enterCombat.Time;
@@ -98,7 +98,7 @@ internal class MAMA : Nightmare
                 if (phase.Targets.Count > 0)
                 {
                     SingleActor phaseTar = phase.Targets[0];
-                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
+                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string? phaseName) ? phaseName : "Unknown";
                 }
             }
             else
@@ -147,7 +147,7 @@ internal class MAMA : Nightmare
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
         switch (target.ID)
         {

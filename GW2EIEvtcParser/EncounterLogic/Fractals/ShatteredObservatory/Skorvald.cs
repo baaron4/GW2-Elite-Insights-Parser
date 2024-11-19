@@ -131,7 +131,7 @@ internal class Skorvald : ShatteredObservatory
         if (manualFractalScaleSet && combatData.Any(x => x.IsStateChange == StateChange.MaxHealthUpdate && x.SrcMatchesAgent(skorvald.AgentItem) && MaxHealthUpdateEvent.GetMaxHealth(x) < 5e6 && MaxHealthUpdateEvent.GetMaxHealth(x) > 0))
         {
             // Remove manual scale from T1 to T3 for now
-            combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale).OverrideSrcAgent(0);
+            combatData.FirstOrDefault(x => x.IsStateChange == StateChange.FractalScale)!.OverrideSrcAgent(0);
             // Once we have the hp thresholds, simply apply -75, -50, -25 to the srcAgent of existing event
         }
 
@@ -162,14 +162,14 @@ internal class Skorvald : ShatteredObservatory
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             AgentItem skorvald = agentData.GetNPCsByID(TargetID.Skorvald).FirstOrDefault() ?? throw new MissingKeyActorsException("Skorvald not found");
             long upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, logStartNPCUpdate.Time, skorvald);
             // Skorvald may spawns with 0% hp
-            CombatItem firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && HealthUpdateEvent.GetHealthPercent(x) > 0);
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ServerDelayConstant);
+            CombatItem? firstNonZeroHPUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.HealthUpdate && x.SrcMatchesAgent(skorvald) && HealthUpdateEvent.GetHealthPercent(x) > 0);
+            CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.EnterCombat && x.SrcMatchesAgent(skorvald) && x.Time <= upperLimit + ServerDelayConstant);
             return firstNonZeroHPUpdate != null ? Math.Min(firstNonZeroHPUpdate.Time, enterCombat != null ? enterCombat.Time : long.MaxValue) : GetGenericFightOffset(fightData);
         }
         return GetGenericFightOffset(fightData);
@@ -238,10 +238,10 @@ internal class Skorvald : ShatteredObservatory
             return;
         }
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");
-        HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+        HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(skorvald.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
         if (lastDamageTaken != null)
         {
-            BuffApplyEvent invul895Apply = combatData.GetBuffDataByIDByDst(Determined895, skorvald.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
+            BuffApplyEvent? invul895Apply = combatData.GetBuffDataByIDByDst(Determined895, skorvald.AgentItem).OfType<BuffApplyEvent>().Where(x => x.Time > lastDamageTaken.Time - 500).LastOrDefault();
             if (invul895Apply != null)
             {
                 fightData.SetSuccess(true, Math.Min(invul895Apply.Time, lastDamageTaken.Time));
@@ -258,7 +258,7 @@ internal class Skorvald : ShatteredObservatory
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
         switch (target.ID)
         {

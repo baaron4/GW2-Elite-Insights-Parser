@@ -34,7 +34,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
         {
             if (!usedBoons.ContainsKey(skill.ID))
             {
-                if (boons.BuffsByIds.TryGetValue(skill.ID, out Buff buff))
+                if (boons.BuffsByIds.TryGetValue(skill.ID, out var buff))
                 {
                     usedBoons.Add(buff.ID, buff);
                 }
@@ -110,7 +110,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
 
     private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, SingleActor p, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
+        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
         var barrierLogs = p.EXTBarrier.GetJustActorOutgoingBarrierEvents(target, log, phase.Start, phase.End);
         var dto = new EXTBarrierStatsBarrierDistributionDto
         {
@@ -132,8 +132,8 @@ internal class EXTBarrierStatsBarrierDistributionDto
     private static EXTBarrierStatsBarrierDistributionDto BuildBarrierDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingBarrierStat outgoingBarrierStats, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTBarrierStatsBarrierDistributionDto();
-        var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
-        var barrierLogs = minions.EXTBarrier.GetOutgoingBarrierEvents(target, log, phase.Start, phase.End).ToList();
+        var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
+        var barrierLogs = minions.EXTBarrier.GetOutgoingBarrierEvents(target, log, phase.Start, phase.End);
         dto.ContributedBarrier = barrierLogs.Sum(x => x.BarrierGiven);
         dto.TotalBarrier = outgoingBarrierStats.Barrier;
         //TODO(Rennorb) @perf

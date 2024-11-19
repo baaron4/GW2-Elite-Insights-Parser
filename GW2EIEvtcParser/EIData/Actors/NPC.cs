@@ -65,7 +65,7 @@ public class NPC : SingleActor
     }
     public override int GetCurrentBarrier(ParsedEvtcLog log, double currentBarrierPercent, long time)
     {
-        MaxHealthUpdateEvent currentMaxHealth = log.CombatData.GetMaxHealthUpdateEvents(AgentItem).LastOrDefault(x => x.Time <= time);
+        MaxHealthUpdateEvent? currentMaxHealth = log.CombatData.GetMaxHealthUpdateEvents(AgentItem).LastOrDefault(x => x.Time <= time);
         if (currentMaxHealth == null || currentBarrierPercent < 0)
         {
             return -1;
@@ -78,13 +78,13 @@ public class NPC : SingleActor
         return AgentItem.Type == AgentItem.AgentType.Gadget ? ParserHelper.GetGadgetIcon() : ParserHelper.GetNPCIcon(ID);
     }
 
-    protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
+    protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)
     {
-        base.InitAdditionalCombatReplayData(log);
-        log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, CombatReplay);
-        if (CombatReplay.Rotations.Count != 0 && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
+        base.InitAdditionalCombatReplayData(log, replay);
+        log.FightData.Logic.ComputeNPCCombatReplayActors(this, log, replay);
+        if (replay.Rotations.Count != 0 && (log.FightData.Logic.TargetAgents.Contains(AgentItem) || log.FriendlyAgents.Contains(AgentItem)))
         {
-            CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), AgentItem));
+            replay.Decorations.Add(new ActorOrientationDecoration(((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), AgentItem));
         }
         // Don't put minions of NPC into the minion display system
         AgentItem master = AgentItem.GetFinalMaster();
@@ -92,9 +92,9 @@ public class NPC : SingleActor
         {
             SingleActor masterActor = log.FindActor(master)!;
             // Basic linkage
-            CombatReplay.Decorations.Add(new LineDecoration((CombatReplay.TimeOffsets.start, CombatReplay.TimeOffsets.end), Colors.Green, 0.5, new AgentConnector(this), new AgentConnector(masterActor)));
+            replay.Decorations.Add(new LineDecoration((replay.TimeOffsets.start, replay.TimeOffsets.end), Colors.Green, 0.5, new AgentConnector(this), new AgentConnector(masterActor)));
             // Prof specific treatment
-            ProfHelper.ComputeMinionCombatReplayActors(this, masterActor, log, CombatReplay);
+            ProfHelper.ComputeMinionCombatReplayActors(this, masterActor, log, replay);
         }
     }
 
@@ -103,17 +103,13 @@ public class NPC : SingleActor
 
     public override SingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
     {
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-        return new NPCCombatReplayDescription(this, log, map, CombatReplay);
+        return new NPCCombatReplayDescription(this, log, map, InitCombatReplay(log));
     }
-    protected override void TrimCombatReplay(ParsedEvtcLog log)
+    protected override void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay)
     {
         if (!log.FriendlyAgents.Contains(AgentItem))
         {
-            TrimCombatReplay(log, CombatReplay, AgentItem);
+            TrimCombatReplay(log, replay, AgentItem);
         }
     }
 }

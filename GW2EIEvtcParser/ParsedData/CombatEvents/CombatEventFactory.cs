@@ -118,7 +118,7 @@ internal static class CombatEventFactory
                 break;
             case StateChange.BuffInfo:
             case StateChange.BuffFormula:
-                if (metaDataEvents.BuffInfoEvents.TryGetValue(stateChangeEvent.SkillID, out BuffInfoEvent buffInfoEvent))
+                if (metaDataEvents.BuffInfoEvents.TryGetValue(stateChangeEvent.SkillID, out var buffInfoEvent))
                 {
                     buffInfoEvent.CompleteBuffInfoEvent(stateChangeEvent, evtcVersion);
                 }
@@ -129,7 +129,7 @@ internal static class CombatEventFactory
                 }
                 if (stateChangeEvent.IsStateChange == StateChange.BuffInfo)
                 {
-                    if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.CategoryByte, out List<BuffInfoEvent> bdEvtList))
+                    if (metaDataEvents.BuffInfoEventsByCategory.TryGetValue(buffInfoEvent.CategoryByte, out var bdEvtList))
                     {
                         bdEvtList.Add(buffInfoEvent);
                     }
@@ -141,7 +141,7 @@ internal static class CombatEventFactory
                 break;
             case StateChange.SkillInfo:
             case StateChange.SkillTiming:
-                if (metaDataEvents.SkillInfoEvents.TryGetValue(stateChangeEvent.SkillID, out SkillInfoEvent skillInfoEvent))
+                if (metaDataEvents.SkillInfoEvents.TryGetValue(stateChangeEvent.SkillID, out var skillInfoEvent))
                 {
                     skillInfoEvent.CompleteSkillInfoEvent(stateChangeEvent);
                 }
@@ -170,7 +170,7 @@ internal static class CombatEventFactory
                     if (markerEvent.IsEnd)
                     {
                         // An end event ends all previous markers
-                        if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out var markers))
                         {
                             for (int i = markers.Count - 1; i >= 0; i--)
                             {
@@ -184,7 +184,7 @@ internal static class CombatEventFactory
                         }
                         break;
                     }
-                    else if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                    else if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out var markers))
                     {
                         for (int i = markers.Count - 1; i >= 0; i--)
                         {
@@ -207,15 +207,15 @@ internal static class CombatEventFactory
                     if (markerEvent.IsEnd)
                     {
                         // Find last marker on agent and set an end time on it
-                        if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                        if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out var markers))
                         {
                             markers.LastOrDefault()?.SetEndTime(markerEvent.Time);
                         }
                         break;
                     }
-                    else if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out List<MarkerEvent> markers))
+                    else if (statusEvents.MarkerEventsBySrc.TryGetValue(markerEvent.Src, out var markers))
                     {
-                        MarkerEvent lastMarker = markers.LastOrDefault();
+                        MarkerEvent? lastMarker = markers.LastOrDefault();
                         if (lastMarker != null)
                         {
                             // Ignore current if last marker on agent is the same and end not set
@@ -338,15 +338,15 @@ internal static class CombatEventFactory
                 if (squadMarkerEvent.IsEnd)
                 {
                     // Find last marker of given index and set an end event on it
-                    if (statusEvents.SquadMarkerEventsByIndex.TryGetValue(squadMarkerEvent.MarkerIndex, out List<SquadMarkerEvent> squadMarkers))
+                    if (statusEvents.SquadMarkerEventsByIndex.TryGetValue(squadMarkerEvent.MarkerIndex, out var squadMarkers))
                     {
                         squadMarkers.LastOrDefault()?.SetEndTime(squadMarkerEvent.Time);
                     }
                     break;
                 }
-                else if (statusEvents.SquadMarkerEventsByIndex.TryGetValue(squadMarkerEvent.MarkerIndex, out List<SquadMarkerEvent> squadMarkers))
+                else if (statusEvents.SquadMarkerEventsByIndex.TryGetValue(squadMarkerEvent.MarkerIndex, out var squadMarkers))
                 {
-                    SquadMarkerEvent lastSquadMarker = squadMarkers.LastOrDefault();
+                    SquadMarkerEvent? lastSquadMarker = squadMarkers.LastOrDefault();
                     if (lastSquadMarker != null)
                     {
                         // End previous if position has changed

@@ -48,15 +48,15 @@ public static class DPSReportController
     }
     ///////////////// URL Utilities
 
-    private static readonly string MainEntryPoint = "https://dps.report";
-    private static readonly string SecondaryEntryPoint = "http://a.dps.report";
-    private static readonly string TertiaryEntryPoint = "https://b.dps.report";
+    private const string MainEntryPoint = "https://dps.report";
+    private const string SecondaryEntryPoint = "http://a.dps.report";
+    private const string TertiaryEntryPoint = "https://b.dps.report";
 
-    private static readonly string UploadContentURL = "/uploadContent";
-    private static readonly string GetUploadsURL = "/getUploads";
-    private static readonly string GetUserTokenURL = "/getUserToken";
-    private static readonly string GetUploadMetadataURL = "/getUploadMetadata";
-    private static readonly string GetJsonURL = "/getJson";
+    private const string UploadContentURL = "/uploadContent";
+    private const string GetUploadsURL = "/getUploads";
+    private const string GetUserTokenURL = "/getUserToken";
+    private const string GetUploadMetadataURL = "/getUploadMetadata";
+    private const string GetJsonURL = "/getJson";
 
     // https://stackoverflow.com/questions/273313/randomize-a-listt
     private static readonly Random rng = new();
@@ -142,7 +142,7 @@ public static class DPSReportController
         };
         return Shuffle(urls);
     }
-    private static List<string> GetUploadMetadataURLs(string id, string permalink)
+    private static List<string> GetUploadMetadataURLs(string? id, string? permalink)
     {
         string url = GetUploadMetadataURL;
         if (id != null)
@@ -161,7 +161,7 @@ public static class DPSReportController
         };
         return Shuffle(urls);
     }
-    private static List<string> GetJsonURLs(string id, string permalink)
+    private static List<string> GetJsonURLs(string? id, string? permalink)
     {
         string url = GetJsonURL;
         if (id != null)
@@ -181,7 +181,7 @@ public static class DPSReportController
         return Shuffle(urls);
     }
     ///////////////// APIs
-    public static DPSReportUploadObject UploadUsingEI(FileInfo fi, TraceHandler traceHandler, string userToken, bool anonymous = false, bool detailedWvW = false)
+    public static DPSReportUploadObject? UploadUsingEI(FileInfo fi, TraceHandler traceHandler, string userToken, bool anonymous = false, bool detailedWvW = false)
     {
         string fileName = fi.Name;
         byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -194,7 +194,7 @@ public static class DPSReportController
             return multiPartContent;
         }
 
-        DPSReportUploadObject response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURLs(userToken, anonymous, detailedWvW), traceHandler, contentCreator);
+        DPSReportUploadObject? response = GetDPSReportResponse<DPSReportUploadObject>("UploadUsingEI", GetUploadContentURLs(userToken, anonymous, detailedWvW), traceHandler, contentCreator);
         if (response != null && response.Error != null)
         {
             traceHandler("UploadUsingEI generated an error - " + response.Error);
@@ -202,20 +202,20 @@ public static class DPSReportController
         return response;
     }
 
-    public static DPSReportGetUploadsObject GetUploads(TraceHandler traceHandler, string userToken, GetUploadsParameters parameters)
+    public static DPSReportGetUploadsObject? GetUploads(TraceHandler traceHandler, string userToken, GetUploadsParameters parameters)
     {
         return GetDPSReportResponse<DPSReportGetUploadsObject>("GetUploads", GetGetUploadsURLs(parameters, userToken), traceHandler);
     }
     public static string GenerateUserToken(TraceHandler traceHandler)
     {
-        DPSReportUserTokenResponse responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", GetUserTokenURLs(), traceHandler);
+        DPSReportUserTokenResponse? responseItem = GetDPSReportResponse<DPSReportUserTokenResponse>("GenerateUserToken", GetUserTokenURLs(), traceHandler);
         if (responseItem != null)
         {
             return responseItem.UserToken;
         }
         return "";
     }
-    public static DPSReportUploadObject GetUploadMetaDataWithID(string id, TraceHandler traceHandler)
+    public static DPSReportUploadObject? GetUploadMetaDataWithID(string id, TraceHandler traceHandler)
     {
         if (id == null || id.Length == 0)
         {
@@ -223,7 +223,7 @@ public static class DPSReportController
         }
         return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithID", GetUploadMetadataURLs(id, null), traceHandler);
     }
-    public static DPSReportUploadObject GetUploadMetaDataWithPermalink(string permalink, TraceHandler traceHandler)
+    public static DPSReportUploadObject? GetUploadMetaDataWithPermalink(string permalink, TraceHandler traceHandler)
     {
         if (permalink == null || permalink.Length == 0)
         {
@@ -232,7 +232,7 @@ public static class DPSReportController
         return GetDPSReportResponse<DPSReportUploadObject>("GetUploadMetaDataWithPermalink", GetUploadMetadataURLs(null, permalink), traceHandler);
     }
 
-    public static T GetJsonWithID<T>(string id, TraceHandler traceHandler)
+    public static T? GetJsonWithID<T>(string id, TraceHandler traceHandler)
     {
         if (id == null || id.Length == 0)
         {
@@ -240,7 +240,7 @@ public static class DPSReportController
         }
         return GetDPSReportResponse<T>("GetJsonWithID", GetJsonURLs(id, null), traceHandler);
     }
-    public static T GetJsonWithPermalink<T>(string permalink, TraceHandler traceHandler)
+    public static T? GetJsonWithPermalink<T>(string permalink, TraceHandler traceHandler)
     {
         if (permalink == null || permalink.Length == 0)
         {
@@ -249,7 +249,7 @@ public static class DPSReportController
         return GetDPSReportResponse<T>("GetJsonWithPermalink", GetJsonURLs(null, permalink), traceHandler);
     }
     ///////////////// Response Utilities
-    private static T GetDPSReportResponse<T>(string requestName, List<string> URIs, TraceHandler traceHandler, Func<HttpContent> content = null)
+    private static T? GetDPSReportResponse<T>(string requestName, List<string> URIs, TraceHandler traceHandler, Func<HttpContent>? content = null)
     {
         const int tentatives = 2;
         for (int i = 0; i < tentatives; i++)
@@ -280,7 +280,7 @@ public static class DPSReportController
                     if (responseContent != null)
                     {
                         var stringContents = responseContent.ReadAsStringAsync().Result;
-                        T item = JsonSerializer.Deserialize<T>(stringContents, DeserializerSettings);
+                        T item = JsonSerializer.Deserialize<T>(stringContents, DeserializerSettings)!;
                         traceHandler(requestName + " tentative successful");
                         return item;
                     }

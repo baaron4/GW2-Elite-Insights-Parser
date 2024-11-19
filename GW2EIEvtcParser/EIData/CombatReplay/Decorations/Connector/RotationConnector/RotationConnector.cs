@@ -5,7 +5,7 @@ public abstract class RotationConnector : Connector
     public abstract class RotationConnectorDescriptor
     {
 
-        public RotationConnectorDescriptor(RotationConnector connector, CombatReplayMap map)
+        protected RotationConnectorDescriptor(RotationConnector connector, CombatReplayMap map)
         {
         }
     }

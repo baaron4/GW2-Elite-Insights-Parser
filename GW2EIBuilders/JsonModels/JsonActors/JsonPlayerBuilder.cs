@@ -116,7 +116,7 @@ internal static class JsonPlayerBuilder
             jsonPlayer.TargetConditionDamage1S = targetConditionDamage1S;
             jsonPlayer.TargetBreakbarDamage1S = targetBreakbarDamage1S;
             IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = player.GetBuffGraphs(log);
-            if (buffGraphs.TryGetValue(SkillIDs.NumberOfClones, out BuffsGraphModel states))
+            if (buffGraphs.TryGetValue(SkillIDs.NumberOfClones, out var states))
             {
                 jsonPlayer.ActiveClones = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();
             }
@@ -216,9 +216,9 @@ internal static class JsonPlayerBuilder
             var data = new List<JsonBuffsGenerationData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val))
+                if (buffs[i].TryGetValue(pair.Key, out var buffStats))
                 {
-                    JsonBuffsGenerationData value = JsonPlayerBuffsGenerationBuilder.BuildJsonBuffsGenerationData(val);
+                    JsonBuffsGenerationData value = JsonPlayerBuffsGenerationBuilder.BuildJsonBuffsGenerationData(buffStats);
                     data.Add(value);
                 }
                 else
@@ -258,9 +258,9 @@ internal static class JsonPlayerBuilder
             var data = new List<JsonBuffsUptimeData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val) && buffDictionaries[i].TryGetValue(pair.Key, out FinalBuffsDictionary dict))
+                if (buffs[i].TryGetValue(pair.Key, out var buffStats) && buffDictionaries[i].TryGetValue(pair.Key, out var buffDicts))
                 {
-                    JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(val, dict);
+                    JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(buffStats, buffDicts);
                     data.Add(value);
                 }
                 else
@@ -273,9 +273,9 @@ internal static class JsonPlayerBuilder
             {
                 if (player.GetBuffDistribution(log, phases[0].Start, phases[0].End).GetUptime(pair.Key) > 0)
                 {
-                    if (personalBuffs.TryGetValue(player.Spec.ToString(), out HashSet<long> hashSet))
+                    if (personalBuffs.TryGetValue(player.Spec.ToString(), out var personalBuffSet))
                     {
-                        hashSet.Add(pair.Key);
+                        personalBuffSet.Add(pair.Key);
                     }
                     else
                     {
@@ -310,9 +310,9 @@ internal static class JsonPlayerBuilder
             var data = new List<JsonBuffOutgoingVolumesData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                if (buffVolumes[i].TryGetValue(pair.Key, out FinalActorBuffVolumes val))
+                if (buffVolumes[i].TryGetValue(pair.Key, out var buffVolumeStats))
                 {
-                    JsonBuffOutgoingVolumesData value = JsonPlayerBuffOutgoingVolumesBuilder.BuildJsonBuffsOutgoingVolumesData(val);
+                    JsonBuffOutgoingVolumesData value = JsonPlayerBuffOutgoingVolumesBuilder.BuildJsonBuffsOutgoingVolumesData(buffVolumeStats);
                     data.Add(value);
                 }
                 else
@@ -352,9 +352,9 @@ internal static class JsonPlayerBuilder
             var data = new List<JsonBuffVolumesData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                if (buffVolumes[i].TryGetValue(pair.Key, out FinalActorBuffVolumes val) && buffVolumeDictionaries[i].TryGetValue(pair.Key, out FinalBuffVolumesDictionary dict))
+                if (buffVolumes[i].TryGetValue(pair.Key, out var buffVol) && buffVolumeDictionaries[i].TryGetValue(pair.Key, out var buffVolDict))
                 {
-                    JsonBuffVolumesData value = JsonBuffVolumesBuilder.BuildJsonBuffVolumesData(val, dict);
+                    JsonBuffVolumesData value = JsonBuffVolumesBuilder.BuildJsonBuffVolumesData(buffVol, buffVolDict);
                     data.Add(value);
                 }
                 else
@@ -367,7 +367,7 @@ internal static class JsonPlayerBuilder
             {
                 if (player.GetBuffDistribution(log, phases[0].Start, phases[0].End).GetUptime(pair.Key) > 0)
                 {
-                    if (personalBuffs.TryGetValue(player.Spec.ToString(), out HashSet<long> hashSet))
+                    if (personalBuffs.TryGetValue(player.Spec.ToString(), out var hashSet))
                     {
                         hashSet.Add(pair.Key);
                     }

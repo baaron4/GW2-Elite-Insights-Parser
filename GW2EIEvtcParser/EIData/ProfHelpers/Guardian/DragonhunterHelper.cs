@@ -28,7 +28,7 @@ internal static class DragonhunterHelper
         return log.FindActor(dst).HasBuff(log, log.FindActor(src), JusticeDragonhunter, time);
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnFoeDamageModifier(Crippled, "Zealot's Aggression", "10% on crippled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByPresence, BuffImages.ZealotsAggression, DamageModifierMode.All),
         // Pur of Sight unclear. Max is very likely to be 1200, as it is the maximum tooltip range for a DH but what is the distance at witch the minimum is reached? Is the scaling linear?
@@ -58,12 +58,12 @@ internal static class DragonhunterHelper
             .UsingChecker((x, log) => x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None).UsingApproximate(true).WithBuilds(GW2Builds.November2022Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(NumberOfConditions, "Hunter's Fortification", "-10%", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByAbsence, BuffImages.HuntersFortification, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Justice (Dragonhunter)", JusticeDragonhunter, Source.Dragonhunter, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SpearOfLight),
         new Buff("Shield of Courage (Active)", ShieldOfCourageActive, Source.Dragonhunter, BuffClassification.Defensive, BuffImages.ShieldOfCourage),

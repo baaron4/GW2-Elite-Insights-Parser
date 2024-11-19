@@ -78,7 +78,7 @@ public readonly struct GUID : IEquatable<GUID>
     }
 
     public readonly bool Equals(GUID other) => first8 == other.first8 && last8 == other.last8;
-    public override readonly bool Equals(object obj) => obj is GUID other && Equals(other);
+    public override readonly bool Equals(object? obj) => obj is GUID other && Equals(other);
     public static bool operator==(in GUID l, in GUID r) => l.Equals(r);
     public static bool operator!=(in GUID l, in GUID r) => !l.Equals(r);
 

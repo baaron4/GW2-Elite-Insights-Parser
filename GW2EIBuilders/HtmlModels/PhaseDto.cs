@@ -151,7 +151,7 @@ internal class PhaseDto
         IReadOnlyDictionary<long, FinalActorBuffs> conditions = target.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
         foreach (Buff boon in log.StatisticsHelper.PresentBoons)
         {
-            if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+            if (conditions.TryGetValue(boon.ID, out var uptime))
             {
                 if (uptime.Uptime > 0.0)
                 {

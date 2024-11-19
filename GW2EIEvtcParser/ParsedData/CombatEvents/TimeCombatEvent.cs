@@ -6,7 +6,7 @@ public abstract class TimeCombatEvent
 {
     public long Time { get; protected set; }
 
-    public TimeCombatEvent(long time)
+    protected TimeCombatEvent(long time)
     {
         Time = time;
     }
@@ -17,7 +17,7 @@ public static partial class ListExt
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByTime<T>(this List<T> list)  where T : TimeCombatEvent
     {
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.Time.CompareTo(b.Time));
+        list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time));
     }
 
     /// Finds the event that is fist in the timeline and has a time above zero.

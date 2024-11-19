@@ -32,7 +32,7 @@ internal static class VirtuosoHelper
     ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new DamageLogDamageModifier("Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, BuffImages.MentalFocus, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
@@ -42,9 +42,9 @@ internal static class VirtuosoHelper
         new BuffOnActorDamageModifier(DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, BuffImages.DeadlyBlades),
         new Buff("Bladeturn", Bladeturn, Source.Virtuoso, BuffClassification.Other, BuffImages.BladeturnRequiem),
@@ -63,7 +63,7 @@ internal static class VirtuosoHelper
             VirtuosoBlade4,
             VirtuosoBlade5,
         };
-        var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID)).ToList();
+        var blades = buffs.Where(x => bladeIDs.Contains(x.BuffID));
         SkillItem skill = skillData.Get(VirtuosoBlades);
         var lastAddedBuffInstance = new Dictionary<long, BuffApplyEvent>();
         foreach (BuffEvent blade in blades)
@@ -77,7 +77,7 @@ internal static class VirtuosoHelper
             {
                 uint removedInstance = 0;
                 long elapsedTime = 0;
-                if (lastAddedBuffInstance.TryGetValue(blade.BuffID, out BuffApplyEvent apply))
+                if (lastAddedBuffInstance.TryGetValue(blade.BuffID, out var apply))
                 {
                     removedInstance = apply.BuffInstance;
                     elapsedTime = brae.Time - apply.Time;

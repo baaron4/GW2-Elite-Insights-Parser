@@ -410,7 +410,7 @@ public class CombatData
                     BuffExtensionEvent? previousExtension = null;
                     foreach (BuffExtensionEvent extensionEvent in extensionEvents)
                     {
-                        BuffApplyEvent initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
+                        BuffApplyEvent? initialStackApplication = applies.LastOrDefault(x => x.Time <= extensionEvent.Time);
                         if (initialStackApplication == null) { continue; }
 
                         var sequence = new List<BuffEvent>(2) { initialStackApplication };
@@ -461,7 +461,7 @@ public class CombatData
             {
                 if (combatItem.IsExtension)
                 {
-                    if (extensions.TryGetValue(combatItem.Pad, out ExtensionHandler handler))
+                    if (extensions.TryGetValue(combatItem.Pad, out var handler))
                     {
                         insertToSkillIDs = handler.IsSkillID(combatItem);
                         handler.InsertEIExtensionEvent(combatItem, agentData, skillData);
@@ -864,11 +864,11 @@ public class CombatData
         {
             return GetBuffData(buffID);
         }
-        if (_buffDataByInstanceID.TryGetValue(buffID, out Dictionary<uint, List<BuffEvent>> dict))
+        if (_buffDataByInstanceID.TryGetValue(buffID, out var dict))
         {
-            if (dict.TryGetValue(instanceID, out List<BuffEvent> list))
+            if (dict.TryGetValue(instanceID, out var buffEventList))
             {
-                return list;
+                return buffEventList;
             }
         }
         return [ ];
@@ -1055,7 +1055,7 @@ public class CombatData
     /// Returns effect events by the given agent and effect GUID.
     /// </summary>
     /// <returns>true on found effect with entries > 0</returns>
-    public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
@@ -1087,7 +1087,7 @@ public class CombatData
     /// Returns effect events on the given agent and effect GUID.
     /// </summary>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsByDstWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
@@ -1148,7 +1148,7 @@ public class CombatData
     /// Returns effect events by the given agent <b>including</b> minions and the given effect GUID.
     /// </summary>
     /// <returns>true on success</returns>
-    public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<EffectEvent>? effectEvents)
+    public bool TryGetEffectEventsByMasterWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out IReadOnlyList<EffectEvent>? effectEvents)
     {
         if (TryGetEffectEventsByGUID(effect, out var effects))
         {
@@ -1203,8 +1203,6 @@ public class CombatData
             groupedEffectEvents = null;
             return false;
         }
-
-        effects.SortByTime();
         groupedEffectEvents = EpsilonWindowOverTime(effects, epsilon);
 
         return true;
@@ -1265,12 +1263,12 @@ public class CombatData
 
     public EffectGUIDEvent? GetEffectGUIDEvent(GUID effectGUID)
     {
-        return _metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out EffectGUIDEvent evt) ? evt : null;
+        return _metaDataEvents.EffectGUIDEventsByGUID.TryGetValue(effectGUID, out var evt) ? evt : null;
     }
 
     internal EffectGUIDEvent GetEffectGUIDEvent(long effectID)
     {
-        if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out EffectGUIDEvent evt))
+        if (_metaDataEvents.EffectGUIDEventsByEffectID.TryGetValue(effectID, out var evt))
         {
             return evt;
         }
@@ -1285,12 +1283,12 @@ public class CombatData
 
     public MarkerGUIDEvent? GetMarkerGUIDEvent(GUID marker)
     {
-        return _metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(marker, out MarkerGUIDEvent evt) ? evt : null;
+        return _metaDataEvents.MarkerGUIDEventsByGUID.TryGetValue(marker, out var evt) ? evt : null;
     }
 
     internal MarkerGUIDEvent GetMarkerGUIDEvent(long markerID)
     {
-        return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out MarkerGUIDEvent evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
+        return _metaDataEvents.MarkerGUIDEventsByMarkerID.TryGetValue(markerID, out var evt) ? evt : MarkerGUIDEvent.DummyMarkerGUID;
     }
 
     public IReadOnlyList<GliderEvent> GetGliderEvents(AgentItem src)

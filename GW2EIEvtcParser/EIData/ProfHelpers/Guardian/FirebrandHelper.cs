@@ -107,11 +107,11 @@ internal static class FirebrandHelper
     }
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers = [];
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Ashes of the Just", AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.EpilogueAshesOfTheJust),
         new Buff("Eternal Oasis", EternalOasis, Source.Firebrand, BuffClassification.Defensive, BuffImages.EpilogueEternalOasis),

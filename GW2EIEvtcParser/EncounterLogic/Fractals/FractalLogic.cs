@@ -78,8 +78,8 @@ internal abstract class FractalLogic : FightLogic
     {
         // check reward
         SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID)) ?? throw new MissingKeyActorsException("Main target of the fight not found");
-        RewardEvent reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > fightData.FightStart);
-        HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+        RewardEvent? reward = combatData.GetRewardEvents().LastOrDefault(x => x.RewardType == RewardTypes.Daily && x.Time > fightData.FightStart);
+        HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(mainTarget.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
         if (lastDamageTaken != null)
         {
             if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 1000)
@@ -95,8 +95,8 @@ internal abstract class FractalLogic : FightLogic
     protected static long GetFightOffsetByFirstInvulFilter(FightData fightData, AgentData agentData, List<CombatItem> combatData, int targetID, long invulID)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
-        AgentItem target;
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+        AgentItem? target;
         if (logStartNPCUpdate != null)
         {
             target = agentData.GetNPCsByIDAndAgent(targetID, logStartNPCUpdate.DstAgent).FirstOrDefault() ?? agentData.GetNPCsByID(targetID).FirstOrDefault();
@@ -111,9 +111,9 @@ internal abstract class FractalLogic : FightLogic
             throw new MissingKeyActorsException("Main target of the fight not found");
         }
         // check first invul gain
-        CombatItem invulGain = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsBuffApply() && x.SkillID == invulID && x.Time >= startToUse);
+        CombatItem? invulGain = combatData.FirstOrDefault(x => x.DstMatchesAgent(target) && x.IsBuffApply() && x.SkillID == invulID && x.Time >= startToUse);
         // get invul lost
-        CombatItem invulLost = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsBuffRemove == BuffRemove.All && x.SkillID == invulID && x.Time >= startToUse);
+        CombatItem? invulLost = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsBuffRemove == BuffRemove.All && x.SkillID == invulID && x.Time >= startToUse);
         // invul gain at the start and invul loss matches the gained invul
         if (invulGain != null && (invulGain.IsStateChange == StateChange.BuffInitial || invulGain.Time - target.FirstAware < 200) && invulLost != null && invulLost.Time >= invulGain.Time)
         {
@@ -122,7 +122,7 @@ internal abstract class FractalLogic : FightLogic
         else if (invulLost != null && (invulGain == null || invulLost.Time < invulGain.Time))
         {
             // only invul lost, missing buff apply event
-            CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == StateChange.EnterCombat && x.Time >= startToUse);
+            CombatItem? enterCombat = combatData.FirstOrDefault(x => x.SrcMatchesAgent(target) && x.IsStateChange == StateChange.EnterCombat && x.Time >= startToUse);
             // no buff apply -> target was invul the whole time
             if (enterCombat != null && enterCombat.Time >= invulLost.Time)
             {
@@ -155,7 +155,7 @@ internal abstract class FractalLogic : FightLogic
         }
 
         // Flux Bomb on selected player
-        var fluxBombApplies = p.GetBuffStatus(log, FluxBombBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0).ToList();
+        var fluxBombApplies = p.GetBuffStatus(log, FluxBombBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (Segment segment in fluxBombApplies)
         {
             replay.AddDecorationWithGrowing(new CircleDecoration(120, segment, Colors.LightOrange, 0.2, new AgentConnector(p)), segment.End);
@@ -168,7 +168,7 @@ internal abstract class FractalLogic : FightLogic
         {
             return;
         }
-        var orderedScales = scales.OrderByDescending(x => x.build).ToList();
+        var orderedScales = scales.OrderByDescending(x => x.build);
         foreach ((ulong build, byte scale) in orderedScales)
         {
             if (gw2Build >= build)
@@ -228,35 +228,35 @@ internal abstract class FractalLogic : FightLogic
     /// <param name="onDistanceFailDuration">Duration of the AoE effects farther away from the caster.</param>
     protected static void AddDistanceCorrectedOrbDecorations(ParsedEvtcLog log, CombatReplayDecorationContainer environmentDecorations, GUID effect, TargetID target, double distanceThreshold, long onDistanceSuccessDuration, long onDistanceFailDuration)
     {
-        if (!log.AgentData.TryGetFirstAgentItem(target, out AgentItem agent))
+        if (!log.AgentData.TryGetFirstAgentItem(target, out var agent))
         {
             return;
         }
 
-        if (log.CombatData.TryGetEffectEventsByGUID(effect, out var events))
+        if (log.CombatData.TryGetEffectEventsByGUID(effect, out var effectEvents))
         {
-            foreach (EffectEvent @event in events)
+            foreach (EffectEvent effectEvent in effectEvents)
             {
-                (long start, long end) lifespan = (@event.Time, @event.Time + @event.Duration);
+                (long start, long end) lifespan = (effectEvent.Time, effectEvent.Time + effectEvent.Duration);
                 // Correcting the duration of the effects for CTBS 45, based on the distance from the target casting the mechanic.
-                if (@event is EffectEventCBTS45)
+                if (effectEvent is EffectEventCBTS45)
                 {
-                    if (!agent.TryGetCurrentPosition(log, @event.Time, out var agentPos))
+                    if (!agent.TryGetCurrentPosition(log, effectEvent.Time, out var agentPos))
                     {
                         continue;
                     }
 
-                    var distance = (@event.Position - agentPos).Length();
+                    var distance = (effectEvent.Position - agentPos).Length();
                     if (distance < distanceThreshold)
                     {
-                        lifespan.end = @event.Time + onDistanceSuccessDuration;
+                        lifespan.end = effectEvent.Time + onDistanceSuccessDuration;
                     }
                     else
                     {
-                        lifespan.end = @event.Time + onDistanceFailDuration;
+                        lifespan.end = effectEvent.Time + onDistanceFailDuration;
                     }
                 }
-                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(@event.Position)));
+                environmentDecorations.Add(new CircleDecoration(100, lifespan, Colors.Orange, 0.3, new PositionConnector(effectEvent.Position)));
             }
         }
     }

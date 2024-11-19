@@ -111,7 +111,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         var phaseStarts = new List<long>();
         var phaseEnds = new List<long>();
         //
-        var magmaDrops = log.CombatData.GetBuffData(MagmaDrop).Where(x => x is BuffApplyEvent).ToList();
+        var magmaDrops = log.CombatData.GetBuffData(MagmaDrop).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent magmaDrop in magmaDrops)
         {
             if (phaseEnds.Count > 0)
@@ -129,7 +129,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         IReadOnlyList<AnimatedCastEvent> pushes = log.CombatData.GetAnimatedCastData(ForceOfRetaliationCast);
         if (pushes.Count > 0)
         {
-            CastEvent push = pushes[0];
+            CastEvent? push = pushes[0];
             phaseStarts.Add(push.Time);
             foreach (long magmaDrop in phaseEnds)
             {
@@ -142,7 +142,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             }
         }
         // rush to pylon
-        phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(BatteringBlitz).Select(x => x.Time).ToList());
+        phaseEnds.AddRange(log.CombatData.GetAnimatedCastData(BatteringBlitz).Select(x => x.Time));
         phaseEnds.Add(log.FightData.FightEnd);
         // tp to middle after pylon destruction
         phaseStarts.AddRange(log.CombatData.GetAnimatedCastData(PeerlessQadimTPCenter).Select(x => x.EndTime));
@@ -194,7 +194,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.PeerlessQadim:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var cataCycle = cls.Where(x => x.SkillId == BigMagmaDrop);
                 foreach (CastEvent c in cataCycle)
                 {
@@ -371,13 +371,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             replay.Decorations.Add(new CircleDecoration(100, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
         }
         // Critical Mass, debuff while carrying an orb
-        var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in criticalMass)
         {
             replay.Decorations.Add(new CircleDecoration(200, seg, Colors.Red, 0.3, new AgentConnector(p)).UsingFilled(false));
         }
         // Magma drop
-        var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         uint magmaRadius = 420;
         int magmaOffset = 4000;
         int magmaDuration = 600000;
@@ -409,10 +409,8 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         AddTetherDecorations(log, p, replay, KineticAbundance, Colors.Green, 0.4);
 
         // Add custom arrow overhead for the player lifted up
-        var castsUnleash = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == UnleashSAK).ToList();
-        castsUnleash.SortByTime();
-        var deadEvents = log.CombatData.GetDeadEvents(p.AgentItem).ToList();
-        deadEvents.SortByTime();
+        var castsUnleash = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == UnleashSAK);
+        var deadEvents = log.CombatData.GetDeadEvents(p.AgentItem);
 
         var castsLiftUp = p.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == PlayerLiftUpQadimThePeerless);
         foreach (CastEvent cast in castsLiftUp)
@@ -609,7 +607,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
 
     private static void AddTetherDecorations(ParsedEvtcLog log, SingleActor actor, CombatReplay replay, long buffId, Color color, double opacity)
     {
-        var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent).ToList();
+        var tethers = log.CombatData.GetBuffDataByIDByDst(buffId, actor.AgentItem).Where(x => x is not BuffRemoveManualEvent);
         var tethersRemoves = new HashSet<AbstractBuffRemoveEvent>(tethers.OfType<AbstractBuffRemoveEvent>());
         foreach (var appliedTether in tethers.OfType<BuffApplyEvent>())
         {

@@ -134,7 +134,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     (int)TargetID.PrototypeArsenite,
                 ];
             }
-            SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)).ToList(), combatData, fightData, playerAgents, true);
+            SetSuccessByDeath(Targets.Where(x => idsToCheck.Contains(x.ID)), combatData, fightData, playerAgents, true);
         }
     }
 
@@ -156,22 +156,22 @@ internal class OldLionsCourt : EndOfDragonsStrike
         ];
     }
 
-    private SingleActor Vermilion()
+    private SingleActor? Vermilion()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilionCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeVermilion));
     }
-    private SingleActor Indigo()
+    private SingleActor? Indigo()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeIndigoCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeIndigo));
     }
-    private SingleActor Arsenite()
+    private SingleActor? Arsenite()
     {
         return Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArseniteCM)) ?? Targets.FirstOrDefault(x => x.IsSpecies(TargetID.PrototypeArsenite));
     }
 
     private static List<PhaseData> GetSubPhases(SingleActor target, ParsedEvtcLog log, string phaseName)
     {
-        DeadEvent dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
+        DeadEvent? dead = log.CombatData.GetDeadEvents(target.AgentItem).LastOrDefault();
         long end = log.FightData.FightEnd;
         long start = log.FightData.FightStart;
         if (dead != null && dead.Time < end)
@@ -218,10 +218,10 @@ internal class OldLionsCourt : EndOfDragonsStrike
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = base.GetFightOffset(evtcVersion, fightData, agentData, combatData);
-        AgentItem vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
+        AgentItem? vermilion = agentData.GetNPCsByID(TargetID.PrototypeVermilionCM).FirstOrDefault() ?? agentData.GetNPCsByID(TargetID.PrototypeVermilion).FirstOrDefault();
         if (vermilion != null)
         {
-            CombatItem breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && BreakbarStateEvent.GetBreakbarState(x) == BreakbarState.Active);
+            CombatItem? breakbarStateActive = combatData.FirstOrDefault(x => x.SrcMatchesAgent(vermilion) && x.IsStateChange == StateChange.BreakbarState && BreakbarStateEvent.GetBreakbarState(x) == BreakbarState.Active);
             if (breakbarStateActive != null)
             {
                 startToUse = breakbarStateActive.Time;
@@ -248,7 +248,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor vermilion = Vermilion();
+        SingleActor? vermilion = Vermilion();
         bool canComputePhases = vermilion != null && vermilion.HasBuff(log, LeyWovenShielding, 500); // check that vermilion is present and starts shielded, otherwise clearly incomplete log
         if (vermilion != null)
         {
@@ -258,7 +258,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 phases.AddRange(GetSubPhases(vermilion, log, "Vermilion"));
             }
         }
-        SingleActor indigo = Indigo();
+        SingleActor? indigo = Indigo();
         if (indigo != null)
         {
             phases[0].AddTarget(indigo);
@@ -267,7 +267,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                 phases.AddRange(GetSubPhases(indigo, log, "Indigo"));
             }
         }
-        SingleActor arsenite = Arsenite();
+        SingleActor? arsenite = Arsenite();
         if (arsenite != null)
         {
             phases[0].AddTarget(arsenite);
@@ -560,7 +560,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         // We only keep the first
                         EffectEvent effect = ultimatumDetonation[0];
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 1500); // Override 0 duration to 1500
-                        EffectEvent previousIndicator = ultimatumIndicators.LastOrDefault(x => x.Time <= effect.Time);
+                        EffectEvent? previousIndicator = ultimatumIndicators.LastOrDefault(x => x.Time <= effect.Time);
                         if (target.TryGetCurrentFacingDirection(log, effect.Time, out var currentRotation) && previousIndicator != null)
                         {
                             var flipped = previousIndicator.GUIDEvent.ContentGUID == EffectGUIDs.OldLionsCourtThunderingUltimatumFlipCone;
@@ -697,7 +697,8 @@ internal class OldLionsCourt : EndOfDragonsStrike
         foreach (BuffApplyEvent bae in applications.Cast<BuffApplyEvent>())
         {
             long start = bae.Time;
-            long end = removals.FirstOrDefault(x => x.Time > start) != null ? removals.FirstOrDefault(x => x.Time > start).Time : log.FightData.LogEnd;
+            var removal = removals.FirstOrDefault(x => x.Time > start);
+            long end = removal != null ? removal.Time : log.FightData.LogEnd;
             replay.Decorations.Add(new IconOverheadDecoration(icon, 20, 1, ((int)start, (int)end), new AgentConnector(player)));
         }
     }

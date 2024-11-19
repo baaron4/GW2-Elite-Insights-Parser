@@ -29,7 +29,7 @@ internal static class SharedDamageModifiers
         return true;
     }
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnFoeDamageModifier(Exposed31589, "Exposed", "50%", DamageSource.All, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.Exposed, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
@@ -53,7 +53,7 @@ internal static class SharedDamageModifiers
             .WithBuilds(GW2Builds.June2022Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(Vulnerability, "Vulnerability", "1% per Stack", DamageSource.All, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByStack, BuffImages.Vulnerability, DamageModifierMode.All)
             .UsingChecker(VulnerabilityActiveCheck),

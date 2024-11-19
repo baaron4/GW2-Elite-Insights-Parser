@@ -21,7 +21,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         new PlayerDstHitMechanic(HailOfFury, "Hail of Fury", new MechanicPlotlySetting(Symbols.CircleOpen,Colors.Red), "Debris","Hail of Fury (Falling Debris)", "Debris",0),
         new EnemyDstBuffApplyMechanic(Compromised, "Compromised", new MechanicPlotlySetting(Symbols.Hexagon,Colors.Blue), "Rift#","Compromised (Pushed Orb through Rifts)", "Compromised",0),
         new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.Teal), "M.B.# 33%","Magic Blast (Orbs eaten by KC) at 33%", "Magic Blast 33%",0).UsingChecker( (de, log) => {
-            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
+            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
             if (phases.Count < 2)
             {
                 // no 33% magic blast
@@ -30,7 +30,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             return de.Time >= phases[1].End;
         }),
         new EnemyDstBuffApplyMechanic(MagicBlast, "Magic Blast", new MechanicPlotlySetting(Symbols.Star,Colors.DarkTeal), "M.B.# 66%","Magic Blast (Orbs eaten by KC) at 66%", "Magic Blast 66%",0).UsingChecker((de, log) => {
-            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains("%")).ToList();
+            var phases = log.FightData.GetPhases(log).Where(x => x.Name.Contains('%')).ToList();
             if (phases.Count < 1)
             {
                 // no 66% magic blast
@@ -154,7 +154,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             if (invul is BuffApplyEvent)
             {
                 end = invul.Time;
-                PhaseData prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
+                PhaseData? prevPhase = phases.LastOrDefault(x => x.Start <= end || x.End <= end);
                 if (prevPhase != null)
                 {
                     start = (prevPhase.End >= end ? prevPhase.Start : prevPhase.End) + 1;
@@ -176,7 +176,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         for (int i = 0; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
-            if (phase.Name.Contains("%"))
+            if (phase.Name.Contains('%'))
             {
                 cur = phase;
             }
@@ -184,7 +184,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
             {
                 if (cur != null)
                 {
-                    if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains("%")))
+                    if (cur.End >= phase.End + 5000 && (i == phases.Count - 1 || phases[i + 1].Name.Contains('%')))
                     {
                         var leftOverPhase = new PhaseData(phase.End, cur.End, "Leftover " + leftOverCount++);
                         leftOverPhase.AddTarget(mainTarget);
@@ -277,14 +277,14 @@ internal class KeepConstruct : StrongholdOfTheFaithful
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
         int start = (int)replay.TimeOffsets.start;
         int end = (int)replay.TimeOffsets.end;
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.KeepConstruct:
 
-                var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in kcOrbCollect)
                 {
                     replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
@@ -420,7 +420,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Bombs
-        var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in xeraFury)
         {
             replay.AddDecorationWithGrowing(new CircleDecoration(550, seg, Colors.Orange, 0.2, new AgentConnector(p)), seg.End);

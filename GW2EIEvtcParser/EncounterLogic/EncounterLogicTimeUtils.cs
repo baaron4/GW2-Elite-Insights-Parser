@@ -14,13 +14,13 @@ internal static class EncounterLogicTimeUtils
 
     }
 
-    internal static long GetPostLogStartNPCUpdateDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, AgentItem mainTarget)
+    internal static long GetPostLogStartNPCUpdateDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, long upperLimit, AgentItem? mainTarget)
     {
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Main target not found");
         }
-        CombatItem firstDamageEvent = combatData.FirstOrDefault(x => (x.SrcMatchesAgent(mainTarget) || x.DstMatchesAgent(mainTarget)) && x.IsDamagingDamage() && x.Time >= upperLimit - ParserHelper.ServerDelayConstant);
+        CombatItem? firstDamageEvent = combatData.FirstOrDefault(x => (x.SrcMatchesAgent(mainTarget) || x.DstMatchesAgent(mainTarget)) && x.IsDamagingDamage() && x.Time >= upperLimit - ParserHelper.ServerDelayConstant);
         if (firstDamageEvent != null)
         {
             return firstDamageEvent.Time;
@@ -28,13 +28,13 @@ internal static class EncounterLogicTimeUtils
         return upperLimit;
     }
 
-    internal static long GetFirstDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, AgentItem mainTarget)
+    internal static long GetFirstDamageEventTime(FightData fightData, AgentData agentData, IReadOnlyList<CombatItem> combatData, AgentItem? mainTarget)
     {
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Main target not found");
         }
-        CombatItem firstDamageEvent = combatData.FirstOrDefault(x => (x.SrcMatchesAgent(mainTarget) || x.DstMatchesAgent(mainTarget)) && x.IsDamagingDamage());
+        CombatItem? firstDamageEvent = combatData.FirstOrDefault(x => (x.SrcMatchesAgent(mainTarget) || x.DstMatchesAgent(mainTarget)) && x.IsDamagingDamage());
         if (firstDamageEvent != null)
         {
             return firstDamageEvent.Time;
@@ -46,10 +46,10 @@ internal static class EncounterLogicTimeUtils
     {
         AgentItem mainTarget = (agentData.GetNPCsByIDAndAgent(id, agent).FirstOrDefault() ?? agentData.GetNPCsByID(id).FirstOrDefault()) ?? throw new MissingKeyActorsException("Main target not found");
         upperLimit = GetPostLogStartNPCUpdateDamageEventTime(fightData, agentData, combatData, upperLimit, mainTarget);
-        CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.TimeThresholdConstant);
+        CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= upperLimit + ParserHelper.TimeThresholdConstant);
         if (enterCombat != null)
         {
-            CombatItem exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
+            CombatItem? exitCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(mainTarget) && x.Time <= enterCombat.Time);
             if (exitCombat != null)
             {
                 return mainTarget.FirstAware;
@@ -59,9 +59,9 @@ internal static class EncounterLogicTimeUtils
         return mainTarget.FirstAware;
     }
 
-    internal static void SetSuccessByCombatExit(IReadOnlyList<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
+    internal static void SetSuccessByCombatExit(IEnumerable<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        if (targets.Count == 0)
+        if (!targets.Any())
         {
             return;
         }
@@ -69,8 +69,8 @@ internal static class EncounterLogicTimeUtils
         var lastTargetDamages = new List<HealthDamageEvent>();
         foreach (SingleActor t in targets)
         {
-            EnterCombatEvent enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
-            ExitCombatEvent exitCombat;
+            EnterCombatEvent? enterCombat = combatData.GetEnterCombatEvents(t.AgentItem).LastOrDefault();
+            ExitCombatEvent? exitCombat;
             if (enterCombat != null)
             {
                 exitCombat = combatData.GetExitCombatEvents(t.AgentItem).Where(x => x.Time > enterCombat.Time).LastOrDefault();
@@ -79,7 +79,7 @@ internal static class EncounterLogicTimeUtils
             {
                 exitCombat = combatData.GetExitCombatEvents(t.AgentItem).LastOrDefault();
             }
-            HealthDamageEvent lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+            HealthDamageEvent? lastDamage = combatData.GetDamageTakenData(t.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
             if (exitCombat == null || lastDamage == null ||
                 combatData.GetAnimatedCastData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant) ||
                 combatData.GetDamageData(t.AgentItem).Any(x => x.Time > exitCombat.Time + ParserHelper.ServerDelayConstant && playerAgents.Contains(x.To)))
@@ -108,14 +108,14 @@ internal static class EncounterLogicTimeUtils
         {
             return;
         }
-        AgentItem chest = agentData.GetGadgetsByID(chestID).FirstOrDefault();
+        AgentItem? chest = agentData.GetGadgetsByID(chestID).FirstOrDefault();
         if (chest != null)
         {
             fightData.SetSuccess(true, chest.FirstAware);
         }
     }
 
-    internal static void SetSuccessByDeath(IReadOnlyList<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
+    internal static void SetSuccessByDeath(IEnumerable<SingleActor> targets, CombatData combatData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents, bool all)
     {
         if (!targets.Any())
         {
@@ -125,12 +125,12 @@ internal static class EncounterLogicTimeUtils
         long maxTime = long.MinValue;
         foreach (SingleActor target in targets)
         {
-            DeadEvent killed = combatData.GetDeadEvents(target.AgentItem).LastOrDefault();
+            DeadEvent? killed = combatData.GetDeadEvents(target.AgentItem).LastOrDefault();
             if (killed != null)
             {
                 long time = killed.Time;
                 success++;
-                HealthDamageEvent lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
+                HealthDamageEvent? lastDamageTaken = combatData.GetDamageTakenData(target.AgentItem).LastOrDefault(x => (x.HealthDamage > 0) && playerAgents.Contains(x.From.GetFinalMaster()));
                 if (lastDamageTaken != null)
                 {
                     time = Math.Min(lastDamageTaken.Time, time);
@@ -138,7 +138,7 @@ internal static class EncounterLogicTimeUtils
                 maxTime = Math.Max(time, maxTime);
             }
         }
-        if ((all && success == targets.Count) || (!all && success > 0))
+        if ((all && success == targets.Count()) || (!all && success > 0))
         {
             fightData.SetSuccess(true, maxTime);
         }

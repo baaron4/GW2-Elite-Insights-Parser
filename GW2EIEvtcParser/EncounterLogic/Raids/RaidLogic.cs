@@ -28,7 +28,7 @@ internal abstract class RaidLogic : FightLogic
             raidRewardsTypes = [RewardTypes.CurrentRaidReward];
         }
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-        RewardEvent reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > fightData.FightStart);
+        RewardEvent? reward = rewards.FirstOrDefault(x => raidRewardsTypes.Contains(x.RewardType) && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);

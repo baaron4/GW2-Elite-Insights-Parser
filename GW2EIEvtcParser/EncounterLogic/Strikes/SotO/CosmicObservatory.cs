@@ -63,7 +63,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         switch (target.ID)
         {
             case (int)TargetID.Dagda:
-                var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var phaseBuffs = target.GetBuffStatus(log, DagdaDuringPhase75_50_25, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
 
                 // Red AoE during 75-50-25 % phases
                 var demonicBlasts = casts.Where(x => x.SkillId == DemonicBlast);
@@ -116,7 +116,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     }
 
                     // Find the targetted player
-                    Player player = log.PlayerList.FirstOrDefault(x => x.HasBuff(log, ShootingStarsTargetBuff, cast.Time, ServerDelayConstant));
+                    Player? player = log.PlayerList.FirstOrDefault(x => x.HasBuff(log, ShootingStarsTargetBuff, cast.Time, ServerDelayConstant));
                     if (player != null)
                     {
                         var rotation = new AgentFacingAgentConnector(target, player);
@@ -135,11 +135,11 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         base.ComputePlayerCombatReplayActors(p, log, replay);
 
         // Lost Control
-        var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(lostControls, p, ParserIcons.CallTarget);
 
         // Shooting Stars Target Overhead
-        var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         replay.AddOverheadIcons(shootingStarsTarget, p, ParserIcons.TargetOverhead);
 
         // Target Order (CM)
@@ -151,9 +151,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
         // Tethering the player to the Soul Feast.
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
-        var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda)).ToList();
-        var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem).ToList();
-        var agentsToTether = log.AgentData.GetNPCsByID(TrashID.SoulFeast).ToList();
+        var buffAppliesAll = log.CombatData.GetBuffData(Revealed).OfType<BuffApplyEvent>().Where(x => x.CreditedBy.IsSpecies(TargetID.Dagda));
+        var buffAppliesPlayer = buffAppliesAll.Where(x => x.To == p.AgentItem);
+        var agentsToTether = log.AgentData.GetNPCsByID(TrashID.SoulFeast);
 
         foreach (BuffApplyEvent buffApply in buffAppliesPlayer)
         {
@@ -162,13 +162,13 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             // Checking for the next buff application prevents cross-tethering between players and feasts.
 
             // The next application to any player
-            BuffApplyEvent nextApplicationEvent = buffAppliesAll.FirstOrDefault(x => x.Time > buffApply.Time);
+            BuffApplyEvent? nextApplicationEvent = buffAppliesAll.FirstOrDefault(x => x.Time > buffApply.Time);
             long endTime = nextApplicationEvent != null ? nextApplicationEvent.Time : log.FightData.LogEnd;
 
             foreach (AgentItem agent in agentsToTether)
             {
                 // Decoration life span ends on the Soul Feast dying
-                DeadEvent deathEvent = log.CombatData.GetDeadEvents(agent).FirstOrDefault();
+                DeadEvent? deathEvent = log.CombatData.GetDeadEvents(agent).FirstOrDefault();
                 var deathTime = deathEvent != null ? deathEvent.Time : agent.LastAware;
                 (long, long) lifespan = (buffApply.Time, deathTime);
 
@@ -283,17 +283,20 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         if (combatData.GetGW2BuildEvent().Build >= GW2Builds.DagdaNMHPChangedAndCMRelease && combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart) == null)
         {
             SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
-            HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HealthPercent <= 1e-6);
+            HealthUpdateEvent? hpUpdate = combatData.GetHealthUpdateEvents(dagda.AgentItem).FirstOrDefault(x => x.HealthPercent <= 1e-6);
             if (hpUpdate != null)
             {
-                HealthDamageEvent lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
-                if (fightData.Success)
+                HealthDamageEvent? lastDamageEvent = combatData.GetDamageTakenData(dagda.AgentItem).LastOrDefault(x => x.HealthDamage > 0 && x.Time <= hpUpdate.Time + ServerDelayConstant);
+                if (lastDamageEvent != null)
                 {
-                    fightData.SetSuccess(true, Math.Min(lastDamageEvent.Time, fightData.FightEnd));
-                }
-                else
-                {
-                    fightData.SetSuccess(true, lastDamageEvent.Time);
+                    if (fightData.Success)
+                    {
+                        fightData.SetSuccess(true, Math.Min(lastDamageEvent.Time, fightData.FightEnd));
+                    }
+                    else
+                    {
+                        fightData.SetSuccess(true, lastDamageEvent.Time);
+                    }
                 }
             }
         }
@@ -386,7 +389,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             }
             else
             {
-                BuffEvent phasingBuffLoss = log.CombatData.GetBuffDataByIDByDst(DagdaDuringPhase75_50_25, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= start && x.Time <= end && x is BuffRemoveAllEvent);
+                BuffEvent? phasingBuffLoss = log.CombatData.GetBuffDataByIDByDst(DagdaDuringPhase75_50_25, mainTarget.AgentItem).FirstOrDefault(x => x.Time >= start && x.Time <= end && x is BuffRemoveAllEvent);
                 if (phasingBuffLoss != null)
                 {
                     start = phasingBuffLoss.Time;
@@ -429,9 +432,9 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
         SingleActor dagda = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Dagda)) ?? throw new MissingKeyActorsException("Dagda not found");
         // Security check to stop dagda from going back to 100%
         var dagdaHPUpdates = combatData.Where(x => x.SrcMatchesAgent(dagda.AgentItem) && x.IsStateChange == StateChange.HealthUpdate).ToList();
-        if (dagdaHPUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(dagdaHPUpdates.LastOrDefault()) == 100)
+        if (dagdaHPUpdates.Count > 1 && HealthUpdateEvent.GetHealthPercent(dagdaHPUpdates.LastOrDefault()!) == 100)
         {
-            dagdaHPUpdates.Last().OverrideDstAgent(dagdaHPUpdates[dagdaHPUpdates.Count - 2].DstAgent);
+            dagdaHPUpdates.Last().OverrideDstAgent(dagdaHPUpdates[^2].DstAgent);
         }
     }
 
@@ -484,7 +487,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
             foreach (Player player in log.PlayerList)
             {
                 IReadOnlyDictionary<long, BuffsGraphModel> bgms = player.GetBuffGraphs(log);
-                if (bgms != null && bgms.TryGetValue(AchievementEligibilityPrecisionAnxiety, out BuffsGraphModel bgm))
+                if (bgms != null && bgms.TryGetValue(AchievementEligibilityPrecisionAnxiety, out var bgm))
                 {
                     if (bgm.BuffChart.Any(x => x.Value == 1))
                     {
