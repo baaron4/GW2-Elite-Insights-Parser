@@ -132,7 +132,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             var buffApplies = combatData.GetBuffDataByIDByDst(Determined895, ankka.AgentItem).OfType<BuffApplyEvent>().Where(x => !x.Initial && x.AppliedDuration > int.MaxValue / 2 && x.Time >= fightData.FightStart + 5000).ToList();
             if (buffApplies.Count == 3)
             {
-                fightData.SetSuccess(true, buffApplies.LastOrDefault()!.Time);
+                fightData.SetSuccess(true, buffApplies.Last().Time);
             }
         }
     }
@@ -201,7 +201,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
             IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
             sanctuary.OverrideType(AgentItem.AgentType.NPC);
             sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism);
-            sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.FirstOrDefault()!.Time : fightData.LogEnd);
+            sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.First().Time : fightData.LogEnd);
         }
         agentData.Refresh();
         ComputeFightTargets(agentData, combatData, extensions);

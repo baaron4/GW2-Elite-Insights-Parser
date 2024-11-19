@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
@@ -8,10 +9,10 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 {
     private readonly SingleActor _actor;
 
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTHealingEvent>>>? _typedSelfHealEvents = [];
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<List<EXTHealingEvent>>> _typedSelfHealEvents = [];
 
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healing1S = [];
-    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>>? _healingReceived1S = [];
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healing1S = [];
+    private readonly Dictionary<EXTHealingType, CachingCollectionWithTarget<int[]>> _healingReceived1S = [];
 
     private CachingCollectionWithTarget<EXTFinalOutgoingHealingStat>? _outgoingHealStats;
     private CachingCollectionWithTarget<EXTFinalIncomingHealingStat>? _incomingHealStats;
@@ -21,13 +22,10 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         _actor = actor;
     }
 
-    public override IEnumerable<EXTHealingEvent> GetOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
-    {
-        if (!log.CombatData.HasEXTHealing)
-        {
-            throw new InvalidOperationException("Healing Stats extension not present");
-        }
 
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitHealEvents(ParsedEvtcLog log)
+    {
         if (HealEvents == null)
         {
             HealEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_actor.AgentItem).Where(x => x.ToFriendly));
@@ -38,10 +36,21 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
             HealEvents.SortByTime();
             HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+
+    public override IEnumerable<EXTHealingEvent> GetOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        if (!log.CombatData.HasEXTHealing)
+        {
+            throw new InvalidOperationException("Healing Stats extension not present");
+        }
+
+        InitHealEvents(log);
 
         if (target != null)
         {
-            if (HealEventsByDst!.TryGetValue(target.AgentItem, out var list))
+            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -63,20 +72,11 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
             throw new InvalidOperationException("Healing Stats extension not present");
         }
 
-        if (HealEvents == null)
-        {
-            HealEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealData(_actor.AgentItem).Where(x => x.ToFriendly));
-            foreach (var minion in _actor.GetMinions(log).Values)
-            {
-                minion.EXTHealing.AppendOutgoingHealEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd, HealEvents);
-            }
-            HealEvents.SortByTime();
-            HealEventsByDst = HealEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
-        }
+        InitHealEvents(log);
 
         if (target != null)
         {
-            if (HealEventsByDst!.TryGetValue(target.AgentItem, out var list))
+            if (HealEventsByDst.TryGetValue(target.AgentItem, out var list))
             {
                 healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
             }
@@ -95,15 +95,12 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         {
             throw new InvalidOperationException("Healing Stats extension not present");
         }
-        
-        if (HealReceivedEvents == null)
-        {
-            InitIncomingHealEvents(log);
-        }
+
+        InitIncomingHealEvents(log);
 
         if (target != null)
         {
-            if (HealReceivedEventsBySrc!.TryGetValue(target.AgentItem, out var list))
+            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -113,7 +110,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
             }
         }
 
-        return HealReceivedEvents!.Where(x => x.Time >= start && x.Time <= end);
+        return HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
     /// <param name="healEventsList">Append to this list</param>
@@ -124,15 +121,12 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         {
             throw new InvalidOperationException("Healing Stats extension not present");
         }
-        
-        if (HealReceivedEvents == null)
-        {
-            InitIncomingHealEvents(log);
-        }
+
+        InitIncomingHealEvents(log);
 
         if (target != null)
         {
-            if (HealReceivedEventsBySrc!.TryGetValue(target.AgentItem, out var list))
+            if (HealReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))
             {
                 healEventsList.AddRange(list.Where(x => x.Time >= start && x.Time <= end));
             }
@@ -140,20 +134,23 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
             return;
         }
 
-        healEventsList.AddRange(HealReceivedEvents!.Where(x => x.Time >= start && x.Time <= end));
+        healEventsList.AddRange(HealReceivedEvents.Where(x => x.Time >= start && x.Time <= end));
 
         return;
     }
 
 
-    //[MemberNotNull(nameof(HealReceivedEvents))]
-    //[MemberNotNull(nameof(HealReceivedEventsBySrc))]
-    public void InitIncomingHealEvents(ParsedEvtcLog log)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitIncomingHealEvents(ParsedEvtcLog log)
     {
-        HealReceivedEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_actor.AgentItem).Where(x => x.ToFriendly));
-        HealReceivedEvents.SortByTime();
-        HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+        if (HealReceivedEvents == null)
+        {
+            HealReceivedEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_actor.AgentItem).Where(x => x.ToFriendly));
+            HealReceivedEvents.SortByTime();
+            HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+        }
     }
+#pragma warning restore CS8774 // must have non null value when exiting
 
 
     public IEnumerable<EXTHealingEvent> GetJustActorOutgoingHealEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
@@ -163,7 +160,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 
     internal IReadOnlyList<EXTHealingEvent> GetJustActorTypedOutgoingHealEvents(SingleActor target, ParsedEvtcLog log, long start, long end, EXTHealingType healingType)
     {
-        if (!_typedSelfHealEvents!.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
+        if (!_typedSelfHealEvents.TryGetValue(healingType, out var healEventsPerPhasePerTarget))
         {
             healEventsPerPhasePerTarget = new CachingCollectionWithTarget<List<EXTHealingEvent>>(log);
             _typedSelfHealEvents[healingType] = healEventsPerPhasePerTarget;
@@ -207,7 +204,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 
     public IReadOnlyList<int> Get1SHealingList(ParsedEvtcLog log, long start, long end, SingleActor? target, EXTHealingType healingType = EXTHealingType.All)
     {
-        if (!_healing1S!.TryGetValue(healingType, out var graphs))
+        if (!_healing1S.TryGetValue(healingType, out var graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _healing1S[healingType] = graphs;
@@ -223,7 +220,7 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
 
     public IReadOnlyList<int> Get1SHealingReceivedList(ParsedEvtcLog log, long start, long end, SingleActor? target, EXTHealingType healingType = EXTHealingType.All)
     {
-        if (!_healingReceived1S!.TryGetValue(healingType, out var graphs))
+        if (!_healingReceived1S.TryGetValue(healingType, out var graphs))
         {
             graphs = new CachingCollectionWithTarget<int[]>(log);
             _healingReceived1S[healingType] = graphs;

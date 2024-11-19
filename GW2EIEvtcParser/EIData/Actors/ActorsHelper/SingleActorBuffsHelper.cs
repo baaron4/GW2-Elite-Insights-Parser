@@ -25,14 +25,11 @@ partial class SingleActor
 
     public BuffDistribution GetBuffDistribution(ParsedEvtcLog log, long start, long end)
     {
-        if (_buffDistribution == null)
-        {
-            ComputeBuffGraphs(log);
-        }
+        ComputeBuffGraphs(log);
 
         if (!_buffDistribution.TryGetValue(start, end, out var value))
         {
-            value = ComputeBuffDistribution(_buffSimulators!, start, end);
+            value = ComputeBuffDistribution(_buffSimulators, start, end);
             _buffDistribution.Set(start, end, value);
         }
 
@@ -66,10 +63,8 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, long> GetBuffPresence(ParsedEvtcLog log, long start, long end)
     {
-        if (_buffPresence == null)
-        {
-            ComputeBuffGraphs(log);
-        }
+
+        ComputeBuffGraphs(log);
 
         if (!_buffPresence.TryGetValue(start, end, out var value))
         {
@@ -98,26 +93,68 @@ partial class SingleActor
 
     public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log)
     {
-        if (_buffGraphs == null)
-        {
-            ComputeBuffGraphs(log);
-        }
-
+        ComputeBuffGraphs(log);
         return _buffGraphs;
     }
 
     public IReadOnlyDictionary<long, BuffsGraphModel> GetBuffGraphs(ParsedEvtcLog log, SingleActor by)
     {
         AgentItem agent = by.AgentItem;
-        if (_buffGraphs == null)
-        {
-            ComputeBuffGraphs(log);
-        }
+        ComputeBuffGraphs(log);
 
         _buffGraphsPerAgent ??= new(8); //TODO(Rennorb) @perf: find capacity dependencies
         if (!_buffGraphsPerAgent.ContainsKey(agent))
         {
-            SetBuffGraphs(log, by);
+            var trackedBuffs = GetTrackedBuffs(log);
+            var buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count);
+            _buffGraphsPerAgent![by.AgentItem] = buffGraphs;
+            var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
+            var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
+            //
+            var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
+            var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
+            //
+            foreach (Buff buff in trackedBuffs)
+            {
+                long buffID = buff.ID;
+                if (_buffSimulators.TryGetValue(buff.ID, out var simulator) && !buffGraphs.ContainsKey(buffID))
+                {
+                    bool updateBoonPresence = boonIds.Contains(buffID);
+                    bool updateCondiPresence = condiIds.Contains(buffID);
+                    var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count + 2);
+                    foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
+                    {
+                        // Graph
+                        var segment = simul.ToSegment(by);
+                        if (graphSegments.Count == 0)
+                        {
+                            graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
+                        }
+                        else if (graphSegments.Last().End != segment.Start)
+                        {
+                            graphSegments.Add(new Segment(graphSegments.Last().End, segment.Start, 0));
+                        }
+                        graphSegments.Add(segment);
+                    }
+                    // Graph object creation
+                    if (graphSegments.Count > 0)
+                    {
+                        graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
+                    }
+                    else
+                    {
+                        graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
+                    }
+                    buffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
+                    if (updateBoonPresence || updateCondiPresence)
+                    {
+                        (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(buffGraphs[buffID].BuffChart);
+                    }
+
+                }
+            }
+            buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
+            buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
         }
 
         return _buffGraphsPerAgent[agent];
@@ -295,6 +332,12 @@ partial class SingleActor
     [MemberNotNull(nameof(_buffSimulators))]
     internal void ComputeBuffGraphs(ParsedEvtcLog log)
     {
+        if (_buffGraphs != null)
+        {
+#pragma warning disable CS8774 // must have non null
+            return;
+#pragma warning restore CS8774 // must have non null
+        }
         if (_buffMap == null)
         {
             ComputeBuffMap(log);
@@ -417,60 +460,6 @@ partial class SingleActor
         }
     }
 
-    private void SetBuffGraphs(ParsedEvtcLog log, SingleActor by)
-    {
-        var trackedBuffs = GetTrackedBuffs(log);
-        var buffGraphs = new Dictionary<long, BuffsGraphModel>(trackedBuffs.Count);
-        _buffGraphsPerAgent![by.AgentItem] = buffGraphs;
-        var boonIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Boon].Select(x => x.ID));
-        var condiIds = new HashSet<long>(log.Buffs.BuffsByClassification[BuffClassification.Condition].Select(x => x.ID));
-        //
-        var boonPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfBoons]);
-        var condiPresenceGraph = new BuffsGraphModel(log.Buffs.BuffsByIds[SkillIDs.NumberOfConditions]);
-        //
-        foreach (Buff buff in trackedBuffs)
-        {
-            long buffID = buff.ID;
-            if (_buffSimulators!.TryGetValue(buff.ID, out var simulator) && !buffGraphs.ContainsKey(buffID))
-            {
-                bool updateBoonPresence = boonIds.Contains(buffID);
-                bool updateCondiPresence = condiIds.Contains(buffID);
-                var graphSegments = new List<Segment>(simulator.GenerationSimulation.Count + 2);
-                foreach (BuffSimulationItem simul in simulator.GenerationSimulation)
-                {
-                    // Graph
-                    var segment = simul.ToSegment(by);
-                    if (graphSegments.Count == 0)
-                    {
-                        graphSegments.Add(new Segment(log.FightData.FightStart, segment.Start, 0));
-                    }
-                    else if (graphSegments.Last().End != segment.Start)
-                    {
-                        graphSegments.Add(new Segment(graphSegments.Last().End, segment.Start, 0));
-                    }
-                    graphSegments.Add(segment);
-                }
-                // Graph object creation
-                if (graphSegments.Count > 0)
-                {
-                    graphSegments.Add(new Segment(graphSegments.Last().End, log.FightData.FightEnd, 0));
-                }
-                else
-                {
-                    graphSegments.Add(new Segment(log.FightData.FightStart, log.FightData.FightEnd, 0));
-                }
-                buffGraphs[buffID] = new BuffsGraphModel(buff, graphSegments);
-                if (updateBoonPresence || updateCondiPresence)
-                {
-                    (updateBoonPresence ? boonPresenceGraph : condiPresenceGraph).MergePresenceInto(buffGraphs[buffID].BuffChart);
-                }
-
-            }
-        }
-        buffGraphs[SkillIDs.NumberOfBoons] = boonPresenceGraph;
-        buffGraphs[SkillIDs.NumberOfConditions] = condiPresenceGraph;
-    }
-
     public IReadOnlyDictionary<long, FinalBuffsDictionary> GetBuffsDictionary(ParsedEvtcLog log, long start, long end)
     {
         _buffsDictionary ??= new(log);
@@ -551,8 +540,10 @@ partial class SingleActor
         {
             SetConsumablesList(log);
         }
-        return _consumeList!.Where(x => x.Time >= start && x.Time <= end).ToList();
+        return _consumeList.Where(x => x.Time >= start && x.Time <= end).ToList();
     }
+
+    [MemberNotNull((nameof(_consumeList)))]
     private void SetConsumablesList(ParsedEvtcLog log)
     {
         var consumableList = new List<Buff>(log.Buffs.BuffsByClassification[BuffClassification.Nourishment]);

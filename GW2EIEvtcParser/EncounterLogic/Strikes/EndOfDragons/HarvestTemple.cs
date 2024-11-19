@@ -16,7 +16,7 @@ internal class HarvestTemple : EndOfDragonsStrike
 {
 
     private static readonly Vector3 GrandStrikeChestPosition = new(605.31f, -20400.5f, -15420.1f);
-    private IReadOnlyList<SingleActor>? FirstAwareSortedTargets;
+    private IReadOnlyList<SingleActor> FirstAwareSortedTargets = [];
     public HarvestTemple(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange([
@@ -1131,7 +1131,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         if (clawVoidOrbs.Count > 0 && clawVoidOrbsAoEs.Count > 0)
                         {
                             // The aoe indicator can be used by other attacks before soo won - filtering out the effects which happen before a claw swipe
-                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.FirstOrDefault()!.Time).ToList();
+                            var filteredBouncingOrbsAoEs = clawVoidOrbsAoEs.Where(x => x.Time > clawVoidOrbs.First().Time).ToList();
                             orbToAoeMatches = MatchEffectToEffect(clawVoidOrbs, filteredBouncingOrbsAoEs);
                             aoeToAoeMatches = MatchEffectToEffect(filteredBouncingOrbsAoEs, filteredBouncingOrbsAoEs);
                         }
@@ -1691,8 +1691,8 @@ internal class HarvestTemple : EndOfDragonsStrike
             (int)ArcDPSEnums.TargetID.TheDragonVoidZhaitan,
             (int)ArcDPSEnums.TargetID.TheDragonVoidSooWon,
         };
-        SingleActor? activeDragon = FirstAwareSortedTargets!.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
-        return activeDragon ?? FirstAwareSortedTargets!.FirstOrDefault(x => x.FirstAware >= time);
+        SingleActor? activeDragon = FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware <= time && x.LastAware >= time && dragonVoidIDs.Contains(x.ID));
+        return activeDragon ?? FirstAwareSortedTargets.FirstOrDefault(x => x.FirstAware >= time);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

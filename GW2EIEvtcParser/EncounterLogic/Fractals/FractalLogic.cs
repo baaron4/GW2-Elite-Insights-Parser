@@ -241,7 +241,7 @@ internal abstract class FractalLogic : FightLogic
                 // Correcting the duration of the effects for CTBS 45, based on the distance from the target casting the mechanic.
                 if (effectEvent is EffectEventCBTS45)
                 {
-                    if (!agent!.TryGetCurrentPosition(log, effectEvent.Time, out var agentPos))
+                    if (!agent.TryGetCurrentPosition(log, effectEvent.Time, out var agentPos))
                     {
                         continue;
                     }

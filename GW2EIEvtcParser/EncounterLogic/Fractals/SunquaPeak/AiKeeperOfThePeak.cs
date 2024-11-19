@@ -354,7 +354,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
                 }
                 break;
             case 3:
-                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffDataByIDByDst(Determined895, Targets.FirstOrDefault(y => y.IsSpecies(TargetID.AiKeeperOfThePeak2))!.AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
+                BuffApplyEvent? darkInvul895Gain = combatData.GetBuffDataByIDByDst(Determined895, Targets.First(y => y.IsSpecies(TargetID.AiKeeperOfThePeak2)).AgentItem).OfType<BuffApplyEvent>().Where(x => x.AppliedDuration > Determined895Duration).FirstOrDefault();
                 if (darkInvul895Gain != null)
                 {
                     fightData.SetSuccess(true, darkInvul895Gain.Time);

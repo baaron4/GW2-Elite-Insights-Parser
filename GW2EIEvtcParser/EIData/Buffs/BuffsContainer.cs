@@ -98,9 +98,9 @@ public class BuffsContainer
         });
         // Unknown consumables
         var buffIDs = new HashSet<long>(currentBuffs.Select(x => x.ID));
-        var foodInfoEvents = FoodBuffs.NormalFoods.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList();
-        foodInfoEvents.AddRange(FoodBuffs.AscendedFood.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null));
-        var foodIDs = foodInfoEvents.Select(x => x!.CategoryByte).Distinct().ToList();
+        List<BuffInfoEvent> foodInfoEvents = FoodBuffs.NormalFoods.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList()!;
+        foodInfoEvents.AddRange(FoodBuffs.AscendedFood.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null)!);
+        var foodIDs = foodInfoEvents.Select(x => x.CategoryByte).Distinct().ToList();
         if (foodIDs.Count == 1)
         {
             var foodID = foodIDs[0];
@@ -113,10 +113,10 @@ public class BuffsContainer
                 }
             }
         }
-        var enhancementInfoEvents = UtilityBuffs.Utilities.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList();
-        enhancementInfoEvents.AddRange(UtilityBuffs.Writs.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null));
-        enhancementInfoEvents.AddRange(UtilityBuffs.SlayingPotions.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null));
-        var enhancementIDs = enhancementInfoEvents.Select(x => x!.CategoryByte).Distinct().ToList();
+        List<BuffInfoEvent> enhancementInfoEvents = UtilityBuffs.Utilities.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null).ToList()!;
+        enhancementInfoEvents.AddRange(UtilityBuffs.Writs.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null)!);
+        enhancementInfoEvents.AddRange(UtilityBuffs.SlayingPotions.Select(x => combatData.GetBuffInfoEvent(x.ID)).Where(x => x != null)!);
+        var enhancementIDs = enhancementInfoEvents.Select(x => x.CategoryByte).Distinct().ToList();
         if (enhancementIDs.Count == 1)
         {
             var enhancementID = enhancementIDs[0];

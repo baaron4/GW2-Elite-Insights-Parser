@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -46,6 +47,27 @@ public abstract class Actor
         Character = name[0];
         AgentItem = agent;
     }
+
+    [MemberNotNull(nameof(CastEvents))]
+    protected abstract void InitCastEvents(ParsedEvtcLog log);
+    [MemberNotNull(nameof(DamageEvents))]
+    [MemberNotNull(nameof(DamageEventByDst))]
+    protected abstract void InitDamageEvents(ParsedEvtcLog log);
+    [MemberNotNull(nameof(DamageTakenEvents))]
+    [MemberNotNull(nameof(DamageTakenEventsBySrc))]
+    protected abstract void InitDamageTakenEvents(ParsedEvtcLog log);
+    [MemberNotNull(nameof(BreakbarDamageEvents))]
+    [MemberNotNull(nameof(BreakbarDamageEventsByDst))]
+    protected abstract void InitBreakbarDamageEvents(ParsedEvtcLog log);
+    [MemberNotNull(nameof(BreakbarDamageTakenEvents))]
+    [MemberNotNull(nameof(BreakbarDamageTakenEventsBySrc))]
+    protected abstract void InitBreakbarDamageTakenEvents(ParsedEvtcLog log);
+    [MemberNotNull(nameof(OutgoingCrowdControlEvents))]
+    [MemberNotNull(nameof(OutgoingCrowdControlEventsByDst))]
+    protected abstract void InitOutgoingCrowdControlEvents(ParsedEvtcLog log);
+    [MemberNotNull(nameof(IncomingCrowdControlEvents))]
+    [MemberNotNull(nameof(IncomingCrowdControlEventsBySrc))]
+    protected abstract void InitIncomingCrowdControlEvents(ParsedEvtcLog log);
 
     public bool IsUnamedSpecies()
     {

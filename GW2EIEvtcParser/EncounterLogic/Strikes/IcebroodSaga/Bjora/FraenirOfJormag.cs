@@ -154,8 +154,8 @@ internal class FraenirOfJormag : Bjora
             // If a Bound Icebrood Elemental gets killed, the log contains a Health update event of 0
             if (boundElementalKilled.Any())
             {
-                long firstAware = boundElementalKilled.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).FirstOrDefault()!.FirstAware;
-                boundElemental.OverrideAwareTimes(firstAware, boundElementalKilled.FirstOrDefault()!.Time);
+                long firstAware = boundElementalKilled.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).First().FirstAware;
+                boundElemental.OverrideAwareTimes(firstAware, boundElementalKilled.First().Time);
             }
             else
             {

@@ -31,7 +31,9 @@ public class Minions : Actor
     }
 
     #region DAMAGE
-    public override IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitDamageEvents(ParsedEvtcLog log)
     {
         if (DamageEvents == null)
         {
@@ -43,10 +45,15 @@ public class Minions : Actor
             DamageEvents.SortByTime();
             DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitDamageEvents(log);
 
         if (target != null)
         {
-            if (DamageEventByDst!.TryGetValue(target.AgentItem, out var list))
+            if (DamageEventByDst.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -58,9 +65,11 @@ public class Minions : Actor
 
         return DamageEvents.Where(x => x.Time >= start && x.Time <= end);
     }
-    public override IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitDamageTakenEvents(ParsedEvtcLog log)
     {
-        if (DamageTakenEvents == null || DamageTakenEventsBySrc == null)
+        if (DamageTakenEvents == null)
         {
             DamageTakenEvents = new List<HealthDamageEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
             foreach (NPC minion in _minionList)
@@ -70,6 +79,11 @@ public class Minions : Actor
             DamageTakenEvents.SortByTime();
             DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitDamageTakenEvents(log);
 
         if (target != null)
         {
@@ -88,7 +102,8 @@ public class Minions : Actor
 
     #region BREAKBAR DAMAGE
 
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitBreakbarDamageEvents(ParsedEvtcLog log)
     {
         if (BreakbarDamageEvents == null)
         {
@@ -100,10 +115,15 @@ public class Minions : Actor
             BreakbarDamageEvents.SortByTime();
             BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitBreakbarDamageEvents(log);
 
         if (target != null)
         {
-            if (BreakbarDamageEventsByDst!.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -116,7 +136,8 @@ public class Minions : Actor
         return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitBreakbarDamageTakenEvents(ParsedEvtcLog log)
     {
         if (BreakbarDamageTakenEvents == null)
         {
@@ -128,10 +149,15 @@ public class Minions : Actor
             BreakbarDamageTakenEvents.SortByTime();
             BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
+    {
+        InitBreakbarDamageTakenEvents(log);
 
         if (target != null)
         {
-            if (BreakbarDamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -148,7 +174,8 @@ public class Minions : Actor
 
     #region CROWD CONTROL
 
-    public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitOutgoingCrowdControlEvents(ParsedEvtcLog log)
     {
         if (OutgoingCrowdControlEvents == null)
         {
@@ -160,10 +187,15 @@ public class Minions : Actor
             OutgoingCrowdControlEvents.SortByTime();
             OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitOutgoingCrowdControlEvents(log);
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out var list))
+            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -176,7 +208,8 @@ public class Minions : Actor
         return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitIncomingCrowdControlEvents(ParsedEvtcLog log)
     {
         if (IncomingCrowdControlEvents == null)
         {
@@ -188,10 +221,15 @@ public class Minions : Actor
             IncomingCrowdControlEvents.SortByTime();
             IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor target, ParsedEvtcLog log, long start, long end)
+    {
+        InitIncomingCrowdControlEvents(log);
 
         if (target != null)
         {
-            if (IncomingCrowdControlEventsBySrc!.TryGetValue(target.AgentItem, out var list))
+            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -206,7 +244,7 @@ public class Minions : Actor
     #endregion CROWD CONTROL
 
     #region CAST
-    private void InitCastEvents(ParsedEvtcLog log)
+    protected override void InitCastEvents(ParsedEvtcLog log)
     {
         CastEvents = new List<CastEvent>(_minionList.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (NPC minion in _minionList)
@@ -222,7 +260,7 @@ public class Minions : Actor
         {
             InitCastEvents(log);
         }
-        return CastEvents!.Where(x => x.Time >= start && x.Time <= end);
+        return CastEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
     public override IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
@@ -231,7 +269,7 @@ public class Minions : Actor
         {
             InitCastEvents(log);
         }
-        return CastEvents!.Where(x => KeepIntersectingCastLog(x, start, end));
+        return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
     }
     #endregion CAST
 

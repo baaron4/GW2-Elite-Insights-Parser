@@ -235,7 +235,7 @@ internal static class NecromancerHelper
                 var markCastsOnEffect = markCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant);
                 if (markCastsOnEffect.Count() == 1)
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.FirstOrDefault()!.SkillId);
+                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.First().SkillId);
                     if (skill.SkillID != MarkOfBlood && skill.SkillID != Chillblains)
                     {
                         fromDodge = true;

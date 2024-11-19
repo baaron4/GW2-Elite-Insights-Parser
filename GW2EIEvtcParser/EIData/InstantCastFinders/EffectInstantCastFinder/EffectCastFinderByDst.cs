@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class EffectCastFinderByDst : EffectCastFinder
 {
-    protected override AgentItem? GetKeyAgent(EffectEvent effectEvent)
+    protected override AgentItem GetKeyAgent(EffectEvent effectEvent)
     {
         return effectEvent.IsAroundDst ? effectEvent.Dst : ParserHelper._unknownAgent;
     }

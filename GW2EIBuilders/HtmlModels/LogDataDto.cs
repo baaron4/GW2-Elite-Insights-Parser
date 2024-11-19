@@ -100,7 +100,8 @@ internal class LogDataDto
         Parser = "Elite Insights " + parserVersion.ToString();
         RecordedBy = log.LogData.PoVName;
         RecordedAccountBy = log.LogData.PoVAccount;
-        FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
+        var fractaleScaleEvent = log.CombatData.GetFractalScaleEvent();
+        FractalScale = fractaleScaleEvent != null ? fractaleScaleEvent.Scale : 0;
         UploadLinks = uploadLinks.ToList();
         if (log.LogData.UsedExtensions.Any())
         {

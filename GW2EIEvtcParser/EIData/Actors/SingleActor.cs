@@ -22,7 +22,7 @@ public abstract partial class SingleActor : Actor
     private Dictionary<long, Minions>? _minions;
     // Replay
     private readonly Dictionary<DamageType, CachingCollectionWithTarget<List<HealthDamageEvent>>> _typedSelfHitDamageEvents = [];
-    protected CombatReplay CombatReplay;
+    private CombatReplay? CombatReplay;
     // Statistics
     private CachingCollectionWithTarget<FinalDPS>? _dpsStats;
     private CachingCollectionWithTarget<FinalDefenses>? _defenseStats;
@@ -277,11 +277,11 @@ public abstract partial class SingleActor : Actor
     #endregion BUFFS
 
     #region COMBAT REPLAY
-    protected void SetMovements(ParsedEvtcLog log)
+    protected static void SetMovements(ParsedEvtcLog log, SingleActor actor, CombatReplay replay)
     {
-        foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(AgentItem))
+        foreach (MovementEvent movementEvent in log.CombatData.GetMovementData(actor.AgentItem))
         {
-            movementEvent.AddPoint3D(CombatReplay);
+            movementEvent.AddPoint3D(replay);
         }
     }
 
@@ -308,38 +308,22 @@ public abstract partial class SingleActor : Actor
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledPositions(ParsedEvtcLog log)
     {
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-        return CombatReplay.Positions;
+        return InitCombatReplay(log).Positions;
     }
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledPositions(ParsedEvtcLog log)
     {
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-        return CombatReplay.PolledPositions;
+        return InitCombatReplay(log).PolledPositions;
     }
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayNonPolledRotations(ParsedEvtcLog log)
     {
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-        return CombatReplay.Rotations;
+        return InitCombatReplay(log).Rotations;
     }
 
     public IReadOnlyList<ParametricPoint3D> GetCombatReplayPolledRotations(ParsedEvtcLog log)
     {
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-        return CombatReplay.PolledRotations;
+        return InitCombatReplay(log).PolledRotations;
     }
 
     protected static void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay, AgentItem agentItem)
@@ -363,40 +347,40 @@ public abstract partial class SingleActor : Actor
         }
     }
 
-    protected virtual void TrimCombatReplay(ParsedEvtcLog log)
+    protected virtual void TrimCombatReplay(ParsedEvtcLog log, CombatReplay replay)
     {
 
     }
 
     [MemberNotNull(nameof(CombatReplay))]
-    protected void InitCombatReplay(ParsedEvtcLog log)
+    protected CombatReplay InitCombatReplay(ParsedEvtcLog log)
     {
+        if (CombatReplay != null)
+        {
+            return CombatReplay;
+        }
         CombatReplay = new CombatReplay(log);
         if (!log.CombatData.HasMovementData)
         {
             // no combat replay support on fight
-            return;
+            return CombatReplay;
         }
-        SetMovements(log);
+        SetMovements(log, this, CombatReplay);
         CombatReplay.PollingRate(log.FightData.FightDuration, AgentItem.Type == AgentItem.AgentType.Player);
-        TrimCombatReplay(log);
+        TrimCombatReplay(log, CombatReplay);
         if (!IsFakeActor)
         {
-            InitAdditionalCombatReplayData(log);
+            InitAdditionalCombatReplayData(log, CombatReplay);
         }
+        return CombatReplay;
     }
 
     internal IReadOnlyList<DecorationRenderingDescription> GetCombatReplayDecorationRenderableDescriptions(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
-
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-        return CombatReplay.Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
+        return InitCombatReplay(log).Decorations.GetCombatReplayRenderableDescriptions(map, log, usedSkills, usedBuffs);
     }
 
-    protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log)
+    protected virtual void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)
     {
         foreach (var squadMarker in MarkerGUIDs.SquadOverheadMarkersHexGUIDs)
         {
@@ -406,7 +390,7 @@ public abstract partial class SingleActor : Actor
                 {
                     if (ParserIcons.SquadMarkerToIcon.TryGetValue(squadMarker, out var icon))
                     {
-                        CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, icon, 240f, 16, 1);
+                        replay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, icon, 240f, 16, 1);
                     }
                 }
             }
@@ -532,21 +516,21 @@ public abstract partial class SingleActor : Actor
     {
         if (CastEvents == null)
         {
-            SetCastEvents(log);
+            InitCastEvents(log);
         }
-        return CastEvents!.Where(x => x.Time >= start && x.Time <= end);
+        return CastEvents.Where(x => x.Time >= start && x.Time <= end);
 
     }
     public override IEnumerable<CastEvent> GetIntersectingCastEvents(ParsedEvtcLog log, long start, long end)
     {
         if (CastEvents == null)
         {
-            SetCastEvents(log);
+            InitCastEvents(log);
         }
-        return CastEvents!.Where(x => KeepIntersectingCastLog(x, start, end));
+        return CastEvents.Where(x => KeepIntersectingCastLog(x, start, end));
 
     }
-    protected void SetCastEvents(ParsedEvtcLog log)
+    protected override void InitCastEvents(ParsedEvtcLog log)
     {
         var animationCastData = log.CombatData.GetAnimatedCastData(AgentItem);
         var instantCastData = log.CombatData.GetInstantCastData(AgentItem);
@@ -666,9 +650,11 @@ public abstract partial class SingleActor : Actor
     #endregion STATISTICS
 
     #region DAMAGE
-    public override IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitDamageEvents(ParsedEvtcLog log)
     {
-        if (DamageEvents == null || DamageEventByDst == null)
+        if (DamageEvents == null)
         {
             DamageEvents = new List<HealthDamageEvent>(log.CombatData.GetDamageData(AgentItem).Where(x => !x.ToFriendly));
             IReadOnlyDictionary<long, Minions> minionsList = GetMinions(log); //TODO(Rennorb @perf: find average complexity
@@ -679,6 +665,11 @@ public abstract partial class SingleActor : Actor
             DamageEvents.SortByTime();
             DamageEventByDst = DamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<HealthDamageEvent> GetDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitDamageEvents(log);
 
         if (target != null)
         {
@@ -700,7 +691,8 @@ public abstract partial class SingleActor : Actor
         return GetDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
     }
 
-    public override IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitDamageTakenEvents(ParsedEvtcLog log)
     {
         if (DamageTakenEvents == null)
         {
@@ -708,10 +700,15 @@ public abstract partial class SingleActor : Actor
             DamageTakenEvents.SortByTime();
             DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
 
+    public override IEnumerable<HealthDamageEvent> GetDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitDamageTakenEvents(log);
         if (target != null)
         {
-            if (DamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out var damageTakenEvents))
+            if (DamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var damageTakenEvents))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -752,7 +749,8 @@ public abstract partial class SingleActor : Actor
         return GetBreakbarDamageEvents(target, log, start, end).Where(x => x.From == AgentItem);
     }
 
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitBreakbarDamageEvents(ParsedEvtcLog log)
     {
         if (BreakbarDamageEvents == null)
         {
@@ -765,10 +763,16 @@ public abstract partial class SingleActor : Actor
             BreakbarDamageEvents.SortByTime();
             BreakbarDamageEventsByDst = BreakbarDamageEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+
+    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitBreakbarDamageEvents(log);
 
         if (target != null)
         {
-            if (BreakbarDamageEventsByDst!.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageEventsByDst.TryGetValue(target.AgentItem, out var list))
             {
                 return list.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -781,7 +785,9 @@ public abstract partial class SingleActor : Actor
         return BreakbarDamageEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitBreakbarDamageTakenEvents(ParsedEvtcLog log)
     {
         if (BreakbarDamageTakenEvents == null)
         {
@@ -789,10 +795,15 @@ public abstract partial class SingleActor : Actor
             BreakbarDamageTakenEvents.SortByTime();
             BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<BreakbarDamageEvent> GetBreakbarDamageTakenEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitBreakbarDamageTakenEvents(log);
 
         if (target != null)
         {
-            if (BreakbarDamageTakenEventsBySrc!.TryGetValue(target.AgentItem, out var list))
+            if (BreakbarDamageTakenEventsBySrc.TryGetValue(target.AgentItem, out var list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;
@@ -816,7 +827,8 @@ public abstract partial class SingleActor : Actor
         return GetOutgoingCrowdControlEvents(target, log, start, end).Where(x => x.From == AgentItem);
     }
 
-    public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitOutgoingCrowdControlEvents(ParsedEvtcLog log)
     {
         if (OutgoingCrowdControlEvents == null)
         {
@@ -829,10 +841,15 @@ public abstract partial class SingleActor : Actor
             OutgoingCrowdControlEvents.SortByTime();
             OutgoingCrowdControlEventsByDst = OutgoingCrowdControlEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting}
+    public override IEnumerable<CrowdControlEvent> GetOutgoingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitOutgoingCrowdControlEvents(log);
 
         if (target != null)
         {
-            if (OutgoingCrowdControlEventsByDst!.TryGetValue(target.AgentItem, out var ccList))
+            if (OutgoingCrowdControlEventsByDst.TryGetValue(target.AgentItem, out var ccList))
             {
                 return ccList.Where(x => x.Time >= start && x.Time <= end);
             }
@@ -845,7 +862,8 @@ public abstract partial class SingleActor : Actor
         return OutgoingCrowdControlEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
-    public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitIncomingCrowdControlEvents(ParsedEvtcLog log)
     {
         if (IncomingCrowdControlEvents == null)
         {
@@ -853,10 +871,15 @@ public abstract partial class SingleActor : Actor
             IncomingCrowdControlEvents.SortByTime();
             IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+    public override IEnumerable<CrowdControlEvent> GetIncomingCrowdControlEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        InitIncomingCrowdControlEvents(log);
 
         if (target != null)
         {
-            if (IncomingCrowdControlEventsBySrc!.TryGetValue(target.AgentItem, out var list))
+            if (IncomingCrowdControlEventsBySrc.TryGetValue(target.AgentItem, out var list))
             {
                 long targetStart = target.FirstAware;
                 long targetEnd = target.LastAware;

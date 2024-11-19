@@ -19,14 +19,10 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         _actor = actor;
     }
 
-    public override IEnumerable<EXTBarrierEvent> GetOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitBarrierEvents(ParsedEvtcLog log)
     {
-        if (!log.CombatData.HasEXTBarrier)
-        {
-            throw new InvalidOperationException("Healing Stats extension not present");
-        }
-
-        if (BarrierEvents == null || BarrierEventsByDst == null)
+        if (BarrierEvents == null)
         {
             BarrierEvents = new List<EXTBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierData(_agentItem).Where(x => x.ToFriendly));
             IReadOnlyDictionary<long, Minions> minions = _actor.GetMinions(log); //TODO(Rennorb) @perf: Find average complexity for reserving elements in barrier events
@@ -37,6 +33,17 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
             BarrierEvents.SortByTime();
             BarrierEventsByDst = BarrierEvents.GroupBy(x => x.To).ToDictionary(x => x.Key, x => x.ToList());
         }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+
+    public override IEnumerable<EXTBarrierEvent> GetOutgoingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    {
+        if (!log.CombatData.HasEXTBarrier)
+        {
+            throw new InvalidOperationException("Healing Stats extension not present");
+        }
+
+        InitBarrierEvents(log);
 
         if (target != null)
         {
@@ -53,6 +60,18 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         return BarrierEvents.Where(x => x.Time >= start && x.Time <= end);
     }
 
+#pragma warning disable CS8774 // must have non null value when exiting
+    protected override void InitIncomingBarrierEvents(ParsedEvtcLog log)
+    {
+        if (BarrierReceivedEvents == null)
+        {
+            BarrierReceivedEvents = new List<EXTBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
+            BarrierReceivedEvents.SortByTime();
+            BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
+        }
+    }
+#pragma warning restore CS8774 // must have non null value when exiting
+
     public override IEnumerable<EXTBarrierEvent> GetIncomingBarrierEvents(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (!log.CombatData.HasEXTBarrier)
@@ -60,13 +79,7 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
             throw new InvalidOperationException("Healing Stats extension not present");
         }
 
-        if (BarrierReceivedEvents == null || BarrierReceivedEventsBySrc == null)
-        {
-            BarrierReceivedEvents = new List<EXTBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
-            BarrierReceivedEvents.SortByTime();
-            BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
-        }
-
+        InitIncomingBarrierEvents(log);
         if (target != null)
         {
             if (BarrierReceivedEventsBySrc.TryGetValue(target.AgentItem, out var list))

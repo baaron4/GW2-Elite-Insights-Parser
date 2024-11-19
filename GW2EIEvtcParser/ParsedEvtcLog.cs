@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
@@ -131,7 +132,7 @@ public class ParsedEvtcLog
             }
         }*/
     }
-
+    [MemberNotNull(nameof(_agentToActorDictionary))]
     private void InitActorDictionaries()
     {
         if (_agentToActorDictionary == null)
@@ -157,7 +158,7 @@ public class ParsedEvtcLog
     public SingleActor FindActor(AgentItem agentItem)
     {
         InitActorDictionaries();
-        if (!_agentToActorDictionary!.TryGetValue(agentItem, out var actor))
+        if (!_agentToActorDictionary.TryGetValue(agentItem, out var actor))
         {
             if (agentItem.Type == AgentItem.AgentType.Player)
             {
