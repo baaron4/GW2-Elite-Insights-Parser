@@ -377,6 +377,18 @@ internal static class EncounterBuffs
             new Buff("Breakbar Target", QadimThePeerlessBreakbarTargetBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Achievement Eligibility: Power Surge", AchievementEligibilityPowerSurge, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
             //////////////////////////////////////////////
+            // Decima
+            new Buff("Fractured Armor", FracturedArmor, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
+            new Buff("Nova Shield", NovaShield, Source.FightSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
+            new Buff("Harmonic Sensitivity", HarmonicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Tracked),
+            new Buff("Galvanic Sensitivity", GalvanicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
+            new Buff("Thrumming Presence", ThrummingPresence, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
+            new Buff("Charge (Decima)", ChargeDecima, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),
+            new Buff("Peal of Harmony", PealOfHarmony, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.KineticAbundance),
+            new Buff("Peal of Discord", PealOfDiscord, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectrifiedMinion),
+            // Greer
+            new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
+            //////////////////////////////////////////////
             // Fractals 
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),
             new Buff("Fractal Savant", FractalSavant, Source.Common, BuffClassification.Offensive, BuffImages.Malign9Infusion),

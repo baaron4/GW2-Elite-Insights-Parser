@@ -169,6 +169,7 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(PowerOfTheVoid, "Power of theVoid", "25% per stack", DamageSource.All, 25, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.PowerOfTheVoid, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(EmpoweredWatchknightTriumverate, "Empowered (Watchknight Triumverate)", "5% per stack", DamageSource.All, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Empowered, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(EmpoweredCerus, "Empowered (Cerus)", "5% per stack", DamageSource.All, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.EmpoweredMursaarOverseer, DamageModifierMode.PvE),
+        new BuffOnFoeDamageModifier(EmpoweredGreer, "Empowered (Greer)", "5% per stack", DamageSource.All, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.EmpoweredMursaarOverseer, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(DevourLonelyTower, "Devour (Lonely Tower)", "2% per stack", DamageSource.All, 2, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Devour, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(BrothersUnited, "Brothers United", "50%", DamageSource.All, 50, DamageType.Strike, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.BrothersUnited, DamageModifierMode.PvE),
         // Enrages
