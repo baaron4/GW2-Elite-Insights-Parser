@@ -613,8 +613,11 @@ public static class EffectGUIDs
     public static readonly GUID QadimPeerlessMagmaWarningAoE = new("E269977C2FC9474EAAD1051CDAFAD653"); // 4000 duration - Src player
     public static readonly GUID QadimPeerlessMagmaLandingExplosion = new("6617FA23565EE646ADAA7A646C895927"); // 1000 duration - No Src
     public static readonly GUID QadimPeerlessMagmaDamagingAoE = new("BABE69EC5AC7AF48A2F14A9FB8920C7F"); // 600000 duration - Src Qadim
+    // Decima
+    public static readonly GUID DecimaEnlightenedConduitPurpleAoE = new("1A81CC24D58C3046AEF30AAA35D6D854"); // 1200000 duration - Src Conduit
+    public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit
     #endregion
-      
+
     #region Strikes
     // Freezie
     public static readonly GUID FreezieFrozenPatch = new("2CE301ED692ACA4E964BFDFEED9D055E"); // 30000 duration
