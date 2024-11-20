@@ -3643,6 +3643,7 @@ public static class SkillIDs
     public const long BowlOfJadeSeaBounty = 64357;
     public const long TailSlap = 64360;
     public const long TargetOrder3 = 64377;
+    public const long UnleashedPowerBuff = 64404;
     public const long HeavensPalm2 = 64409;
     public const long ScreamOfZhaitanCM = 64428;
     public const long JadeMine1 = 64435;

@@ -58,6 +58,7 @@ internal static class UntamedHelper
         new Buff("Pet Unleashed", PetUnleashed, Source.Untamed, BuffClassification.Other, BuffImages.UnleashPet),
         new Buff("Perilous Gift", PerilousGift, Source.Untamed, BuffClassification.Other, BuffImages.PerilousGift),
         new Buff("Forest's Fortification", ForestsFortification, Source.Untamed, BuffClassification.Other, BuffImages.ForestsFortification),
+        new Buff("Unleashed Power", UnleashedPowerBuff, Source.Untamed, BuffClassification.Other, BuffImages.UnleashedPower),
     ];
 
 }

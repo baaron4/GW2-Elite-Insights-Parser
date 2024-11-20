@@ -1192,6 +1192,7 @@ public static class BuffImages
     public const string VowOfTheUntamed = "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png";
     public const string UnleashRanger = "https://wiki.guildwars2.com/images/9/91/Unleash_Ranger.png";
     public const string UnleashPet = "https://wiki.guildwars2.com/images/4/43/Unleash_Pet.png";
+    public const string UnleashedPower = "https://wiki.guildwars2.com/images/1/1d/Unleashed_Power.png";
     public const string PerilousGift = "https://wiki.guildwars2.com/images/d/d6/Perilous_Gift.png";
     public const string ForestsFortification = "https://wiki.guildwars2.com/images/4/43/Forest%27s_Fortification.png";
     public const string WeaversProwess = "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png";
