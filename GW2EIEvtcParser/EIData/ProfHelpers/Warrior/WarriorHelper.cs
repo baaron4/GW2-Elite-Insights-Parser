@@ -94,6 +94,7 @@ internal static class WarriorHelper
         new Buff("Healing Signet", HealingSignet, Source.Warrior, BuffClassification.Other, BuffImages.HealingSignet),
         new Buff("Dolyak Signet", DolyakSignetBuff, Source.Warrior, BuffClassification.Other, BuffImages.DolyakSignet),
         new Buff("Signet of Fury", SignetOfFuryBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
+        new Buff("Signet of Fury (Active)", SignetOfFuryActive, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfFury),
         new Buff("Signet of Might", SignetOfMightBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfMight),
         new Buff("Signet of Stamina", SignetOfStaminaBuff, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfStamina),
         new Buff("Signet of Rage", SignetOfRage, Source.Warrior, BuffClassification.Other, BuffImages.SignetOfRage),
