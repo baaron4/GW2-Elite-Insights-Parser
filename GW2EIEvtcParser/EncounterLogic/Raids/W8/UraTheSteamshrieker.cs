@@ -19,4 +19,9 @@ internal class UraTheSteamshrieker : MountBalrior
         EncounterCategoryInformation.InSubCategoryOrder = 2;
         EncounterID |= 0x000003;
     }
+
+    internal override string GetLogicName(CombatData combatData, AgentData agentData)
+    {
+        return "Ura, the Steamshrieker";
+    }
 }
