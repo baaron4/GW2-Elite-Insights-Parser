@@ -204,7 +204,13 @@ public abstract class FightLogic
         
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
-        var targetIDs = GetTargetsIDs();
+        var targetIDs = GetTargetsIDs().ToArray();
+        var trashIDs = GetTrashMobsIDs();
+        //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
+        // to build the hashset and hash the value each time.
+
+// Build targets
+#if !DEBUG2
         foreach (int id in targetIDs)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
@@ -213,6 +219,9 @@ public abstract class FightLogic
                 _targets.Add(new NPC(agentItem));
             }
         }
+#else
+        _targets.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !trashIDs.Contains(GetTrashID(x.ID)) && !x.GetFinalMaster().IsPlayer && !x.IsNonIdentifiedSpecies()).Select(a => new NPC(a)));
+#endif
         //TODO(Rennorb) @perf @cleanup: is this required?
         _targets.SortByFirstAware();
 
@@ -226,18 +235,14 @@ public abstract class FightLogic
             }
             return int.MaxValue;
         }).ToList();
-        
-        //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
-        // to build the hashset and hash the value each time.
-        var trashIDs = GetTrashMobsIDs();
-        foreach(var trash in trashIDs)
+        // Build trash mobs
+        foreach (var trash in trashIDs)
         {
             if(targetIDs.IndexOf((int)trash) != -1)
             {
                 throw new InvalidDataException("ID collision between trash and targets");
             }
         }
-
         _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).Select(a => new NPC(a)));
         //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
 #if DEBUG2

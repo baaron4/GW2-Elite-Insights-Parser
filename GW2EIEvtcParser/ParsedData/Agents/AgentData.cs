@@ -155,6 +155,12 @@ public class AgentData
         return GetGadgetsByID((int)id);
     }
 
+
+    public AgentItem? GetAgentByUniqueID(long uniqueID)
+    {
+        return _allAgentsList.FirstOrDefault(x => x.UniqueID == uniqueID);
+    }
+
     public AgentItem GetAgentByInstID(ushort instid, long time)
     {
         if (instid != 0)
