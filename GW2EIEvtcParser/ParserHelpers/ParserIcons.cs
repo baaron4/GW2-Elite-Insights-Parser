@@ -192,6 +192,9 @@ internal static class ParserIcons
     private const string TargetDagda = "https://i.imgur.com/k6rQdML.png";
     private const string TargetCerus = "https://i.imgur.com/wDdN8O3.png";
     private const string TargetEparch = "https://i.imgur.com/3NnhvUT.png";
+    private const string TargetGreer = "https://i.imgur.com/kcUvn4L.png";
+    private const string TargetDecima = "https://i.imgur.com/lvWmkY6.png";
+    private const string TargetUra = "https://i.imgur.com/ZnO5txz.png";
     #endregion
 
     #region Trash
@@ -929,6 +932,9 @@ internal static class ParserIcons
         { TargetID.CerusLonelyTower, TargetCerus },
         { TargetID.DeimosLonelyTower, TargetDeimos },
         { TargetID.EparchLonelyTower, TargetEparch },
+        { TargetID.Greer, TargetGreer },
+        { TargetID.Decima, TargetDecima },
+        { TargetID.Ura, TargetUra },
     };
 
     /// <summary>
