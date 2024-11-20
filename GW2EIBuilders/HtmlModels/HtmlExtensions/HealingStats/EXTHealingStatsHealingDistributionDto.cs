@@ -6,15 +6,32 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.EXTHealing;
 
+using HealingDistributionItem = (
+    bool indirect,
+    long skillID,
+    int total,
+    int min,
+    int max,
+    int cast,
+    double wasted,
+    double saved,
+    int hits,
+    long timeCast,
+    int totalDowned,
+    long minTimeCast,
+    long maxTimeCast,
+    long timeCastNoInterrupt,
+    int castNoInterrupt
+);
 internal class EXTHealingStatsHealingDistributionDto
 {
     public long ContributedHealing { get; set; }
     public long ContributedDownedHealing { get; set; }
     public long TotalHealing { get; set; }
     public long TotalCasting { get; set; }
-    public List<object[]>? Distribution { get; set; }
+    public List<HealingDistributionItem>? Distribution { get; set; }
 
-    private static object[] GetHealingToItem(SkillItem skill, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+    private static HealingDistributionItem GetHealingToItem(SkillItem skill, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
     {
         int totalhealing = 0,
             totaldownedhealing = 0,
@@ -70,7 +87,7 @@ internal class EXTHealingStatsHealingDistributionDto
         {
             (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
         }
-        object[] skillItem = [
+        return (
                 isIndirectHealing,
                 skill.ID,
                 totalhealing,
@@ -85,9 +102,8 @@ internal class EXTHealingStatsHealingDistributionDto
                 isIndirectHealing ? 0 : minTimeSpentCasting,
                 isIndirectHealing ? 0 : maxTimeSpentCasting,
                 isIndirectHealing ? 0 : timeSpentCastingNoInterrupt,
-                isIndirectHealing ? 0 : numberOfCastNoInterrupt,
-            ];
-        return skillItem;
+                isIndirectHealing ? 0 : numberOfCastNoInterrupt
+           );
     }
 
     public static EXTHealingStatsHealingDistributionDto BuildIncomingHealingDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
@@ -108,62 +124,14 @@ internal class EXTHealingStatsHealingDistributionDto
     }
 
 
-    private static List<object[]> BuildHealingDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<HealingDistributionItem> BuildHealingDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
     {
-        var list = new List<object[]>();
+        var list = new List<HealingDistributionItem>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         foreach (var group in healingLogs.GroupBy(x => x.Skill))
         {
             list.Add(GetHealingToItem(group.Key, group, castLogsBySkill, usedSkills, usedBuffs, log.Buffs, phase));
         }
-        // non damaging
-        /*foreach (KeyValuePair<SkillItem, List<AbstractCastEvent>> pair in castLogsBySkill)
-        {
-            if (healingLogsBySkill.ContainsKey(pair.Key))
-            {
-                continue;
-            }
-
-            if (!usedSkills.ContainsKey(pair.Key.ID))
-            {
-                usedSkills.Add(pair.Key.ID, pair.Key);
-            }
-            long timeCasting = 0;
-            int casts = 0;
-            int timeWasted = 0, timeSaved = 0;
-            foreach (AbstractCastEvent cl in pair.Value)
-            {
-                if (phase.InInterval(cl.Time))
-                {
-                    casts++;
-                    switch (cl.Status)
-                    {
-                        case AbstractCastEvent.AnimationStatus.Interrupted:
-                            timeWasted += cl.SavedDuration;
-                            break;
-
-                        case AbstractCastEvent.AnimationStatus.Reduced:
-                            timeSaved += cl.SavedDuration;
-                            break;
-                    }
-                }
-                timeCasting += Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start);
-            }
-
-            object[] skillData = {
-                false,
-                pair.Key.ID,
-                0,
-                -1,
-                0,
-                casts,
-                -timeWasted / 1000.0,
-                timeSaved / 1000.0,
-                0,
-                timeCasting
-            };
-            list.Add(skillData);
-        }*/
         return list;
     }
 

@@ -4,13 +4,19 @@ using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIBuilders.HtmlModels.EXTHealing;
 
+using HealingStatItem = (
+    int healing,
+    int healingPowerHybrid,
+    int conversion,
+    int downed
+);
 
 internal class EXTHealingStatsPhaseDto
 {
 
-    public List<List<object>> OutgoingHealingStats { get; set; }
-    public List<List<List<object>>> OutgoingHealingStatsTargets { get; set; }
-    public List<List<object>> IncomingHealingStats { get; set; }
+    public List<HealingStatItem> OutgoingHealingStats { get; set; }
+    public List<List<HealingStatItem>> OutgoingHealingStatsTargets { get; set; }
+    public List<HealingStatItem> IncomingHealingStats { get; set; }
 
     public EXTHealingStatsPhaseDto(PhaseData phase, ParsedEvtcLog log)
     {
@@ -22,34 +28,30 @@ internal class EXTHealingStatsPhaseDto
 
     // helper methods
 
-    private static List<object> GetOutgoingHealingStatData(EXTFinalOutgoingHealingStat outgoingHealingStats)
+    private static HealingStatItem GetOutgoingHealingStatData(EXTFinalOutgoingHealingStat outgoingHealingStats)
     {
-        var data = new List<object>
-            {
+        return (
                 outgoingHealingStats.Healing,
                 outgoingHealingStats.HealingPowerHealing + outgoingHealingStats.HybridHealing,
                 outgoingHealingStats.ConversionHealing,
                 //outgoingHealingStats.HybridHealing,
-                outgoingHealingStats.DownedHealing,
-            };
-        return data;
+                outgoingHealingStats.DownedHealing
+       );
     }
 
-    private static List<object> GetIncomingHealingStatData(EXTFinalIncomingHealingStat incomingHealintStats)
+    private static HealingStatItem GetIncomingHealingStatData(EXTFinalIncomingHealingStat incomingHealintStats)
     {
-        var data = new List<object>
-            {
+        return (
                 incomingHealintStats.Healed,
                 incomingHealintStats.HealingPowerHealed + incomingHealintStats.HybridHealed,
                 incomingHealintStats.ConversionHealed,
                 //incomingHealintStats.HybridHealed,
-                incomingHealintStats.DownedHealed,
-            };
-        return data;
+                incomingHealintStats.DownedHealed
+            );
     }
-    public static List<List<object>> BuildOutgoingHealingStatData(ParsedEvtcLog log, PhaseData phase)
+    public static List<HealingStatItem> BuildOutgoingHealingStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<object>>(log.Friendlies.Count);
+        var list = new List<HealingStatItem>(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
             EXTFinalOutgoingHealingStat outgoingHealingStats = actor.EXTHealing.GetOutgoingHealStats(null, log, phase.Start, phase.End);
@@ -58,13 +60,13 @@ internal class EXTHealingStatsPhaseDto
         return list;
     }
 
-    public static List<List<List<object>>> BuildOutgoingHealingFriendlyStatData(ParsedEvtcLog log, PhaseData phase)
+    public static List<List<HealingStatItem>> BuildOutgoingHealingFriendlyStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<List<object>>>(log.Friendlies.Count);
+        var list = new List<List<HealingStatItem>>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            var playerData = new List<List<object>>();
+            var playerData = new List<HealingStatItem>();
 
             foreach (SingleActor target in log.Friendlies)
             {
@@ -75,9 +77,9 @@ internal class EXTHealingStatsPhaseDto
         return list;
     }
 
-    public static List<List<object>> BuildIncomingHealingStatData(ParsedEvtcLog log, PhaseData phase)
+    public static List<HealingStatItem> BuildIncomingHealingStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<object>>();
+        var list = new List<HealingStatItem>();
 
         foreach (SingleActor actor in log.Friendlies)
         {

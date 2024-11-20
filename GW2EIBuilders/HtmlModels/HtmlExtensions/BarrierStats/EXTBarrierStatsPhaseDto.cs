@@ -8,9 +8,9 @@ namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 internal class EXTBarrierStatsPhaseDto
 {
 
-    public List<List<object>> OutgoingBarrierStats { get; set; }
-    public List<List<List<object>>> OutgoingBarrierStatsTargets { get; set; }
-    public List<List<object>> IncomingBarrierStats { get; set; }
+    public List<List<int>> OutgoingBarrierStats { get; set; }
+    public List<List<List<int>>> OutgoingBarrierStatsTargets { get; set; }
+    public List<List<int>> IncomingBarrierStats { get; set; }
 
     public EXTBarrierStatsPhaseDto(PhaseData phase, ParsedEvtcLog log)
     {
@@ -22,26 +22,26 @@ internal class EXTBarrierStatsPhaseDto
 
     // helper methods
 
-    private static List<object> GetOutgoingBarrierStatData(EXTFinalOutgoingBarrierStat outgoingBarrierStats)
+    private static List<int> GetOutgoingBarrierStatData(EXTFinalOutgoingBarrierStat outgoingBarrierStats)
     {
-        var data = new List<object>
+        var data = new List<int>
             {
                 outgoingBarrierStats.Barrier,
             };
         return data;
     }
 
-    private static List<object> GetIncomingBarrierStatData(EXTFinalIncomingBarrierStat incomingBarrierStats)
+    private static List<int> GetIncomingBarrierStatData(EXTFinalIncomingBarrierStat incomingBarrierStats)
     {
-        var data = new List<object>
+        var data = new List<int>
             {
                 incomingBarrierStats.BarrierReceived,
             };
         return data;
     }
-    public static List<List<object>> BuildOutgoingBarrierStatData(ParsedEvtcLog log, PhaseData phase)
+    public static List<List<int>> BuildOutgoingBarrierStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<object>>(log.Friendlies.Count);
+        var list = new List<List<int>>(log.Friendlies.Count);
         foreach (SingleActor actor in log.Friendlies)
         {
             EXTFinalOutgoingBarrierStat outgoingBarrierStats = actor.EXTBarrier.GetOutgoingBarrierStats(null, log, phase.Start, phase.End);
@@ -50,13 +50,13 @@ internal class EXTBarrierStatsPhaseDto
         return list;
     }
 
-    public static List<List<List<object>>> BuildOutgoingBarrierFriendlyStatData(ParsedEvtcLog log, PhaseData phase)
+    public static List<List<List<int>>> BuildOutgoingBarrierFriendlyStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<List<object>>>(log.Friendlies.Count);
+        var list = new List<List<List<int>>>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            var playerData = new List<List<object>>();
+            var playerData = new List<List<int>>();
 
             foreach (SingleActor target in log.Friendlies)
             {
@@ -67,9 +67,9 @@ internal class EXTBarrierStatsPhaseDto
         return list;
     }
 
-    public static List<List<object>> BuildIncomingBarrierStatData(ParsedEvtcLog log, PhaseData phase)
+    public static List<List<int>> BuildIncomingBarrierStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<object>>();
+        var list = new List<List<int>>();
 
         foreach (SingleActor actor in log.Friendlies)
         {
