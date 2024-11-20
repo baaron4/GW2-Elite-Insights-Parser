@@ -386,6 +386,12 @@ internal static class EncounterBuffs
             new Buff("Charge (Decima)", ChargeDecima, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),
             new Buff("Peal of Harmony", PealOfHarmony, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.KineticAbundance),
             new Buff("Peal of Discord", PealOfDiscord, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ElectrifiedMinion),
+            new Buff("Target Order: 1 (JW)", TargetOrder1JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder1),
+            new Buff("Target Order: 2 (JW)", TargetOrder2JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder2),
+            new Buff("Target Order: 3 (JW)", TargetOrder3JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder3),
+            new Buff("Target Order: 4 (JW)", TargetOrder4JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder4),
+            new Buff("Target Order: 5 (JW)", TargetOrder5JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder5),
+            new Buff("Focused Fluxlance", FocusedFluxlance, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Damage Immunity", DamageImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),

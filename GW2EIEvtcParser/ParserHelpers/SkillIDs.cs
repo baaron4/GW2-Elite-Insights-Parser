@@ -4511,13 +4511,19 @@ public static class SkillIDs
     public const long SpearmarshalsSupportBombard = 74290;
     public const long RelicOfSorrowBuff = 74410;
     public const long GalvanicSensitivity = 74659;
+    public const long FocusedFluxlance = 74689;
+    public const long TargetOrder4JW = 74712;
     public const long EmpoweredGreer = 74722;
     public const long NovaShield = 74791;
     public const long FracturedArmor = 74840;
+    public const long TargetOrder3JW = 74789;
     public const long HarmonicSensitivity = 74904;
-    public const long ThrummingPresence = 74992;
+    public const long ThrummingPresence = 74982;
+    public const long TargetOrder1JW = 75023;
+    public const long TargetOrder5JW = 75034;
     public const long InvulnerableBarrier = 75042;
     public const long ChargeDecima = 75175;
+    public const long TargetOrder2JW = 75151;
     public const long PealOfHarmony = 75290;
     public const long PealOfDiscord = 75301;
     #endregion
