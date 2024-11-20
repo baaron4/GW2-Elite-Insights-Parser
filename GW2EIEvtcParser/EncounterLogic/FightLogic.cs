@@ -272,7 +272,7 @@ public abstract class FightLogic
             {
                 enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault();
             }
-            if (enterCombat != null && enterCombat.Spec != Spec.Unknown)
+            if (enterCombat != null && enterCombat.Spec != Spec.Unknown && enterCombat.Subgroup != 0)
             {
                 p.AgentItem.OverrideSpec(enterCombat.Spec);
                 p.OverrideGroup(enterCombat.Subgroup);

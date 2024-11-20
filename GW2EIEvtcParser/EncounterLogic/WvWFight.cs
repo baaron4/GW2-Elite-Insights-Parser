@@ -81,7 +81,7 @@ internal class WvWFight : FightLogic
         {
             // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
             var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
-            if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
+            if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && enterCombat.Subgroup > 0 && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
             {
                 p.AgentItem.OverrideSpec(enterCombat.Spec);
                 p.OverrideGroup(enterCombat.Subgroup);
