@@ -1280,6 +1280,7 @@ internal static class ParserIcons
         { TrashID.DerangedSpiritSR, TrashDerangedSpirit },
         { TrashID.DerangedSpiritSR2, TrashDerangedSpirit },
         { TrashID.Tribocharge, TrashTribocharge },
+        { TrashID.EmpoweringBeast, TrashGenericRedEnemySkull },
     };
 
     /// <summary>

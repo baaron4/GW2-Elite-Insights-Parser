@@ -887,6 +887,7 @@ public static class ArcDPSEnums
         // Greer
         Reeg = 26742,
         Gree = 26771,
+        EmpoweringBeast = 26776,
         // Fraenir
         IcebroodElemental = 22576,
         BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
