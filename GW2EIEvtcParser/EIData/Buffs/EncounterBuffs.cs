@@ -395,6 +395,13 @@ internal static class EncounterBuffs
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Damage Immunity", DamageImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
+            // Ura
+            new Buff("Pressure Blast", PressureBlast, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Sulfuric Acid", SulfuricAcid, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Deterrence", Deterrence, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Bloodstone Saturation", BloodstoneSaturation, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Rising Pressure", RisingPressure, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Hardened Crust", HardenedCrust, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             //////////////////////////////////////////////
             // Fractals 
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),

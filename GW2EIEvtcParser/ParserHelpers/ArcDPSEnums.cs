@@ -896,6 +896,8 @@ public static class ArcDPSEnums
         GreenOrb2Persons = 26783,
         DecimaBeamEnd = 26793,
         DecimaBeamStart = 26708,
+        // Ura
+        Fumaroller = 26797,
         // Fraenir
         IcebroodElemental = 22576,
         BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,

@@ -24,4 +24,11 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         return "Ura, the Steamshrieker";
     }
+    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    {
+        return
+        [
+            ArcDPSEnums.TrashID.Fumaroller,
+        ];
+    }
 }
