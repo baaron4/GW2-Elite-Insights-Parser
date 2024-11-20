@@ -21,9 +21,29 @@ internal class DecimaTheStormsinger : MountBalrior
         EncounterID |= 0x000002;
     }
 
+    protected override ReadOnlySpan<int> GetTargetsIDs()
+    {
+        return
+        [
+            (int)ArcDPSEnums.TargetID.Decima,
+            //(int)ArcDPSEnums.TrashID.EnlightenedConduit,
+        ];
+    }
+
+    protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()
+    {
+        return
+        [
+            ArcDPSEnums.TrashID.GreenOrb1Person,
+            ArcDPSEnums.TrashID.GreenOrb2Persons,
+            ArcDPSEnums.TrashID.EnlightenedConduit,
+        ];
+    }
+
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
+        var tst = log.AgentData.GetAgentByUniqueID(588);
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor Decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
         phases[0].AddTarget(Decima);
@@ -50,14 +70,47 @@ internal class DecimaTheStormsinger : MountBalrior
         return phases;
     }
 
+
+    internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    {
+        var lifespan = ((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end);
+        switch (target.ID)
+        {
+            case (int)ArcDPSEnums.TargetID.Decima:
+                break;
+            // TODO: find all greens and their proper sizes
+            case (int)ArcDPSEnums.TrashID.GreenOrb1Person:
+                replay.Decorations.Add(new CircleDecoration(100, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
+                break;
+            case (int)ArcDPSEnums.TrashID.GreenOrb2Persons:
+                replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
+                break;
+            case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaEnlightenedConduitPurpleAoE, out var effects))
+                {
+
+                    // TODO: We need to find a way to handle sizing
+                    foreach (var effect in effects)
+                    {
+                        var aoeLifeSpan = effect.ComputeDynamicLifespan(log, 1200000);
+                        replay.Decorations.Add(new CircleDecoration(150, aoeLifeSpan, Colors.DarkPurple, 0.3, new PositionConnector(effect.Position)));
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
     internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
     }
 }
