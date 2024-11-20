@@ -884,10 +884,18 @@ public static class ArcDPSEnums
         Brandstorm = 21978,
         GiantQadimThePeerless = 21953,
         DummyPeerlessQadim = 22005,
+        // W8
+        VentShot = 26766,
         // Greer
         Reeg = 26742,
         Gree = 26771,
         EmpoweringBeast = 26776,
+        // Decima
+        EnlightenedConduit = 26709,
+        GreenOrb1Person = 26798,
+        GreenOrb2Persons = 26783,
+        DecimaBeamEnd = 26793,
+        DecimaBeamStart = 26708,
         // Fraenir
         IcebroodElemental = 22576,
         BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
