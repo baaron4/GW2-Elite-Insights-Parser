@@ -1,8 +1,9 @@
-﻿using static GW2EIEvtcParser.ParserHelper;
+﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class SkillModeDescriptor
+internal class SkillModeDescriptor
 {
     [Flags]
     public enum SkillModeCategory : uint
@@ -35,10 +36,10 @@ public class SkillModeDescriptor
         CC = 1 << 7,
     }
 
-    public SkillConnector Owner;
-    public Spec Spec;
-    public long SkillID = 0;
-    public SkillModeCategory Category = SkillModeCategory.NotApplicable;
+    public readonly SkillConnector Owner;
+    public readonly Spec Spec;
+    public readonly long SkillID = 0;
+    public readonly SkillModeCategory Category = SkillModeCategory.NotApplicable;
 
     /// <summary>
     /// 
@@ -71,5 +72,10 @@ public class SkillModeDescriptor
     /// <returns></returns>
     public SkillModeDescriptor(SingleActor owner, long skillID = 0, SkillModeCategory category = SkillModeCategory.NotApplicable) : this(owner, Spec.Unknown, skillID, category)
     {
+    }
+
+    public SkillModeDescription GetDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
+    {
+        return new SkillModeDescription(this, map, log, usedSkills, usedBuffs);
     }
 }

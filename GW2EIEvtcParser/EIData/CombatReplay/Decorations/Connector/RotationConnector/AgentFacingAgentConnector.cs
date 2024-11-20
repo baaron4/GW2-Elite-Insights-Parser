@@ -14,17 +14,9 @@ internal class AgentFacingAgentConnector : AgentFacingConnector
     {
         DstAgent = dstAgent;
     }
-    public class AgentFacingAgentConnectorDescriptor : AgentFacingConnectorDescriptor
-    {
-        public int DstMasterId { get; private set; }
-        public AgentFacingAgentConnectorDescriptor(AgentFacingAgentConnector connector, CombatReplayMap map) : base(connector, map)
-        {
-            DstMasterId = connector.DstAgent.UniqueID;
-        }
-    }
 
-    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
+    public override ConnectorDescription GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
     {
-        return new AgentFacingAgentConnectorDescriptor(this, map);
+        return new AgentFacingAgentConnectorDescription(this, map, log);
     }
 }
