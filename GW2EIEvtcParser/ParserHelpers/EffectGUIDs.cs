@@ -616,6 +616,9 @@ public static class EffectGUIDs
     // Decima
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE = new("1A81CC24D58C3046AEF30AAA35D6D854"); // 1200000 duration - Src Conduit
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit
+    // Ura
+    public static readonly GUID UraToxicGeyserSpawn = new("6B95E7A99147644A990ACF34D04A98F1");
+    public static readonly GUID UraSulfuricGeyserSpawn = new("413AF4D44B924B4399481047CBB2820C");
     #endregion
 
     #region Strikes

@@ -1283,6 +1283,7 @@ internal static class ParserIcons
         { TrashID.EmpoweringBeast, TrashGenericRedEnemySkull },
         { TrashID.EnlightenedConduit, TrashChargedBloodstoneFragment },
         { TrashID.VentShot, TrashGenericRedEnemySkull },
+        { TrashID.Fumaroller, TrashGenericRedEnemySkull },
     };
 
     /// <summary>

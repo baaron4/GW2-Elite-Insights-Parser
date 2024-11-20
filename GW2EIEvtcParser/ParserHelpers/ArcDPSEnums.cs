@@ -610,6 +610,10 @@ public static class ArcDPSEnums
     private const int KryptisRift = -59;
     private const int EparchLonelyTowerDummy = -60;
     private const int EtherealBarrier = -61;
+    private const int ToxicGeyser = -62;
+    private const int SulfuricGeyser = -63;
+    private const int TitanspawnGeyser = -64;
+    private const int UraGadget = -65;
     public const int NonIdentifiedSpecies = 0;
 
     //
@@ -898,6 +902,10 @@ public static class ArcDPSEnums
         DecimaBeamStart = 26708,
         // Ura
         Fumaroller = 26797,
+        ToxicGeyser = ArcDPSEnums.ToxicGeyser,
+        SulfuricGeyser = ArcDPSEnums.SulfuricGeyser,
+        TitanspawnGeyser = ArcDPSEnums.TitanspawnGeyser,
+        UraGadget = ArcDPSEnums.UraGadget,
         // Fraenir
         IcebroodElemental = 22576,
         BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
