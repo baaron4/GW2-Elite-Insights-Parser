@@ -1196,6 +1196,9 @@ public static class ArcDPSEnums
         Adina = 22006,
         Sabir = 21964,
         PeerlessQadim = 22000,
+        Greer = 26725,
+        Decima = 26774,
+        Ura = 26712,
         // Strike Missions
         IcebroodConstruct = 22154,
         VoiceOfTheFallen = 22343,

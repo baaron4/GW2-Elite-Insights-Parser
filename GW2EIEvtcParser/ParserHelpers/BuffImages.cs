@@ -416,6 +416,10 @@ public static class BuffImages
     public const string EnfeebledForce = "https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png";
     public const string MagicBlastIntensity = "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png";
     public const string PartiallyProtected = "https://wiki.guildwars2.com/images/d/d0/Partially_Protected.png";
+    // Decima
+    public const string ElectricalBuildup = "https://wiki.guildwars2.com/images/0/01/Electrical_Buildup.png";
+    public const string ConjuredBarrier = "https://wiki.guildwars2.com/images/4/42/Conjured_Barrier.png";
+    public const string ElectrifiedMinion = "https://wiki.guildwars2.com/images/6/6d/Electrified_Minion.png";
     // Fractal
     public const string GambitExhausted = "https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png";
     public const string RedirectAnomaly = "https://wiki.guildwars2.com/images/9/94/Redirect_Anomaly.png";
