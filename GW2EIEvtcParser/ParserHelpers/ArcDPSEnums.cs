@@ -884,6 +884,9 @@ public static class ArcDPSEnums
         Brandstorm = 21978,
         GiantQadimThePeerless = 21953,
         DummyPeerlessQadim = 22005,
+        // Greer
+        Reeg = 26742,
+        Gree = 26771,
         // Fraenir
         IcebroodElemental = 22576,
         BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
