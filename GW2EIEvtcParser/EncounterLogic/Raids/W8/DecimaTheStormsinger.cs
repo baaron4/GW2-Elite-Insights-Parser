@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
@@ -36,6 +37,7 @@ internal class DecimaTheStormsinger : MountBalrior
         [
             ArcDPSEnums.TrashID.GreenOrb1Person,
             ArcDPSEnums.TrashID.GreenOrb2Persons,
+            ArcDPSEnums.TrashID.GreenOrb3Persons,
             ArcDPSEnums.TrashID.EnlightenedConduit,
         ];
     }
@@ -43,7 +45,6 @@ internal class DecimaTheStormsinger : MountBalrior
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
-        var tst = log.AgentData.GetAgentByUniqueID(588);
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor Decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
         phases[0].AddTarget(Decima);
@@ -80,10 +81,16 @@ internal class DecimaTheStormsinger : MountBalrior
                 break;
             // TODO: find all greens and their proper sizes
             case (int)ArcDPSEnums.TrashID.GreenOrb1Person:
-                replay.Decorations.Add(new CircleDecoration(100, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
+                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
+                //replay.Decorations.Add(new CircleDecoration(100, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.GreenOrb2Persons:
-                replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
+                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
+                //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
+                break;
+            case (int)ArcDPSEnums.TrashID.GreenOrb3Persons:
+                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
+                //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaEnlightenedConduitPurpleAoE, out var effects))

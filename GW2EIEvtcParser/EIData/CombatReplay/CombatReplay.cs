@@ -321,6 +321,10 @@ public class CombatReplay
     {
         Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, segment, new AgentConnector(actor)));
     }
+    internal void AddOverheadIcon((long start, long end) lifespan, SingleActor actor, string icon, uint pixelSize = ParserHelper.CombatReplayOverheadDefaultSizeInPixel, float opacity = ParserHelper.CombatReplayOverheadDefaultOpacity)
+    {
+        Decorations.Add(new IconOverheadDecoration(icon, pixelSize, opacity, lifespan, new AgentConnector(actor)));
+    }
 
     /// <summary>
     /// Add an overhead icon decoration
