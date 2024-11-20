@@ -240,7 +240,7 @@ public abstract class FightLogic
         {
             if(targetIDs.IndexOf((int)trash) != -1)
             {
-                throw new InvalidDataException("ID collision between trash and targets");
+                throw new InvalidDataException("ID collision between trash and targets: " + nameof(trash));
             }
         }
         _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).Select(a => new NPC(a)));
