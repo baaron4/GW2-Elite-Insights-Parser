@@ -16,16 +16,18 @@ internal static class JsonMinionsBuilder
 
     public static JsonMinions BuildJsonMinions(Minions minions, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        var jsonMinions = new JsonMinions();
-        jsonMinions.Id = minions.ID;
+        var jsonMinions = new JsonMinions
+        {
+            Id = minions.ID
+        };
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         bool isEnemyMinion = !log.FriendlyAgents.Contains(minions.Master.AgentItem);
         //
         jsonMinions.Name = minions.Character;
         //
-        var totalDamage = new List<int>();
-        var totalShieldDamage = new List<int>();
-        var totalBreakbarDamage = new List<double>();
+        var totalDamage = new List<int>(phases.Count);
+        var totalShieldDamage = new List<int>(phases.Count);
+        var totalBreakbarDamage = new List<double>(phases.Count);
         foreach (PhaseData phase in phases)
         {
             int tot = 0;
@@ -50,9 +52,9 @@ internal static class JsonMinionsBuilder
             for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
             {
                 SingleActor tar = log.FightData.Logic.Targets[i];
-                var totalTarDamage = new List<int>();
-                var totalTarShieldDamage = new List<int>();
-                var totalTarBreakbarDamage = new List<double>();
+                var totalTarDamage = new List<int>(phases.Count);
+                var totalTarShieldDamage = new List<int>(phases.Count);
+                var totalTarBreakbarDamage = new List<double>(phases.Count);
                 foreach (PhaseData phase in phases)
                 {
                     int tot = 0;

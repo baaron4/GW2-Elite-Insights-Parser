@@ -162,9 +162,9 @@ internal static class JsonPlayerBuilder
         jsonPlayer.SquadBuffVolumesActive = GetPlayerBuffOutgoingVolumes(phases.Select(phase => player.GetActiveBuffVolumes(BuffEnum.Squad, log, phase.Start, phase.End)).ToList(), log, buffMap);
         //
         IReadOnlyList<Consumable> consumables = player.GetConsumablesList(log, log.FightData.FightStart, log.FightData.FightEnd);
-        if (consumables.Any())
+        if (consumables.Count > 0)
         {
-            var consumablesJSON = new List<JsonConsumable>();
+            var consumablesJSON = new List<JsonConsumable>(consumables.Count);
             foreach (Consumable food in consumables)
             {
                 if (!buffMap.ContainsKey(food.Buff.ID))
@@ -177,7 +177,7 @@ internal static class JsonPlayerBuilder
         }
         //
         IReadOnlyList<DeathRecap> deathRecaps = player.GetDeathRecaps(log);
-        if (deathRecaps.Any())
+        if (deathRecaps.Count > 0)
         {
             jsonPlayer.DeathRecap = deathRecaps.Select(x => JsonDeathRecapBuilder.BuildJsonDeathRecap(x)).ToList();
         }
@@ -201,7 +201,7 @@ internal static class JsonPlayerBuilder
     private static List<JsonPlayerBuffsGeneration>? GetPlayerBuffGenerations(List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-        var uptimes = new List<JsonPlayerBuffsGeneration>();
+        var uptimes = new List<JsonPlayerBuffsGeneration>(buffs[0].Count);
         foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
         {
             Buff buff = log.Buffs.BuffsByIds[pair.Key];
@@ -213,7 +213,7 @@ internal static class JsonPlayerBuilder
             {
                 buffMap[pair.Key] = buff;
             }
-            var data = new List<JsonBuffsGenerationData>();
+            var data = new List<JsonBuffsGenerationData>(phases.Count);
             for (int i = 0; i < phases.Count; i++)
             {
                 if (buffs[i].TryGetValue(pair.Key, out var buffStats))
@@ -245,7 +245,7 @@ internal static class JsonPlayerBuilder
 
     private static List<JsonBuffsUptime> GetPlayerJsonBuffsUptime(SingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffs>> buffs, List<IReadOnlyDictionary<long, FinalBuffsDictionary>> buffDictionaries, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap, Dictionary<string, HashSet<long>> personalBuffs)
     {
-        var res = new List<JsonBuffsUptime>();
+        var res = new List<JsonBuffsUptime>(buffs[0].Count);
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
@@ -255,7 +255,7 @@ internal static class JsonPlayerBuilder
             {
                 continue;
             }
-            var data = new List<JsonBuffsUptimeData>();
+            var data = new List<JsonBuffsUptimeData>(phases.Count);
             for (int i = 0; i < phases.Count; i++)
             {
                 if (buffs[i].TryGetValue(pair.Key, out var buffStats) && buffDictionaries[i].TryGetValue(pair.Key, out var buffDicts))
@@ -295,7 +295,7 @@ internal static class JsonPlayerBuilder
     private static List<JsonPlayerBuffOutgoingVolumes>? GetPlayerBuffOutgoingVolumes(List<IReadOnlyDictionary<long, FinalActorBuffVolumes>> buffVolumes, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
-        var uptimes = new List<JsonPlayerBuffOutgoingVolumes>();
+        var uptimes = new List<JsonPlayerBuffOutgoingVolumes>(buffVolumes[0].Count);
         foreach (KeyValuePair<long, FinalActorBuffVolumes> pair in buffVolumes[0])
         {
             Buff buff = log.Buffs.BuffsByIds[pair.Key];
@@ -307,7 +307,7 @@ internal static class JsonPlayerBuilder
             {
                 buffMap[pair.Key] = buff;
             }
-            var data = new List<JsonBuffOutgoingVolumesData>();
+            var data = new List<JsonBuffOutgoingVolumesData>(phases.Count);
             for (int i = 0; i < phases.Count; i++)
             {
                 if (buffVolumes[i].TryGetValue(pair.Key, out var buffVolumeStats))
@@ -339,7 +339,7 @@ internal static class JsonPlayerBuilder
 
     private static List<JsonBuffVolumes> GetPlayerJsonBuffVolumes(SingleActor player, List<IReadOnlyDictionary<long, FinalActorBuffVolumes>> buffVolumes, List<IReadOnlyDictionary<long, FinalBuffVolumesDictionary>> buffVolumeDictionaries, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap, Dictionary<string, HashSet<long>> personalBuffs)
     {
-        var res = new List<JsonBuffVolumes>();
+        var res = new List<JsonBuffVolumes>(buffVolumes[0].Count);
         var profEnums = new HashSet<Source>(SpecToSources(player.Spec));
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         foreach (KeyValuePair<long, FinalActorBuffVolumes> pair in buffVolumes[0])
@@ -349,7 +349,7 @@ internal static class JsonPlayerBuilder
             {
                 continue;
             }
-            var data = new List<JsonBuffVolumesData>();
+            var data = new List<JsonBuffVolumesData>(phases.Count);
             for (int i = 0; i < phases.Count; i++)
             {
                 if (buffVolumes[i].TryGetValue(pair.Key, out var buffVol) && buffVolumeDictionaries[i].TryGetValue(pair.Key, out var buffVolDict))

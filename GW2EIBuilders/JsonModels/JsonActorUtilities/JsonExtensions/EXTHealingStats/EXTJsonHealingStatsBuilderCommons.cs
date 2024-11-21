@@ -51,8 +51,10 @@ internal static class EXTJsonHealingStatsBuilderCommons
     //TODO(Rennorb) @perf
     private static EXTJsonHealingDist BuildHealingDist(long id, List<EXTHealingEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        var jsonHealingDist = new EXTJsonHealingDist();
-        jsonHealingDist.IndirectHealing = list.Exists(x => x is EXTNonDirectHealingEvent);
+        var jsonHealingDist = new EXTJsonHealingDist
+        {
+            IndirectHealing = list.Exists(x => x is EXTNonDirectHealingEvent)
+        };
         if (jsonHealingDist.IndirectHealing)
         {
             if (!buffMap.ContainsKey(id))

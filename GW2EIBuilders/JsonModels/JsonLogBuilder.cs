@@ -125,19 +125,19 @@ internal static class JsonLogBuilder
         jsonLog.MissingPreEvent = log.FightData.MissingPreEvent;
         jsonLog.Anonymous = log.ParserSettings.AnonymousPlayers;
         jsonLog.DetailedWvW = log.ParserSettings.DetailedWvWParse && log.FightData.Logic.ParseMode == FightLogic.ParseModeEnum.WvW;
-        var personalBuffs = new Dictionary<string, HashSet<long>>(); //TODO(Rennorb) @perf
-        var personalDamageMods = new Dictionary<string, HashSet<long>>(); //TODO(Rennorb) @perf
-        var skillMap = new Dictionary<long, SkillItem>(); //TODO(Rennorb) @perf
-        var skillDescs = new Dictionary<string, SkillDesc>(); //TODO(Rennorb) @perf
-        var buffMap = new Dictionary<long, Buff>(); //TODO(Rennorb) @perf
-        var buffDescs = new Dictionary<string, BuffDesc>(); //TODO(Rennorb) @perf
-        var damageModMap = new Dictionary<long, DamageModifier>(); //TODO(Rennorb) @perf
-        var damageModDesc = new Dictionary<string, DamageModDesc>(); //TODO(Rennorb) @perf
+        var personalBuffs = new Dictionary<string, HashSet<long>>(20); //TODO(Rennorb) @perf
+        var personalDamageMods = new Dictionary<string, HashSet<long>>(20); //TODO(Rennorb) @perf
+        var skillMap = new Dictionary<long, SkillItem>(200); //TODO(Rennorb) @perf
+        var skillDescs = new Dictionary<string, SkillDesc>(200); //TODO(Rennorb) @perf
+        var buffMap = new Dictionary<long, Buff>(100); //TODO(Rennorb) @perf
+        var buffDescs = new Dictionary<string, BuffDesc>(100); //TODO(Rennorb) @perf
+        var damageModMap = new Dictionary<long, DamageModifier>(50); //TODO(Rennorb) @perf
+        var damageModDesc = new Dictionary<string, DamageModDesc>(50); //TODO(Rennorb) @perf
 
         var instanceBuffs = log.FightData.Logic.GetInstanceBuffs(log);
         if (instanceBuffs.Any())
         {
-            var presentFractalInstabilities = new List<long>(); //TODO(Rennorb) @perf
+            var presentFractalInstabilities = new List<long>(3); //TODO(Rennorb) @perf
             var presentInstanceBuffs = new List<(long, int)>(instanceBuffs.Count);
             foreach ((Buff instanceBuff, int stack) in instanceBuffs)
             {

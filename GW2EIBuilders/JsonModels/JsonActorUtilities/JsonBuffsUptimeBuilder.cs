@@ -12,7 +12,7 @@ internal static class JsonBuffsUptimeBuilder
 {
     private static Dictionary<string, double> ConvertKeys(IReadOnlyDictionary<SingleActor, double> toConvert)
     {
-        var res = new Dictionary<string, double>();
+        var res = new Dictionary<string, double>(toConvert.Count);
         foreach (KeyValuePair<SingleActor, double> pair in toConvert)
         {
             res[pair.Key.Character] = pair.Value;

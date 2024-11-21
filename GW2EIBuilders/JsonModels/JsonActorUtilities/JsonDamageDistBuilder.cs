@@ -12,8 +12,10 @@ internal static class JsonDamageDistBuilder
 {
     private static JsonDamageDist BuildJsonDamageDist(long id, List<HealthDamageEvent> dmList, List<BreakbarDamageEvent> brList, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        var jsonDamageDist = new JsonDamageDist();
-        jsonDamageDist.IndirectDamage = dmList.Exists(x => x is NonDirectHealthDamageEvent);
+        var jsonDamageDist = new JsonDamageDist
+        {
+            IndirectDamage = dmList.Exists(x => x is NonDirectHealthDamageEvent)
+        };
         if (jsonDamageDist.IndirectDamage)
         {
             if (!buffMap.ContainsKey(id))
