@@ -6,22 +6,8 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 
-using BarrierDistributionItem = (
-    bool indirect,
-    long skillID,
-    int total,
-    int min,
-    int max,
-    int cast,
-    double wasted,
-    double saved,
-    int hits,
-    long timeCast,
-    long minTimeCast,
-    long maxTimeCast,
-    long timeCastNoInterrupt,
-    int castNoInterrupt
-    );
+
+using BarrierDistributionItem = object[];
 
 internal class EXTBarrierStatsBarrierDistributionDto
 {
@@ -83,7 +69,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
             (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
         }
 
-        return (
+        return [
                 isIndirectBarrier,
                 skill.ID,
                 totalbarrier,
@@ -98,7 +84,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
                 isIndirectBarrier ? 0 : maxTimeSpentCasting,
                 isIndirectBarrier ? 0 : timeSpentCastingNoInterrupt,
                 isIndirectBarrier ? 0 : numberOfCastNoInterrupt
-       );
+        ];
     }
 
     public static EXTBarrierStatsBarrierDistributionDto BuildIncomingBarrierDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)

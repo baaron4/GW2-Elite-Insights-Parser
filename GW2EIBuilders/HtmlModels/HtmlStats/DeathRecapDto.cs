@@ -3,13 +3,7 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
-using DeathRecapItem = (
-    int time,
-    long skillID,
-    int damage,
-    string src,
-    bool indirect
-);
+using DeathRecapItem = object[];
 internal class DeathRecapDto
 {
     public long Time { get; set; }
@@ -22,13 +16,13 @@ internal class DeathRecapDto
         foreach (DeathRecap.DeathRecapDamageItem item in list)
         {
             data.Add(
-            (
+            [
                     item.Time,
                     item.ID,
                     item.Damage,
                     item.Src,
                     item.IndirectDamage
-            ));
+            ]);
         }
         return data;
     }

@@ -6,7 +6,8 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels;
 
-using GameplayStatDataItem = (
+using GameplayStatDataItem = List<double>;
+/*(
     double timeWasted, // 0
     int wasted, // 1
     double timeSaved, // 2
@@ -17,8 +18,10 @@ using GameplayStatDataItem = (
     double castUptime, // 7
     double castUptimeNoAA // 8
 );
+*/
 
-using OffensiveStatDataItem = (
+using OffensiveStatDataItem = List<double>;
+/*(
     int directDamageCount, // 0
     int critableDirectDamageCount,
     int criticalCount,
@@ -48,16 +51,18 @@ using OffensiveStatDataItem = (
     int totalDamage,
     int appliedCrowdControl,
     double appliedCrowdControlDuration
-);
+);*/
 
-using DPSStatDataItem = (
+using DPSStatDataItem = List<double>;
+/*(
     int damage, // 0
     int powerDamage,
     int conditionDamage,
     double breakbarDamage
-);
+);*/
 
-using DefensiveStatDataItem = (
+using DefensiveStatDataItem = object[];
+/*(
     int damageTaken, // 0
     int damageBarrier,
     int missedCount,
@@ -77,9 +82,10 @@ using DefensiveStatDataItem = (
     int downedDamageTaken,
     int receivedCrowdControl,
     double receivedCrowdControlDuration
-);
+);*/
 
-using SupportStatDataItem = (
+using SupportStatDataItem = List<double>;
+/*(
     int conditionCleanse, // 0
     double conditionCleanseTime,
     int conditionCleanseSelf,
@@ -90,7 +96,7 @@ using SupportStatDataItem = (
     double ressurectsTime,
     int stunBreak,
     double removedStunDuration
-);
+);*/
 
 //TODO(Rennorb) @perf: IF we wanted more performance we could try to just get rid of this json data step all together.
 // It should be doable to just merge it with existing structures, as to not need to copy everything..
@@ -236,7 +242,7 @@ internal class PhaseDto
 
     private static GameplayStatDataItem GetGameplayStatData(FinalGameplayStats stats)
     {
-        return (
+        return [
                 stats.TimeWasted,
                 stats.Wasted,
                 stats.TimeSaved,
@@ -246,12 +252,12 @@ internal class PhaseDto
                 Math.Round(stats.DistToCom, 2),
                 stats.SkillCastUptime,
                 stats.SkillCastUptimeNoAA
-        );
+        ];
     }
 
     private static OffensiveStatDataItem GetOffensiveStatData(FinalOffensiveStats stats)
     {
-        return (
+        return [
                 stats.DirectDamageCount,
                 stats.CritableDirectDamageCount,
                 stats.CriticalCount,
@@ -281,22 +287,22 @@ internal class PhaseDto
                 stats.TotalDmg,
                 stats.AppliedCrowdControl,
                 stats.AppliedCrowdControlDuration
-            );
+            ];
     }
 
     private static DPSStatDataItem GetDPSStatData(FinalDPS dpsAll)
     {
-        return (
+        return [
                 dpsAll.Damage,
                 dpsAll.PowerDamage,
                 dpsAll.CondiDamage,
                 dpsAll.BreakbarDamage
-            );
+            ];
     }
 
     private static SupportStatDataItem GetSupportStatData(FinalToPlayersSupport support)
     {
-        return (
+        return [
                 support.CondiCleanse,
                 support.CondiCleanseTime,
                 support.CondiCleanseSelf,
@@ -307,7 +313,7 @@ internal class PhaseDto
                 support.ResurrectTime,
                 support.StunBreak,
                 support.RemovedStunDuration
-        );
+        ];
     }
 
     private static DefensiveStatDataItem GetDefenseStatData(FinalDefensesAll defenses, PhaseData phase)
@@ -328,7 +334,7 @@ internal class PhaseDto
             deadCount = (defenses.DeadCount);
             deadTooltip = (deathDuration.TotalSeconds + " seconds dead, " + (100.0 - Math.Round((deathDuration.TotalMilliseconds / phase.DurationInMS) * 100, 1)) + "% Alive");
         }
-        return (
+        return [
                 defenses.DamageTaken, 
                 defenses.DamageBarrier,
                 defenses.MissedCount,
@@ -348,7 +354,7 @@ internal class PhaseDto
                 defenses.DownedDamageTaken, 
                 defenses.ReceivedCrowdControl,
                 defenses.ReceivedCrowdControlDuration
-            );
+            ];
     }
     public static List<DPSStatDataItem> BuildDPSData(ParsedEvtcLog log, PhaseData phase)
     {

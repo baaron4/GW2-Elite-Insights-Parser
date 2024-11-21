@@ -69,7 +69,7 @@ internal class EXTBarrierStatsPhaseDto
 
     public static List<List<int>> BuildIncomingBarrierStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<List<int>>();
+        var list = new List<List<int>>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
         {

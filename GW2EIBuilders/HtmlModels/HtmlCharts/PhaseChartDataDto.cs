@@ -5,8 +5,8 @@ namespace GW2EIBuilders.HtmlModels.HTMLCharts;
 
 internal class PhaseChartDataDto
 {
-    public List<PlayerChartDataDto> Players { get; set; } = [];
-    public List<TargetChartDataDto> Targets { get; set; } = [];
+    public List<PlayerChartDataDto>? Players { get; set; }
+    public List<TargetChartDataDto>? Targets { get; set; }
 
     public List<List<double[]>?>? TargetsHealthStatesForCR { get; set; } = null;
     public List<List<double[]>?>? TargetsBreakbarPercentStatesForCR { get; set; } = null;
@@ -15,15 +15,16 @@ internal class PhaseChartDataDto
     public PhaseChartDataDto(ParsedEvtcLog log, PhaseData phase, bool addCRData)
     {
         Players = PlayerChartDataDto.BuildPlayersGraphData(log, phase);
+        Targets = new(phase.AllTargets.Count);
         foreach (SingleActor target in phase.AllTargets)
         {
             Targets.Add(new TargetChartDataDto(log, phase, target));
         }
         if (addCRData)
         {
-            TargetsHealthStatesForCR = [];
-            TargetsBreakbarPercentStatesForCR = [];
-            TargetsBarrierStatesForCR = [];
+            TargetsHealthStatesForCR = new(log.FightData.Logic.Targets.Count);
+            TargetsBreakbarPercentStatesForCR = new(log.FightData.Logic.Targets.Count);
+            TargetsBarrierStatesForCR = new(log.FightData.Logic.Targets.Count);
             foreach (SingleActor target in log.FightData.Logic.Targets)
             {
                 TargetsHealthStatesForCR.Add(ChartDataDto.BuildHealthStates(log, target, phase, false));

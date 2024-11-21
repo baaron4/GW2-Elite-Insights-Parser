@@ -6,23 +6,8 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.EXTHealing;
 
-using HealingDistributionItem = (
-    bool indirect,
-    long skillID,
-    int total,
-    int min,
-    int max,
-    int cast,
-    double wasted,
-    double saved,
-    int hits,
-    long timeCast,
-    int totalDowned,
-    long minTimeCast,
-    long maxTimeCast,
-    long timeCastNoInterrupt,
-    int castNoInterrupt
-);
+using HealingDistributionItem = object[];
+
 internal class EXTHealingStatsHealingDistributionDto
 {
     public long ContributedHealing { get; set; }
@@ -87,7 +72,7 @@ internal class EXTHealingStatsHealingDistributionDto
         {
             (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
         }
-        return (
+        return [
                 isIndirectHealing,
                 skill.ID,
                 totalhealing,
@@ -103,7 +88,7 @@ internal class EXTHealingStatsHealingDistributionDto
                 isIndirectHealing ? 0 : maxTimeSpentCasting,
                 isIndirectHealing ? 0 : timeSpentCastingNoInterrupt,
                 isIndirectHealing ? 0 : numberOfCastNoInterrupt
-           );
+           ];
     }
 
     public static EXTHealingStatsHealingDistributionDto BuildIncomingHealingDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)

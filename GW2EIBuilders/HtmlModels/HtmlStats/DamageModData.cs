@@ -4,12 +4,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
-using DamageModDataItem = (
-    int hit,
-    int totalHit,
-    double damageGain,
-    int totalDamage
-);
+using DamageModDataItem = List<double>;
 
 internal class DamageModData
 {
@@ -26,22 +21,22 @@ internal class DamageModData
             if (dModData.TryGetValue(dMod.Name, out var data))
             {
                 Data.Add(
-                (
+                [
                     data.HitCount,
                     data.TotalHitCount,
                     data.DamageGain,
                     data.TotalDamage
-                ));
+                ]);
             }
             else
             {
                 Data.Add(
-                (
+                [
                     0,
                     dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
                     0,
                     dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
-                ));
+                ]);
             }
         }
 
@@ -57,22 +52,22 @@ internal class DamageModData
                 if (dModData.TryGetValue(dMod.Name, out var data))
                 {
                     pTarget.Add(
-                    (
+                    [
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
                         data.TotalDamage
-                    ));
+                    ]);
                 }
                 else
                 {
                     pTarget.Add(
-                    (
+                    [
                         0,
                         dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
                         0,
                         dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
-                    ));
+                    ]);
                 }
             }
         }
@@ -87,29 +82,29 @@ internal class DamageModData
             if (dModData.TryGetValue(dMod.Name, out var data))
             {
                 Data.Add(
-                (
+                [
                     data.HitCount,
                     data.TotalHitCount,
                     data.DamageGain,
                     data.TotalDamage
-                ));
+                ]);
             }
             else
             {
                 Data.Add(
-                (
+                [
                     0,
                     dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
                     0,
                     dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
-                ));
+                ]);
             }
         }
 
         DataTarget = new(phase.Targets.Count);
         foreach (SingleActor target in phase.Targets)
         {
-            var pTarget = new List<DamageModDataItem>();
+            var pTarget = new List<DamageModDataItem>(listToUse.Count);
             DataTarget.Add(pTarget);
             dModData = actor.GetIncomingDamageModifierStats(target, log, phase.Start, phase.End);
             foreach (IncomingDamageModifier dMod in listToUse)
@@ -117,22 +112,22 @@ internal class DamageModData
                 if (dModData.TryGetValue(dMod.Name, out var data))
                 {
                     pTarget.Add(
-                    (
+                    [
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
                         data.TotalDamage
-                    ));
+                    ]);
                 }
                 else
                 {
                     pTarget.Add(
-                    (
+                    [
                         0,
                         dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
                         0,
                         dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
-                    ));
+                    ]);
                 }
             }
         }

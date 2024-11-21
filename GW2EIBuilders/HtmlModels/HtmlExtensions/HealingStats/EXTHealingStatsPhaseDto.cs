@@ -4,12 +4,7 @@ using GW2EIEvtcParser.Extensions;
 
 namespace GW2EIBuilders.HtmlModels.EXTHealing;
 
-using HealingStatItem = (
-    int healing,
-    int healingPowerHybrid,
-    int conversion,
-    int downed
-);
+using HealingStatItem = List<int>;
 
 internal class EXTHealingStatsPhaseDto
 {
@@ -30,24 +25,24 @@ internal class EXTHealingStatsPhaseDto
 
     private static HealingStatItem GetOutgoingHealingStatData(EXTFinalOutgoingHealingStat outgoingHealingStats)
     {
-        return (
+        return [
                 outgoingHealingStats.Healing,
                 outgoingHealingStats.HealingPowerHealing + outgoingHealingStats.HybridHealing,
                 outgoingHealingStats.ConversionHealing,
                 //outgoingHealingStats.HybridHealing,
                 outgoingHealingStats.DownedHealing
-       );
+       ];
     }
 
     private static HealingStatItem GetIncomingHealingStatData(EXTFinalIncomingHealingStat incomingHealintStats)
     {
-        return (
+        return [
                 incomingHealintStats.Healed,
                 incomingHealintStats.HealingPowerHealed + incomingHealintStats.HybridHealed,
                 incomingHealintStats.ConversionHealed,
                 //incomingHealintStats.HybridHealed,
                 incomingHealintStats.DownedHealed
-            );
+            ];
     }
     public static List<HealingStatItem> BuildOutgoingHealingStatData(ParsedEvtcLog log, PhaseData phase)
     {
@@ -66,7 +61,7 @@ internal class EXTHealingStatsPhaseDto
 
         foreach (SingleActor actor in log.Friendlies)
         {
-            var playerData = new List<HealingStatItem>();
+            var playerData = new List<HealingStatItem>(log.Friendlies.Count);
 
             foreach (SingleActor target in log.Friendlies)
             {
@@ -79,7 +74,7 @@ internal class EXTHealingStatsPhaseDto
 
     public static List<HealingStatItem> BuildIncomingHealingStatData(ParsedEvtcLog log, PhaseData phase)
     {
-        var list = new List<HealingStatItem>();
+        var list = new List<HealingStatItem>(log.Friendlies.Count);
 
         foreach (SingleActor actor in log.Friendlies)
         {

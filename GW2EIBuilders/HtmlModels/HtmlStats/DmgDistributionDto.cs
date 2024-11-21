@@ -4,30 +4,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
-using DistributionItem = (
-    bool indirect,
-    long skillID,
-    int totalDamage,
-    int minDamage,
-    int maxDamage,
-    int cast,
-    int connectedHits,
-    int crit,
-    int flank,
-    int glance,
-    double wasted,
-    double saved,
-    int shieldDamage,
-    int critDamage,
-    int hits,
-    long timeCasting,
-    int againstMoving,
-    double breakbarDamage,
-    long minTimeCastingNoInterrupt,
-    long maxTimeSpentCastingNoInterrupt,
-    long timeSpentCastingNoInterrupt,
-    int castNoInterrupt
-);
+using DistributionItem = object[];
 internal class DmgDistributionDto
 {
     public static readonly DmgDistributionDto EmptyInstance = new();
@@ -161,7 +138,7 @@ internal class DmgDistributionDto
 
         double breakbarDamage = breakbarLogsBySkill.Remove(skill, out var brList) ? Math.Round(brList.Sum(x => x.BreakbarDamage), 1) : 0;
 
-        return (
+        return [
             IsIndirectDamage,
             skill.ID,
             totaldamage,
@@ -184,7 +161,7 @@ internal class DmgDistributionDto
             IsIndirectDamage ? 0 : maxTimeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : timeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : numberOfCastNoInterrupt
-        );
+        ];
     }
 
     public static DmgDistributionDto BuildDMGTakenDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
@@ -230,7 +207,7 @@ internal class DmgDistributionDto
 
             (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) = GetCastValues(pair.Value, phase);
 
-            list.Add((
+            list.Add([
                 false,
                 pair.Key.ID,
                 0,
@@ -253,7 +230,7 @@ internal class DmgDistributionDto
                 maxTimeSpentCastingNoInterrupt,
                 timeSpentCastingNoInterrupt,
                 numberOfCastNoInterrupt
-                ));
+                ]);
         }
         // breakbar only
         foreach (var (skill, events) in breakbarLogsBySkill)
@@ -261,7 +238,7 @@ internal class DmgDistributionDto
             usedSkills.TryAdd(skill.ID, skill);
             double breakbarDamage = Math.Round(events.Sum(x => x.BreakbarDamage), 1);
 
-            list.Add((
+            list.Add([
                 false,
                 skill.ID,
                 0,
@@ -284,7 +261,7 @@ internal class DmgDistributionDto
                 0,
                 0,
                 0
-           ));
+           ]);
         }
         return list;
     }

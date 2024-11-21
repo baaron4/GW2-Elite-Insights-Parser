@@ -131,9 +131,9 @@ internal class BuffVolumesContainerDto
         DefBuffOutgoingVolumeActiveSquadStats = BuffVolumeData.BuildActiveBuffOutgoingVolumeData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad);
 
 
-        TargetsCondiVolumeStats = [];
-        TargetsCondiIncomingVolumeTotals = [];
-        TargetsBoonIncomingVolumeTotals = [];
+        TargetsCondiVolumeStats = new(phase.AllTargets.Count);
+        TargetsCondiIncomingVolumeTotals = new(phase.AllTargets.Count);
+        TargetsBoonIncomingVolumeTotals = new(phase.AllTargets.Count);
         foreach (SingleActor target in phase.AllTargets)
         {
             TargetsCondiVolumeStats.Add(BuffVolumeData.BuildTargetCondiVolumeData(log, phase, target));
