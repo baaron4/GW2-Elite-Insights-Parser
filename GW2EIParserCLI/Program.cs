@@ -56,7 +56,7 @@ internal static class Program
         }
         var thisAssembly = Assembly.GetExecutingAssembly();
         var settings = CustomSettingsManager.GetProgramSettings();
-        var programHelper = new ProgramHelper(thisAssembly.GetName().Version, settings);
+        using var programHelper = new ProgramHelper(thisAssembly.GetName().Version, settings);
         if (logFiles.Count > 0)
         {
             return ConsoleProgram.ParseAll(logFiles, programHelper);

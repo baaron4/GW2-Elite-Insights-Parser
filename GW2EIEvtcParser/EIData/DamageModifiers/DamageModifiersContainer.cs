@@ -14,7 +14,7 @@ public class DamageModifiersContainer
 
     internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
-        IEnumerable<List<DamageModifierDescriptor>> allOutgoingDamageModifiers = 
+        IEnumerable<IReadOnlyList<DamageModifierDescriptor>> allOutgoingDamageModifiers = 
         [
             ItemDamageModifiers.OutgoingDamageModifiers,
             EncounterDamageModifiers.OutgoingDamageModifiers,
@@ -80,7 +80,7 @@ public class DamageModifiersContainer
             return first;
         });
         //
-        IEnumerable<List<DamageModifierDescriptor>> allIncomingDamageModifiers =
+        IEnumerable<IReadOnlyList<DamageModifierDescriptor>> allIncomingDamageModifiers =
         [
             ItemDamageModifiers.IncomingDamageModifiers,
             EncounterDamageModifiers.IncomingDamageModifiers,
@@ -153,9 +153,9 @@ public class DamageModifiersContainer
         var res = new List<OutgoingDamageModifier>(srcs.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (ParserHelper.Source src in srcs)
         {
-            if (OutgoingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<OutgoingDamageModifier> list))
+            if (OutgoingDamageModifiersPerSource.TryGetValue(src, out var damageMods))
             {
-                res.AddRange(list);
+                res.AddRange(damageMods);
             }
         }
         return res;
@@ -167,9 +167,9 @@ public class DamageModifiersContainer
         var res = new List<IncomingDamageModifier>(srcs.Count); //TODO(Rennorb) @perf: find average complexity
         foreach (ParserHelper.Source src in srcs)
         {
-            if (IncomingDamageModifiersPerSource.TryGetValue(src, out IReadOnlyList<IncomingDamageModifier> list))
+            if (IncomingDamageModifiersPerSource.TryGetValue(src, out var damageMods))
             {
-                res.AddRange(list);
+                res.AddRange(damageMods);
             }
         }
         return res;

@@ -33,10 +33,10 @@ internal class WvWFight : FightLogic
                 {
                     return new List<HealthDamageEvent>();
                 }
-                return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); //TODO(Rennorb) @perf
+                return log.FindActor(a).GetDamageEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
             }).UsingChecker((x, log) => x.HasKilled && (x.To.Type == AgentItem.AgentType.NonSquadPlayer || x.To.IsSpecies(ArcDPSEnums.TargetID.WorldVersusWorld))),
             new EnemyDamageMechanic("Killing Blows received by enemies", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Red), "Kllng.Blw.Enemy", "Killing Blows inflicted enemy Players by Squad Players", "Killing Blows received by enemies", 0, (log, a) => {
-                return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd).ToList(); //TODO(Rennorb) @perf
+                return log.FindActor(a).GetDamageTakenEvents(null, log, log.FightData.FightStart, log.FightData.FightEnd); //TODO(Rennorb) @perf
             }).UsingChecker((x, log) => x.HasKilled && x.CreditedFrom.Type == AgentItem.AgentType.Player),
         ]);
     }
@@ -81,7 +81,7 @@ internal class WvWFight : FightLogic
         {
             // We get the first enter combat for the player, we ignore it however if there was an exit combat before it as that means the player was already in combat at log start
             var enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).FirstOrDefault();
-            if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
+            if (enterCombat != null && enterCombat.Spec != ParserHelper.Spec.Unknown && enterCombat.Subgroup > 0 && !combatData.GetExitCombatEvents(p.AgentItem).Any(x => x.Time < enterCombat.Time))
             {
                 p.AgentItem.OverrideSpec(enterCombat.Spec);
                 p.OverrideGroup(enterCombat.Subgroup);
@@ -96,7 +96,7 @@ internal class WvWFight : FightLogic
 
     protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
     {
-        MapIDEvent mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapID = log.CombatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
         {
             return base.GetCombatMapInternal(log);
@@ -122,7 +122,7 @@ internal class WvWFight : FightLogic
     }
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        MapIDEvent mapID = combatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapID = combatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
         {
             return _defaultName;
@@ -236,7 +236,7 @@ internal class WvWFight : FightLogic
             modes.AddRange(log.CombatData.GetBuffData(GuildHallsPvPMode));
             modes.AddRange(log.CombatData.GetBuffData(GuildHallWvWMode));
             modes.SortByTime();
-            var usedModes = modes.Select(x => x.BuffID).Distinct().ToList();
+            var usedModes = modes.Select(x => x.BuffID).Distinct();
             foreach (long buffID in usedModes)
             {
                 InstanceBuffs.Add((log.Buffs.BuffsByIds[buffID], 1));
@@ -273,13 +273,13 @@ internal class WvWFight : FightLogic
         if (!_detailed)
         {
             var friendlyAgents = new HashSet<AgentItem>(NonPlayerFriendlies.Select(x => x.AgentItem));
-            var enemyPlayerList = aList.Where(x => !friendlyAgents.Contains(x)).ToList();
+            var enemyPlayerList = aList.Where(x => !friendlyAgents.Contains(x));
             var enemyPlayerDicts = enemyPlayerList.GroupBy(x => x.Agent).ToDictionary(x => x.Key, x => x.ToList());
             foreach (CombatItem c in combatData)
             {
                 if (c.IsDamage(extensions))
                 {
-                    if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out List<AgentItem> srcs))
+                    if (enemyPlayerDicts.TryGetValue(c.SrcAgent, out var srcs))
                     {
                         foreach (AgentItem src in srcs)
                         {
@@ -290,7 +290,7 @@ internal class WvWFight : FightLogic
                             }
                         }
                     }
-                    if (enemyPlayerDicts.TryGetValue(c.DstAgent, out List<AgentItem> dsts))
+                    if (enemyPlayerDicts.TryGetValue(c.DstAgent, out var dsts))
                     {
                         foreach (AgentItem dst in dsts)
                         {
@@ -304,7 +304,7 @@ internal class WvWFight : FightLogic
                 }
             }
         }
-        CombatItem modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
+        CombatItem? modeEvent = combatData.FirstOrDefault(x => (x.IsBuffApply() || x.IsBuffRemoval()) && (x.SkillID == GuildHallPvEMode || x.SkillID == GuildHallsPvPMode || x.SkillID == GuildHallWvWMode));
         if (modeEvent != null)
         {
             _foundSkillMode = true;
@@ -322,9 +322,7 @@ internal class WvWFight : FightLogic
             }
         }
         ComputeFightTargets(agentData, combatData, extensions);
-        auxFriendlies = auxFriendlies.OrderBy(x => x.Character).ToList();
-        _nonPlayerFriendlies.AddRange(auxFriendlies);
-        auxTargets = auxTargets.OrderBy(x => x.Character).ToList();
-        _targets.AddRange(auxTargets);
+        _nonPlayerFriendlies.AddRange(auxFriendlies.OrderBy(x => x.Character));
+        _targets.AddRange(auxTargets.OrderBy(x => x.Character));
     }
 }

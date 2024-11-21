@@ -130,7 +130,7 @@ internal class Gorseval : SpiritVale
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Ghastly Prison - Eggs AoEs
-        var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var eggs = p.GetBuffStatus(log, GhastlyPrison, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in eggs)
         {
             replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(255, 160, 0, 0.3)", new AgentConnector(p)));
@@ -146,7 +146,7 @@ internal class Gorseval : SpiritVale
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Gorseval:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var blooms = cls.Where(x => x.SkillId == GorsevalBloom);
                 foreach (CastEvent c in blooms)
                 {
@@ -183,7 +183,7 @@ internal class Gorseval : SpiritVale
                                 break;
                             }
                         }
-                        if (pos == null)
+                        if (pos == default)
                         {
                             break;
                         }
@@ -276,7 +276,7 @@ internal class Gorseval : SpiritVale
                         }
                     }
                 }
-                var slam = cls.Where(x => x.SkillId == SpectralImpact).ToList();
+                var slam = cls.Where(x => x.SkillId == SpectralImpact);
                 foreach (CastEvent c in slam)
                 {
                     int start = (int)c.Time;

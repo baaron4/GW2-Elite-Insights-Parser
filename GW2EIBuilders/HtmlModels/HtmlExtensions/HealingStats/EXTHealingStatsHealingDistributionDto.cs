@@ -40,7 +40,7 @@ internal class EXTHealingStatsHealingDistributionDto
         {
             if (!usedBoons.ContainsKey(skill.ID))
             {
-                if (boons.BuffsByIds.TryGetValue(skill.ID, out Buff buff))
+                if (boons.BuffsByIds.TryGetValue(skill.ID, out var buff))
                 {
                     usedBoons.Add(buff.ID, buff);
                 }
@@ -54,10 +54,7 @@ internal class EXTHealingStatsHealingDistributionDto
         }
         else
         {
-            if (!usedSkills.ContainsKey(skill.ID))
-            {
-                usedSkills.Add(skill.ID, skill);
-            }
+            usedSkills.TryAdd(skill.ID, skill);
         }
 
         IEnumerable<CastEvent>? clList = null;
@@ -111,7 +108,7 @@ internal class EXTHealingStatsHealingDistributionDto
     }
 
 
-    private static List<object[]> BuildHealingDistBodyData(ParsedEvtcLog log, IReadOnlyList<CastEvent> casting, IReadOnlyList<EXTHealingEvent> healingLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<object[]> BuildHealingDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTHealingEvent> healingLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
     {
         var list = new List<object[]>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
@@ -173,8 +170,8 @@ internal class EXTHealingStatsHealingDistributionDto
     private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, SingleActor p, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTHealingStatsHealingDistributionDto();
-        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
-        var healingLogs = p.EXTHealing.GetJustActorOutgoingHealEvents(target, log, phase.Start, phase.End).ToList();
+        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
+        var healingLogs = p.EXTHealing.GetJustActorOutgoingHealEvents(target, log, phase.Start, phase.End);
         dto.ContributedHealing = outgoingHealingStats.ActorHealing;
         dto.ContributedDownedHealing = outgoingHealingStats.ActorDownedHealing;
         dto.TotalHealing = outgoingHealingStats.Healing;
@@ -193,8 +190,8 @@ internal class EXTHealingStatsHealingDistributionDto
     private static EXTHealingStatsHealingDistributionDto BuildHealingDistDataMinionsInternal(ParsedEvtcLog log, EXTFinalOutgoingHealingStat outgoingHealingStats, Minions minions, SingleActor? target, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
         var dto = new EXTHealingStatsHealingDistributionDto();
-        var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
-        var healingLogs = minions.EXTHealing.GetOutgoingHealEvents(target, log, phase.Start, phase.End).ToList(); //TODO(Rennorb) @perf
+        var casting = minions.GetIntersectingCastEvents(log, phase.Start, phase.End);
+        var healingLogs = minions.EXTHealing.GetOutgoingHealEvents(target, log, phase.Start, phase.End);
         dto.ContributedHealing = healingLogs.Sum(x => x.HealingDone);
         dto.TotalHealing = outgoingHealingStats.Healing;
         dto.TotalCasting = casting.Sum(cl => Math.Min(cl.EndTime, phase.End) - Math.Max(cl.Time, phase.Start));

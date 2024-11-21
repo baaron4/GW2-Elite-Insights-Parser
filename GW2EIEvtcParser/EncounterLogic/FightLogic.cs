@@ -114,7 +114,7 @@ public abstract class FightLogic
         long end = log.FightData.Success ? log.FightData.FightEnd : (log.FightData.FightEnd + log.FightData.FightStart) / 2;
         int emboldenedStacks = (int)log.PlayerList.Select(x =>
         {
-            if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out BuffsGraphModel graph))
+            if (x.GetBuffGraphs(log).TryGetValue(SkillIDs.Emboldened, out var graph))
             {
                 return graph.BuffChart.Where(y => y.Intersects(log.FightData.FightStart, end)).Max(y => y.Value);
             }
@@ -185,7 +185,7 @@ public abstract class FightLogic
 
     internal virtual string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        SingleActor target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
+        SingleActor? target = Targets.FirstOrDefault(x => x.IsSpecies(GenericTriggerID));
         if (target == null)
         {
             return "UNKNOWN";
@@ -204,7 +204,13 @@ public abstract class FightLogic
         
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
         // to build the hashset and hash the value each time.
-        var targetIDs = GetTargetsIDs();
+        var targetIDs = GetTargetsIDs().ToArray();
+        var trashIDs = GetTrashMobsIDs();
+        //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
+        // to build the hashset and hash the value each time.
+
+// Build targets
+#if !DEBUG2
         foreach (int id in targetIDs)
         {
             IReadOnlyList<AgentItem> agents = agentData.GetNPCsByID(id);
@@ -213,6 +219,9 @@ public abstract class FightLogic
                 _targets.Add(new NPC(agentItem));
             }
         }
+#else
+        _targets.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => !trashIDs.Contains(GetTrashID(x.ID)) && !x.GetFinalMaster().IsPlayer && !x.IsNonIdentifiedSpecies()).Select(a => new NPC(a)));
+#endif
         //TODO(Rennorb) @perf @cleanup: is this required?
         _targets.SortByFirstAware();
 
@@ -226,18 +235,14 @@ public abstract class FightLogic
             }
             return int.MaxValue;
         }).ToList();
-        
-        //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than
-        // to build the hashset and hash the value each time.
-        var trashIDs = GetTrashMobsIDs();
-        foreach(var trash in trashIDs)
+        // Build trash mobs
+        foreach (var trash in trashIDs)
         {
             if(targetIDs.IndexOf((int)trash) != -1)
             {
-                throw new InvalidDataException("ID collision between trash and targets");
+                throw new InvalidDataException("ID collision between trash and targets: " + nameof(trash));
             }
         }
-
         _trashMobs.AddRange(agentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => trashIDs.Contains(GetTrashID(x.ID))).Select(a => new NPC(a)));
         //aList.AddRange(agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => ids2.Contains(ParseEnum.GetTrashIDS(x.ID))));
 #if DEBUG2
@@ -272,7 +277,7 @@ public abstract class FightLogic
             {
                 enterCombat = combatData.GetEnterCombatEvents(p.AgentItem).Where(x => x.Time <= threshold).LastOrDefault();
             }
-            if (enterCombat != null && enterCombat.Spec != Spec.Unknown)
+            if (enterCombat != null && enterCombat.Spec != Spec.Unknown && enterCombat.Subgroup != 0)
             {
                 p.AgentItem.OverrideSpec(enterCombat.Spec);
                 p.OverrideGroup(enterCombat.Subgroup);
@@ -417,7 +422,7 @@ public abstract class FightLogic
         {
             foreach (var squadMarkerEvent in log.CombatData.GetSquadMarkerEvents(squadMarker))
             {
-                if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out string icon))
+                if (ParserIcons.SquadMarkerIndexToIcon.TryGetValue(squadMarker, out var icon))
                 {
                     EnvironmentDecorations.Add(new IconDecoration(icon, 16, 90, 0.8f, (squadMarkerEvent.Time, squadMarkerEvent.EndTime), new PositionConnector(squadMarkerEvent.Position)).UsingSquadMarker(true));
                 }
@@ -456,9 +461,9 @@ public abstract class FightLogic
         NoBouncyChestGenericCheckSucess(combatData, agentData, fightData, playerAgents);
     }
 
-    protected IReadOnlyList<SingleActor> GetSuccessCheckTargets()
+    protected IEnumerable<SingleActor> GetSuccessCheckTargets()
     {
-        return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID)).ToList();
+        return Targets.Where(x => GetSuccessCheckIDs().Contains(x.ID));
     }
 
     protected void NoBouncyChestGenericCheckSucess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)

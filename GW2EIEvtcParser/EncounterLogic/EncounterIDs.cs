@@ -26,6 +26,7 @@ internal static class EncounterIDs
         public const long HallOfChainsMask = 0x000500;
         public const long MythwrightGambitMask = 0x000600;
         public const long TheKeyOfAhdashimMask = 0x000700;
+        public const long MountBalriorMask = 0x000800;
     }
 
     public static class FractalMasks

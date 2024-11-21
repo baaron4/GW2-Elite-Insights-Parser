@@ -73,6 +73,9 @@ internal static class EncounterImages
     internal const string EncounterIconAdina = "https://wiki.guildwars2.com/images/a/a0/Mini_Earth_Djinn.png";
     internal const string EncounterIconSabir = "https://wiki.guildwars2.com/images/f/fc/Mini_Air_Djinn.png";
     internal const string EncounterIconPeerlessQadim = "https://wiki.guildwars2.com/images/8/8b/Mini_Qadim_the_Peerless.png";
+    internal const string EncounterIconDecima = "https://i.imgur.com/EJJRx02.png";
+    internal const string EncounterIconGreer = "https://i.imgur.com/19lr7VM.png";
+    internal const string EncounterIconUra = "https://i.imgur.com/hUdfF7h.png";
 
     // Instances Icons
     internal const string InstanceIconSpiritVale = "https://i.imgur.com/DcuOUHQ.png";

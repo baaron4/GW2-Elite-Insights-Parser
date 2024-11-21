@@ -57,7 +57,7 @@ internal class FraenirOfJormag : Bjora
         List<PhaseData> phases = GetInitialPhase(log);
         SingleActor fraenir = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.FraenirOfJormag)) ?? throw new MissingKeyActorsException("Fraenir of Jormag not found");
         phases[0].AddTarget(fraenir);
-        SingleActor icebrood = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.IcebroodConstructFraenir));
+        SingleActor? icebrood = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.IcebroodConstructFraenir));
         if (icebrood != null)
         {
             phases[0].AddTarget(icebrood);
@@ -66,7 +66,7 @@ internal class FraenirOfJormag : Bjora
         {
             return phases;
         }
-        BuffEvent invulApplyFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
+        BuffEvent? invulApplyFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
         if (invulApplyFraenir != null)
         {
             // split happened
@@ -74,23 +74,23 @@ internal class FraenirOfJormag : Bjora
             if (icebrood != null)
             {
                 // icebrood enters combat
-                EnterCombatEvent enterCombatIce = log.CombatData.GetEnterCombatEvents(icebrood.AgentItem).LastOrDefault();
+                EnterCombatEvent? enterCombatIce = log.CombatData.GetEnterCombatEvents(icebrood.AgentItem).LastOrDefault();
                 if (enterCombatIce != null)
                 {
                     // icebrood phasing
-                    BuffEvent invulApplyIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
-                    BuffEvent invulRemoveIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
+                    BuffEvent? invulApplyIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffApplyEvent).FirstOrDefault();
+                    BuffEvent? invulRemoveIce = log.CombatData.GetBuffDataByIDByDst(Invulnerability757, icebrood.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                     long icebroodStart = enterCombatIce.Time;
                     long icebroodEnd = log.FightData.FightEnd;
                     if (invulApplyIce != null && invulRemoveIce != null)
                     {
                         long icebrood2Start = invulRemoveIce.Time;
                         phases.Add(new PhaseData(icebroodStart + 1, invulApplyIce.Time, "Construct Intact"));
-                        BuffEvent invulRemoveFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
+                        BuffEvent? invulRemoveFraenir = log.CombatData.GetBuffDataByIDByDst(Determined762, fraenir.AgentItem).Where(x => x is BuffRemoveAllEvent).FirstOrDefault();
                         if (invulRemoveFraenir != null)
                         {
                             // fraenir came back
-                            DeadEvent deadIce = log.CombatData.GetDeadEvents(icebrood.AgentItem).LastOrDefault();
+                            DeadEvent? deadIce = log.CombatData.GetDeadEvents(icebrood.AgentItem).LastOrDefault();
                             if (deadIce != null)
                             {
                                 icebroodEnd = deadIce.Time;
@@ -143,7 +143,7 @@ internal class FraenirOfJormag : Bjora
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10).ToList();
+        var boundElementals = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 100 && x.FirstAware > 10);
         IReadOnlyList<AgentItem> spawnedElementals = agentData.GetNPCsByID(ArcDPSEnums.TrashID.IcebroodElemental);
         foreach (AgentItem boundElemental in boundElementals)
         {
@@ -154,8 +154,8 @@ internal class FraenirOfJormag : Bjora
             // If a Bound Icebrood Elemental gets killed, the log contains a Health update event of 0
             if (boundElementalKilled.Any())
             {
-                long firstAware = boundElementalKilled.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToList().FirstOrDefault().FirstAware;
-                boundElemental.OverrideAwareTimes(firstAware, boundElementalKilled.FirstOrDefault().Time);
+                long firstAware = boundElementalKilled.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).First().FirstAware;
+                boundElemental.OverrideAwareTimes(firstAware, boundElementalKilled.First().Time);
             }
             else
             {
@@ -164,15 +164,15 @@ internal class FraenirOfJormag : Bjora
                 // When they match, override the Bound's LastAware to the Elemental's FirstAware
                 foreach (AgentItem spawnedElemental in spawnedElementals)
                 {
-                    CombatItem itemBound = combatData.FirstOrDefault(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
-                    CombatItem itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                    CombatItem? itemBound = combatData.FirstOrDefault(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
+                    CombatItem? itemElem = combatData.FirstOrDefault(x => x.SrcMatchesAgent(spawnedElemental) && x.IsStateChange == ArcDPSEnums.StateChange.Position);
                     if (itemBound != null && itemElem != null)
                     {
                         var bound3D = MovementEvent.GetPoint3D(itemBound);
                         var elem3D = MovementEvent.GetPoint3D(itemElem);
                         if ((bound3D - elem3D).XY().LengthSquared() < 1)
                         {
-                            long firstAwareBound = combatData.Where(x => x.SrcMatchesAgent(boundElemental)).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).ToList().FirstOrDefault().FirstAware;
+                            long firstAwareBound = boundElemental.FirstAware;
                             boundElemental.OverrideAwareTimes(firstAwareBound, spawnedElemental.FirstAware);
                         }
                     }

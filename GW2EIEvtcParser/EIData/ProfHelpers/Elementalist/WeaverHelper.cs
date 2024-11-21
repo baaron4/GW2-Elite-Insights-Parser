@@ -210,7 +210,7 @@ internal static class WeaverHelper
     ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
@@ -242,14 +242,14 @@ internal static class WeaverHelper
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance)
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(WovenEarth, "Woven Earth", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenEarth, DamageModifierMode.All),
         new BuffOnActorDamageModifier(PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Dual Fire Attunement", DualFireAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireAttunement),
         new Buff("Fire Water Attunement", FireWaterAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireWaterAttunement),
@@ -305,7 +305,7 @@ internal static class WeaverHelper
         { EarthMajorAttunement, new HashSet<long> { EarthFireAttunement, EarthWaterAttunement, EarthAirAttunement, DualEarthAttunement }},
     };
 
-    private static long TranslateWeaverAttunement(List<BuffApplyEvent> buffApplies)
+    private static long TranslateWeaverAttunement(IEnumerable<BuffApplyEvent> buffApplies)
     {
         // check if more than 3 ids are present
         // Seems to happen when the attunement bug happens
@@ -329,13 +329,13 @@ internal static class WeaverHelper
             {
                 return c.BuffID;
             }
-            if (_majorsTranslation.ContainsKey(c.BuffID))
+            if (_majorsTranslation.TryGetValue(c.BuffID, out var potentialMajors))
             {
-                major = _majorsTranslation[c.BuffID];
+                major = potentialMajors;
             }
-            else if (_minorsTranslation.ContainsKey(c.BuffID))
+            else if (_minorsTranslation.TryGetValue(c.BuffID, out var potentialMinors))
             {
-                minor = _minorsTranslation[c.BuffID];
+                minor = potentialMinors;
             }
         }
         if (major == null || minor == null)
@@ -394,15 +394,15 @@ internal static class WeaverHelper
         };
         // first we get rid of standard attunements
         var toClean = new HashSet<long>();
-        var attuns = buffs.Where(x => attunements.Contains(x.BuffID)).ToList();
+        var attuns = buffs.Where(x => attunements.Contains(x.BuffID));
         foreach (BuffEvent c in attuns)
         {
             toClean.Add(c.BuffID);
             c.Invalidate(skillData);
         }
         // get all weaver attunements ids and group them by time
-        var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID)).ToList();
-        if (weaverAttuns.Count == 0)
+        var weaverAttuns = buffs.Where(x => weaverAttunements.Contains(x.BuffID));
+        if (!weaverAttuns.Any())
         {
             return res;
         }
@@ -410,7 +410,7 @@ internal static class WeaverHelper
         long prevID = 0;
         foreach (KeyValuePair<long, List<BuffEvent>> pair in groupByTime)
         {
-            var applies = pair.Value.OfType<BuffApplyEvent>().ToList();
+            var applies = pair.Value.OfType<BuffApplyEvent>();
             long curID = TranslateWeaverAttunement(applies);
             foreach (BuffEvent c in pair.Value)
             {

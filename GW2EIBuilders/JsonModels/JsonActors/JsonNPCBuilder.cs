@@ -74,9 +74,9 @@ internal static class JsonNPCBuilder
             var data = new List<JsonBuffsUptimeData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                if (buffs[i].TryGetValue(pair.Key, out FinalActorBuffs val) && buffDictionaries[i].TryGetValue(pair.Key, out FinalBuffsDictionary dict))
+                if (buffs[i].TryGetValue(pair.Key, out var buffstats) && buffDictionaries[i].TryGetValue(pair.Key, out var buffsDict))
                 {
-                    JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(val, dict);
+                    JsonBuffsUptimeData value = JsonBuffsUptimeBuilder.BuildJsonBuffsUptimeData(buffstats, buffsDict);
                     data.Add(value);
                 }
                 else
@@ -105,9 +105,9 @@ internal static class JsonNPCBuilder
             var data = new List<JsonBuffVolumesData>();
             for (int i = 0; i < phases.Count; i++)
             {
-                if (buffVolumes[i].TryGetValue(pair.Key, out FinalActorBuffVolumes val) && buffVolumeDictionaries[i].TryGetValue(pair.Key, out FinalBuffVolumesDictionary dict))
+                if (buffVolumes[i].TryGetValue(pair.Key, out var buffStats) && buffVolumeDictionaries[i].TryGetValue(pair.Key, out var buffDicts))
                 {
-                    JsonBuffVolumesData value = JsonBuffVolumesBuilder.BuildJsonBuffVolumesData(val, dict);
+                    JsonBuffVolumesData value = JsonBuffVolumesBuilder.BuildJsonBuffVolumesData(buffStats, buffDicts);
                     data.Add(value);
                 }
                 else

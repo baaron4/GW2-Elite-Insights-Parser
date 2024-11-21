@@ -1355,7 +1355,7 @@ public class SkillItem
         Name = name.Replace("\0", "");
         ApiSkill = apiController.GetAPISkill(ID);
         //
-        if (_overrideNames.TryGetValue(ID, out string overrideName))
+        if (_overrideNames.TryGetValue(ID, out var overrideName))
         {
             Name = overrideName;
         }
@@ -1363,7 +1363,7 @@ public class SkillItem
         {
             Name = ApiSkill.Name;
         }
-        if (_overrideIcons.TryGetValue(ID, out string icon))
+        if (_overrideIcons.TryGetValue(ID, out var icon))
         {
             Icon = icon;
         }

@@ -17,7 +17,7 @@ internal class BuffData
             var buffVals = new List<object>();
             Data.Add(buffVals);
 
-            if (buffs.TryGetValue(buff.ID, out FinalActorBuffs uptime))
+            if (buffs.TryGetValue(buff.ID, out var uptime))
             {
                 buffVals.Add(uptime.Uptime);
                 if (buff.Type == Buff.BuffType.Intensity && uptime.Presence > 0)
@@ -32,7 +32,7 @@ internal class BuffData
     {
         foreach (Buff buff in listToUse)
         {
-            if (buffs.TryGetValue(buff.ID, out FinalBuffsDictionary toUse) && toUse.GeneratedBy.ContainsKey(actor))
+            if (buffs.TryGetValue(buff.ID, out var toUse) && toUse.GeneratedBy.ContainsKey(actor))
             {
                 Data.Add(
                     [
@@ -63,7 +63,7 @@ internal class BuffData
     {
         foreach (Buff buff in listToUse)
         {
-            if (uptimes.TryGetValue(buff.ID, out FinalActorBuffs uptime))
+            if (uptimes.TryGetValue(buff.ID, out var uptime))
             {
                 Data.Add(
                     [
@@ -96,7 +96,7 @@ internal class BuffData
         {
             var boonVals = new List<object>();
             Data.Add(boonVals);
-            if (uptimes.TryGetValue(buff.ID, out FinalActorBuffs uptime))
+            if (uptimes.TryGetValue(buff.ID, out var uptime))
             {
                 boonVals.Add(uptime.Uptime);
                 if (buff.Type == Buff.BuffType.Intensity && uptime.Presence > 0)

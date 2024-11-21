@@ -20,7 +20,7 @@ internal static class EncounterLogicPhaseUtils
         IReadOnlyList<HealthUpdateEvent> hpUpdates = log.CombatData.GetHealthUpdateEvents(mainTarget.AgentItem);
         for (int i = 0; i < thresholds.Count; i++)
         {
-            HealthUpdateEvent evt = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[i]);
+            HealthUpdateEvent? evt = hpUpdates.FirstOrDefault(x => x.HealthPercent <= thresholds[i]);
             if (evt == null)
             {
                 break;
@@ -84,6 +84,52 @@ internal static class EncounterLogicPhaseUtils
     internal static List<PhaseData> GetPhasesByInvul(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool beginWithStart)
     {
         return GetPhasesByInvul(log, skillID, mainTarget, addSkipPhases, beginWithStart, log.FightData.FightStart, log.FightData.FightEnd);
+    }
+
+
+    internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, IEnumerable<long> skillIDs, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCasts, long start, long end)
+    {
+        long last = start;
+        var invuls = mainTarget.GetCastEvents(log, start, end)
+            .Where(x => skillIDs.Contains(x.SkillId))
+            .ToList();
+        invuls.SortByTime(); // Sort in case there were multiple skillIDs
+
+        var phases = new List<PhaseData>(invuls.Count);
+        bool nextToAddIsSkipPhase = !mainBetweenCasts;
+        foreach (CastEvent c in invuls)
+        {
+            if (mainBetweenCasts)
+            {
+                phases.Add(new PhaseData(last, c.Time));
+                if (addSkipPhases) {
+                    phases.Add(new PhaseData(c.Time, c.EndTime));
+                }
+            } 
+            else
+            {
+                if (addSkipPhases)
+                {
+                    phases.Add(new PhaseData(last, c.Time));
+                }
+                phases.Add(new PhaseData(c.Time, c.EndTime));
+            }
+            last = c.EndTime;
+        }
+        if (!nextToAddIsSkipPhase || (nextToAddIsSkipPhase && addSkipPhases))
+        {
+            phases.Add(new PhaseData(last, end));
+        }
+        return phases.Where(x => x.DurationInMS > 100).ToList(); // only filter unrealistically short phases, otherwise it may mess with phase names
+    }
+
+    internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCast, long start, long end)
+    {
+        return GetPhasesByCast(log, [skillID], mainTarget, addSkipPhases, mainBetweenCast, start, end);
+    }
+    internal static List<PhaseData> GetPhasesByCast(ParsedEvtcLog log, long skillID, SingleActor mainTarget, bool addSkipPhases, bool mainBetweenCast)
+    {
+        return GetPhasesByCast(log, skillID, mainTarget, addSkipPhases, mainBetweenCast, log.FightData.FightStart, log.FightData.FightEnd);
     }
 
     internal static List<PhaseData> GetInitialPhase(ParsedEvtcLog log)

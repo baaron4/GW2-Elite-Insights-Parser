@@ -10,10 +10,10 @@ public class MovingPlatformDecorationRenderingDescription : BackgroundDecoration
 {
     public class PositionConverter : JsonConverter<Position[]>
     {
-        public override void Write(Utf8JsonWriter writer, Position[] positions, JsonSerializerOptions serializer)
+        public override void Write(Utf8JsonWriter writer, Position[] value, JsonSerializerOptions options)
         {
             writer.WriteStartArray();
-            foreach (var (x, y, z, angle, opacity, time) in positions)
+            foreach (var (x, y, z, angle, opacity, time) in value)
             {
                 writer.WriteStartArray();
                 writer.WriteNumberValue(x);
@@ -28,7 +28,7 @@ public class MovingPlatformDecorationRenderingDescription : BackgroundDecoration
             writer.WriteEndArray();
         }
 
-        public override Position[] Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions serializer)
+        public override Position[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             throw new NotSupportedException();
         }

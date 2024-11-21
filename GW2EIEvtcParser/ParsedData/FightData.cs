@@ -174,6 +174,15 @@ public class FightData
             case ArcDPSEnums.TargetID.PeerlessQadim:
                 Logic = new PeerlessQadim(id);
                 break;
+            case ArcDPSEnums.TargetID.Greer:
+                Logic = new GreerTheBlightbringer(id);
+                break;
+            case ArcDPSEnums.TargetID.Decima:
+                Logic = new DecimaTheStormsinger(id);
+                break;
+            case ArcDPSEnums.TargetID.Ura:
+                Logic = new UraTheSteamshrieker(id);
+                break;
             //
             case ArcDPSEnums.TargetID.IcebroodConstruct:
                 Logic = new IcebroodConstruct(id);

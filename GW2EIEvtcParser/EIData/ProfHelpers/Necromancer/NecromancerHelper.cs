@@ -46,7 +46,7 @@ internal static class NecromancerHelper
         new EffectCastFinder(DistressSkill, EffectGUIDs.NecromancerSpearDistress).UsingChecker((effectEvent, combatData, agentData, skillData) => CombatData.FindRelatedEvents(combatData.GetBuffRemoveAllData(DistressBuff).OfType<BuffRemoveAllEvent>(), effectEvent.Time).Any()),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Spite
         new BuffOnFoeDamageModifier(NumberOfBoons, "Spiteful Talisman", "10% on boonless target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByAbsence, BuffImages.SpitefulTalisman, DamageModifierMode.All),
@@ -64,7 +64,7 @@ internal static class NecromancerHelper
         new BuffOnActorDamageModifier([DeathShroud, ReapersShroud, HarbingerShroud], "Death Perception", "15% crit damage while in shroud", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathPerception, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.June2022Balance), // no tracked for Scourge
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(DeathShroud, "Death Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(DeathShroud, "Death Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Necromancer, ByPresence, BuffImages.DeathShroud, DamageModifierMode.sPvPWvW),
@@ -73,7 +73,7 @@ internal static class NecromancerHelper
             .WithBuilds(GW2Builds.October2019Balance),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [     
         // Forms
         new Buff("Lich Form", LichForm, Source.Necromancer, BuffClassification.Other, BuffImages.LichForm),
@@ -226,16 +226,16 @@ internal static class NecromancerHelper
         // Mark of Blood or Chillblains (Staff 2/3)
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.NecromancerMarkOfBloodOrChillblains, out var markOfBloodOrChillblains))
         {
-            var markCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == MarkOfBlood || x.SkillId == Chillblains || x.Skill.IsDodge(log.SkillData)).ToList();
+            var markCasts = player.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == MarkOfBlood || x.SkillId == Chillblains || x.Skill.IsDodge(log.SkillData));
             foreach (EffectEvent effect in markOfBloodOrChillblains)
             {
                 SkillModeDescriptor skill;
                 string icon;
                 bool fromDodge = false;
-                var markCastsOnEffect = markCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant).ToList();
-                if (markCastsOnEffect.Count == 1)
+                var markCastsOnEffect = markCasts.Where(x => effect.Time - ServerDelayConstant > x.Time && x.EndTime > effect.Time + ServerDelayConstant);
+                if (markCastsOnEffect.Count() == 1)
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.FirstOrDefault().SkillId);
+                    skill = new SkillModeDescriptor(player, Spec.Necromancer, markCastsOnEffect.First().SkillId);
                     if (skill.SkillID != MarkOfBlood && skill.SkillID != Chillblains)
                     {
                         fromDodge = true;

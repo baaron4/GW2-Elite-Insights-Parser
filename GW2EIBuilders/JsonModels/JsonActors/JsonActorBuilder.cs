@@ -28,7 +28,7 @@ internal static class JsonActorBuilder
         jsonActor.HitboxWidth = actor.HitboxWidth;
         jsonActor.InstanceID = actor.AgentItem.InstID;
         jsonActor.IsFake = actor.IsFakeActor;
-        TeamChangeEvent teamChange = log.CombatData.GetTeamChangeEvents(actor.AgentItem).LastOrDefault();
+        TeamChangeEvent? teamChange = log.CombatData.GetTeamChangeEvents(actor.AgentItem).LastOrDefault();
         if (teamChange != null)
         {
             if (teamChange.TeamIDInto > 0)
@@ -89,7 +89,7 @@ internal static class JsonActorBuilder
             IReadOnlyDictionary<long, BuffsGraphModel> buffGraphs = actor.GetBuffGraphs(log);
             jsonActor.BoonsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfBoons])?.ToList();
             jsonActor.ConditionsStates = JsonBuffsUptimeBuilder.GetBuffStates(buffGraphs[SkillIDs.NumberOfConditions])?.ToList();
-            if (buffGraphs.TryGetValue(SkillIDs.NumberOfActiveCombatMinions, out BuffsGraphModel states))
+            if (buffGraphs.TryGetValue(SkillIDs.NumberOfActiveCombatMinions, out var states))
             {
                 jsonActor.ActiveCombatMinions = JsonBuffsUptimeBuilder.GetBuffStates(states).ToList();
             }

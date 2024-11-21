@@ -15,7 +15,7 @@ internal abstract class EndOfDragonsStrike : StrikeMissionLogic
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
         IReadOnlyList<RewardEvent> rewards = combatData.GetRewardEvents();
-        RewardEvent reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart);
+        RewardEvent? reward = rewards.FirstOrDefault(x => x.RewardType == RewardTypes.PostEoDStrikeReward && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);

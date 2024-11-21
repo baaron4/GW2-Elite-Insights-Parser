@@ -3,6 +3,7 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.ParserHelpers;
 
+#pragma warning disable CA1823 // Unused field
 internal static class ParserIcons
 {
     /// <summary>
@@ -191,6 +192,9 @@ internal static class ParserIcons
     private const string TargetDagda = "https://i.imgur.com/k6rQdML.png";
     private const string TargetCerus = "https://i.imgur.com/wDdN8O3.png";
     private const string TargetEparch = "https://i.imgur.com/3NnhvUT.png";
+    private const string TargetDecima = "https://i.imgur.com/MPcVY47.png";
+    private const string TargetGreer = "https://i.imgur.com/iuhDVaM.png";
+    private const string TargetUra = "https://i.imgur.com/LxO1u5r.png";
     #endregion
 
     #region Trash
@@ -928,6 +932,9 @@ internal static class ParserIcons
         { TargetID.CerusLonelyTower, TargetCerus },
         { TargetID.DeimosLonelyTower, TargetDeimos },
         { TargetID.EparchLonelyTower, TargetEparch },
+        { TargetID.Greer, TargetGreer },
+        { TargetID.Decima, TargetDecima },
+        { TargetID.Ura, TargetUra },
     };
 
     /// <summary>
@@ -1273,6 +1280,10 @@ internal static class ParserIcons
         { TrashID.DerangedSpiritSR, TrashDerangedSpirit },
         { TrashID.DerangedSpiritSR2, TrashDerangedSpirit },
         { TrashID.Tribocharge, TrashTribocharge },
+        { TrashID.EmpoweringBeast, TrashGenericRedEnemySkull },
+        { TrashID.EnlightenedConduit, TrashChargedBloodstoneFragment },
+        { TrashID.VentShot, TrashGenericRedEnemySkull },
+        { TrashID.Fumaroller, TrashGenericRedEnemySkull },
     };
 
     /// <summary>
@@ -1563,3 +1574,5 @@ internal static class ParserIcons
         { MarkerGUIDs.WhiteCatmanderTag, WhiteCatmanderTagOverhead },
     };
 }
+
+#pragma warning restore CA1823 // Unused field

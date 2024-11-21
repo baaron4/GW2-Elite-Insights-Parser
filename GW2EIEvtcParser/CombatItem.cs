@@ -136,7 +136,7 @@ public class CombatItem
 
     internal bool HasTime(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out ExtensionHandler handler))
+        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out var handler))
         {
             return handler.HasTime(this);
         }
@@ -171,7 +171,7 @@ public class CombatItem
 
     internal bool IsDamage(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out ExtensionHandler handler))
+        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out var handler))
         {
             return handler.IsDamage(this);
         }
@@ -180,7 +180,7 @@ public class CombatItem
 
     internal bool IsDamagingDamage(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out ExtensionHandler handler))
+        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out var handler))
         {
             return handler.IsDamagingDamage(this);
         }
@@ -241,7 +241,7 @@ public class CombatItem
 
     internal bool SrcIsAgent(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out ExtensionHandler handler))
+        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out var handler))
         {
             return handler.SrcIsAgent(this);
         }
@@ -261,7 +261,7 @@ public class CombatItem
 
     internal bool DstIsAgent(IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out ExtensionHandler handler))
+        if (IsExtension && Pad != 0 && extensions.TryGetValue(Pad, out var handler))
         {
             return handler.DstIsAgent(this);
         }

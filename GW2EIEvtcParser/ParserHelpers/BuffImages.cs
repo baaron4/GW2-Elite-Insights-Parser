@@ -416,6 +416,10 @@ public static class BuffImages
     public const string EnfeebledForce = "https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png";
     public const string MagicBlastIntensity = "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png";
     public const string PartiallyProtected = "https://wiki.guildwars2.com/images/d/d0/Partially_Protected.png";
+    // Decima
+    public const string ElectricalBuildup = "https://wiki.guildwars2.com/images/0/01/Electrical_Buildup.png";
+    public const string ConjuredBarrier = "https://wiki.guildwars2.com/images/4/42/Conjured_Barrier.png";
+    public const string ElectrifiedMinion = "https://wiki.guildwars2.com/images/6/6d/Electrified_Minion.png";
     // Fractal
     public const string GambitExhausted = "https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png";
     public const string RedirectAnomaly = "https://wiki.guildwars2.com/images/9/94/Redirect_Anomaly.png";
@@ -1188,6 +1192,7 @@ public static class BuffImages
     public const string VowOfTheUntamed = "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png";
     public const string UnleashRanger = "https://wiki.guildwars2.com/images/9/91/Unleash_Ranger.png";
     public const string UnleashPet = "https://wiki.guildwars2.com/images/4/43/Unleash_Pet.png";
+    public const string UnleashedPower = "https://wiki.guildwars2.com/images/1/1d/Unleashed_Power.png";
     public const string PerilousGift = "https://wiki.guildwars2.com/images/d/d6/Perilous_Gift.png";
     public const string ForestsFortification = "https://wiki.guildwars2.com/images/4/43/Forest%27s_Fortification.png";
     public const string WeaversProwess = "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png";

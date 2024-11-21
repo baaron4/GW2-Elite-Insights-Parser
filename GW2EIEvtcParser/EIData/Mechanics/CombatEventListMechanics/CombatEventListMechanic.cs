@@ -5,11 +5,11 @@ namespace GW2EIEvtcParser.EIData;
 internal abstract class CombatEventListMechanic<T> : CheckedMechanic<T> where T : TimeCombatEvent
 {
 
-    public delegate IReadOnlyList<T> CombatEventsGetter(ParsedEvtcLog log, AgentItem agent);
+    public delegate IEnumerable<T> CombatEventsGetter(ParsedEvtcLog log, AgentItem agent);
 
     private readonly CombatEventsGetter _getter;
 
-    public IReadOnlyList<T> GetEvents(ParsedEvtcLog log, AgentItem a)
+    public IEnumerable<T> GetEvents(ParsedEvtcLog log, AgentItem a)
     {
         return _getter(log, a);
     }

@@ -74,7 +74,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         }
 
         Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-        if (distribution.TryGetValue(_src, out BuffDistributionItem toModify))
+        if (distribution.TryGetValue(_src, out var toModify))
         {
             toModify.IncrementValue(cDur);
         }

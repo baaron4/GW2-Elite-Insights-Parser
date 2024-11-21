@@ -41,7 +41,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData, IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.OldRaidReward2 && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);
@@ -50,14 +50,14 @@ internal class TwistedCastle : StrongholdOfTheFaithful
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
             IReadOnlyList<AgentItem> statues = agentData.GetNPCsByID(ArcDPSEnums.TrashID.HauntingStatue);
             long start = long.MaxValue;
             foreach (AgentItem statue in statues)
             {
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(statue));
+                CombatItem? enterCombat = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat && x.SrcMatchesAgent(statue));
                 if (enterCombat != null)
                 {
                     start = Math.Min(start, enterCombat.Time);
@@ -165,7 +165,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         foreach (Player player in log.PlayerList)
         {
             IReadOnlyDictionary<long, BuffsGraphModel> bgms = player.GetBuffGraphs(log);
-            if (bgms != null && bgms.TryGetValue(Madness, out BuffsGraphModel bgm))
+            if (bgms != null && bgms.TryGetValue(Madness, out var bgm))
             {
                 if (bgm.BuffChart.Any(x => x.Value >= 99)) { return false; }
             }

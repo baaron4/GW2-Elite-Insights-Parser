@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class FoodBuffs
 {
-    internal static readonly List<Buff> NormalFoods =
+    internal static readonly IReadOnlyList<Buff> NormalFoods =
     [
         new Buff("Malnourished", Malnourished, Source.Item, BuffClassification.Nourishment, BuffImages.Malnourished),
         new Buff("Plate of Truffle Steak", PlateOfTruffleSteak, Source.Item, BuffClassification.Nourishment, BuffImages.PlateOfTruffleSteak),
@@ -379,7 +379,7 @@ internal static class FoodBuffs
         new Buff("Weight of the World", WeightOfTheWorld, Source.Item, BuffClassification.Nourishment, BuffImages.NourishmentFood),
     ];
 
-    internal static readonly List<Buff> AscendedFood =
+    internal static readonly IReadOnlyList<Buff> AscendedFood =
     [
         // Ascended Food
         new Buff("Bowl of Fruit Salad with Cilantro Garnish", BowlOfFruitSaladWithCilantroGarnish, Source.Item, BuffClassification.Nourishment, BuffImages.BowlOfFruitSaladWithCilantroGarnish),
@@ -452,7 +452,7 @@ internal static class FoodBuffs
         new Buff("Mists-Infused Spherified Peppercorn-Spiced Oyster Soup", MistsInfusedSpherifiedPeppercornSpicedOysterSoup, Source.Item, BuffClassification.Nourishment, BuffImages.SpherifiedPeppercornSpicedOysterSoup),
     ];
 
-    internal static readonly List<Buff> FoodProcs =
+    internal static readonly IReadOnlyList<Buff> FoodProcs =
     [
         // Buff procs for On Kill Food
         new Buff("Nourishment (Bonus 40 Power)", NourishmentBonusPower40, Source.Item, BuffClassification.Offensive, BuffImages.ChampionOfTheCrown),

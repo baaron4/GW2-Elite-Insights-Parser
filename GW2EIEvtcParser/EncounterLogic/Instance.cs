@@ -123,7 +123,7 @@ internal class Instance : FightLogic
 
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
-        MapIDEvent mapID = combatData.GetMapIDEvents().LastOrDefault();
+        MapIDEvent? mapID = combatData.GetMapIDEvents().LastOrDefault();
         if (mapID == null)
         {
             return base.GetLogicName(combatData, agentData);

@@ -38,7 +38,7 @@ internal static class CatalystHelper
     ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance2),
@@ -60,13 +60,13 @@ internal static class CatalystHelper
             .WithBuilds(GW2Builds.September2023Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.NoPets, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, BuffImages.HardenedAuras, DamageModifierMode.All),// TODO Check if strike only
     ];
 
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Flame Wheel", FlameWheelBuff, Source.Catalyst, BuffClassification.Other, BuffImages.FlameWheel)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),

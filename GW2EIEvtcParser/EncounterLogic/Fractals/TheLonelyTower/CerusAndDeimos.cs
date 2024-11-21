@@ -48,14 +48,14 @@ internal class CerusAndDeimos : LonelyTower
         {
             AgentItem cerus = agentData.GetNPCsByID(TargetID.CerusLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Cerus not found");
             AgentItem deimos = agentData.GetNPCsByID(TargetID.DeimosLonelyTower).FirstOrDefault() ?? throw new MissingKeyActorsException("Deimos not found");
-            CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
+            CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == StateChange.LogNPCUpdate);
             if (logStartNPCUpdate != null)
             {
                 startToUse = Math.Min(GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.CerusLonelyTower, logStartNPCUpdate.DstAgent),
                         GetEnterCombatTime(fightData, agentData, combatData, logStartNPCUpdate.Time, (int)TargetID.DeimosLonelyTower, logStartNPCUpdate.DstAgent));
                 return startToUse;
             }
-            CombatItem initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
+            CombatItem? initialDamageToPlayers = combatData.Where(x => x.IsDamagingDamage() && agentData.GetAgent(x.DstAgent, x.Time).IsPlayer && (
                   agentData.GetAgent(x.SrcAgent, x.Time) == cerus || agentData.GetAgent(x.SrcAgent, x.Time) == deimos)).FirstOrDefault();
             long initialDamageTimeToTargets = Math.Min(GetFirstDamageEventTime(fightData, agentData, combatData, cerus), GetFirstDamageEventTime(fightData, agentData, combatData, deimos));
             if (initialDamageToPlayers != null)
@@ -71,8 +71,8 @@ internal class CerusAndDeimos : LonelyTower
     {
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower)) ?? throw new MissingKeyActorsException("Deimos not found");
         SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower)) ?? throw new MissingKeyActorsException("Cerus not found");
-        BuffApplyEvent determinedApplyCerus = combatData.GetBuffDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
-        BuffApplyEvent determinedApplyDeimos = combatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+        BuffApplyEvent? determinedApplyCerus = combatData.GetBuffDataByIDByDst(Determined762, cerus.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+        BuffApplyEvent? determinedApplyDeimos = combatData.GetBuffDataByIDByDst(Determined762, deimos.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         if (determinedApplyCerus != null && determinedApplyDeimos != null)
         {
             fightData.SetSuccess(true, Math.Max(determinedApplyCerus.Time, determinedApplyDeimos.Time));
@@ -94,7 +94,7 @@ internal class CerusAndDeimos : LonelyTower
 
     private static PhaseData GetBossPhase(ParsedEvtcLog log, SingleActor target, string phaseName)
     {
-        BuffApplyEvent determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
+        BuffApplyEvent? determinedApply = log.CombatData.GetBuffDataByIDByDst(Determined762, target.AgentItem).OfType<BuffApplyEvent>().LastOrDefault();
         long end = determinedApply != null ? determinedApply.Time : target.LastAware;
         var bossPhase = new PhaseData(log.FightData.FightStart, end, phaseName)
         {
@@ -120,11 +120,11 @@ internal class CerusAndDeimos : LonelyTower
         return phases;
     }
 
-    private static void DoBrotherTether(ParsedEvtcLog log, SingleActor target, SingleActor brother, CombatReplay replay)
+    private static void DoBrotherTether(ParsedEvtcLog log, SingleActor target, SingleActor? brother, CombatReplay replay)
     {
         if (brother != null)
         {
-            var brothers = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            var brothers = target.GetBuffStatus(log, BrothersUnited, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             foreach (var seg in brothers)
             {
                 replay.Decorations.Add(new LineDecoration(seg, Colors.LightBlue, 0.5, new AgentConnector(target), new AgentConnector(brother)));
@@ -138,11 +138,11 @@ internal class CerusAndDeimos : LonelyTower
         switch (target.ID)
         {
             case (int)TargetID.DeimosLonelyTower:
-                SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
+                SingleActor? cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
                 DoBrotherTether(log, target, cerus, replay);
                 break;
             case (int)TargetID.CerusLonelyTower:
-                SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
+                SingleActor? deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
                 DoBrotherTether(log, target, deimos, replay);
                 break;
             default:
@@ -150,11 +150,11 @@ internal class CerusAndDeimos : LonelyTower
         }
     }
 
-    private static void DoFixationTether(ParsedEvtcLog log, PlayerActor p, CombatReplay replay, SingleActor target, long fixationID, Color color)
+    private static void DoFixationTether(ParsedEvtcLog log, PlayerActor p, CombatReplay replay, SingleActor? target, long fixationID, Color color)
     {
         if (target != null)
         {
-            var fixated = p.GetBuffStatus(log, fixationID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+            var fixated = p.GetBuffStatus(log, fixationID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
             foreach (var seg in fixated)
             {
                 replay.Decorations.Add(new LineDecoration(seg, color, 0.3, new AgentConnector(p), new AgentConnector(target)));
@@ -166,9 +166,9 @@ internal class CerusAndDeimos : LonelyTower
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-        SingleActor cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
+        SingleActor? cerus = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.CerusLonelyTower));
         DoFixationTether(log, p, replay, cerus, CerussFocus, Colors.Orange);
-        SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
+        SingleActor? deimos = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.DeimosLonelyTower));
         DoFixationTether(log, p, replay, deimos, DeimossFocus, Colors.Red);
     }
 

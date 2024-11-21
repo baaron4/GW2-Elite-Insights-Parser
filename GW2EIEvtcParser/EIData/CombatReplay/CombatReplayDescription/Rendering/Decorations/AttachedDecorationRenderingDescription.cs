@@ -30,21 +30,15 @@ public abstract class AttachedDecorationRenderingDescription : DecorationRenderi
             {
                 Category = (uint)decoration.SkillMode.Category
             };
-            if (log.Buffs.BuffsByIds.TryGetValue(decoration.SkillMode.SkillID, out Buff buff))
+            if (log.Buffs.BuffsByIds.TryGetValue(decoration.SkillMode.SkillID, out var buff))
             {
-                if (!usedBuffs.ContainsKey(buff.ID))
-                {
-                    usedBuffs.Add(buff.ID, buff);
-                }
+                usedBuffs.TryAdd(buff.ID, buff);
                 skillModeDescription.IsBuff = true;
             }
             else
             {
                 SkillItem skill = log.SkillData.Get(decoration.SkillMode.SkillID);
-                if (!usedSkills.ContainsKey(skill.ID))
-                {
-                    usedSkills.Add(skill.ID, skill);
-                }
+                usedSkills.TryAdd(skill.ID, skill);
                 skillModeDescription.IsBuff = false;
             }
             if (decoration.SkillMode.Owner != null)

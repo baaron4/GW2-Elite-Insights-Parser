@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 namespace Tracing;
 
 #pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable CA1822 // static members
 
 public static class Trace
 {
@@ -145,3 +146,4 @@ public struct AutoTrace : IDisposable
 }
 
 #pragma warning restore IDE0060 // Remove unused parameter
+#pragma warning restore CA1822 // static members

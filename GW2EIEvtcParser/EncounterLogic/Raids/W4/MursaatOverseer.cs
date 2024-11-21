@@ -87,7 +87,7 @@ internal class MursaatOverseer : BastionOfThePenitent
         {
             case (int)ArcDPSEnums.TrashID.Jade:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+                var shields = target.GetBuffStatus(log, MursaatOverseersShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 uint shieldRadius = 100;
                 foreach (var seg in shields)
                 {
@@ -126,8 +126,8 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         List<CastEvent> res = base.SpecialCastEventProcess(combatData, skillData);
 
-        var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>().ToList();
-        var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>().ToList();
+        var claimApply = combatData.GetBuffData(ClaimBuff).OfType<BuffApplyEvent>();
+        var dispelApply = combatData.GetBuffData(DispelBuff).OfType<BuffApplyEvent>();
 
         SkillItem claimSkill = skillData.Get(ClaimSAK);
         SkillItem dispelSkill = skillData.Get(DispelSAK);
@@ -137,7 +137,7 @@ internal class MursaatOverseer : BastionOfThePenitent
             skillData.NotAccurate.Add(ClaimSAK);
             foreach (EffectEvent effect in claims)
             {
-                BuffApplyEvent src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
+                BuffApplyEvent? src = claimApply.LastOrDefault(x => x.Time <= effect.Time);
                 if (src != null)
                 {
                     res.Add(new InstantCastEvent(effect.Time, claimSkill, src.To));
@@ -150,7 +150,7 @@ internal class MursaatOverseer : BastionOfThePenitent
             skillData.NotAccurate.Add(DispelSAK);
             foreach (EffectEvent effect in dispels)
             {
-                BuffApplyEvent src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
+                BuffApplyEvent? src = dispelApply.LastOrDefault(x => x.Time <= effect.Time);
                 if (src != null)
                 {
                     res.Add(new InstantCastEvent(effect.Time, dispelSkill, src.To));

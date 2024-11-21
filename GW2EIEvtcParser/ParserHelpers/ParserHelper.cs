@@ -133,7 +133,7 @@ public static class ParserHelper
     }
     public enum BuffEnum { Self, Group, OffGroup, Squad };
 
-    internal static Dictionary<long, List<T>> GroupByTime<T>(IReadOnlyList<T> list) where T : TimeCombatEvent
+    internal static Dictionary<long, List<T>> GroupByTime<T>(IEnumerable<T> list) where T : TimeCombatEvent
     {
         var groupByTime = new Dictionary<long, List<T>>();
         foreach (T c in list)
@@ -323,8 +323,8 @@ public static class ParserHelper
         }
         // Copy attack targets
         var attackTargetAgents = new HashSet<AgentItem>();
-        var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList();
-        var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1).ToList();
+        var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom));
+        var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1);
         foreach (CombatItem c in attackTargets)
         {
             var cExtra = new CombatItem(c);
@@ -358,7 +358,7 @@ public static class ParserHelper
         }
         foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyFromAgentConditions)
         {
-            CombatItem stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAgent(x) && x.Time <= to.FirstAware);
+            CombatItem? stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAgent(x) && x.Time <= to.FirstAware);
             if (stateToCopy != null)
             {
                 toCopy.Add(stateToCopy);
@@ -376,7 +376,7 @@ public static class ParserHelper
             };
             foreach (Func<CombatItem, bool> stateChangeCopyCondition in stateChangeCopyFromAttackTargetConditions)
             {
-                CombatItem stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAttackTarget(x) && x.Time <= to.FirstAware);
+                CombatItem? stateToCopy = combatData.LastOrDefault(x => stateChangeCopyCondition(x) && canCopyFromAttackTarget(x) && x.Time <= to.FirstAware);
                 if (stateToCopy != null)
                 {
                     toCopy.Add(stateToCopy);
@@ -588,17 +588,17 @@ public static class ParserHelper
 
     public static IReadOnlyList<Source> SpecToSources(Spec spec)
     {
-        return SpecToSourcesDictionary.TryGetValue(spec, out List<Source> list) ? list : [ ];
+        return SpecToSourcesDictionary.TryGetValue(spec, out var sourceList) ? sourceList : [ ];
     }
 
     internal static string GetHighResolutionProfIcon(Spec spec)
     {
-        return ParserIcons.HighResProfIcons.TryGetValue(spec, out string icon) ? icon : ParserIcons.UnknownProfessionIcon;
+        return ParserIcons.HighResProfIcons.TryGetValue(spec, out var icon) ? icon : ParserIcons.UnknownProfessionIcon;
     }
 
     internal static string GetProfIcon(Spec spec)
     {
-        return ParserIcons.BaseResProfIcons.TryGetValue(spec, out string icon) ? icon : ParserIcons.UnknownProfessionIcon;
+        return ParserIcons.BaseResProfIcons.TryGetValue(spec, out var icon) ? icon : ParserIcons.UnknownProfessionIcon;
     }
 
     internal static string GetGadgetIcon()
@@ -616,17 +616,17 @@ public static class ParserHelper
         TargetID target = GetTargetID(id);
         if (target != TargetID.Unknown)
         {
-            return ParserIcons.TargetNPCIcons.TryGetValue(target, out string targetIcon) ? targetIcon : ParserIcons.GenericEnemyIcon;
+            return ParserIcons.TargetNPCIcons.TryGetValue(target, out var targetIcon) ? targetIcon : ParserIcons.GenericEnemyIcon;
         }
         TrashID trash = GetTrashID(id);
         if (trash != TrashID.Unknown)
         {
-            return ParserIcons.TrashNPCIcons.TryGetValue(trash, out string trashIcon) ? trashIcon : ParserIcons.GenericEnemyIcon;
+            return ParserIcons.TrashNPCIcons.TryGetValue(trash, out var trashIcon) ? trashIcon : ParserIcons.GenericEnemyIcon;
         }
         MinionID minion = GetMinionID(id);
         if (minion != MinionID.Unknown)
         {
-            return ParserIcons.MinionNPCIcons.TryGetValue(minion, out string minionIcon) ? minionIcon : ParserIcons.GenericEnemyIcon;
+            return ParserIcons.MinionNPCIcons.TryGetValue(minion, out var minionIcon) ? minionIcon : ParserIcons.GenericEnemyIcon;
         }
 
         return ParserIcons.GenericEnemyIcon;
@@ -837,7 +837,7 @@ public static class ParserHelper
     }
     public static void Add<TKey, TValue>(Dictionary<TKey, List<TValue>> dict, TKey key, TValue evt)
     {
-        if (dict.TryGetValue(key, out List<TValue> list))
+        if (dict.TryGetValue(key, out List<TValue>? list))
         {
             list.Add(evt);
         }
@@ -851,7 +851,7 @@ public static class ParserHelper
     }
     public static void Add<TKey, TValue>(Dictionary<TKey, HashSet<TValue>> dict, TKey key, TValue evt)
     {
-        if (dict.TryGetValue(key, out HashSet<TValue> list))
+        if (dict.TryGetValue(key, out HashSet<TValue>? list))
         {
             list.Add(evt);
         }

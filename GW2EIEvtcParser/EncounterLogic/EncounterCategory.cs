@@ -25,6 +25,7 @@ public class EncounterCategory
         HallOfChains,
         MythwrightGambit,
         TheKeyOfAhdashim,
+        MountBalrior,
         //Fractals
         CaptainMaiTrinBossFractal,
         Deepstone,
@@ -111,6 +112,8 @@ public class EncounterCategory
                 return "Mythwright Gambit";
             case SubFightCategory.TheKeyOfAhdashim:
                 return "The Key of Ahdashim";
+            case SubFightCategory.MountBalrior:
+                return "Mount Balrior";
             // 
             case SubFightCategory.CaptainMaiTrinBossFractal:
                 return "Captain Mai Trin Boss Fractal";

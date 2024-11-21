@@ -100,7 +100,8 @@ internal class LogDataDto
         Parser = "Elite Insights " + parserVersion.ToString();
         RecordedBy = log.LogData.PoVName;
         RecordedAccountBy = log.LogData.PoVAccount;
-        FractalScale = log.CombatData.GetFractalScaleEvent() != null ? log.CombatData.GetFractalScaleEvent()!.Scale : 0;
+        var fractaleScaleEvent = log.CombatData.GetFractalScaleEvent();
+        FractalScale = fractaleScaleEvent != null ? fractaleScaleEvent.Scale : 0;
         UploadLinks = uploadLinks.ToList();
         if (log.LogData.UsedExtensions.Any())
         {
@@ -142,9 +143,9 @@ internal class LogDataDto
     {
         var boonsBySpec = new Dictionary<Spec, IReadOnlyList<Buff>>();
         // Collect all personal buffs by spec
-        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
+        foreach (var pair in log.FriendliesListBySpec)
         {
-            List<SingleActor> friendlies = pair.Value;
+            var friendlies = pair.Value;
             var specBoonIds = new HashSet<long>(log.Buffs.GetPersonalBuffsList(pair.Key).Select(x => x.ID));
             var boonToUse = new HashSet<Buff>();
             foreach (SingleActor actor in friendlies)
@@ -154,7 +155,7 @@ internal class LogDataDto
                     IReadOnlyDictionary<long, FinalActorBuffs> boons = actor.GetBuffs(BuffEnum.Self, log, phase.Start, phase.End);
                     foreach (Buff boon in log.StatisticsHelper.GetPresentRemainingBuffsOnPlayer(actor))
                     {
-                        if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+                        if (boons.TryGetValue(boon.ID, out var uptime))
                         {
                             if (uptime.Uptime > 0 && specBoonIds.Contains(boon.ID))
                             {
@@ -182,7 +183,7 @@ internal class LogDataDto
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>>();
         // Collect all personal damage mods by spec
-        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
+        foreach (var pair in log.FriendliesListBySpec)
         {
             var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetOutgoingModifiersPerSpec(pair.Key).Select(x => x.Name));
             var damageModsToUse = new HashSet<OutgoingDamageModifier>();
@@ -212,7 +213,7 @@ internal class LogDataDto
     {
         var damageModBySpecs = new Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>>();
         // Collect all personal damage mods by spec
-        foreach (KeyValuePair<Spec, List<SingleActor>> pair in log.FriendliesListBySpec)
+        foreach (var pair in log.FriendliesListBySpec)
         {
             var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetIncomingModifiersPerSpec(pair.Key).Select(x => x.Name));
             var damageModsToUse = new HashSet<IncomingDamageModifier>();
@@ -305,7 +306,7 @@ internal class LogDataDto
         {
             allDamageMods.UnionWith(actor.GetPresentOutgoingDamageModifier(log));
         }
-        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<OutgoingDamageModifier> list))
+        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Common, out var list))
         {
             foreach (OutgoingDamageModifier dMod in list)
             {
@@ -362,7 +363,7 @@ internal class LogDataDto
         {
             allIncDamageMods.UnionWith(actor.GetPresentIncomingDamageModifier(log));
         }
-        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Common, out IReadOnlyList<IncomingDamageModifier> list))
+        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Common, out var list))
         {
             foreach (IncomingDamageModifier dMod in list)
             {
