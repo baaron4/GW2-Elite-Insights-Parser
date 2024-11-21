@@ -127,6 +127,17 @@ internal static class EncounterDamageModifiers
         new BuffOnActorDamageModifier(RageAttunement, "Rage Attunement", "5%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RageAttunement, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(DespairAttunement, "Despair Attunement", "-3%", DamageSource.NoPets, -3, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RageAttunement, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Consumed, "Consumed", "-3%", DamageSource.NoPets, -3, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Consumed, DamageModifierMode.PvE),
+        new BuffOnFoeDamageModifier(RisingPressure, "Rising Pressure (in)", "-5% per stack, stacks additively with Vulnerability, while still capable of doing damage", DamageSource.All, -5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RisingPressure, DamageModifierMode.PvE)
+            .UsingGainAdjuster(VulnerabilityAdjuster)
+            .UsingChecker((ahde, log) =>
+            {
+                return VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5);
+            }),
+        new CounterOnFoeDamageModifier(RisingPressure, "Blood Shield (in, invul)", "-5% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, BuffImages.BloodShield, DamageModifierMode.PvE)
+            .UsingChecker((ahde, log) =>
+            {
+                return !VulnerabilityAdditiveChecker(ahde, log, RisingPressure, 5);
+            }),
         // Enrages
         new BuffOnFoeDamageModifier(Enraged_100_strike_25_reduc, "Enraged (-25%)", "-25%, stacks additively with Vulnerability", DamageSource.All, -25, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
         new BuffOnFoeDamageModifier(Enraged_200_strike_50_reduc, "Enraged (-50%)", "-50%, stacks additively with Vulnerability", DamageSource.All, -50, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE).UsingGainAdjuster(VulnerabilityAdjuster),
@@ -142,17 +153,16 @@ internal static class EncounterDamageModifiers
             {
                 return VulnerabilityAdditiveChecker(ahde, log, ConjuredProtection, 10);
             }),
-        new BuffOnActorDamageModifier(ExposedPlayer, "Exposed (Player)", "25% per stack", DamageSource.All, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Exposed, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(NotStickingTogetherBuff, "Not Sticking Together", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.ActivateRed, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(EnvyAttunement, "Envy Attunement", "5%", DamageSource.NoPets, 5, DamageType.Condition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.EnvyAttunement, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(RageAttunement, "Rage Attunement", "5%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RageAttunement, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(DespairAttunement, "Despair Attunement", "-3%", DamageSource.NoPets, -3, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RageAttunement, DamageModifierMode.PvE),
-        //
         new CounterOnActorDamageModifier(ConjuredProtection, "Conjured Protection (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.Strike, DamageType.All, Source.FightSpecific, BuffImages.Fractured, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) =>
             {
                 return !VulnerabilityAdditiveChecker(ahde, log, ConjuredProtection, 10);
             }),
+        new BuffOnActorDamageModifier(ExposedPlayer, "Exposed (Player)", "25% per stack", DamageSource.All, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Exposed, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(NotStickingTogetherBuff, "Not Sticking Together", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.ActivateRed, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(EnvyAttunement, "Envy Attunement", "5%", DamageSource.NoPets, 5, DamageType.Condition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.EnvyAttunement, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(RageAttunement, "Rage Attunement", "5%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RageAttunement, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(DespairAttunement, "Despair Attunement", "-3%", DamageSource.NoPets, -3, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RageAttunement, DamageModifierMode.PvE),
         //
         new BuffOnFoeDamageModifier(DiaphanousShielding, "Diaphanous Shielding", "25% per stack", DamageSource.All, 25.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.DiaphanousShielding, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(BloodFueledMatthias, "Blood Fueled Abo", "10% per stack", DamageSource.All, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByStack, BuffImages.BloodFueled, DamageModifierMode.PvE),
@@ -172,6 +182,7 @@ internal static class EncounterDamageModifiers
         new BuffOnFoeDamageModifier(EmpoweredGreer, "Empowered (Greer)", "5% per stack", DamageSource.All, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.EmpoweredMursaarOverseer, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(DevourLonelyTower, "Devour (Lonely Tower)", "2% per stack", DamageSource.All, 2, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.Devour, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(BrothersUnited, "Brothers United", "50%", DamageSource.All, 50, DamageType.Strike, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.BrothersUnited, DamageModifierMode.PvE),
+        new BuffOnFoeDamageModifier(RisingPressure, "Rising Pressure (out)", "5% per stack", DamageSource.All, 5, DamageType.Strike, DamageType.All, Source.FightSpecific, ByStack, BuffImages.RisingPressure, DamageModifierMode.PvE),
         // Enrages
         new BuffOnFoeDamageModifier([Enraged_100_strike, Enraged_100_strike_25_reduc], "Enraged (100% strike)", "100%", DamageSource.All, 100.0, DamageType.Strike, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),
         new BuffOnFoeDamageModifier(Enraged_200, "Enraged (200%)", "200%", DamageSource.All, 200.0, DamageType.StrikeAndCondition, DamageType.All, Source.FightSpecific, ByPresence, BuffImages.Enraged, DamageModifierMode.PvE),

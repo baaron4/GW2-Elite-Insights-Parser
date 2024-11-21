@@ -4530,6 +4530,7 @@ public static class SkillIDs
     public const long Deterrence = 75075;
     public const long ChargeDecima = 75175;
     public const long TargetOrder2JW = 75151;
+    public const long UnstoppableDecima = 75246;
     public const long PealOfHarmony = 75290;
     public const long PealOfDiscord = 75301;
     #endregion
