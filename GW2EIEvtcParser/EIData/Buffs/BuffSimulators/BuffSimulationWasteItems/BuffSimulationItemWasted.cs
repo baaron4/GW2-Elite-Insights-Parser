@@ -16,7 +16,7 @@ internal class BuffSimulationItemWasted : AbstractBuffSimulationItemWasted
         if (value > 0)
         {
             AgentItem agent = Src;
-            if (distrib.TryGetValue(agent, out BuffDistributionItem toModify))
+            if (distrib.TryGetValue(agent, out var toModify))
             {
                 toModify.IncrementWaste(value);
             }
