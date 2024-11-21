@@ -4,6 +4,30 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
+using DistributionItem = (
+    bool indirect,
+    long skillID,
+    int totalDamage,
+    int minDamage,
+    int maxDamage,
+    int cast,
+    int connectedHits,
+    int crit,
+    int flank,
+    int glance,
+    double wasted,
+    double saved,
+    int shieldDamage,
+    int critDamage,
+    int hits,
+    long timeCasting,
+    int againstMoving,
+    double breakbarDamage,
+    long minTimeCastingNoInterrupt,
+    long maxTimeSpentCastingNoInterrupt,
+    long timeSpentCastingNoInterrupt,
+    int castNoInterrupt
+);
 internal class DmgDistributionDto
 {
     public static readonly DmgDistributionDto EmptyInstance = new();
@@ -14,7 +38,7 @@ internal class DmgDistributionDto
     public long            TotalDamage;
     public double          TotalBreakbarDamage;
     public long            TotalCasting;
-    public List<object[]>? Distribution;
+    public List<DistributionItem>? Distribution;
 
     internal static (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) GetCastValues(IEnumerable<CastEvent> clList, PhaseData phase)
     {
@@ -57,7 +81,7 @@ internal class DmgDistributionDto
         return (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCastingNoInterrupt, maxTimeSpentCastingNoInterrupt, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted);
     }
 
-    private static object[] GetDMGDtoItem(SkillItem skill, IEnumerable<HealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+    private static DistributionItem GetDMGDtoItem(SkillItem skill, IEnumerable<HealthDamageEvent> damageLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<SkillItem, IEnumerable<BreakbarDamageEvent>> breakbarLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
     {
         int totaldamage = 0,
             mindamage = int.MaxValue,
@@ -137,7 +161,7 @@ internal class DmgDistributionDto
 
         double breakbarDamage = breakbarLogsBySkill.Remove(skill, out var brList) ? Math.Round(brList.Sum(x => x.BreakbarDamage), 1) : 0;
 
-        object[] skillItem = [
+        return (
             IsIndirectDamage,
             skill.ID,
             totaldamage,
@@ -159,9 +183,8 @@ internal class DmgDistributionDto
             IsIndirectDamage ? 0 : minTimeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : maxTimeSpentCastingNoInterrupt,
             IsIndirectDamage ? 0 : timeSpentCastingNoInterrupt,
-            IsIndirectDamage ? 0 : numberOfCastNoInterrupt,
-        ];
-        return skillItem;
+            IsIndirectDamage ? 0 : numberOfCastNoInterrupt
+        );
     }
 
     public static DmgDistributionDto BuildDMGTakenDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
@@ -186,9 +209,9 @@ internal class DmgDistributionDto
     }
 
 
-    private static List<object[]> BuildDMGDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<DistributionItem> BuildDMGDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<HealthDamageEvent> damageLogs, IEnumerable<BreakbarDamageEvent> breakbarLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
     {
-        var list = new List<object[]>();
+        var list = new List<DistributionItem>();
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         //NOTE(Rennorb): The inner list only ever gets enumerated once, because once its matched it gets removed.
         var breakbarLogsBySkill = breakbarLogs.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
@@ -207,7 +230,7 @@ internal class DmgDistributionDto
 
             (long timeSpentCasting, long timeSpentCastingNoInterrupt, long minTimeSpentCastingNoInterrupt, long maxTimeSpentCastingNoInterrupt, int numberOfCast, int numberOfCastNoInterrupt, int timeSaved, int timeWasted) = GetCastValues(pair.Value, phase);
 
-            object[] skillData = [
+            list.Add((
                 false,
                 pair.Key.ID,
                 0,
@@ -229,9 +252,8 @@ internal class DmgDistributionDto
                 minTimeSpentCastingNoInterrupt,
                 maxTimeSpentCastingNoInterrupt,
                 timeSpentCastingNoInterrupt,
-                numberOfCastNoInterrupt,
-            ];
-            list.Add(skillData);
+                numberOfCastNoInterrupt
+                ));
         }
         // breakbar only
         foreach (var (skill, events) in breakbarLogsBySkill)
@@ -239,7 +261,7 @@ internal class DmgDistributionDto
             usedSkills.TryAdd(skill.ID, skill);
             double breakbarDamage = Math.Round(events.Sum(x => x.BreakbarDamage), 1);
 
-            object[] skillData = [
+            list.Add((
                 false,
                 skill.ID,
                 0,
@@ -257,9 +279,12 @@ internal class DmgDistributionDto
                 0,
                 0,
                 0,
-                breakbarDamage
-            ];
-            list.Add(skillData);
+                breakbarDamage,
+                0,
+                0,
+                0,
+                0
+           ));
         }
         return list;
     }

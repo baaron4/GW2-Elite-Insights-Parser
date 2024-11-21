@@ -4,10 +4,17 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
+using DamageModDataItem = (
+    int hit,
+    int totalHit,
+    double damageGain,
+    int totalDamage
+);
+
 internal class DamageModData
 {
-    public readonly List<object[]> Data;
-    public readonly List<List<object[]>> DataTarget;
+    public readonly List<DamageModDataItem> Data;
+    public readonly List<List<DamageModDataItem>> DataTarget;
 
     private DamageModData(SingleActor actor, ParsedEvtcLog log, IReadOnlyList<OutgoingDamageModifier> listToUse, PhaseData phase)
     {
@@ -19,22 +26,22 @@ internal class DamageModData
             if (dModData.TryGetValue(dMod.Name, out var data))
             {
                 Data.Add(
-                [
+                (
                     data.HitCount,
                     data.TotalHitCount,
                     data.DamageGain,
                     data.TotalDamage
-                ]);
+                ));
             }
             else
             {
                 Data.Add(
-                [
+                (
                     0,
                     dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
                     0,
                     dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
-                ]);
+                ));
             }
         }
 
@@ -42,7 +49,7 @@ internal class DamageModData
         DataTarget = new(allTargets.Count);
         foreach (SingleActor target in allTargets)
         {
-            var pTarget = new List<object[]>(1 + listToUse.Count);
+            var pTarget = new List<DamageModDataItem>(1 + listToUse.Count);
             DataTarget.Add(pTarget);
             dModData = actor.GetOutgoingDamageModifierStats(target, log, phase.Start, phase.End);
             foreach (OutgoingDamageModifier dMod in listToUse)
@@ -50,22 +57,22 @@ internal class DamageModData
                 if (dModData.TryGetValue(dMod.Name, out var data))
                 {
                     pTarget.Add(
-                    [
+                    (
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
                         data.TotalDamage
-                    ]);
+                    ));
                 }
                 else
                 {
                     pTarget.Add(
-                    [
+                    (
                         0,
                         dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
                         0,
                         dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
-                    ]);
+                    ));
                 }
             }
         }
@@ -80,29 +87,29 @@ internal class DamageModData
             if (dModData.TryGetValue(dMod.Name, out var data))
             {
                 Data.Add(
-                [
+                (
                     data.HitCount,
                     data.TotalHitCount,
                     data.DamageGain,
                     data.TotalDamage
-                ]);
+                ));
             }
             else
             {
                 Data.Add(
-                [
+                (
                     0,
                     dMod.GetHitDamageEvents(actor, log, null, phase.Start, phase.End).Count(),
                     0,
                     dMod.GetTotalDamage(actor, log, null, phase.Start, phase.End)
-                ]);
+                ));
             }
         }
 
         DataTarget = new(phase.Targets.Count);
         foreach (SingleActor target in phase.Targets)
         {
-            var pTarget = new List<object[]>();
+            var pTarget = new List<DamageModDataItem>();
             DataTarget.Add(pTarget);
             dModData = actor.GetIncomingDamageModifierStats(target, log, phase.Start, phase.End);
             foreach (IncomingDamageModifier dMod in listToUse)
@@ -110,22 +117,22 @@ internal class DamageModData
                 if (dModData.TryGetValue(dMod.Name, out var data))
                 {
                     pTarget.Add(
-                    [
+                    (
                         data.HitCount,
                         data.TotalHitCount,
                         data.DamageGain,
                         data.TotalDamage
-                    ]);
+                    ));
                 }
                 else
                 {
                     pTarget.Add(
-                    [
+                    (
                         0,
                         dMod.GetHitDamageEvents(actor, log, target, phase.Start, phase.End).Count(),
                         0,
                         dMod.GetTotalDamage(actor, log, target, phase.Start, phase.End)
-                    ]);
+                    ));
                 }
             }
         }

@@ -15,6 +15,11 @@ using static GW2EIEvtcParser.ParserHelper;
 [assembly: InternalsVisibleTo("GW2EIParser.tst")]
 namespace GW2EIBuilders.HtmlModels;
 
+using BuffInstanceItem = (
+    long buffID,
+    int stack
+);
+
 //TODO(Rennorb) @perf
 internal class LogDataDto
 {
@@ -32,7 +37,7 @@ internal class LogDataDto
     public List<long> Nourishments = [];
     public List<long> Enhancements = [];
     public List<long> OtherConsumables = [];
-    public List<object[]> InstanceBuffs = [];
+    public List<BuffInstanceItem> InstanceBuffs = [];
     public List<long> DmgModifiersItem = [];
     public List<long> DmgIncModifiersItem = [];
     public List<long> DmgModifiersCommon = [];
@@ -294,7 +299,7 @@ internal class LogDataDto
         }
         foreach ((Buff instanceBuff, int stack) in log.FightData.Logic.GetInstanceBuffs(log))
         {
-            InstanceBuffs.Add([instanceBuff.ID, stack]);
+            InstanceBuffs.Add((instanceBuff.ID, stack));
             usedBuffs[instanceBuff.ID] = instanceBuff;
         }
     }
