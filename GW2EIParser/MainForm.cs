@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Runtime.Versioning;
 using Discord;
 using GW2EIDiscord;
@@ -56,7 +57,7 @@ internal sealed partial class MainForm : Form
 
     public MainForm(IEnumerable<string> filesArray, ProgramHelper programHelper) : this(programHelper)
     {
-        AddLogFiles(filesArray);
+        Load += new EventHandler((send, e) => AddLogFiles(filesArray));
     }
 
     /// <summary>
