@@ -95,12 +95,13 @@ internal class DecimaTheStormsinger : MountBalrior
             case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaEnlightenedConduitPurpleAoE, out var effects))
                 {
-
                     // TODO: We need to find a way to handle sizing
                     foreach (var effect in effects)
                     {
                         var aoeLifeSpan = effect.ComputeDynamicLifespan(log, 1200000);
-                        replay.Decorations.Add(new CircleDecoration(150, aoeLifeSpan, Colors.DarkPurple, 0.3, new PositionConnector(effect.Position)));
+                        // Placeholder to indicate activated conduits, until we can find proper sizes
+                        replay.AddOverheadIcon(aoeLifeSpan, target, BuffImages.InvokeLightning);
+                        //replay.Decorations.Add(new CircleDecoration(150, aoeLifeSpan, Colors.DarkPurple, 0.3, new PositionConnector(effect.Position)));
                     }
                 }
                 break;
