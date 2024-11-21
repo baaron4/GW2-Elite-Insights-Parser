@@ -37,7 +37,7 @@ public class CSVBuilder
         _statistics = log.StatisticsHelper;
 
         _uploadResult = uploadResults.ToArray();
-        _legacyTarget = log.FightData.Logic.Targets.OfType<NPC>().FirstOrDefault();
+        _legacyTarget = log.FightData.Logic.Targets.OfType<NPC>().FirstOrDefault()!;
         if (_legacyTarget == null)
         {
             throw new InvalidDataException("No Targets found for csv");
@@ -259,11 +259,11 @@ public class CSVBuilder
             IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
             var scholar = new DamageModifierStat(0, 0, 0, 0);
             var moving = new DamageModifierStat(0, 0, 0, 0);
-            if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))
+            if (damageMods.TryGetValue("Scholar Rune", out var schoDict))
             {
                 scholar = schoDict;
             }
-            if (damageMods.TryGetValue("Moving Bonus", out DamageModifierStat moveDict))
+            if (damageMods.TryGetValue("Moving Bonus", out var moveDict))
             {
                 moving = moveDict;
             }
@@ -306,11 +306,11 @@ public class CSVBuilder
             IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
             var scholar = new DamageModifierStat(0, 0, 0, 0);
             var moving = new DamageModifierStat(0, 0, 0, 0);
-            if (damageMods.TryGetValue("Scholar Rune", out DamageModifierStat schoDict))
+            if (damageMods.TryGetValue("Scholar Rune", out var schoDict))
             {
                 scholar = schoDict;
             }
-            if (damageMods.TryGetValue("Moving Bonus", out DamageModifierStat moveDict))
+            if (damageMods.TryGetValue("Moving Bonus", out var moveDict))
             {
                 moving = moveDict;
             }
@@ -396,7 +396,7 @@ public class CSVBuilder
             WriteCell(player.GetGameplayStats(_log, phase.Start, phase.End).AvgBoons.ToString());
             foreach (Buff boon in listToUse)
             {
-                if (uptimes.TryGetValue(boon.ID, out FinalActorBuffs value))
+                if (uptimes.TryGetValue(boon.ID, out var value))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {
@@ -443,7 +443,7 @@ public class CSVBuilder
             {
                 string rate = "0";
                 string overstack = "0";
-                if (uptimes.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+                if (uptimes.TryGetValue(boon.ID, out var uptime))
                 {
                     if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
@@ -493,7 +493,7 @@ public class CSVBuilder
             {
                 string rate = "0";
                 string overstack = "0";
-                if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out var uptime))
                 {
                     if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
@@ -544,7 +544,7 @@ public class CSVBuilder
             {
                 string rate = "0";
                 string overstack = "0";
-                if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out var uptime))
                 {
                     if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
@@ -594,7 +594,7 @@ public class CSVBuilder
             {
                 string rate = "0";
                 string overstack = "0";
-                if (boons.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+                if (boons.TryGetValue(boon.ID, out var uptime))
                 {
                     if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
@@ -716,7 +716,7 @@ public class CSVBuilder
         WriteCell(Math.Round(_legacyTarget.GetGameplayStats(_log, phase.Start, phase.End).AvgConditions, 1).ToString());
         foreach (Buff boon in _statistics.PresentConditions)
         {
-            if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+            if (conditions.TryGetValue(boon.ID, out var uptime))
             {
                 if (boon.Type == Buff.BuffType.Duration)
                 {
@@ -757,7 +757,7 @@ public class CSVBuilder
         WriteCell(boss.Character);
         foreach (Buff boon in _statistics.PresentBoons)
         {
-            if (conditions.TryGetValue(boon.ID, out FinalActorBuffs uptime))
+            if (conditions.TryGetValue(boon.ID, out var uptime))
             {
                 if (boon.Type == Buff.BuffType.Duration)
                 {
@@ -799,7 +799,7 @@ public class CSVBuilder
             WriteCell(player.Character);
             foreach (Buff boon in _statistics.PresentConditions)
             {
-                if (conditions.TryGetValue(boon.ID, out FinalBuffsDictionary uptime) && uptime.GeneratedBy.ContainsKey(player))
+                if (conditions.TryGetValue(boon.ID, out var uptime) && uptime.GeneratedBy.ContainsKey(player))
                 {
                     if (boon.Type == Buff.BuffType.Duration)
                     {

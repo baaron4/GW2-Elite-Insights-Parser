@@ -30,7 +30,7 @@ public abstract class CastEvent : TimeCombatEvent
         Caster = agentData.GetAgent(baseItem.SrcAgent, baseItem.Time);
     }
 
-    public CastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
+    protected CastEvent(long time, SkillItem skill, AgentItem caster) : base(time)
     {
         Skill = skill;
         Caster = caster;
@@ -48,12 +48,12 @@ public static partial class ListExt
     public static void SortByTimeThenNegatedSwap<T>(this List<T> list)  where T : CastEvent
     {
         var str = string.Join(",", list.Select(x => x.Time));
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(b.Skill.IsSwap) - Convert.ToInt32(a.Skill.IsSwap)));
+        list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(b.Skill.IsSwap) - Convert.ToInt32(a.Skill.IsSwap)));
     }
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByTimeThenSwap<T>(this List<T> list)  where T : CastEvent
     {
         true.CompareTo(false);
-        StableSort<T>.fluxsort(list.AsSpan(), (a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(a.Skill.IsSwap) - Convert.ToInt32(b.Skill.IsSwap)));
+        list.AsSpan().SortStable((a, b) => a.Time.CompareTo(b.Time) * 2 + (Convert.ToInt32(a.Skill.IsSwap) - Convert.ToInt32(b.Skill.IsSwap)));
     }
 }

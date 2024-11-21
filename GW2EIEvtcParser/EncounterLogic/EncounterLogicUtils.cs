@@ -27,14 +27,14 @@ internal static class EncounterLogicUtils
 
     internal static bool TargetHPPercentUnderThreshold(int targetID, long time, CombatData combatData, IReadOnlyList<SingleActor> targets, double expectedInitialPercent = 100.0)
     {
-        SingleActor target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
+        SingleActor? target = targets.FirstOrDefault(x => x.IsSpecies(targetID));
         if (target == null)
         {
             // If tracked target is missing, then 0% hp
             return true;
         }
         long minTime = Math.Max(target.FirstAware, time);
-        HealthUpdateEvent hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HealthPercent > 0));
+        HealthUpdateEvent? hpUpdate = combatData.GetHealthUpdateEvents(target.AgentItem).FirstOrDefault(x => x.Time >= minTime && (x.Time > target.FirstAware + 100 || x.HealthPercent > 0));
         var targetTotalHP = target.GetHealth(combatData);
         if (hpUpdate == null || targetTotalHP < 0)
         {
@@ -53,7 +53,7 @@ internal static class EncounterLogicUtils
         return TargetHPPercentUnderThreshold((int)targetID, time, combatData, targets, expectedInitialPercent);
     }
 
-    internal static void NegateDamageAgainstBarrier(CombatData combatData, IReadOnlyList<AgentItem> agentItems)
+    internal static void NegateDamageAgainstBarrier(CombatData combatData, IEnumerable<AgentItem> agentItems)
     {
         var dmgEvts = new List<HealthDamageEvent>();
         foreach (AgentItem agentItem in agentItems)
@@ -202,7 +202,7 @@ internal static class EncounterLogicUtils
             }
 
             return false;
-        }).ToList();
+        });
 
         var velocities = combatData.Where(evt => {
             if (evt.IsStateChange == ArcDPSEnums.StateChange.Velocity)
@@ -215,7 +215,7 @@ internal static class EncounterLogicUtils
                 return positions.Any(x => x.SrcMatchesAgent(agent));
             }
             return false;
-        }).ToList();
+        });
 
         var candidates = positions.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().ToList();
         // Remove all candidates who moved, chests can not move
@@ -326,13 +326,13 @@ internal static class EncounterLogicUtils
     /// <param name="startEffects">List of the initial effects for the positions.</param>
     /// <param name="endEffects">List of the final effects for the positions.</param>
     /// <returns>Filtered list with matched <paramref name="startEffects"/>, <paramref name="endEffects"/> and distance between them.</returns>
-    internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IReadOnlyList<EffectEvent> startEffects, IReadOnlyList<EffectEvent> endEffects)
+    internal static List<(EffectEvent endEffect, EffectEvent startEffect, float distance)> MatchEffectToEffect(IEnumerable<EffectEvent> startEffects, IEnumerable<EffectEvent> endEffects)
     {
         var matchedEffects = new List<(EffectEvent, EffectEvent, float)>(); //TODO(Rennorb) @perf
         foreach (EffectEvent startEffect in startEffects)
         {
-            var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000).ToList();
-            if (candidateEffectEvents.Count != 0)
+            var candidateEffectEvents = endEffects.Where(x => x.Time > startEffect.Time + 200 && Math.Abs(x.Time - startEffect.Time) < 10000);
+            if (candidateEffectEvents.Any())
             {
                 EffectEvent matchedEffect = candidateEffectEvents.MinBy(x => (x.Position - startEffect.Position).LengthSquared()); //TODO(Rennorb) @perf
                 float minimalDistance = (matchedEffect.Position - startEffect.Position).Length();

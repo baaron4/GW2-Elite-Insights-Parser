@@ -10,7 +10,7 @@ internal static class EncounterBuffs
 {
 
 
-    internal static readonly List<Buff> FractalInstabilities =
+    internal static readonly IReadOnlyList<Buff> FractalInstabilities =
     [
         // Legacy
         new Buff("Mistlock Instability: Fleeting Precision", MistlockInstabilityFleetingPrecision, Source.FractalInstability, BuffClassification.Other, BuffImages.Instability),
@@ -54,7 +54,7 @@ internal static class EncounterBuffs
         new Buff("Flux Bomb Target", FluxBombBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InstabilityFluxBomb),
     ];
 
-    internal static readonly List<Buff> FightSpecific =
+    internal static readonly IReadOnlyList<Buff> FightSpecific =
         [
             // Generic
             new Buff("Emboldened", Emboldened, Source.FightSpecific,BuffStackType.Stacking, 5, BuffClassification.Offensive, BuffImages.Emboldened),
@@ -376,6 +376,32 @@ internal static class EncounterBuffs
             new Buff("Charged Soul", ChargedSoul, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.PartiallyProtected),
             new Buff("Breakbar Target", QadimThePeerlessBreakbarTargetBuff, Source.FightSpecific, BuffClassification.Hidden, BuffImages.Unknown),
             new Buff("Achievement Eligibility: Power Surge", AchievementEligibilityPowerSurge, Source.FightSpecific, BuffClassification.Other, BuffImages.AchievementEffect),
+            //////////////////////////////////////////////
+            // Decima
+            new Buff("Fractured Armor", FracturedArmor, Source.FightSpecific, BuffClassification.Other, BuffImages.ExposeWeakness),
+            new Buff("Nova Shield", NovaShield, Source.FightSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
+            new Buff("Harmonic Sensitivity", HarmonicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Tracked),
+            new Buff("Galvanic Sensitivity", GalvanicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
+            new Buff("Thrumming Presence", ThrummingPresence, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
+            new Buff("Charge (Decima)", ChargeDecima, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),
+            new Buff("Peal of Harmony", PealOfHarmony, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.KineticAbundance),
+            new Buff("Peal of Discord", PealOfDiscord, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ElectrifiedMinion),
+            new Buff("Target Order: 1 (JW)", TargetOrder1JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder1),
+            new Buff("Target Order: 2 (JW)", TargetOrder2JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder2),
+            new Buff("Target Order: 3 (JW)", TargetOrder3JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder3),
+            new Buff("Target Order: 4 (JW)", TargetOrder4JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder4),
+            new Buff("Target Order: 5 (JW)", TargetOrder5JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder5),
+            new Buff("Focused Fluxlance", FocusedFluxlance, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            // Greer
+            new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
+            new Buff("Damage Immunity", DamageImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.Determined),
+            // Ura
+            new Buff("Pressure Blast", PressureBlast, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Sulfuric Acid", SulfuricAcid, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Deterrence", Deterrence, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Bloodstone Saturation", BloodstoneSaturation, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Rising Pressure", RisingPressure, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Hardened Crust", HardenedCrust, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             //////////////////////////////////////////////
             // Fractals 
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),

@@ -415,6 +415,14 @@ class Animator {
     }
 
     selectActor(actorId, keepIfEqual = false) {
+        if (DEBUG) {
+            const inLogActor = logData.players.filter(x => x.uniqueID === actorId)[0] || logData.targets.filter(x => x.uniqueID === actorId)[0];
+            if (inLogActor) {
+                alert(actorId + " " + inLogActor.name)
+            } else {
+                alert(actorId);
+            }
+        }
         let actor = this.getActorData(actorId);
         if (!actor || (!keepIfEqual && this.selectedActor === actor)) {
             this.selectedActor = null;

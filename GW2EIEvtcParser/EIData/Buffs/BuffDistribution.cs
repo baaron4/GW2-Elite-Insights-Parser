@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Diagnostics.CodeAnalysis;
+using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -61,7 +62,7 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
 
     internal Dictionary<AgentItem, BuffDistributionItem> GetDistrib(long buffID)
     {
-        if (!_distribution.TryGetValue(buffID, out Dictionary<AgentItem, BuffDistributionItem> distrib))
+        if (!_distribution.TryGetValue(buffID, out var distrib))
         {
             distrib = new Dictionary<AgentItem, BuffDistributionItem>(_initialSecondaryCapacity);
             _distribution.Add(buffID, distrib);
@@ -82,49 +83,58 @@ public class BuffDistribution(int initialPrimaryCapacity, int initialSecondaryCa
     public List<SingleActor> GetSrcs(long buffID, ParsedEvtcLog log)
     {
         var actors = new List<SingleActor>();
-        if (!_distribution.ContainsKey(buffID))
+        if (_distribution.TryGetValue(buffID, out var buffsByAgent))
         {
-            return actors;
-        }
-        foreach (AgentItem agent in _distribution[buffID].Keys)
-        {
-            actors.Add(log.FindActor(agent));
+            actors.AddRange(buffsByAgent.Keys.Select(x => log.FindActor(x)));
         }
         return actors;
     }
 
+    private bool TryGetBuffDistribution(long buffID, AgentItem src, [NotNullWhen(returnValue: true)] out BuffDistributionItem? distrib)
+    {
+        distrib = null;
+        if (_distribution.TryGetValue(buffID, out var buffsByAgent))
+        {
+            if (buffsByAgent.TryGetValue(src, out distrib))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public long GetUptime(long buffID)
     {
-        return !_distribution.ContainsKey(buffID) ? 0 : _distribution[buffID].Sum(x => x.Value.Value);
+        return !_distribution.TryGetValue(buffID, out var buffsByAgent) ? 0 : buffsByAgent.Sum(x => x.Value.Value);
     }
 
     public long GetGeneration(long buffID, AgentItem src)
     {
-        return !_distribution.ContainsKey(buffID) || !_distribution[buffID].ContainsKey(src) ? 0 : _distribution[buffID][src].Value;
+        return !TryGetBuffDistribution(buffID, src, out var distrib) ? 0 : distrib.Value;
     }
 
     public long GetOverstack(long buffID, AgentItem src)
     {
-        return !_distribution.ContainsKey(buffID) || !_distribution[buffID].ContainsKey(src) ? 0 : _distribution[buffID][src].Overstack;
+        return !TryGetBuffDistribution(buffID, src, out var distrib) ? 0 : distrib.Overstack;
     }
 
     public long GetWaste(long buffID, AgentItem src)
     {
-        return !_distribution.ContainsKey(buffID) || !_distribution[buffID].ContainsKey(src) ? 0 : _distribution[buffID][src].Waste;
+        return !TryGetBuffDistribution(buffID, src, out var distrib) ? 0 : distrib.Waste;
     }
 
     public long GetUnknownExtension(long buffID, AgentItem src)
     {
-        return !_distribution.ContainsKey(buffID) || !_distribution[buffID].ContainsKey(src) ? 0 : _distribution[buffID][src].UnknownExtension;
+        return !TryGetBuffDistribution(buffID, src, out var distrib) ? 0 : distrib.UnknownExtension;
     }
 
     public long GetExtension(long buffID, AgentItem src)
     {
-        return !_distribution.ContainsKey(buffID) || !_distribution[buffID].ContainsKey(src) ? 0 : _distribution[buffID][src].Extension;
+        return !TryGetBuffDistribution(buffID, src, out var distrib) ? 0 : distrib.Extension;
     }
 
     public long GetExtended(long buffID, AgentItem src)
     {
-        return !_distribution.ContainsKey(buffID) || !_distribution[buffID].ContainsKey(src) ? 0 : _distribution[buffID][src].Extended;
+        return !TryGetBuffDistribution(buffID, src, out var distrib) ? 0 : distrib.Extended;
     }
 }

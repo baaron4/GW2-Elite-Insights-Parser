@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GW2EIDPSReport.DPSReportJsons;
 
+#pragma warning disable CS0649 // field never assigned to
 public class DPSReportUploadObject
 {
     
@@ -39,14 +40,14 @@ public class DPSReportUploadObject
     {
         get
         {
-            var json = PlayersJson.ToString();
+            var json = PlayersJson.ToString()!;
             try
             {
-                return JsonSerializer.Deserialize<Dictionary<string, DPSReportUploadPlayerObject>>(json);
+                return JsonSerializer.Deserialize<Dictionary<string, DPSReportUploadPlayerObject>>(json)!;
             }
             catch
             {
-                return new Dictionary<string, DPSReportUploadPlayerObject>();
+                return [];
             }
         }
     }
@@ -58,3 +59,4 @@ public class DPSReportUploadObject
     
     public string TempApiId;
 }
+#pragma warning restore CS0649 // field never assigned to

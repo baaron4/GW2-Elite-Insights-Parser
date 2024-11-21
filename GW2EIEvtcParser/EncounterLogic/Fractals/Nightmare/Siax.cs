@@ -126,7 +126,7 @@ internal class Siax : Nightmare
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
-        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+        var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
 
         switch (target.ID)
         {

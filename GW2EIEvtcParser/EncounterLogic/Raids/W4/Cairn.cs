@@ -68,7 +68,7 @@ internal class Cairn : BastionOfThePenitent
         {
             return phases;
         }
-        BuffApplyEvent enrageApply = log.CombatData.GetBuffDataByIDByDst(EnragedCairn, cairn.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault();
+        BuffApplyEvent? enrageApply = log.CombatData.GetBuffDataByIDByDst(EnragedCairn, cairn.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault();
         if (enrageApply != null)
         {
             var normalPhase = new PhaseData(log.FightData.FightStart, enrageApply.Time)
@@ -109,7 +109,7 @@ internal class Cairn : BastionOfThePenitent
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Cairn:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var swordSweep = cls.Where(x => x.SkillId == OrbitalSweep);
                 foreach (CastEvent c in swordSweep)
                 {
@@ -148,7 +148,7 @@ internal class Cairn : BastionOfThePenitent
                     {
                         long dashGreenStart = dashGreen.Time;
                         long dashGreenEnd = target.LastAware;
-                        CastEvent endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
+                        CastEvent? endEvent = spatialManipulations.FirstOrDefault(x => x.EndTime >= dashGreenStart);
                         if (endEvent != null)
                         {
                             dashGreenEnd = endEvent.Time + 3300; // from skill def
@@ -168,12 +168,12 @@ internal class Cairn : BastionOfThePenitent
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Cairn, out AgentItem cairn))
+        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Cairn, out var cairn))
         {
             throw new MissingKeyActorsException("Cairn not found");
         }
         // spawn protection loss -- most reliable
-        CombatItem spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(cairn) && x.SkillID == SpawnProtection);
+        CombatItem? spawnProtectionLoss = combatData.Find(x => x.IsBuffRemove == ArcDPSEnums.BuffRemove.All && x.SrcMatchesAgent(cairn) && x.SkillID == SpawnProtection);
         if (spawnProtectionLoss != null)
         {
             return spawnProtectionLoss.Time;
@@ -181,7 +181,7 @@ internal class Cairn : BastionOfThePenitent
         else
         {
             // get first end casting
-            CombatItem firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(cairn));
+            CombatItem? firstCastEnd = combatData.FirstOrDefault(x => x.EndCasting() && (x.Time - fightData.LogStart) < 2000 && x.SrcMatchesAgent(cairn));
             // It has to Impact(38102), otherwise anomaly, player may have joined mid fight, do nothing
             if (firstCastEnd != null && firstCastEnd.SkillID == CairnImpact)
             {
@@ -214,7 +214,7 @@ internal class Cairn : BastionOfThePenitent
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // shared agony
-        var agony = log.CombatData.GetBuffDataByIDByDst(SharedAgony, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
+        var agony = log.CombatData.GetBuffDataByIDByDst(SharedAgony, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in agony)
         {
             long agonyStart = c.Time;

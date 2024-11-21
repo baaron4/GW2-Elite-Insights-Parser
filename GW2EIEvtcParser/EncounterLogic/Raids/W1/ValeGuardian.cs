@@ -184,7 +184,7 @@ internal class ValeGuardian : SpiritVale
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.ValeGuardian:
-                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+                var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var magicStorms = cls.Where(x => x.SkillId == MagicStorm);
                 foreach (CastEvent c in magicStorms)
                 {

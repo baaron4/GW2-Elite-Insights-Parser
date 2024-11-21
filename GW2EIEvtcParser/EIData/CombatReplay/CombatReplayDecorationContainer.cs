@@ -23,12 +23,12 @@ internal class CombatReplayDecorationContainer
 
         _DecorationMetadata constantPart = decoration.DecorationMetadata;
         var id = constantPart.GetSignature();
-        if (!DecorationCache.TryGetValue(id, out _DecorationMetadata cached))
+        if (!DecorationCache.TryGetValue(id, out var cachedMetadata))
         {
-            cached = constantPart;
+            cachedMetadata = constantPart;
             DecorationCache[id] = constantPart;
         }
-        Decorations.Add((cached, decoration.DecorationRenderingData));
+        Decorations.Add((cachedMetadata, decoration.DecorationRenderingData));
     }
 
     public void ReserveAdditionalCapacity(int additionalCapacity)

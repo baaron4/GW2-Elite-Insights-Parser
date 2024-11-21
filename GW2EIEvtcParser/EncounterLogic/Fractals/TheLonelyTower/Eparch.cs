@@ -50,17 +50,20 @@ internal class Eparch : LonelyTower
         var dummyEparchs = agentData.GetNPCsByID(TargetID.EparchLonelyTower).Where(eparch =>
         {
             return !combatData.Any(x => x.SrcMatchesAgent(eparch) && x.StartCasting() && x.SkillID != WeaponDraw && x.SkillID != WeaponStow);
-        }).ToList();
-        dummyEparchs.ForEach(x => x.OverrideID(TrashID.EparchLonelyTowerDummy));
-        //
-        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000).ToList();
-        riftAgents.ForEach(x =>
-        {
-            x.OverrideID(TrashID.KryptisRift);
-            x.OverrideType(AgentItem.AgentType.NPC);
         });
+        foreach (var dummyEparch in dummyEparchs)
+        {
+            dummyEparch.OverrideID(TrashID.EparchLonelyTowerDummy);
+        }
         //
-        if (riftAgents.Count != 0 || dummyEparchs.Count != 0)
+        var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000);
+        foreach (var riftAgent in riftAgents)
+        {
+            riftAgent.OverrideID(TrashID.KryptisRift);
+            riftAgent.OverrideType(AgentItem.AgentType.NPC);
+        }
+        //
+        if (riftAgents.Any() || dummyEparchs.Any())
         {
             agentData.Refresh();
         }
@@ -318,16 +321,16 @@ internal class Eparch : LonelyTower
             const int globuleHealth = 14_940;
             const uint globuleWidth = 16;
             const uint globuleHeight = 160;
-            MaxHealthUpdateEvent health = log.CombatData.GetMaxHealthUpdateEvents(gadget).LastOrDefault(); // may have max health 0 initially
+            MaxHealthUpdateEvent? health = log.CombatData.GetMaxHealthUpdateEvents(gadget).LastOrDefault(); // may have max health 0 initially
             if (gadget.HitboxWidth == globuleWidth && gadget.HitboxHeight == globuleHeight && health?.MaxHealth == globuleHealth)
             {
-                SpawnEvent spawn = log.CombatData.GetSpawnEvents(gadget).FirstOrDefault();
-                DespawnEvent despawn = log.CombatData.GetDespawnEvents(gadget).FirstOrDefault();
+                SpawnEvent? spawn = log.CombatData.GetSpawnEvents(gadget).FirstOrDefault();
+                DespawnEvent? despawn = log.CombatData.GetDespawnEvents(gadget).FirstOrDefault();
                 if (spawn != null && despawn != null)
                 {
                     const long globuleDelay = 700;
-                    AnimatedCastEvent lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
-                    if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out Color color))
+                    AnimatedCastEvent? lastCast = eparchCasts.LastOrDefault(x => x.Time < spawn.Time - globuleDelay);
+                    if (lastCast != null && globuleColors.TryGetValue(lastCast.SkillId, out var color))
                     {
                         if (gadget.TryGetCurrentPosition(log, gadget.LastAware, out var position))
                         {

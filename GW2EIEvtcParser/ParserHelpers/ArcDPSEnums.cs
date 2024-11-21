@@ -610,6 +610,10 @@ public static class ArcDPSEnums
     private const int KryptisRift = -59;
     private const int EparchLonelyTowerDummy = -60;
     private const int EtherealBarrier = -61;
+    private const int ToxicGeyser = -62;
+    private const int SulfuricGeyser = -63;
+    private const int TitanspawnGeyser = -64;
+    private const int UraGadget = -65;
     public const int NonIdentifiedSpecies = 0;
 
     //
@@ -884,6 +888,25 @@ public static class ArcDPSEnums
         Brandstorm = 21978,
         GiantQadimThePeerless = 21953,
         DummyPeerlessQadim = 22005,
+        // W8
+        VentShot = 26766,
+        // Greer
+        Reeg = 26742,
+        Gree = 26771,
+        EmpoweringBeast = 26776,
+        // Decima
+        EnlightenedConduit = 26709,
+        GreenOrb1Person = 26798,
+        GreenOrb2Persons = 26783,
+        GreenOrb3Persons = 26727,
+        DecimaBeamEnd = 26793,
+        DecimaBeamStart = 26708,
+        // Ura
+        Fumaroller = 26797,
+        ToxicGeyser = ArcDPSEnums.ToxicGeyser,
+        SulfuricGeyser = ArcDPSEnums.SulfuricGeyser,
+        TitanspawnGeyser = ArcDPSEnums.TitanspawnGeyser,
+        UraGadget = ArcDPSEnums.UraGadget,
         // Fraenir
         IcebroodElemental = 22576,
         BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,
@@ -1196,6 +1219,9 @@ public static class ArcDPSEnums
         Adina = 22006,
         Sabir = 21964,
         PeerlessQadim = 22000,
+        Greer = 26725,
+        Decima = 26774,
+        Ura = 26712,
         // Strike Missions
         IcebroodConstruct = 22154,
         VoiceOfTheFallen = 22343,

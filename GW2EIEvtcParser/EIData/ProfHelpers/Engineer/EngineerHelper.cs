@@ -23,7 +23,7 @@ internal static class EngineerHelper
                 {
                     return false;
                 }
-                WeaponSwapEvent nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
+                WeaponSwapEvent? nextSwap = combatData.GetWeaponSwapData(swap.Caster).FirstOrDefault(x => x.Time > swap.Time + ServerDelayConstant);
                 long nextSwapTime = nextSwap != null ? nextSwap.Time : long.MaxValue;
                 var castIds = new HashSet<long>(combatData.GetAnimatedCastData(swap.Caster).Where(x => x.Time >= swap.Time + WeaponSwapDelayConstant && x.Time <= nextSwapTime).Select(x => x.SkillId));
                 return skill.ApiSkill.BundleSkills.Intersect(castIds).Any();
@@ -112,7 +112,7 @@ internal static class EngineerHelper
             .UsingICD(1100), // Automatically procs on the target that has the Focused buff and is hit by Spear #5 Devastator, hits 6 times in 1 second.
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Explosives
         new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
@@ -178,13 +178,13 @@ internal static class EngineerHelper
         new BuffOnActorDamageModifier(Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
         new BuffOnActorDamageModifier(IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.NoPets, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, BuffImages.IronBlooded, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, BuffImages.StaticShield),
         new Buff("Absorb", Absorb, Source.Engineer, BuffClassification.Other, BuffImages.Absorb),
@@ -245,11 +245,12 @@ internal static class EngineerHelper
         HashSet<AgentItem> healingTurrets = GetOffensiveGadgetAgents(combatData, TurretExplosion, playerAgents);
         healingTurrets.RemoveWhere(x => thumperTurrets.Contains(x) || rocketTurrets.Contains(x) || netTurrets.Contains(x) || rifleTurrets.Contains(x) || flameTurrets.Contains(x) || harpoonTurrets.Contains(x));
 
-        var engineers = players.Where(x => x.BaseSpec == Spec.Engineer).ToList();
+        var engineers = players.Where(x => x.BaseSpec == Spec.Engineer);
+        var engineersCount = engineers.Count();
         // if only one engineer, could only be that one
-        if (engineers.Count == 1)
+        if (engineersCount == 1)
         {
-            Player engineer = engineers[0];
+            Player engineer = engineers.First();
             SetGadgetMaster(flameTurrets, engineer.AgentItem);
             SetGadgetMaster(netTurrets, engineer.AgentItem);
             SetGadgetMaster(rocketTurrets, engineer.AgentItem);
@@ -258,7 +259,7 @@ internal static class EngineerHelper
             SetGadgetMaster(harpoonTurrets, engineer.AgentItem);
             SetGadgetMaster(healingTurrets, engineer.AgentItem);
         }
-        else if (engineers.Count > 1)
+        else if (engineersCount > 1)
         {
             AttachMasterToGadgetByCastData(combatData, flameTurrets, new List<long> { FlameTurretCast, SupplyCrate }, 1000);
             AttachMasterToGadgetByCastData(combatData, rifleTurrets, new List<long> { RifleTurretCast }, 1000);

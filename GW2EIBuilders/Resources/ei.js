@@ -143,6 +143,8 @@ function getDefaultMainComponent() {
     return 0;
 }
 
+const DEBUG = EIUrlParams.get("debug") === "true";
+
 function getDefaultPhase() {
     const setting = EIUrlParams.get("phase");
     if (!setting) {

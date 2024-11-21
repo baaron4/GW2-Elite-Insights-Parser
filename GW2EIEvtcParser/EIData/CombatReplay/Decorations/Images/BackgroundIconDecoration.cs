@@ -24,10 +24,10 @@ internal class BackgroundIconDecoration : ImageDecoration
     {
         public readonly IReadOnlyList<ParametricPoint1D> Opacities;
         public readonly IReadOnlyList<ParametricPoint1D> Heights;
-        public BackgroundIconDecorationRenderingData((long, long) lifespan, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, GeographicalConnector connector) : base(lifespan, connector)
+        public BackgroundIconDecorationRenderingData((long, long) lifespan, IEnumerable<ParametricPoint1D> opacities, IEnumerable<ParametricPoint1D> heights, GeographicalConnector connector) : base(lifespan, connector)
         {
-            Opacities = opacities;
-            Heights = heights;
+            Opacities = opacities.ToList();
+            Heights = heights.ToList();
         }
         public override void UsingSkillMode(SkillModeDescriptor? skill)
         {
@@ -46,11 +46,11 @@ internal class BackgroundIconDecoration : ImageDecoration
     internal BackgroundIconDecoration(BackgroundIconDecorationMetadata metadata, BackgroundIconDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
     }
-    public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base(new BackgroundIconDecorationMetadata(icon, pixelSize, worldSize), new BackgroundIconDecorationRenderingData(lifespan, opacities, heights, connector))
+    public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IEnumerable<ParametricPoint1D> opacities, IEnumerable<ParametricPoint1D> heights, (long start, long end) lifespan, GeographicalConnector connector) : base(new BackgroundIconDecorationMetadata(icon, pixelSize, worldSize), new BackgroundIconDecorationRenderingData(lifespan, opacities, heights, connector))
     {
     }
 
-    public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IReadOnlyList<ParametricPoint1D> opacities, IReadOnlyList<ParametricPoint1D> heights, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacities, heights, (lifespan.Start, lifespan.End), connector)
+    public BackgroundIconDecoration(string icon, uint pixelSize, uint worldSize, IEnumerable<ParametricPoint1D> opacities, IEnumerable<ParametricPoint1D> heights, Segment lifespan, GeographicalConnector connector) : this(icon, pixelSize, worldSize, opacities, heights, (lifespan.Start, lifespan.End), connector)
     {
     }
 }

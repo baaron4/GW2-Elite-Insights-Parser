@@ -17,7 +17,7 @@ public class SkillData
 
     public SkillItem Get(long ID)
     {
-        if (_skills.TryGetValue(ID, out SkillItem value))
+        if (_skills.TryGetValue(ID, out var value))
         {
             return value;
         }
@@ -56,7 +56,7 @@ public class SkillData
     {
         foreach (KeyValuePair<long, SkillItem> pair in _skills)
         {
-            if (skillInfoEvents.TryGetValue(pair.Key, out SkillInfoEvent skillInfoEvent))
+            if (skillInfoEvents.TryGetValue(pair.Key, out var skillInfoEvent))
             {
                 pair.Value.AttachSkillInfoEvent(skillInfoEvent);
             }

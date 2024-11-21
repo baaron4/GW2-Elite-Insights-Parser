@@ -10,7 +10,7 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
         ImperialImpactExtension = 2000;
     }
 
-    protected override List<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
+    protected override IEnumerable<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
     {
         if (extension > ImperialImpactExtension + ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
@@ -39,8 +39,8 @@ internal class BuffSourceFinder20210921 : BuffSourceFinder20210511
                 return [];
             }
         }
-        var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
-        return candidates.Select(x => x.Caster).ToList();
+        var candidates = _vindicatorDodges.Where(x => x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant);
+        return candidates.Select(x => x.Caster);
     }
 
 }

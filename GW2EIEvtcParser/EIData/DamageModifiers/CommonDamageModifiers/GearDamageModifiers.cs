@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal static class GearDamageModifiers
 {
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Runes
         new DamageLogDamageModifier("Scholar Rune", "5% if hp >=90%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheScholar, (x, log) => x.IsOverNinety, DamageModifierMode.All)
@@ -71,7 +71,7 @@ internal static class GearDamageModifiers
         new BuffOnActorDamageModifier(RelicOfTheClaw, "Relic of the Claw", "7% after disabling a foe", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfTheClaw, DamageModifierMode.All),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Runes
         new DamageLogDamageModifier("Rune of Hoelbrak", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfHoelbrak, (x, log) => true, DamageModifierMode.All)

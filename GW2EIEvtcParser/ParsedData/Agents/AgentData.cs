@@ -1,4 +1,5 @@
-﻿using static GW2EIEvtcParser.ArcDPSEnums;
+﻿using System.Diagnostics.CodeAnalysis;
+using static GW2EIEvtcParser.ArcDPSEnums;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -67,7 +68,7 @@ public class AgentData
     {
         if (agentAddress != 0)
         {
-            if (_allAgentsByAgent.TryGetValue(agentAddress, out List<AgentItem> agents))
+            if (_allAgentsByAgent.TryGetValue(agentAddress, out var agents))
             {
                 foreach (AgentItem a in agents)
                 {
@@ -83,7 +84,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetNPCsByID(int id)
     {
-        if (_allNPCsByID.TryGetValue(id, out List<AgentItem> list))
+        if (_allNPCsByID.TryGetValue(id, out var list))
         {
             return list;
         }
@@ -128,7 +129,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetGadgetsByID(int id)
     {
-        if (_allGadgetsByID.TryGetValue(id, out List<AgentItem> list))
+        if (_allGadgetsByID.TryGetValue(id, out var list))
         {
             return list;
         }
@@ -154,11 +155,17 @@ public class AgentData
         return GetGadgetsByID((int)id);
     }
 
+
+    public AgentItem? GetAgentByUniqueID(long uniqueID)
+    {
+        return _allAgentsList.FirstOrDefault(x => x.UniqueID == uniqueID);
+    }
+
     public AgentItem GetAgentByInstID(ushort instid, long time)
     {
         if (instid != 0)
         {
-            if (_allAgentsByInstID.TryGetValue(instid, out List<AgentItem> agents))
+            if (_allAgentsByInstID.TryGetValue(instid, out var agents))
             {
                 foreach (AgentItem a in agents)
                 {
@@ -214,7 +221,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetAgentByType(AgentItem.AgentType type)
     {
-        if (_allAgentsByType.TryGetValue(type, out List<AgentItem> list))
+        if (_allAgentsByType.TryGetValue(type, out var list))
         {
             return list;
         }
@@ -229,7 +236,7 @@ public class AgentData
 
     public static IEnumerable<IEnumerable<AgentItem>> GetGroupedAgentsByTimeCondition(IEnumerable<AgentItem> agents, AgentGroupingTimeFetchet timeFetcher, long epsilon = ParserHelper.ServerDelayConstant)
     {
-        var groupedAgents = new List<List<AgentItem>>();
+        var groupedAgents = new List<IEnumerable<AgentItem>>();
         var processedTimes = new HashSet<long>();
         foreach (var agent in agents)
         {
@@ -238,7 +245,7 @@ public class AgentData
             {
                 continue;
             }
-            var group = agents.Where(otherAgent => timeFetcher(otherAgent) >= time && timeFetcher(otherAgent) < time + epsilon).ToList();
+            var group = agents.Where(otherAgent => timeFetcher(otherAgent) >= time && timeFetcher(otherAgent) < time + epsilon);
             foreach (var groupedAgent in group)
             {
                 processedTimes.Add(timeFetcher(groupedAgent));
@@ -278,7 +285,7 @@ public class AgentData
     /// <param name="targetID">The ID of the target to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given  <see cref="TargetID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(TargetID targetID, out AgentItem agentItem)
+    public bool TryGetFirstAgentItem(TargetID targetID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)targetID, out agentItem);
     }
@@ -289,7 +296,7 @@ public class AgentData
     /// <param name="trashID">The ID of the trash to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="TrashID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(TrashID trashID, out AgentItem agentItem)
+    public bool TryGetFirstAgentItem(TrashID trashID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)trashID, out agentItem);
     }
@@ -300,7 +307,7 @@ public class AgentData
     /// <param name="minionID">The ID of the minion to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="MinionID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(MinionID minionID, out AgentItem agentItem)
+    public bool TryGetFirstAgentItem(MinionID minionID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)minionID, out agentItem);
     }
@@ -311,7 +318,7 @@ public class AgentData
     /// <param name="chestID">The ID of the chest to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <see cref="ChestID"/>; otherwise,  <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(ChestID chestID, out AgentItem agentItem)
+    public bool TryGetFirstAgentItem(ChestID chestID, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         return TryGetFirstAgentItem((int)chestID, out agentItem);
     }
@@ -322,7 +329,7 @@ public class AgentData
     /// <param name="agentId">The ID of the agent to search for.</param>
     /// <param name="agentItem">The <see cref="AgentItem"/> found, if any.</param>
     /// <returns><see langword="true"/> if an <see cref="AgentItem"/> was found for the given <paramref name="agentId"/>; otherwise, <see langword="false"/>.</returns>
-    public bool TryGetFirstAgentItem(int agentId, out AgentItem agentItem)
+    public bool TryGetFirstAgentItem(int agentId, [NotNullWhen(returnValue: true)] out AgentItem? agentItem)
     {
         agentItem = GetNPCsByID(agentId).FirstOrDefault();
         if (agentItem != null)

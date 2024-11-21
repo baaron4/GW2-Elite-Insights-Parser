@@ -109,7 +109,7 @@ internal class Xera : StrongholdOfTheFaithful
                 phase100to0.AddTarget(mainTarget);
                 phases.Add(phase100to0);
             }
-            BuffEvent invulXera = GetInvulXeraEvent(log, mainTarget);
+            BuffEvent? invulXera = GetInvulXeraEvent(log, mainTarget);
             // split happened
             if (invulXera != null)
             {
@@ -135,36 +135,36 @@ internal class Xera : StrongholdOfTheFaithful
         return phases;
     }
 
-    private SingleActor GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Xera));
+    private SingleActor? GetMainTarget() => Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Xera));
 
-    private static BuffEvent GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
+    private static BuffEvent? GetInvulXeraEvent(ParsedEvtcLog log, SingleActor xera)
     {
-        BuffEvent determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
+        BuffEvent? determined = log.CombatData.GetBuffDataByIDByDst(Determined762, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent) ?? log.CombatData.GetBuffDataByIDByDst(SpawnProtection, xera.AgentItem).FirstOrDefault(x => x is BuffApplyEvent);
         return determined;
     }
 
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem xera))
+        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out var xera))
         {
             throw new MissingKeyActorsException("Xera not found");
         }
         // enter combat
-        CombatItem enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
+        CombatItem? enterCombat = combatData.Find(x => x.SrcMatchesAgent(xera) && x.IsStateChange == ArcDPSEnums.StateChange.EnterCombat);
         if (enterCombat != null)
         {
-            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.FakeXera, out AgentItem fakeXera))
+            if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.FakeXera, out var fakeXera))
             {
                 _hasPreEvent = true;
                 long encounterStart = fakeXera.LastAware;
-                CombatItem death = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ChangeDead && x.SrcMatchesAgent(fakeXera));
+                CombatItem ?death = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ChangeDead && x.SrcMatchesAgent(fakeXera));
                 if (death != null)
                 {
                     encounterStart = death.Time + 1000;
                 } 
                 else
                 {
-                    CombatItem exitCombat = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(fakeXera));
+                    CombatItem? exitCombat = combatData.LastOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.ExitCombat && x.SrcMatchesAgent(fakeXera));
                     if (exitCombat != null)
                     {
                         encounterStart = exitCombat.Time + 1000;
@@ -183,15 +183,15 @@ internal class Xera : StrongholdOfTheFaithful
         bool needsRefresh = false;
         bool needsDummy = true;
         // find target
-        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out AgentItem firstXera))
+        if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out var firstXera))
         {
             throw new MissingKeyActorsException("Xera not found");
         }
         _xeraFirstPhaseEndTime = firstXera.LastAware;
         //
-        var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData)).ToList();
+        var maxHPUpdates = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => new MaxHealthUpdateEvent(x, agentData));
         //
-        var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+        var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneFragments)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -199,7 +199,7 @@ internal class Xera : StrongholdOfTheFaithful
             needsRefresh = true;
         }
         //
-        var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+        var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsMainFight)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -207,7 +207,7 @@ internal class Xera : StrongholdOfTheFaithful
             needsRefresh = true;
         }
         //
-        var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+        var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsButton)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -216,7 +216,7 @@ internal class Xera : StrongholdOfTheFaithful
             needsDummy = false;
         }
         //
-        var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget).ToList();
+        var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsRift)
         {
             gadget.OverrideType(AgentItem.AgentType.NPC);
@@ -225,7 +225,7 @@ internal class Xera : StrongholdOfTheFaithful
             needsDummy = false;
         }
         //
-        var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware).ToList();
+        var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware);
         foreach (AgentItem gadget in chargedBloodStones)
         {
             if (!combatData.Any(x => x.IsDamage() && x.DstMatchesAgent(gadget)))
@@ -246,9 +246,9 @@ internal class Xera : StrongholdOfTheFaithful
             agentData.Refresh();
         }
         // find split
-        if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera2, out AgentItem secondXera))
+        if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera2, out var secondXera))
         {
-            CombatItem move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
+            CombatItem? move = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(secondXera) && x.Time >= secondXera.FirstAware + 500);
             if (move != null)
             {
                 _xeraSecondPhaseStartTime = move.Time;
@@ -331,7 +331,7 @@ internal class Xera : StrongholdOfTheFaithful
                 if (_xeraFirstPhaseEndTime != 0)
                 {
                     long end = replay.TimeOffsets.end;
-                    HealthDamageEvent lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
+                    HealthDamageEvent? lastDamage = target.GetDamageTakenEvents(null, log, 0, log.FightData.FightEnd).LastOrDefault();
                     if (lastDamage != null)
                     {
                         end = lastDamage.Time;

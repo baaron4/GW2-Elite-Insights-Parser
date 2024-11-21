@@ -219,7 +219,7 @@ public class HTMLBuilder
         // generate file if external is present
         if (!externalNull)
         {
-            filePath = Path.Combine(externalPath, fileName);
+            filePath = Path.Combine(externalPath!, fileName);
 
             // always create file in DEBUG
 #if !DEBUG

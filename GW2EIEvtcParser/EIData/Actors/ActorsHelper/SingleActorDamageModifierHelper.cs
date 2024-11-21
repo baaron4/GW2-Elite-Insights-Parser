@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.ParsedData;
+﻿using System.Xml.Schema;
+using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
@@ -21,10 +22,17 @@ partial class SingleActor
                 DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                 if (damageMod != null)
                 {
-                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end);
+                    double sum = 0;
+                    int count = 0;
+                    foreach (var damageEvent in eventsToUse)
+                    {
+                        sum += damageEvent.DamageGain;
+                        count++;
+                    }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
                     var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
-                    res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
+                    res[pair.Key] = new DamageModifierStat(count, typeHits.Count(), sum, totalDamage);
                 }
             }
             _outgoingDamageModifiersPerTargets!.Set(start, end, target, res);
@@ -50,8 +58,8 @@ partial class SingleActor
 
         if (_outgoingDamageModifiersPerTargets == null)
         {
-            _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log, 8, 2);
-            _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log, 1, 1);
+            _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
+            _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
         }
 
         if (_outgoingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
@@ -66,7 +74,7 @@ partial class SingleActor
         }
 
         var damageMods = new List<OutgoingDamageModifier>(40);
-        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<OutgoingDamageModifier> list))
+        if (log.DamageModifiers.OutgoingDamageModifiersPerSource.TryGetValue(Source.Item, out var list))
         {
             damageMods.AddRange(list);
         }
@@ -125,10 +133,17 @@ partial class SingleActor
                 DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                 if (damageMod != null)
                 {
-                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end).ToList();
+                    var eventsToUse = pair.Value.Where(x => x.Time >= start && x.Time <= end);
+                    double sum = 0;
+                    int count = 0;
+                    foreach (var damageEvent in eventsToUse)
+                    {
+                        sum += damageEvent.DamageGain;
+                        count++;
+                    }
                     int totalDamage = damageMod.GetTotalDamage(this, log, target, start, end);
                     var typeHits = damageMod.GetHitDamageEvents(this, log, target, start, end);
-                    res[pair.Key] = new DamageModifierStat(eventsToUse.Count, typeHits.Count(), eventsToUse.Sum(x => x.DamageGain), totalDamage);
+                    res[pair.Key] = new DamageModifierStat(count, typeHits.Count(), sum, totalDamage);
                 }
             }
             _incomingDamageModifiersPerTargets!.Set(start, end, target, res);
@@ -154,8 +169,8 @@ partial class SingleActor
 
         if (_incomingDamageModifiersPerTargets == null)
         {
-            _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log, 8, 2);
-            _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log, 1, 1);
+            _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
+            _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
         }
 
         if (_incomingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
@@ -170,7 +185,7 @@ partial class SingleActor
         }
 
         var damageMods = new List<IncomingDamageModifier>(32);
-        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out IReadOnlyList<IncomingDamageModifier> list))
+        if (log.DamageModifiers.IncomingDamageModifiersPerSource.TryGetValue(Source.Item, out var list))
         {
             damageMods.AddRange(list);
         }

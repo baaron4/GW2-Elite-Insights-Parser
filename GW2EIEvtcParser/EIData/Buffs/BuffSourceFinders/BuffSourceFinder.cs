@@ -18,7 +18,7 @@ internal abstract class BuffSourceFinder
         _boonIds = boonIds;
     }
 
-    private List<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
+    private IEnumerable<CastEvent> GetExtensionSkills(ParsedEvtcLog log, long time, HashSet<long> idsToKeep)
     {
         if (_extensionSkills == null)
         {
@@ -28,7 +28,7 @@ internal abstract class BuffSourceFinder
                 _extensionSkills.AddRange(p.GetIntersectingCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => ExtensionIDS.Contains(x.SkillId) && x.Status != CastEvent.AnimationStatus.Interrupted));
             }
         }
-        return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant).ToList();
+        return _extensionSkills.Where(x => idsToKeep.Contains(x.SkillId) && x.Time <= time && time <= x.EndTime + ParserHelper.ServerDelayConstant);
     }
     // Spec specific checks
 
@@ -58,7 +58,7 @@ internal abstract class BuffSourceFinder
 
     protected virtual bool CouldBeImbuedMelodies(AgentItem agent, long buffID, long time, long extension, ParsedEvtcLog log)
     {
-        if (log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out List<SingleActor> tempests) && Math.Abs(extension - ImbuedMelodies) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
+        if (log.FriendliesListBySpec.TryGetValue(ParserHelper.Spec.Tempest, out var tempests) && Math.Abs(extension - ImbuedMelodies) <= ParserHelper.BuffSimulatorStackActiveDelayConstant)
         {
             var magAuraApplications = new HashSet<AgentItem>(log.CombatData.GetBuffData(SkillIDs.MagneticAura).Where(x => x is BuffApplyEvent && Math.Abs(x.Time - time) < ParserHelper.ServerDelayConstant && x.CreditedBy != agent).Select(x => x.CreditedBy));
             foreach (SingleActor tempest in tempests)
@@ -72,7 +72,7 @@ internal abstract class BuffSourceFinder
         return false;
     }
 
-    protected virtual List<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
+    protected virtual IEnumerable<AgentItem> CouldBeImperialImpact(long buffID, long time, long extension, ParsedEvtcLog log)
     {
         return [];
     }
@@ -91,7 +91,7 @@ internal abstract class BuffSourceFinder
         return res;
     }
 
-    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, int essenceOfSpeedCheck, IReadOnlyList<AgentItem> imperialImpactCheck)
+    private AgentItem NoCastSrcFinder(AgentItem dst, long time, long extension, ParsedEvtcLog log, long buffID, int essenceOfSpeedCheck, IEnumerable<AgentItem> imperialImpactCheck)
     {
         // If uncertainty due to imbued melodies, return unknown
         if (CouldBeImbuedMelodies(dst, buffID, time, extension, log))
@@ -105,7 +105,7 @@ internal abstract class BuffSourceFinder
             return dst;
         }
         // uncertainty due to imperial impact but not due to essence of speed
-        if (essenceOfSpeedCheck == -1 && imperialImpactCheck.Count == 1)
+        if (essenceOfSpeedCheck == -1 && imperialImpactCheck.Count() == 1)
         {
             // the vindicator
             return imperialImpactCheck.First();
@@ -121,7 +121,7 @@ internal abstract class BuffSourceFinder
         {
             if (buffInstance > 0)
             {
-                BuffApplyEvent seedApply = log.CombatData.GetBuffDataByInstanceID(buffID, buffInstance).OfType<BuffApplyEvent>().LastOrDefault(x => x.BuffInstance == buffInstance && x.Time <= time);
+                BuffApplyEvent? seedApply = log.CombatData.GetBuffDataByInstanceID(buffID, buffInstance).OfType<BuffApplyEvent>().LastOrDefault(x => x.BuffInstance == buffInstance && x.Time <= time);
                 if (seedApply != null)
                 {
                     return seedApply.By;
@@ -129,9 +129,10 @@ internal abstract class BuffSourceFinder
             }
             return ParserHelper._unknownAgent;
         }
-        List<AgentItem> imperialImpactCheck = CouldBeImperialImpact(buffID, time, extension, log);
+        var imperialImpactCheck = CouldBeImperialImpact(buffID, time, extension, log);
+        var impImpactCount = imperialImpactCheck.Count();
         // Multiple imperial impact at the same time
-        if (imperialImpactCheck.Count > 1)
+        if (impImpactCount > 1)
         {
             return ParserHelper._unknownAgent;
         }
@@ -144,17 +145,18 @@ internal abstract class BuffSourceFinder
         HashSet<long> idsToCheck = GetIDs(log, buffID, extension);
         if (idsToCheck.Count != 0)
         {
-            List<CastEvent> cls = GetExtensionSkills(log, time, idsToCheck);
+            var cls = GetExtensionSkills(log, time, idsToCheck);
+            var clsCount = cls.Count();
             // If multiple casters, return unknown
-            if (cls.Count > 1)
+            if (clsCount > 1)
             {
                 return ParserHelper._unknownAgent;
             }
-            else if (cls.Count == 1)
+            else if (clsCount == 1)
             {
                 CastEvent item = cls.First();
                 // If uncertainty due to essence of speed, imbued melodies or imperial impact, return unknown
-                if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, buffID, time, extension, log) || imperialImpactCheck.Count != 0)
+                if (essenceOfSpeedCheck == 0 || CouldBeImbuedMelodies(item.Caster, buffID, time, extension, log) || impImpactCount != 0)
                 {
                     return ParserHelper._unknownAgent;
                 }

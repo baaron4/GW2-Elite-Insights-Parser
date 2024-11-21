@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData;
 internal static class CommonBuffs
 {
 
-    internal static readonly List<Buff> Boons =
+    internal static readonly IReadOnlyList<Buff> Boons =
     [
         new Buff("Might", Might, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Boon, BuffImages.Might),
         new Buff("Fury", Fury, Source.Common, BuffStackType.Queue, 9, BuffClassification.Boon, BuffImages.Fury),
@@ -28,7 +28,7 @@ internal static class CommonBuffs
         new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.BoonDuration),
     ];
 
-    internal static readonly List<Buff> Conditions =
+    internal static readonly IReadOnlyList<Buff> Conditions =
     [
         new Buff("Bleeding", Bleeding, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Bleeding),
         new Buff("Burning", Burning, Source.Common, BuffStackType.Stacking, 1500, BuffClassification.Condition, BuffImages.Burning),
@@ -48,7 +48,7 @@ internal static class CommonBuffs
         new Buff("Number of Conditions", NumberOfConditions, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.ConditionDuration),
     ];
 
-    internal static readonly List<Buff> Commons =
+    internal static readonly IReadOnlyList<Buff> Commons =
     [
         new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfRanger),
         new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfMesmer),
@@ -131,7 +131,7 @@ internal static class CommonBuffs
         new Buff("Utility Primer", UtilityPrimer, Source.Common, BuffClassification.Other, BuffImages.UtilityPrimer),
     ];
 
-    internal static readonly List<Buff> Gear =
+    internal static readonly IReadOnlyList<Buff> Gear =
     [
         // Sigils
         new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration)

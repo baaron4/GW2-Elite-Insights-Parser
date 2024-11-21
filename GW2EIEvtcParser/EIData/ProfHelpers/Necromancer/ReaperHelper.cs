@@ -27,7 +27,7 @@ internal static class ReaperHelper
         new DamageCastFinder(ChillingNova, ChillingNova).UsingOrigin(EIData.InstantCastFinder.InstantCastOrigin.Trait),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnFoeDamageModifier(Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2019Balance),
@@ -39,7 +39,7 @@ internal static class ReaperHelper
             , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2019Balance)
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.sPvPWvW),
@@ -49,7 +49,7 @@ internal static class ReaperHelper
         // Rise is unclear, I don't see any inc damage reducing fact for Dark Bond
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Reaper's Shroud", ReapersShroud, Source.Reaper, BuffClassification.Other, BuffImages.ReapersShroud),
         new Buff("Infusing Terror", InfusingTerrorBuff, Source.Reaper, BuffClassification.Other, BuffImages.InfusingTerror),

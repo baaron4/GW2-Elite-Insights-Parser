@@ -92,7 +92,7 @@ internal class Sabetha : SpiritVale
                 if (phase.Targets.Count > 0)
                 {
                     SingleActor phaseTar = phase.Targets[0];
-                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out string phaseName) ? phaseName : "Unknown";
+                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out var phaseName) ? phaseName : "Unknown";
                 }
                 switch (phaseID)
                 {
@@ -229,7 +229,7 @@ internal class Sabetha : SpiritVale
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
                 // timed bombs
-        var timedBombs = log.CombatData.GetBuffDataByIDByDst(TimeBomb, p.AgentItem).Where(x => x is BuffApplyEvent).ToList();
+        var timedBombs = log.CombatData.GetBuffDataByIDByDst(TimeBomb, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in timedBombs)
         {
             int start = (int)c.Time;
@@ -237,7 +237,7 @@ internal class Sabetha : SpiritVale
             replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(280, (start, end), Colors.LightOrange, 0.5, new AgentConnector(p)).UsingFilled(false), true, end);
         }
                 // Sapper bombs
-        var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0).ToList();
+        var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
         {
             replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);

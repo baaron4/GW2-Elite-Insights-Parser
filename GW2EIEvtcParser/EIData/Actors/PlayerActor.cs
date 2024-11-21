@@ -44,15 +44,15 @@ public class PlayerActor : SingleActor
         return !IsFriendlyPlayer ? GetHighResolutionProfIcon(Spec) : GetProfIcon(Spec);
     }
 
-    protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
+    protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)
     {
-        base.InitAdditionalCombatReplayData(log);
+        base.InitAdditionalCombatReplayData(log, replay);
         // Fight related stuff
-        log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, CombatReplay);
-        ProfHelper.ComputeProfessionCombatReplayActors(this, log, CombatReplay);
-        if (CombatReplay.Rotations.Count != 0)
+        log.FightData.Logic.ComputePlayerCombatReplayActors(this, log, replay);
+        ProfHelper.ComputeProfessionCombatReplayActors(this, log, replay);
+        if (replay.Rotations.Count != 0)
         {
-            CombatReplay.Decorations.Add(new ActorOrientationDecoration(((int)CombatReplay.TimeOffsets.start, (int)CombatReplay.TimeOffsets.end), AgentItem));
+            replay.Decorations.Add(new ActorOrientationDecoration(((int)replay.TimeOffsets.start, (int)replay.TimeOffsets.end), AgentItem));
         }
     }
 
@@ -60,10 +60,6 @@ public class PlayerActor : SingleActor
 
     public override SingleActorCombatReplayDescription GetCombatReplayDescription(CombatReplayMap map, ParsedEvtcLog log)
     {
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-        return new PlayerCombatReplayDescription(this, log, map, CombatReplay);
+        return new PlayerCombatReplayDescription(this, log, map, InitCombatReplay(log));
     }
 }

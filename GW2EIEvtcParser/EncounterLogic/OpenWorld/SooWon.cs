@@ -29,7 +29,7 @@ internal class SooWon : OpenWorldLogic
         new EnemyDstBuffApplyMechanic(HardenedShell, "Hardened Shell", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkTeal), "Tail", "Soo-Won's Tail spawned", "Tail", 0),
         new EnemyDstBuffRemoveMechanic(HardenedShell, "Hardened Shell", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.DarkGreen), "Tail Killed", "Soo-Won's Tail killed", "Tail Killed", 0).UsingChecker((bre, log) => !bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
         new EnemyDstBuffRemoveMechanic(HardenedShell, "Hardened Shell", new MechanicPlotlySetting(Symbols.DiamondWide, Colors.Yellow), "Tail Despawned", "Soo-Won's Tail despawned due to phase change", "Tail Despawned", 0).UsingChecker((bre, log) => bre.To.HasBuff(log, Invulnerability757, bre.Time - ParserHelper.ServerDelayConstant + 500)),
-        new EnemyDstBuffApplyMechanic(DamageImmunitySooWonBite, "Damage Immunity", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", 0),
+        new EnemyDstBuffApplyMechanic(DamageImmunity, "Damage Immunity", new MechanicPlotlySetting(Symbols.Diamond, Colors.Pink), "Side Swap", "Soo-Won breifly becomes invulnerable and switches sides of the arena", "Side Swap", 0),
         new EnemyDstBuffApplyMechanic(OldExposed, "Exposed", new MechanicPlotlySetting(Symbols.DiamondTall, Colors.DarkGreen), "CCed", "Breakbar successfully broken", "CCed", 0).UsingChecker((bae, log) => bae.To.IsSpecies(ArcDPSEnums.TargetID.SooWonOW) & !bae.To.HasBuff(log, OldExposed, bae.Time - ParserHelper.ServerDelayConstant)),
         });
         Extension = "soowon";
@@ -41,10 +41,10 @@ internal class SooWon : OpenWorldLogic
     internal override long GetFightOffset(EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData)
     {
         long startToUse = GetGenericFightOffset(fightData);
-        CombatItem logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
+        CombatItem? logStartNPCUpdate = combatData.FirstOrDefault(x => x.IsStateChange == ArcDPSEnums.StateChange.LogNPCUpdate);
         if (logStartNPCUpdate != null)
         {
-            return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW).FirstOrDefault());
+            return GetFirstDamageEventTime(fightData, agentData, combatData, agentData.GetGadgetsByID(ArcDPSEnums.TargetID.SooWonOW).FirstOrDefault() ?? throw new EvtcAgentException("SooWon not found"));
         }
         return startToUse;
     }
@@ -52,8 +52,8 @@ internal class SooWon : OpenWorldLogic
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SooWonOW));
-        SingleActor tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.SooWonTail));
+        SingleActor? mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.SooWonOW));
+        SingleActor? tailTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TrashID.SooWonTail));
         if (mainTarget == null)
         {
             throw new MissingKeyActorsException("Soo-Won not found");
@@ -96,8 +96,7 @@ internal class SooWon : OpenWorldLogic
     private static int GetPhaseOffset(ParsedEvtcLog log, SingleActor mainTarget)
     {
         double initialHealth = mainTarget.GetCurrentHealthPercent(log, 0);
-        Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs =
-            log.CombatData.GetBuffDataByDst(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault;
+        Func<Func<BuffApplyEvent, bool>, BuffApplyEvent> targetBuffs = log.CombatData.GetBuffDataByDst(mainTarget.AgentItem).OfType<BuffApplyEvent>().FirstOrDefault!;
         BuffEvent initialInvuln = targetBuffs(x => x.Initial && x.BuffID == Invulnerability757);
         BuffEvent initialDmgImmunity = targetBuffs(x => x.Initial && x.BuffID == SooWonSpearPhaseInvul); // spear phase
 
@@ -135,7 +134,7 @@ internal class SooWon : OpenWorldLogic
     }
 
     private void InitPhases(List<PhaseData> phases, SingleActor mainTarget,
-        SingleActor tailTarget, int phaseOffset)
+        SingleActor? tailTarget, int phaseOffset)
     {
         for (int i = 1; i < phases.Count; i++)
         {
@@ -228,7 +227,7 @@ internal class SooWon : OpenWorldLogic
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData,
         IReadOnlyCollection<AgentItem> playerAgents)
     {
-        RewardEvent reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.Daily && x.Time > fightData.FightStart);
+        RewardEvent? reward = combatData.GetRewardEvents().FirstOrDefault(x => x.RewardType == ArcDPSEnums.RewardTypes.Daily && x.Time > fightData.FightStart);
         if (reward != null)
         {
             fightData.SetSuccess(true, reward.Time);

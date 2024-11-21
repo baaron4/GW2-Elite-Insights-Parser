@@ -2,15 +2,15 @@
 
 namespace GW2EIEvtcParser;
 
-public class CachingCollection<T>(ParsedEvtcLog log, int initiaPrimaryCapacity, int initialSecondaryCapacity) : AbstractCachingCollection<T>(log)
+public class CachingCollection<T>(ParsedEvtcLog log) : AbstractCachingCollection<T>(log)
 {
-		readonly int _initialSecondaryCap = initialSecondaryCapacity;
-    private readonly Dictionary<long, Dictionary<long, T>> _cache = new(initiaPrimaryCapacity);
+		readonly int _initialSecondaryCap = log.FightData.GetPhases(log).Count;
+    private readonly Dictionary<long, Dictionary<long, T>> _cache = new(log.FightData.GetPhases(log).Count);
 
     public bool TryGetValue(long start, long end, [NotNullWhen(true)] out T? value)
     {
         (start, end) = SanitizeTimes(start, end);
-        if (_cache.TryGetValue(start, out Dictionary<long, T> subCache))
+        if (_cache.TryGetValue(start, out var subCache))
         {
             if (subCache.TryGetValue(end, out value!))
             {
@@ -25,7 +25,7 @@ public class CachingCollection<T>(ParsedEvtcLog log, int initiaPrimaryCapacity, 
     {
         (start, end) = SanitizeTimes(start, end);
 
-        if (!_cache.TryGetValue(start, out Dictionary<long, T> subCache))
+        if (!_cache.TryGetValue(start, out var subCache))
         {
             _cache[start] = new Dictionary<long, T>(_initialSecondaryCap);
             subCache = _cache[start];

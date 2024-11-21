@@ -33,7 +33,7 @@ internal static class SoulbeastHelper
             .WithBuilds(GW2Builds.October2022Balance),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnActorDamageModifier(TwiceAsVicious, "Twice as Vicious", "5% (4s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
@@ -58,7 +58,7 @@ internal static class SoulbeastHelper
         new SkillDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.OneWolfPack, DamageModifierMode.All),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.July2019Balance),
@@ -67,7 +67,7 @@ internal static class SoulbeastHelper
         new BuffOnActorDamageModifier(DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.DolyakStance, DamageModifierMode.All),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Dolyak Stance", DolyakStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.DolyakStance),
         new Buff("Griffon Stance", GriffonStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.GriffonStance),

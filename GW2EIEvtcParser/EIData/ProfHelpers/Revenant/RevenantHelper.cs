@@ -75,7 +75,7 @@ internal static class RevenantHelper
     ];
 
 
-    internal static readonly List<DamageModifierDescriptor> OutgoingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Retribution
         new BuffOnFoeDamageModifier(Weakness, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DwarvenBattleTraining, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance),
@@ -108,7 +108,7 @@ internal static class RevenantHelper
         new DamageLogDamageModifier("Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
     ];
 
-    internal static readonly List<DamageModifierDescriptor> IncomingDamageModifiers =
+    internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(RiteOfTheGreatDwarf, "Rite of the Great Dwarf (condition)", "-50%", DamageSource.All, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
         new BuffOnActorDamageModifier(RiteOfTheGreatDwarf, "Rite of the Great Dwarf (strike)", "-50%", DamageSource.All, -50.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.RiteOfTheGreatDwarf, DamageModifierMode.All),
@@ -133,7 +133,7 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(UnyieldingSpirit, "Unyielding Spirit", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.UnyieldingSpirit, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2022FractalInstabilitiesRework),
     ];
 
-    internal static readonly List<Buff> Buffs =
+    internal static readonly IReadOnlyList<Buff> Buffs =
     [
         new Buff("Vengeful Hammers", VengefulHammersBuff, Source.Revenant, BuffClassification.Other, BuffImages.VengefulHammers),
         new Buff("Rite of the Great Dwarf", RiteOfTheGreatDwarf, Source.Revenant, BuffClassification.Defensive, BuffImages.RiteOfTheGreatDwarf),
@@ -356,7 +356,7 @@ internal static class RevenantHelper
                 // Hit indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRazeHit, out var abyssalRazeHits))
                 {
-                    EffectEvent hit = abyssalRazeHits.FirstOrDefault(x => x.Time > effect.Time && x.Time < effect.Time + 1000);
+                    var hit = abyssalRazeHits.FirstOrDefault(x => x.Time > effect.Time && x.Time < effect.Time + 1000);
                     if (hit != null)
                     {
                         (long start, long end) lifespanHit = (lifespanWarning.end, lifespanWarning.end + 500);

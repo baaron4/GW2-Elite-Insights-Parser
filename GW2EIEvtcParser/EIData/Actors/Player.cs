@@ -22,7 +22,7 @@ public class Player : PlayerActor
         {
             throw new EvtcAgentException("Name problem on Player");
         }
-        if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains("-"))
+        if (name[1].Length == 0 || name[2].Length == 0 || Character.Contains('-'))
         {
             throw new EvtcAgentException("Missing Group on Player");
         }
@@ -196,26 +196,21 @@ public class Player : PlayerActor
         return result;
     }
 
-    protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log)
+    protected override void InitAdditionalCombatReplayData(ParsedEvtcLog log, CombatReplay replay)
     {
         foreach (var seg in GetCommanderStates(log))
         {
-            if (ParserIcons.CommanderTagToIcon.TryGetValue(seg.Value, out string icon))
+            if (ParserIcons.CommanderTagToIcon.TryGetValue(seg.Value, out var icon))
             {
-                CombatReplay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, icon, 180f, 15);
+                replay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, icon, 180f, 15);
             }
         }
-        base.InitAdditionalCombatReplayData(log);
+        base.InitAdditionalCombatReplayData(log, replay);
     }
 
     /// <summary> Calculates a list of positions of the player which are null in places where the player is dead or disconnected. </summary>
     public List<ParametricPoint3D?> GetCombatReplayActivePositions(ParsedEvtcLog log)
     {
-        if (CombatReplay == null)
-        {
-            InitCombatReplay(log);
-        }
-
         var (deads, _, dcs) = GetStatus(log);
         var positions = GetCombatReplayPolledPositions(log);
         var activePositions = new List<ParametricPoint3D?>(positions.Count);
