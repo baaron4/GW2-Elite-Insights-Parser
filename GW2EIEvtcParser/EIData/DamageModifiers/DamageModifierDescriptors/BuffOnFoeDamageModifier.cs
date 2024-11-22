@@ -10,11 +10,11 @@ internal class BuffOnFoeDamageModifier : BuffOnActorDamageModifier
 {
     private BuffsTracker? _trackerSource = null;
     private GainComputer? _gainComputerSource = null;
-    internal BuffOnFoeDamageModifier(long buffID, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(buffID, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
+    internal BuffOnFoeDamageModifier(long buffID, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(0, buffID, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
 
-    internal BuffOnFoeDamageModifier(HashSet<long> buffIDs, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(buffIDs, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
+    internal BuffOnFoeDamageModifier(HashSet<long> buffIDs, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(0, buffIDs, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, gainComputer, icon, mode)
     {
     }
 

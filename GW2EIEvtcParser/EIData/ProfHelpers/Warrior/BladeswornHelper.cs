@@ -5,6 +5,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -36,7 +37,7 @@ internal static class BladeswornHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, BuffImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, BuffImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];

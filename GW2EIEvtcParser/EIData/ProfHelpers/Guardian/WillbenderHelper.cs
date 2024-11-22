@@ -5,6 +5,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -15,7 +16,7 @@ internal static class WillbenderHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.All)
             .UsingChecker( (x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -27,7 +28,7 @@ internal static class WillbenderHelper
             })
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "1% per stack", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "1% per stack", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.PvE)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -39,7 +40,7 @@ internal static class WillbenderHelper
             })
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.PvE)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -52,7 +53,7 @@ internal static class WillbenderHelper
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.November2022Balance),
         //
-        new BuffOnActorDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.All)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -64,7 +65,7 @@ internal static class WillbenderHelper
             })
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -76,7 +77,7 @@ internal static class WillbenderHelper
             })
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.PvE)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -89,7 +90,7 @@ internal static class WillbenderHelper
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.November2022Balance),
         //
-        new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -101,7 +102,7 @@ internal static class WillbenderHelper
             })
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2022Balance2),
-        new BuffOnActorDamageModifier(LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_LethalTempo, LethalTempo, "Lethal Tempo", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.LethalTempo, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 6000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -114,7 +115,7 @@ internal static class WillbenderHelper
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.March2022Balance2),
         //
-        new BuffOnActorDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "4% per stack", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "4% per stack", DamageSource.NoPets, 4.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -126,7 +127,7 @@ internal static class WillbenderHelper
             })
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2022Balance2),
-        new BuffOnActorDamageModifier(LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_TyrantsLethalTempo, LethalTempo, "Tyrant's Lethal Tempo", "5% per stack", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByStack, BuffImages.TyrantsMomentum, DamageModifierMode.sPvPWvW)
             .UsingChecker((x, log) => {
                 AgentItem src = x.From;
                 var effectApply = log.CombatData.GetBuffData(LethalTempo).Where(y => y is BuffApplyEvent bae && Math.Abs(bae.AppliedDuration - 4000) < ServerDelayConstant && bae.By == src).LastOrDefault(y => y.Time <= x.Time);
@@ -145,9 +146,9 @@ internal static class WillbenderHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(CrashingCourage, "Deathless Courage", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, BuffImages.DeathlessCourage, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "50%", DamageSource.NoPets, 50.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, BuffImages.DeathlessCourage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(CrashingCourage, "Deathless Courage", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, BuffImages.DeathlessCourage, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_DeathlessCourage, CrashingCourage, "Deathless Courage", "20%", DamageSource.NoPets, 20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Willbender, ByPresence, BuffImages.DeathlessCourage, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
     ];
 

@@ -11,12 +11,12 @@ internal class BuffOnActorDamageModifier : DamageModifierDescriptor
     internal BuffsTracker Tracker;
     internal DamageGainAdjuster? GainAdjuster;
 
-    internal BuffOnActorDamageModifier(long buffID, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(0, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
+    internal BuffOnActorDamageModifier(int id, long buffID, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
     {
         Tracker = new BuffsTrackerSingle(buffID);
     }
 
-    internal BuffOnActorDamageModifier(HashSet<long> buffIDs, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(0, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
+    internal BuffOnActorDamageModifier(int id, HashSet<long> buffIDs, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, GainComputer gainComputer, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, gainPerStack, srctype, compareType, src, icon, gainComputer, mode)
     {
         Tracker = new BuffsTrackerMulti(buffIDs);
     }

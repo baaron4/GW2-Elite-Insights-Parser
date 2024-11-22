@@ -76,9 +76,9 @@ internal static class ElementalistHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Fire
-        new BuffOnActorDamageModifier(PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_PersistingFlames, PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2020Balance),
-        new BuffOnActorDamageModifier([FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement], "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_PyromancersTraining, [FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement], "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.BurningRage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
@@ -121,24 +121,24 @@ internal static class ElementalistHelper
             .UsingApproximate(true),
         //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance),
         // Arcane
-        new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BountifulPower, NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
         new BuffOnFoeDamageModifier([Stun, Daze, Knockdown, Fear, Taunt], "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, BuffImages.Stormsoul, DamageModifierMode.All)
             .WithBuilds(GW2Builds.December2018Balance)
             .UsingApproximate(true),
-        new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(RagingRichochetBuff, "Raging Ricochet", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.RagingRicochet, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_RagingRicochet, RagingRichochetBuff, "Raging Ricochet", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.RagingRicochet, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2024NewWeapons),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
-        new BuffOnActorDamageModifier([EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.StoneFlesh, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_StoneFlesh, [EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.StoneFlesh, DamageModifierMode.All),
         new DamageLogDamageModifier(Mod_GeomancersTraining, "Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) => 
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)

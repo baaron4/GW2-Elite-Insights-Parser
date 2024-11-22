@@ -5,6 +5,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -60,7 +61,7 @@ internal static class DragonhunterHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(NumberOfConditions, "Hunter's Fortification", "-10%", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByAbsence, BuffImages.HuntersFortification, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_HuntersFortification, NumberOfConditions, "Hunter's Fortification", "-10%", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Dragonhunter, ByAbsence, BuffImages.HuntersFortification, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

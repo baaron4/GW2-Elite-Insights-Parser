@@ -4,6 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -23,15 +24,15 @@ internal static class BerserkerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(AlwaysAngry, "Always Angry", "7% per stack", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, ByPresence, BuffImages.AlwaysAngry, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "25% while in berserk", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.June2023Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance, GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "15% while in berserk", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "15% while in berserk", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2022Balance),
-        new BuffOnActorDamageModifier(BerserkBuff, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2022Balance),
+        new BuffOnActorDamageModifier(Mod_AlwaysAngry, AlwaysAngry, "Always Angry", "7% per stack", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, ByPresence, BuffImages.AlwaysAngry, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.August2022Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "25% while in berserk", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.June2023Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "20% while in berserk", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance, GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "15% while in berserk", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "15% while in berserk", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2022Balance),
+        new BuffOnActorDamageModifier(Mod_BloodyRoar, BerserkBuff, "Bloody Roar", "10% while in berserk", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Berserker, ByPresence, BuffImages.BloodyRoar, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2022Balance),
 
     ];
 

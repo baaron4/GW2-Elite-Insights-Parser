@@ -4,6 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -39,15 +40,15 @@ internal static class HolosmithHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LasersEdge, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_LasersEdge, LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LasersEdge, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(SpectrumShieldBuff, "Spectrum Shield", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.sPvP).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(PhotonForge, "Light Density Amplifier", "-15%", DamageSource.NoPets, -15, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LightDensityAmplifier, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.sPvP).WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_LightDensityAmplifier, PhotonForge, "Light Density Amplifier", "-15%", DamageSource.NoPets, -15, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LightDensityAmplifier, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

@@ -25,9 +25,9 @@ internal static class GearDamageModifiers
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023Balance),
         new DamageLogDamageModifier(Mod_ThiefRune, "Thief Rune", "10% while flanking or against defiant", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheThief, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2023Balance, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Might, "Strength Rune", "5% under might", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfStrength, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_StrengthRune, Might, "Strength Rune", "5% under might", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfStrength, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(FireAura, "Fire Rune", "10% under fire aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfFire, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FireRune, FireAura, "Fire Rune", "10% under fire aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfFire, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnFoeDamageModifier(Burning, "Flame Legion Rune", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheFlameLegion, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
@@ -35,7 +35,7 @@ internal static class GearDamageModifiers
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnFoeDamageModifier(Chilled, "Ice Rune", "7% on chilled target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheIce, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Fury, "Rage Rune", "5% under fury", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfRage, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RageRune, Fury, "Rage Rune", "5% under fury", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfRage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnFoeDamageModifier(Daze, "Rune of the Mesmer", "10% on dazed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheMesmer, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
@@ -60,16 +60,16 @@ internal static class GearDamageModifiers
             var dst = log.FindActor(x.To);
             return dst.HasBuff(log, src, RelicOfPeithaTargetBuff, x.Time);
         }).WithBuilds(GW2Builds.November2023Balance).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
-        new BuffOnActorDamageModifier(RelicOfTheThief, "Relic of the Thief", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByStack, BuffImages.RelicOfTheThief, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.sPvP).WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(RelicOfFireworks, "Relic of Fireworks", "7%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.PvEWvW).WithBuilds( GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(RelicOfTheBrawler, "Relic of the Brawler", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheBrawler, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(RelicOfTheDeadeye, "Relic of the Deadeye", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheDeadeye, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(RelicOfTheWeaver, "Relic of the Weaver", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheWeaver, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(NouryssHungerDamageBuff, "Relic of Nourys", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(NouryssHungerDamageBuff, "Relic of Nourys", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.sPvPWvW),
-        new BuffOnActorDamageModifier(RelicOfTheClaw, "Relic of the Claw", "7% after disabling a foe", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfTheClaw, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheThief, RelicOfTheThief, "Relic of the Thief", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByStack, BuffImages.RelicOfTheThief, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfFireworks, RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_RelicOfFireworks, RelicOfFireworks, "Relic of Fireworks", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.sPvP).WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_RelicOfFireworks, RelicOfFireworks, "Relic of Fireworks", "7%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfFireworks, DamageModifierMode.PvEWvW).WithBuilds( GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheBrawler, RelicOfTheBrawler, "Relic of the Brawler", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheBrawler, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheDeadeye, RelicOfTheDeadeye, "Relic of the Deadeye", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheDeadeye, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheWeaver, RelicOfTheWeaver, "Relic of the Weaver", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheWeaver, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_RelicOfTheClaw, RelicOfTheClaw, "Relic of the Claw", "7% after disabling a foe", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfTheClaw, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -88,7 +88,7 @@ internal static class GearDamageModifiers
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnFoeDamageModifier(Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         // Relics
-        new BuffOnActorDamageModifier(NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.NoPets, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(RelicOfSorrowBuff, "Relic of Sorrow", "-20%", DamageSource.NoPets, -20.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfTheSorrow, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.NoPets, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfSorrow, RelicOfSorrowBuff, "Relic of Sorrow", "-20%", DamageSource.NoPets, -20.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfTheSorrow, DamageModifierMode.All),
     ];
 }

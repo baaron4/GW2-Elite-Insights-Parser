@@ -53,12 +53,12 @@ internal static class ThiefHelper
             .UsingApproximate(true),
         new DamageLogDamageModifier(Mod_FerociousStrikes, "Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, DamageModifierMode.All),
         // Trickery
-        new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), 
+        new BuffOnActorDamageModifier(Mod_LeadAttacks, LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), 
         // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all       
-        new BuffOnActorDamageModifier(FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.FluidStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
+        new BuffOnActorDamageModifier(Mod_FluidStrikes, FluidStrikes, "Fluid Strikes", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.FluidStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.July2023BalanceAndSilentSurfCM),
         // Spear       
-        new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(DistractingThrowBuff, "Distracting Throw", "5%", DamageSource.NoPets, 5, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_DistractingThrow, DistractingThrowBuff, "Distracting Throw", "10%", DamageSource.NoPets, 10, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_DistractingThrow, DistractingThrowBuff, "Distracting Throw", "5%", DamageSource.NoPets, 5, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByPresence, BuffImages.MonsterSkill, DamageModifierMode.sPvPWvW),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =

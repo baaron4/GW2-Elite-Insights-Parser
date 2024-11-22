@@ -40,7 +40,7 @@ internal static class VirtuosoHelper
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_DeadlyBlades, DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];

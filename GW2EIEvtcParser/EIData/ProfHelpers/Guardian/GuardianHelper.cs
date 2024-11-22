@@ -94,32 +94,32 @@ internal static class GuardianHelper
         // Zeal
         new BuffOnFoeDamageModifier(Burning, "Fiery Wrath", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.FieryWrath, DamageModifierMode.All),
         new BuffOnFoeDamageModifier(Vulnerability, "Symbolic Exposure", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.SymbolicExposure, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, BuffImages.SymbolicAvenger, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_SymbolicAvenger, SymbolicAvenger, "Symbolic Avenger", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, BuffImages.SymbolicAvenger, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
         // Radiance
-        new BuffOnActorDamageModifier(Retaliation, "Retribution", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.RetributionTrait, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_Retribution, Retaliation, "Retribution", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.RetributionTrait, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Resolution, "Retribution", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.RetributionTrait, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_Retribution, Resolution, "Retribution", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.RetributionTrait, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
         // Virtues
-        new BuffOnActorDamageModifier(Aegis, "Unscathed Contender", "20% under aegis", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.UnscathedContender, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender", "20% under aegis", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.UnscathedContender, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2023Balance),
-        new BuffOnActorDamageModifier(Aegis, "Unscathed Contender (Aegis)", "7% under aegis", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.UnscathedContender, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_UnscathedContenderAegis, Aegis, "Unscathed Contender (Aegis)", "7% under aegis", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.UnscathedContender, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance),
         new DamageLogDamageModifier(Mod_UnscathedContenderHP, "Unscathed Contender (HP)", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Guardian, BuffImages.UnscathedContender, (x, log) => x.IsOverNinety, DamageModifierMode.All)
             .WithBuilds( GW2Builds.February2023Balance),
-        new BuffOnActorDamageModifier(NumberOfBoons, "Power of the Virtuous", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, BuffImages.PowerOfTheVirtuous,  DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_PowerOfTheVirtuous, NumberOfBoons, "Power of the Virtuous", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, BuffImages.PowerOfTheVirtuous,  DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(NumberOfBoons, "Inspired Virtue", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, BuffImages.InspiredVirtue, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, BuffImages.InspiredVirtue, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.VirtuousSolace, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_InspiredVirtue, InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.VirtuousSolace, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2020Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(SignetOfJudgmentBuff, "Signet of Judgment", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.NoPets, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SignetOfJudgment, SignetOfJudgmentBuff, "Signet of Judgment", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SignetOfJudgmentPI, SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.NoPets, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
         new CounterOnActorDamageModifier(RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Guardian, BuffImages.RenewedFocus, DamageModifierMode.All)
     ];
 

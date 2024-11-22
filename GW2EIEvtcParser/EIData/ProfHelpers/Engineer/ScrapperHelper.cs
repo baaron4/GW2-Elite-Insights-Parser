@@ -31,7 +31,7 @@ internal static class ScrapperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier([Swiftness, Superspeed, Stability], "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ObjectInMotion, [Swiftness, Superspeed, Stability], "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance)
     ];
 
