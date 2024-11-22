@@ -16,7 +16,14 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
             Stacks = new BuffSimulationItemBase[count];
             for (int i = 0; i < count; i++)
             {
-                Stacks[i] = new BuffSimulationItemBase(stacks[i]);
+                var stack = stacks[i];
+                var hasSeed = stack.SeedSrc != stack.Src;
+                var isExtension = stack.IsExtension;
+                Stacks[i] = hasSeed ?
+                    (isExtension ? new BuffSimulationItemBaseWithExtensionWithSeed(stack)  : new BuffSimulationItemBaseWithSeed(stack))
+                    :
+                    (isExtension ? new BuffSimulationItemBaseWithExtension(stack) : new BuffSimulationItemBase(stack))
+                    ;
             }
         }
         else
@@ -51,10 +58,10 @@ internal abstract class BuffSimulationItemStack : BuffSimulationItem
         return _stacksPerSource.GetValueOrDefault(actor.AgentItem);
     }
 
-    public override IEnumerable<long> GetActualDurationPerStack()
+    /*public override IEnumerable<long> GetActualDurationPerStack()
     {
         return Stacks.Select(x => x.GetActualDuration());
-    }
+    }*/
 
     public override IEnumerable<AgentItem> GetSources()
     {

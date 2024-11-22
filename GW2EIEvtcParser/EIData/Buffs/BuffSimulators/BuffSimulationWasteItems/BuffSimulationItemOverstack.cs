@@ -9,24 +9,24 @@ internal class BuffSimulationItemOverstack : AbstractBuffSimulationItemWasted
     {
     }
 
-    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         Dictionary<AgentItem, BuffDistributionItem> distrib = distribs.GetDistrib(buffID);
-        AgentItem agent = Src;
         long value = GetValue(start, end);
-        if (value == 0)
+        if (value > 0)
         {
-            return;
+            AgentItem agent = Src;
+            if (distrib.TryGetValue(agent, out var toModify))
+            {
+                toModify.IncrementOverstack(value);
+            }
+            else
+            {
+                distrib.Add(agent, new BuffDistributionItem(
+                    0,
+                    value, 0, 0, 0, 0));
+            }
         }
-        if (distrib.TryGetValue(agent, out var toModify))
-        {
-            toModify.IncrementOverstack(value);
-        }
-        else
-        {
-            distrib.Add(agent, new BuffDistributionItem(
-                0,
-                value, 0, 0, 0, 0));
-        }
+        return value;
     }
 }

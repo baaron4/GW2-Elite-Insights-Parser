@@ -13,7 +13,7 @@ internal class CappedDurationLogic : StackingLogic
         return false;
     }
 
-    public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
+    public override bool FindLowestValue(ParsedEvtcLog log, BuffStackItemPool pool, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID)
     {
         // no lowest value to find
         return false;

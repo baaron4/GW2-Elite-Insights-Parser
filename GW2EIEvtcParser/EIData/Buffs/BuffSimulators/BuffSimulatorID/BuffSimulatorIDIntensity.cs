@@ -7,7 +7,7 @@ internal class BuffSimulatorIDIntensity : BuffSimulatorID
 {
     private readonly int _capacity;
     // Constructor
-    public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff, capacity)
+    public BuffSimulatorIDIntensity(ParsedEvtcLog log, Buff buff, BuffStackItemPool pool, int capacity) : base(log, buff, pool, capacity)
     {
         _capacity = capacity;
     }
@@ -20,7 +20,7 @@ internal class BuffSimulatorIDIntensity : BuffSimulatorID
 
     public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
     {
-        BuffStack.Add(new BuffStackItemID(start, duration, src, addedActive, stackID));
+        BuffStack.Add(Pool.GetBuffStackItemID(start, duration, src, addedActive, stackID));
     }
 
     protected override void Update(long timePassed)

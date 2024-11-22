@@ -2,7 +2,7 @@
 
 internal abstract class StackingLogic
 {
-    public abstract bool FindLowestValue(ParsedEvtcLog log, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID);
+    public abstract bool FindLowestValue(ParsedEvtcLog log, BuffStackItemPool pool, BuffStackItem stackItem, List<BuffStackItem> stacks, List<BuffSimulationItemWasted> wastes, long overridenDuration, uint overridenStackID);
 
     public virtual bool IsFull(List<BuffStackItem> stacks, int capacity)
     {

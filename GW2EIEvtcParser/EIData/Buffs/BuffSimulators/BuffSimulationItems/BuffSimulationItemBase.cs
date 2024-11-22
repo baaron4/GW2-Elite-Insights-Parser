@@ -5,9 +5,7 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 internal class BuffSimulationItemBase : BuffSimulationItem
 {
     internal readonly AgentItem _src;
-    internal readonly AgentItem _seedSrc;
-    internal readonly long _totalDuration;
-    internal readonly bool _isExtension;
+    //internal readonly long _totalDuration;
 
     protected internal BuffSimulationItemBase(BuffStackItem buffStackItem) : base(buffStackItem.Start, buffStackItem.Start + buffStackItem.Duration)
     {
@@ -15,9 +13,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         // this only influences buff uptime values, so it can be difficult to spot.
         // There is a regression test for this in Tests/Regression.cs:BuffUptime.
         _src           = buffStackItem.Src;
-        _seedSrc       = buffStackItem.SeedSrc;
-        _totalDuration = buffStackItem.TotalDuration;
-        _isExtension   = buffStackItem.IsExtension;
+        //_totalDuration = buffStackItem.TotalDuration;
     }
 
     public override void OverrideEnd(long end)
@@ -45,7 +41,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         return GetActiveSources().Any(x => x == actor.AgentItem) ? 1 : 0;
     }
 
-    public override IEnumerable<long> GetActualDurationPerStack()
+    /*public override IEnumerable<long> GetActualDurationPerStack()
     {
         return [ GetActualDuration() ];
     }
@@ -53,7 +49,7 @@ internal class BuffSimulationItemBase : BuffSimulationItem
     public override long GetActualDuration()
     {
         return _totalDuration;
-    }
+    }*/
 
     public override IEnumerable<AgentItem> GetSources()
     {
@@ -65,66 +61,24 @@ internal class BuffSimulationItemBase : BuffSimulationItem
         return GetSources();
     }
 
-    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long buffID)
     {
         long cDur = GetClampedDuration(start, end);
-        if (cDur == 0)
+        if (cDur > 0)
         {
-            return;
-        }
-
-        Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
-        if (distribution.TryGetValue(_src, out var toModify))
-        {
-            toModify.IncrementValue(cDur);
-        }
-        else
-        {
-            distribution.Add(_src, new BuffDistributionItem(
-                cDur,
-                0, 0, 0, 0, 0));
-        }
-
-        if (_isExtension)
-        {
-            if (distribution.TryGetValue(_src, out toModify))
+            Dictionary<AgentItem, BuffDistributionItem> distribution = distribs.GetDistrib(buffID);
+            if (distribution.TryGetValue(_src, out var toModify))
             {
-                toModify.IncrementExtension(cDur);
+                toModify.IncrementValue(cDur);
             }
             else
             {
                 distribution.Add(_src, new BuffDistributionItem(
-                    0,
-                    0, 0, 0, cDur, 0));
+                    cDur,
+                    0, 0, 0, 0, 0));
             }
         }
 
-        if (_src != _seedSrc)
-        {
-            if (distribution.TryGetValue(_seedSrc, out toModify))
-            {
-                toModify.IncrementExtended(cDur);
-            }
-            else
-            {
-                distribution.Add(_seedSrc, new BuffDistributionItem(
-                    0,
-                    0, 0, 0, 0, cDur));
-            }
-        }
-
-        if (_src == ParserHelper._unknownAgent)
-        {
-            if (distribution.TryGetValue(_seedSrc, out toModify))
-            {
-                toModify.IncrementUnknownExtension(cDur);
-            }
-            else
-            {
-                distribution.Add(_seedSrc, new BuffDistributionItem(
-                    0,
-                    0, 0, cDur, 0, 0));
-            }
-        }
+        return cDur;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
@@ -8,7 +9,7 @@ internal class BuffSimulatorIDDuration : BuffSimulatorID
     private BuffStackItemID? _activeStack;
 
     // Constructor
-    public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff, capacity)
+    public BuffSimulatorIDDuration(ParsedEvtcLog log, Buff buff, BuffStackItemPool pool, int capacity) : base(log, buff, pool, capacity)
     {
     }
 
@@ -17,14 +18,17 @@ internal class BuffSimulatorIDDuration : BuffSimulatorID
         _activeStack?.Disable();
         
         _activeStack = BuffStack.FirstOrDefault(x => x.StackID == stackID);
-        Debug.Assert(_activeStack != null, $"Activate has failed: could not find stack id {stackID}");
+        if (_activeStack == null)
+        {
+            throw new EIBuffSimulatorIDException($"Activate has failed: could not find stack id {stackID}");
+        }
 
         _activeStack.Activate();
     }
 
     public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
     {
-        var toAdd = new BuffStackItemID(start, duration, src, addedActive, stackID);
+        var toAdd = Pool.GetBuffStackItemID(start, duration, src, addedActive, stackID);
         BuffStack.Add(toAdd);
         if (addedActive)
         {
