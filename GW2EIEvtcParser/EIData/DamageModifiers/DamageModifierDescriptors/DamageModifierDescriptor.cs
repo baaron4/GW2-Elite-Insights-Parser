@@ -25,13 +25,20 @@ internal abstract class DamageModifierDescriptor : IVersionable
     public readonly Source Src;
     public readonly string Icon;
     public readonly string Name;
+
+    public readonly int ID;
     public string InitialTooltip { get; protected set; }
 
     internal readonly DamageModifierMode Mode = DamageModifierMode.All;
     private List<DamageLogChecker> _dlCheckers;
 
-    internal DamageModifierDescriptor(string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
+    internal DamageModifierDescriptor(int id, string name, string tooltip, DamageSource damageSource, double gainPerStack, DamageType srctype, DamageType compareType, Source src, string icon, GainComputer gainComputer, DamageModifierMode mode)
     {
+        if (id <= 0)
+        {
+            throw new InvalidOperationException("Damage modifier id must be strictly positive");
+        }
+        ID = id;
         InitialTooltip = tooltip;
         Name = name;
         DmgSrc = damageSource;

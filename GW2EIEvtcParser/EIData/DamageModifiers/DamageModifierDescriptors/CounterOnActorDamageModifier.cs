@@ -21,11 +21,11 @@ internal class CounterOnActorDamageModifier : BuffOnActorDamageModifier
 
     private static readonly GainComputerCounter counterGainComputer = new();
 
-    internal CounterOnActorDamageModifier(long id, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
+    internal CounterOnActorDamageModifier(long buffID, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(buffID, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
     {
     }
 
-    internal CounterOnActorDamageModifier(HashSet<long> ids, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(ids, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
+    internal CounterOnActorDamageModifier(HashSet<long> buffIDs, string name, string tooltip, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(buffIDs, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, counterGainComputer, icon, mode)
     {
     }
     internal override DamageModifierDescriptor UsingGainAdjuster(DamageGainAdjuster gainAdjuster)

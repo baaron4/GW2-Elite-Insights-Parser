@@ -7,7 +7,6 @@ public class IncomingDamageModifier : DamageModifier
 {
     internal IncomingDamageModifier(DamageModifierDescriptor damageModDescriptor) : base(damageModDescriptor, DamageModifiersUtils.DamageSource.NotApplicable)
     {
-        ID = ("inc" + Name).GetHashCode();
         Incoming = true;
     }
 
