@@ -136,7 +136,7 @@ internal static class MesmerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new CounterOnActorDamageModifier(DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
     ];
 
 

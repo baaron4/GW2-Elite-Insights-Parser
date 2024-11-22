@@ -120,7 +120,7 @@ internal static class GuardianHelper
     [
         new BuffOnActorDamageModifier(Mod_SignetOfJudgment, SignetOfJudgmentBuff, "Signet of Judgment", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_SignetOfJudgmentPI, SignetOfJudgmentPI, "Signet of Judgment (PI)", "-12%", DamageSource.NoPets, -12, DamageType.StrikeAndCondition, DamageType.All, Source.Guardian, ByPresence, BuffImages.SignetOfJudgment, DamageModifierMode.All),
-        new CounterOnActorDamageModifier(RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Guardian, BuffImages.RenewedFocus, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_RenewedFocus, RenewedFocus, "Renewed Focus", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Guardian, BuffImages.RenewedFocus, DamageModifierMode.All)
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

@@ -78,7 +78,7 @@ internal static class WarriorHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new CounterOnActorDamageModifier(EnduringPainBuff, "Endure Pain", "-100%", DamageSource.NoPets, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.EndurePain, DamageModifierMode.All),
+        new CounterOnActorDamageModifier(Mod_EndurePain, EnduringPainBuff, "Endure Pain", "-100%", DamageSource.NoPets, DamageType.Strike, DamageType.All, Source.Warrior, BuffImages.EndurePain, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_HardenedArmor, Resolution, "Hardened Armor", "-10% under resolution", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.HardenedArmor, DamageModifierMode.All).WithBuilds(GW2Builds.March2020Balance),
         new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-25%", DamageSource.NoPets, -25.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnActorDamageModifier(Mod_Rampage, Rampage, "Rampage", "-50%", DamageSource.NoPets, -50.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.Rampage, DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance),

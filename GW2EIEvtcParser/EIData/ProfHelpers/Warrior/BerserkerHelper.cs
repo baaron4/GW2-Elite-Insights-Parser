@@ -38,7 +38,7 @@ internal static class BerserkerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new CounterOnActorDamageModifier(FeelNoPainSavageInstinct, "Feel No Pain", "-100%", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, BuffImages.SavageInstinct, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_FeelNoPain, FeelNoPainSavageInstinct, "Feel No Pain", "-100%", DamageSource.NoPets, DamageType.StrikeAndCondition, DamageType.All, Source.Berserker, BuffImages.SavageInstinct, DamageModifierMode.All)
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

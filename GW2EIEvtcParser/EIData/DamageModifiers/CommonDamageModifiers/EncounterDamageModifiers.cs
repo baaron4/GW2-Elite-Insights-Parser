@@ -154,7 +154,7 @@ internal static class EncounterDamageModifiers
             {
                 return VulnerabilityAdditiveChecker(ahde, log, ConjuredProtection, 10);
             }),
-        new CounterOnActorDamageModifier(ConjuredProtection, "Conjured Protection (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.Strike, DamageType.All, Source.FightSpecific, BuffImages.Fractured, DamageModifierMode.PvE)
+        new CounterOnActorDamageModifier(Mod_ConjuredProtectionInvul, ConjuredProtection, "Conjured Protection (Invul)", "-10% per stack, stacks additively with Vulnerability, while doing 0 damages", DamageSource.All, DamageType.Strike, DamageType.All, Source.FightSpecific, BuffImages.Fractured, DamageModifierMode.PvE)
             .UsingChecker((ahde, log) =>
             {
                 return !VulnerabilityAdditiveChecker(ahde, log, ConjuredProtection, 10);

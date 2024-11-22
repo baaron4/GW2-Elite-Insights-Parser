@@ -221,5 +221,14 @@ public static class DamageModifierIDs
     public const int Mod_DragonsEndContributor8 = 207;
     public const int Mod_DragonsEndContributor9 = 208;
     public const int Mod_DragonsEndContributor10 = 209;
+    public const int Mod_ConjuredProtectionInvul = 210;
+    public const int Mod_WritOfMasterfulMalice = 211;
+    public const int Mod_WritOfMasterfufStrength = 212;
+    public const int Mod_RenewedFocus = 213;
+    public const int Mod_RushingJustice = 214;
+    public const int Mod_Distortion = 215;
+    public const int Mod_PerilousGift = 216;
+    public const int Mod_FeelNoPain = 217;
+    public const int Mod_EndurePain = 218;
 }
 
