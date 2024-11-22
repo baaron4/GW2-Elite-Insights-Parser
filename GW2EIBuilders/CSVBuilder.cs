@@ -3,6 +3,7 @@ using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ParserHelper;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIBuilders;
 
@@ -256,14 +257,14 @@ public class CSVBuilder
         {
             FinalGameplayStats stats = player.GetGameplayStats(_log, phase.Start, phase.End);
             FinalOffensiveStats statsBoss = player.GetOffensiveStats(_legacyTarget, _log, phase.Start, phase.End);
-            IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
+            IReadOnlyDictionary<int, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
             var scholar = new DamageModifierStat(0, 0, 0, 0);
             var moving = new DamageModifierStat(0, 0, 0, 0);
-            if (damageMods.TryGetValue("Scholar Rune", out var schoDict))
+            if (damageMods.TryGetValue(Mod_ScholarRune, out var schoDict))
             {
                 scholar = schoDict;
             }
-            if (damageMods.TryGetValue("Moving Bonus", out var moveDict))
+            if (damageMods.TryGetValue(Mod_MovingBonus, out var moveDict))
             {
                 moving = moveDict;
             }
@@ -303,14 +304,14 @@ public class CSVBuilder
         {
             FinalGameplayStats gameplayStats = player.GetGameplayStats(_log, phase.Start, phase.End);
             FinalOffensiveStats offStats = player.GetOffensiveStats(null, _log, phase.Start, phase.End);
-            IReadOnlyDictionary<string, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
+            IReadOnlyDictionary<int, DamageModifierStat> damageMods = player.GetOutgoingDamageModifierStats(_legacyTarget, _log, phase.Start, phase.End);
             var scholar = new DamageModifierStat(0, 0, 0, 0);
             var moving = new DamageModifierStat(0, 0, 0, 0);
-            if (damageMods.TryGetValue("Scholar Rune", out var schoDict))
+            if (damageMods.TryGetValue(Mod_ScholarRune, out var schoDict))
             {
                 scholar = schoDict;
             }
-            if (damageMods.TryGetValue("Moving Bonus", out var moveDict))
+            if (damageMods.TryGetValue(Mod_MovingBonus, out var moveDict))
             {
                 moving = moveDict;
             }

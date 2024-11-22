@@ -185,14 +185,14 @@ internal class LogDataDto
         // Collect all personal damage mods by spec
         foreach (var pair in log.FriendliesListBySpec)
         {
-            var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetOutgoingModifiersPerSpec(pair.Key).Select(x => x.Name));
+            var specDamageModsID = new HashSet<int>(log.DamageModifiers.GetOutgoingModifiersPerSpec(pair.Key).Select(x => x.ID));
             var damageModsToUse = new HashSet<OutgoingDamageModifier>();
             foreach (SingleActor actor in pair.Value)
             {
-                var presentDamageMods = new HashSet<string>(actor.GetPresentOutgoingDamageModifier(log).Intersect(specDamageModsName));
-                foreach (string name in presentDamageMods)
+                var presentDamageMods = new HashSet<int>(actor.GetPresentOutgoingDamageModifier(log).Intersect(specDamageModsID));
+                foreach (int modID in presentDamageMods)
                 {
-                    damageModsToUse.Add(log.DamageModifiers.OutgoingDamageModifiersByName[name]);
+                    damageModsToUse.Add(log.DamageModifiers.OutgoingDamageModifiersByID[modID]);
                 }
             }
             damageModBySpecs[pair.Key] = damageModsToUse.ToList();
@@ -215,14 +215,14 @@ internal class LogDataDto
         // Collect all personal damage mods by spec
         foreach (var pair in log.FriendliesListBySpec)
         {
-            var specDamageModsName = new HashSet<string>(log.DamageModifiers.GetIncomingModifiersPerSpec(pair.Key).Select(x => x.Name));
+            var specDamageModsID = new HashSet<int>(log.DamageModifiers.GetIncomingModifiersPerSpec(pair.Key).Select(x => x.ID));
             var damageModsToUse = new HashSet<IncomingDamageModifier>();
             foreach (SingleActor actor in pair.Value)
             {
-                var presentDamageMods = new HashSet<string>(actor.GetPresentIncomingDamageModifier(log).Intersect(specDamageModsName));
-                foreach (string name in presentDamageMods)
+                var presentDamageMods = new HashSet<int>(actor.GetPresentIncomingDamageModifier(log).Intersect(specDamageModsID));
+                foreach (int modID in presentDamageMods)
                 {
-                    damageModsToUse.Add(log.DamageModifiers.IncomingDamageModifiersByName[name]);
+                    damageModsToUse.Add(log.DamageModifiers.IncomingDamageModifiersByID[modID]);
                 }
             }
             damageModBySpecs[pair.Key] = damageModsToUse.ToList();
@@ -300,7 +300,7 @@ internal class LogDataDto
     }
 
     private void BuildOutgoingDamageModDictionaries(ParsedEvtcLog log, HashSet<OutgoingDamageModifier> usedDamageMods,
-        HashSet<string> allDamageMods, List<OutgoingDamageModifier> commonDamageModifiers, List<OutgoingDamageModifier> itemDamageModifiers)
+        HashSet<int> allDamageMods, List<OutgoingDamageModifier> commonDamageModifiers, List<OutgoingDamageModifier> itemDamageModifiers)
     {
         foreach (SingleActor actor in log.Friendlies)
         {
@@ -310,7 +310,7 @@ internal class LogDataDto
         {
             foreach (OutgoingDamageModifier dMod in list)
             {
-                if (allDamageMods.Contains(dMod.Name))
+                if (allDamageMods.Contains(dMod.ID))
                 {
                     commonDamageModifiers.Add(dMod);
                     DmgModifiersCommon.Add(dMod.ID);
@@ -322,7 +322,7 @@ internal class LogDataDto
         {
             foreach (OutgoingDamageModifier dMod in list)
             {
-                if (allDamageMods.Contains(dMod.Name))
+                if (allDamageMods.Contains(dMod.ID))
                 {
                     commonDamageModifiers.Add(dMod);
                     DmgModifiersCommon.Add(dMod.ID);
@@ -334,7 +334,7 @@ internal class LogDataDto
         {
             foreach (OutgoingDamageModifier dMod in list)
             {
-                if (allDamageMods.Contains(dMod.Name))
+                if (allDamageMods.Contains(dMod.ID))
                 {
                     itemDamageModifiers.Add(dMod);
                     DmgModifiersItem.Add(dMod.ID);
@@ -346,7 +346,7 @@ internal class LogDataDto
         {
             foreach (OutgoingDamageModifier dMod in list)
             {
-                if (allDamageMods.Contains(dMod.Name))
+                if (allDamageMods.Contains(dMod.ID))
                 {
                     itemDamageModifiers.Add(dMod);
                     DmgModifiersItem.Add(dMod.ID);
@@ -357,7 +357,7 @@ internal class LogDataDto
     }
 
     private void BuildIncomingDamageModDictionaries(ParsedEvtcLog log, HashSet<IncomingDamageModifier> usedIncDamageMods,
-        HashSet<string> allIncDamageMods, List<IncomingDamageModifier> commonIncDamageModifiers, List<IncomingDamageModifier> itemIncDamageModifiers)
+        HashSet<int> allIncDamageMods, List<IncomingDamageModifier> commonIncDamageModifiers, List<IncomingDamageModifier> itemIncDamageModifiers)
     {
         foreach (SingleActor actor in log.Friendlies)
         {
@@ -367,7 +367,7 @@ internal class LogDataDto
         {
             foreach (IncomingDamageModifier dMod in list)
             {
-                if (allIncDamageMods.Contains(dMod.Name))
+                if (allIncDamageMods.Contains(dMod.ID))
                 {
                     commonIncDamageModifiers.Add(dMod);
                     DmgIncModifiersCommon.Add(dMod.ID);
@@ -379,7 +379,7 @@ internal class LogDataDto
         {
             foreach (IncomingDamageModifier dMod in list)
             {
-                if (allIncDamageMods.Contains(dMod.Name))
+                if (allIncDamageMods.Contains(dMod.ID))
                 {
                     commonIncDamageModifiers.Add(dMod);
                     DmgIncModifiersCommon.Add(dMod.ID);
@@ -391,7 +391,7 @@ internal class LogDataDto
         {
             foreach (IncomingDamageModifier dMod in list)
             {
-                if (allIncDamageMods.Contains(dMod.Name))
+                if (allIncDamageMods.Contains(dMod.ID))
                 {
                     itemIncDamageModifiers.Add(dMod);
                     DmgIncModifiersItem.Add(dMod.ID);
@@ -403,7 +403,7 @@ internal class LogDataDto
         {
             foreach (IncomingDamageModifier dMod in list)
             {
-                if (allIncDamageMods.Contains(dMod.Name))
+                if (allIncDamageMods.Contains(dMod.ID))
                 {
                     itemIncDamageModifiers.Add(dMod);
                     DmgIncModifiersItem.Add(dMod.ID);
@@ -463,12 +463,12 @@ internal class LogDataDto
         Dictionary<Spec, IReadOnlyList<OutgoingDamageModifier>> persOutDamageModDict = BuildPersonalOutgoingDamageModData(log, logData.DmgModifiersPers, usedDamageMods);
         Dictionary<Spec, IReadOnlyList<IncomingDamageModifier>> persIncDamageModDict = BuildPersonalIncomingDamageModData(log, logData.DmgIncModifiersPers, usedIncDamageMods);
         
-        var allOutDamageMods         = new HashSet<string>();
-        var commonOutDamageModifiers = new List<OutgoingDamageModifier>();
-        var itemOutDamageModifiers   = new List<OutgoingDamageModifier>();
-        var allIncDamageMods         = new HashSet<string>();
-        var commonIncDamageModifiers = new List<IncomingDamageModifier>();
-        var itemIncDamageModifiers   = new List<IncomingDamageModifier>();
+        var allOutDamageMods         = new HashSet<int>(60);
+        var commonOutDamageModifiers = new List<OutgoingDamageModifier>(20);
+        var itemOutDamageModifiers   = new List<OutgoingDamageModifier>(20);
+        var allIncDamageMods         = new HashSet<int>(60);
+        var commonIncDamageModifiers = new List<IncomingDamageModifier>(20);
+        var itemIncDamageModifiers   = new List<IncomingDamageModifier>(20);
         
         logData.BuildBuffDictionaries(log, usedBuffs);
         logData.BuildOutgoingDamageModDictionaries(log, usedDamageMods, allOutDamageMods, commonOutDamageModifiers, itemOutDamageModifiers);

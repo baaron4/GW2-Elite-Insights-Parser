@@ -20,7 +20,7 @@ namespace GW2EIBuilders.JsonModels.JsonActors;
 internal static class JsonPlayerBuilder
 {
 
-    public static JsonPlayer BuildJsonPlayer(SingleActor player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, Dictionary<long, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, HashSet<long>> personalDamageMods)
+    public static JsonPlayer BuildJsonPlayer(SingleActor player, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalBuffs, Dictionary<string, HashSet<long>> personalDamageMods)
     {
         var jsonPlayer = new JsonPlayer();
         JsonActorBuilder.FillJsonActor(jsonPlayer, player, log, settings, skillMap, buffMap);
