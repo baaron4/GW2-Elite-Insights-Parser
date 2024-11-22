@@ -32,14 +32,14 @@ internal static class DaredevilHelper
         new BuffOnActorDamageModifier(Mod_BoundingDodger, BoundingDodger, "Bounding Dodger", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.BoundingDodger, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(Mod_BoundingDodger, BoundingDodger, "Bounding Dodger", "15% (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.BoundingDodger, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Mod_BoundingDodger, BoundingDodger, "Bounding Dodger", "15% (4s) after dodging", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.BoundingDodger, DamageModifierMode.All).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "10% if weakness on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.All).WithBuilds(GW2Builds.April2019Balance, GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "7% if weakness on target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "10% if weakness on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Weakness, "Weakening Strikes", "-10% if weakness on foe", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_WeakeningStrikes, Weakness, "Weakening Strikes", "-10% if weakness on foe", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Daredevil, ByPresence, BuffImages.WeakeningStrikes, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_UnhideredCombatant, UnhinderedCombatant, "Unhindered Combatant", "-10%", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Daredevil, ByPresence, BuffImages.UnhinderedCombatant, DamageModifierMode.All),
     ];
 

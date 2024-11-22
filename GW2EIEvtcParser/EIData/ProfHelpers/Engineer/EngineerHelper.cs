@@ -125,9 +125,9 @@ internal static class EngineerHelper
         new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnFoeDamageModifier(Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExplosivePowder, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExplosivePowder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
-        new BuffOnFoeDamageModifier(Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ExplosivePowder, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ExplosivePowder, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
         new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
         {
@@ -169,11 +169,11 @@ internal static class EngineerHelper
             .WithBuilds(GW2Builds.August2018Balance),
         new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
-        new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2024JWRelease),
-        new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.WvW)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.August2024JWRelease),
-        new BuffOnFoeDamageModifier(NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
             .WithBuilds(GW2Builds.August2024JWRelease),
         // Tools
         new BuffOnActorDamageModifier(Mod_ExcessiveEnergy, Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),

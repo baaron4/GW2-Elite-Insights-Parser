@@ -79,7 +79,7 @@ internal static class RevenantHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Retribution
-        new BuffOnFoeDamageModifier(Weakness, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DwarvenBattleTraining, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance),
+        new BuffOnFoeDamageModifier(Mod_DwarvenBattleTraining, Weakness, "Dwarven Battle Training", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DwarvenBattleTraining, DamageModifierMode.All).WithBuilds(GW2Builds.December2018Balance),
         new BuffOnActorDamageModifier(Mod_ViciousReprisal, Retaliation, "Vicious Reprisal", "10% under retaliation", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.ViciousReprisal, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_ViciousReprisal, Resolution, "Vicious Reprisal", "10% under resolution", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Revenant, ByPresence, BuffImages.ViciousReprisal, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
         // Invocation
@@ -103,9 +103,9 @@ internal static class RevenantHelper
         new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
                 x.To.GetCurrentHealthPercent(log, x.Time) > 80
             , DamageModifierMode.sPvPWvW ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.TargetedDestruction, DamageModifierMode.All).WithBuilds(GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.TargetedDestruction, DamageModifierMode.All).WithBuilds(GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_TargetedDestruction, Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
         new DamageLogDamageModifier(Mod_SwiftTermination, "Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
     ];
 

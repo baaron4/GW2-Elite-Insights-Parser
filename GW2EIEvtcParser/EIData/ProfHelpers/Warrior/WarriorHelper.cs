@@ -46,13 +46,13 @@ internal static class WarriorHelper
         new BuffOnActorDamageModifier(Mod_StalwartStrength, Stability, "Stalwart Strength", "10%", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.BerserkersPower, DamageModifierMode.All).WithBuilds(GW2Builds.October2022Balance),
         // Can merciless hammer conditions be tracked reliably?
         // Cull the Weak
-        new BuffOnFoeDamageModifier(Weakness, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.CullTheWeak, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnFoeDamageModifier(Weakness, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.CullTheWeak, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnFoeDamageModifier(Weakness, "Cull the Weak", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.CullTheWeak, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.CullTheWeak, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "7% on weakened target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.CullTheWeak, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnFoeDamageModifier(Mod_CullTheWeak, Weakness, "Cull the Weak", "10% on weakened target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.CullTheWeak, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
         // Leg Specialist
-        new BuffOnFoeDamageModifier([Crippled, Immobile, Chilled], "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.LegSpecialist, DamageModifierMode.All).WithBuilds(GW2Builds.October2019Balance, GW2Builds.May2021Balance),
-        new BuffOnFoeDamageModifier([Crippled, Immobile, Chilled], "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.LegSpecialist, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnFoeDamageModifier([Crippled, Immobile, Chilled], "Leg Specialist", "10% to movement-impaired foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.LegSpecialist, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnFoeDamageModifier(Mod_LegSpecialist, [Crippled, Immobile, Chilled], "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.LegSpecialist, DamageModifierMode.All).WithBuilds(GW2Builds.October2019Balance, GW2Builds.May2021Balance),
+        new BuffOnFoeDamageModifier(Mod_LegSpecialist, [Crippled, Immobile, Chilled], "Leg Specialist", "7% to movement-impaired foes", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.LegSpecialist, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnFoeDamageModifier(Mod_LegSpecialist, [Crippled, Immobile, Chilled], "Leg Specialist", "10% to movement-impaired foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.LegSpecialist, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
         //
         new BuffOnActorDamageModifier(Mod_Empowered, NumberOfBoons, "Empowered", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Warrior, ByStack, BuffImages.Empowered, DamageModifierMode.All),
         // Warrior's Cunning (Barrier)
@@ -72,7 +72,7 @@ internal static class WarriorHelper
         new BuffOnActorDamageModifier(Mod_WarriorsSprint, Swiftness, "Warrior's Sprint", "3% under swiftness", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.WarriorsSprint, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2018Balance),
         new BuffOnActorDamageModifier(Mod_WarriorsSprint, Swiftness, "Warrior's Sprint", "10% under swiftness", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Warrior, ByPresence, BuffImages.WarriorsSprint, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
         //
-        new BuffOnFoeDamageModifier(NumberOfBoons, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByMultipliyingStack, BuffImages.DestructionOfTheEmpowered, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_DestructionOfTheEmpowered, NumberOfBoons, "Destruction of the Empowered", "3% per target boon", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Warrior, ByMultipliyingStack, BuffImages.DestructionOfTheEmpowered, DamageModifierMode.All),
 
     ];
 

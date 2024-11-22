@@ -29,32 +29,32 @@ internal static class GearDamageModifiers
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier(Mod_FireRune, FireAura, "Fire Rune", "10% under fire aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfFire, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnFoeDamageModifier(Burning, "Flame Legion Rune", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheFlameLegion, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_FlameLegionRune, Burning, "Flame Legion Rune", "7% on burning target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheFlameLegion, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnFoeDamageModifier(NumberOfBoons, "Spellbreaker Rune", "7% on boonless target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByAbsence, BuffImages.SuperiorRuneOfTheSpellbreaker, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_SpellbreakerRune, NumberOfBoons, "Spellbreaker Rune", "7% on boonless target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByAbsence, BuffImages.SuperiorRuneOfTheSpellbreaker, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnFoeDamageModifier(Chilled, "Ice Rune", "7% on chilled target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheIce, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_IceRune, Chilled, "Ice Rune", "7% on chilled target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheIce, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier(Mod_RageRune, Fury, "Rage Rune", "5% under fury", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfRage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnFoeDamageModifier(Daze, "Rune of the Mesmer", "10% on dazed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheMesmer, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_RuneOfMesmer, Daze, "Rune of the Mesmer", "10% on dazed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfTheMesmer, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         // Sigils
-        new BuffOnFoeDamageModifier([Stun, Knockdown], "Impact Sigil", "7% on stunned or knocked-down target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorSigilOfImpact, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_ImpactSigil, [Stun, Knockdown], "Impact Sigil", "7% on stunned or knocked-down target", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorSigilOfImpact, DamageModifierMode.All),
         // Relics
-        new BuffOnFoeDamageModifier(RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter", "10% after trap hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheDragonhunter, DamageModifierMode.All).UsingChecker((x, log) =>
+        new BuffOnFoeDamageModifier(Mod_RelicOfTheDragonhunter, RelicOfTheDragonhunterTargetBuff, "Relic of the Dragonhunter", "10% after trap hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfTheDragonhunter, DamageModifierMode.All).UsingChecker((x, log) =>
         {
             var src = log.FindActor(x.From);
             var dst = log.FindActor(x.To);
             return dst.HasBuff(log, src, RelicOfTheDragonhunterTargetBuff, x.Time);
         }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
-        new BuffOnFoeDamageModifier(RelicOfIsgarrenTargetBuff, "Relic of Isgarren", "10% after evade", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfIsgarren, DamageModifierMode.All).UsingChecker((x, log) =>
+        new BuffOnFoeDamageModifier(Mod_RelicOfIsgarren, RelicOfIsgarrenTargetBuff, "Relic of Isgarren", "10% after evade", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfIsgarren, DamageModifierMode.All).UsingChecker((x, log) =>
         {
             var src = log.FindActor(x.From);
             var dst = log.FindActor(x.To);
             return dst.HasBuff(log, src, RelicOfIsgarrenTargetBuff, x.Time);
         }).UsingApproximate(true), // Reapplication while buff is running is done via extension, extensions source finding is not capable of always finding the source
-        new BuffOnFoeDamageModifier(RelicOfPeithaTargetBuff, "Relic of Peitha", "10% after blade hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfPeitha, DamageModifierMode.All).UsingChecker((x, log) =>
+        new BuffOnFoeDamageModifier(Mod_RelicOfPeitha, RelicOfPeithaTargetBuff, "Relic of Peitha", "10% after blade hit", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.RelicOfPeitha, DamageModifierMode.All).UsingChecker((x, log) =>
         {
             var src = log.FindActor(x.From);
             var dst = log.FindActor(x.To);
@@ -86,7 +86,7 @@ internal static class GearDamageModifiers
                 && (currentPosition - currentTargetPosition).Length() >= 600.0
             , DamageModifierMode.PvEWvW)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnFoeDamageModifier(Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+        new BuffOnFoeDamageModifier(Mod_RuneOfPerplexity, Confusion, "Rune of Perplexity", "-10% from confused foes", DamageSource.NoPets, -10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfPerplexity, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
         // Relics
         new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "-15%", DamageSource.NoPets, -15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.All),
         new BuffOnActorDamageModifier(Mod_RelicOfSorrow, RelicOfSorrowBuff, "Relic of Sorrow", "-20%", DamageSource.NoPets, -20.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfTheSorrow, DamageModifierMode.All),
