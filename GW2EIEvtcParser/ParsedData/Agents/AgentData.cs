@@ -185,14 +185,10 @@ public class AgentData
             .Any(agent => agent.GetFinalMaster() == master && Math.Abs(agent.FirstAware - time) < epsilon);
     }
 
-    internal void ReplaceAgentsFromID(AgentItem agentItem)
+    internal void ReplaceAgents(IEnumerable<AgentItem> toRemove, IEnumerable<AgentItem> toAdd)
     {
-        if (agentItem.ID == 0)
-        {
-            return;
-        }
-        _allAgentsList.RemoveAll(x => x.ID == agentItem.ID);
-        _allAgentsList.Add(agentItem);
+        _allAgentsList.RemoveAll(toRemove.Contains);
+        _allAgentsList.AddRange(toAdd);
         Refresh();
     }
 
