@@ -151,8 +151,7 @@ public static partial class ListExt
     public static void SortStable<T>(this Span<T> span, Func<T, T, int> cmp)
     {
         StableSort<T>.fluxsort(span, cmp);
-        //TODO(Rennorb) @correctness: wire this up with settings
-        if(!typeof(T).IsValueType && MemoryWatchdog.GetMemoryPressure(1L * 1024*1024*1024) >= MemoryWatchdog.MemoryPressure.Medium)
+        if(!typeof(T).IsValueType)
         {
             ClearableSharedArrayPool<T>.Shared.ClearAll();
         }
