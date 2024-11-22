@@ -32,6 +32,11 @@ internal class GreerTheBlightbringer : MountBalrior
         ];
     }
 
+    protected override ReadOnlySpan<int> GetUniqueNPCIDs()
+    {
+        return GetTargetsIDs();
+    }
+
     protected override Dictionary<int, int> GetTargetsSortIDs()
     {
         return new Dictionary<int, int>()
