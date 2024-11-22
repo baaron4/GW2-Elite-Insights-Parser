@@ -6,6 +6,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -40,9 +41,9 @@ internal static class RenegadeHelper
         new BuffOnActorDamageModifier(ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
-        new SkillDamageModifier("Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.SoulcleavesSummit, DamageModifierMode.All)
+        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.SoulcleavesSummit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new SkillDamageModifier("Soulcleave's Summit", "per hit (1s ICD per target)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.SoulcleavesSummit, DamageModifierMode.All)
+        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (1s ICD per target)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.SoulcleavesSummit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
     ];
 

@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -115,20 +116,20 @@ internal static class EngineerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Explosives
-        new DamageLogDamageModifier("Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2017Balance, GW2Builds.July2019Balance2),
-        new DamageLogDamageModifier("Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2019Balance2, GW2Builds.May2021Balance),
-        new DamageLogDamageModifier("Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.May2021Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExplosivePowder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ExplosivePowder, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
-        new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -139,7 +140,7 @@ internal static class EngineerHelper
             return selfHP > dstHP;
         }, DamageModifierMode.All ).UsingApproximate(true)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new DamageLogDamageModifier("Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -151,7 +152,7 @@ internal static class EngineerHelper
         }, DamageModifierMode.sPvPWvW )
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier("Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);

@@ -9,6 +9,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -86,26 +87,26 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, BuffImages.FerociousAggression, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Fury, "Ferocious Aggression", "7% under fury", DamageSource.NoPets, 7.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, BuffImages.FerociousAggression, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
         new BuffOnActorDamageModifier(Fury, "Ferocious Aggression", "10% under fury", DamageSource.NoPets, 10.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Revenant, ByPresence, BuffImages.FerociousAggression, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier("Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new DamageLogDamageModifier("Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier("Rising Tide", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.November2022Balance),
-        new DamageLogDamageModifier("Rising Tide", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance).UsingApproximate(true),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.IsOverNinety, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.November2022Balance),
+        new DamageLogDamageModifier(Mod_RisingTide, "Rising Tide", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.RisingTide, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance).UsingApproximate(true),
         // Devastation
         new BuffOnActorDamageModifier(ViciousLacerations, "Vicious Lacerations", "3% per Stack", DamageSource.NoPets, 3.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.ViciousLacerations, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2020Balance),
         new BuffOnActorDamageModifier(ViciousLacerations, "Vicious Lacerations", "2% per Stack", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.ViciousLacerations, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
-        new DamageLogDamageModifier("Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
+        new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "25% if target hp > 80%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
                 x.To.GetCurrentHealthPercent(log, x.Time) > 80
             , DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021BalanceHotFix),
-        new DamageLogDamageModifier("Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
+        new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "20% if target hp > 80%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
                 x.To.GetCurrentHealthPercent(log, x.Time) > 80
             , DamageModifierMode.PvE ).UsingApproximate(true).WithBuilds(GW2Builds.May2021BalanceHotFix),
-        new DamageLogDamageModifier("Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
+        new DamageLogDamageModifier(Mod_UnsuspectingStrikes, "Unsuspecting Strikes", "10% if target hp > 80%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.ViciousLacerations, (x,log) =>
                 x.To.GetCurrentHealthPercent(log, x.Time) > 80
             , DamageModifierMode.sPvPWvW ).UsingApproximate(true).WithBuilds(GW2Builds.February2020Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Revenant, ByStack, BuffImages.TargetedDestruction, DamageModifierMode.All).WithBuilds(GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "10.0% if vuln", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.March2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Targeted Destruction", "7.0% if vuln", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.TargetedDestruction, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
-        new DamageLogDamageModifier("Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_SwiftTermination, "Swift Termination", "20% if target <50%", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.SwiftTermination, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
@@ -118,7 +119,7 @@ internal static class RevenantHelper
         new BuffOnActorDamageModifier(Resistance, "Demonic Resistance", "-10%", DamageSource.All, -10.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DemonicResistance, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.July2020Balance),
         new BuffOnActorDamageModifier(Resistance, "Demonic Resistance", "-33%", DamageSource.All, -33.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DemonicResistance, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Resistance, "Demonic Resistance", "-20%", DamageSource.All, -20.0, DamageType.Strike, DamageType.All, Source.Revenant, ByPresence, BuffImages.DemonicResistance, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
-        new DamageLogDamageModifier("Close Quarters", "10% from foes beyond 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.CloseQuarters, (x,log) =>
+        new DamageLogDamageModifier(Mod_CloseQuarters, "Close Quarters", "10% from foes beyond 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Revenant, BuffImages.CloseQuarters, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 360

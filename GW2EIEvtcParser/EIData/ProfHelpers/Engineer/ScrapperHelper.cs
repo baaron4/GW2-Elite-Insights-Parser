@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -36,7 +37,7 @@ internal static class ScrapperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new DamageLogDamageModifier("Adaptive Armor", "-20%", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, BuffImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
+        new DamageLogDamageModifier(Mod_AdaptiveArmor, "Adaptive Armor", "-20%", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, BuffImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =

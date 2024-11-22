@@ -4,6 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -45,7 +46,7 @@ internal static class SoulbeastHelper
         new BuffOnActorDamageModifier(Fury, "Furious Strength", "15% under fury", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, BuffImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021BalanceHotFix, GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier(Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, BuffImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
         new BuffOnActorDamageModifier([Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.LoudWhistle, DamageModifierMode.All).UsingChecker((x,log) => x.IsOverNinety).WithBuilds(GW2Builds.May2018Balance),
-        new DamageLogDamageModifier("Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, BuffImages.OppressiveSuperiority, (x,log) =>
+        new DamageLogDamageModifier(Mod_OppressiveSuperiority, "Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, BuffImages.OppressiveSuperiority, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -55,7 +56,7 @@ internal static class SoulbeastHelper
             }
             return selfHP > dstHP;
         }, DamageModifierMode.All ).UsingApproximate(true),
-        new SkillDamageModifier("One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.OneWolfPack, DamageModifierMode.All),
+        new SkillDamageModifier(Mod_OneWolfPack,"One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.OneWolfPack, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =

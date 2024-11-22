@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -84,38 +85,38 @@ internal static class ElementalistHelper
         new BuffOnFoeDamageModifier(Burning, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
         // Air
-        new DamageLogDamageModifier("Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.BoltToTheHeart, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_BoltToTheHeart, "Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.BoltToTheHeart, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
         // Earth
         new BuffOnFoeDamageModifier(Bleeding, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SerratedStones, DamageModifierMode.All),
         // Water
-        new DamageLogDamageModifier("Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.AquamancersTraining, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_AquamancersTraining, "Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.AquamancersTraining, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-            .UsingActorCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingSrcCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-            .UsingActorCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingSrcCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
-            .UsingActorCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingSrcCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
-            .UsingActorCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingSrcCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
         new BuffOnFoeDamageModifier(Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
-            .UsingActorCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
+            .UsingSrcCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance)
             .UsingApproximate(true),
-        new DamageLogDamageModifier("Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance)
             .UsingApproximate(true),
-        new DamageLogDamageModifier("Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance),
-        new DamageLogDamageModifier("Flow like Water (>= 50%)", "10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water (>= 50%)", "10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2024Balance),
-        new DamageLogDamageModifier("Flow like Water (< 50%)", "5% if hp <50%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water (< 50%)", "5% if hp <50%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2024Balance)
             .UsingApproximate(true),
         //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance),
@@ -138,7 +139,7 @@ internal static class ElementalistHelper
     [
         new BuffOnActorDamageModifier(SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
         new BuffOnActorDamageModifier([EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.StoneFlesh, DamageModifierMode.All),
-        new DamageLogDamageModifier("Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) => 
+        new DamageLogDamageModifier(Mod_GeomancersTraining, "Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) => 
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 360.0

@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -43,14 +44,14 @@ internal static class ThiefHelper
         // Deadly arts
         new BuffOnFoeDamageModifier(NumberOfConditions, "Exposed Weakness", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Thief, ByStack, BuffImages.ExposedWeakness, DamageModifierMode.All).WithBuilds(GW2Builds.July2018Balance),
         new BuffOnFoeDamageModifier(NumberOfConditions, "Exposed Weakness", "10% if condition on target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, ByPresence, BuffImages.ExposedWeakness, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2018Balance),
-        new DamageLogDamageModifier("Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.Executioner, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_Executioner, "Executioner", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.Executioner, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
         // Critical Strikes
-        new DamageLogDamageModifier("Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_TwinFangs, "Twin Fangs","7% if hp >=90%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.IsOverNinety && x.HasCrit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2024BalanceAndCerusLegendary),
-        new DamageLogDamageModifier("Twin Fangs","7% if hp >=50%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0 && x.HasCrit, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_TwinFangs, "Twin Fangs","7% if hp >=50%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0 && x.HasCrit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(true),
-        new DamageLogDamageModifier("Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_FerociousStrikes, "Ferocious Strikes", "10% on critical strikes if target >50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.FerociousStrikes, (x, log) => !x.AgainstUnderFifty && x.HasCrit, DamageModifierMode.All),
         // Trickery
         new BuffOnActorDamageModifier(LeadAttacks, "Lead Attacks", "1% (10s) per initiative spent", DamageSource.NoPets, 1.0, DamageType.StrikeAndCondition, DamageType.All, Source.Thief, ByStack, BuffImages.LeadAttacks, DamageModifierMode.All), 
         // It's not always possible to detect the presence of pistol and the trait is additive with itself. Staff master is worse as we can't detect endurance at all       
@@ -62,7 +63,7 @@ internal static class ThiefHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new DamageLogDamageModifier("Marauder's Resilience", "-10% from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.MaraudersResilience, (x,log) =>
+        new DamageLogDamageModifier(Mod_MaraudersResilience, "Marauder's Resilience", "-10% from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Thief, BuffImages.MaraudersResilience, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 360

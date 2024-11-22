@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -165,37 +166,37 @@ internal static class RangerHelper
             return false;
         }).WithBuilds(GW2Builds.May2021Balance),
         // Marksmanship
-        new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill 
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "5% with weapon skills below 600 range", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+        new DamageLogDamageModifier(Mod_FarsightedClose, "Farsighted (<= 600)", "10% with weapon skills below 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
             x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() > 600
             , DamageModifierMode.All).UsingApproximate(true).WithBuilds(GW2Builds.July2018Balance, GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "15% with weapon skills above 600 range", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() > 600
             , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
+        new DamageLogDamageModifier(Mod_FarsightedFar, "Farsighted (> 600)", "10% with weapon skills above 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SteadyFocus, (x, log) =>
                 x.Skill.IsWeaponSkill
                 && x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
@@ -203,17 +204,17 @@ internal static class RangerHelper
             , DamageModifierMode.sPvPWvW).UsingApproximate(true).WithBuilds(GW2Builds.June2023Balance),
         new BuffOnFoeDamageModifier([Stun, Taunt, Daze, Crippled, Fear, Immobile, Chilled], "Predator's Onslaught", "15% to disabled or movement-impaired foes", DamageSource.All, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.PredatorsOnslaught, DamageModifierMode.All).UsingApproximate(true),
         // Skirmishing
-        new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
-        new DamageLogDamageModifier("Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
-        new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2022Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2022Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2022Balance, GW2Builds.June2023Balance),
+        new DamageLogDamageModifier(Mod_HuntersTactics, "Hunter's Tactics", "15% while flanking or against defiant", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.HuntersTactics, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None , DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
         new BuffOnActorDamageModifier(LightOnYourFeet, "Light on your Feet", "10% (4s) after dodging", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.LightOnYourFeet, DamageModifierMode.All),
         // Nature Magic
         // We can't check buffs on minions yet
         new BuffOnActorDamageModifier(NumberOfBoons, "Bountiful Hunter", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Ranger, ByStack, BuffImages.BountifulHunter, DamageModifierMode.All),
         new BuffOnActorDamageModifier(FrostSpiritBuff, "Frost Spirit", "5%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Common, ByPresence, BuffImages.FrostSpirit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2018Balance, GW2Builds.June2022Balance),
-        new DamageLogDamageModifier("Survival Instincts (Outgoing)","10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Outgoing)","10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary)
             .UsingApproximate(true),
         new BuffOnActorDamageModifier(ForceOfNature, "Force of Nature", "25%", DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.ForceOfNature, DamageModifierMode.All)
@@ -229,7 +230,7 @@ internal static class RangerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         new BuffOnActorDamageModifier(Regeneration, "Oakheart Salve", "-5% under regeneration", DamageSource.NoPets, -5.0, DamageType.Strike, DamageType.All, Source.Ranger, ByPresence, BuffImages.OakheartSalve, DamageModifierMode.All),
-        new DamageLogDamageModifier("Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_SurvivalInstincts, "Survival Instincts (Incoming)","10% if hp <= 50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Ranger, BuffImages.SurvivalInstincts, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
     ];
 

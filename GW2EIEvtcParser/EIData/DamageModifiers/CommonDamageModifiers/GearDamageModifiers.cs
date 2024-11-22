@@ -4,6 +4,7 @@ using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -12,17 +13,17 @@ internal static class GearDamageModifiers
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Runes
-        new DamageLogDamageModifier("Scholar Rune", "5% if hp >=90%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheScholar, (x, log) => x.IsOverNinety, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ScholarRune, "Scholar Rune", "5% if hp >=90%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheScholar, (x, log) => x.IsOverNinety, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier("Scholar Rune", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheScholar, (x, log) => x.IsOverNinety, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ScholarRune, "Scholar Rune", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheScholar, (x, log) => x.IsOverNinety, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
-        new DamageLogDamageModifier("Eagle Rune", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_EagleRune,"Eagle Rune", "10% if target <50% HP", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier("Eagle Rune", "6% if target <50% HP", DamageSource.NoPets, 6.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_EagleRune, "Eagle Rune", "6% if target <50% HP", DamageSource.NoPets, 6.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheEagle, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
-        new DamageLogDamageModifier("Thief Rune", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheThief, (x, log) => x.IsFlanking, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ThiefRune, "Thief Rune", "10% while flanking", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheThief, (x, log) => x.IsFlanking, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023Balance),
-        new DamageLogDamageModifier("Thief Rune", "10% while flanking or against defiant", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheThief, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_ThiefRune, "Thief Rune", "10% while flanking or against defiant", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Gear, BuffImages.SuperiorRuneOfTheThief, (x, log) => x.IsFlanking || x.To.GetCurrentBreakbarState(log, x.Time) != BreakbarState.None, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2023Balance, GW2Builds.SOTOReleaseAndBalance),
         new BuffOnActorDamageModifier(Might, "Strength Rune", "5% under might", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.Strike, Source.Gear, ByPresence, BuffImages.SuperiorRuneOfStrength, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
@@ -74,12 +75,12 @@ internal static class GearDamageModifiers
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Runes
-        new DamageLogDamageModifier("Rune of Hoelbrak", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfHoelbrak, (x, log) => true, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_RuneOfHoelbrak, "Rune of Hoelbrak", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfHoelbrak, (x, log) => true, DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier("Rune of the Stars", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfTheStars, (x, log) => true, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier("Rune of Mercy", "-20%", DamageSource.NoPets, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfMercy, (x, log) => log.CombatData.GetAnimatedCastData(Resurrect).Any(y => y.Caster == x.To && x.Time >= y.Time && x.Time <= y.EndTime), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_RuneOfTheStars, "Rune of the Stars", "-10% condition damamge", DamageSource.NoPets, -10.0, DamageType.Condition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfTheStars, (x, log) => true, DamageModifierMode.All).WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
+        new DamageLogDamageModifier(Mod_RuneOfMercy, "Rune of Mercy", "-20%", DamageSource.NoPets, -20.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfMercy, (x, log) => log.CombatData.GetAnimatedCastData(Resurrect).Any(y => y.Caster == x.To && x.Time >= y.Time && x.Time <= y.EndTime), DamageModifierMode.All)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new DamageLogDamageModifier("Rune of the Scrapper", "-10% condition damamge", DamageSource.NoPets, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfTheScrapper, (x,log) =>
+        new DamageLogDamageModifier(Mod_RuneOfTheScrapper, "Rune of the Scrapper", "-10% condition damamge", DamageSource.NoPets, -7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, BuffImages.SuperiorRuneOfTheScrapper, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 600.0
