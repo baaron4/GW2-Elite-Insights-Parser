@@ -4530,6 +4530,7 @@ public static class SkillIDs
     public const long HarmonicSensitivity = 74904;
     public const long SulfuricAcid = 74933;
     public const long FluxlanceSalvo4 = 74973;
+    public const long DecimaConduitWallBuff = 74962;
     public const long ThrummingPresenceBuff = 74982;
     public const long PressureBlastSkill = 75022;
     public const long TargetOrder1JW = 75023;

@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
-internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
+internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff, BuffStackItemPool pool)
 {
     // Fields
     public readonly List<BuffSimulationItem>          GenerationSimulation      = []; //TODO(Rennorb) @perf
@@ -13,6 +13,8 @@ internal abstract class AbstractBuffSimulator(ParsedEvtcLog log, Buff buff)
     public readonly Buff Buff = buff;
 
     protected readonly ParsedEvtcLog Log = log;
+
+    protected readonly BuffStackItemPool Pool = pool;
 
 
     // Abstract Methods

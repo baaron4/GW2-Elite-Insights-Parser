@@ -17,8 +17,9 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
     //private static readonly CappedDurationLogic _cappedDurationLogic = new CappedDurationLogic();
 
     // Constructor
-    protected BuffSimulator(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
+    protected BuffSimulator(ParsedEvtcLog log, Buff buff, BuffStackItemPool pool, int capacity) : base(log, buff, pool)
     {
+        pool.InitializeBuffStackItemPool();
         _capacity = capacity;
         switch (buff.StackType)
         {
@@ -47,6 +48,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
 
     protected override void AfterSimulate()
     {
+        Pool.ReleaseBuffStackItems(BuffStack);
         BuffStack.Clear();
     }
 
@@ -60,7 +62,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
         // Replace lowest value
         else
         {
-            if (!_logic.FindLowestValue(Log, toAdd, BuffStack, WasteSimulationResult, overridenDuration, overridenStackID))
+            if (!_logic.FindLowestValue(Log, Pool, toAdd, BuffStack, WasteSimulationResult, overridenDuration, overridenStackID))
             {
                 OverstackSimulationResult.Add(new BuffSimulationItemOverstack(toAdd.Src, toAdd.Duration, toAdd.Start));
             }
@@ -77,13 +79,13 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
 
     public override void Add(long duration, AgentItem src, long start, uint stackID, bool addedActive, long overridenDuration, uint overridenStackID)
     {
-        var toAdd = new BuffStackItem(start, duration, src, stackID);
+        var toAdd = Pool.GetBuffStackItem(start, duration, src, stackID);
         Add(toAdd, addedActive, overridenDuration, overridenStackID);
     }
 
     protected void Add(long duration, AgentItem src, AgentItem seedSrc, long time, bool addedActive, bool isExtension, uint stackID)
     {
-        var toAdd = new BuffStackItem(time, duration, src, seedSrc, isExtension, stackID);
+        var toAdd = Pool.GetBuffStackItem(time, duration, src, seedSrc, isExtension, stackID);
         Add(toAdd, addedActive, 0, 0);
     }
 
@@ -103,6 +105,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
                         }
                     }
                 }
+                Pool.ReleaseBuffStackItems(BuffStack);
                 BuffStack.Clear();
                 break;
             case BuffRemove.Single:
@@ -119,6 +122,7 @@ internal abstract class BuffSimulator : AbstractBuffSimulator
                                 WasteSimulationResult.Add(new BuffSimulationItemWasted(src, value, time));
                             }
                         }
+                        Pool.ReleaseBuffStackItem(stackItem);
                         BuffStack.RemoveAt(i);
                         return;
                     }

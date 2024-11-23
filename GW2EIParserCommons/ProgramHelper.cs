@@ -178,12 +178,6 @@ public sealed class ProgramHelper : IDisposable
 
     private string[] UploadOperation(FileInfo fInfo, ParsedEvtcLog originalLog, OperationController originalController)
     {
-        // Only upload supported 5 men, 10 men and golem logs, without anonymous players
-        var isWingmanCompatible = !originalLog.ParserSettings.AnonymousPlayers && (
-                        originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Instanced10 ||
-                        originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Instanced5 ||
-                        originalLog.FightData.Logic.ParseMode == GW2EIEvtcParser.EncounterLogic.FightLogic.ParseModeEnum.Benchmark
-                        );
         //Upload Process
         string[] uploadresult = ["", ""];
         if (Settings.UploadToDPSReports)
@@ -212,9 +206,9 @@ public sealed class ProgramHelper : IDisposable
         if (Settings.UploadToWingman)
         {
 #if !DEBUG
-            if (!isWingmanCompatible)
+            if (originalLog.ParserSettings.AnonymousPlayers)
             {
-                originalController.UpdateProgressWithCancellationCheck("Wingman: unsupported log");
+                originalController.UpdateProgressWithCancellationCheck("Wingman: players and accounts have been anonymized, log not supported");
             } 
             else
             {
@@ -270,22 +264,22 @@ public sealed class ProgramHelper : IDisposable
                             originalController.UpdateProgressWithCancellationCheck("Wingman: new ParsedEvtcLog processing completed");
                         }
 
-                        originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing Upload");
+                        originalController.UpdateProgressWithCancellationCheck("Wingman: Preparing upload");
 
                         string result = logToUse.FightData.Success ? "kill" : "fail";
                         WingmanController.UploadProcessed(fInfo, accName, jsonFile, htmlFile, $"_{logToUse.FightData.Logic.Extension}_{result}", str => originalController.UpdateProgress("Wingman: " + str), ParserVersion);
                     }
                     catch (Exception e)
                     {
-                        originalController.UpdateProgressWithCancellationCheck("Wingman: operation failed " + e.Message);
+                        originalController.UpdateProgressWithCancellationCheck("Wingman: Operation failed " + e.Message);
                     }
                 } 
                 else
                 {
-                    originalController.UpdateProgressWithCancellationCheck("Wingman: upload is not possible");
+                    originalController.UpdateProgressWithCancellationCheck("Wingman: Upload is not possible, unsupported log, log already uploaded or wingman is down");
                 }
             }
-            originalController.UpdateProgressWithCancellationCheck("Wingman: operation completed");
+            originalController.UpdateProgressWithCancellationCheck("Wingman: Operation completed");
 #endif
 
         }

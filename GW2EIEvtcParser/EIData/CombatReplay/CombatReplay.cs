@@ -457,7 +457,9 @@ public class CombatReplay
     /// </summary>
     /// <param name="tethers">Buff events of the tethers.</param>
     /// <param name="color">color of the tether</param>
-    internal void AddTether(IEnumerable<BuffEvent> tethers, string color)
+    /// <param name="thickness">thickness of the tether</param>
+    /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
+    internal void AddTether(IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickess = false)
     {
         int tetherStart = 0;
         AgentItem src = ParserHelper._unknownAgent;
@@ -475,7 +477,7 @@ public class CombatReplay
                 int tetherEnd = (int)tether.Time;
                 if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
                 {
-                    Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)));
+                    Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new AgentConnector(dst), new AgentConnector(src)).WithThickess(thickness, worldSizeThickess));
                     src = ParserHelper._unknownAgent;
                     dst = ParserHelper._unknownAgent;
                 }
@@ -487,9 +489,12 @@ public class CombatReplay
     /// </summary>
     /// <param name="tethers">Buff events of the tethers.</param>
     /// <param name="color">color of the tether</param>
-    internal void AddTether(IEnumerable<BuffEvent> tethers, Color color, double opacity)
+    /// <param name="opacity">opacity of the tether</param>
+    /// <param name="thickness">thickness of the tether</param>
+    /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
+    internal void AddTether(IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
     {
-        AddTether(tethers, color.WithAlpha(opacity).ToString(true));
+        AddTether(tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
     }
 
     /// <summary>

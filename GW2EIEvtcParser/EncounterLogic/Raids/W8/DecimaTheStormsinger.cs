@@ -5,9 +5,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
@@ -131,6 +131,8 @@ internal class DecimaTheStormsinger : MountBalrior
                         //replay.Decorations.Add(new CircleDecoration(150, aoeLifeSpan, Colors.DarkPurple, 0.3, new PositionConnector(effect.Position)));
                     }
                 }
+                var walls = GetFilteredList(log.CombatData, DecimaConduitWallBuff, target, true, true);
+                replay.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
             default:
                 break;

@@ -323,7 +323,7 @@ public static class ParserHelper
         }
         // Copy attack targets
         var attackTargetAgents = new HashSet<AgentItem>();
-        var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom));
+        var attackTargets = combatData.Where(x => x.IsStateChange == StateChange.AttackTarget && x.DstMatchesAgent(redirectFrom)).ToList() ;
         var targetableOns = combatData.Where(x => x.IsStateChange == StateChange.Targetable && x.DstAgent == 1);
         foreach (CombatItem c in attackTargets)
         {

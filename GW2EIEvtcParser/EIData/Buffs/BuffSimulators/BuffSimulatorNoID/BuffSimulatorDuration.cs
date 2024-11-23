@@ -6,7 +6,7 @@ internal class BuffSimulatorDuration : BuffSimulator
 {
     private (AgentItem agent, bool extension) _lastSrcRemove = (ParserHelper._unknownAgent, false);
     // Constructor
-    public BuffSimulatorDuration(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff, capacity)
+    public BuffSimulatorDuration(ParsedEvtcLog log, Buff buff, BuffStackItemPool pool, int capacity) : base(log, buff, pool, capacity)
     {
     }
 
@@ -52,6 +52,7 @@ internal class BuffSimulatorDuration : BuffSimulator
             if (activeStack.Duration == 0)
             {
                 _lastSrcRemove = (activeStack.SeedSrc, activeStack.IsExtension);
+                Pool.ReleaseBuffStackItem(activeStack);
                 BuffStack.RemoveAt(0);
             }
             Update(leftOver);
