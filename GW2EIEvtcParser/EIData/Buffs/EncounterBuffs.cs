@@ -393,6 +393,9 @@ internal static class EncounterBuffs
             new Buff("Target Order: 5 (JW)", TargetOrder5JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder5),
             new Buff("Focused Fluxlance", FocusedFluxlance, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Unstoppable (Decima)", UnstoppableDecima, Source.FightSpecific, BuffClassification.Other, BuffImages.Enraged),
+        new Buff("Fluxlance Target (Buff 1)", FluxlanceTargetBuff1, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
+        new Buff("Fluxlance Target (Buff 2)", FluxlanceTargetBuff2, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
+        new Buff("Fluxlance Target (Red Arrow)", FluxlanceRedArrowTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target2),
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Damage Immunity", DamageImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),

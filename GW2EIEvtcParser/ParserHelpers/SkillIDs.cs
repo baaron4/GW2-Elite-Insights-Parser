@@ -4522,9 +4522,11 @@ public static class SkillIDs
     public const long FluxlanceSalvo2 = 74725;
     public const long FluxlanceSalvo3 = 74742;
     public const long PressureBlastBubbleBuff = 74754;
+    public const long FluxlanceTargetBuff1 = 74774;
     public const long NovaShield = 74791;
     public const long FracturedArmor = 74840;
     public const long TargetOrder3JW = 74789;
+    public const long FluxlanceRedArrowTargetBuff = 74845;
     public const long ThrummingPresenceDamage = 74872;
     public const long InfectiousRotBuff = 74900;
     public const long HarmonicSensitivity = 74904;
@@ -4540,9 +4542,10 @@ public static class SkillIDs
     public const long UraDispelSAK = 75066;
     public const long PressureBlastTargetBuff = 75067;
     public const long Deterrence = 75075;
+    public const long FluxlanceTargetBuff2 = 75140;
+    public const long TargetOrder2JW = 75151;
     public const long Fluxlance = 75155;
     public const long ChargeDecima = 75175;
-    public const long TargetOrder2JW = 75151;
     public const long UnstoppableDecima = 75246;
     public const long RotEruption = 75251;
     public const long PressureBlastDamage = 75258;
