@@ -419,7 +419,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 return targetables.Any(y => y.Targetable);
             }
             return false;
-        });
+        }).ToList();
         int index = 0;
         var processedAttackTargets = new HashSet<AgentItem>();
         foreach (AttackTargetEvent attackTargetEvent in attackTargetEvents)
