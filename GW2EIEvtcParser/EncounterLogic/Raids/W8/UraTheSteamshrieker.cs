@@ -21,6 +21,13 @@ internal class UraTheSteamshrieker : MountBalrior
         EncounterID |= 0x000003;
     }
 
+    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    {
+        return new CombatReplayMap(CombatReplayUratheSteamshrieker,
+                        (1833, 1824),
+                        (2900, 6600, 8355, 12028));
+    }
+
     internal override string GetLogicName(CombatData combatData, AgentData agentData)
     {
         return "Ura, the Steamshrieker";
