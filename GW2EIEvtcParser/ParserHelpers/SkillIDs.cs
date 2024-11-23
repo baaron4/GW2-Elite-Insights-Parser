@@ -3029,7 +3029,6 @@ public static class SkillIDs
     public const long RadiantBlindness = 56593;
     public const long ShowerOfChaos = 56598;
     public const long KineticAbundance = 56609;
-    public const long NoxiousBlightTargetBuff = 56610;
     public const long BatteringBlitz = 56616;
     public const long StormsEdgeRightHand = 56620;
     public const long AchievementEligibilityConserveTheLand = 56625;
