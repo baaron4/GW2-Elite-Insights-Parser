@@ -2,22 +2,12 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public class PositionConnector(in Vector3 position) : GeographicalConnector
+internal class PositionConnector(in Vector3 position) : GeographicalConnector
 {
-    protected Vector3 Position = position;
+    public readonly Vector3 Position = position;
 
-    public class PositionConnectorDescriptor : GeographicalConnectorDescriptor
+    public override ConnectorDescription GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
     {
-        public readonly IReadOnlyList<float> Position;
-        public PositionConnectorDescriptor(PositionConnector connector, CombatReplayMap map) : base(connector, map)
-        {
-            (float x, float y) = map.GetMapCoordRounded(connector.Position.XY());
-            Position = [ x, y ]; //TODO(Rennorb) @perf
-        }
-    }
-
-    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
-    {
-        return new PositionConnectorDescriptor(this, map);
+        return new PositionConnectorDescription(this, map, log);
     }
 }

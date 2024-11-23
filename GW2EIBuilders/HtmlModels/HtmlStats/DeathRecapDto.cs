@@ -3,15 +3,16 @@ using GW2EIEvtcParser.EIData;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
+using DeathRecapItem = object[];
 internal class DeathRecapDto
 {
     public long Time { get; set; }
-    public List<object[]>? ToDown { get; set; } = null;
-    public List<object[]>? ToKill { get; set; } = null;
+    public List<DeathRecapItem>? ToDown { get; set; } = null;
+    public List<DeathRecapItem>? ToKill { get; set; } = null;
 
-    private static List<object[]> BuildDeathRecapItemList(List<DeathRecap.DeathRecapDamageItem> list)
+    private static List<DeathRecapItem> BuildDeathRecapItemList(List<DeathRecap.DeathRecapDamageItem> list)
     {
-        var data = new List<object[]>(list.Count);
+        var data = new List<DeathRecapItem>(list.Count);
         foreach (DeathRecap.DeathRecapDamageItem item in list)
         {
             data.Add(

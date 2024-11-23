@@ -1,5 +1,5 @@
 ﻿
-#if TRACE
+#if TRACING
 #define EI_TRACING
 #define EI_TRACING_STATS
 #endif

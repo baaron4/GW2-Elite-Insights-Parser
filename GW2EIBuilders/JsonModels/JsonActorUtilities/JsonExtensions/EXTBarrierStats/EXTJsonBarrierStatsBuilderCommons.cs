@@ -31,8 +31,10 @@ internal static class EXTJsonBarrierStatsBuilderCommons
     //TODO(Rennorb) @perf
     private static EXTJsonBarrierDist BuildBarrierDist(long id, List<EXTBarrierEvent> list, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        var jsonBarrierDist = new EXTJsonBarrierDist();
-        jsonBarrierDist.IndirectBarrier = list.Exists(x => x is EXTNonDirectBarrierEvent);
+        var jsonBarrierDist = new EXTJsonBarrierDist
+        {
+            IndirectBarrier = list.Exists(x => x is EXTNonDirectBarrierEvent)
+        };
         if (jsonBarrierDist.IndirectBarrier)
         {
             if (!buffMap.ContainsKey(id))

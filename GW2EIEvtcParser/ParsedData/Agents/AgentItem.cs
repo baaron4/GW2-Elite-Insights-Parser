@@ -477,6 +477,10 @@ public class AgentItem
     {
         return log.FindActor(this).TryGetCurrentPosition(log, time, out position, forwardWindow);
     }
+    public bool TryGetCurrentInterpolatedPosition(ParsedEvtcLog log, long time, out Vector3 position)
+    {
+        return log.FindActor(this).TryGetCurrentInterpolatedPosition(log, time, out position);
+    }
 
     public bool TryGetCurrentFacingDirection(ParsedEvtcLog log, long time, out Vector3 facing, long forwardWindow = 0)
     {

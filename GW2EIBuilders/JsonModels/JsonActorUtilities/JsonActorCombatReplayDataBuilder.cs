@@ -19,7 +19,7 @@ internal static class JsonActorCombatReplayDataBuilder
         if (settings.RawFormatTimelineArrays)
         {
             //
-            var jsonPositions = new List<(float, float)>();
+            var jsonPositions = new List<(float, float)>(description.Positions.Count / 2);
             for (int i = 0; i < description.Positions.Count; i += 2)
             {
                 jsonPositions.Add((description.Positions[i], description.Positions[i + 1]));
@@ -28,7 +28,7 @@ internal static class JsonActorCombatReplayDataBuilder
             //
             if (description.Dead != null)
             {
-                var jsonDeads = new List<(long, long)>();
+                var jsonDeads = new List<(long, long)>(description.Dead.Count / 2);
                 for (int i = 0; i < description.Dead.Count; i += 2)
                 {
                     jsonDeads.Add((description.Dead[i], description.Dead[i + 1]));
@@ -37,7 +37,7 @@ internal static class JsonActorCombatReplayDataBuilder
             }
             if (description.Dc != null)
             {
-                var jsonDcs = new List<(long, long)>();
+                var jsonDcs = new List<(long, long)>(description.Dc.Count / 2);
                 for (int i = 0; i < description.Dc.Count; i += 2)
                 {
                     jsonDcs.Add((description.Dc[i], description.Dc[i + 1]));
@@ -46,7 +46,7 @@ internal static class JsonActorCombatReplayDataBuilder
             }
             if (description.Down != null)
             {
-                var jsonDowns = new List<(long, long)>();
+                var jsonDowns = new List<(long, long)>(description.Down.Count / 2);
                 for (int i = 0; i < description.Down.Count; i += 2)
                 {
                     jsonDowns.Add((description.Down[i], description.Down[i + 1]));

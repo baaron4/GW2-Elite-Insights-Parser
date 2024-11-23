@@ -1296,6 +1296,8 @@ internal static class ParserIcons
         { TrashID.SulfuricGeyser, TrashSulfuricGeyser },
         { TrashID.TitanspawnGeyser, TrashTitanspawnGeyser },
         { TrashID.UraGadget_BloodstoneShard, TrashBloodstoneShard },
+        { TrashID.DecimaBeamStart, NoImage },
+        { TrashID.DecimaBeamEnd, NoImage },
     };
 
     /// <summary>

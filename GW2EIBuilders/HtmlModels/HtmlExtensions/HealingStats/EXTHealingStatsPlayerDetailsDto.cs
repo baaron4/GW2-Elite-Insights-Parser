@@ -15,17 +15,19 @@ internal class EXTHealingStatsPlayerDetailsDto
 
     public static EXTHealingStatsPlayerDetailsDto BuildPlayerHealingData(ParsedEvtcLog log, SingleActor actor, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
+        var phases = log.FightData.GetPhases(log);
+        var minions = actor.GetMinions(log);
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
-            HealingDistributions = [],
-            HealingDistributionsTargets = [],
-            IncomingHealingDistributions = [],
-            Minions = [],
+            HealingDistributions = new (phases.Count),
+            HealingDistributionsTargets = new (phases.Count),
+            IncomingHealingDistributions = new (phases.Count),
+            Minions = new (minions.Count),
         };
-        foreach (PhaseData phase in log.FightData.GetPhases(log))
+        foreach (PhaseData phase in phases)
         {
             dto.HealingDistributions.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyHealingDistData(log, actor, null, phase, usedSkills, usedBuffs));
-            var dmgTargetsDto = new List<EXTHealingStatsHealingDistributionDto>();
+            var dmgTargetsDto = new List<EXTHealingStatsHealingDistributionDto>(log.Friendlies.Count);
             foreach (SingleActor target in log.Friendlies)
             {
                 dmgTargetsDto.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyHealingDistData(log, actor, target, phase, usedSkills, usedBuffs));
@@ -33,7 +35,7 @@ internal class EXTHealingStatsPlayerDetailsDto
             dto.HealingDistributionsTargets.Add(dmgTargetsDto);
             dto.IncomingHealingDistributions.Add(EXTHealingStatsHealingDistributionDto.BuildIncomingHealingDistData(log, actor, phase, usedSkills, usedBuffs));
         }
-        foreach (KeyValuePair<long, Minions> pair in actor.GetMinions(log))
+        foreach (KeyValuePair<long, Minions> pair in minions)
         {
             dto.Minions.Add(BuildFriendlyMinionsHealingData(log, actor, pair.Value, usedSkills, usedBuffs));
         }
@@ -43,14 +45,15 @@ internal class EXTHealingStatsPlayerDetailsDto
 
     private static EXTHealingStatsPlayerDetailsDto BuildFriendlyMinionsHealingData(ParsedEvtcLog log, SingleActor actor, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
     {
+        var phases = log.FightData.GetPhases(log);
         var dto = new EXTHealingStatsPlayerDetailsDto
         {
-            HealingDistributions = [],
-            HealingDistributionsTargets = []
+            HealingDistributions = new (phases.Count),
+            HealingDistributionsTargets = new(phases.Count)
         };
-        foreach (PhaseData phase in log.FightData.GetPhases(log))
+        foreach (PhaseData phase in phases)
         {
-            var dmgTargetsDto = new List<EXTHealingStatsHealingDistributionDto>();
+            var dmgTargetsDto = new List<EXTHealingStatsHealingDistributionDto>(log.Friendlies.Count);
             foreach (SingleActor target in log.Friendlies)
             {
                 dmgTargetsDto.Add(EXTHealingStatsHealingDistributionDto.BuildFriendlyMinionHealingDistData(log, actor, minion, target, phase, usedSkills, usedBuffs));

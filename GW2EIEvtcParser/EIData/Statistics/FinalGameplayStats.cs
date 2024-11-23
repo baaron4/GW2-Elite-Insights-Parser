@@ -43,7 +43,7 @@ public class FinalGameplayStats
                     continue;
                 }
 
-                distances.Add((positions[time].Value - reference[time + offset]!.Value.Value).XY().Length());
+                distances.Add((positions[time].XYZ - reference[time + offset]!.Value.XYZ).XY().Length());
             }
             return distances.Count == 0 ? -1 : distances.Sum() / distances.Count;
         }

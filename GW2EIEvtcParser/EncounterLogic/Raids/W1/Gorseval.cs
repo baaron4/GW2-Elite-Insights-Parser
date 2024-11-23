@@ -165,7 +165,7 @@ internal class Gorseval : SpiritVale
                     const byte fifth = 1 << 4;
                     const byte full = 1 << 5;
 
-                    var pos = replay.PolledPositions.First().Value;
+                    var pos = replay.PolledPositions.First().XYZ;
                     foreach (CastEvent c in rampage)
                     {
                         int start = (int)c.Time;

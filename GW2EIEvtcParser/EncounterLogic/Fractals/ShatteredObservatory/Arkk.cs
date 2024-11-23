@@ -297,7 +297,7 @@ internal class Arkk : ShatteredObservatory
                             BuffApplyEvent? nextStun = applies.FirstOrDefault(x => x.BuffID == Stun);
                             long cap = Math.Min(nextInvul?.Time ?? log.FightData.FightEnd, nextStun?.Time ?? log.FightData.FightEnd);
                             long actualEndCast = ComputeEndCastTimeByBuffApplication(log, target, Stun, cast.Time, castDuration);
-                            float facing = rotation.Value.Value.GetRoundedZRotationDeg();
+                            float facing = rotation.Value.XYZ.GetRoundedZRotationDeg();
                             for (int i = 0; i < 5; i++)
                             {
                                 long start = cast.Time + offset * (i + 1);

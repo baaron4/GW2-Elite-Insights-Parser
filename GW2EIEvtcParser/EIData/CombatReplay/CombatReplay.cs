@@ -101,14 +101,14 @@ public class CombatReplay
                             velocity = Velocities[velocityTableIndex];
                         }
 
-                        if (nextPos.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && velocity.Value.Length() < 1e-3)
+                        if (nextPos.Time - last.Time > ArcDPSEnums.ArcDPSPollingRate + rate && velocity.XYZ.Length() < 1e-3)
                         {
                             PolledPositions.Add(last.WithChangedTime(t));
                         }
                         else
                         {
                             float ratio = (float)(t - last.Time) / (nextPos.Time - last.Time);
-                            PolledPositions.Add(new(Vector3.Lerp(last.Value, nextPos.Value, ratio), t));
+                            PolledPositions.Add(new(Vector3.Lerp(last.XYZ, nextPos.XYZ, ratio), t));
                         }
 
                     }
@@ -163,7 +163,7 @@ public class CombatReplay
                         else
                         {
                             float ratio = (float)(t - last.Time) / (nextRot.Time - last.Time);
-                            PolledRotations.Add(new(Vector3.Lerp(last.Value, nextRot.Value, ratio), t));
+                            PolledRotations.Add(new(Vector3.Lerp(last.XYZ, nextRot.XYZ, ratio), t));
                         }
 
                     }
@@ -495,6 +495,54 @@ public class CombatReplay
     internal void AddTether(IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
     {
         AddTether(tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
+    }
+
+
+    /// <summary>
+    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
+    /// </summary>
+    /// <param name="tethers">Buff events of the tethers.</param>
+    /// <param name="color">color of the tether</param>
+    /// <param name="thickness">thickness of the tether</param>
+    /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
+    internal void addTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickess = false)
+    {
+        int tetherStart = 0;
+        AgentItem src = ParserHelper._unknownAgent;
+        AgentItem dst = ParserHelper._unknownAgent;
+        foreach (BuffEvent tether in tethers)
+        {
+            if (tether is BuffApplyEvent)
+            {
+                tetherStart = (int)tether.Time;
+                src = tether.By;
+                dst = tether.To;
+            }
+            else if (tether is BuffRemoveAllEvent)
+            {
+                int tetherEnd = (int)tether.Time;
+                if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
+                {
+                    if (src.TryGetCurrentInterpolatedPosition(log, tetherStart, out var srcPos) && dst.TryGetCurrentInterpolatedPosition(log, tetherStart, out var dstPos)) {
+                        Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new PositionConnector(dstPos), new PositionConnector(srcPos)).WithThickess(thickness, worldSizeThickess));
+                        src = ParserHelper._unknownAgent;
+                        dst = ParserHelper._unknownAgent;
+                    }
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
+    /// </summary>
+    /// <param name="tethers">Buff events of the tethers.</param>
+    /// <param name="color">color of the tether</param>
+    /// <param name="opacity">opacity of the tether</param>
+    /// <param name="thickness">thickness of the tether</param>
+    /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
+    internal void addTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
+    {
+        addTetherAtApplyTimePosition(log, tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
     }
 
     /// <summary>

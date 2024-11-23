@@ -4519,6 +4519,7 @@ public static class SkillIDs
     public const long HardenedCrust = 74715;
     public const long EmpoweredGreer = 74722;
     public const long FluxlanceSalvo2 = 74725;
+    public const long DecimaRedBeamFiring = 74726;
     public const long FluxlanceSalvo3 = 74742;
     public const long PressureBlastBubbleBuff = 74754;
     public const long FluxlanceTargetBuff1 = 74774;
@@ -4529,6 +4530,7 @@ public static class SkillIDs
     public const long ThrummingPresenceDamage = 74872;
     public const long InfectiousRotBuff = 74900;
     public const long HarmonicSensitivity = 74904;
+    public const long DecimaBeamFiring = 74922;
     public const long SulfuricAcid = 74933;
     public const long FluxlanceSalvo4 = 74973;
     public const long DecimaConduitWallBuff = 74962;
@@ -4542,9 +4544,13 @@ public static class SkillIDs
     public const long PressureBlastTargetBuff = 75067;
     public const long Deterrence = 75075;
     public const long BlobOfBlight = 75089;
+    public const long DecimaRedBeamLoading = 75090;
     public const long FluxlanceTargetBuff2 = 75140;
     public const long TargetOrder2JW = 75151;
     public const long Fluxlance = 75155;
+    public const long ChargeDecima = 75175;
+    public const long DecimaBeamLoading = 75198;
+    public const long TargetOrder2JW = 75151;
     public const long ChargeDecima = 75175;
     public const long UnstoppableDecima = 75246;
     public const long RotEruption = 75251;

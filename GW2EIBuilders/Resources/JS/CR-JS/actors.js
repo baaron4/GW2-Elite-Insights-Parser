@@ -36,7 +36,7 @@ class IconDrawable {
         this.hitboxWidth = InchToPixel * params.hitboxWidth;
         //
         uint32[0] = params.id;
-        this.pickingColor = `rgba(${uint32ToUint8[0]}, ${uint32ToUint8[1]}, ${uint32ToUint8[2]}, 1)`;
+        this.pickingColor = params.img && params.img.length > 0 ? `rgba(${uint32ToUint8[0]}, ${uint32ToUint8[1]}, ${uint32ToUint8[2]}, 1)` : null;
     }
 
     isSelected() {
@@ -188,7 +188,7 @@ class IconDrawable {
     }
 
     draw() {
-        if (!this.canDraw()) {
+        if (!this.canDraw() || this.pickingColor == null) {
             return;
         }
         const pos = this.getPosition();
@@ -228,7 +228,7 @@ class IconDrawable {
     }
 
     drawPicking() {
-        if (!this.canDraw()) {
+        if (!this.canDraw() || !this.pickingColor) {
             return;
         }
         const pos = this.getPosition();

@@ -307,7 +307,7 @@ class MechanicDrawable {
         this.owner = null;
         this.category = 0;
         if (params.skillMode) {
-            this.ownerID = params.skillMode.owner;
+            this.ownerID = params.skillMode.owner.ownerID;
             this.category = params.skillMode.category;
         }
         //

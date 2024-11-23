@@ -13,11 +13,13 @@ internal static class JsonDamageModifierDataBuilder
 
     private static JsonDamageModifierItem BuildJsonDamageModifierItem(DamageModifierStat extraData)
     {
-        var jsonDamageModifierItem = new JsonDamageModifierItem();
-        jsonDamageModifierItem.HitCount = extraData.HitCount;
-        jsonDamageModifierItem.TotalHitCount = extraData.TotalHitCount;
-        jsonDamageModifierItem.DamageGain = extraData.DamageGain;
-        jsonDamageModifierItem.TotalDamage = extraData.TotalDamage;
+        var jsonDamageModifierItem = new JsonDamageModifierItem
+        {
+            HitCount = extraData.HitCount,
+            TotalHitCount = extraData.TotalHitCount,
+            DamageGain = extraData.DamageGain,
+            TotalDamage = extraData.TotalDamage
+        };
         return jsonDamageModifierItem;
     }
 
@@ -32,15 +34,15 @@ internal static class JsonDamageModifierDataBuilder
     }
 
 
-    public static List<JsonDamageModifierData> GetOutgoingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<string, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<long, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
+    public static List<JsonDamageModifierData> GetOutgoingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
     {
-        var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
+        var dict = new Dictionary<int, List<JsonDamageModifierItem>>(50);
         var profEnums = new HashSet<ParserHelper.Source>(ParserHelper.SpecToSources(player.Spec));
-        foreach (IReadOnlyDictionary<string, DamageModifierStat> damageModDict in damageModDicts)
+        foreach (IReadOnlyDictionary<int, DamageModifierStat> damageModDict in damageModDicts)
         {
-            foreach (string key in damageModDict.Keys)
+            foreach (int key in damageModDict.Keys)
             {
-                DamageModifier dMod = log.DamageModifiers.OutgoingDamageModifiersByName[key];
+                DamageModifier dMod = log.DamageModifiers.OutgoingDamageModifiersByID[key];
                 int iKey = dMod.ID;
                 if (!damageModMap.ContainsKey(iKey))
                 {
@@ -74,7 +76,7 @@ internal static class JsonDamageModifierDataBuilder
             }
         }
 
-        var res = new List<JsonDamageModifierData>();
+        var res = new List<JsonDamageModifierData>(dict.Count);
         foreach (KeyValuePair<int, List<JsonDamageModifierItem>> pair in dict)
         {
             res.Add(BuildJsonDamageModifierData(pair.Key, pair.Value));
@@ -82,15 +84,15 @@ internal static class JsonDamageModifierDataBuilder
         return res;
     }
 
-    public static List<JsonDamageModifierData> GetIncomingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<string, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<long, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
+    public static List<JsonDamageModifierData> GetIncomingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
     {
-        var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
+        var dict = new Dictionary<int, List<JsonDamageModifierItem>>(50);
         var profEnums = new HashSet<ParserHelper.Source>(ParserHelper.SpecToSources(player.Spec));
-        foreach (IReadOnlyDictionary<string, DamageModifierStat> damageModDict in damageModDicts)
+        foreach (IReadOnlyDictionary<int, DamageModifierStat> damageModDict in damageModDicts)
         {
-            foreach (string key in damageModDict.Keys)
+            foreach (int key in damageModDict.Keys)
             {
-                DamageModifier dMod = log.DamageModifiers.IncomingDamageModifiersByName[key];
+                DamageModifier dMod = log.DamageModifiers.IncomingDamageModifiersByID[key];
                 int iKey = dMod.ID;
                 if (!damageModMap.ContainsKey(iKey))
                 {
@@ -124,7 +126,7 @@ internal static class JsonDamageModifierDataBuilder
             }
         }
 
-        var res = new List<JsonDamageModifierData>();
+        var res = new List<JsonDamageModifierData>(dict.Count);
         foreach (KeyValuePair<int, List<JsonDamageModifierItem>> pair in dict)
         {
             res.Add(BuildJsonDamageModifierData(pair.Key, pair.Value));
@@ -132,7 +134,7 @@ internal static class JsonDamageModifierDataBuilder
         return res;
     }
 
-    public static List<JsonDamageModifierData>[] GetOutgoingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<long, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
+    public static List<JsonDamageModifierData>[] GetOutgoingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
     {
         var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
         for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)
@@ -143,7 +145,7 @@ internal static class JsonDamageModifierDataBuilder
         return res;
     }
 
-    public static List<JsonDamageModifierData>[] GetIncomingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<long, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
+    public static List<JsonDamageModifierData>[] GetIncomingDamageModifiersTarget(SingleActor player, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods, IReadOnlyList<PhaseData> phases)
     {
         var res = new List<JsonDamageModifierData>[log.FightData.Logic.Targets.Count];
         for (int i = 0; i < log.FightData.Logic.Targets.Count; i++)

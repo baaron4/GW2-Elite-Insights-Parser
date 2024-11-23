@@ -2,29 +2,12 @@
 
 namespace GW2EIEvtcParser.EIData;
 
-public abstract class GeographicalConnector : Connector
+internal abstract class GeographicalConnector : Connector
 {
-    private Vector3? Offset;
+    public Vector3? Offset { get; private set; }
 
-    private bool OffsetAfterRotation;
-    private bool _invertYOffset = false;
-    public abstract class GeographicalConnectorDescriptor
-    {
-        public readonly IReadOnlyList<float>? Offset;
-        public readonly bool OffsetAfterRotation;
-
-        protected GeographicalConnectorDescriptor(GeographicalConnector connector, CombatReplayMap map)
-        {
-            if (connector.Offset.HasValue)
-            {
-                OffsetAfterRotation = connector.OffsetAfterRotation;
-                Offset = [
-                    connector.Offset.Value.X,
-                    connector._invertYOffset ? -connector.Offset.Value.Y : connector.Offset.Value.Y,
-                ];
-            }
-        }
-    }
+    public bool OffsetAfterRotation { get; private set; }
+    public bool InvertYOffset { get; private set; } = false;
 
     /// <summary>
     /// Adds an offset by the specified amount in the orientation given in <b>radians</b>. 
@@ -44,7 +27,7 @@ public abstract class GeographicalConnector : Connector
     {
         Offset = offset;
         OffsetAfterRotation = afterRotation;
-        _invertYOffset = invertY;
+        InvertYOffset = invertY;
         return this;
     }
 }

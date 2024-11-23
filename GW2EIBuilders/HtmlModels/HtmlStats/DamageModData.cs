@@ -4,10 +4,12 @@ using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIBuilders.HtmlModels.HTMLStats;
 
+using DamageModDataItem = List<double>;
+
 internal class DamageModData
 {
-    public readonly List<object[]> Data;
-    public readonly List<List<object[]>> DataTarget;
+    public readonly List<DamageModDataItem> Data;
+    public readonly List<List<DamageModDataItem>> DataTarget;
 
     private DamageModData(SingleActor actor, ParsedEvtcLog log, IReadOnlyList<OutgoingDamageModifier> listToUse, PhaseData phase)
     {
@@ -16,7 +18,7 @@ internal class DamageModData
         Data = new(listToUse.Count);
         foreach (OutgoingDamageModifier dMod in listToUse)
         {
-            if (dModData.TryGetValue(dMod.Name, out var data))
+            if (dModData.TryGetValue(dMod.ID, out var data))
             {
                 Data.Add(
                 [
@@ -42,12 +44,12 @@ internal class DamageModData
         DataTarget = new(allTargets.Count);
         foreach (SingleActor target in allTargets)
         {
-            var pTarget = new List<object[]>(1 + listToUse.Count);
+            var pTarget = new List<DamageModDataItem>(1 + listToUse.Count);
             DataTarget.Add(pTarget);
             dModData = actor.GetOutgoingDamageModifierStats(target, log, phase.Start, phase.End);
             foreach (OutgoingDamageModifier dMod in listToUse)
             {
-                if (dModData.TryGetValue(dMod.Name, out var data))
+                if (dModData.TryGetValue(dMod.ID, out var data))
                 {
                     pTarget.Add(
                     [
@@ -77,7 +79,7 @@ internal class DamageModData
         Data = new(listToUse.Count);
         foreach (IncomingDamageModifier dMod in listToUse)
         {
-            if (dModData.TryGetValue(dMod.Name, out var data))
+            if (dModData.TryGetValue(dMod.ID, out var data))
             {
                 Data.Add(
                 [
@@ -102,12 +104,12 @@ internal class DamageModData
         DataTarget = new(phase.Targets.Count);
         foreach (SingleActor target in phase.Targets)
         {
-            var pTarget = new List<object[]>();
+            var pTarget = new List<DamageModDataItem>(listToUse.Count);
             DataTarget.Add(pTarget);
             dModData = actor.GetIncomingDamageModifierStats(target, log, phase.Start, phase.End);
             foreach (IncomingDamageModifier dMod in listToUse)
             {
-                if (dModData.TryGetValue(dMod.Name, out var data))
+                if (dModData.TryGetValue(dMod.ID, out var data))
                 {
                     pTarget.Add(
                     [

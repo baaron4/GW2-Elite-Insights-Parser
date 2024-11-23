@@ -1,10 +1,10 @@
 ﻿namespace GW2EIEvtcParser.EIData;
 
-public class InterpolationConnector : GeographicalConnector
+internal class InterpolationConnector : GeographicalConnector
 {
-    protected IReadOnlyList<ParametricPoint3D> Positions;
+    public readonly IReadOnlyList<ParametricPoint3D> Positions;
 
-    private readonly InterpolationMethod _method;
+    public readonly InterpolationMethod Method;
 
     public InterpolationConnector(IReadOnlyList<ParametricPoint3D> positions, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
     {
@@ -13,30 +13,11 @@ public class InterpolationConnector : GeographicalConnector
             throw new InvalidOperationException("Must at least have one point");
         }
         Positions = positions;
-        _method = interpolationMethod;
+        Method = interpolationMethod;
     }
 
-    public class InterpolationConnectorDescriptor : GeographicalConnectorDescriptor
+    public override ConnectorDescription GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
     {
-        public int InterpolationMethod { get; private set; }
-        public IReadOnlyList<float> Positions { get; private set; }
-        public InterpolationConnectorDescriptor(InterpolationConnector connector, CombatReplayMap map) : base(connector, map)
-        {
-            InterpolationMethod = (int)connector._method;
-            var positions = new List<float>();
-            foreach (ParametricPoint3D pos in connector.Positions)
-            {
-                (float x, float y) = map.GetMapCoordRounded(pos.Value.XY());
-                positions.Add(x);
-                positions.Add(y);
-                positions.Add(pos.Time);
-            }
-            Positions = positions;
-        }
-    }
-
-    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
-    {
-        return new InterpolationConnectorDescriptor(this, map);
+        return new InterpolationConnectorDescription(this, map, log);
     }
 }

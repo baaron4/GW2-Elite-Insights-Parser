@@ -10,22 +10,22 @@ internal static class EXTJsonPlayerBarrierStatsBuilder
 
     public static EXTJsonPlayerBarrierStats BuildPlayerBarrierStats(SingleActor a, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        var outgoingBarrierAllies = new List<List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>>();
-        var outgoingBarrier = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>();
-        var incomingBarrier = new List<EXTJsonBarrierStatistics.EXTJsonIncomingBarrierStatistics>();
-        var alliedBarrier1S = new List<List<IReadOnlyList<int>>>();
-        var barrier1S = new List<IReadOnlyList<int>>();
-        var barrierReceived1S = new List<IReadOnlyList<int>>();
-        var alliedBarrierDist = new List<List<List<EXTJsonBarrierDist>>>();
-        var totalBarrierDist = new List<List<EXTJsonBarrierDist>>();
-        var totalIncomingBarrierDist = new List<List<EXTJsonBarrierDist>>();
-
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        var outgoingBarrierAllies = new List<List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>>(log.Friendlies.Count);
+        var outgoingBarrier = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>(phases.Count);
+        var incomingBarrier = new List<EXTJsonBarrierStatistics.EXTJsonIncomingBarrierStatistics>(phases.Count);
+        var alliedBarrier1S = new List<List<IReadOnlyList<int>>>(log.Friendlies.Count);
+        var barrier1S = new List<IReadOnlyList<int>>(phases.Count);
+        var barrierReceived1S = new List<IReadOnlyList<int>>(phases.Count);
+        var alliedBarrierDist = new List<List<List<EXTJsonBarrierDist>>>(log.Friendlies.Count);
+        var totalBarrierDist = new List<List<EXTJsonBarrierDist>>(phases.Count);
+        var totalIncomingBarrierDist = new List<List<EXTJsonBarrierDist>>(phases.Count);
+
         foreach (SingleActor friendly in log.Friendlies)
         {
-            var outgoingBarrierAlly = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>();
-            var allyBarrier1S = new List<IReadOnlyList<int>>();
-            var allyBarrierDist = new List<List<EXTJsonBarrierDist>>();
+            var outgoingBarrierAlly = new List<EXTJsonBarrierStatistics.EXTJsonOutgoingBarrierStatistics>(phases.Count);
+            var allyBarrier1S = new List<IReadOnlyList<int>>(phases.Count);
+            var allyBarrierDist = new List<List<EXTJsonBarrierDist>>(phases.Count);
             
             foreach (PhaseData phase in phases)
             {

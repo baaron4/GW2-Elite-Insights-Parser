@@ -5,6 +5,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -19,12 +20,12 @@ internal static class DeadeyeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
-        new BuffOnActorDamageModifier(NumberOfBoons, "Premeditation", "1.5% per boon",DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
-        new BuffOnActorDamageModifier(NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds( GW2Builds.July2023BalanceAndSilentSurfCM),
+        new BuffOnActorDamageModifier(Mod_Premeditation, NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+        new BuffOnActorDamageModifier(Mod_Premeditation, NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
+        new BuffOnActorDamageModifier(Mod_Premeditation, NumberOfBoons, "Premeditation", "1.5% per boon",DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.PvE).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
+        new BuffOnActorDamageModifier(Mod_Premeditation, NumberOfBoons, "Premeditation", "1% per boon",DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByStack, BuffImages.Premeditation, DamageModifierMode.All).WithBuilds( GW2Builds.July2023BalanceAndSilentSurfCM),
         //
-        new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
             var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
@@ -32,7 +33,7 @@ internal static class DeadeyeHelper
             }
             return false;
         }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
             var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
@@ -40,7 +41,7 @@ internal static class DeadeyeHelper
             }
             return false;
         }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
-        new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "15% to marked target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "15% to marked target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
             var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
@@ -49,7 +50,7 @@ internal static class DeadeyeHelper
             return false;
         }).WithBuilds(GW2Builds.August2022Balance, GW2Builds.July2023BalanceAndSilentSurfCM),
 
-        new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "10% to marked target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
             var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.From).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
@@ -61,7 +62,7 @@ internal static class DeadeyeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.All).UsingChecker((x, log) => {
             var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
@@ -69,7 +70,7 @@ internal static class DeadeyeHelper
             }
             return false;
         }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
+        new BuffOnActorDamageModifier(Mod_IronSight, DeadeyesGaze, "Iron Sight", "-10% from marked target", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => {
             var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {
@@ -77,7 +78,7 @@ internal static class DeadeyeHelper
             }
             return false;
         }).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(DeadeyesGaze, "Iron Sight", "-15% from marked target", DamageSource.NoPets, -15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
+        new BuffOnActorDamageModifier(Mod_IronSight,DeadeyesGaze, "Iron Sight", "-15% from marked target", DamageSource.NoPets, -15.0, DamageType.Strike, DamageType.All, Source.Deadeye, ByPresence, BuffImages.IronSight, DamageModifierMode.PvE).UsingChecker((x, log) => {
             var effectApply = log.CombatData.GetBuffDataByIDByDst(DeadeyesGaze, x.To).Where(y => y is BuffApplyEvent).LastOrDefault(y => y.Time <= x.Time);
             if (effectApply != null)
             {

@@ -1,4 +1,5 @@
-﻿namespace GW2EIEvtcParser.EIData;
+﻿
+namespace GW2EIEvtcParser.EIData;
 
 public abstract class StringBasedMechanic<Checkable> : CheckedMechanic<Checkable>
 {
@@ -12,8 +13,8 @@ public abstract class StringBasedMechanic<Checkable> : CheckedMechanic<Checkable
 
     protected StringBasedMechanic(ReadOnlySpan<GUID> mechanicIDs, string inGameName, MechanicPlotlySetting plotlySetting, string shortName, string description, string fullName, int internalCoolDown) : base(inGameName, plotlySetting, shortName, description, fullName, internalCoolDown)
     {
-        MechanicIDs.ReserveAdditional(MechanicIDs.Count);
-        for(int i = 0; i < MechanicIDs.Count; i++)
+        MechanicIDs.ReserveAdditional(mechanicIDs.Length);
+        for(int i = 0; i < mechanicIDs.Length; i++)
         {
             MechanicIDs.Add(mechanicIDs[i]);
         }

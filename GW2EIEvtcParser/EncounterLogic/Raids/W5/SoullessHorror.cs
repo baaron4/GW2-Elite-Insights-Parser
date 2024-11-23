@@ -311,7 +311,7 @@ internal class SoullessHorror : HallOfChains
                 {
                     break;
                 }
-                replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().Value)));
+                replay.Decorations.Add(new CircleDecoration(400, (end, end + 60000), Colors.Red, 0.5, new PositionConnector(replay.Positions.Last().XYZ)));
                 break;
 
             case (int)TrashID.SurgingSoul:
@@ -320,7 +320,7 @@ internal class SoullessHorror : HallOfChains
                     break;
                 }
 
-                var firstPos = replay.Positions[0].Value;
+                var firstPos = replay.Positions[0].XYZ;
                 if (firstPos.X < -12000 || firstPos.X > -9250)
                 {
                     replay.Decorations.Add(new RectangleDecoration(240, 660, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));

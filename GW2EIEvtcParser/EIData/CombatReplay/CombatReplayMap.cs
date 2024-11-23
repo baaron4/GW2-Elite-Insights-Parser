@@ -84,10 +84,10 @@ public class CombatReplayMap
                     continue;
                 }
                 var pos = p.GetCombatReplayPolledPositions(log);
-                _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.Value.X)) - 250, _rectInMap.topX);
-                _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.Value.Y)) - 250, _rectInMap.topY);
-                _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.Value.X)) + 250, _rectInMap.bottomX);
-                _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.Value.Y)) + 250, _rectInMap.bottomY);
+                _rectInMap.topX = Math.Min(Math.Floor(pos.Min(x => x.XYZ.X)) - 250, _rectInMap.topX);
+                _rectInMap.topY = Math.Min(Math.Floor(pos.Min(x => x.XYZ.Y)) - 250, _rectInMap.topY);
+                _rectInMap.bottomX = Math.Max(Math.Floor(pos.Max(x => x.XYZ.X)) + 250, _rectInMap.bottomX);
+                _rectInMap.bottomY = Math.Max(Math.Floor(pos.Max(x => x.XYZ.Y)) + 250, _rectInMap.bottomY);
             }
         }
     }

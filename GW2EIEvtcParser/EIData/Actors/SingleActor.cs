@@ -407,7 +407,7 @@ public abstract partial class SingleActor : Actor
                 ?? points.LastOrNull((in ParametricPoint3D x) => x.Time <= time);
            if(parametric.HasValue)
            {
-                point = parametric.Value.Value;
+                point = parametric.Value.XYZ;
                 return true;
            }
 
@@ -429,7 +429,7 @@ public abstract partial class SingleActor : Actor
             return false;
         }
         
-        point = position.Value;
+        point = position.XYZ;
         return true;
     }
 
@@ -465,12 +465,12 @@ public abstract partial class SingleActor : Actor
             long denom = next.Value.Time - prev.Value.Time;
             if (denom == 0)
             {
-                position = prev.Value.Value;
+                position = prev.Value.XYZ;
             }
             else
             {
                 float ratio = (float)(time - prev.Value.Time) / denom;
-                position = Vector3.Lerp(prev.Value.Value, next.Value.Value, ratio);
+                position = Vector3.Lerp(prev.Value.XYZ, next.Value.XYZ, ratio);
             }
             return true;
         }
@@ -479,7 +479,7 @@ public abstract partial class SingleActor : Actor
             var parametric = prev ?? next;
             if(parametric != null)
             {
-                position = parametric.Value.Value;
+                position = parametric.Value.XYZ;
                 return true;
             }
             else

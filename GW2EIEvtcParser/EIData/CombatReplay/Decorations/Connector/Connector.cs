@@ -7,5 +7,5 @@ public abstract class Connector
     {
         Linear = 0
     }
-    public abstract object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log);
+    public abstract ConnectorDescription GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log);
 }

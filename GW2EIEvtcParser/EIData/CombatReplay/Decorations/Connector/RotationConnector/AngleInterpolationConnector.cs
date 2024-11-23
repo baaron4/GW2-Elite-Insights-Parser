@@ -1,18 +1,18 @@
 ﻿namespace GW2EIEvtcParser.EIData;
 
-public class AngleInterpolationConnector : RotationConnector
+internal class AngleInterpolationConnector : RotationConnector
 {
     /// <summary>
     /// Points for angles, in degrees, around Z axis
     /// </summary>
-    protected IReadOnlyList<ParametricPoint1D> Angles;
+    public readonly IReadOnlyList<ParametricPoint1D> Angles;
 
-    private readonly InterpolationMethod _method;
+    public readonly InterpolationMethod Method;
 
     public AngleInterpolationConnector(IReadOnlyList<ParametricPoint1D> angles, InterpolationMethod interpolationMethod = InterpolationMethod.Linear)
     {
         Angles = angles;
-        _method = interpolationMethod;
+        Method = interpolationMethod;
     }
 
     /// <summary>
@@ -38,33 +38,16 @@ public class AngleInterpolationConnector : RotationConnector
                 throw new InvalidOperationException("Origin and Destination points must have the same timestamp");
             }
 
-            var facing = destinationPoints[i].Value - originPoints[i].Value;
+            var facing = destinationPoints[i].XYZ - originPoints[i].XYZ;
             float angle = facing.GetRoundedZRotationDeg();
             angles.Add(new ParametricPoint1D(angle, time));
         }
         Angles = angles;
-        _method = interpolationMethod;
+        Method = interpolationMethod;
     }
 
-    public class AngleInterpolationConnectorDescriptor : RotationConnectorDescriptor
+    public override ConnectorDescription GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
     {
-        public int InterpolationMethod { get; private set; }
-        public IReadOnlyList<float> Angles { get; private set; }
-        public AngleInterpolationConnectorDescriptor(AngleInterpolationConnector connector, CombatReplayMap map) : base(connector, map)
-        {
-            InterpolationMethod = (int)connector._method;
-            var angles = new List<float>();
-            foreach (ParametricPoint1D angle in connector.Angles)
-            {
-                angles.Add(-angle.X);
-                angles.Add(angle.Time);
-            }
-            Angles = angles;
-        }
-    }
-
-    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
-    {
-        return new AngleInterpolationConnectorDescriptor(this, map);
+        return new AngleInterpolationConnectorDescription(this, map, log);
     }
 }
