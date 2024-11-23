@@ -1284,6 +1284,8 @@ internal static class ParserIcons
         { TrashID.EnlightenedConduit, TrashChargedBloodstoneFragment },
         { TrashID.VentShot, TrashGenericRedEnemySkull },
         { TrashID.Fumaroller, TrashGenericRedEnemySkull },
+        { TrashID.DecimaBeamStart, NoImage },
+        { TrashID.DecimaBeamEnd, NoImage },
     };
 
     /// <summary>
