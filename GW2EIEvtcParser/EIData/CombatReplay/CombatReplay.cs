@@ -505,7 +505,7 @@ public class CombatReplay
     /// <param name="color">color of the tether</param>
     /// <param name="thickness">thickness of the tether</param>
     /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void addTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickess = false)
+    internal void AddTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickess = false)
     {
         int tetherStart = 0;
         AgentItem src = ParserHelper._unknownAgent;
@@ -540,9 +540,9 @@ public class CombatReplay
     /// <param name="opacity">opacity of the tether</param>
     /// <param name="thickness">thickness of the tether</param>
     /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void addTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
+    internal void AddTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
     {
-        addTetherAtApplyTimePosition(log, tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
+        AddTetherAtApplyTimePosition(log, tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
     }
 
     /// <summary>

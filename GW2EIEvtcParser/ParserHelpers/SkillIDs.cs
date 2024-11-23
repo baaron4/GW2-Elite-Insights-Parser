@@ -4550,8 +4550,6 @@ public static class SkillIDs
     public const long Fluxlance = 75155;
     public const long ChargeDecima = 75175;
     public const long DecimaBeamLoading = 75198;
-    public const long TargetOrder2JW = 75151;
-    public const long ChargeDecima = 75175;
     public const long UnstoppableDecima = 75246;
     public const long RotEruption = 75251;
     public const long PressureBlastDamage = 75258;

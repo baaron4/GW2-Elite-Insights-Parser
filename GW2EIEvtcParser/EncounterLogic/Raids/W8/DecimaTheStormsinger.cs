@@ -145,10 +145,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
             case (int)ArcDPSEnums.TrashID.DecimaBeamStart:
+                // TODO: Add warning indicators before the damage
+                // Damage Indicators
                 var yellowBeams = GetFilteredList(log.CombatData, DecimaBeamFiring, target.AgentItem, true, true);
-                replay.addTetherAtApplyTimePosition(log, yellowBeams, Colors.Yellow, 0.3, 80, true);
+                replay.AddTetherAtApplyTimePosition(log, yellowBeams, Colors.Yellow, 0.3, 80, true);
                 var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamFiring, target.AgentItem, true, true);
-                replay.addTetherAtApplyTimePosition(log, redBeams, Colors.Red, 0.3, 80, true);
+                replay.AddTetherAtApplyTimePosition(log, redBeams, Colors.Red, 0.3, 80, true);
                 break;
             default:
                 break;
