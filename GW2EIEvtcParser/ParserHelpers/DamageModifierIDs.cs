@@ -55,7 +55,6 @@ public static class DamageModifierIDs
     public const int Mod_FireRune = 42;
     public const int Mod_RageRune = 43;
     public const int Mod_RelicOfTheThief = 44;
-    public const int Mod_RelicOfFireworks = 44;
     public const int Mod_RelicOfNourys = 45;
     public const int Mod_RelicOfTheBrawler = 46;
     public const int Mod_RelicOfTheDeadeye = 47;
@@ -323,5 +322,7 @@ public static class DamageModifierIDs
     public const int Mod_FierySurge = 309;
     public const int Mod_AugmentedPower = 310;
     public const int Mod_StrengthenedBondGuldhem = 311;
+    public const int Mod_RelicOfFireworks = 312;
+    public const int Mod_InspiringVirtue = 313;
 }
 

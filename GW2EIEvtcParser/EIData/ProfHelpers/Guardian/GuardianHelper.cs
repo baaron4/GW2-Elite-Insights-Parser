@@ -112,7 +112,7 @@ internal static class GuardianHelper
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
         new BuffOnActorDamageModifier(Mod_InspiredVirtue, NumberOfBoons, "Inspired Virtue", "1% per boon", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Guardian, ByStack, BuffImages.InspiredVirtue, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_InspiredVirtue, InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.VirtuousSolace, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_InspiringVirtue, InspiringVirtue, "Inspiring Virtue", "10% (6s) after activating a virtue ", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Guardian, ByPresence, BuffImages.VirtuousSolace, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2020Balance),
     ];
 

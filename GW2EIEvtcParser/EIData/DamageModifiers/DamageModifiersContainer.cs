@@ -75,7 +75,7 @@ public class DamageModifiersContainer
         {
             var e = x.GetEnumerator(); e.MoveNext();
             var first = e.Current;
-            if (e.MoveNext()) { throw new InvalidDataException("Same name present multiple times in damage mods - " + first.ID); }
+            if (e.MoveNext()) { throw new InvalidDataException("Same id present multiple times in damage mods - " + first.ID); }
             return first;
         });
         //
@@ -141,7 +141,7 @@ public class DamageModifiersContainer
         {
             var e = x.GetEnumerator(); e.MoveNext();
             var first = e.Current;
-            if (e.MoveNext()) { throw new InvalidDataException("Same name present multiple times in damage mods - " + first.ID); }
+            if (e.MoveNext()) { throw new InvalidDataException("Same id present multiple times in damage mods - " + first.ID); }
             return first;
         });
     }
