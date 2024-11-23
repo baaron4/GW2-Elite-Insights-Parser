@@ -188,7 +188,7 @@ class IconDrawable {
     }
 
     draw() {
-        if (!this.canDraw()) {
+        if (!this.canDraw() || this.pickingColor == null) {
             return;
         }
         const pos = this.getPosition();

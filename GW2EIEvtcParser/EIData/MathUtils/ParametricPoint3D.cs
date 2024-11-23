@@ -9,7 +9,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonConverter(typeof(Converter))]
 public readonly struct ParametricPoint3D(in Vector3 value, long time)
 {
-    public readonly Vector3 Value = value;
+    public readonly Vector3 XYZ = value;
     public readonly long Time = time;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -18,7 +18,7 @@ public readonly struct ParametricPoint3D(in Vector3 value, long time)
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly ParametricPoint3D WithChangedTime(long newTime) => new(Value, newTime);
+    public readonly ParametricPoint3D WithChangedTime(long newTime) => new(XYZ, newTime);
 
     public class Converter : JsonConverter<ParametricPoint3D>
     {
@@ -54,9 +54,9 @@ public readonly struct ParametricPoint3D(in Vector3 value, long time)
         public override void Write(Utf8JsonWriter writer, ParametricPoint3D value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
-            writer.WriteNumber("X", value.Value.X);
-            writer.WriteNumber("Y", value.Value.Y);
-            writer.WriteNumber("Z", value.Value.Z);
+            writer.WriteNumber("X", value.XYZ.X);
+            writer.WriteNumber("Y", value.XYZ.Y);
+            writer.WriteNumber("Z", value.XYZ.Z);
             writer.WriteNumber("Time", value.Time);
             writer.WriteEndObject();
         }

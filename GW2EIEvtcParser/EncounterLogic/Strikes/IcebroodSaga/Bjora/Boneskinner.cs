@@ -109,7 +109,7 @@ internal class Boneskinner : Bjora
                     if (lastDirection != null)
                     {
                         var connector = new AgentConnector(target);
-                        var rotationConnector = new AngleConnector(lastDirection.Value.Value);
+                        var rotationConnector = new AngleConnector(lastDirection.Value.XYZ);
                         // Growing Decoration
                         var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
                         replay.AddDecorationWithGrowing(pie, endHitTime);

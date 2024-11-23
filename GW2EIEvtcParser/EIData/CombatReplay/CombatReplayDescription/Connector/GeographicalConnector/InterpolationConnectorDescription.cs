@@ -10,7 +10,7 @@ public class InterpolationConnectorDescription : GeographicalConnectorDescriptio
         var positions = new List<float>();
         foreach (ParametricPoint3D pos in connector.Positions)
         {
-            (float x, float y) = map.GetMapCoordRounded(pos.Value.XY());
+            (float x, float y) = map.GetMapCoordRounded(pos.XYZ.XY());
             positions.Add(x);
             positions.Add(y);
             positions.Add(pos.Time);

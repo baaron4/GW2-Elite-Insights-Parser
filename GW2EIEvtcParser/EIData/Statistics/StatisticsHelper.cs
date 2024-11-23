@@ -199,7 +199,7 @@ public class StatisticsHelper
                 var pos = positions[t];
                 if (pos != null)
                 {
-                    position += pos.Value.Value;
+                    position += pos.Value.XYZ;
                 }
                 else
                 {

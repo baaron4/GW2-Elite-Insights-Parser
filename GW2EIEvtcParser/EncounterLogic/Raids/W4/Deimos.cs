@@ -612,7 +612,7 @@ internal class Deimos : BastionOfThePenitent
                     {
                         float diffX = 0;
                         float diffY = 0;
-                        var pos = replay.PolledPositions[0].Value;
+                        var pos = replay.PolledPositions[0].XYZ;
                         if (pos.X > demonicCenter.X)
                         {
                             if (pos.Y > demonicCenter.Y)

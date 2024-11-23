@@ -38,7 +38,7 @@ internal class AngleInterpolationConnector : RotationConnector
                 throw new InvalidOperationException("Origin and Destination points must have the same timestamp");
             }
 
-            var facing = destinationPoints[i].Value - originPoints[i].Value;
+            var facing = destinationPoints[i].XYZ - originPoints[i].XYZ;
             float angle = facing.GetRoundedZRotationDeg();
             angles.Add(new ParametricPoint1D(angle, time));
         }

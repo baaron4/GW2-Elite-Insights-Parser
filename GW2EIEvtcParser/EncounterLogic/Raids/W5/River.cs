@@ -163,8 +163,8 @@ internal class River : HallOfChains
                 break;
 
             case (int)ArcDPSEnums.TrashID.HollowedBomber:
-                ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.Value != default);
-                if (firstBomberMovement.Value != default)
+                ParametricPoint3D firstBomberMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
+                if (firstBomberMovement.XYZ != default)
                 {
                     replay.Trim(firstBomberMovement.Time - 1000, replay.TimeOffsets.end);
                 }
@@ -181,8 +181,8 @@ internal class River : HallOfChains
                 break;
 
             case (int)ArcDPSEnums.TrashID.RiverOfSouls:
-                ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.Value != default);
-                if (firstRiverMovement.Value != default)
+                ParametricPoint3D firstRiverMovement = replay.Velocities.FirstOrDefault(x => x.XYZ != default);
+                if (firstRiverMovement.XYZ != default)
                 {
                     replay.Trim(firstRiverMovement.Time - 1000, replay.TimeOffsets.end);
                 }

@@ -11,7 +11,7 @@ public class PositionEvent : MovementEvent
     internal override void AddPoint3D(CombatReplay replay)
     {
         ParametricPoint3D point = GetParametricPoint3D();
-        if (point.Value == default)
+        if (point.XYZ == default)
         {
             return;
         }

@@ -573,7 +573,7 @@ internal class Dhuum : HallOfChains
                     int reaperIndex = -1;
                     foreach (var reaper in ReapersToGreen)
                     {
-                        if ((reaper.Position - pos.Value).Length() < 10)
+                        if ((reaper.Position - pos.XYZ).Length() < 10)
                         {
                             reaperIndex = reaper.Index;
                             break;

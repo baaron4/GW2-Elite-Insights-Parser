@@ -732,7 +732,7 @@ internal class Qadim : MythwrightGambit
                 const float hiddenOpacity = 0.1f;
                 const float visibleOpacity = 1f;
                 const float noOpacity = -1f;
-                var heights = replay.Positions.Select(x => new ParametricPoint1D(x.Value.Z, x.Time));
+                var heights = replay.Positions.Select(x => new ParametricPoint1D(x.XYZ.Z, x.Time));
                 var opacities = new List<ParametricPoint1D> { new(visibleOpacity, target.FirstAware) };
                 int velocityIndex = 0;
                 SingleActor qadim = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Qadim)) ?? throw new MissingKeyActorsException("Qadim not found");
@@ -755,7 +755,7 @@ internal class Qadim : MythwrightGambit
                     case "1":
                         foreach(var velocity in replay.Velocities)
                         {
-                            if((velocity.Value  - new Vector3(-28.3569336f, -49.2431641f, 90.90576f)).Length() < threshold) {
+                            if((velocity.XYZ  - new Vector3(-28.3569336f, -49.2431641f, 90.90576f)).Length() < threshold) {
                                 opacities.Add(new ParametricPoint1D(hiddenOpacity, velocity.Time));
                                 break;
                             }
@@ -912,7 +912,7 @@ internal class Qadim : MythwrightGambit
         float threshold = 1f;
         for (int velocityIndex = startIndex; velocityIndex < velocities.Count; velocityIndex++)
         {
-            if ((referenceVelocity - velocities[velocityIndex].Value).Length() < threshold)
+            if ((referenceVelocity - velocities[velocityIndex].XYZ).Length() < threshold)
             {
                 if (opacity >= 0)
                 {
@@ -1038,7 +1038,7 @@ internal class Qadim : MythwrightGambit
             //TODO(Rennorb) @perf: Why was there an unused reference to last phase here?
             foreach(var pos in qadim.GetCombatReplayNonPolledPositions(log))
             {
-                if((pos.Value.XY() - qadimFinalXY).LengthSquared() < 25)
+                if((pos.XYZ.XY() - qadimFinalXY).LengthSquared() < 25)
                 {
                     finalPhaseTime = (int)pos.Time;
                 }
@@ -1383,7 +1383,7 @@ internal class Qadim : MythwrightGambit
 
             for (int i = 0; i < lamps.Count; i++)
             {
-                if (positions.Any(x => x.Value.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
+                if (positions.Any(x => x.XYZ.Z > lampLabyrinthZ && x.Time >= lamps[i].FirstAware && x.Time <= lamps[i].LastAware) && entered == exited)
                 {
                     entered++;
                 }
@@ -1449,7 +1449,7 @@ internal class Qadim : MythwrightGambit
         // For each matching position polled, check if the distance between points is under 2000
         for (int i = 0; i < Math.Min(addPositions.Count, qadimPositions.Count); i++)
         {
-            if ((qadimPositions[i].Value - addPositions[i].Value).Length() < 2000)
+            if ((qadimPositions[i].XYZ - addPositions[i].XYZ).Length() < 2000)
             {
                 return true;
             }

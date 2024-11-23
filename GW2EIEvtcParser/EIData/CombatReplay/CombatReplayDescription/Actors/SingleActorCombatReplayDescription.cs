@@ -50,7 +50,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
         var positions = new List<float>(replay.PolledPositions.Count * 2);
         foreach (var pos in replay.PolledPositions)
         {
-            (float x, float y) = map.GetMapCoordRounded(pos.Value.XY());
+            (float x, float y) = map.GetMapCoordRounded(pos.XYZ.XY());
             positions.Add(x);
             positions.Add(y);
         }
@@ -59,7 +59,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
         var angles = new List<float>(replay.PolledRotations.Count);
         foreach (var facing in replay.PolledRotations)
         {
-            angles.Add(-facing.Value.GetRoundedZRotationDeg());
+            angles.Add(-facing.XYZ.GetRoundedZRotationDeg());
         }
         Angles = angles;
 

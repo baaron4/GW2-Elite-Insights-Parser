@@ -321,7 +321,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 if (replay.PolledPositions.Count > 0)
                 {
                     uint radiusAnomaly = target.HitboxWidth / 2;
-                    replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].Value)), start);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.BigKillerTornado:

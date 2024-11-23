@@ -7,7 +7,7 @@ namespace GW2EIEvtcParser.EIData;
 [JsonConverter(typeof(Converter))]
 public class ParametricPoint2D(in Vector2 vector, long time)
 {
-    public readonly Vector2 Vector = vector;
+    public readonly Vector2 XY = vector;
     public readonly long Time = time;
 
     public ParametricPoint2D(in Vector2 a, in Vector2 b, float ratio, long time) : this(Vector2.Lerp(a, b, ratio), time)
@@ -47,8 +47,8 @@ public class ParametricPoint2D(in Vector2 vector, long time)
         public override void Write(Utf8JsonWriter writer, ParametricPoint2D value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
-            writer.WriteNumber("X", value.Vector.X);
-            writer.WriteNumber("Y", value.Vector.Y);
+            writer.WriteNumber("X", value.XY.X);
+            writer.WriteNumber("Y", value.XY.Y);
             writer.WriteNumber("Time", value.Time);
             writer.WriteEndObject();
         }

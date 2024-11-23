@@ -392,7 +392,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
                 if (replay.PolledPositions.Count > 0)
                 {
-                    replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(replay.PolledPositions[0].Value)), start);
+                    replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.GreenPhantasm:
