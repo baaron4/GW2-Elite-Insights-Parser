@@ -4542,6 +4542,7 @@ public static class SkillIDs
     public const long UraDispelSAK = 75066;
     public const long PressureBlastTargetBuff = 75067;
     public const long Deterrence = 75075;
+    public const long BlobOfBlight = 75089;
     public const long FluxlanceTargetBuff2 = 75140;
     public const long TargetOrder2JW = 75151;
     public const long Fluxlance = 75155;
@@ -4549,8 +4550,11 @@ public static class SkillIDs
     public const long UnstoppableDecima = 75246;
     public const long RotEruption = 75251;
     public const long PressureBlastDamage = 75258;
+    public const long RainOfSpores = 75289;
     public const long PealOfHarmony = 75290;
+    public const long BlobOfBlight2 = 75294;
     public const long PealOfDiscord = 75301;
+    public const long ScatteringSporeblast = 75330;
     public const long FluxlanceSalvo5 = 75348;
     #endregion
 }

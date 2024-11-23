@@ -898,9 +898,9 @@ public static class ArcDPSEnums
         EmpoweringBeast = 26776,
         // Decima
         EnlightenedConduit = 26709,
-        GreenOrb1Person = 26798,
-        GreenOrb2Persons = 26783,
-        GreenOrb3Persons = 26727,
+        GreenOrb1Player = 26798,
+        GreenOrb2Players = 26783,
+        GreenOrb3Players = 26727,
         DecimaBeamEnd = 26793,
         DecimaBeamStart = 26708,
         // Ura

@@ -8,6 +8,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
@@ -44,10 +45,12 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         return
         [
-            ArcDPSEnums.TrashID.GreenOrb1Person,
-            ArcDPSEnums.TrashID.GreenOrb2Persons,
-            ArcDPSEnums.TrashID.GreenOrb3Persons,
+            ArcDPSEnums.TrashID.GreenOrb1Player,
+            ArcDPSEnums.TrashID.GreenOrb2Players,
+            ArcDPSEnums.TrashID.GreenOrb3Players,
             ArcDPSEnums.TrashID.EnlightenedConduit,
+            //ArcDPSEnums.TrashID.DecimaBeamStart,
+            //ArcDPSEnums.TrashID.DecimaBeamEnd,
         ];
     }
 
@@ -108,15 +111,15 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
                 break;
             // TODO: find all greens and their proper sizes
-            case (int)ArcDPSEnums.TrashID.GreenOrb1Person:
+            case (int)ArcDPSEnums.TrashID.GreenOrb1Player:
                 replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
                 //replay.Decorations.Add(new CircleDecoration(100, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenOrb2Persons:
+            case (int)ArcDPSEnums.TrashID.GreenOrb2Players:
                 replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
                 //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenOrb3Persons:
+            case (int)ArcDPSEnums.TrashID.GreenOrb3Players:
                 replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
                 //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;

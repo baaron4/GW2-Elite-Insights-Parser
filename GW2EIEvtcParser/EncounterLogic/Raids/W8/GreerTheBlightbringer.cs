@@ -14,13 +14,16 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class GreerTheBlightbringer : MountBalrior
 {
+    private readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores];
     public GreerTheBlightbringer(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>()
         {
-            new PlayerDstBuffApplyMechanic(NoxiousBlightTargetBuff, "Noxious Blight", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "NoxBlight.T", "Targeted by Noxious Blight (Green)", "Noxious Blight (Green)", 0),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TargetID.Greer)),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TrashID.Reeg)),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TrashID.Gree)),
             new PlayerDstBuffApplyMechanic(InfectiousRotBuff, "Infectious Rot", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "InfRot.T", "Targeted by Infectious Rot (Failed Green)", "Infectious Rot (Green Fail)", 0),
-            
+            new PlayerDstEffectMechanic(EffectGUIDs.GreerNoxiousBlightGreen, "Noxious Blight", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "NoxBlight.T", "Targeted by Noxious Blight (Green)", "Noxious Blight (Green)", 0),
         });
         Extension = "greer";
         Icon = EncounterIconGreer;
