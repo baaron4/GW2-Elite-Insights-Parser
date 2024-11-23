@@ -10,11 +10,13 @@ internal static class JsonConsumableBuilder
 {
     public static JsonConsumable BuildJsonConsumable(Consumable food)
     {
-        var jsonConsumable = new JsonConsumable();
-        jsonConsumable.Stack = food.Stack;
-        jsonConsumable.Duration = food.Duration;
-        jsonConsumable.Time = food.Time;
-        jsonConsumable.Id = food.Buff.ID;
+        var jsonConsumable = new JsonConsumable
+        {
+            Stack = food.Stack,
+            Duration = food.Duration,
+            Time = food.Time,
+            Id = food.Buff.ID
+        };
         return jsonConsumable;
     }
 }

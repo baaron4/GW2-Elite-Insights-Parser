@@ -79,8 +79,8 @@ internal class SkillDto : IDItemDto
 
     public static List<SkillCastDto> BuildRotationData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills)
     {
-        var list = new List<SkillCastDto>(); //TODO(Rennorb) @perf
-        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End);
+        var casting = p.GetIntersectingCastEvents(log, phase.Start, phase.End).ToList();
+        var list = new List<SkillCastDto>(casting.Count);
         foreach (CastEvent cl in casting)
         {
             if (!usedSkills.ContainsKey(cl.SkillId))

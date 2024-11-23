@@ -137,9 +137,9 @@ internal class BuffsContainerDto
         DefBuffGenActiveSquadStats  = BuffData.BuildActiveBuffGenerationData(log, statistics.PresentDefbuffs, phase, BuffEnum.Squad);
 
 
-        TargetsCondiStats   = [];
-        TargetsCondiUptimes = [];
-        TargetsBoonUptimes  = [];
+        TargetsCondiStats   = new (phase.AllTargets.Count);
+        TargetsCondiUptimes = new(phase.AllTargets.Count);
+        TargetsBoonUptimes  = new(phase.AllTargets.Count);
         foreach (SingleActor target in phase.AllTargets)
         {
             TargetsCondiStats.Add(BuffData.BuildTargetCondiData(log, phase, target));

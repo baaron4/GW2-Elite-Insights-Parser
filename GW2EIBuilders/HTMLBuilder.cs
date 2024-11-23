@@ -15,21 +15,10 @@ namespace GW2EIBuilders;
     PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
     IncludeFields = true, WriteIndented = false, NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
     Converters = [
-        //TODO(Rennorb) @perf: replace with explicit decorators
         typeof(GW2EIJSON.Tuple2ToArrayConverterFactory),
     ]
 )]
 [JsonSerializable(typeof(LogDataDto))]
-//NOTE(Rennorb): The following types need to be manually added to the generator, because they are used as opaque object fields.
-// The generator cannot know the types of those fields, and we want to avoid having to use slow reflection to find out the members of those arbitrary types.
-// Specifying them here tells the generator to generate switches for these specific types whenever an opaque object needs to be serialized.
-[JsonSerializable(typeof(AgentConnector.AgentConnectorDescriptor))]
-[JsonSerializable(typeof(PositionConnector.PositionConnectorDescriptor))]
-[JsonSerializable(typeof(AgentFacingConnector.AgentFacingConnectorDescriptor))]
-[JsonSerializable(typeof(AngleConnector.AngleConnectorDescriptor))]
-[JsonSerializable(typeof(AngleInterpolationConnector.AngleInterpolationConnectorDescriptor))]
-[JsonSerializable(typeof(InterpolationConnector.InterpolationConnectorDescriptor))]
-[JsonSerializable(typeof(AttachedDecorationRenderingDescription.SkillModeDescription))]
 partial class LogDataDtoSerializerContext : JsonSerializerContext {  }
 
 

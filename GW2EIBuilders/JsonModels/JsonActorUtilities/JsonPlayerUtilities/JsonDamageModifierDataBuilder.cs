@@ -13,11 +13,13 @@ internal static class JsonDamageModifierDataBuilder
 
     private static JsonDamageModifierItem BuildJsonDamageModifierItem(DamageModifierStat extraData)
     {
-        var jsonDamageModifierItem = new JsonDamageModifierItem();
-        jsonDamageModifierItem.HitCount = extraData.HitCount;
-        jsonDamageModifierItem.TotalHitCount = extraData.TotalHitCount;
-        jsonDamageModifierItem.DamageGain = extraData.DamageGain;
-        jsonDamageModifierItem.TotalDamage = extraData.TotalDamage;
+        var jsonDamageModifierItem = new JsonDamageModifierItem
+        {
+            HitCount = extraData.HitCount,
+            TotalHitCount = extraData.TotalHitCount,
+            DamageGain = extraData.DamageGain,
+            TotalDamage = extraData.TotalDamage
+        };
         return jsonDamageModifierItem;
     }
 
@@ -34,7 +36,7 @@ internal static class JsonDamageModifierDataBuilder
 
     public static List<JsonDamageModifierData> GetOutgoingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
     {
-        var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
+        var dict = new Dictionary<int, List<JsonDamageModifierItem>>(50);
         var profEnums = new HashSet<ParserHelper.Source>(ParserHelper.SpecToSources(player.Spec));
         foreach (IReadOnlyDictionary<int, DamageModifierStat> damageModDict in damageModDicts)
         {
@@ -74,7 +76,7 @@ internal static class JsonDamageModifierDataBuilder
             }
         }
 
-        var res = new List<JsonDamageModifierData>();
+        var res = new List<JsonDamageModifierData>(dict.Count);
         foreach (KeyValuePair<int, List<JsonDamageModifierItem>> pair in dict)
         {
             res.Add(BuildJsonDamageModifierData(pair.Key, pair.Value));
@@ -84,7 +86,7 @@ internal static class JsonDamageModifierDataBuilder
 
     public static List<JsonDamageModifierData> GetIncomingDamageModifiers(SingleActor player, List<IReadOnlyDictionary<int, DamageModifierStat>> damageModDicts, ParsedEvtcLog log, Dictionary<int, DamageModifier> damageModMap, Dictionary<string, HashSet<long>> personalDamageMods)
     {
-        var dict = new Dictionary<int, List<JsonDamageModifierItem>>();
+        var dict = new Dictionary<int, List<JsonDamageModifierItem>>(50);
         var profEnums = new HashSet<ParserHelper.Source>(ParserHelper.SpecToSources(player.Spec));
         foreach (IReadOnlyDictionary<int, DamageModifierStat> damageModDict in damageModDicts)
         {
@@ -124,7 +126,7 @@ internal static class JsonDamageModifierDataBuilder
             }
         }
 
-        var res = new List<JsonDamageModifierData>();
+        var res = new List<JsonDamageModifierData>(dict.Count);
         foreach (KeyValuePair<int, List<JsonDamageModifierItem>> pair in dict)
         {
             res.Add(BuildJsonDamageModifierData(pair.Key, pair.Value));

@@ -3,7 +3,7 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
-public class AgentFacingConnector : RotationConnector
+internal class AgentFacingConnector : RotationConnector
 {
     public readonly AgentItem Agent;
 
@@ -49,21 +49,8 @@ public class AgentFacingConnector : RotationConnector
     {
     }
 
-    public class AgentFacingConnectorDescriptor : RotationConnectorDescriptor
+    public override ConnectorDescription GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
     {
-        public int MasterId { get; private set; }
-        public float RotationOffset { get; private set; }
-        public int RotationOffsetMode { get; private set; }
-        public AgentFacingConnectorDescriptor(AgentFacingConnector connector, CombatReplayMap map) : base(connector, map)
-        {
-            MasterId = connector.Agent.UniqueID;
-            RotationOffset = connector.RotationOffset;
-            RotationOffsetMode = (int)connector.OffsetMode;
-        }
-    }
-
-    public override object GetConnectedTo(CombatReplayMap map, ParsedEvtcLog log)
-    {
-        return new AgentFacingConnectorDescriptor(this, map);
+        return new AgentFacingConnectorDescription(this, map, log);
     }
 }

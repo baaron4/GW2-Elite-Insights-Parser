@@ -26,7 +26,7 @@ internal class MechanicChartDataDto
         var res = new List<List<(double time, string? name)>>();
         if (!enemyMechanic)
         {
-            var playerIndex = new Dictionary<SingleActor, int>();
+            var playerIndex = new Dictionary<SingleActor, int>(log.Friendlies.Count);
             for (int p = 0; p < log.Friendlies.Count; p++)
             {
                 playerIndex.Add(log.Friendlies[p], p);
@@ -43,7 +43,7 @@ internal class MechanicChartDataDto
         }
         else
         {
-            var targetIndex = new Dictionary<SingleActor, int>();
+            var targetIndex = new Dictionary<SingleActor, int>(phase.AllTargets.Count);
             for (int p = 0; p < phase.AllTargets.Count; p++)
             {
                 targetIndex.Add(phase.AllTargets[p], p);
@@ -68,8 +68,9 @@ internal class MechanicChartDataDto
 
     private static List<List<List<(double time, string? name)>>> BuildMechanicGraphPointData(ParsedEvtcLog log, IReadOnlyList<MechanicEvent> mechanicLogs, bool enemyMechanic)
     {
-        var list = new List<List<List<(double time, string? name)>>>();
-        foreach (PhaseData phase in log.FightData.GetPhases(log))
+        var phases = log.FightData.GetPhases(log);
+        var list = new List<List<List<(double time, string? name)>>>(phases.Count);
+        foreach (PhaseData phase in phases)
         {
             list.Add(GetMechanicChartPoints(mechanicLogs, phase, log, enemyMechanic));
         }
@@ -78,8 +79,9 @@ internal class MechanicChartDataDto
 
     public static List<MechanicChartDataDto> BuildMechanicsChartData(ParsedEvtcLog log)
     {
-        var mechanicsChart = new List<MechanicChartDataDto>();
-        foreach (Mechanic mech in log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd))
+        var mechs = log.MechanicData.GetPresentMechanics(log, log.FightData.FightStart, log.FightData.FightEnd);
+        var mechanicsChart = new List<MechanicChartDataDto>(mechs.Count);
+        foreach (Mechanic mech in mechs)
         {
             mechanicsChart.Add(new MechanicChartDataDto(log, mech));
         }

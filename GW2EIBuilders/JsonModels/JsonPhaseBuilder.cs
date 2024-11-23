@@ -12,17 +12,19 @@ internal static class JsonPhaseBuilder
 
     public static JsonPhase BuildJsonPhase(PhaseData phase, ParsedEvtcLog log)
     {
-        var jsPhase = new JsonPhase();
-        jsPhase.Start = phase.Start;
-        jsPhase.End = phase.End;
-        jsPhase.Name = phase.Name;
-        var targets = new List<int>();
-        var secondaryTargets = new List<int>();
+        var jsPhase = new JsonPhase
+        {
+            Start = phase.Start,
+            End = phase.End,
+            Name = phase.Name
+        };
+        var targets = new List<int>(phase.Targets.Count);
         jsPhase.BreakbarPhase = phase.BreakbarPhase;
         foreach (SingleActor tar in phase.Targets)
         {
             targets.Add(log.FightData.Logic.Targets.IndexOf(tar));
         }
+        var secondaryTargets = new List<int>(phase.SecondaryTargets.Count);
         foreach (SingleActor tar in phase.SecondaryTargets)
         {
             secondaryTargets.Add(log.FightData.Logic.Targets.IndexOf(tar));

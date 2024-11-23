@@ -14,7 +14,7 @@ internal class EXTBarrierStatsPlayerChartDto
         {
             Total = p.EXTBarrier.Get1SBarrierList(log, phase.Start, phase.End, null),
             Taken = p.EXTBarrier.Get1SBarrierReceivedList(log, phase.Start, phase.End, null),
-            Targets = []
+            Targets = new (log.Friendlies.Count)
         };
         foreach (SingleActor target in log.Friendlies)
         {

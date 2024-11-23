@@ -1,4 +1,5 @@
-﻿using GW2EIBuilders.JsonModels.JsonActorUtilities;
+﻿using System.Linq;
+using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
@@ -60,9 +61,9 @@ internal static class JsonNPCBuilder
 
     private static List<JsonBuffsUptime> GetNPCJsonBuffsUptime(SingleActor npc, ParsedEvtcLog log, RawFormatSettings settings, Dictionary<long, Buff> buffMap)
     {
-        var res = new List<JsonBuffsUptime>();
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         var buffs = phases.Select(x => npc.GetBuffs(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
+        var res = new List<JsonBuffsUptime>(buffs[0].Count);
         var buffDictionaries = phases.Select(x => npc.GetBuffsDictionary(log, x.Start, x.End)).ToList();
         foreach (KeyValuePair<long, FinalActorBuffs> pair in buffs[0])
         {
@@ -71,7 +72,7 @@ internal static class JsonNPCBuilder
             {
                 continue;
             }
-            var data = new List<JsonBuffsUptimeData>();
+            var data = new List<JsonBuffsUptimeData>(phases.Count);
             for (int i = 0; i < phases.Count; i++)
             {
                 if (buffs[i].TryGetValue(pair.Key, out var buffstats) && buffDictionaries[i].TryGetValue(pair.Key, out var buffsDict))
@@ -91,9 +92,9 @@ internal static class JsonNPCBuilder
     }
     private static List<JsonBuffVolumes> GetNPCJsonBuffVolumes(SingleActor npc, ParsedEvtcLog log, Dictionary<long, Buff> buffMap)
     {
-        var res = new List<JsonBuffVolumes>();
         IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         var buffVolumes = phases.Select(x => npc.GetBuffVolumes(ParserHelper.BuffEnum.Self, log, x.Start, x.End)).ToList();
+        var res = new List<JsonBuffVolumes>(buffVolumes[0].Count);
         var buffVolumeDictionaries = phases.Select(x => npc.GetBuffVolumesDictionary(log, x.Start, x.End)).ToList();
         foreach (KeyValuePair<long, FinalActorBuffVolumes> pair in buffVolumes[0])
         {
@@ -102,7 +103,7 @@ internal static class JsonNPCBuilder
             {
                 continue;
             }
-            var data = new List<JsonBuffVolumesData>();
+            var data = new List<JsonBuffVolumesData>(phases.Count);
             for (int i = 0; i < phases.Count; i++)
             {
                 if (buffVolumes[i].TryGetValue(pair.Key, out var buffStats) && buffVolumeDictionaries[i].TryGetValue(pair.Key, out var buffDicts))

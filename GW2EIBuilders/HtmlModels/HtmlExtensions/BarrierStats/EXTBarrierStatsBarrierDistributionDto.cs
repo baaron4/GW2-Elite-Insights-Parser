@@ -6,14 +6,18 @@ using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIBuilders.HtmlModels.EXTBarrier;
 
+
+using BarrierDistributionItem = object[];
+
 internal class EXTBarrierStatsBarrierDistributionDto
 {
+
     public long ContributedBarrier { get; set; }
     public long TotalBarrier { get; set; }
     public long TotalCasting { get; set; }
-    public List<object[]>? Distribution { get; set; }
+    public List<BarrierDistributionItem>? Distribution { get; set; }
 
-    private static object[] GetBarrierToItem(SkillItem skill, IEnumerable<EXTBarrierEvent> barrierLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
+    private static BarrierDistributionItem GetBarrierToItem(SkillItem skill, IEnumerable<EXTBarrierEvent> barrierLogs, Dictionary<SkillItem, IEnumerable<CastEvent>>? castLogsBySkill, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBoons, BuffsContainer boons, PhaseData phase)
     {
         int totalbarrier = 0,
             minbarrier = int.MaxValue,
@@ -65,7 +69,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
             (timeSpentCasting, timeSpentCastingNoInterrupt, minTimeSpentCasting, maxTimeSpentCasting, numberOfCast, numberOfCastNoInterrupt, timeSaved, timeWasted) = DmgDistributionDto.GetCastValues(clList, phase);
         }
 
-        object[] skillItem = [
+        return [
                 isIndirectBarrier,
                 skill.ID,
                 totalbarrier,
@@ -79,9 +83,8 @@ internal class EXTBarrierStatsBarrierDistributionDto
                 isIndirectBarrier ? 0 : minTimeSpentCasting,
                 isIndirectBarrier ? 0 : maxTimeSpentCasting,
                 isIndirectBarrier ? 0 : timeSpentCastingNoInterrupt,
-                isIndirectBarrier ? 0 : numberOfCastNoInterrupt,
-            ];
-        return skillItem;
+                isIndirectBarrier ? 0 : numberOfCastNoInterrupt
+        ];
     }
 
     public static EXTBarrierStatsBarrierDistributionDto BuildIncomingBarrierDistData(ParsedEvtcLog log, SingleActor p, PhaseData phase, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs)
@@ -99,7 +102,7 @@ internal class EXTBarrierStatsBarrierDistributionDto
     }
 
 
-    private static List<object[]> BuildBarrierDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTBarrierEvent> barrierLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
+    private static List<BarrierDistributionItem> BuildBarrierDistBodyData(ParsedEvtcLog log, IEnumerable<CastEvent> casting, IEnumerable<EXTBarrierEvent> barrierLogs, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, PhaseData phase)
     {
         var castLogsBySkill = casting.GroupBy(x => x.Skill).ToDictionary(x => x.Key, x => x.AsEnumerable());
         var list = barrierLogs.GroupBy(x => x.Skill)

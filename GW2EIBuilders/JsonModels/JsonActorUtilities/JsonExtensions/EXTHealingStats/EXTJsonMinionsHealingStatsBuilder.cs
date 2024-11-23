@@ -10,10 +10,11 @@ internal static class EXTJsonMinionsHealingStatsBuilder
 
     public static EXTJsonMinionsHealingStats BuildMinionsHealingStats(Minions minions, ParsedEvtcLog log, Dictionary<long, SkillItem> skillMap, Dictionary<long, Buff> buffMap)
     {
-        var totalHealing = new List<int>();
-        var totalAlliedHealing = new List<List<int>>();
-        var alliedHealingDist = new List<List<List<EXTJsonHealingDist>>>();
-        var totalHealingDist = new List<List<EXTJsonHealingDist>>();
+        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
+        var totalHealing = new List<int>(phases.Count);
+        var totalAlliedHealing = new List<List<int>>(log.Friendlies.Count);
+        var alliedHealingDist = new List<List<List<EXTJsonHealingDist>>>(log.Friendlies.Count);
+        var totalHealingDist = new List<List<EXTJsonHealingDist>>(phases.Count);
         var res = new EXTJsonMinionsHealingStats()
         {
             TotalHealing = totalHealing,
@@ -21,13 +22,12 @@ internal static class EXTJsonMinionsHealingStatsBuilder
             AlliedHealingDist = alliedHealingDist,
             TotalHealingDist = totalHealingDist
         };
-        IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
         foreach (SingleActor friendly in log.Friendlies)
         {
-            var totalAllyHealing = new List<int>();
+            var totalAllyHealing = new List<int>(phases.Count);
             totalAlliedHealing.Add(totalAllyHealing);
             //
-            var allyHealingDist = new List<List<EXTJsonHealingDist>>();
+            var allyHealingDist = new List<List<EXTJsonHealingDist>>(phases.Count);
             alliedHealingDist.Add(allyHealingDist);
             foreach (PhaseData phase in phases)
             {
