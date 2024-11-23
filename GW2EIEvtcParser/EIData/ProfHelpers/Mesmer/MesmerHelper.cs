@@ -8,6 +8,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -85,10 +86,10 @@ internal static class MesmerHelper
         // Domination
         // Empowered illusions require knowing all illusion species ID
         // We need illusion species ID to enable Vicious Expression on All
-        new BuffOnFoeDamageModifier(NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-        new BuffOnFoeDamageModifier(NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
         //
-        new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -98,7 +99,7 @@ internal static class MesmerHelper
             }
             return selfHP > dstHP;
         }, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier("Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -108,7 +109,7 @@ internal static class MesmerHelper
             }
             return selfHP > dstHP;
         }, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier("Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -119,23 +120,23 @@ internal static class MesmerHelper
             return selfHP > dstHP;
         }, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
         //
-        new BuffOnFoeDamageModifier(Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
         // Dueling
         // Superiority Complex can all the conditions be tracked?
         // Illusions
-        new BuffOnActorDamageModifier(CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance),
         // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
         // Chaos       
-        new BuffOnActorDamageModifier(Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new CounterOnActorDamageModifier(DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
     ];
 
 

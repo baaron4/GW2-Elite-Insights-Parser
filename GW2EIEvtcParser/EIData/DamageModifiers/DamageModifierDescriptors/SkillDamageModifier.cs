@@ -24,7 +24,7 @@ internal class SkillDamageModifier : DamageModifierDescriptor
 
     private static readonly GainComputerBySkill skillGainComputer = new();
 
-    internal SkillDamageModifier(string name, string tooltip, long skillID, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, icon, skillGainComputer, mode)
+    internal SkillDamageModifier(int id, string name, string tooltip, long skillID, DamageSource damageSource, DamageType srctype, DamageType compareType, Source src, string icon, DamageModifierMode mode) : base(id, name, tooltip, damageSource, int.MaxValue, srctype, compareType, src, icon, skillGainComputer, mode)
     {
         _skillID = skillID;
     }

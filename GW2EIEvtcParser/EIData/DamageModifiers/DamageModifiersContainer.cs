@@ -6,11 +6,10 @@ namespace GW2EIEvtcParser.EIData;
 public class DamageModifiersContainer
 {
     public readonly IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<OutgoingDamageModifier>> OutgoingDamageModifiersPerSource;
+    public readonly IReadOnlyDictionary<int, OutgoingDamageModifier> OutgoingDamageModifiersByID;
 
-    public readonly IReadOnlyDictionary<string, OutgoingDamageModifier> OutgoingDamageModifiersByName;
     public readonly IReadOnlyDictionary<ParserHelper.Source, IReadOnlyList<IncomingDamageModifier>> IncomingDamageModifiersPerSource;
-
-    public readonly IReadOnlyDictionary<string, IncomingDamageModifier> IncomingDamageModifiersByName;
+    public readonly IReadOnlyDictionary<int, IncomingDamageModifier> IncomingDamageModifiersByID;
 
     internal DamageModifiersContainer(CombatData combatData, FightLogic.ParseModeEnum parseMode, FightLogic.SkillModeEnum skillMode, EvtcParserSettings parserSettings)
     {
@@ -72,11 +71,11 @@ public class DamageModifiersContainer
             currentOutgoingDamageMods.AddRange(modifierDescriptor.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new OutgoingDamageModifier(x)));
         }
         OutgoingDamageModifiersPerSource = currentOutgoingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<OutgoingDamageModifier>)x.ToList());
-        OutgoingDamageModifiersByName = currentOutgoingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
+        OutgoingDamageModifiersByID = currentOutgoingDamageMods.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
         {
             var e = x.GetEnumerator(); e.MoveNext();
             var first = e.Current;
-            if(e.MoveNext()) { throw new InvalidDataException("Same name present multiple times in damage mods - " + first.Name); }
+            if (e.MoveNext()) { throw new InvalidDataException("Same id present multiple times in damage mods - " + first.ID); }
             return first;
         });
         //
@@ -138,11 +137,11 @@ public class DamageModifiersContainer
             currentIncomingDamageMods.AddRange(boons.Where(x => x.Available(combatData) && x.Keep(parseMode, skillMode, parserSettings)).Select(x => new IncomingDamageModifier(x)));
         }
         IncomingDamageModifiersPerSource = currentIncomingDamageMods.GroupBy(x => x.Src).ToDictionary(x => x.Key, x => (IReadOnlyList<IncomingDamageModifier>)x.ToList());
-        IncomingDamageModifiersByName = currentIncomingDamageMods.GroupBy(x => x.Name).ToDictionary(x => x.Key, x =>
+        IncomingDamageModifiersByID = currentIncomingDamageMods.GroupBy(x => x.ID).ToDictionary(x => x.Key, x =>
         {
             var e = x.GetEnumerator(); e.MoveNext();
             var first = e.Current;
-            if(e.MoveNext()) { throw new InvalidDataException("Same name present multiple times in damage mods - " + first.Name); }
+            if (e.MoveNext()) { throw new InvalidDataException("Same id present multiple times in damage mods - " + first.ID); }
             return first;
         });
     }

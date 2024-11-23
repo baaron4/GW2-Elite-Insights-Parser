@@ -6,18 +6,18 @@ namespace GW2EIEvtcParser.EIData;
 
 partial class SingleActor
 {
-    private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>? _outgoingDamageModifiersPerTargets;
-    private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>? _outgoingDamageModifierEventsPerTargets;
-    private CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>? _incomingDamageModifiersPerTargets;
-    private CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>? _incomingDamageModifierEventsPerTargets;
+    private CachingCollectionWithTarget<Dictionary<int, DamageModifierStat>>? _outgoingDamageModifiersPerTargets;
+    private CachingCollectionWithTarget<Dictionary<int, List<DamageModifierEvent>>>? _outgoingDamageModifierEventsPerTargets;
+    private CachingCollectionWithTarget<Dictionary<int, DamageModifierStat>>? _incomingDamageModifiersPerTargets;
+    private CachingCollectionWithTarget<Dictionary<int, List<DamageModifierEvent>>>? _incomingDamageModifierEventsPerTargets;
 
-    private Dictionary<string, DamageModifierStat>? ComputeDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    private Dictionary<int, DamageModifierStat>? ComputeDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         // Check if damage mods against target
         if (_outgoingDamageModifierEventsPerTargets!.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
         {
-            var res = new Dictionary<string, DamageModifierStat>();
-            foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
+            var res = new Dictionary<int, DamageModifierStat>();
+            foreach (KeyValuePair<int, List<DamageModifierEvent>> pair in events)
             {
                 DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                 if (damageMod != null)
@@ -41,7 +41,7 @@ partial class SingleActor
         // Check if we already filled the cache, that means no damage modifiers against given target
         else if (_outgoingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, null, out events))
         {
-            var res = new Dictionary<string, DamageModifierStat>();
+            var res = new Dictionary<int, DamageModifierStat>();
             _outgoingDamageModifiersPerTargets!.Set(start, end, target, res);
             return res;
         }
@@ -49,17 +49,17 @@ partial class SingleActor
         return null;
     }
 
-    public IReadOnlyDictionary<string, DamageModifierStat> GetOutgoingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    public IReadOnlyDictionary<int, DamageModifierStat> GetOutgoingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
         {
-            return new Dictionary<string, DamageModifierStat>();
+            return new Dictionary<int, DamageModifierStat>();
         }
 
         if (_outgoingDamageModifiersPerTargets == null)
         {
-            _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
-            _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
+            _outgoingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<int, DamageModifierStat>>(log);
+            _outgoingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<int, List<DamageModifierEvent>>>(log);
         }
 
         if (_outgoingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
@@ -104,31 +104,26 @@ partial class SingleActor
         damageModifierEvents.SortByTime();
 
 
-        var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
+        var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
         _outgoingDamageModifierEventsPerTargets!.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
 
         foreach (var modsByActor in damageModifierEvents.GroupBy(x => x.Dst))
         {
             var actor = modsByActor.Key;
-            var events = modsByActor.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
+            var events = modsByActor.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
             _outgoingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), events);
         }
         
         return ComputeDamageModifierStats(target, log, start, end)!;
     }
 
-    public IReadOnlyCollection<string> GetPresentOutgoingDamageModifier(ParsedEvtcLog log)
-    {
-        return new HashSet<string>(GetOutgoingDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
-    }
-
-    private Dictionary<string, DamageModifierStat>? ComputeIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    private Dictionary<int, DamageModifierStat>? ComputeIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         // Check if damage mods against target
         if (_incomingDamageModifierEventsPerTargets!.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, target, out var events))
         {
-            var res = new Dictionary<string, DamageModifierStat>(events.Count);
-            foreach (KeyValuePair<string, List<DamageModifierEvent>> pair in events)
+            var res = new Dictionary<int, DamageModifierStat>(events.Count);
+            foreach (KeyValuePair<int, List<DamageModifierEvent>> pair in events)
             {
                 DamageModifier? damageMod = pair.Value.FirstOrDefault()?.DamageModifier;
                 if (damageMod != null)
@@ -153,24 +148,24 @@ partial class SingleActor
         // Check if we already filled the cache, that means no damage modifiers against given target
         else if (_incomingDamageModifierEventsPerTargets.TryGetValue(log.FightData.FightStart, log.FightData.FightEnd, null, out events))
         {
-            var res = new Dictionary<string, DamageModifierStat>();
+            var res = new Dictionary<int, DamageModifierStat>();
             _incomingDamageModifiersPerTargets!.Set(start, end, target, res);
             return res;
         }
         return null;
     }
 
-    public IReadOnlyDictionary<string, DamageModifierStat> GetIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
+    public IReadOnlyDictionary<int, DamageModifierStat> GetIncomingDamageModifierStats(SingleActor? target, ParsedEvtcLog log, long start, long end)
     {
         if (!log.ParserSettings.ComputeDamageModifiers || IsFakeActor)
         {
-            return new Dictionary<string, DamageModifierStat>();
+            return new Dictionary<int, DamageModifierStat>();
         }
 
         if (_incomingDamageModifiersPerTargets == null)
         {
-            _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<string, DamageModifierStat>>(log);
-            _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<string, List<DamageModifierEvent>>>(log);
+            _incomingDamageModifiersPerTargets = new CachingCollectionWithTarget<Dictionary<int, DamageModifierStat>>(log);
+            _incomingDamageModifierEventsPerTargets = new CachingCollectionWithTarget<Dictionary<int, List<DamageModifierEvent>>>(log);
         }
 
         if (_incomingDamageModifiersPerTargets.TryGetValue(start, end, target, out var res))
@@ -213,22 +208,28 @@ partial class SingleActor
         }
         damageModifierEvents.SortByTime();
 
-        var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
+        var damageModifiersEvents = damageModifierEvents.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
         _incomingDamageModifierEventsPerTargets!.Set(log.FightData.FightStart, log.FightData.FightEnd, null, damageModifiersEvents);
 
         foreach (var eventsByTarget in damageModifierEvents.GroupBy(x => x.Src))
         {
             var actor = eventsByTarget.Key;
-            var events = eventsByTarget.GroupBy(y => y.DamageModifier.Name).ToDictionary(y => y.Key, y => y.ToList());
+            var events = eventsByTarget.GroupBy(y => y.DamageModifier.ID).ToDictionary(y => y.Key, y => y.ToList());
             _incomingDamageModifierEventsPerTargets.Set(log.FightData.FightStart, log.FightData.FightEnd, log.FindActor(actor), events);
         }
 
         return ComputeIncomingDamageModifierStats(target, log, start, end)!;
     }
 
-    public IReadOnlyCollection<string> GetPresentIncomingDamageModifier(ParsedEvtcLog log)
+
+    public IReadOnlyCollection<int> GetPresentOutgoingDamageModifier(ParsedEvtcLog log)
     {
-        return new HashSet<string>(GetIncomingDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
+        return new HashSet<int>(GetOutgoingDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
+    }
+
+    public IReadOnlyCollection<int> GetPresentIncomingDamageModifier(ParsedEvtcLog log)
+    {
+        return new HashSet<int>(GetIncomingDamageModifierStats(null, log, log.FightData.FightStart, log.FightData.FightEnd).Keys);
     }
 
 }
