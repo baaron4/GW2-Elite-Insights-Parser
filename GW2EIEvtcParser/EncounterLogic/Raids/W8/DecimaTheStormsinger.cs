@@ -45,6 +45,8 @@ internal class DecimaTheStormsinger : MountBalrior
             ArcDPSEnums.TrashID.GreenOrb2Persons,
             ArcDPSEnums.TrashID.GreenOrb3Persons,
             ArcDPSEnums.TrashID.EnlightenedConduit,
+            ArcDPSEnums.TrashID.DecimaBeamEnd,
+            ArcDPSEnums.TrashID.DecimaBeamStart,
         ];
     }
 
@@ -52,26 +54,26 @@ internal class DecimaTheStormsinger : MountBalrior
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor Decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
-        phases[0].AddTarget(Decima);
+        SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
+        phases[0].AddTarget(decima);
         if (!requirePhases)
         {
             return phases;
         }
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, NovaShield, Decima, true, true));
+        phases.AddRange(GetPhasesByInvul(log, NovaShield, decima, true, true));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
             if (i % 2 == 0)
             {
                 phase.Name = "Split " + (i) / 2;
-                phase.AddTarget(Decima);
+                phase.AddTarget(decima);
             }
             else
             {
                 phase.Name = "Phase " + (i + 1) / 2;
-                phase.AddTarget(Decima);
+                phase.AddTarget(decima);
             }
         }
         return phases;
@@ -112,6 +114,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
                 var walls = GetFilteredList(log.CombatData, DecimaConduitWallBuff, target, true, true);
                 replay.AddTether(walls, Colors.Purple, 0.4, 60, true);
+                break;
+            case (int)ArcDPSEnums.TrashID.DecimaBeamStart:
+                var yellowBeams = GetFilteredList(log.CombatData, DecimaBeamFiring, target.AgentItem, true, true);
+                replay.addTetherAtApplyTimePosition(log, yellowBeams, Colors.Yellow, 0.3, 80, true);
+                var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamFiring, target.AgentItem, true, true);
+                replay.addTetherAtApplyTimePosition(log, redBeams, Colors.Red, 0.3, 80, true);
                 break;
             default:
                 break;

@@ -4516,11 +4516,13 @@ public static class SkillIDs
     public const long TargetOrder4JW = 74712;
     public const long HardenedCrust = 74715;
     public const long EmpoweredGreer = 74722;
+    public const long DecimaRedBeamFiring = 74726;
     public const long PressureBlast = 74754;
     public const long NovaShield = 74791;
     public const long FracturedArmor = 74840;
     public const long TargetOrder3JW = 74789;
     public const long HarmonicSensitivity = 74904;
+    public const long DecimaBeamFiring = 74922;
     public const long SulfuricAcid = 74933;
     public const long DecimaConduitWallBuff = 74962;
     public const long ThrummingPresence = 74982;
@@ -4529,8 +4531,10 @@ public static class SkillIDs
     public const long InvulnerableBarrier = 75042;
     public const long BloodstoneSaturation = 75056;
     public const long Deterrence = 75075;
-    public const long ChargeDecima = 75175;
+    public const long DecimaRedBeamLoading = 75090;
     public const long TargetOrder2JW = 75151;
+    public const long ChargeDecima = 75175;
+    public const long DecimaBeamLoading = 75198;
     public const long UnstoppableDecima = 75246;
     public const long PealOfHarmony = 75290;
     public const long PealOfDiscord = 75301;
