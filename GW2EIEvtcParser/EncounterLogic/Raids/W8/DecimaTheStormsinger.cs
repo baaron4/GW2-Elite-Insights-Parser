@@ -25,7 +25,7 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         return new CombatReplayMap(CombatReplayDecimaTheStormsinger,
                         (1602, 1602),
-                        (-13668, 10500, -6900, 15268));
+                        (-12668, 10500, -7900, 15268));
     }
 
     protected override ReadOnlySpan<int> GetTargetsIDs()
