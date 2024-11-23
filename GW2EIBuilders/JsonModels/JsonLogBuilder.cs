@@ -131,7 +131,7 @@ internal static class JsonLogBuilder
         var skillDescs = new Dictionary<string, SkillDesc>(200); //TODO(Rennorb) @perf
         var buffMap = new Dictionary<long, Buff>(100); //TODO(Rennorb) @perf
         var buffDescs = new Dictionary<string, BuffDesc>(100); //TODO(Rennorb) @perf
-        var damageModMap = new Dictionary<long, DamageModifier>(50); //TODO(Rennorb) @perf
+        var damageModMap = new Dictionary<int, DamageModifier>(50); //TODO(Rennorb) @perf
         var damageModDesc = new Dictionary<string, DamageModDesc>(50); //TODO(Rennorb) @perf
 
         var instanceBuffs = log.FightData.Logic.GetInstanceBuffs(log);
@@ -214,7 +214,7 @@ internal static class JsonLogBuilder
             buffDescs["b" + pair.Key] = BuildBuffDesc(pair.Value, log);
         }
         jsonLog.BuffMap = buffDescs;
-        foreach (KeyValuePair<long, DamageModifier> pair in damageModMap)
+        foreach (KeyValuePair<int, DamageModifier> pair in damageModMap)
         {
             damageModDesc["d" + pair.Key] = BuildDamageModDesc(pair.Value);
         }

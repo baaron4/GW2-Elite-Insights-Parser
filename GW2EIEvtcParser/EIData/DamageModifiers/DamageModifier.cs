@@ -19,7 +19,7 @@ public abstract class DamageModifier
     public string Icon => DamageModDescriptor.Icon;
     public string Name => DamageModDescriptor.Name;
     /// <remarks>Not stable across restarts because it uses `Name.GetHashCode()`.</remarks>
-    public int ID { get; protected set; }
+    public int ID => Incoming ? -DamageModDescriptor.ID : DamageModDescriptor.ID;
     public string Tooltip { get; protected set; }
 
     public bool Incoming { get; protected set; }

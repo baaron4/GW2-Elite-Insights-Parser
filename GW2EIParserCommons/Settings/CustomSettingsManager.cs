@@ -108,6 +108,18 @@ public static class CustomSettingsManager
                 Properties.Settings.Default[name] = -1;
             }
         }
+        else if (type == typeof(int))
+        {
+            if (int.TryParse(value, out int res))
+            {
+                Properties.Settings.Default[name] = res;
+            }
+            else
+            {
+                Console.WriteLine("Warning: Setting \"" + name + "\" expected type \"" + type.Name);
+                Properties.Settings.Default[name] = -1;
+            }
+        }
         else
         {
             Console.WriteLine("Warning: Setting \"" + name + "\" of type \"" + type.Name + "\" cannot be processed.");

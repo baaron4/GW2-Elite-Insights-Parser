@@ -18,7 +18,7 @@ internal class DamageModData
         Data = new(listToUse.Count);
         foreach (OutgoingDamageModifier dMod in listToUse)
         {
-            if (dModData.TryGetValue(dMod.Name, out var data))
+            if (dModData.TryGetValue(dMod.ID, out var data))
             {
                 Data.Add(
                 [
@@ -49,7 +49,7 @@ internal class DamageModData
             dModData = actor.GetOutgoingDamageModifierStats(target, log, phase.Start, phase.End);
             foreach (OutgoingDamageModifier dMod in listToUse)
             {
-                if (dModData.TryGetValue(dMod.Name, out var data))
+                if (dModData.TryGetValue(dMod.ID, out var data))
                 {
                     pTarget.Add(
                     [
@@ -79,7 +79,7 @@ internal class DamageModData
         Data = new(listToUse.Count);
         foreach (IncomingDamageModifier dMod in listToUse)
         {
-            if (dModData.TryGetValue(dMod.Name, out var data))
+            if (dModData.TryGetValue(dMod.ID, out var data))
             {
                 Data.Add(
                 [
@@ -109,7 +109,7 @@ internal class DamageModData
             dModData = actor.GetIncomingDamageModifierStats(target, log, phase.Start, phase.End);
             foreach (IncomingDamageModifier dMod in listToUse)
             {
-                if (dModData.TryGetValue(dMod.Name, out var data))
+                if (dModData.TryGetValue(dMod.ID, out var data))
                 {
                     pTarget.Add(
                     [

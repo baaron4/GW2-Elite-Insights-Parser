@@ -4,6 +4,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -29,10 +30,10 @@ internal static class ReaperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2019Balance),
-        new BuffOnFoeDamageModifier(Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
-        new DamageLogDamageModifier("Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, BuffImages.SoulEater, (x,log) =>
+        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "15% on chilled target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2019Balance),
+        new BuffOnFoeDamageModifier(Mod_ColdShoulder, Chilled, "Cold Shoulder", "10% on chilled target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, ByPresence, BuffImages.ColdShoulder, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.March2019Balance),
+        new DamageLogDamageModifier(Mod_SoulEater, "Soul Eater", "10% to foes within 300 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Reaper, BuffImages.SoulEater, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() >= 300.0
@@ -41,11 +42,11 @@ internal static class ReaperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.PvE),
-        new BuffOnActorDamageModifier(ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.sPvPWvW),
-        new BuffOnActorDamageModifier(InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
-        new BuffOnActorDamageModifier(InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023Balance),
-        new BuffOnActorDamageModifier(InfusingTerrorBuff, "Infusing Terror", "-66%", DamageSource.NoPets, -66, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2023Balance), 
+        new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.PvE),
+        new BuffOnActorDamageModifier(Mod_ReapersShroud, ReapersShroud, "Reaper's Shroud", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.ReapersShroud, DamageModifierMode.sPvPWvW),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-20%", DamageSource.NoPets, -20, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2023Balance),
+        new BuffOnActorDamageModifier(Mod_InfusingTerror, InfusingTerrorBuff, "Infusing Terror", "-66%", DamageSource.NoPets, -66, DamageType.StrikeAndCondition, DamageType.All, Source.Reaper, ByPresence, BuffImages.InfusingTerror, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2023Balance), 
         // Rise is unclear, I don't see any inc damage reducing fact for Dark Bond
     ];
 

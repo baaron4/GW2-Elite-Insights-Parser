@@ -5,6 +5,7 @@ using static GW2EIEvtcParser.EIData.Buff;
 using static GW2EIEvtcParser.EIData.DamageModifiersUtils;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -53,13 +54,13 @@ internal static class MechanistHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Need to check mech specy id for those
-        new BuffOnActorDamageModifier(ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
             .UsingChecker((x,log) =>
             {
                 return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
             }),
-        new BuffOnActorDamageModifier(SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.SuperconductingSignet, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_SuperconductingSignet, SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.SuperconductingSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
             .UsingChecker((x,log) =>
             {
@@ -69,7 +70,7 @@ internal static class MechanistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(BarrierSignet, "Barrier Signet", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.BarrierSignet, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BarrierSignet, BarrierSignet, "Barrier Signet", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.BarrierSignet, DamageModifierMode.All),
     ];
 
 

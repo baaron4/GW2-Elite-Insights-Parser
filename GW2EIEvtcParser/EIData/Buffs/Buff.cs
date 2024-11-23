@@ -132,7 +132,7 @@ public class Buff : IVersionable
         }
     }
 
-    internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, bool forceNoId)
+    internal AbstractBuffSimulator CreateSimulator(ParsedEvtcLog log, BuffStackItemPool pool, bool forceNoId)
     {
         BuffInfoEvent? buffInfoEvent = log.CombatData.GetBuffInfoEvent(ID);
         int capacity = Capacity;
@@ -146,16 +146,16 @@ public class Buff : IVersionable
 
             return Type switch
             {
-                BuffType.Intensity => new BuffSimulatorIntensity(log, this, capacity),
-                BuffType.Duration => new BuffSimulatorDuration(log, this, capacity),
+                BuffType.Intensity => new BuffSimulatorIntensity(log, this, pool, capacity),
+                BuffType.Duration => new BuffSimulatorDuration(log, this, pool, capacity),
                 _ => throw new InvalidDataException("Buffs can not be stackless"),
             };
         }
 
         return Type switch
         {
-            BuffType.Intensity => new BuffSimulatorIDIntensity(log, this, capacity),
-            BuffType.Duration => new BuffSimulatorIDDuration(log, this, capacity),
+            BuffType.Intensity => new BuffSimulatorIDIntensity(log, this, pool, capacity),
+            BuffType.Duration => new BuffSimulatorIDDuration(log, this, pool, capacity),
             _ => throw new InvalidDataException("Buffs can not be stackless"),
         };
     }

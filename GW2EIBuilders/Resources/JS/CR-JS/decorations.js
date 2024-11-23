@@ -48,6 +48,11 @@ class DoughnutDecorationMetadata extends FormDecorationMetadata {
 class LineDecorationMetadata extends FormDecorationMetadata {
     constructor(params) {
         super(params);
+        this.thickness = params.thickness;
+        this.worldSizeThickness = params.worldSizeThickness;
+        if (this.worldSizeThickness) {
+            this.thickness *= InchToPixel;
+        }
     }
 }
 
@@ -693,6 +698,14 @@ class LineMechanicDrawable extends FormMechanicDrawable {
         this.endMaster = null;
     }
 
+    get thickness() {
+        return this.metadata.thickness;
+    }
+
+    get worldSizeThickness() {
+        return this.metadata.worldSizeThickness;
+    }
+
     getTargetPosition() {
         var time = animator.reactiveDataStatus.time;
         if (this.start > time || this.end < time) {
@@ -749,8 +762,11 @@ class LineMechanicDrawable extends FormMechanicDrawable {
             ctx.lineTo(percent * (target.x - pos.x), percent * (target.y - pos.y));
             ctx.closePath();
         }
-        
-        ctx.lineWidth = (2 / animator.scale).toString();
+        let thickness = this.thickness;
+        if (!this.worldSizeThickness) {
+            thickness /= animator.scale;
+        }
+        ctx.lineWidth = (thickness).toString();
         ctx.strokeStyle = this.color;
         ctx.stroke();
         ctx.restore();

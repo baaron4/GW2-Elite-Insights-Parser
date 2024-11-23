@@ -6,7 +6,7 @@ internal class BuffSimulatorIntensity : BuffSimulator
 {
     private readonly List<(AgentItem agent, bool extension)> _lastSrcRemoves = [];
     // Constructor
-    public BuffSimulatorIntensity(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff, capacity)
+    public BuffSimulatorIntensity(ParsedEvtcLog log, Buff buff, BuffStackItemPool pool, int capacity) : base(log, buff, pool, capacity)
     {
     }
 
@@ -56,9 +56,13 @@ internal class BuffSimulatorIntensity : BuffSimulator
             foreach (BuffStackItem buffStackItem in BuffStack)
             {
                 buffStackItem.Shift(diff, diff);
-                if (buffStackItem.Duration == 0 && leftOver == 0)
+                if (buffStackItem.Duration == 0)
                 {
-                    _lastSrcRemoves.Add((buffStackItem.SeedSrc, buffStackItem.IsExtension));
+                    Pool.ReleaseBuffStackItem(buffStackItem);
+                    if (leftOver == 0)
+                    {
+                        _lastSrcRemoves.Add((buffStackItem.SeedSrc, buffStackItem.IsExtension));
+                    }
                 }
             }
             BuffStack.RemoveAll(x => x.Duration == 0);

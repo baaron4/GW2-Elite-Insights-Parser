@@ -30,7 +30,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Trace|AnyCPU'">
-        <DefineConstants>TRACE</DefineConstants>
+        <DefineConstants>TRACING</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoRewards|AnyCPU'">

@@ -7,6 +7,7 @@ using static GW2EIEvtcParser.EIData.ProfHelper;
 using static GW2EIEvtcParser.EIData.SkillModeDescriptor;
 using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
+using static GW2EIEvtcParser.DamageModifierIDs;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -33,7 +34,7 @@ internal static class SpecterHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, BuffImages.EnterShadowShroud, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
+        new BuffOnActorDamageModifier(Mod_ShadowShroud, ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, BuffImages.EnterShadowShroud, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
     ];
 
 

@@ -5,9 +5,9 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterCategory;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
+using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
@@ -20,6 +20,12 @@ internal class DecimaTheStormsinger : MountBalrior
         Icon = EncounterIconDecima;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
+    }
+    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    {
+        return new CombatReplayMap(CombatReplayDecimaTheStormsinger,
+                        (1602, 1602),
+                        (-12668, 10500, -7900, 15268));
     }
 
     protected override ReadOnlySpan<int> GetTargetsIDs()
@@ -95,14 +101,17 @@ internal class DecimaTheStormsinger : MountBalrior
             case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaEnlightenedConduitPurpleAoE, out var effects))
                 {
-
                     // TODO: We need to find a way to handle sizing
                     foreach (var effect in effects)
                     {
                         var aoeLifeSpan = effect.ComputeDynamicLifespan(log, 1200000);
-                        replay.Decorations.Add(new CircleDecoration(150, aoeLifeSpan, Colors.DarkPurple, 0.3, new PositionConnector(effect.Position)));
+                        // Placeholder to indicate activated conduits, until we can find proper sizes
+                        replay.AddOverheadIcon(aoeLifeSpan, target, BuffImages.InvokeLightning);
+                        //replay.Decorations.Add(new CircleDecoration(150, aoeLifeSpan, Colors.DarkPurple, 0.3, new PositionConnector(effect.Position)));
                     }
                 }
+                var walls = GetFilteredList(log.CombatData, DecimaConduitWallBuff, target, true, true);
+                replay.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
             default:
                 break;

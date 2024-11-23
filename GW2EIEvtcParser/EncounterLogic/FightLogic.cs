@@ -199,7 +199,7 @@ public abstract class FightLogic
     {
         foreach (int id in GetUniqueNPCIDs())
         {
-            RegroupTargetsByID(id, agentData, combatItems, extensions);
+            RegroupSameInstidNPCsByID(id, agentData, combatItems, extensions);
         }
         
         //NOTE(Rennorb): Even though this collection is used for contains tests, it is still faster to just iterate the 5 or so members this can have than

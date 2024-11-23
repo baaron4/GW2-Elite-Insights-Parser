@@ -6,14 +6,23 @@ internal class LineDecoration : FormDecoration
 {
     internal class LineDecorationMetadata : FormDecorationMetadata
     {
-
-        public LineDecorationMetadata(string color) : base(color)
+        public bool WorldSizeThickness;
+        public uint Thickness;
+        public LineDecorationMetadata(string color, uint thickness = 2, bool worldSizeThickness = false) : base(color)
         {
+            Thickness = thickness;
+            WorldSizeThickness = worldSizeThickness;
+        }
+
+        public void WithThickess(uint thickness, bool worldSizeThickness = false)
+        {
+            Thickness = thickness;
+            WorldSizeThickness = worldSizeThickness;
         }
 
         public override string GetSignature()
         {
-            return "Line" + Color;
+            return "Line" + Color + "Thickness" + Thickness + "WorldSize" + WorldSizeThickness;
         }
         public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
@@ -41,6 +50,9 @@ internal class LineDecoration : FormDecoration
     }
     private new LineDecorationRenderingData DecorationRenderingData => (LineDecorationRenderingData)base.DecorationRenderingData;
     public GeographicalConnector ConnectedFrom => DecorationRenderingData.ConnectedFrom;
+    private new LineDecorationMetadata DecorationMetadata => (LineDecorationMetadata)base.DecorationMetadata;
+    public bool WorldSizeThickness => DecorationMetadata.WorldSizeThickness;
+    public uint Thickness => DecorationMetadata.Thickness;
 
     internal LineDecoration(LineDecorationMetadata metadata, LineDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
@@ -63,6 +75,12 @@ internal class LineDecoration : FormDecoration
     public override FormDecoration Copy(string? color = null)
     {
         return (FormDecoration)new LineDecoration(Lifespan, color ?? Color, ConnectedTo, ConnectedFrom).UsingFilled(Filled).UsingGrowingEnd(GrowingEnd, GrowingReverse).UsingRotationConnector(RotationConnectedTo).UsingSkillMode(SkillMode);
+    }
+
+    public LineDecoration WithThickess(uint thickness, bool worldSizeThickness = false)
+    {
+        DecorationMetadata.WithThickess(thickness, worldSizeThickness);
+        return this;
     }
 
     public override FormDecoration GetBorderDecoration(string? borderColor = null)
