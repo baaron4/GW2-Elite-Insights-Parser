@@ -292,6 +292,8 @@ public class SkillItem
         { PeerlessQadimTPCenter, "Teleport Center" },
         { EatPylon, "Eat Pylon" },
         { BigMagmaDrop, "Big Magma Drop" },
+        // Ura
+        { UraDispelSAK, "Dispel" },
         #endregion Raids
         #region Strikes
         // Voice and Claw
@@ -1039,6 +1041,8 @@ public class SkillItem
             { FluxDisruptorDeactivateCast, "https://wiki.guildwars2.com/images/3/34/Flux_Disruptor-_Deactivate.png" },
             { PlayerLiftUpQadimThePeerless, ParserIcons.GenericBlueArrowUp },
             { UnleashSAK, "https://wiki.guildwars2.com/images/9/99/Touch_of_the_Sun.png" },
+            // - Ura
+            { UraDispelSAK, "https://wiki.guildwars2.com/images/0/07/Consume_Bloodsktone_Fragment.png" },
             // - Mai Trin (Aetherble Hideout)
             { ReverseThePolaritySAK, "https://wiki.guildwars2.com/images/f/f8/Prod.png" },
             // - Dadga (Cosmic Observatory)
@@ -1049,6 +1053,10 @@ public class SkillItem
             { HypernovaLaunchSAK, BuffImages.CelestialDash },
             // Freezie
             { FireSnowball, "https://wiki.guildwars2.com/images/d/d0/Fire_Snowball.png" },
+            // Generic Encounter Skills
+            // - Ura
+            { ThrummingPresenceDamage, BuffImages.ConjuredBarrier },
+            { ThrummingPresenceBuff, BuffImages.ConjuredBarrier },
             #endregion  EncounterIcons
             #region WvWIcons
             { WvWSpendingSupplies, "https://wiki.guildwars2.com/images/b/b7/Repair_Master.png" },

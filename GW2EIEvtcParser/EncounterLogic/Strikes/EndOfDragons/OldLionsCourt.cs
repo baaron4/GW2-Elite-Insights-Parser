@@ -38,7 +38,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
             new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Vermilion)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Red), "Fix.Verm.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeVermilion, TargetID.PrototypeVermilionCM])),
             new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Arsenite)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Green), "Fix.Arse.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeArsenite, TargetID.PrototypeArseniteCM])),
             new PlayerDstBuffApplyMechanic(FixatedOldLionsCourt, "Fixated (Indigo)", new MechanicPlotlySetting(Symbols.Diamond, Colors.Blue), "Fix.Indi.A", "Fixated Applied", "Fixated Applied", 0).UsingChecker((bae, log) => bae.CreditedBy.IsAnySpecies([TargetID.PrototypeIndigo, TargetID.PrototypeIndigoCM])),
-            new PlayerDstBuffApplyMechanic(NoxiousVaporBladeTargetBuff, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Blade.A", "Targetted for Noxious Vapor Blade", "Noxious Vapor Blade Target", 0),
+            new PlayerDstBuffApplyMechanic(NoxiousVaporBladeTargetBuff, "Noxious Vapor Blade", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Green), "Blade.A", "Targeted for Noxious Vapor Blade", "Noxious Vapor Blade Target", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredWatchknightTriumverate, "Empowered", new MechanicPlotlySetting(Symbols.TriangleUp, Colors.Blue), "Empowered.A", "Knight gained Empowered", "Empowered Applied", 0),
             new EnemyDstBuffApplyMechanic(PowerTransfer, "Power Transfer", new MechanicPlotlySetting(Symbols.TriangleRight, Colors.Blue), "PwrTrns.A", "Knight gained Power Transfer", "Power Transfer Applied", 0),
             new EnemyDstBuffApplyMechanic(LeyWovenShielding, "Ley-Woven Shielding", new MechanicPlotlySetting(Symbols.Pentagon, Colors.Teal), "WovShld.A", "Knight gained Ley-Woven Shielding", "Ley-Woven Shielding Applied", 0),
@@ -311,7 +311,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         // Noxious Vapor Blade
         // The buff is applied from Arsenite to Player, lasts 2000ms.
         // In game, the green tether lasts for the entire duration of the blade, meanwhile the buff on the player displays the green border overlay and is hidden.
-        // In the log, the tether effect can't be found, so this decoration is only indicative of who has been targetted, the duration is not correct.
+        // In the log, the tether effect can't be found, so this decoration is only indicative of who has been targeted, the duration is not correct.
         var noxiousBlade = GetFilteredList(log.CombatData, NoxiousVaporBladeTargetBuff, p, true, true);
         replay.AddTether(noxiousBlade, Colors.Green, 0.5);
 

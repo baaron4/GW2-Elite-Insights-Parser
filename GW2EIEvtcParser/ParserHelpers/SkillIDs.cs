@@ -3029,6 +3029,7 @@ public static class SkillIDs
     public const long RadiantBlindness = 56593;
     public const long ShowerOfChaos = 56598;
     public const long KineticAbundance = 56609;
+    public const long NoxiousBlightTargetBuff = 56610;
     public const long BatteringBlitz = 56616;
     public const long StormsEdgeRightHand = 56620;
     public const long AchievementEligibilityConserveTheLand = 56625;
@@ -4511,28 +4512,42 @@ public static class SkillIDs
     public const long SpearmarshalsSupportBombard = 74290;
     public const long RelicOfSorrowBuff = 74410;
     public const long GalvanicSensitivity = 74659;
+    public const long FluxlanceFusillade = 74660;
     public const long FocusedFluxlance = 74689;
+    public const long FluxlanceSalvo1 = 74705;
     public const long RisingPressure = 74707;
     public const long TargetOrder4JW = 74712;
     public const long HardenedCrust = 74715;
     public const long EmpoweredGreer = 74722;
-    public const long PressureBlast = 74754;
+    public const long FluxlanceSalvo2 = 74725;
+    public const long FluxlanceSalvo3 = 74742;
+    public const long PressureBlastBubbleBuff = 74754;
     public const long NovaShield = 74791;
     public const long FracturedArmor = 74840;
     public const long TargetOrder3JW = 74789;
+    public const long ThrummingPresenceDamage = 74872;
+    public const long InfectiousRotBuff = 74900;
     public const long HarmonicSensitivity = 74904;
     public const long SulfuricAcid = 74933;
-    public const long ThrummingPresence = 74982;
+    public const long FluxlanceSalvo4 = 74973;
+    public const long ThrummingPresenceBuff = 74982;
+    public const long PressureBlastSkill = 75022;
     public const long TargetOrder1JW = 75023;
     public const long TargetOrder5JW = 75034;
     public const long InvulnerableBarrier = 75042;
     public const long BloodstoneSaturation = 75056;
+    public const long UraDispelSAK = 75066;
+    public const long PressureBlastTargetBuff = 75067;
     public const long Deterrence = 75075;
+    public const long Fluxlance = 75155;
     public const long ChargeDecima = 75175;
     public const long TargetOrder2JW = 75151;
     public const long UnstoppableDecima = 75246;
+    public const long RotEruption = 75251;
+    public const long PressureBlastDamage = 75258;
     public const long PealOfHarmony = 75290;
     public const long PealOfDiscord = 75301;
+    public const long FluxlanceSalvo5 = 75348;
     #endregion
 }
 

@@ -17,8 +17,8 @@ internal class Freezie : FestivalStrikeMissionLogic
     {
         MechanicList.AddRange(new List<Mechanic>
         {
-            new PlayerDstBuffApplyMechanic(AuroraBeamTargetBuff, "Aurora Beam", new MechanicPlotlySetting(Symbols.Star, Colors.Purple), "AuroraBeam.T", "Targetted by Aurora Beam", "Aurora Beam Target", 0),
-            new PlayerDstBuffApplyMechanic(GiantSnowballFreezieTargetBuff1, "Giant Snowball", new MechanicPlotlySetting(Symbols.Star, Colors.Purple, 5), "GiantSnowball.T", "Targetted by Giant Snowball", "Giant Snowball Target", 0),
+            new PlayerDstBuffApplyMechanic(AuroraBeamTargetBuff, "Aurora Beam", new MechanicPlotlySetting(Symbols.Star, Colors.Purple), "AuroraBeam.T", "Targeted by Aurora Beam", "Aurora Beam Target", 0),
+            new PlayerDstBuffApplyMechanic(GiantSnowballFreezieTargetBuff1, "Giant Snowball", new MechanicPlotlySetting(Symbols.Star, Colors.Purple, 5), "GiantSnowball.T", "Targeted by Giant Snowball", "Giant Snowball Target", 0),
             new PlayerDstHitMechanic([AuroraBeam1, AuroraBeam2, AuroraBeam3], "Aurora Beam", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.Purple), "AuroraBeam.H", "Hit by Aurora Beam", "Aurora Beam Hit", 0),
             new PlayerDstHitMechanic(GiantSnowballFreezieDamage, "Giant Snowball", new MechanicPlotlySetting(Symbols.Circle, Colors.White), "GiantSnowball.H", "Hit by Giant Snowball", "Giant Snowball Hit", 0),
             new PlayerDstHitMechanic(Blizzard, "Blizzard", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.Orange), "Blizzard.H", "Hit by Blizzard (Outer circle)", "Blizzard Hit", 0),

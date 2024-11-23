@@ -382,7 +382,7 @@ internal static class EncounterBuffs
             new Buff("Nova Shield", NovaShield, Source.FightSpecific, BuffClassification.Other, BuffImages.DiaphanousShielding),
             new Buff("Harmonic Sensitivity", HarmonicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.Tracked),
             new Buff("Galvanic Sensitivity", GalvanicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
-            new Buff("Thrumming Presence", ThrummingPresence, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
+            new Buff("Thrumming Presence", ThrummingPresenceBuff, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
             new Buff("Charge (Decima)", ChargeDecima, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),
             new Buff("Peal of Harmony", PealOfHarmony, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.KineticAbundance),
             new Buff("Peal of Discord", PealOfDiscord, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ElectrifiedMinion),
@@ -396,8 +396,11 @@ internal static class EncounterBuffs
             // Greer
             new Buff("Empowered (Greer)", EmpoweredGreer, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.EmpoweredMursaarOverseer),
             new Buff("Damage Immunity", DamageImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
+            new Buff("Noxious Blight Target", NoxiousBlightTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
+            new Buff("Infectious Rot", InfectiousRotBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.MonsterSkill),
             // Ura
-            new Buff("Pressure Blast", PressureBlast, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Pressure Blast", PressureBlastBubbleBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
+            new Buff("Pressure Blast Target", PressureBlastTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Sulfuric Acid", SulfuricAcid, Source.FightSpecific, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.SulfuricAcid),
             new Buff("Deterrence", Deterrence, Source.FightSpecific, BuffClassification.Other, BuffImages.Deterrence),
             new Buff("Bloodstone Saturation", BloodstoneSaturation, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BloodstoneSaturation),

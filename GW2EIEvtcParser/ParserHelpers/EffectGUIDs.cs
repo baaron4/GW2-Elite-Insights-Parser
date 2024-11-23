@@ -613,12 +613,18 @@ public static class EffectGUIDs
     public static readonly GUID QadimPeerlessMagmaWarningAoE = new("E269977C2FC9474EAAD1051CDAFAD653"); // 4000 duration - Src player
     public static readonly GUID QadimPeerlessMagmaLandingExplosion = new("6617FA23565EE646ADAA7A646C895927"); // 1000 duration - No Src
     public static readonly GUID QadimPeerlessMagmaDamagingAoE = new("BABE69EC5AC7AF48A2F14A9FB8920C7F"); // 600000 duration - Src Qadim
+    // Greer
+    public static readonly GUID GreerNoxiousBlightGreen = new("C4E12D8CDDAA904CB4E7B52E6CEF1287"); // 10000 duration - Src NPC
     // Decima
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE = new("1A81CC24D58C3046AEF30AAA35D6D854"); // 1200000 duration - Src Conduit
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit
+    public static readonly GUID DecimaMainshockIndicator = new("E9196E3A25E11F4FB66EFC47CE3593D1"); // 2300 duration - Src Decima
+    public static readonly GUID DecimaMainshockDamage = new("8079A224EB97804EBD2B19963BF21F6F"); // 1000 duration - Src Decima
     // Ura
     public static readonly GUID UraToxicGeyserSpawn = new("6B95E7A99147644A990ACF34D04A98F1");
     public static readonly GUID UraSulfuricGeyserSpawn = new("413AF4D44B924B4399481047CBB2820C");
+    public static readonly GUID UraSlamCone = new("BBA33A70B7D2A94589DE81B1F35D3D69");
+    public static readonly GUID UraSteamPrisonIndicator = new("093D22A7DBFB0D4ABA9424225954DB68"); // 3000 duration - Src Ura - Dst Player
     #endregion
 
     #region Strikes

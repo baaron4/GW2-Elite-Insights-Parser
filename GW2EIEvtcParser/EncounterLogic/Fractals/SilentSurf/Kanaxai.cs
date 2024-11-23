@@ -63,7 +63,7 @@ internal class Kanaxai : SilentSurf
                             return diff > -ServerDelayConstant && diff <= 1000;
                         });
                 }),
-            new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], "Rending Storm Target", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targetted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
+            new PlayerDstBuffApplyMechanic([RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], "Rending Storm Target", new MechanicPlotlySetting(Symbols.CircleX, Colors.LightPurple), "RendStm.T", "Targeted by Rending Storm (Axe Throw)", "Rending Storm Target", 150),
         });
         Extension = "kanaxai";
         Icon = EncounterIconKanaxai;
