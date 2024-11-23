@@ -21,7 +21,12 @@ internal class GreerTheBlightbringer : MountBalrior
         EncounterCategoryInformation.InSubCategoryOrder = 0;
         EncounterID |= 0x000001;
     }
-
+    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    {
+        return new CombatReplayMap(CombatReplayGreerTheBlightbringer,
+                        (1912, 1845),
+                        (11200, -10291, 16890, -4800));
+    }
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {
         return

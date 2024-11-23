@@ -21,6 +21,12 @@ internal class DecimaTheStormsinger : MountBalrior
         EncounterCategoryInformation.InSubCategoryOrder = 1;
         EncounterID |= 0x000002;
     }
+    protected override CombatReplayMap GetCombatMapInternal(ParsedEvtcLog log)
+    {
+        return new CombatReplayMap(CombatReplayDecimaTheStormsinger,
+                        (1602, 1602),
+                        (-13668, 10500, -6900, 15268));
+    }
 
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {

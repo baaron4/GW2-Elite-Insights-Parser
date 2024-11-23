@@ -120,6 +120,9 @@ internal static class EncounterImages
     internal const string CombatReplayAdinaSplitPhase3 = "https://i.imgur.com/P4SGbrc.png";
     internal const string CombatReplaySabir = "https://i.imgur.com/wesgoc6.png";
     internal const string CombatReplayPeerlessQadim = "https://i.imgur.com/Q5R4R6q.png";
+    internal const string CombatReplayGreerTheBlightbringer = "https://i.imgur.com/LPruyyJ.png";
+    internal const string CombatReplayDecimaTheStormsinger = "https://i.imgur.com/z43fG6d.png";
+    internal const string CombatReplayUratheSteamshrieker = "https://i.imgur.com/JSCqbRu.png";
 
     #endregion RAIDS
 
