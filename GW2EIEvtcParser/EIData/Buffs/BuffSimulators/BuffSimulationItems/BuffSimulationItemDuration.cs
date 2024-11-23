@@ -23,13 +23,13 @@ internal class BuffSimulationItemDuration(IReadOnlyList<BuffStackItem> stacks) :
         return GetSources().Take(1);
     }
 
-    public override long GetActualDuration()
+    /*public override long GetActualDuration()
     {
         return GetActualDurationPerStack().Sum();
-    }
+    }*/
 
-    public override void SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
+    public override long SetBuffDistributionItem(BuffDistribution distribs, long start, long end, long boonid)
     {
-        Stacks.First().SetBuffDistributionItem(distribs, start, end, boonid);
+        return Stacks.First().SetBuffDistributionItem(distribs, start, end, boonid);
     }
 }

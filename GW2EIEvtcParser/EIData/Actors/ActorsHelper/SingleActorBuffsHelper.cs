@@ -357,7 +357,7 @@ partial class SingleActor
         _buffDistribution = new(log);
         _buffPresence     = new(log);
         _buffSimulators   = new(trackedBuffs.Count * 2);
-
+        var buffStackItemPool = new BuffStackItemPool();
         foreach (Buff buff in trackedBuffs)
         {
             long buffID = buff.ID;
@@ -369,11 +369,11 @@ partial class SingleActor
                     if (log.CombatData.UseBuffInstanceSimulator && AgentItem.Type == AgentItem.AgentType.NonSquadPlayer)
                     {
                         buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
-                        simulator = buff.CreateSimulator(log, true);
+                        simulator = buff.CreateSimulator(log, buffStackItemPool, true);
                     } 
                     else
                     {
-                        simulator = buff.CreateSimulator(log, false);
+                        simulator = buff.CreateSimulator(log, buffStackItemPool, false);
                     }
                     simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
                 }
@@ -382,7 +382,7 @@ partial class SingleActor
                     // get rid of logs invalid for HasStackIDs false
                     log.UpdateProgressWithCancellationCheck("Parsing: Failed id based simulation on " + Character + " for " + buff.Name + " because " + e.Message);
                     buffEvents.RemoveAll(x => !x.IsBuffSimulatorCompliant(false));
-                    simulator = buff.CreateSimulator(log, true);
+                    simulator = buff.CreateSimulator(log, buffStackItemPool, true);
                     simulator.Simulate(buffEvents, log.FightData.FightStart, log.FightData.FightEnd);
                 }
                 _buffSimulators[buffID] = simulator;

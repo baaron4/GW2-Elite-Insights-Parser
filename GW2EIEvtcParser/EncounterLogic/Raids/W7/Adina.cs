@@ -80,7 +80,7 @@ internal class Adina : TheKeyOfAhdashim
                 return targetables.Any(y => y.Targetable);
             }
             return false;
-        });
+        }).ToList();
         long final = fightData.FightEnd;
         var handOfEruptionPositions = new Vector2[] { new(15570.5f, -693.117f), new(14277.2f, -2202.52f) }; // gadget locations
         var processedAttackTargets = new HashSet<AgentItem>();

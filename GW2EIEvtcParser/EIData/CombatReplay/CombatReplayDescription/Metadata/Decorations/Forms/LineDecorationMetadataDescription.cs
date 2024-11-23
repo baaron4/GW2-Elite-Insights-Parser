@@ -5,8 +5,12 @@ namespace GW2EIEvtcParser.EIData;
 public class LineDecorationMetadataDescription : FormDecorationMetadataDescription
 {
 
+    public readonly bool WorldSizeThickness;
+    public readonly uint Thickness;
     internal LineDecorationMetadataDescription(LineDecorationMetadata decoration) : base(decoration)
     {
         Type = "Line";
+        WorldSizeThickness = decoration.WorldSizeThickness;
+        Thickness = decoration.Thickness;
     }
 }

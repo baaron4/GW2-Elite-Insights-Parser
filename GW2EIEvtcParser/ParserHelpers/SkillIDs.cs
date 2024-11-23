@@ -4522,6 +4522,7 @@ public static class SkillIDs
     public const long TargetOrder3JW = 74789;
     public const long HarmonicSensitivity = 74904;
     public const long SulfuricAcid = 74933;
+    public const long DecimaConduitWallBuff = 74962;
     public const long ThrummingPresence = 74982;
     public const long TargetOrder1JW = 75023;
     public const long TargetOrder5JW = 75034;

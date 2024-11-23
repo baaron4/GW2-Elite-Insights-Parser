@@ -6,47 +6,19 @@ namespace GW2EIEvtcParser.EIData.BuffSimulators;
 
 internal abstract class BuffSimulatorID : AbstractBuffSimulator
 {
-    protected class BuffStackItemID : BuffStackItem
-    {
-
-        public bool Active { get; protected set; } = false;
-
-        public BuffStackItemID(long start, long boonDuration, AgentItem src, bool active, long stackID) : base(start, boonDuration, src, stackID)
-        {
-            Active = active;
-        }
-
-        public void Activate()
-        {
-            Active = true;
-        }
-
-        public void Disable()
-        {
-            Active = false;
-        }
-
-        public override void Shift(long startShift, long durationShift)
-        {
-            if (!Active)
-            {
-                base.Shift(startShift, 0);
-                return;
-            }
-            base.Shift(startShift, durationShift);
-        }
-    }
 
     protected readonly List<BuffStackItemID> BuffStack;
 
 
-    protected BuffSimulatorID(ParsedEvtcLog log, Buff buff, int capacity) : base(log, buff)
+    protected BuffSimulatorID(ParsedEvtcLog log, Buff buff, BuffStackItemPool pool, int capacity) : base(log, buff, pool)
     {
+        pool.InitializeBuffStackItemPool();
         BuffStack = new List<BuffStackItemID>((int)Math.Max(Math.Min(capacity * 1.2, 300), 4));
     }
 
     protected override void AfterSimulate()
     {
+        Pool.ReleaseBuffStackItemsID(BuffStack);
         BuffStack.Clear();
     }
 
@@ -70,6 +42,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
                 // remove all due to despawn event
                 if (removedStacks == BuffRemoveAllEvent.FullRemoval)
                 {
+                    Pool.ReleaseBuffStackItemsID(BuffStack);
                     BuffStack.Clear();
                     return;
                 }
@@ -92,6 +65,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
                             }
                         }
                     }
+                    Pool.ReleaseBuffStackItemsID(BuffStack);
                     BuffStack.Clear();
                     return;
                 }
@@ -108,6 +82,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
             throw new EIBuffSimulatorIDException("Remove has failed");
         }
         var toRemove = BuffStack[toRemoveIdx];
+        Pool.ReleaseBuffStackItemID(toRemove);
         BuffStack.RemoveAt(toRemoveIdx);
 
         if (removedDuration > ParserHelper.BuffSimulatorDelayConstant)
