@@ -410,6 +410,8 @@ internal static class ParserIcons
     private const string TrashVentshot = "https://i.imgur.com/B0gDZQv.png";
     private const string TrashEnlightenedConduit = "https://i.imgur.com/FrfY7UU.png";
     private const string TrashBloodstoneShard = "https://i.imgur.com/fEp6wEj.png";
+    private const string TrashGree = "https://i.imgur.com/fk9cmiH.png";
+    private const string TrashReeg = "https://i.imgur.com/cJIIZu3.png";
     #endregion
 
     #region Minion
@@ -1298,6 +1300,8 @@ internal static class ParserIcons
         { TrashID.UraGadget_BloodstoneShard, TrashBloodstoneShard },
         { TrashID.DecimaBeamStart, NoImage },
         { TrashID.DecimaBeamEnd, NoImage },
+        { TrashID.Gree, TrashGree },
+        { TrashID.Reeg, TrashReeg },
     };
 
     /// <summary>
