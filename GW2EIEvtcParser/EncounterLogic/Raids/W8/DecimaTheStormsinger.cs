@@ -154,11 +154,11 @@ internal class DecimaTheStormsinger : MountBalrior
                 SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
                 var decimaConnector = new AgentConnector(decima);
                 const uint beamLength = 2900;
-                const uint yellowBeamWidth = 80;
+                const uint orangeBeamWidth = 80;
                 const uint redBeamWidth = 160;
-                var yellowBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
-                AddBeamWarning(log, target, replay, decima, DecimaBeamLoading, yellowBeamWidth, beamLength, yellowBeams.OfType<BuffApplyEvent>(), Colors.Yellow);
-                replay.AddTetherWithCustomConnectors(log, yellowBeams, Colors.Yellow, 0.5, 
+                var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
+                AddBeamWarning(log, target, replay, decima, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
+                replay.AddTetherWithCustomConnectors(log, orangeBeams, Colors.LightOrange, 0.5, 
                     (log, agent, start, end) =>
                     {
                         if (agent.TryGetCurrentInterpolatedPosition(log, start, out var pos))
@@ -171,7 +171,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     {
                         return decimaConnector;
                     }, 
-                    yellowBeamWidth, true);
+                    orangeBeamWidth, true);
                 var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, decima, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
                 replay.AddTetherWithCustomConnectors(log, redBeams, Colors.Red, 0.5,
