@@ -4516,13 +4516,13 @@ public static class SkillIDs
     public const long TargetOrder4JW = 74712;
     public const long HardenedCrust = 74715;
     public const long EmpoweredGreer = 74722;
-    public const long DecimaRedBeamFiring = 74726;
+    public const long DecimaRedBeamTargeting = 74726;
     public const long PressureBlast = 74754;
     public const long NovaShield = 74791;
     public const long FracturedArmor = 74840;
     public const long TargetOrder3JW = 74789;
     public const long HarmonicSensitivity = 74904;
-    public const long DecimaBeamFiring = 74922;
+    public const long DecimaBeamTargeting = 74922;
     public const long SulfuricAcid = 74933;
     public const long DecimaConduitWallBuff = 74962;
     public const long ThrummingPresence = 74982;

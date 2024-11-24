@@ -384,6 +384,8 @@ internal static class EncounterBuffs
             new Buff("Galvanic Sensitivity", GalvanicSensitivity, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ExposedEyes),
             new Buff("Thrumming Presence", ThrummingPresence, Source.FightSpecific, BuffClassification.Debuff, BuffImages.ConjuredBarrier),
             new Buff("Charge (Decima)", ChargeDecima, Source.FightSpecific, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElectricalBuildup),
+            new Buff("Decima Beam Targeting", DecimaBeamLoading, Source.FightSpecific, BuffClassification.Unknown, BuffImages.Unknown),
+            new Buff("Decima Red Beam Targeting", DecimaRedBeamLoading, Source.FightSpecific, BuffClassification.Unknown, BuffImages.Unknown),
             new Buff("Peal of Harmony", PealOfHarmony, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.KineticAbundance),
             new Buff("Peal of Discord", PealOfDiscord, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ElectrifiedMinion),
             new Buff("Target Order: 1 (JW)", TargetOrder1JW, Source.FightSpecific, BuffClassification.Other, BuffImages.TargetOrder1),
