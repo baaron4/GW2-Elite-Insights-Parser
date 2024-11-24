@@ -123,7 +123,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 const uint redBeamWidth = 160;
                 var yellowBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, decima, DecimaBeamLoading, yellowBeamWidth, beamLength, yellowBeams.OfType<BuffApplyEvent>(), Colors.Yellow);
-                replay.addTetherWithCustomConnectors(log, yellowBeams, Colors.Yellow, 0.5, 
+                replay.AddTetherWithCustomConnectors(log, yellowBeams, Colors.Yellow, 0.5, 
                     (log, agent, start, end) =>
                     {
                         if (agent.TryGetCurrentInterpolatedPosition(log, start, out var pos))
@@ -139,7 +139,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     yellowBeamWidth, true);
                 var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, decima, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
-                replay.addTetherWithCustomConnectors(log, redBeams, Colors.Red, 0.5,
+                replay.AddTetherWithCustomConnectors(log, redBeams, Colors.Red, 0.5,
                     (log, agent, start, end) =>
                     {
                         if (agent.TryGetCurrentInterpolatedPosition(log, start, out var pos))

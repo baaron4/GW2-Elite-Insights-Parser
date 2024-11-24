@@ -546,7 +546,7 @@ public class CombatReplay
     /// <param name="opacity">opacity of the tether</param>
     /// <param name="thickness">thickness of the tether</param>
     /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void addTetherWithCustomConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
+    internal void AddTetherWithCustomConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
     {
         addTetherWithCustomConnectors(log, tethers, color.WithAlpha(opacity).ToString(true), srcConnectorBuilder, dstConnectorBuilder, thickness, worldSizeThickess);
     }
