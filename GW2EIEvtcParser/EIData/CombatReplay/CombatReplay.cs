@@ -1,10 +1,14 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
 
 public class CombatReplay
 {
+
+    internal delegate GeographicalConnector? CustomConnectorBuilder(ParsedEvtcLog log, AgentItem agent, long start, long end);
+
     //TODO(Rennorb) @perf: capacity
     internal readonly List<ParametricPoint3D> Positions = [];
     internal readonly List<ParametricPoint3D> PolledPositions = [];
@@ -452,6 +456,7 @@ public class CombatReplay
         AddDecorationWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(true), reverseGrowing);
     }
 
+
     /// <summary>
     /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
     /// </summary>
@@ -497,7 +502,6 @@ public class CombatReplay
         AddTether(tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
     }
 
-
     /// <summary>
     /// Add tether decorations which src and dst are defined by tethers parameter using <see cref="BuffEvent"/>.
     /// </summary>
@@ -505,7 +509,7 @@ public class CombatReplay
     /// <param name="color">color of the tether</param>
     /// <param name="thickness">thickness of the tether</param>
     /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void AddTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, uint thickness = 2, bool worldSizeThickess = false)
+    internal void AddTetherWithCustomConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
     {
         int tetherStart = 0;
         AgentItem src = ParserHelper._unknownAgent;
@@ -523,8 +527,10 @@ public class CombatReplay
                 int tetherEnd = (int)tether.Time;
                 if (src != ParserHelper._unknownAgent && dst != ParserHelper._unknownAgent)
                 {
-                    if (src.TryGetCurrentInterpolatedPosition(log, tetherStart, out var srcPos) && dst.TryGetCurrentInterpolatedPosition(log, tetherStart, out var dstPos)) {
-                        Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, new PositionConnector(dstPos), new PositionConnector(srcPos)).WithThickess(thickness, worldSizeThickess));
+                    var srcConnector = srcConnectorBuilder(log, src, tetherStart, tetherEnd);
+                    var dstConnector = dstConnectorBuilder(log, dst, tetherStart, tetherEnd);
+                    if (srcConnector != null && dstConnector != null) {
+                        Decorations.Add(new LineDecoration((tetherStart, tetherEnd), color, dstConnector, srcConnector).WithThickess(thickness, worldSizeThickess));
                         src = ParserHelper._unknownAgent;
                         dst = ParserHelper._unknownAgent;
                     }
@@ -540,9 +546,9 @@ public class CombatReplay
     /// <param name="opacity">opacity of the tether</param>
     /// <param name="thickness">thickness of the tether</param>
     /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void AddTetherAtApplyTimePosition(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, uint thickness = 2, bool worldSizeThickess = false)
+    internal void AddTetherWithCustomConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
     {
-        AddTetherAtApplyTimePosition(log, tethers, color.WithAlpha(opacity).ToString(true), thickness, worldSizeThickess);
+        AddTetherWithCustomConnectors(log, tethers, color.WithAlpha(opacity).ToString(true), srcConnectorBuilder, dstConnectorBuilder, thickness, worldSizeThickess);
     }
 
     /// <summary>
