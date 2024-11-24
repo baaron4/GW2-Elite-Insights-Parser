@@ -4523,7 +4523,9 @@ public static class SkillIDs
     public const long FluxlanceSalvo3 = 74742;
     public const long PressureBlastBubbleBuff = 74754;
     public const long FluxlanceTargetBuff1 = 74774;
+    public const long FluxNova = 74790;
     public const long NovaShield = 74791;
+    public const long DecimaSpawnsConduitsP3 = 74805;
     public const long FracturedArmor = 74840;
     public const long TargetOrder3JW = 74789;
     public const long FluxlanceRedArrowTargetBuff = 74845;
@@ -4535,6 +4537,7 @@ public static class SkillIDs
     public const long FluxlanceSalvo4 = 74973;
     public const long DecimaConduitWallBuff = 74962;
     public const long ThrummingPresenceBuff = 74982;
+    public const long DecimaSpawnsConduitsP2 = 75015;
     public const long PressureBlastSkill = 75022;
     public const long TargetOrder1JW = 75023;
     public const long TargetOrder5JW = 75034;
@@ -4557,6 +4560,7 @@ public static class SkillIDs
     public const long PealOfHarmony = 75290;
     public const long BlobOfBlight2 = 75294;
     public const long PealOfDiscord = 75301;
+    public const long DecimaSpawnsConduitsP1 = 75311;
     public const long ScatteringSporeblast = 75330;
     public const long FluxlanceSalvo5 = 75348;
     #endregion

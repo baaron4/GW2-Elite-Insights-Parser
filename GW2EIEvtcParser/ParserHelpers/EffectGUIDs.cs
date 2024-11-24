@@ -620,6 +620,7 @@ public static class EffectGUIDs
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit
     public static readonly GUID DecimaMainshockIndicator = new("E9196E3A25E11F4FB66EFC47CE3593D1"); // 2300 duration - Src Decima
     public static readonly GUID DecimaMainshockDamage = new("8079A224EB97804EBD2B19963BF21F6F"); // 1000 duration - Src Decima
+    public static readonly GUID DecimaRedRing = new("C9AD859A4AE01D4FB807D99642379B5D"); // 0 duration - No End Event - Dst Decima
     // Ura
     public static readonly GUID UraToxicGeyserSpawn = new("6B95E7A99147644A990ACF34D04A98F1");
     public static readonly GUID UraSulfuricGeyserSpawn = new("413AF4D44B924B4399481047CBB2820C");

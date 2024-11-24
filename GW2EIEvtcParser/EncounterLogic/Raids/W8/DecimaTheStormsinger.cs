@@ -103,6 +103,12 @@ internal class DecimaTheStormsinger : MountBalrior
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Decima:
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+
+                AddRedRing(target, log, replay, casts, DecimaSpawnsConduitsP1);
+                AddRedRing(target, log, replay, casts, DecimaSpawnsConduitsP2);
+                AddRedRing(target, log, replay, casts, DecimaSpawnsConduitsP3);
+
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaMainshockIndicator, out var mainshockSlices))
                 {
                     foreach (EffectEvent effect in mainshockSlices)
@@ -178,5 +184,27 @@ internal class DecimaTheStormsinger : MountBalrior
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+    }
+
+    /// <summary>
+    /// The ring appears when Decima spawns conduits and ends when she starts the breakbar (Flux Nova).
+    /// </summary>
+    private static void AddRedRing(NPC target, ParsedEvtcLog log, CombatReplay replay, List<CastEvent> casts, long skillId)
+    {
+        var conduitsSpawn = casts.FirstOrDefault(x => x.SkillId == skillId);
+
+        // Return only if P2 and P3 are null
+        if (conduitsSpawn == null && skillId != DecimaSpawnsConduitsP1)
+        {
+            return;
+        }
+
+        // The spawn of the first conduits might be missing in the log, we use FightStart.
+        long start = conduitsSpawn != null ? conduitsSpawn.Time : log.FightData.FightStart;
+        var breakbar = casts.FirstOrDefault(x => x.SkillId == FluxNova && x.Time > start);
+        long end = breakbar != null ? breakbar.Time : log.FightData.FightEnd;
+
+        (long start, long end) lifespan = (start, end);
+        replay.Decorations.Add(new CircleDecoration(700, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
     }
 }
