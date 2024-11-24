@@ -39,7 +39,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 new PlayerDstSkillMechanic(MagBeam, "Mag Beam", new MechanicPlotlySetting(Symbols.X, Colors.Red), "PuzzleCM.Dth", "Died to Mag Beam (Puzzle)", "Puzzle CM Death", 0).UsingChecker((evt, log) => evt.HasDowned && evt.To.IsPlayer && evt.To.IsDead(log, evt.Time - 5, evt.Time + 5)),
                 new PlayerDstBuffApplyMechanic(PhotonSaturation, "Photon Saturation", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.Green), "Green.D", "Received Photon Saturation (Green Debuff)", "Green Debuff", 150),
                 new PlayerDstBuffApplyMechanic(MagneticBomb, "Magnetic Bomb", new MechanicPlotlySetting(Symbols.Circle, Colors.Magenta), "Bomb", "Selected for Bomb", "Bomb", 150),
-                new PlayerDstBuffApplyMechanic(LeyBreachTargetBuff, "Ley Breach", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.CobaltBlue), "LeyBreach.T", "Targetted by Ley Breach (Red Puddle)", "Ley Breach Target", 0),
+                new PlayerDstBuffApplyMechanic(LeyBreachTargetBuff, "Ley Breach", new MechanicPlotlySetting(Symbols.DiamondOpen, Colors.CobaltBlue), "LeyBreach.T", "Targeted by Ley Breach (Red Puddle)", "Ley Breach Target", 0),
                 new PlayerDstBuffApplyMechanic(MaiTrinCMBeamsTargetGreen, "Beam Target", new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Green), "BombGreen.A", "Received Green Bomb Target", "Green Bomb Target", 0),
                 new PlayerDstBuffApplyMechanic(MaiTrinCMBeamsTargetRed, "Beam Target", new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Red), "BombRed.A", "Received Red Bomb Target", "Red Bomb Target", 0),
                 new PlayerDstBuffApplyMechanic(MaiTrinCMBeamsTargetBlue, "Beam Target", new MechanicPlotlySetting(Symbols.DiamondWideOpen, Colors.Blue), "BombBlue.A", "Received Blue Bomb Target", "Blue Bomb Target", 0),
@@ -323,14 +323,13 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetRed, 0, 90);
         AddMagBeamDecorations(player, log, replay, MaiTrinCMBeamsTargetBlue, 60, 150);
 
-        // Ley Breach - Visualizing the blue beam on the targetted player.
+        // Ley Breach - Visualizing the blue beam on the targeted player.
         var segments = player.GetBuffStatus(log, LeyBreachTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         var offset = new Vector3(0, -100, 0);
         foreach (Segment segment in segments)
         {
-            (long start, long end) lifespan = (segment.Start, segment.End);
-            replay.Decorations.Add(new RectangleDecoration(25, 200, lifespan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem).WithOffset(offset, true)));
-            replay.AddDecorationWithGrowing(new CircleDecoration(80, lifespan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem)), lifespan.end);
+            replay.Decorations.Add(new RectangleDecoration(25, 200, segment.TimeSpan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem).WithOffset(offset, true)));
+            replay.AddDecorationWithGrowing(new CircleDecoration(80, segment.TimeSpan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem)), segment.End);
         }
 
         // Kaleidoscopic Chaos - Spreads Normal Mode
@@ -684,9 +683,8 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         // Add the rectangles on the player and Ferrous Bomb.
         foreach (Segment segment in segments)
         {
-            (long start, long end) lifespanIndicator = (segment.Start, segment.End);
-            var indicator1 = (RectangleDecoration)new RectangleDecoration(width, length, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(angleConnector1);
-            var indicator2 = (RectangleDecoration)new RectangleDecoration(width, length, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(angleConnector2);
+            var indicator1 = (RectangleDecoration)new RectangleDecoration(width, length, segment.TimeSpan, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(angleConnector1);
+            var indicator2 = (RectangleDecoration)new RectangleDecoration(width, length, segment.TimeSpan, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(angleConnector2);
             replay.Decorations.Add(indicator1);
             replay.Decorations.Add(indicator2);
 
@@ -897,56 +895,6 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 // Increase radius and store index used.
                 radius += radiusIncrease;
                 previousIndex = index;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Flanking Shot - The Ferrous Bomb puzzle in Challenge Mode.<br></br>
-    /// </summary>
-    /// <param name="actor">Actor with the buff, can be the player or the Ferrous Bomb.</param>
-    /// <param name="replay">Combat Replay.</param>
-    /// <param name="log">The log.</param>
-    /// <param name="skillId">The buff applied on the player or the Ferrous Bomb.</param>
-    /// <param name="angle1">The rotation angle of the first rectangle.</param>
-    /// <param name="angle2">The rotation angle of the second rectangle.</param>
-    private static void AddFlankingShotDecorations(SingleActor actor, ParsedEvtcLog log, CombatReplay replay, long skillId, int angle1, int angle2)
-    {
-        const uint width = 320;
-        const uint length = 2000;
-        var segments = actor.GetBuffStatus(log, skillId, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        // If the actor is a player, add the overhead bomb icon.
-        if (actor.AgentItem.IsPlayer)
-        {
-            replay.AddOverheadIcons(segments, actor, ParserIcons.BombOverhead);
-        }
-        var agentConnector = new AgentConnector(actor.AgentItem);
-        var angleConnector1 = new AngleConnector(angle1);
-        var angleConnector2 = new AngleConnector(angle2);
-        // Add the rectangles on the player and Ferrous Bomb.
-        foreach (Segment segment in segments)
-        {
-            (long start, long end) lifespanIndicator = (segment.Start, segment.End);
-            var indicator1 = (RectangleDecoration)new RectangleDecoration(width, length, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(angleConnector1);
-            var indicator2 = (RectangleDecoration)new RectangleDecoration(width, length, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(angleConnector2);
-            replay.Decorations.Add(indicator1);
-            replay.Decorations.Add(indicator2);
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.AetherbladeHideoutPuzzleCirclesDetonation, out var detonations) && actor.TryGetCurrentPosition(log, segment.End, out var position, 1000))
-            {
-                foreach (EffectEvent effect in detonations.Where(x => 
-                        Math.Abs(segment.End - x.Time) < 100
-                        && Vector2.Distance(position.XY(), x.Position.XY()) < 20)
-                    )
-                {
-                    // Adding an effect for the damage like Normal Mode
-                    // We use the circles detonations as timestamp
-                    (long start, long end) lifespanDamage = (effect.Time, effect.Time + 500);
-                    var positionConnector = new PositionConnector(effect.Position);
-                    var damage1 = (RectangleDecoration)new RectangleDecoration(width, length, lifespanDamage, Colors.LightBlue, 0.2, positionConnector).UsingRotationConnector(angleConnector1);
-                    var damage2 = (RectangleDecoration)new RectangleDecoration(width, length, lifespanDamage, Colors.LightBlue, 0.2, positionConnector).UsingRotationConnector(angleConnector2);
-                    replay.Decorations.Add(damage1);
-                    replay.Decorations.Add(damage2);
-                }
             }
         }
     }

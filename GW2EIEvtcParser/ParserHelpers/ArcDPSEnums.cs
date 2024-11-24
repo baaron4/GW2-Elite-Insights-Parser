@@ -613,7 +613,7 @@ public static class ArcDPSEnums
     private const int ToxicGeyser = -62;
     private const int SulfuricGeyser = -63;
     private const int TitanspawnGeyser = -64;
-    private const int UraGadget = -65;
+    private const int UraGadget_BloodstoneShard = -65;
     public const int NonIdentifiedSpecies = 0;
 
     //
@@ -889,24 +889,27 @@ public static class ArcDPSEnums
         GiantQadimThePeerless = 21953,
         DummyPeerlessQadim = 22005,
         // W8
-        VentShot = 26766,
+        VeteranVentshot = 26799,
+        EliteVentshot = 26766,
+        ChampionVentshot = 26795,
         // Greer
         Reeg = 26742,
         Gree = 26771,
         EmpoweringBeast = 26776,
         // Decima
         EnlightenedConduit = 26709,
-        GreenOrb1Person = 26798,
-        GreenOrb2Persons = 26783,
-        GreenOrb3Persons = 26727,
+        GreenOrb1Player = 26798,
+        GreenOrb2Players = 26783,
+        GreenOrb3Players = 26727,
         DecimaBeamEnd = 26793,
         DecimaBeamStart = 26708,
         // Ura
-        Fumaroller = 26797,
+        EliteFumaroller = 26797,
+        ChampionFumaroller = 26744,
         ToxicGeyser = ArcDPSEnums.ToxicGeyser,
         SulfuricGeyser = ArcDPSEnums.SulfuricGeyser,
         TitanspawnGeyser = ArcDPSEnums.TitanspawnGeyser,
-        UraGadget = ArcDPSEnums.UraGadget,
+        UraGadget_BloodstoneShard = ArcDPSEnums.UraGadget_BloodstoneShard,
         // Fraenir
         IcebroodElemental = 22576,
         BoundIcebroodElemental = ArcDPSEnums.BoundIcebroodElemental,

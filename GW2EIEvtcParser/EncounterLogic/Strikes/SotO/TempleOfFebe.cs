@@ -73,7 +73,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 })
                 .UsingEnable(x => x.FightData.IsCM || x.FightData.IsLegendaryCM)
                 .UsingAchievementEligibility(true),
-            new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targetted by Malicious Intent", 0),
+            new PlayerDstEffectMechanic(EffectGUIDs.TempleOfFebeMaliciousIntentTether, "Malicious Intent", new MechanicPlotlySetting(Symbols.Bowtie, Colors.DarkGreen), "MalInt.A", "Malicious Intent Target", "Targeted by Malicious Intent", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredCerus, "Empowered", new MechanicPlotlySetting(Symbols.Square, Colors.Red), "Emp.A", "Gained Empowered", "Empowered Application", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredDespairCerus, "Empowered Despair", new MechanicPlotlySetting(Symbols.Square, Colors.Black), "EmpDesp.A", "Gained Empowered Despair", "Empowered Despair Application", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredEnvyCerus, "Empowered Envy", new MechanicPlotlySetting(Symbols.Square, Colors.Blue), "EmpEnvy.A", "Gained Empowered Envy", "Empowered Envy Application", 0),

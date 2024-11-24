@@ -14,8 +14,17 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class GreerTheBlightbringer : MountBalrior
 {
+    private readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores];
     public GreerTheBlightbringer(int triggerID) : base(triggerID)
     {
+        MechanicList.AddRange(new List<Mechanic>()
+        {
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Pink), "ProjRefl.Greer.H", "Reflected projectiles have hit Greer", "Reflected Projectile Hit (Greer)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TargetID.Greer)),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.Purple), "ProjRefl.Reeg.H", "Reflected projectiles have hit Reeg", "Reflected Projectile Hit (Reeg)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TrashID.Reeg)),
+            new PlayerSrcHitMechanic(ReflectableProjectiles, "Reflected Projectiles", new MechanicPlotlySetting(Symbols.YDown, Colors.LightPurple), "ProjRefl.Gree.H", "Reflected projectiles have hit Gree", "Reflected Projectile Hit (Gree)", 0).UsingChecker((hde, log) => hde.To.IsSpecies(ArcDPSEnums.TrashID.Gree)),
+            new PlayerDstBuffApplyMechanic(InfectiousRotBuff, "Infectious Rot", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "InfRot.T", "Targeted by Infectious Rot (Failed Green)", "Infectious Rot (Green Fail)", 0),
+            new PlayerDstEffectMechanic(EffectGUIDs.GreerNoxiousBlightGreen, "Noxious Blight", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "NoxBlight.T", "Targeted by Noxious Blight (Green)", "Noxious Blight (Green)", 0),
+        });
         Extension = "greer";
         Icon = EncounterIconGreer;
         EncounterCategoryInformation.InSubCategoryOrder = 0;
@@ -100,5 +109,31 @@ internal class GreerTheBlightbringer : MountBalrior
             }
         }
         return phases;
+    }
+
+    internal override void ComputePlayerCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
+    {
+        base.ComputePlayerCombatReplayActors(player, log, replay);
+
+        // Noxious Blight - Green AoE
+        if (log.CombatData.TryGetEffectEventsByDstWithGUID(player.AgentItem, EffectGUIDs.GreerNoxiousBlightGreen, out var noxiousBlight))
+        {
+            foreach (EffectEvent effect in noxiousBlight)
+            {
+                long duration = 10000;
+                long growing = effect.Time + duration;
+                (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
+                var circle = new CircleDecoration(240, lifespan, Colors.Green, 0.2, new AgentConnector(player));
+                replay.AddDecorationWithGrowing(circle, growing);
+            }
+        }
+
+        // Infectious Rot - Failed Green AoE
+        var infectiousRot = player.GetBuffStatus(log, InfectiousRotBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        foreach (var segment in infectiousRot)
+        {
+            replay.Decorations.Add(new CircleDecoration(200, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(player)));
+        }
+
     }
 }

@@ -403,6 +403,15 @@ internal static class ParserIcons
     private const string TrashEnragedSpirit = "https://i.imgur.com/6gbEvy3.png";
     private const string TrashDerangedSpirit = "https://i.imgur.com/lLx4SGw.png";
     private const string TrashTribocharge = "https://i.imgur.com/6RAiqQT.png";
+    private const string TrashToxicGeyser = "https://i.imgur.com/3ls2rUH.png";
+    private const string TrashSulfuricGeyser = "https://i.imgur.com/xG22XR0.png";
+    private const string TrashTitanspawnGeyser = "https://i.imgur.com/AsEnuzK.png";
+    private const string TrashFumaroller = "https://i.imgur.com/STEJmlN.png";
+    private const string TrashVentshot = "https://i.imgur.com/B0gDZQv.png";
+    private const string TrashEnlightenedConduit = "https://i.imgur.com/FrfY7UU.png";
+    private const string TrashBloodstoneShard = "https://i.imgur.com/fEp6wEj.png";
+    private const string TrashGree = "https://i.imgur.com/fk9cmiH.png";
+    private const string TrashReeg = "https://i.imgur.com/cJIIZu3.png";
     #endregion
 
     #region Minion
@@ -1281,11 +1290,18 @@ internal static class ParserIcons
         { TrashID.DerangedSpiritSR2, TrashDerangedSpirit },
         { TrashID.Tribocharge, TrashTribocharge },
         { TrashID.EmpoweringBeast, TrashGenericRedEnemySkull },
-        { TrashID.EnlightenedConduit, TrashChargedBloodstoneFragment },
-        { TrashID.VentShot, TrashGenericRedEnemySkull },
-        { TrashID.Fumaroller, TrashGenericRedEnemySkull },
+        { TrashID.EnlightenedConduit, TrashEnlightenedConduit },
+        { TrashID.EliteVentshot, TrashVentshot },
+        { TrashID.EliteFumaroller, TrashFumaroller },
+        { TrashID.ChampionFumaroller, TrashFumaroller },
+        { TrashID.ToxicGeyser, TrashToxicGeyser },
+        { TrashID.SulfuricGeyser, TrashSulfuricGeyser },
+        { TrashID.TitanspawnGeyser, TrashTitanspawnGeyser },
+        { TrashID.UraGadget_BloodstoneShard, TrashBloodstoneShard },
         { TrashID.DecimaBeamStart, NoImage },
         { TrashID.DecimaBeamEnd, NoImage },
+        { TrashID.Gree, TrashGree },
+        { TrashID.Reeg, TrashReeg },
     };
 
     /// <summary>

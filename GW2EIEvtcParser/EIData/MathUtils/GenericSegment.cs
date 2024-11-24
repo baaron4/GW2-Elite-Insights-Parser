@@ -11,6 +11,7 @@ public struct GenericSegment<T>(long start, long end, T? value)
     public long Start = start;
     public long End   = end;
     public T?   Value = value; //TODO(Rennorb) @perf @cleanup
+    public readonly (long, long) TimeSpan => (Start, End);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public GenericSegment(long start, long end) : this(start, end, default) { }

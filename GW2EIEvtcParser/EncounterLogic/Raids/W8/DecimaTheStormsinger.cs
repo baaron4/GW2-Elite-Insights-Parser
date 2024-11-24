@@ -8,6 +8,7 @@ using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
+using static GW2EIEvtcParser.ParserHelper;
 using static GW2EIEvtcParser.SkillIDs;
 
 namespace GW2EIEvtcParser.EncounterLogic;
@@ -16,6 +17,15 @@ internal class DecimaTheStormsinger : MountBalrior
 {
     public DecimaTheStormsinger(int triggerID) : base(triggerID)
     {
+        MechanicList.AddRange(new List<Mechanic>()
+        {
+            new PlayerDstHitMechanic(Fluxlance, "Fluxlance", new MechanicPlotlySetting(Symbols.StarSquare, Colors.LightOrange), "Fluxlance.H", "Hit by Fluxlance (Single Orange Arrow)", "Fluxlance Hit", 0),
+            new PlayerDstHitMechanic(FluxlanceFusillade, "Fluxlance Fusillade", new MechanicPlotlySetting(Symbols.StarDiamond, Colors.LightOrange), "FluxFusi.H", "Hit by Fluxlance Fusillade (Sequential Orange Arrows)", "Fluxlance Fusillade Hit", 0),
+            new PlayerDstHitMechanic([FluxlanceSalvo1, FluxlanceSalvo2, FluxlanceSalvo3, FluxlanceSalvo4, FluxlanceSalvo5], "Fluxlance Salvo", new MechanicPlotlySetting(Symbols.StarDiamondOpen, Colors.LightOrange), "FluxSalvo.H", "Hit by Fluxlance Salvo (Simultaneous Orange Arrows)", "Fluxlance Salvo Hit", 0),
+            new PlayerDstBuffApplyMechanic([TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], "Target Order", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightOrange), "FluxOrder.T", "Targeted by Fluxlance (Target Order)", "Fluxlance Target (Sequential)", 0),
+            new PlayerDstBuffApplyMechanic(FluxlanceTargetBuff1, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Orange), "Fluxlance.T", "Targeted by Fluxlance", "Fluxlance Target", 0),
+            new PlayerDstBuffApplyMechanic(FluxlanceRedArrowTargetBuff, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Red), "FluxRed.T", "Targeted by Fluxlance (Red Arrow)", "Fluxlance (Red Arrow)", 0),
+        });
         Extension = "decima";
         Icon = EncounterIconDecima;
         EncounterCategoryInformation.InSubCategoryOrder = 1;
@@ -41,15 +51,22 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         return
         [
-            ArcDPSEnums.TrashID.GreenOrb1Person,
-            ArcDPSEnums.TrashID.GreenOrb2Persons,
-            ArcDPSEnums.TrashID.GreenOrb3Persons,
+            ArcDPSEnums.TrashID.GreenOrb1Player,
+            ArcDPSEnums.TrashID.GreenOrb2Players,
+            ArcDPSEnums.TrashID.GreenOrb3Players,
             ArcDPSEnums.TrashID.EnlightenedConduit,
-            ArcDPSEnums.TrashID.DecimaBeamEnd,
             ArcDPSEnums.TrashID.DecimaBeamStart,
+            ArcDPSEnums.TrashID.DecimaBeamEnd,
         ];
     }
 
+    internal override List<InstantCastFinder> GetInstantCastFinders()
+    {
+        return
+        [
+            new DamageCastFinder(ThrummingPresenceBuff, ThrummingPresenceDamage),
+        ];
+    }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
@@ -86,17 +103,35 @@ internal class DecimaTheStormsinger : MountBalrior
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Decima:
+                var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).ToList();
+
+                AddRedRing(target, log, replay, casts, DecimaSpawnsConduitsP1);
+                AddRedRing(target, log, replay, casts, DecimaSpawnsConduitsP2);
+                AddRedRing(target, log, replay, casts, DecimaSpawnsConduitsP3);
+
+                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaMainshockIndicator, out var mainshockSlices))
+                {
+                    foreach (EffectEvent effect in mainshockSlices)
+                    {
+                        long duration = 2300;
+                        long growing = effect.Time + duration;
+                        (long start, long end) lifespan2 = effect.ComputeLifespan(log, duration);
+                        var rotation = new AngleConnector(effect.Rotation.Z + 90);
+                        var slice = (PieDecoration)new PieDecoration(1200, 32, lifespan2, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
+                        replay.AddDecorationWithBorder(slice, Colors.LightOrange, 0.6);
+                    }
+                }
                 break;
             // TODO: find all greens and their proper sizes
-            case (int)ArcDPSEnums.TrashID.GreenOrb1Person:
+            case (int)ArcDPSEnums.TrashID.GreenOrb1Player:
                 replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
                 //replay.Decorations.Add(new CircleDecoration(100, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenOrb2Persons:
+            case (int)ArcDPSEnums.TrashID.GreenOrb2Players:
                 replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
                 //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
-            case (int)ArcDPSEnums.TrashID.GreenOrb3Persons:
+            case (int)ArcDPSEnums.TrashID.GreenOrb3Players:
                 replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
                 //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
@@ -180,10 +215,43 @@ internal class DecimaTheStormsinger : MountBalrior
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
+        // Target Overhead
+        // In phase 2 you get the Fluxlance Target Buff but also Target Order, in game only Target Order is displayed overhead, so we filter those out.
+        var p2Targets = player.GetBuffStatus(log, [TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var allTargets = player.GetBuffStatus(log, FluxlanceTargetBuff1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
+        var filtered = allTargets.Where(x => !p2Targets.Any(y => Math.Abs(x.Start - y.Start) < ServerDelayConstant));
+        foreach (var segment in filtered)
+        {
+            replay.AddOverheadIcon(segment, player, ParserIcons.TargetOverhead);
+        }
+
+        // Target Order Overhead
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
         replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+    }
+
+    /// <summary>
+    /// The ring appears when Decima spawns conduits and ends when she starts the breakbar (Flux Nova).
+    /// </summary>
+    private static void AddRedRing(NPC target, ParsedEvtcLog log, CombatReplay replay, List<CastEvent> casts, long skillId)
+    {
+        var conduitsSpawn = casts.FirstOrDefault(x => x.SkillId == skillId);
+
+        // Return only if P2 and P3 are null
+        if (conduitsSpawn == null && skillId != DecimaSpawnsConduitsP1)
+        {
+            return;
+        }
+
+        // The spawn of the first conduits might be missing in the log, we use FightStart.
+        long start = conduitsSpawn != null ? conduitsSpawn.Time : log.FightData.FightStart;
+        var breakbar = casts.FirstOrDefault(x => x.SkillId == FluxNova && x.Time > start);
+        long end = breakbar != null ? breakbar.Time : log.FightData.FightEnd;
+
+        (long start, long end) lifespan = (start, end);
+        replay.Decorations.Add(new CircleDecoration(700, lifespan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
     }
 }
