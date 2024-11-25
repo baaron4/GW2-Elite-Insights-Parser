@@ -697,7 +697,6 @@ public abstract partial class SingleActor : Actor
         if (DamageTakenEvents == null)
         {
             DamageTakenEvents = new List<HealthDamageEvent>(log.CombatData.GetDamageTakenData(AgentItem));
-            DamageTakenEvents.SortByTime();
             DamageTakenEventsBySrc = DamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
@@ -792,7 +791,6 @@ public abstract partial class SingleActor : Actor
         if (BreakbarDamageTakenEvents == null)
         {
             BreakbarDamageTakenEvents = new List<BreakbarDamageEvent>(log.CombatData.GetBreakbarDamageTakenData(AgentItem));
-            BreakbarDamageTakenEvents.SortByTime();
             BreakbarDamageTakenEventsBySrc = BreakbarDamageTakenEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
@@ -868,7 +866,6 @@ public abstract partial class SingleActor : Actor
         if (IncomingCrowdControlEvents == null)
         {
             IncomingCrowdControlEvents = new List<CrowdControlEvent>(log.CombatData.GetIncomingCrowdControlData(AgentItem));
-            IncomingCrowdControlEvents.SortByTime();
             IncomingCrowdControlEventsBySrc = IncomingCrowdControlEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }

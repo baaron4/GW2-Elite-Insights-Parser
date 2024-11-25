@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData;
@@ -217,6 +218,7 @@ public abstract class Actor
 
 public static partial class ListExt
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByFirstAware<T>(this List<T> list)  where T : Actor
     {
         list.AsSpan().SortStable((a, b) => a.FirstAware.CompareTo(b.FirstAware));

@@ -146,7 +146,6 @@ public class EXTSingleActorHealingHelper : EXTActorHealingHelper
         if (HealReceivedEvents == null)
         {
             HealReceivedEvents = new List<EXTHealingEvent>(log.CombatData.EXTHealingCombatData.GetHealReceivedData(_actor.AgentItem).Where(x => x.ToFriendly));
-            HealReceivedEvents.SortByTime();
             HealReceivedEventsBySrc = HealReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
