@@ -175,7 +175,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             // one in TLS for better locality.
             ref SharedArrayPoolThreadLocalArray tla = ref tlsBuckets[bucketIndex];
             Array? prev = tla.Array;
-            tla = new SharedArrayPoolThreadLocalArray(array);
+            tla = new SharedArrayPoolThreadLocalArray(array) { KnownToBeCleared = clearArray };
             if (prev is not null)
             {
                 SharedArrayPoolPartitions partitionsForArraySize = _buckets[bucketIndex] ?? CreatePerCorePartitions(bucketIndex);
@@ -183,6 +183,7 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             }
         }
     }
+    
     /// <summary> Clears all arrays in the pool. Noticeably does not destroy the arrays, only clear any remaining references they hold. </summary>
     public void ClearAll()
     {
@@ -191,19 +192,45 @@ public sealed class ClearableSharedArrayPool<T> : ArrayPool<T> // where T : clas
             var buckets = tlsBuckets.Key;
             for (int i = 0; i < buckets.Length; i++)
             {
-                var array = buckets[i].Array;
-                if (array == null)
+                ref var bucket = ref buckets[i];
+                if (bucket.Array == null || bucket.KnownToBeCleared)
                 {
                     continue;
                 }
 
-                Array.Clear(array, 0, array.Length);
+                Array.Clear(bucket.Array, 0, bucket.Array.Length);
+                bucket.KnownToBeCleared = true;
             }
         }
 
         foreach(var bucket in _buckets)
         {
             bucket?.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Clears all arrays in the pool. Noticeably does not destroy the arrays, only clear any remaining references they hold.\n
+    /// This only clears arrays associated wit the current thread and does not touch anything that might be shared.
+    /// </summary>
+    /// <remarks>While this is threadsafe it is not Task-safe, as multiple tasks might run on the same thread.</remarks>
+    public void ClearAllThreadLocal()
+    {
+        if (t_tlsBuckets == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < t_tlsBuckets.Length; i++)
+        {
+            ref var bucket = ref t_tlsBuckets[i];
+            if (bucket.Array == null || bucket.KnownToBeCleared)
+            {
+                continue;
+            }
+
+            Array.Clear(bucket.Array, 0, bucket.Array.Length);
+            bucket.KnownToBeCleared = true;
         }
     }
 
@@ -252,6 +279,7 @@ internal struct SharedArrayPoolThreadLocalArray(Array array)
     public Array? Array = array;
     /// <summary>Environment.TickCount timestamp for when this array was observed by Trim.</summary>
     public int MillisecondsTimeStamp = 0;
+    public bool KnownToBeCleared = false;
 }
 
 /// <summary>Provides a collection of partitions, each of which is a pool of arrays.</summary>
