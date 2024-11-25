@@ -130,7 +130,7 @@ public static partial class ListExt
         }
     }
 
-    /// Reserves space at least 'count' additional elements in the list should they not fit already.
+    /// <summary>Reserves space for at least 'count' additional elements in the list should they not fit already.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ReserveAdditional<T>(this List<T> list, int count)
     {
@@ -140,7 +140,7 @@ public static partial class ListExt
         }
     }
 
-    /// Reserves space at least 'count' additional elements in the list should they not fit already.
+    /// <summary>Reserves space for at least 'count' additional elements in the set should they not fit already.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ReserveAdditional<T>(this HashSet<T> set, int count)
     {
@@ -153,7 +153,7 @@ public static partial class ListExt
         StableSort<T>.fluxsort(span, cmp);
         if(!typeof(T).IsValueType)
         {
-            ClearableSharedArrayPool<T>.Shared.ClearAll();
+            ClearableSharedArrayPool<T>.Shared.ClearAllThreadLocal(); // make sure to not mess with other threads pools
         }
     }
 
