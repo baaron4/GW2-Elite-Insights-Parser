@@ -27,7 +27,7 @@ public class ParsingFailureReason
     /// </summary>
     public void Throw()
     {
-        throw _reason;
+        throw new Exception("Parsing Failed", _reason);
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public class ParsingFailureReason
     {
         if (IsParserBug)
         {
-            throw _reason;
+            throw new Exception("Parsing Failed", _reason);
         }
     }
 

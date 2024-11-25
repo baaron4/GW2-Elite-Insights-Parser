@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using GW2EIEvtcParser;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
 using Tracing;
@@ -85,7 +86,11 @@ static class ConsoleProgram
         }
         catch (ProgramException ex)
         {
-            operation.UpdateProgress("Program: " + ex.InnerException.Message);
+            var finalException = ParserHelper.GetFinalException(ex);
+            operation.UpdateProgress("Program: " + finalException.Source);
+            operation.UpdateProgress("Program: " + finalException.StackTrace);
+            operation.UpdateProgress("Program: " + finalException.TargetSite);
+            operation.UpdateProgress("Program: " + finalException.Message);
             operation.FinalizeStatus("Parsing Failure - ");
         }
         catch (Exception)
