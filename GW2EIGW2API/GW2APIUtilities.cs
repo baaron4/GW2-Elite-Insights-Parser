@@ -9,7 +9,7 @@ internal static class GW2APIUtilities
     {
         WriteIndented = false,
         IncludeFields = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         //NOTE(Rennorb): does html escape by default
     };
 
