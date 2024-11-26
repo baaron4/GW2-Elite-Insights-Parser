@@ -288,7 +288,7 @@ internal class BanditTrio : SalvationPass
                         var rotationConnector = new AngleConnector(facing);
                         var agentConnector = new AgentConnector(target);
                         var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
-                        replay.AddDecorationWithGrowing(cone, lifespan.End);
+                        replay.Decorations.AddDecorationWithGrowing(cone, lifespan.End);
                     }
                 }
             } break;
@@ -331,8 +331,8 @@ internal class BanditTrio : SalvationPass
         foreach (var seg in sapperBombs)
         {
             var circle = new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player));
-            replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, seg.Start + 5000);
-            replay.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
+            replay.Decorations.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, seg.Start + 5000);
+            replay.Decorations.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
         }
     }
 

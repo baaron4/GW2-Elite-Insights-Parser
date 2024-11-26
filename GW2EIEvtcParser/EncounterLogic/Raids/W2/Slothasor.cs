@@ -179,7 +179,7 @@ internal class Slothasor : SalvationPass
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
                     var circle = new CircleDecoration(300, (start, end), Colors.LightOrange, 0.4, new AgentConnector(target));
-                    replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
+                    replay.Decorations.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                 }
                 var shakes = cls.Where(x => x.SkillId == SporeRelease);
                 foreach (CastEvent c in shakes)
@@ -187,7 +187,7 @@ internal class Slothasor : SalvationPass
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
                     var circle = new CircleDecoration(700, (start, end), Colors.Red, 0.4, new AgentConnector(target));
-                    replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
+                    replay.Decorations.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.PoisonMushroom:
@@ -208,12 +208,12 @@ internal class Slothasor : SalvationPass
             int toDropStart = (int)seg.Start;
             int toDropEnd = (int)seg.End;
             var circle = new CircleDecoration(180, seg, "rgba(255, 255, 100, 0.5)", new AgentConnector(p));
-            replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
+            replay.Decorations.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, toDropStart + 8000);
             if (p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
             {
                 replay.Decorations.Add(new CircleDecoration(900, 180, (toDropEnd, toDropEnd + 90000), Colors.Red, 0.3, new PositionConnector(position)).UsingGrowingEnd(toDropStart + 90000));
             }
-            replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
         // Transformation
         var slubTrans = p.GetBuffStatus(log, MagicTransformation, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
@@ -226,7 +226,7 @@ internal class Slothasor : SalvationPass
         foreach (Segment seg in fixatedSloth)
         {
             replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
-            replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
     }
 }

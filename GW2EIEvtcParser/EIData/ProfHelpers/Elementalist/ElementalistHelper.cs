@@ -348,7 +348,7 @@ internal static class ElementalistHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 750);
                 var connector = new PositionConnector(effect.Position);
                 var circle = (CircleDecoration)new CircleDecoration(240, lifespan, color, 0.3, connector).UsingFilled(false).UsingSkillMode(skill);
-                replay.AddDecorationWithGrowing(circle, lifespan.Item2, true);
+                replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2, true);
                 replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }

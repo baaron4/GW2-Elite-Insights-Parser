@@ -139,7 +139,7 @@ internal class Sabir : TheKeyOfAhdashim
         foreach (Segment seg in boltBreaks)
         {
             var circle = new CircleDecoration(boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p));
-            replay.AddDecorationWithGrowing(circle, seg.End);
+            replay.Decorations.AddDecorationWithGrowing(circle, seg.End);
         }
     }
 
@@ -179,7 +179,7 @@ internal class Sabir : TheKeyOfAhdashim
                     GeographicalConnector connector = new AgentConnector(target);
                     replay.Decorations.Add(new CircleDecoration(radius, (start, start + delay), Colors.Orange, 0.2, connector));
                     replay.Decorations.Add(new CircleDecoration(radius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.5, connector));
-                    replay.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
+                    replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Grey, 0.7, radius);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.BigKillerTornado:

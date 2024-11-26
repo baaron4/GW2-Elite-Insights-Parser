@@ -355,12 +355,12 @@ internal class ConjuredAmalgamate : MythwrightGambit
             if (p.TryGetCurrentInterpolatedPosition(log, start, out var position))
             {
                 var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
-                replay.AddDecorationWithBorder(circle);
+                replay.Decorations.AddDecorationWithBorder(circle);
             }
         }
         // Shields and Greatswords Overheads
-        replay.AddOverheadIcons(p.GetBuffStatus(log, ConjuredShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.ConjuredShieldEmptyOverhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, ConjuredShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.ConjuredShieldEmptyOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, GreatswordPower, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0), p, ParserIcons.GreatswordPowerEmptyOverhead);
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

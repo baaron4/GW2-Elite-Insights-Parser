@@ -390,7 +390,7 @@ public abstract partial class SingleActor : Actor
                 {
                     if (ParserIcons.SquadMarkerToIcon.TryGetValue(squadMarker, out var icon))
                     {
-                        replay.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, icon, 240f, 16, 1);
+                        replay.Decorations.AddRotatedOverheadMarkerIcon(new Segment(markerEvent.Time, markerEvent.EndTime, 1), this, icon, 240f, 16, 1);
                     }
                 }
             }

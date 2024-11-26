@@ -535,7 +535,7 @@ internal class Deimos : BastionOfThePenitent
                     start = (int)c.Time;
                     end = start + 5000;
                     var circle = new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target));
-                    replay.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
+                    replay.Decorations.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                     if (!log.FightData.IsCM)
                     {
                         replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Vector3(-8421.818f, 3091.72949f, -9.818082e8f))));
@@ -662,11 +662,11 @@ internal class Deimos : BastionOfThePenitent
         foreach (Segment seg in tpDeimos)
         {
             var circle = new CircleDecoration(180, seg, "rgba(0, 150, 0, 0.3)", new AgentConnector(p));
-            replay.AddDecorationWithGrowing(circle, seg.End);
+            replay.Decorations.AddDecorationWithGrowing(circle, seg.End);
         }
         // Tear Instability
         IEnumerable<Segment> tearInstabs = p.GetBuffStatus(log, TearInstability, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
+        replay.Decorations.AddOverheadIcons(tearInstabs, p, ParserIcons.TearInstabilityOverhead);
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

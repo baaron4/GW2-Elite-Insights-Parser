@@ -113,7 +113,7 @@ internal class MursaatOverseer : BastionOfThePenitent
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
         var claims = player.GetBuffStatus(log, ClaimBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddOverheadIcons(claims, player, ParserIcons.FixationPurpleOverhead);
     }
 
     internal override FightData.EncounterMode GetEncounterMode(CombatData combatData, AgentData agentData, FightData fightData)

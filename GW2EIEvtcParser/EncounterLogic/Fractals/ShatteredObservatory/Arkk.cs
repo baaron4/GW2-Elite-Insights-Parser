@@ -240,13 +240,13 @@ internal class Arkk : ShatteredObservatory
 
         // Corporeal Reassignment (skull)
         IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
+        replay.Decorations.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
 
         // Bloom Fixations
         IEnumerable<Segment> fixations = p.GetBuffStatus(log, [ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         var fixationEvents = GetFilteredList(log.CombatData, [ FixatedBloom1, FixatedBloom2, FixatedBloom3, FixatedBloom4 ], p, true, true);
-        replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
-        replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
+        replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
 
         // Cosmic Meteor (green)
         IEnumerable<Segment> cosmicMeteors = p.GetBuffStatus(log, CosmicMeteor, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
@@ -254,7 +254,7 @@ internal class Arkk : ShatteredObservatory
         {
             int start = (int)cosmicMeteor.Start;
             int end = (int)cosmicMeteor.End;
-            replay.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new AgentConnector(p)), end);
+            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new AgentConnector(p)), end);
         }
     }
 
@@ -271,7 +271,7 @@ internal class Arkk : ShatteredObservatory
                     switch (cast.SkillId)
                     {
                         case SolarBlastArkk1:
-                            replay.AddOverheadIcon(new Segment((int)cast.Time, cast.EndTime, 1), target, ParserIcons.EyeOverhead, 30);
+                            replay.Decorations.AddOverheadIcon(new Segment((int)cast.Time, cast.EndTime, 1), target, ParserIcons.EyeOverhead, 30);
                             break;
                         case SupernovaArkk:
                             // TODO: add growing square

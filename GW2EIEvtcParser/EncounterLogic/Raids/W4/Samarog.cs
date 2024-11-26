@@ -198,11 +198,11 @@ internal class Samarog : BastionOfThePenitent
                 replay.Decorations.Add(new CircleDecoration(240, spearLifespan, Colors.Orange, 0.1, new AgentConnector(target)));
                 if (log.CombatData.GetBuffDataByIDByDst(SpearOfAggressionBuff, target.AgentItem).Any())
                 {
-                    replay.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15);
+                    replay.Decorations.AddOverheadIcon(spearLifespan, target, BuffImages.Taunt, 15);
                 }
                 else
                 {
-                    replay.AddOverheadIcon(spearLifespan, target, BuffImages.Fear, 15);
+                    replay.Decorations.AddOverheadIcon(spearLifespan, target, BuffImages.Fear, 15);
                 }
                 break;
             default:
@@ -220,7 +220,7 @@ internal class Samarog : BastionOfThePenitent
             int bigStart = (int)c.Time;
             int bigEnd = bigStart + 6000;
             var circle = new CircleDecoration(300, (bigStart, bigEnd), "rgba(150, 80, 0, 0.2)", new AgentConnector(p));
-            replay.AddDecorationWithGrowing(circle, bigEnd);
+            replay.Decorations.AddDecorationWithGrowing(circle, bigEnd);
         }
         // small bomb
         var smallbomb = log.CombatData.GetBuffDataByIDByDst(InevitableBetrayalSmall, p.AgentItem).Where(x => x is BuffApplyEvent);
@@ -235,10 +235,10 @@ internal class Samarog : BastionOfThePenitent
         foreach (Segment seg in fixatedSam)
         {
             replay.Decorations.Add(new CircleDecoration(80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
-            replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
         var fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);
-        replay.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
+        replay.Decorations.AddTether(fixatedSamarog, "rgba(255, 80, 255, 0.3)");
         //fixated Guldhem
         var fixatedGuldhem = p.GetBuffStatus(log, FixatedGuldhem, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedGuldhem)

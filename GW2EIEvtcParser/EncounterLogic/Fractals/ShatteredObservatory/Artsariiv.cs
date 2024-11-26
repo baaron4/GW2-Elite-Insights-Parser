@@ -195,7 +195,7 @@ internal class Artsariiv : ShatteredObservatory
 
         // Corporeal Reassignment (skull)
         IEnumerable<Segment> corpReass = p.GetBuffStatus(log, CorporealReassignmentBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
+        replay.Decorations.AddOverheadIcons(corpReass, p, ParserIcons.SkullOverhead);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -214,7 +214,7 @@ internal class Artsariiv : ShatteredObservatory
                             {
                                 int castStart = (int)cast.Time;
                                 int castEnd = castStart + 3160;
-                                replay.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), Colors.Orange, 0.2, new AgentConnector(target)), castEnd);
+                                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1300, (castStart, castEnd), Colors.Orange, 0.2, new AgentConnector(target)), castEnd);
                                 (float, float)[][] positions = [
                                    // positions taken from effects
                                    [(9286.88f, 2512.43f), (11432.0f, 2529.76f), (11422.7f, 401.501f), (9284.73f, 392.916f)],
@@ -235,7 +235,7 @@ internal class Artsariiv : ShatteredObservatory
                                     foreach ((float x, float y) in positions[i])
                                     {
                                         var position = new PositionConnector(new(x, y, 0));
-                                        replay.AddDecorationWithGrowing(new CircleDecoration(radius[i], (start, end), Colors.Orange, 0.2, position), end);
+                                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius[i], (start, end), Colors.Orange, 0.2, position), end);
                                     }
                                 }
                                 break;

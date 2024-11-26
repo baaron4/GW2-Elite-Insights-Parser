@@ -313,7 +313,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
         // In game, the green tether lasts for the entire duration of the blade, meanwhile the buff on the player displays the green border overlay and is hidden.
         // In the log, the tether effect can't be found, so this decoration is only indicative of who has been targeted, the duration is not correct.
         var noxiousBlade = GetFilteredList(log.CombatData, NoxiousVaporBladeTargetBuff, p, true, true);
-        replay.AddTether(noxiousBlade, Colors.Green, 0.5);
+        replay.Decorations.AddTether(noxiousBlade, Colors.Green, 0.5);
 
         // Tri-Bolt
         if (log.CombatData.TryGetEffectEventsByDstWithGUID(p.AgentItem, EffectGUIDs.OldLionsCourtTriBoltSpread, out var tribolt))
@@ -321,7 +321,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
             foreach (EffectEvent effect in tribolt)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
-                replay.AddDecorationWithGrowing(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.2, new AgentConnector(effect.Dst)), lifespan.end);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.2, new AgentConnector(effect.Dst)), lifespan.end);
             }
         }
     }
@@ -439,7 +439,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         int duration = 3000; // Logged duration of 0
                         (long start, long end) lifespan = (effect.Time, effect.Time + duration);
                         uint radius = 3000; // Radius is an estimate
-                        replay.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.White, 0.3, radius);
+                        replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.White, 0.3, radius);
                     }
                 }
 
@@ -451,7 +451,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         uint radius = 100; // The diameter is the size of the Knight's hitbox, which is 200.
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 1190);
                         var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                        replay.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
                     }
                 }
 
@@ -493,7 +493,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     foreach (EffectEvent effect in vortexWarnings1)
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                        replay.AddContrenticRings(0, 120, lifespan, effect.Position, Colors.LightOrange);
+                        replay.Decorations.AddContrenticRings(0, 120, lifespan, effect.Position, Colors.LightOrange);
                     }
                 }
                 
@@ -526,7 +526,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     {
                         (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 2000);
                         var circle = new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                        replay.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
                     }
                 }
 
@@ -591,7 +591,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     foreach (EffectEvent effect in crackingWind)
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                        replay.AddContrenticRings(0, 140, lifespan, effect.Position, Colors.LightOrange, 0.01f, 8, true);
+                        replay.Decorations.AddContrenticRings(0, 140, lifespan, effect.Position, Colors.LightOrange, 0.01f, 8, true);
                         // Add bigger doughnut past 1120 radius (140 * 8)
                         var doughnut = new DoughnutDecoration(1120, 2500, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                         replay.Decorations.Add(doughnut);
@@ -611,7 +611,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         // Effect spawns 2 seconds after the NPC, overriding start time to FirstAware and end time to the 5000 ms duration.
                         uint radius = 100; // Approximated value
                         (long start, long end) lifespan = (target.FirstAware, target.FirstAware + 5000);
-                        replay.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem.GetFinalMaster())), lifespan.end);
+                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem.GetFinalMaster())), lifespan.end);
                     }
                 }
                 break;

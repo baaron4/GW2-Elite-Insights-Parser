@@ -409,7 +409,7 @@ internal class Dhuum : HallOfChains
                 foreach (CastEvent c in cataCycle)
                 {
                     var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
-                    replay.AddDecorationWithGrowing(circle, end);
+                    replay.Decorations.AddDecorationWithGrowing(circle, end);
                 }
 
                 // Cone Slash
@@ -524,14 +524,14 @@ internal class Dhuum : HallOfChains
                     var agentConnector = new AgentConnector(target);
                     var rotationConnector = new AngleConnector(facing);
                     var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
-                    replay.AddDecorationWithFilledWithGrowing(cone, true, lifespan.Item2);
+                    replay.Decorations.AddDecorationWithFilledWithGrowing(cone, true, lifespan.Item2);
                 }
             } break;
             case (int)TrashID.Messenger:
                 replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Orange, 0.5, new AgentConnector(target)));
                 // Fixation tether to player
                 var fixations = GetFilteredList(log.CombatData, DhuumsMessengerFixationBuff, target, true, true);
-                replay.AddTether(fixations, Colors.Red, 0.4);
+                replay.Decorations.AddTether(fixations, Colors.Red, 0.4);
                 break;
             case (int)TrashID.Deathling:
                 break;
@@ -597,7 +597,7 @@ internal class Dhuum : HallOfChains
                     {
                         int gend = gstart + 5000;
                         var greenCircle = new CircleDecoration(240, (gstart, gend), Colors.DarkGreen, 0.4, new AgentConnector(target));
-                        replay.AddDecorationWithGrowing(greenCircle, gend);
+                        replay.Decorations.AddDecorationWithGrowing(greenCircle, gend);
                     }
                 }
                 break;
@@ -628,26 +628,26 @@ internal class Dhuum : HallOfChains
             }
             var lifespan = new Segment(start, end, 1);
             var circle = new CircleDecoration(100, lifespan, "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
-            replay.AddDecorationWithGrowing(circle, duration);
-            replay.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
+            replay.Decorations.AddDecorationWithGrowing(circle, duration);
+            replay.Decorations.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
         var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in bombDhuum)
         {
             var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
-            replay.AddDecorationWithGrowing(circle, seg.Start + 13000);
-            replay.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
+            replay.Decorations.AddDecorationWithGrowing(circle, seg.Start + 13000);
+            replay.Decorations.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
         }
         // shackles connection
         var shackles = GetFilteredList(log.CombatData, [ DhuumShacklesBuff, DhuumShacklesBuff2 ], p, true, true);
-        replay.AddTether(shackles, Colors.Teal, 0.5);
+        replay.Decorations.AddTether(shackles, Colors.Teal, 0.5);
 
         // shackles damage (identical to the connection for now, not yet properly distinguishable from the pure connection, further investigation needed due to inconsistent behavior (triggering too early, not triggering the damaging skill though)
         // shackles start with buff 47335 applied from one player to the other, this is switched over to buff 48591 after mostly 2 seconds, sometimes later. This is switched to 48042 usually 4 seconds after initial application and the damaging skill 47164 starts to deal damage from that point on.
         // Before that point, 47164 is only logged when evaded/blocked, but doesn't deal damage. Further investigation needed.
         var shacklesDmg = GetFilteredList(log.CombatData, DhuumDamagingShacklesBuff, p, true, true);
-        replay.AddTether(shacklesDmg, Colors.Yellow, 0.5);
+        replay.Decorations.AddTether(shacklesDmg, Colors.Yellow, 0.5);
 
         // Soul split
         var souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
@@ -796,6 +796,6 @@ internal class Dhuum : HallOfChains
         replay.Decorations.Add(hitbox);
         replay.Decorations.Add(line);
         replay.Decorations.Add(icon);
-        replay.AddDecorationWithFilledWithGrowing(death, true, soulSplitDeathTime);
+        replay.Decorations.AddDecorationWithFilledWithGrowing(death, true, soulSplitDeathTime);
     }
 }

@@ -140,7 +140,7 @@ internal class Siax : Nightmare
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                     lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
                     var doughnut = new DoughnutDecoration(0, 1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
-                    replay.AddDecorationWithGrowing(doughnut, expectedEndCast, true);
+                    replay.Decorations.AddDecorationWithGrowing(doughnut, expectedEndCast, true);
                 }
                 // Tail Swipe
                 var tailLash = casts.Where(x => x.SkillId == TailLashSiax);
@@ -162,7 +162,7 @@ internal class Siax : Nightmare
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
                     var circle = new CircleDecoration(1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
-                    replay.AddDecorationWithGrowing(circle, expectedEndCast);
+                    replay.Decorations.AddDecorationWithGrowing(circle, expectedEndCast);
                 }
 
                 break;
@@ -184,7 +184,7 @@ internal class Siax : Nightmare
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 300);
                         var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
-                        replay.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
                     }
                 }
                 break;
@@ -200,8 +200,8 @@ internal class Siax : Nightmare
         // Fixations
         IEnumerable<Segment> fixations = p.GetBuffStatus(log, FixatedNightmare, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         var fixationEvents = GetFilteredList(log.CombatData, FixatedNightmare, p, true, true);
-        replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
-        replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
+        replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

@@ -118,21 +118,21 @@ internal class DecimaTheStormsinger : MountBalrior
                         (long start, long end) lifespan2 = effect.ComputeLifespan(log, duration);
                         var rotation = new AngleConnector(effect.Rotation.Z + 90);
                         var slice = (PieDecoration)new PieDecoration(1200, 32, lifespan2, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                        replay.AddDecorationWithBorder(slice, Colors.LightOrange, 0.6);
+                        replay.Decorations.AddDecorationWithBorder(slice, Colors.LightOrange, 0.6);
                     }
                 }
                 break;
             // TODO: find all greens and their proper sizes
             case (int)ArcDPSEnums.TrashID.GreenOrb1Player:
-                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
                 //replay.Decorations.Add(new CircleDecoration(100, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.GreenOrb2Players:
-                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
                 //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.GreenOrb3Players:
-                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
                 //replay.Decorations.Add(new CircleDecoration(200, lifespan, Colors.Green, 0.3, new AgentConnector(target)));
                 break;
             case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
@@ -143,12 +143,12 @@ internal class DecimaTheStormsinger : MountBalrior
                     {
                         var aoeLifeSpan = effect.ComputeDynamicLifespan(log, 1200000);
                         // Placeholder to indicate activated conduits, until we can find proper sizes
-                        replay.AddOverheadIcon(aoeLifeSpan, target, BuffImages.InvokeLightning);
+                        replay.Decorations.AddOverheadIcon(aoeLifeSpan, target, BuffImages.InvokeLightning);
                         //replay.Decorations.Add(new CircleDecoration(150, aoeLifeSpan, Colors.DarkPurple, 0.3, new PositionConnector(effect.Position)));
                     }
                 }
                 var walls = GetFilteredList(log.CombatData, DecimaConduitWallBuff, target, true, true);
-                replay.AddTether(walls, Colors.Purple, 0.4, 60, true);
+                replay.Decorations.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
             case (int)ArcDPSEnums.TrashID.DecimaBeamStart:
                 SingleActor decima = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Decima)) ?? throw new MissingKeyActorsException("Decima not found");
@@ -158,7 +158,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 const uint redBeamWidth = 160;
                 var orangeBeams = GetFilteredList(log.CombatData, DecimaBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, decima, DecimaBeamLoading, orangeBeamWidth, beamLength, orangeBeams.OfType<BuffApplyEvent>(), Colors.LightOrange);
-                replay.AddTetherWithCustomConnectors(log, orangeBeams, Colors.LightOrange, 0.5, 
+                replay.Decorations.AddTetherWithCustomConnectors(log, orangeBeams, Colors.LightOrange, 0.5, 
                     (log, agent, start, end) =>
                     {
                         if (agent.TryGetCurrentInterpolatedPosition(log, start, out var pos))
@@ -174,7 +174,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     orangeBeamWidth, true);
                 var redBeams = GetFilteredList(log.CombatData, DecimaRedBeamTargeting, target.AgentItem, true, true);
                 AddBeamWarning(log, target, replay, decima, DecimaRedBeamLoading, redBeamWidth, beamLength, redBeams.OfType<BuffApplyEvent>(), Colors.Red);
-                replay.AddTetherWithCustomConnectors(log, redBeams, Colors.Red, 0.5,
+                replay.Decorations.AddTetherWithCustomConnectors(log, redBeams, Colors.Red, 0.5,
                     (log, agent, start, end) =>
                     {
                         if (agent.TryGetCurrentInterpolatedPosition(log, start, out var pos))
@@ -222,15 +222,15 @@ internal class DecimaTheStormsinger : MountBalrior
         var filtered = allTargets.Where(x => !p2Targets.Any(y => Math.Abs(x.Start - y.Start) < ServerDelayConstant));
         foreach (var segment in filtered)
         {
-            replay.AddOverheadIcon(segment, player, ParserIcons.TargetOverhead);
+            replay.Decorations.AddOverheadIcon(segment, player, ParserIcons.TargetOverhead);
         }
 
         // Target Order Overhead
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
     }
 
     /// <summary>

@@ -162,11 +162,11 @@ internal class MAMA : Nightmare
 
                     if (c.SkillId == Blastwave1)
                     {
-                        replay.AddDecorationWithBorder(new CircleDecoration(530, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
+                        replay.Decorations.AddDecorationWithBorder(new CircleDecoration(530, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
                     }
                     else if (c.SkillId == Blastwave2)
                     {
-                        replay.AddDecorationWithBorder(new CircleDecoration(480, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
+                        replay.Decorations.AddDecorationWithBorder(new CircleDecoration(480, lifespan, Colors.Orange, 0.2, new AgentConnector(target)).UsingGrowingEnd(expectedEndCast), 0, Colors.Red, 0.2, false);
                     }
                 }
 
@@ -181,7 +181,7 @@ internal class MAMA : Nightmare
                     // Find position at the end of the leap time
                     if (target.TryGetCurrentPosition(log, expectedEndCast + 1000, out var targetPosition))
                     {
-                        replay.AddDecorationWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), expectedEndCast);
+                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(350, lifespan, Colors.Orange, 0.2, new PositionConnector(targetPosition)), expectedEndCast);
 
                         // 3 rounds of decorations for the 3 waves
                         if (lifespan.end == expectedEndCast)
@@ -193,7 +193,7 @@ internal class MAMA : Nightmare
                                 long shockWaveStart = expectedEndCast + i * 120;
                                 (long, long) lifespanShockwave = (shockWaveStart, shockWaveStart + duration);
                                 GeographicalConnector connector = new PositionConnector(targetPosition);
-                                replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, shockwaveRadius);
+                                replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, shockwaveRadius);
                             }
                         }
                     }
@@ -209,7 +209,7 @@ internal class MAMA : Nightmare
                     int castDuration = 1714;
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    replay.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast, true);
+                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast, true);
                 }
 
                 // Explosive Impact - Knight fall and knockback AoE
@@ -219,7 +219,7 @@ internal class MAMA : Nightmare
                     int castDuration = 533;
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    replay.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
+                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
                 }
 
                 // Pull AoE
@@ -229,7 +229,7 @@ internal class MAMA : Nightmare
                     int castDuration = 3835;
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    replay.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
+                    replay.Decorations.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), expectedEndCast);
                 }
                 break;
             default:

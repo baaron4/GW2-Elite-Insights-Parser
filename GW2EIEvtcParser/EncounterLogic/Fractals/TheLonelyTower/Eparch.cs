@@ -184,8 +184,8 @@ internal class Eparch : LonelyTower
         // consume fixations
         var  consumes = player.GetBuffStatus(log, Consume, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         var consumeEvents = GetFilteredList(log.CombatData, [ Consume ], player, true, true);
-        replay.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
-        replay.AddTether(consumeEvents, Colors.Red, 0.5);
+        replay.Decorations.AddOverheadIcons(consumes, player, ParserIcons.FixationRedOverhead);
+        replay.Decorations.AddTether(consumeEvents, Colors.Red, 0.5);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -196,7 +196,7 @@ internal class Eparch : LonelyTower
             case (int)TrashID.KryptisRift:
                 {
                     var events = GetFilteredList(log.CombatData, [ KryptisRiftIncarnationTether ], target, true, true);
-                    replay.AddTether(events, Colors.Red, 0.5);
+                    replay.Decorations.AddTether(events, Colors.Red, 0.5);
                     break;
                 }
         }

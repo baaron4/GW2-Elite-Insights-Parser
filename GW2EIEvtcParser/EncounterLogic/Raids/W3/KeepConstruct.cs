@@ -287,7 +287,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in kcOrbCollect)
                 {
-                    replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
+                    replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
                 }
                 
                 var towerDrop = cls.Where(x => x.SkillId == TowerDrop);
@@ -298,7 +298,7 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                     int skillCast = end - 1000;
                     if (target.TryGetCurrentInterpolatedPosition(log, end, out var position))
                     {
-                        replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), Colors.LightOrange, 0.5, new PositionConnector(position)).UsingFilled(false), true, skillCast);
+                        replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(400, (start, skillCast), Colors.LightOrange, 0.5, new PositionConnector(position)).UsingFilled(false), true, skillCast);
                     }
                 }
                
@@ -392,12 +392,12 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 replay.Decorations.Add(new CircleDecoration(400, (start, end), Colors.LightBlue, 0.5, new AgentConnector(target)));
                 if (replay.PolledPositions.Count > 0)
                 {
-                    replay.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
+                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(300, (start - 5000, start), Colors.Orange, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.GreenPhantasm:
                 int lifetime = 8000;
-                replay.AddDecorationWithGrowing(new CircleDecoration(210, (start, start + lifetime), Colors.Green, 0.2, new AgentConnector(target)), start + lifetime);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(210, (start, start + lifetime), Colors.Green, 0.2, new AgentConnector(target)), start + lifetime);
                 break;
             case (int)ArcDPSEnums.TrashID.RetrieverProjection:
             case (int)ArcDPSEnums.TrashID.InsidiousProjection:
@@ -423,20 +423,20 @@ internal class KeepConstruct : StrongholdOfTheFaithful
         var xeraFury = p.GetBuffStatus(log, XerasFury, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in xeraFury)
         {
-            replay.AddDecorationWithGrowing(new CircleDecoration(550, seg, Colors.Orange, 0.2, new AgentConnector(p)), seg.End);
+            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(550, seg, Colors.Orange, 0.2, new AgentConnector(p)), seg.End);
 
         }
         // Fixated Statue tether to Player
         var fixatedStatue = GetFilteredList(log.CombatData, [ StatueFixated1, StatueFixated2 ], p, true, true);
-        replay.AddTether(fixatedStatue, Colors.Magenta, 0.5);
+        replay.Decorations.AddTether(fixatedStatue, Colors.Magenta, 0.5);
         // Fixation Overhead
         IEnumerable<Segment> fixations = p.GetBuffStatus(log, [ StatueFixated1, StatueFixated2 ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
         // Attunements Overhead
         IEnumerable<Segment> crimsonAttunements = p.GetBuffStatus(log, [ CrimsonAttunementPhantasm, CrimsonAttunementOrb ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
+        replay.Decorations.AddOverheadIcons(crimsonAttunements, p, ParserIcons.CrimsonAttunementOverhead);
         IEnumerable<Segment> radiantAttunements = p.GetBuffStatus(log, [ RadiantAttunementPhantasm, RadiantAttunementOrb ], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
+        replay.Decorations.AddOverheadIcons(radiantAttunements, p, ParserIcons.RadiantAttunementOverhead);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

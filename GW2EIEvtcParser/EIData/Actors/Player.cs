@@ -202,7 +202,7 @@ public class Player : PlayerActor
         {
             if (ParserIcons.CommanderTagToIcon.TryGetValue(seg.Value, out var icon))
             {
-                replay.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, icon, 180f, 15);
+                replay.Decorations.AddRotatedOverheadMarkerIcon(new Segment(seg.Start, seg.End, 1), this, icon, 180f, 15);
             }
         }
         base.InitAdditionalCombatReplayData(log, replay);

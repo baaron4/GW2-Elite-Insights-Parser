@@ -158,7 +158,7 @@ internal class CerusAndDeimos : LonelyTower
             foreach (var seg in fixated)
             {
                 replay.Decorations.Add(new LineDecoration(seg, color, 0.3, new AgentConnector(p), new AgentConnector(target)));
-                replay.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
+                replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
             }
         }
     }

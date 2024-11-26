@@ -269,7 +269,7 @@ internal class Matthias : SalvationPass
                 {
                     start = (int)c.Time;
                     end = (int)c.EndTime;
-                    replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, end);
+                    replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(300, (start, end), Colors.Red, 0.5, new AgentConnector(target)).UsingFilled(false), true, end);
                 }
                 var hadouken = cls.Where(x => x.SkillId == OppressiveGazeAbomination || x.SkillId == OppressiveGazeHuman);
                 foreach (CastEvent c in hadouken)
@@ -317,30 +317,30 @@ internal class Matthias : SalvationPass
             replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
             if (p.TryGetCurrentInterpolatedPosition(log, corruptedMatthiasEnd, out var position))
             {
-                replay.AddDecorationWithGrowing(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), Colors.Black, 0.3, new PositionConnector(position)), corruptedMatthiasEnd + 100000);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), Colors.Black, 0.3, new PositionConnector(position)), corruptedMatthiasEnd + 100000);
             }
-            replay.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
         }
         // Well of profane
         var wellMatthias = p.GetBuffStatus(log, UnstableBloodMagic, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in wellMatthias)
         {
             int wellMatthiasEnd = (int)seg.End;
-            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
+            replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(120, seg, "rgba(150, 255, 80, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 9000);
             if (p.TryGetCurrentInterpolatedPosition(log, wellMatthiasEnd, out var position))
             {
                 replay.Decorations.Add(new CircleDecoration(300, (wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", new PositionConnector(position)));
             }
-            replay.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.VolatilePoisonOverhead);
         }
                 // Sacrifice Selection
         var sacrificeSelection = p.GetBuffStatus(log, MatthiasSacrificeSelection, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
+        replay.Decorations.AddOverheadIcons(sacrificeSelection, p, ParserIcons.RedArrowOverhead);
                 // Sacrifice
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sacrificeMatthias)
         {
-            replay.AddDecorationWithGrowing(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
+            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
         }
                 // Bombs
         var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent);
@@ -348,11 +348,11 @@ internal class Matthias : SalvationPass
         {
             int zealousStart = (int)c.Time;
             int zealousEnd = zealousStart + 5000;
-            replay.AddDecorationWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), Colors.Orange, 0.2, new AgentConnector(p)), zealousEnd);
+            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, (zealousStart, zealousEnd), Colors.Orange, 0.2, new AgentConnector(p)), zealousEnd);
         }
                 // Unbalanced
         var unbalanced = p.GetBuffStatus(log, Unbalanced, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
+        replay.Decorations.AddOverheadIcons(unbalanced, p, ParserIcons.UnbalancedOverhead);
     }
 
 }

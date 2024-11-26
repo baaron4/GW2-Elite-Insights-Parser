@@ -326,7 +326,7 @@ internal class TwinLargos : MythwrightGambit
                     uint radius = 1200;
                     (long, long) lifespan = (start + delay, start + delay + duration);
                     GeographicalConnector connector = new AgentConnector(target);
-                    replay.AddShockwave(connector, lifespan, Colors.SkyBlue, 0.5, radius);
+                    replay.Decorations.AddShockwave(connector, lifespan, Colors.SkyBlue, 0.5, radius);
                 }
                 var boonSteal = cls.Where(x => x.SkillId == VaporJet);
                 foreach (CastEvent c in boonSteal)
@@ -340,7 +340,7 @@ internal class TwinLargos : MythwrightGambit
                     {
                         var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                         var rotationConnextor = new AngleConnector(facing);
-                        replay.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), Colors.LightOrange, 0.4, positionConnector).UsingRotationConnector(rotationConnextor));
+                        replay.Decorations.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start + delay, start + delay + duration), Colors.LightOrange, 0.4, positionConnector).UsingRotationConnector(rotationConnextor));
                     }
                 }
                 break;
@@ -362,12 +362,12 @@ internal class TwinLargos : MythwrightGambit
             uint radius = 500;
             int toDropStart = (int)seg.Start;
             int toDropEnd = (int)seg.End;
-            replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, Colors.Orange, 0.4, new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
+            replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(debuffRadius, seg, Colors.Orange, 0.4, new AgentConnector(p)).UsingFilled(false), true, toDropStart + timer);
             if (p.TryGetCurrentInterpolatedPosition(log, toDropEnd, out var position))
             {
-                replay.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), Colors.DarkWhite, 0.5, new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, debuffRadius, (toDropEnd, toDropEnd + duration), Colors.DarkWhite, 0.5, new PositionConnector(position)).UsingFilled(false), toDropStart + duration);
             }
-            replay.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
+            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.TidalPoolOverhead);
         }
         // Bubble (Aquatic Detainment)
         var bubble = p.GetBuffStatus(log, AquaticDetainmentBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);

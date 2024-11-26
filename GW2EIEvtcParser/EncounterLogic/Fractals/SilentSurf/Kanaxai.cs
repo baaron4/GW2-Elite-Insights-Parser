@@ -293,13 +293,13 @@ internal class Kanaxai : SilentSurf
         // Blue tether from Aspect to player, appears when the player gains Phantasmagoria
         // Custom decoration not visible in game
         var phantasmagorias = GetFilteredList(log.CombatData, Phantasmagoria, player, true, true);
-        replay.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
+        replay.Decorations.AddTether(phantasmagorias, Colors.LightBlue, 0.5);
 
         // Rending Storm - Axe AoE attached to players - There are 2 buffs for the targetting
         IEnumerable<Segment> axes = player.GetBuffStatus(log, [RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (Segment segment in axes)
         {
-            replay.AddDecorationWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
+            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
         }
 
         // Frightening Speed - Numbers spread AoEs
@@ -310,11 +310,11 @@ internal class Kanaxai : SilentSurf
         }
 
         // Target Order Overhead
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -351,11 +351,11 @@ internal class Kanaxai : SilentSurf
                     double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
                     if (actualDuration > 0)
                     {
-                        replay.AddOverheadIcon(new Segment(c.Time, c.Time + (long)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
+                        replay.Decorations.AddOverheadIcon(new Segment(c.Time, c.Time + (long)Math.Ceiling(actualDuration), 1), target, ParserIcons.EyeOverhead, 30);
                     }
                     else
                     {
-                        replay.AddOverheadIcon(new Segment(c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                        replay.Decorations.AddOverheadIcon(new Segment(c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
                     }
                 }
                 break;
@@ -389,7 +389,7 @@ internal class Kanaxai : SilentSurf
                     {
                         double actualDuration = ComputeCastTimeWithQuicknessAndSugarRush(log, target, c.Time, castDuration);
                         var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
-                        replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
+                        replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                     }
 
                     // If the aspect has Sugar rush AND NOT Quickness
@@ -397,7 +397,7 @@ internal class Kanaxai : SilentSurf
                     {
                         var actualDuration = ComputeCastTimeWithSugarRush(castDuration);
                         var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
-                        replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
+                        replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                     }
 
                     // If the aspect DOESN'T have Sugar rush but HAS Quickness
@@ -405,13 +405,13 @@ internal class Kanaxai : SilentSurf
                     {
                         double actualDuration = ComputeCastTimeWithQuickness(log, target, c.Time, castDuration);
                         var duration = new Segment(c.Time, c.Time + (int)Math.Ceiling(actualDuration), 1);
-                        replay.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
+                        replay.Decorations.AddOverheadIcon(duration, target, ParserIcons.EyeOverhead, 30);
                     }
 
                     // If the aspect DOESN'T have Sugar Rush and Quickness
                     if (!hasSugarRush && quickness == null)
                     {
-                        replay.AddOverheadIcon(new Segment((int)c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
+                        replay.Decorations.AddOverheadIcon(new Segment((int)c.Time, expectedEndCastTime, 1), target, ParserIcons.EyeOverhead, 30);
                     }
                 }
                 break;
@@ -522,6 +522,6 @@ internal class Kanaxai : SilentSurf
     /// <param name="growing">Duration of the channel.</param>
     private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, (long start, long end) lifespan, long growing)
     {
-        replay.AddDecorationWithGrowing(new CircleDecoration(1100, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing);
+        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1100, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing);
     }
 }

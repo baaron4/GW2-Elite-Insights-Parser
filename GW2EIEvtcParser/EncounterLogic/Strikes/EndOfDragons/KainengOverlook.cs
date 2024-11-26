@@ -217,15 +217,15 @@ internal class KainengOverlook : EndOfDragonsStrike
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Target Order
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
         // Fixation
-        replay.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, FixatedAnkkaKainengOverlook, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.FixationPurpleOverhead);
         var fixationEvents = GetFilteredList(log.CombatData, FixatedAnkkaKainengOverlook, p, true, true);
-        replay.AddTether(fixationEvents, Colors.Magenta, 0.5);
+        replay.Decorations.AddTether(fixationEvents, Colors.Magenta, 0.5);
 
         // Shared Destruction (Green)
         int greenDuration = 6250;
@@ -270,7 +270,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                 (int, int) lifespan = ((int)effect.Time, (int)effect.Time + correctedDuration);
 
                 // Tether Sniper to Player
-                replay.AddTetherByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
+                replay.Decorations.AddTetherByEffectGUID(log, effect, Colors.Yellow, 0.3, correctedDuration, true);
 
                 // Circle around the player
                 replay.Decorations.Add(new CircleDecoration(500, lifespan, Colors.Red, 0.2, new AgentConnector(p)).UsingFilled(false));
@@ -284,7 +284,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new AgentConnector(p);
-                replay.AddDecorationWithGrowing(new CircleDecoration(230, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(230, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
 
@@ -295,7 +295,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                 var connector = new AgentConnector(p);
-                replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
 
@@ -306,7 +306,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 2000);
                 var connector = new AgentConnector(p);
-                replay.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
 
@@ -317,7 +317,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new AgentConnector(p);
-                replay.AddDecorationWithGrowing(new CircleDecoration(280, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(280, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
     }
@@ -389,7 +389,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                         var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespanWarning, Colors.Orange, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
-                        replay.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
+                        replay.Decorations.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
                     }
                 }
                 // Damage decoration
@@ -400,20 +400,20 @@ internal class KainengOverlook : EndOfDragonsStrike
                     var connector = new AgentConnector(target);
                     var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                     var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespan, "rgba(30, 120, 40, 0.4)", connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
-                    replay.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
+                    replay.Decorations.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
                 }
             }  break;
             case (int)ArcDPSEnums.TrashID.TheEnforcer:
             case (int)ArcDPSEnums.TrashID.TheEnforcerCM:
                 // Blue tether from Enforcer to Mindblade when they're close to each other
                 var enforcerInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
-                replay.AddTether(enforcerInspiration, Colors.Blue, 0.1);
+                replay.Decorations.AddTether(enforcerInspiration, Colors.Blue, 0.1);
                 break;
             case (int)ArcDPSEnums.TrashID.TheMindblade:
             case (int)ArcDPSEnums.TrashID.TheMindbladeCM:
                 // Blue tether from Mindblade to Enforcer when they're close to each other
                 var mindbladeInspiration = GetFilteredList(log.CombatData, LethalInspiration, target, true, true);
-                replay.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
+                replay.Decorations.AddTether(mindbladeInspiration, Colors.Blue, 0.1);
                 break;
             case (int)ArcDPSEnums.TrashID.TheRitualist:
             case (int)ArcDPSEnums.TrashID.TheRitualistCM:
@@ -427,7 +427,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                         var connector = new AgentConnector(target);
                         var circle = new CircleDecoration(380, lifespan, Colors.Orange, 0.2, connector);
-                        replay.AddDecorationWithGrowing(circle, lifespan.Item2);
+                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2);
                     }
                 }
                 break;
@@ -440,7 +440,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                         var connector = new AgentConnector(target);
                         var doughnut = new DoughnutDecoration(100, 500, lifespan, Colors.Orange, 0.2, connector);
-                        replay.AddDecorationWithGrowing(doughnut, lifespan.Item2);
+                        replay.Decorations.AddDecorationWithGrowing(doughnut, lifespan.Item2);
                     }
                 }
                 break;
@@ -596,7 +596,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         var connector = new AgentConnector(target);
         var rotationConnector = new AngleConnector(facingDirection);
         var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-        replay.AddDecorationWithGrowing(pie, lifespan.Item2);
+        replay.Decorations.AddDecorationWithGrowing(pie, lifespan.Item2);
         replay.Decorations.Add(pie.GetBorderDecoration());
     }
 
@@ -610,7 +610,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         var connector = new AgentConnector(target);
         var rotationConnector = new AngleConnector(facingDirection);
         var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-        replay.AddDecorationWithGrowing(pie, lifespan.Item2);
+        replay.Decorations.AddDecorationWithGrowing(pie, lifespan.Item2);
     }
 
     private static void AddSharedDestructionDecoration(PlayerActor p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)

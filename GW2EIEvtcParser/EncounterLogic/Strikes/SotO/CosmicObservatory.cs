@@ -89,7 +89,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     (long, long) lifespan = (cast.Time, cast.Time + cast.ActualDuration);
                     var connector = new AgentConnector(target);
                     var circle = new CircleDecoration(300, lifespan, "rgba(0, 191, 255, 0.2)", connector);
-                    replay.AddDecorationWithGrowing(circle, lifespan.Item2);
+                    replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2);
                 }
 
                 // Shooting Stars - Green Arrow
@@ -136,18 +136,18 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
 
         // Lost Control
         var lostControls = p.GetBuffStatus(log, CosmicObservatoryLostControlBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(lostControls, p, ParserIcons.CallTarget);
+        replay.Decorations.AddOverheadIcons(lostControls, p, ParserIcons.CallTarget);
 
         // Shooting Stars Target Overhead
         var shootingStarsTarget = p.GetBuffStatus(log, ShootingStarsTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(shootingStarsTarget, p, ParserIcons.TargetOverhead);
+        replay.Decorations.AddOverheadIcons(shootingStarsTarget, p, ParserIcons.TargetOverhead);
 
         // Target Order (CM)
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder1, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder2, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder3, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder4, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, TargetOrder5, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.TargetOrder5Overhead);
 
         // Tethering the player to the Soul Feast.
         // The buff is applied by Dagda to the player and the Soul Feast follows that player until death.
@@ -188,7 +188,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new AgentConnector(p);
                 var circle = new CircleDecoration(285, lifespan, Colors.Orange, 0.2, connector);
-                replay.AddDecorationWithGrowing(circle, lifespan.Item2);
+                replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2);
             }
         }
 
@@ -200,7 +200,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 (long, long) lifespan = effect.ComputeLifespan(log, 6250, p.AgentItem, DagdaSharedDestruction_MeteorCrash);
                 var connector = new AgentConnector(p);
                 var circle = new CircleDecoration(160, lifespan, Colors.DarkGreen, 0.4, connector);
-                replay.AddDecorationWithGrowing(circle, lifespan.Item2, true);
+                replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2, true);
             }
         }
     }

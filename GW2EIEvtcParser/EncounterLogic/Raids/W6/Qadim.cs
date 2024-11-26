@@ -535,7 +535,7 @@ internal class Qadim : MythwrightGambit
                         GeographicalConnector connector = new PositionConnector(position);
                         replay.Decorations.Add(new CircleDecoration(impactRadius, (start, start + delay), Colors.Orange, 0.2, connector));
                         replay.Decorations.Add(new CircleDecoration(impactRadius, (start + delay - 10, start + delay + 100), Colors.Orange, 0.7, connector));
-                        replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.7, radius);
+                        replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.7, radius);
                     }
                 }
                 break;
@@ -613,7 +613,7 @@ internal class Qadim : MythwrightGambit
                         for (uint i = 0; i < coneAmount; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
 
                         }
                     }
@@ -661,7 +661,7 @@ internal class Qadim : MythwrightGambit
                         for (uint i = 0; i < coneAmount; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                 }
@@ -676,7 +676,7 @@ internal class Qadim : MythwrightGambit
                     uint maxRadius = 2000;
                     (long, long) lifespan = (start + delay, start + delay + duration);
                     GeographicalConnector connector = new AgentConnector(target);
-                    replay.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
+                    replay.Decorations.AddShockwave(connector, lifespan, Colors.Yellow, 0.7, maxRadius);
                 }
                 var stompShockwave = cls.Where(x => x.SkillId == SeismicStomp);
                 foreach (CastEvent c in stompShockwave)
@@ -719,7 +719,7 @@ internal class Qadim : MythwrightGambit
                         for (uint i = 0; i < coneAmount; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                 }

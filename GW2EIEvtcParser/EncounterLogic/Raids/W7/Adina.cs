@@ -217,7 +217,7 @@ internal class Adina : TheKeyOfAhdashim
                     uint radius = 1100;
                     (long, long) lifespan = (start + delay, start + duration);
                     GeographicalConnector connector = new AgentConnector(target);
-                    replay.AddShockwave(connector, lifespan, Colors.LightOrange, 0.6, radius);
+                    replay.Decorations.AddShockwave(connector, lifespan, Colors.LightOrange, 0.6, radius);
                 }
                 //
                 var diamondPalisades = target.GetBuffStatus(log, DiamondPalisade, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);

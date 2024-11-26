@@ -160,7 +160,7 @@ internal class Freezie : FestivalStrikeMissionLogic
             case (int)TargetID.Freezie:
                 // Fixation tether to Icy Protector
                 var fixations = GetFilteredList(log.CombatData, IcyBarrier, target, true, true);
-                replay.AddTether(fixations, "rgba(30, 144, 255, 0.4)");
+                replay.Decorations.AddTether(fixations, "rgba(30, 144, 255, 0.4)");
                 break;
             default:
                 break;
@@ -173,11 +173,11 @@ internal class Freezie : FestivalStrikeMissionLogic
 
         // Fixation Aurora Beam
         var fixatedBeam = p.GetBuffStatus(log, AuroraBeamTargetBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(fixatedBeam, p, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddOverheadIcons(fixatedBeam, p, ParserIcons.FixationPurpleOverhead);
 
         // Fixation Giant Snowball
         var fixated = p.GetBuffStatus(log, GiantSnowballFreezieTargetBuff1, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(fixated, p, ParserIcons.FixationYellowOverhead);
+        replay.Decorations.AddOverheadIcons(fixated, p, ParserIcons.FixationYellowOverhead);
     }
 
     internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)

@@ -356,15 +356,15 @@ internal class Xera : StrongholdOfTheFaithful
         {
             if (segment.Value >= 90)
             {
-                replay.AddOverheadIcon(segment, player, ParserIcons.DerangementRedOverhead);
+                replay.Decorations.AddOverheadIcon(segment, player, ParserIcons.DerangementRedOverhead);
             }
             else if (segment.Value >= 60)
             {
-                replay.AddOverheadIcon(segment, player, ParserIcons.DerangementGoldOverhead);
+                replay.Decorations.AddOverheadIcon(segment, player, ParserIcons.DerangementGoldOverhead);
             }
             else if (segment.Value >= 30)
             {
-                replay.AddOverheadIcon(segment, player, ParserIcons.DerangementSilverOverhead);
+                replay.Decorations.AddOverheadIcon(segment, player, ParserIcons.DerangementSilverOverhead);
             }
         }
     }

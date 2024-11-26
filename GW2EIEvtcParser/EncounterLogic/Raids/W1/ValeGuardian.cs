@@ -190,7 +190,7 @@ internal class ValeGuardian : SpiritVale
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
-                    replay.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)), start + c.ExpectedDuration);
+                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)), start + c.ExpectedDuration);
                 }
                 if (!log.CombatData.HasEffectData)
                 {
@@ -257,8 +257,8 @@ internal class ValeGuardian : SpiritVale
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Attunements Overhead
-        replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
-        replay.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementBlue, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorBlueOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementGreen, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorGreenOverhead);
+        replay.Decorations.AddOverheadIcons(p.GetBuffStatus(log, PylonAttunementRed, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), p, ParserIcons.SensorRedOverhead);
     }
 }

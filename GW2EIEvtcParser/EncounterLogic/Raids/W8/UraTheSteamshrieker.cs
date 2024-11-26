@@ -171,7 +171,7 @@ internal class UraTheSteamshrieker : MountBalrior
                         if (target.TryGetCurrentFacingDirection(log, effect.Time, out var facingDirection, duration))
                         {
                             var pie = (PieDecoration)new PieDecoration(1000, 60, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(new AngleConnector(facingDirection));
-                            replay.AddDecorationWithGrowing(pie, growing);
+                            replay.Decorations.AddDecorationWithGrowing(pie, growing);
                         }
                     }
                 }
@@ -194,13 +194,13 @@ internal class UraTheSteamshrieker : MountBalrior
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
-        replay.AddOverheadIcons(player.GetBuffStatus(log, Deterrence, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.CrimsonAttunementOverhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, Deterrence, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.CrimsonAttunementOverhead);
 
         // Pressure Blast - Bubble AoE Indicator
         var pressureBlastTarget = player.GetBuffStatus(log, PressureBlastTargetBuff, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (var segment in pressureBlastTarget)
         {
-            replay.AddDecorationWithGrowing(new CircleDecoration(180, segment.TimeSpan, Colors.LightOrange, 0.2, new AgentConnector(player)), segment.End);
+            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, segment.TimeSpan, Colors.LightOrange, 0.2, new AgentConnector(player)), segment.End);
         }
 
         // Pressure Blast - Bubble Lift Up

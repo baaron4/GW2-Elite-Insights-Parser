@@ -363,7 +363,7 @@ internal class Skorvald : ShatteredObservatory
                     if (expectedEndCast <= lifespan.end)
                     {
                         GeographicalConnector connector = new AgentConnector(target);
-                        replay.AddShockwave(connector, lifespanWave, Colors.Red, 0.6, 1200);
+                        replay.Decorations.AddShockwave(connector, lifespanWave, Colors.Red, 0.6, 1200);
                     }
                 }
 
@@ -374,7 +374,7 @@ internal class Skorvald : ShatteredObservatory
                     int duration = 75000;
                     long expectedEndCast = c.Time + duration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, duration));
-                    replay.AddDecorationWithGrowing(new CircleDecoration(1200, lifespan, Colors.Red, 0.2, new AgentConnector(target)), expectedEndCast);
+                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1200, lifespan, Colors.Red, 0.2, new AgentConnector(target)), expectedEndCast);
                 }
 
                 // Cranial Cascade
@@ -416,8 +416,8 @@ internal class Skorvald : ShatteredObservatory
 
                     // Stomp
                     GeographicalConnector connector = new AgentConnector(target);
-                    replay.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, connector), lifespan.end);
-                    replay.AddShockwave(connector, lifespanShockwave, Colors.Red, 0.6, 1200);
+                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, connector), lifespan.end);
+                    replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Red, 0.6, 1200);
                 }
 
                 // Punishing Kick
@@ -463,10 +463,10 @@ internal class Skorvald : ShatteredObservatory
                     int castDuration = 1933;
                     (long start, long end) lifespan = (c.Time, c.Time + castDuration);
                     (long start, long end) lifespanShockwave = (lifespan.end, lifespan.end + 2250);
-                    replay.AddDecorationWithGrowing(new CircleDecoration(160, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
+                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(160, lifespan, Colors.Orange, 0.2, new AgentConnector(target)), lifespan.end);
                     // Nightmare Discharge Shockwave
                     GeographicalConnector connector = new AgentConnector(target);
-                    replay.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, 1200);
+                    replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.3, 1200);
                 }
 
                 // Wave of Mutilation
@@ -541,7 +541,7 @@ internal class Skorvald : ShatteredObservatory
         base.ComputePlayerCombatReplayActors(p, log, replay);
         // Fixations
         var fixations = p.GetBuffStatus(log, [FixatedBloom1, SkorvaldsIre], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
+        replay.Decorations.AddOverheadIcons(fixations, p, ParserIcons.FixationPurpleOverhead);
     }
 
     /// <summary>
@@ -580,7 +580,7 @@ internal class Skorvald : ShatteredObservatory
         int translation = 150;
         var rotationConnector = new AngleConnector(rotation);
         var positionConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(translation, 0, 0), true);
-        replay.AddDecorationWithGrowing((RectangleDecoration)new RectangleDecoration(300, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnector), expectedEndCast);
+        replay.Decorations.AddDecorationWithGrowing((RectangleDecoration)new RectangleDecoration(300, target.HitboxWidth, lifespan, Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnector), expectedEndCast);
 
         // Cascade count => 4
         for (int i = 0; i < 4; i++)

@@ -120,15 +120,15 @@ internal class TwistedCastle : StrongholdOfTheFaithful
         {
             if (segment.Value >= 90)
             {
-                replay.AddOverheadIcon(segment, player, ParserIcons.MadnessRedOverhead);
+                replay.Decorations.AddOverheadIcon(segment, player, ParserIcons.MadnessRedOverhead);
             }
             else if (segment.Value >= 60)
             {
-                replay.AddOverheadIcon(segment, player, ParserIcons.MadnessGoldOverhead);
+                replay.Decorations.AddOverheadIcon(segment, player, ParserIcons.MadnessGoldOverhead);
             }
             else if (segment.Value >= 30)
             {
-                replay.AddOverheadIcon(segment, player, ParserIcons.MadnessSilverOverhead);
+                replay.Decorations.AddOverheadIcon(segment, player, ParserIcons.MadnessSilverOverhead);
             }
         }
     }

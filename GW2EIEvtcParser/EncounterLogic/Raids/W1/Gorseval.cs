@@ -138,7 +138,7 @@ internal class Gorseval : SpiritVale
 
         // Spectral Darkness - Orbs Debuff Overhead
         var spectralDarknesses = p.GetBuffStatus(log, SpectralDarkness, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
-        replay.AddOverheadIcons(spectralDarknesses, p, ParserIcons.SpectralDarknessOverhead);
+        replay.Decorations.AddOverheadIcons(spectralDarknesses, p, ParserIcons.SpectralDarknessOverhead);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
@@ -152,7 +152,7 @@ internal class Gorseval : SpiritVale
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
-                    replay.AddDecorationWithFilledWithGrowing(new CircleDecoration(600, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
+                    replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(600, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
                 }
                 IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                 if (phases.Count > 1)
@@ -264,14 +264,14 @@ internal class Gorseval : SpiritVale
                             }
                             foreach (FormDecoration decoration in nonFullDecorations)
                             {
-                                replay.AddDecorationWithGrowing(decoration, explosionNonFull);
+                                replay.Decorations.AddDecorationWithGrowing(decoration, explosionNonFull);
                             }
                             // Full a different timings
                             if ((pattern & full) > 0)
                             {
                                 (int, int) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
                                 int fullExplosion = explosionNonFull - 1000;
-                                replay.AddDecorationWithGrowing(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
+                                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
                             }
                         }
                     }
