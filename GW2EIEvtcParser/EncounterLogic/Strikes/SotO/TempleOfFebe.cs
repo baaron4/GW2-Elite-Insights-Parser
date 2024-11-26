@@ -443,7 +443,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 long growing = lifespan.end;
                 lifespan = ComputeMechanicLifespanWithCancellationTime(effect.Src, log, lifespan);
                 var circle = new CircleDecoration(radius, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(p));
-                replay.Decorations.AddDecorationWithGrowing(circle, growing, true);
+                replay.Decorations.AddWithGrowing(circle, growing, true);
             }
         }
 
@@ -456,7 +456,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 long growing = lifespan.end;
                 lifespan = ComputeMechanicLifespanWithCancellationTime(effect.Src, log, lifespan);
                 var circle = new CircleDecoration(120, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p));
-                replay.Decorations.AddDecorationWithGrowing(circle, growing);
+                replay.Decorations.AddWithGrowing(circle, growing);
             }
         }
 
@@ -469,7 +469,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 long growing = lifespan.end;
                 lifespan = ComputeMechanicLifespanWithCancellationTime(effect.Src, log, lifespan);
                 var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p));
-                replay.Decorations.AddDecorationWithGrowing(circle, growing);
+                replay.Decorations.AddWithGrowing(circle, growing);
             }
         }
     }
@@ -663,7 +663,7 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             lifespan = ComputeMechanicLifespanWithCancellationTime(target.AgentItem, log, lifespan);
 
             var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
-            replay.Decorations.AddDecorationWithGrowing(circle, growing);
+            replay.Decorations.AddWithGrowing(circle, growing);
         }
     }
 
@@ -701,13 +701,13 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                 var rotation = new AngleConnector(facing);
                 var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(width / 2, 0, 0), true);
                 var rectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, agentConnector).UsingRotationConnector(rotation);
-                replay.Decorations.AddDecorationWithGrowing(rectangle, growing);
+                replay.Decorations.AddWithGrowing(rectangle, growing);
                 if (isEmpowered)
                 {
                     // Opposite Indicator
                     var oppositeAgentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(-(width / 2), 0, 0), true);
                     var oppositeRectangle = (RectangleDecoration)new RectangleDecoration(width, 100, lifespanIndicator, Colors.LightOrange, 0.2, oppositeAgentConnector).UsingRotationConnector(rotation);
-                    replay.Decorations.AddDecorationWithGrowing(oppositeRectangle, growing);
+                    replay.Decorations.AddWithGrowing(oppositeRectangle, growing);
                 }
 
                 // Check if Petrify is casted between the end of the indicator and the start of the damage beam

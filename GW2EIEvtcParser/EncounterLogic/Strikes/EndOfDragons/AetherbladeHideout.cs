@@ -165,7 +165,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     }
 
                     var indicator = (RectangleDecoration)new RectangleDecoration(range, 50, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem).WithOffset(offset, true)).UsingRotationConnector(new AngleConnector(facingDirection));
-                    replay.Decorations.AddDecorationWithGrowing(indicator, growing);
+                    replay.Decorations.AddWithGrowing(indicator, growing);
                 }
                 break;
             case (int)TrashID.MaiTrinStrikeDuringEcho:
@@ -329,7 +329,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         foreach (Segment segment in segments)
         {
             replay.Decorations.Add(new RectangleDecoration(25, 200, segment.TimeSpan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem).WithOffset(offset, true)));
-            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(80, segment.TimeSpan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem)), segment.End);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(80, segment.TimeSpan, Colors.Blue, 0.2, new AgentConnector(player.AgentItem)), segment.End);
         }
 
         // Kaleidoscopic Chaos - Spreads Normal Mode
@@ -719,7 +719,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             var connector = new AgentConnector(target);
             var rotation = new AngleConnector(facingDirection);
             var pie = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotation);
-            replay.Decorations.AddDecorationWithGrowing(pie, growing);
+            replay.Decorations.AddWithGrowing(pie, growing);
             replay.Decorations.Add(pie.GetBorderDecoration());
 
             // If the indicator lifespan matches the growing or the side Mai Trin is casting, add the shockwave.
@@ -729,7 +729,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 var background = (PieDecoration)new PieDecoration(radius, angle, lifespanWave, Colors.Orange, 0.1, connector).UsingRotationConnector(rotation);
                 var shockwave = (PieDecoration)new PieDecoration(radius, angle, lifespanWave, Colors.Red, 0.4, connector).UsingFilled(false).UsingRotationConnector(rotation);
                 replay.Decorations.Add(background);
-                replay.Decorations.AddDecorationWithGrowing(shockwave, lifespanWave.end);
+                replay.Decorations.AddWithGrowing(shockwave, lifespanWave.end);
             }
         }
     }
@@ -769,7 +769,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
             lifespan.end = Math.Min(lifespan.end, effect.ComputeLifespanWithNPCRemoval(log, targets, species).end);
         }
 
-        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, color, 0.2, new AgentConnector(player)), growing);
+        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, lifespan, color, 0.2, new AgentConnector(player)), growing);
     }
 
     /// <summary>
@@ -793,7 +793,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                 }
 
                 var indicator = new CircleDecoration(150, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                replay.Decorations.AddDecorationWithGrowing(indicator, growing);
+                replay.Decorations.AddWithGrowing(indicator, growing);
 
                 // If the echo isn't stunned, add the shockwave. Rendering order
                 if (stun == null)
@@ -888,7 +888,7 @@ internal class AetherbladeHideout : EndOfDragonsStrike
                     {
                         (long start, long end) lifespanDetonation = (detonation.Time, detonation.Time + 250); // Logged duration of 0, overriding to 250 for visual.
                         var detonationDeco = new CircleDecoration(radius, lifespanDetonation, Colors.Yellow, 0.1, new PositionConnector(detonation.Position));
-                        replay.Decorations.AddDecorationWithBorder(detonationDeco, Colors.Red, 0.2);
+                        replay.Decorations.AddWithBorder(detonationDeco, Colors.Red, 0.2);
                     }
                 }
 

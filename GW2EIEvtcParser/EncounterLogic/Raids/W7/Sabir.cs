@@ -139,7 +139,7 @@ internal class Sabir : TheKeyOfAhdashim
         foreach (Segment seg in boltBreaks)
         {
             var circle = new CircleDecoration(boltBreakRadius, seg, "rgba(255, 150, 0, 0.3)", new AgentConnector(p));
-            replay.Decorations.AddDecorationWithGrowing(circle, seg.End);
+            replay.Decorations.AddWithGrowing(circle, seg.End);
         }
     }
 

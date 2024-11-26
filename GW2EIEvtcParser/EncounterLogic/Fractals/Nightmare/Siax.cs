@@ -140,7 +140,7 @@ internal class Siax : Nightmare
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                     lifespan.end = Math.Min(lifespan.end, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
                     var doughnut = new DoughnutDecoration(0, 1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(doughnut, expectedEndCast, true);
+                    replay.Decorations.AddWithGrowing(doughnut, expectedEndCast, true);
                 }
                 // Tail Swipe
                 var tailLash = casts.Where(x => x.SkillId == TailLashSiax);
@@ -162,7 +162,7 @@ internal class Siax : Nightmare
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Determined762, c.Time, castDuration));
                     var circle = new CircleDecoration(1500, lifespan, Colors.Red, 0.2, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(circle, expectedEndCast);
+                    replay.Decorations.AddWithGrowing(circle, expectedEndCast);
                 }
 
                 break;
@@ -184,7 +184,7 @@ internal class Siax : Nightmare
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 300);
                         var circle = new CircleDecoration(240, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target));
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
                 break;

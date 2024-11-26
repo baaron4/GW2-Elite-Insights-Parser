@@ -152,7 +152,7 @@ internal class Gorseval : SpiritVale
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
-                    replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(600, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
+                    replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(600, (start, end), Colors.Orange, 0.5, new AgentConnector(target)).UsingFilled(false), true, c.ExpectedDuration + start);
                 }
                 IReadOnlyList<PhaseData> phases = log.FightData.GetPhases(log);
                 if (phases.Count > 1)
@@ -264,14 +264,14 @@ internal class Gorseval : SpiritVale
                             }
                             foreach (FormDecoration decoration in nonFullDecorations)
                             {
-                                replay.Decorations.AddDecorationWithGrowing(decoration, explosionNonFull);
+                                replay.Decorations.AddWithGrowing(decoration, explosionNonFull);
                             }
                             // Full a different timings
                             if ((pattern & full) > 0)
                             {
                                 (int, int) fullLifespanRampage = (tickStartNonFull - 1000, tickEndNonFull - 1000);
                                 int fullExplosion = explosionNonFull - 1000;
-                                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
+                                replay.Decorations.AddWithGrowing(new CircleDecoration(1800, fullLifespanRampage, color, connector), fullExplosion);
                             }
                         }
                     }

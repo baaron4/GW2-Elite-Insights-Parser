@@ -409,7 +409,7 @@ internal class Dhuum : HallOfChains
                 foreach (CastEvent c in cataCycle)
                 {
                     var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(circle, end);
+                    replay.Decorations.AddWithGrowing(circle, end);
                 }
 
                 // Cone Slash
@@ -524,7 +524,7 @@ internal class Dhuum : HallOfChains
                     var agentConnector = new AgentConnector(target);
                     var rotationConnector = new AngleConnector(facing);
                     var cone = (PieDecoration)new PieDecoration(40, 90, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotationConnector);
-                    replay.Decorations.AddDecorationWithFilledWithGrowing(cone, true, lifespan.Item2);
+                    replay.Decorations.AddWithFilledWithGrowing(cone, true, lifespan.Item2);
                 }
             } break;
             case (int)TrashID.Messenger:
@@ -597,7 +597,7 @@ internal class Dhuum : HallOfChains
                     {
                         int gend = gstart + 5000;
                         var greenCircle = new CircleDecoration(240, (gstart, gend), Colors.DarkGreen, 0.4, new AgentConnector(target));
-                        replay.Decorations.AddDecorationWithGrowing(greenCircle, gend);
+                        replay.Decorations.AddWithGrowing(greenCircle, gend);
                     }
                 }
                 break;
@@ -628,7 +628,7 @@ internal class Dhuum : HallOfChains
             }
             var lifespan = new Segment(start, end, 1);
             var circle = new CircleDecoration(100, lifespan, "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
-            replay.Decorations.AddDecorationWithGrowing(circle, duration);
+            replay.Decorations.AddWithGrowing(circle, duration);
             replay.Decorations.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
@@ -636,7 +636,7 @@ internal class Dhuum : HallOfChains
         foreach (Segment seg in bombDhuum)
         {
             var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
-            replay.Decorations.AddDecorationWithGrowing(circle, seg.Start + 13000);
+            replay.Decorations.AddWithGrowing(circle, seg.Start + 13000);
             replay.Decorations.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
         }
         // shackles connection
@@ -796,6 +796,6 @@ internal class Dhuum : HallOfChains
         replay.Decorations.Add(hitbox);
         replay.Decorations.Add(line);
         replay.Decorations.Add(icon);
-        replay.Decorations.AddDecorationWithFilledWithGrowing(death, true, soulSplitDeathTime);
+        replay.Decorations.AddWithFilledWithGrowing(death, true, soulSplitDeathTime);
     }
 }

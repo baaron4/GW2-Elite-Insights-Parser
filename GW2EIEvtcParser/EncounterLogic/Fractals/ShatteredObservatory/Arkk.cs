@@ -254,7 +254,7 @@ internal class Arkk : ShatteredObservatory
         {
             int start = (int)cosmicMeteor.Start;
             int end = (int)cosmicMeteor.End;
-            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new AgentConnector(p)), end);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(180, (start, end), Colors.DarkGreen, 0.4, new AgentConnector(p)), end);
         }
     }
 

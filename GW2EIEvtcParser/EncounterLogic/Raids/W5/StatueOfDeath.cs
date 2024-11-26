@@ -94,7 +94,7 @@ internal class StatueOfDeath : HallOfChains
                     start = (int)c.Time;
                     end = (int)c.EndTime;
                     var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
+                    replay.Decorations.AddWithGrowing(circle, start + c.ExpectedDuration);
                 }
                 var vomit = cls.Where(x => x.SkillId == HungeringMiasma);
                 foreach (CastEvent c in vomit)
@@ -128,7 +128,7 @@ internal class StatueOfDeath : HallOfChains
                     int gstart = (int)c.Time + 667;
                     int gend = gstart + 5000;
                     var circle = new CircleDecoration(240, (gstart, gend), Colors.Green, 0.2, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(circle, gend);
+                    replay.Decorations.AddWithGrowing(circle, gend);
                 }
             } break;
             case (int)ArcDPSEnums.TrashID.SpiritHorde1:
@@ -209,7 +209,7 @@ internal class StatueOfDeath : HallOfChains
                 end = (int)removedBuff.Time;
             }
             var circle = new CircleDecoration(100, (start, end), "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
-            replay.Decorations.AddDecorationWithGrowing(circle, start + duration);
+            replay.Decorations.AddWithGrowing(circle, start + duration);
         }
     }
 

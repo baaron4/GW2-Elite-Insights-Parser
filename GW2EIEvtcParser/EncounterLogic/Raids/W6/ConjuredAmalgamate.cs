@@ -355,7 +355,7 @@ internal class ConjuredAmalgamate : MythwrightGambit
             if (p.TryGetCurrentInterpolatedPosition(log, start, out var position))
             {
                 var circle = new CircleDecoration(radius, (start, start + duration), "rgba(255, 0, 255, 0.2)", new PositionConnector(position));
-                replay.Decorations.AddDecorationWithBorder(circle);
+                replay.Decorations.AddWithBorder(circle);
             }
         }
         // Shields and Greatswords Overheads

@@ -234,13 +234,13 @@ internal class Sabetha : SpiritVale
         {
             int start = (int)c.Time;
             int end = start + 3000;
-            replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(280, (start, end), Colors.LightOrange, 0.5, new AgentConnector(p)).UsingFilled(false), true, end);
+            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(280, (start, end), Colors.LightOrange, 0.5, new AgentConnector(p)).UsingFilled(false), true, end);
         }
                 // Sapper bombs
         var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
         {
-            replay.Decorations.AddDecorationWithFilledWithGrowing(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);
+            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.BombOverhead);
         }
     }

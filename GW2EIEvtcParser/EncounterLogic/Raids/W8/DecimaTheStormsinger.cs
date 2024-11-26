@@ -118,7 +118,7 @@ internal class DecimaTheStormsinger : MountBalrior
                         (long start, long end) lifespan2 = effect.ComputeLifespan(log, duration);
                         var rotation = new AngleConnector(effect.Rotation.Z + 90);
                         var slice = (PieDecoration)new PieDecoration(1200, 32, lifespan2, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                        replay.Decorations.AddDecorationWithBorder(slice, Colors.LightOrange, 0.6);
+                        replay.Decorations.AddWithBorder(slice, Colors.LightOrange, 0.6);
                     }
                 }
                 break;

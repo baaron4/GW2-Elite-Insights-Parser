@@ -761,7 +761,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         int duration = 3000;
                         (long start, long end) lifespan = (lightningEffect.Time - duration, lightningEffect.Time);
                         var circle = new CircleDecoration(200, lifespan, Colors.LightBlue, 0.2, new PositionConnector(lightningEffect.Position));
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
                 // Primordus - Flames of Primordus
@@ -774,7 +774,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var circle = new CircleDecoration(200, lifespanIndicator, Colors.LightOrange, 0.2, new PositionConnector(fireBallEffect.Position));
                         target.TryGetCurrentPosition(log, lifespanIndicator.start, out var primordusPos);
                         replay.Decorations.AddProjectile(primordusPos, fireBallEffect.Position, lifespanIndicator, Colors.Yellow, 0.2);
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespanIndicator.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespanIndicator.end);
                         replay.Decorations.Add(new CircleDecoration(200, lifespanFlame, Colors.Red, 0.2, new PositionConnector(fireBallEffect.Position)));
                     }
                 }
@@ -787,7 +787,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var connector = new PositionConnector(stormfallEffect.Position);
                         var rotationConnector = new AngleConnector(stormfallEffect.Rotation.Z);
                         var rectangle = (RectangleDecoration)new RectangleDecoration(90, 230, lifespan, Colors.DarkMagenta, 0.2, connector).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddDecorationWithGrowing(rectangle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(rectangle, lifespan.end);
                     }
                 }
                 // Mordremoth - Swarm of Mordremoth (Bees)
@@ -799,7 +799,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         int end = start + 3000;
                         replay.Decorations.Add(new RectangleDecoration(380, 30, (start, end), Colors.Red, 0.4, new PositionConnector(beeLaunchEffect.Position).WithOffset(new(190, 0, 0), true)).UsingRotationConnector(new AngleConnector(beeLaunchEffect.Rotation.Z - 90)));
                         var circle = new CircleDecoration(280, (start, end), Colors.LightOrange, 0.2, new PositionConnector(beeLaunchEffect.Position));
-                        replay.Decorations.AddDecorationWithGrowing(circle, end);
+                        replay.Decorations.AddWithGrowing(circle, end);
                         var initialPosition = new ParametricPoint3D(beeLaunchEffect.Position, end);
                         int velocity = 210;
                         int lifespan = 15000;
@@ -825,10 +825,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var damage = new CircleDecoration(radiusDamage, lifespanDamage, Colors.GreyishGreen, 0.4, position);
                         var damageExtra = new DoughnutDecoration(radiusDamage, radiusEffect, lifespanDamage, Colors.GreyishGreen, 0.2, position);
                         var despawn = new CircleDecoration(radiusEffect, lifespanDespawning, Colors.GreyishGreen, 0.2, position);
-                        replay.Decorations.AddDecorationWithGrowing(spawning, lifespanSpawning.end);
-                        replay.Decorations.AddDecorationWithBorder(damage, Colors.Red, 0.4);
+                        replay.Decorations.AddWithGrowing(spawning, lifespanSpawning.end);
+                        replay.Decorations.AddWithBorder(damage, Colors.Red, 0.4);
                         replay.Decorations.Add(damageExtra);
-                        replay.Decorations.AddDecorationWithGrowing(despawn, lifespanDespawning.end, true);
+                        replay.Decorations.AddWithGrowing(despawn, lifespanDespawning.end, true);
                     }
                 }
                 // Magic Discharge - Orb Explosion
@@ -862,9 +862,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                         int start = (int)effect.Time;
                         int fieldEnd = (int)Math.Min(start + lingerDuration, target.LastAware);
                         // meteor impact
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(600, (start - indicatorDuration, start), Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), start);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(600, (start - indicatorDuration, start), Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), start);
                         // ice field
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1200, (start, fieldEnd), Colors.SkyBlue, 0.1, new PositionConnector(effect.Position)), start + spreadDuration);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(1200, (start, fieldEnd), Colors.SkyBlue, 0.1, new PositionConnector(effect.Position)), start + spreadDuration);
                     }
                 }
                 // Grasp of Jormag - Indicators
@@ -887,7 +887,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     (long start, long end) lifespanBeam = (frostBeamMoveStartVelocity.Time, target.LastAware);
                     replay.Trim(lifespanBeam.start, lifespanBeam.end);
                     var beamAoE = new CircleDecoration(300, lifespanBeam, Colors.LightBlue, 0.1, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithBorder(beamAoE, Colors.Red, 0.5);
+                    replay.Decorations.AddWithBorder(beamAoE, Colors.Red, 0.5);
                 } 
                 else
                 {
@@ -910,7 +910,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         long growingEnd = effect.Time + duration;
                         (long start, long end) lifespan = (effect.Time - duration, effect.Time);
                         lifespan.end = Math.Min(lifespan.end, target.LastAware);
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(580, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)), growingEnd);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(580, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)), growingEnd);
                     }
                 }
 
@@ -931,7 +931,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         long growingEnd = effect.Time + jawsOfDestructionIndicatorDuration;
                         (long start, long end) lifespanIndicator = (effect.Time, Math.Min(growingEnd, target.LastAware));
                         var indicator = new CircleDecoration(1450, lifespanIndicator, Colors.Orange, 0.2, jawsOfDestructionConnector);
-                        replay.Decorations.AddDecorationWithGrowing(indicator, growingEnd);
+                        replay.Decorations.AddWithGrowing(indicator, growingEnd);
                     }
                 }
 
@@ -945,7 +945,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         {
                             (long start, long end) lifespanIndicator = (effect.Time - jawsOfDestructionIndicatorDuration, effect.Time);
                             var indicator = new CircleDecoration(1450, lifespanIndicator, Colors.Orange, 0.2, jawsOfDestructionConnector);
-                            replay.Decorations.AddDecorationWithGrowing(indicator, lifespanIndicator.end);
+                            replay.Decorations.AddWithGrowing(indicator, lifespanIndicator.end);
                         }
                         // The damage field gets cancelled when phasing to Kralkatorrik.
                         (long start, long end) lifespanDamage = effect.ComputeLifespan(log, 5000);
@@ -963,7 +963,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         int indicatorDuration = 2000;
                         long growingEnd = effect.Time + indicatorDuration;
                         (long start, long end) lifespan = (effect.Time, Math.Min(growingEnd, target.LastAware));
-                        replay.Decorations.AddDecorationWithGrowing(new RectangleDecoration(700, 2900, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)), growingEnd);
+                        replay.Decorations.AddWithGrowing(new RectangleDecoration(700, 2900, lifespan, Colors.Orange, 0.2, new PositionConnector(effect.Position)), growingEnd);
                     }
                 }
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleKralkatorrikBeamAoe, out var kralkBeamAoeEffects))
@@ -992,8 +992,8 @@ internal class HarvestTemple : EndOfDragonsStrike
                                     var positionConnector = new PositionConnector(impactEffect.Position);
                                     var warning = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
                                     var impect = new CircleDecoration(radius, (lifespan.end, lifespan.end + 250), Colors.White, 0.3, positionConnector);
-                                    replay.Decorations.AddDecorationWithGrowing(warning, lifespan.end);
-                                    replay.Decorations.AddDecorationWithBorder(impect, Colors.DarkPurple, 0.5);
+                                    replay.Decorations.AddWithGrowing(warning, lifespan.end);
+                                    replay.Decorations.AddWithBorder(impect, Colors.DarkPurple, 0.5);
                                     break;
                                 }
                             }
@@ -1018,7 +1018,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                             EffectEvent nextEffect = poolEffects[i + 1];
                             int start = (int)curEffect.Time;
                             int end = (int)nextEffect.Time;
-                            replay.Decorations.AddDecorationWithBorder(new CircleDecoration((uint)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
+                            replay.Decorations.AddWithBorder(new CircleDecoration((uint)radius, (start, end), "rgba(59, 0, 16, 0.2)", new PositionConnector(curEffect.Position)), Colors.Red, 0.5);
                             radius += radiusIncrement;
                         }
                         EffectEvent lastEffect = poolEffects.Last();
@@ -1036,7 +1036,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         {
                             lifespan.end = lifespan.start + 4000;
                         }
-                        replay.Decorations.AddDecorationWithBorder(new CircleDecoration((uint)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
+                        replay.Decorations.AddWithBorder(new CircleDecoration((uint)radius, lifespan, "rgba(59, 0, 16, 0.2)", new PositionConnector(lastEffect.Position)), Colors.Red, 0.5);
                     }
                 }
                 break;
@@ -1046,7 +1046,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     foreach (EffectEvent effect in mordremothPoisonEffects)
                     {
                         (long start, long end) lifespan = (effect.Time - 2000, effect.Time);
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(200, lifespan, Colors.MilitaryGreen, 0.2, new PositionConnector(effect.Position)), lifespan.end);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespan, Colors.MilitaryGreen, 0.2, new PositionConnector(effect.Position)), lifespan.end);
                     }
                 }
                 // Shockwaves
@@ -1068,7 +1068,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     foreach (EffectEvent effect in putridDelugeImpacts)
                     {
                         (long start, long end) lifespan = (effect.Time - 2000, effect.Time);
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(200, lifespan, Colors.LightMilitaryGreen, 0.2, new PositionConnector(effect.Position)), lifespan.end);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespan, Colors.LightMilitaryGreen, 0.2, new PositionConnector(effect.Position)), lifespan.end);
                     }
                 }
                 if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.HarvestTempleZhaitanPutridDelugeAoE, out var putridDelugeAoEs))
@@ -1081,7 +1081,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         {
                             lifespan.end = Math.Min(target.LastAware, lifespan.end);
                         }
-                        replay.Decorations.AddDecorationWithBorder(new CircleDecoration(200, lifespan, Colors.LightMilitaryGreen, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.4);
+                        replay.Decorations.AddWithBorder(new CircleDecoration(200, lifespan, Colors.LightMilitaryGreen, 0.2, new PositionConnector(effect.Position)), Colors.Red, 0.4);
                     }
                 }
                 // Tail Slam
@@ -1092,7 +1092,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         // We use effect time - 3000 because the AoE effect indicator isn't disambiguous, the impact is
                         (long start, long end) lifespan = (effect.Time - 3000, effect.Time);
                         var circle = new CircleDecoration(620, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
                 // Scream of Zhaitan
@@ -1102,7 +1102,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 3000);
                         var circle = new CircleDecoration(1720, lifespan, Colors.LightRed, 0.1, new PositionConnector(effect.Position));
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
                 break;
@@ -1115,7 +1115,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     {
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 2300);
                         var connector = new PositionConnector(effect.Position);
-                        replay.Decorations.AddDecorationWithGrowing((PieDecoration)new PieDecoration(1060, 145, lifespan, Colors.Red, 0.4, connector).UsingRotationConnector(rotationConnector), lifespan.end);
+                        replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(1060, 145, lifespan, Colors.Red, 0.4, connector).UsingRotationConnector(rotationConnector), lifespan.end);
                     }
                 }
 
@@ -1184,7 +1184,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                                 }
                             }
                             // Add aoe
-                            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(aoe.Position)), lifespanAoE.end);
                             // Add projectile
                             replay.Decorations.AddProjectile(orb.Position, aoe.Position, lifespanAoE, Colors.Black, 0.5);
                         }
@@ -1216,7 +1216,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                             }
                             // Add aoe
                             (long start, long end) lifespanAoE = (endingAoE.Time, endingAoE.Time + endingAoEDuration);
-                            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(endingAoE.Position)), lifespanAoE.end);
                             // Add projectile - Starts when the previous AoE ends because it's bouncing
                             (long start, long end) lifespanAnimation = (startingAoE.Time + startingAoEDuration, endingAoE.Time + endingAoEDuration);
                             replay.Decorations.AddProjectile(startingAoE.Position, endingAoE.Position, lifespanAnimation, Colors.Black, 0.5);
@@ -1237,13 +1237,13 @@ internal class HarvestTemple : EndOfDragonsStrike
 
                             // Tail Slam AoE
                             (long start, long end) lifespanTail = tailSlamEffect.ComputeLifespan(log, 1600);
-                            replay.Decorations.AddDecorationWithGrowing(new RectangleDecoration(3000, 750, lifespanTail, Colors.Red, 0.2, new PositionConnector(tailSlamEffect.Position)), lifespanTail.end);
+                            replay.Decorations.AddWithGrowing(new RectangleDecoration(3000, 750, lifespanTail, Colors.Red, 0.2, new PositionConnector(tailSlamEffect.Position)), lifespanTail.end);
 
                             // Void Orbs AoEs
                             foreach (EffectEvent orbAoeEffect in filteredVoidOrbsAoEs)
                             {
                                 (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
-                                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
+                                replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
                                 // Add projectile
                                 replay.Decorations.AddProjectile(tailSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
                             }
@@ -1263,13 +1263,13 @@ internal class HarvestTemple : EndOfDragonsStrike
                             var filteredVoidOrbsAoEs = genericOrangeAoE.Where(x => Math.Abs(x.Time - tsunamiSlamEffect.Time) < 2000 && x.Time < tsunamiSlamEffect.Time + 10000);
 
                             (long start, long end) lifespanClawAoE = tsunamiSlamEffect.ComputeLifespan(log, 1600);
-                            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(235, lifespanClawAoE, Colors.Red, 0.2, new PositionConnector(tsunamiSlamEffect.Position)), lifespanClawAoE.end);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(235, lifespanClawAoE, Colors.Red, 0.2, new PositionConnector(tsunamiSlamEffect.Position)), lifespanClawAoE.end);
 
                             // Void Orbs AoEs
                             foreach (EffectEvent orbAoeEffect in filteredVoidOrbsAoEs)
                             {
                                 (long start, long end) lifespanAoE = orbAoeEffect.ComputeLifespan(log, 1900);
-                                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
+                                replay.Decorations.AddWithGrowing(new CircleDecoration(200, lifespanAoE, Colors.LightOrange, 0.2, new PositionConnector(orbAoeEffect.Position)), lifespanAoE.end);
                                 // Add projectile
                                 replay.Decorations.AddProjectile(tsunamiSlamEffect.Position, orbAoeEffect.Position, lifespanAoE, Colors.Black, 0.5);
                             }
@@ -1303,7 +1303,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 {
                     int castTime = 1900;
                     int endTime = (int)c.Time + castTime;
-                    replay.Decorations.AddDecorationWithGrowing(new DoughnutDecoration(260, 480, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
+                    replay.Decorations.AddWithGrowing(new DoughnutDecoration(260, 480, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
                 // Ground Slam - AoE that knocks out
                 var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamHT);
@@ -1312,7 +1312,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     int castTime = c.SkillId == ZhaitansReachGroundSlam ? 800 : 2500;
                     uint radius = 400;
                     long endTime = c.Time + castTime;
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.VoidBrandbomber:
@@ -1334,7 +1334,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                             uint radius = 240;
                             var positionConnector = new PositionConnector(brandedArtilleryAoE.Position);
                             var aoeCircle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                            replay.Decorations.AddDecorationWithGrowing(aoeCircle, lifespan.end);
+                            replay.Decorations.AddWithGrowing(aoeCircle, lifespan.end);
                             // Projective decoration
                             replay.Decorations.AddProjectile(brandbomberPosition, brandedArtilleryAoE.Position, lifespan, Colors.DarkPurple);
                         }
@@ -1359,7 +1359,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 10000);
                         var positionConnector = new PositionConnector(effect.Position);
                         var circle = new CircleDecoration(100, lifespan, Colors.Black, 0.2, positionConnector);
-                        replay.Decorations.AddDecorationWithBorder(circle, Colors.LightRed, 0.4);
+                        replay.Decorations.AddWithBorder(circle, Colors.LightRed, 0.4);
                     }
                 }
                 break;
@@ -1381,7 +1381,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     (long start, long end) lifespan = (c.Time, actualEndCast);
                     var agentConnector = new AgentConnector(c.Caster);
                     var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, agentConnector);
-                    replay.Decorations.AddDecorationWithGrowing(circle, supposedEndCast);
+                    replay.Decorations.AddWithGrowing(circle, supposedEndCast);
                 }
 
                 // Rotting Bile - Poison AoE Indicator
@@ -1393,7 +1393,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 1400);
                         var positionConnector = new PositionConnector(effect.Position);
                         var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
 
@@ -1421,7 +1421,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var positionConnector = new PositionConnector(effect.Position);
                         var circleIndicator = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, positionConnector);
                         var lightningIndicator = new CircleDecoration(radius, (lifespan.end, lifespan.end + 250), Colors.LightPurple, 0.2, positionConnector);
-                        replay.Decorations.AddDecorationWithGrowing(circleIndicator, lifespan.start);
+                        replay.Decorations.AddWithGrowing(circleIndicator, lifespan.start);
                         replay.Decorations.Add(lightningIndicator);
                     }
                 }
@@ -1437,7 +1437,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var positionConnector = new PositionConnector(effect.Position);
                         var circleIndicator = new CircleDecoration(radius, (lifespan.start - 2000, lifespan.start), Colors.LightOrange, 0.2, positionConnector);
                         var circleWhirlpool = new CircleDecoration(radius, lifespan, Colors.LightBlue, 0.2, positionConnector);
-                        replay.Decorations.AddDecorationWithGrowing(circleIndicator, lifespan.start);
+                        replay.Decorations.AddWithGrowing(circleIndicator, lifespan.start);
                         replay.Decorations.Add(circleWhirlpool);
                         // The whirlpools increase in size every set of 3, find if there is a next effect within 500ms.
                         EffectEvent? nextWhirlpool = hydroBurstWhirlpools.FirstOrDefault(x => Math.Abs(x.Time - effect.Time) < 500 && x.Time > effect.Time);
@@ -1462,7 +1462,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var positionConnector = new PositionConnector(effect.Position);
                         var rotationConnector = new AngleConnector(effect.Rotation.Z + 90);
                         var cone = (PieDecoration)new PieDecoration(radius, angle, lifespan, Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddDecorationWithGrowing(cone, lifespan.end);
+                        replay.Decorations.AddWithGrowing(cone, lifespan.end);
                     }
                 }
 
@@ -1477,7 +1477,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var positionConnector = new PositionConnector(effect.Position);
                         var rotationConnector = new AngleConnector(effect.Rotation.Z + 90);
                         var rectangle = (RectangleDecoration)new RectangleDecoration(width, height, lifespan, Colors.LightOrange, 0.2, positionConnector).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddDecorationWithGrowing(rectangle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(rectangle, lifespan.end);
                     }
                 }
 
@@ -1489,7 +1489,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 1700);
                         var positionConnector = new PositionConnector(effect.Position);
                         var circle = new CircleDecoration(300, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
 
@@ -1509,7 +1509,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                                 innerRadius = 180;
                                 outerRadius = 300;
                                 var circle = new CircleDecoration(140, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                                replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                                replay.Decorations.AddWithGrowing(circle, lifespan.end);
                                 break;
                             case 1:
                             case 2:
@@ -1527,7 +1527,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                                 break;
                         }
                         var doughnut = new DoughnutDecoration(innerRadius, outerRadius, lifespan, Colors.LightOrange, 0.2, positionConnector);
-                        replay.Decorations.AddDecorationWithGrowing(doughnut, lifespan.end);
+                        replay.Decorations.AddWithGrowing(doughnut, lifespan.end);
                         counter = (counter + 1) % 7;
                     }
                 }
@@ -1545,7 +1545,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     (long start, long end) lifespan = (c.Time, actualEndCast);
                     var agentConnector = new AgentConnector(c.Caster);
                     var cone = new PieDecoration(radius, angle, lifespan, Colors.Orange, 0.2, agentConnector);
-                    replay.Decorations.AddDecorationWithGrowing(cone, supposedEndCast);
+                    replay.Decorations.AddWithGrowing(cone, supposedEndCast);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.VoidObliterator:
@@ -1564,7 +1564,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var agentConnector = (AgentConnector)new AgentConnector(target).WithOffset(new(length / 2, 0, 0), true);
                         var rotation = new AngleConnector(facing);
                         var rectangle = (RectangleDecoration)new RectangleDecoration(length, width, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotation);
-                        replay.Decorations.AddDecorationWithGrowing(rectangle, supposedEndCast);
+                        replay.Decorations.AddWithGrowing(rectangle, supposedEndCast);
                     }
                 }
 
@@ -1583,7 +1583,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         var agentConnector = new AgentConnector(target);
                         var rotation = new AngleConnector(facing);
                         var warningCone = (PieDecoration)new PieDecoration(radius, openingAngle, lifespan, Colors.Orange, 0.2, agentConnector).UsingRotationConnector(rotation);
-                        replay.Decorations.AddDecorationWithGrowing(warningCone, supposedEndCast);
+                        replay.Decorations.AddWithGrowing(warningCone, supposedEndCast);
                         // Manually adding a fire decoration for old logs
                         if (!log.CombatData.HasEffectData)
                         {
@@ -1658,7 +1658,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                     (long start, long end) lifespan = (c.Time, actualEndCast);
                     var agentConnector = new AgentConnector(c.Caster);
                     var circle = new CircleDecoration(radius, lifespan, Colors.Orange, 0.2, agentConnector);
-                    replay.Decorations.AddDecorationWithGrowing(circle, supposedEndCast);
+                    replay.Decorations.AddWithGrowing(circle, supposedEndCast);
                 }
 
                 // Glacial Slam - AoE
@@ -1671,7 +1671,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                         (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                         var positionConnector = new PositionConnector(effect.Position);
                         var circle = new CircleDecoration(radius, lifespan, Colors.Ice, 0.4, positionConnector);
-                        replay.Decorations.AddDecorationWithBorder(circle, Colors.Red, 0.5);
+                        replay.Decorations.AddWithBorder(circle, Colors.Red, 0.5);
                     }
                 }
                 break;
@@ -1738,7 +1738,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 continue;
             }
             lifespan.end = Math.Min((int)dragonVoid.LastAware, lifespan.end);
-            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(p)), growing);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(radius, lifespan, Colors.Red, 0.2, new AgentConnector(p)), growing);
         }
     }
 
@@ -1765,7 +1765,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 continue;
             }
             lifespan.end = Math.Min(dragonVoid.LastAware, lifespan.end);
-            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p)), growing);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(p)), growing);
         }
     }
 

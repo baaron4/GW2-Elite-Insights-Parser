@@ -352,7 +352,7 @@ internal static class RevenantHelper
                 var connector = new PositionConnector(effect.Position);
                 (long start, long end) lifespanWarning = (effect.Time, effect.Time + warningDuration);
                 var circle = (CircleDecoration)new CircleDecoration(radius, lifespanWarning, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill);
-                replay.Decorations.AddDecorationWithGrowing(circle, lifespanWarning.end);
+                replay.Decorations.AddWithGrowing(circle, lifespanWarning.end);
                 replay.Decorations.Add(new IconDecoration(ParserIcons.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanWarning, connector).UsingSkillMode(skill));
                 // Hit indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRazeHit, out var abyssalRazeHits))

@@ -103,7 +103,7 @@ internal class Ensolyss : Nightmare
         {
             var connector = new AgentConnector(target);
             var rotationConnector = new AngleConnector(point);
-            replay.Decorations.AddDecorationWithGrowing((PieDecoration)new PieDecoration(700, 90, (startQuarter, endQuarter), Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growingQuarter);
+            replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(700, 90, (startQuarter, endQuarter), Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growingQuarter);
             if (endQuarter == growingQuarter) // If the attack went off
             {
                 replay.Decorations.Add(new PieDecoration(700, 90, (endQuarter, endQuarter + 1000), Colors.LightPink, 0.2, connector).UsingRotationConnector(rotationConnector)); // Lingering
@@ -121,8 +121,8 @@ internal class Ensolyss : Nightmare
             var flippedRotationConnector = new AngleConnector(flipPoint);
             (long start, long end) lifespanLingering = (lifespan.end, lifespan.end + 1000);
 
-            replay.Decorations.AddDecorationWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growing); // Frontal
-            replay.Decorations.AddDecorationWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(flippedRotationConnector), growing); // Retro
+            replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(rotationConnector), growing); // Frontal
+            replay.Decorations.AddWithGrowing((PieDecoration)new PieDecoration(1200, 90, lifespan, Colors.LightOrange, 0.2, connector).UsingRotationConnector(flippedRotationConnector), growing); // Retro
             if (lifespan.end == growing) // If the attack went off
             {
                 replay.Decorations.Add(new PieDecoration(1200, 90, lifespanLingering, Colors.LightPink, 0.2, connector).UsingRotationConnector(rotationConnector)); // Frontal Lingering
@@ -174,7 +174,7 @@ internal class Ensolyss : Nightmare
                                     attackEnd = (int)_percent15treshhold.Start;
                                 }
                                 replay.Decorations.Add(new CircleDecoration(300, (start, attackEnd), Colors.Blue, 0.4, new PositionConnector(shieldEffect.Position)));
-                                replay.Decorations.AddDecorationWithGrowing(new DoughnutDecoration(300, 2000, (start, attackEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), expectedHitEnd, true);
+                                replay.Decorations.AddWithGrowing(new DoughnutDecoration(300, 2000, (start, attackEnd), Colors.Red, 0.2, new PositionConnector(shieldEffect.Position)), expectedHitEnd, true);
                             }
                         }
                     }
@@ -248,7 +248,7 @@ internal class Ensolyss : Nightmare
                     {
                         var rotation = new AngleConnector(facing);
                         var cone = (PieDecoration)new PieDecoration(600, 144, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)).UsingRotationConnector(rotation);
-                        replay.Decorations.AddDecorationWithGrowing(cone, expectedEndCast);
+                        replay.Decorations.AddWithGrowing(cone, expectedEndCast);
                     }
                 }
 
@@ -282,7 +282,7 @@ internal class Ensolyss : Nightmare
                     int castDuration = 1500;
                     long expectedEndCast = c.Time + castDuration;
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1300, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), expectedEndCast);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(1300, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target)), expectedEndCast);
                 }
 
                 // Upswing
@@ -294,7 +294,7 @@ internal class Ensolyss : Nightmare
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
                     (long start, long end) lifespanShockwave = (lifespan.end, c.Time + 3100);
                     GeographicalConnector connector = new AgentConnector(target);
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, connector), expectedEndCast);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(600, lifespan, Colors.LightOrange, 0.2, connector), expectedEndCast);
                     // Shockwave
                     replay.Decorations.AddShockwave(connector, lifespanShockwave, Colors.Yellow, 0.4, 1500);
                 }
@@ -309,7 +309,7 @@ internal class Ensolyss : Nightmare
                     (long start, long end) lifespan = (c.Time, ComputeEndCastTimeByBuffApplication(log, target, Stun, c.Time, castDuration));
 
                     // Circle going in
-                    replay.Decorations.AddDecorationWithGrowing(new DoughnutDecoration(0, 2000, lifespan, Colors.Red, 0.2, new AgentConnector(target)), expectedEndCast, true);
+                    replay.Decorations.AddWithGrowing(new DoughnutDecoration(0, 2000, lifespan, Colors.Red, 0.2, new AgentConnector(target)), expectedEndCast, true);
 
                     if (lifespan.end == expectedEndCast)
                     {
@@ -373,7 +373,7 @@ internal class Ensolyss : Nightmare
                     replay.Decorations.Add(outline);
                     // Orange warning circle
                     var warning = new CircleDecoration(380, lifespanWarning, Colors.LightOrange, 0.2, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(warning, lifespanWarning.end);
+                    replay.Decorations.AddWithGrowing(warning, lifespanWarning.end);
                     // Growing inwards shockwave
                     var shockwave = (CircleDecoration)new CircleDecoration(1200, lifespanShockwave, Colors.Yellow, 0.4, new AgentConnector(target)).UsingFilled(false).UsingGrowingEnd(lifespanShockwave.end, true);
                     replay.Decorations.Add(shockwave);
@@ -413,7 +413,7 @@ internal class Ensolyss : Nightmare
                 {
                     int castDuration = 1333;
                     (long start, long end) lifespan = (c.Time, c.Time + castDuration);
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.1, new AgentConnector(target)), lifespan.end);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.1, new AgentConnector(target)), lifespan.end);
                 }
                 break;
             case (int)TrashID.NightmareHallucination2:

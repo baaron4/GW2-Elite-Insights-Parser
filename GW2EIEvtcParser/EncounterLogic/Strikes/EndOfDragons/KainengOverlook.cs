@@ -284,7 +284,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new AgentConnector(p);
-                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(230, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(230, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
 
@@ -295,7 +295,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 8000);
                 var connector = new AgentConnector(p);
-                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
 
@@ -306,7 +306,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 2000);
                 var connector = new AgentConnector(p);
-                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(240, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
 
@@ -317,7 +317,7 @@ internal class KainengOverlook : EndOfDragonsStrike
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new AgentConnector(p);
-                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(280, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(280, lifespan, Colors.Orange, 0.2, connector), lifespan.Item2);
             }
         }
     }
@@ -389,7 +389,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                         var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespanWarning, Colors.Orange, 0.2, connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
+                        replay.Decorations.AddWithBorder(rectangle, Colors.Red, 0.2);
                     }
                 }
                 // Damage decoration
@@ -400,7 +400,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                     var connector = new AgentConnector(target);
                     var rotationConnector = new AgentFacingConnector(target, 90, AgentFacingConnector.RotationOffsetMode.AddToMaster);
                     var rectangle = (RectangleDecoration)new RectangleDecoration(375, 3000, lifespan, "rgba(30, 120, 40, 0.4)", connector.WithOffset(offset, true)).UsingRotationConnector(rotationConnector);
-                    replay.Decorations.AddDecorationWithBorder(rectangle, Colors.Red, 0.2);
+                    replay.Decorations.AddWithBorder(rectangle, Colors.Red, 0.2);
                 }
             }  break;
             case (int)ArcDPSEnums.TrashID.TheEnforcer:
@@ -427,7 +427,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                         var connector = new AgentConnector(target);
                         var circle = new CircleDecoration(380, lifespan, Colors.Orange, 0.2, connector);
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.Item2);
                     }
                 }
                 break;
@@ -440,7 +440,7 @@ internal class KainengOverlook : EndOfDragonsStrike
                         (long, long) lifespan = effect.ComputeLifespan(log, 5500);
                         var connector = new AgentConnector(target);
                         var doughnut = new DoughnutDecoration(100, 500, lifespan, Colors.Orange, 0.2, connector);
-                        replay.Decorations.AddDecorationWithGrowing(doughnut, lifespan.Item2);
+                        replay.Decorations.AddWithGrowing(doughnut, lifespan.Item2);
                     }
                 }
                 break;
@@ -596,7 +596,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         var connector = new AgentConnector(target);
         var rotationConnector = new AngleConnector(facingDirection);
         var pie = (PieDecoration)new PieDecoration(480, angle, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-        replay.Decorations.AddDecorationWithGrowing(pie, lifespan.Item2);
+        replay.Decorations.AddWithGrowing(pie, lifespan.Item2);
         replay.Decorations.Add(pie.GetBorderDecoration());
     }
 
@@ -610,7 +610,7 @@ internal class KainengOverlook : EndOfDragonsStrike
         var connector = new AgentConnector(target);
         var rotationConnector = new AngleConnector(facingDirection);
         var pie = (PieDecoration)new PieDecoration(1200, 160, lifespan, Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-        replay.Decorations.AddDecorationWithGrowing(pie, lifespan.Item2);
+        replay.Decorations.AddWithGrowing(pie, lifespan.Item2);
     }
 
     private static void AddSharedDestructionDecoration(PlayerActor p, CombatReplay replay, (long, long) lifespan, bool isSuccessful)

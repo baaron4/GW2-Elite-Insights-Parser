@@ -120,7 +120,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="filled"></param>
     /// <param name="growingEnd"></param>
     /// <param name="reverseGrowing"></param>
-    internal void AddDecorationWithFilledWithGrowing(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
+    internal void AddWithFilledWithGrowing(FormDecoration decoration, bool filled, long growingEnd, bool reverseGrowing = false)
     {
         Add(decoration);
         Add(decoration.Copy().UsingFilled(filled).UsingGrowingEnd(growingEnd, reverseGrowing));
@@ -132,7 +132,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="decoration"></param>
     /// <param name="growingEnd"></param>
     /// <param name="reverseGrowing"></param>
-    internal void AddDecorationWithGrowing(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
+    internal void AddWithGrowing(FormDecoration decoration, long growingEnd, bool reverseGrowing = false)
     {
         Add(decoration);
         Add(decoration.Copy().UsingGrowingEnd(growingEnd, reverseGrowing));
@@ -143,7 +143,7 @@ internal class CombatReplayDecorationContainer
     /// </summary>
     /// <param name="decoration"></param>
     /// <param name="filled"></param>
-    internal void AddDecorationWithFilled(FormDecoration decoration, bool filled)
+    internal void AddWithFilled(FormDecoration decoration, bool filled)
     {
         Add(decoration);
         Add(decoration.Copy().UsingFilled(filled));
@@ -154,7 +154,7 @@ internal class CombatReplayDecorationContainer
     /// </summary>
     /// <param name="decoration">Must be filled</param>
     /// <param name="color"></param>
-    internal void AddDecorationWithBorder(FormDecoration decoration, string? color = null)
+    internal void AddWithBorder(FormDecoration decoration, string? color = null)
     {
         Add(decoration);
         Add(decoration.GetBorderDecoration(color));
@@ -165,9 +165,9 @@ internal class CombatReplayDecorationContainer
     /// <param name="decoration">Must be filled</param>
     /// <param name="color"></param>
     /// <param name="opacity"></param>
-    internal void AddDecorationWithBorder(FormDecoration decoration, Color color, double opacity)
+    internal void AddWithBorder(FormDecoration decoration, Color color, double opacity)
     {
-        AddDecorationWithBorder(decoration, color.WithAlpha(opacity).ToString(true));
+        AddWithBorder(decoration, color.WithAlpha(opacity).ToString(true));
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="color"></param>
     /// <param name="growingEnd"></param>
     /// <param name="reverseGrowing"></param>
-    internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, string? color = null, bool reverseGrowing = false)
+    internal void AddWithBorder(FormDecoration decoration, long growingEnd, string? color = null, bool reverseGrowing = false)
     {
         Add(decoration);
         Add(decoration.GetBorderDecoration(color).UsingGrowingEnd(growingEnd, reverseGrowing));
@@ -190,9 +190,9 @@ internal class CombatReplayDecorationContainer
     /// <param name="color"></param>
     /// <param name="growingEnd"></param>
     /// <param name="reverseGrowing"></param>
-    internal void AddDecorationWithBorder(FormDecoration decoration, long growingEnd, Color color, double opacity, bool reverseGrowing = false)
+    internal void AddWithBorder(FormDecoration decoration, long growingEnd, Color color, double opacity, bool reverseGrowing = false)
     {
-        AddDecorationWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(true), reverseGrowing);
+        AddWithBorder(decoration, growingEnd, color.WithAlpha(opacity).ToString(true), reverseGrowing);
     }
 
 
@@ -248,7 +248,7 @@ internal class CombatReplayDecorationContainer
     /// <param name="color">color of the tether</param>
     /// <param name="thickness">thickness of the tether</param>
     /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void AddTetherWithCustomConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
+    internal void AddTetherWithConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, string color, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
     {
         int tetherStart = 0;
         AgentItem src = ParserHelper._unknownAgent;
@@ -286,9 +286,9 @@ internal class CombatReplayDecorationContainer
     /// <param name="opacity">opacity of the tether</param>
     /// <param name="thickness">thickness of the tether</param>
     /// <param name="worldSizeThickess">true to indicate that thickness is in inches instead of pixels</param>
-    internal void AddTetherWithCustomConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
+    internal void AddTetherWithConnectors(ParsedEvtcLog log, IEnumerable<BuffEvent> tethers, Color color, double opacity, CustomConnectorBuilder srcConnectorBuilder, CustomConnectorBuilder dstConnectorBuilder, uint thickness = 2, bool worldSizeThickess = false)
     {
-        AddTetherWithCustomConnectors(log, tethers, color.WithAlpha(opacity).ToString(true), srcConnectorBuilder, dstConnectorBuilder, thickness, worldSizeThickess);
+        AddTetherWithConnectors(log, tethers, color.WithAlpha(opacity).ToString(true), srcConnectorBuilder, dstConnectorBuilder, thickness, worldSizeThickess);
     }
 
     /// <summary>
@@ -466,7 +466,7 @@ internal class CombatReplayDecorationContainer
             uint maxRadius = minRadius + radiusIncrease;
             float opacity = inverted ? initialOpacity * i : initialOpacity / i;
             var circle = new DoughnutDecoration(minRadius, maxRadius, lifespan, color, opacity, positionConnector);
-            AddDecorationWithBorder(circle, color, 0.2);
+            AddWithBorder(circle, color, 0.2);
             minRadius = maxRadius;
         }
 

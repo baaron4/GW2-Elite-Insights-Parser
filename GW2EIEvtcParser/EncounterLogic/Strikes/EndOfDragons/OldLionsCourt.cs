@@ -321,7 +321,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
             foreach (EffectEvent effect in tribolt)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 2000);
-                replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.2, new AgentConnector(effect.Dst)), lifespan.end);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(220, lifespan, Colors.LightOrange, 0.2, new AgentConnector(effect.Dst)), lifespan.end);
             }
         }
     }
@@ -451,7 +451,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         uint radius = 100; // The diameter is the size of the Knight's hitbox, which is 200.
                         (long start, long end) lifespan = effect.ComputeLifespan(log, 1190);
                         var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
 
@@ -526,7 +526,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                     {
                         (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, 2000);
                         var circle = new CircleDecoration(180, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                        replay.Decorations.AddDecorationWithGrowing(circle, lifespan.end);
+                        replay.Decorations.AddWithGrowing(circle, lifespan.end);
                     }
                 }
 
@@ -611,7 +611,7 @@ internal class OldLionsCourt : EndOfDragonsStrike
                         // Effect spawns 2 seconds after the NPC, overriding start time to FirstAware and end time to the 5000 ms duration.
                         uint radius = 100; // Approximated value
                         (long start, long end) lifespan = (target.FirstAware, target.FirstAware + 5000);
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem.GetFinalMaster())), lifespan.end);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target.AgentItem.GetFinalMaster())), lifespan.end);
                     }
                 }
                 break;

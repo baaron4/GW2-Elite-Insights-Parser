@@ -613,7 +613,7 @@ internal class Qadim : MythwrightGambit
                         for (uint i = 0; i < coneAmount; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.Decorations.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.3, connector).UsingRotationConnector(rotationConnector));
 
                         }
                     }
@@ -661,7 +661,7 @@ internal class Qadim : MythwrightGambit
                         for (uint i = 0; i < coneAmount; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.Decorations.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                 }
@@ -719,7 +719,7 @@ internal class Qadim : MythwrightGambit
                         for (uint i = 0; i < coneAmount; i++)
                         {
                             var rotationConnector = new AngleConnector(initialAngle - (i * angleIncrement));
-                            replay.Decorations.AddDecorationWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
+                            replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(maxRadius - (i * radiusDecrement), openingAngle, (start, start + delay), Colors.LightOrange, 0.4, connector).UsingRotationConnector(rotationConnector));
                         }
                     }
                 }

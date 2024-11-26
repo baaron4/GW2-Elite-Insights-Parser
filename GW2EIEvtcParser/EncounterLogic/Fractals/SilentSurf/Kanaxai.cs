@@ -299,7 +299,7 @@ internal class Kanaxai : SilentSurf
         IEnumerable<Segment> axes = player.GetBuffStatus(log, [RendingStormAxeTargetBuff1, RendingStormAxeTargetBuff2], log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0);
         foreach (Segment segment in axes)
         {
-            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(180, segment, Colors.Orange, 0.2, new AgentConnector(player)), segment.End);
         }
 
         // Frightening Speed - Numbers spread AoEs
@@ -522,6 +522,6 @@ internal class Kanaxai : SilentSurf
     /// <param name="growing">Duration of the channel.</param>
     private static void AddWorldCleaverDecoration(NPC target, CombatReplay replay, (long start, long end) lifespan, long growing)
     {
-        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(1100, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing);
+        replay.Decorations.AddWithGrowing(new CircleDecoration(1100, lifespan, Colors.Red, 0.2, new AgentConnector(target)), growing);
     }
 }

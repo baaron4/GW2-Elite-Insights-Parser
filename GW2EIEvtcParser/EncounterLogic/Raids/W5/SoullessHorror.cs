@@ -210,7 +210,7 @@ internal class SoullessHorror : HallOfChains
                     if (hpUpdate != null)
                     {
                         var doughnut = new DoughnutDecoration(innerRadius, outerRadius, (hpUpdate.Value.Start, log.FightData.FightEnd), Colors.Orange, 0.3, new PositionConnector(center));
-                        replay.Decorations.AddDecorationWithGrowing(doughnut, hpUpdate.Value.Start + 3000);
+                        replay.Decorations.AddWithGrowing(doughnut, hpUpdate.Value.Start + 3000);
                     }
                     else
                     {
@@ -225,7 +225,7 @@ internal class SoullessHorror : HallOfChains
                     start = (int)c.Time;
                     end = (int)c.EndTime;
                     var circle = new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(circle, start + c.ExpectedDuration);
+                    replay.Decorations.AddWithGrowing(circle, start + c.ExpectedDuration);
                 }
                 
                 var vortex = cls.Where(x => x.SkillId == InnerVortexSlash);
@@ -236,7 +236,7 @@ internal class SoullessHorror : HallOfChains
                     if (target.TryGetCurrentInterpolatedPosition(log, start, out var position))
                     {
                         var circle = new CircleDecoration(380, (start, end), Colors.LightOrange, 0.5, new PositionConnector(position));
-                        replay.Decorations.AddDecorationWithFilledWithGrowing(circle.UsingFilled(false), true, end);
+                        replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, end);
                         replay.Decorations.Add(new DoughnutDecoration(380, 760, (end, end + 1000), Colors.LightOrange, 0.5, new PositionConnector(position)));
                     }
                 }

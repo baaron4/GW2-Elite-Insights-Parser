@@ -89,7 +89,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     (long, long) lifespan = (cast.Time, cast.Time + cast.ActualDuration);
                     var connector = new AgentConnector(target);
                     var circle = new CircleDecoration(300, lifespan, "rgba(0, 191, 255, 0.2)", connector);
-                    replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2);
+                    replay.Decorations.AddWithGrowing(circle, lifespan.Item2);
                 }
 
                 // Shooting Stars - Green Arrow
@@ -188,7 +188,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new AgentConnector(p);
                 var circle = new CircleDecoration(285, lifespan, Colors.Orange, 0.2, connector);
-                replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2);
+                replay.Decorations.AddWithGrowing(circle, lifespan.Item2);
             }
         }
 
@@ -200,7 +200,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 (long, long) lifespan = effect.ComputeLifespan(log, 6250, p.AgentItem, DagdaSharedDestruction_MeteorCrash);
                 var connector = new AgentConnector(p);
                 var circle = new CircleDecoration(160, lifespan, Colors.DarkGreen, 0.4, connector);
-                replay.Decorations.AddDecorationWithGrowing(circle, lifespan.Item2, true);
+                replay.Decorations.AddWithGrowing(circle, lifespan.Item2, true);
             }
         }
     }

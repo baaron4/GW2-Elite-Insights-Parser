@@ -362,7 +362,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     int castTime = 2800;
                     uint radius = 300;
                     int endTime = (int)c.Time + castTime;
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
             } break;
 
@@ -374,7 +374,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     int castTime = 5600;
                     uint radius = 450;
                     int endTime = (int)c.Time + castTime;
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
             } break;
 
@@ -386,7 +386,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                 {
                     int castTime = 1900;
                     int endTime = (int)c.Time + castTime;
-                    replay.Decorations.AddDecorationWithGrowing(new DoughnutDecoration(300, 500, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
+                    replay.Decorations.AddWithGrowing(new DoughnutDecoration(300, 500, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
                 // Ground Slam - AoE that knocks out
                 var groundSlam = casts.Where(x => x.SkillId == ZhaitansReachGroundSlam || x.SkillId == ZhaitansReachGroundSlamXJJ);
@@ -398,7 +398,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     // 66534 -> Fast AoE -- 66397 -> Slow AoE
                     if (c.SkillId == ZhaitansReachGroundSlam) { castTime = 800; } else if (c.SkillId == ZhaitansReachGroundSlamXJJ) { castTime = 2500; }
                     endTime = (int)c.Time + castTime;
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (c.Time, endTime), Colors.Orange, 0.2, new AgentConnector(target)), endTime);
                 }
             } break;
 
@@ -430,7 +430,7 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
                     uint deathsHandRadius = (uint)(log.FightData.IsCM ? 380 : 300);
                     int deathsHandDuration = log.FightData.IsCM ? 33000 : 13000;
                     // AoE on player
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(deathsHandRadius, segment, Colors.Orange, 0.2, new AgentConnector(p)), segment.End);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(deathsHandRadius, segment, Colors.Orange, 0.2, new AgentConnector(p)), segment.End);
                     // Logs without effects, we add the dropped AoE manually
                     if (!log.CombatData.HasEffectData)
                     {
@@ -458,11 +458,11 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         int deathHandGrowStart = start;
         int deathHandGrowEnd = deathHandGrowStart + delay;
         // Growing AoE
-        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (deathHandGrowStart, deathHandGrowEnd), Colors.Orange, 0.2, new PositionConnector(position)), deathHandGrowEnd);
+        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (deathHandGrowStart, deathHandGrowEnd), Colors.Orange, 0.2, new PositionConnector(position)), deathHandGrowEnd);
         // Damaging AoE
         int AoEStart = deathHandGrowEnd;
         int AoEEnd = AoEStart + duration;
-        replay.Decorations.AddDecorationWithBorder(new CircleDecoration(radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.3)", new PositionConnector(position)), Colors.Red, 0.4);
+        replay.Decorations.AddWithBorder(new CircleDecoration(radius, (AoEStart, AoEEnd), "rgba(0, 100, 0, 0.3)", new PositionConnector(position)), Colors.Red, 0.4);
     }
 
     private static void AddDeathEmbraceDecoration(CombatReplay replay, int startCast, int durationCast, uint radius, int delay, Vector3 position)

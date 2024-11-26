@@ -124,7 +124,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.Green, 0.2, new AgentConnector(player));
-                replay.Decorations.AddDecorationWithGrowing(circle, growing);
+                replay.Decorations.AddWithGrowing(circle, growing);
             }
         }
 

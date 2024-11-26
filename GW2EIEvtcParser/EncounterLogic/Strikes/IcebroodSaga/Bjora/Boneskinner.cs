@@ -112,7 +112,7 @@ internal class Boneskinner : Bjora
                         var rotationConnector = new AngleConnector(lastDirection.Value.XYZ);
                         // Growing Decoration
                         var pie = (PieDecoration)new PieDecoration(radius, 30, (c.Time, endHitTime), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector);
-                        replay.Decorations.AddDecorationWithGrowing(pie, endHitTime);
+                        replay.Decorations.AddWithGrowing(pie, endHitTime);
                         // Lingering AoE to match in game display
                         replay.Decorations.Add(new PieDecoration(radius, 30, (endHitTime, endCastTime), Colors.Orange, 0.1, connector).UsingRotationConnector(rotationConnector));
                     }
@@ -129,7 +129,7 @@ internal class Boneskinner : Bjora
                     // Position of the jump back
                     var jumpPosition = new Vector3(613.054f, -85.3458f, -7075.265f);
                     var circle = new CircleDecoration(radius, (c.Time, endTime), Colors.LightOrange, 0.1, new PositionConnector(jumpPosition));
-                    replay.Decorations.AddDecorationWithGrowing(circle, endTime);
+                    replay.Decorations.AddWithGrowing(circle, endTime);
                 }
 
                 // Douse in Darkness
@@ -143,7 +143,7 @@ internal class Boneskinner : Bjora
 
                     // Jump up
                     var jumpUpCircle = new CircleDecoration(radius, (c.Time, endJump), Colors.LightOrange, 0.1, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(jumpUpCircle, endJump);
+                    replay.Decorations.AddWithGrowing(jumpUpCircle, endJump);
                     // Pull
                     for (int i = 0; i < 4; i++)
                     {
@@ -155,7 +155,7 @@ internal class Boneskinner : Bjora
                     long pullTime = c.Time + jumpTime + 1700;
                     long finalTime = pullTime + 1500;
                     var landingCircle = new CircleDecoration(radius, (pullTime, finalTime), Colors.LightOrange, 0.1, new AgentConnector(target));
-                    replay.Decorations.AddDecorationWithGrowing(landingCircle, finalTime);
+                    replay.Decorations.AddWithGrowing(landingCircle, finalTime);
                 }
                 // Cascade
                 AddCascadeDecoration(log, target, replay, EffectGUIDs.CascadeAoEIndicator1, 200, 40);
@@ -217,7 +217,7 @@ internal class Boneskinner : Bjora
                 {
                     var connector = new PositionConnector(indicator.Position);
                     var rotationConnector = new AngleConnector(rotation);
-                    replay.Decorations.AddDecorationWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector), Colors.Red, 0.2);
+                    replay.Decorations.AddWithBorder((RectangleDecoration)new RectangleDecoration(width, height, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector), Colors.Red, 0.2);
                 }
             }
         }

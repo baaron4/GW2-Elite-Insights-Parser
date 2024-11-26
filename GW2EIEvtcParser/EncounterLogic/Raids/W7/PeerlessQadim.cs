@@ -205,7 +205,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     {
                         continue;
                     }
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, (start, end), Colors.LightRed, 0.2, new PositionConnector(pylonPosition)), end);
                     replay.Decorations.Add(new CircleDecoration(magmaRadius, (end, log.FightData.FightEnd), Colors.Red, 0.5, new PositionConnector(pylonPosition)));
                 }
                 var forceOfHavoc = cls.Where(x => x.SkillId == ForceOfHavoc2);
@@ -241,7 +241,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     start = (int)c.Time + 1400;
                     if (target.TryGetCurrentPosition(log, start + 1000, out var position))
                     {
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, start + preCastTime), "rgba(255, 220, 50, 0.2)", new PositionConnector(position)), start + preCastTime);
                         for (uint i = 0; i < cascades; i++)
                         {
                             replay.Decorations.Add(new DoughnutDecoration(radius + (uint)(radiusIncrement * i), radius + (uint)(radiusIncrement * (i + 1)), (start + preCastTime + timeBetweenCascades * i, start + preCastTime + timeBetweenCascades * (i + 1)), "rgba(30, 30, 30, 0.5)", new PositionConnector(position)));
@@ -260,7 +260,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     {
                         var connector = new AgentConnector(target);
                         var rotationConnector = new AngleConnector(facing);
-                        replay.Decorations.AddDecorationWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector));
+                        replay.Decorations.AddWithBorder((PieDecoration)new PieDecoration(coneRadius, coneAngle, (start, end), Colors.Orange, 0.2, connector).UsingRotationConnector(rotationConnector));
                     }
                 }
                 var causticChaos = cls.Where(x => x.SkillId == CausticChaosProjectile);
@@ -300,11 +300,11 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     end = (int)c.EndTime;
                     if (target.TryGetCurrentPosition(log, start + 1000, out var position))
                     {
-                        replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
+                        replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new PositionConnector(position)), end);
 
                         foreach (NPC pylon in TrashMobs.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.PeerlessQadimAuraPylon)))
                         {
-                            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new AgentConnector(pylon)), end);
+                            replay.Decorations.AddWithGrowing(new CircleDecoration(radius, (start, end), Colors.Yellow, 0.2, new AgentConnector(pylon)), end);
                         }
                     }
                 }
@@ -321,7 +321,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                 if (replay.PolledPositions.Count > 0)
                 {
                     uint radiusAnomaly = target.HitboxWidth / 2;
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(radiusAnomaly, (start - 5000, start), Colors.Red, 0.3, new PositionConnector(replay.PolledPositions[0].XYZ)), start);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.BigKillerTornado:
@@ -388,7 +388,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
             // If a player has gone into downstate while in air, the magma field will not spawn
             var hasPlayerDownedInAir = log.CombatData.GetDownEvents(p.AgentItem).Any(x => x.Time >= seg.Start && x.Time <= seg.End);
             long magmaDropEnd = seg.End;
-            replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
+            replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, seg, "rgba(255, 50, 0, 0.2)", new AgentConnector(p)), magmaDropEnd);
             if (!log.CombatData.HasEffectData)
             {
                 if (p.TryGetCurrentInterpolatedPosition(log, magmaDropEnd, out var position) && !hasPlayerDownedInAir)
@@ -397,7 +397,7 @@ internal class PeerlessQadim : TheKeyOfAhdashim
                     magmaCounter = (magmaCounter + 1) & 1;
 
                     long magmaWarningEnd = magmaDropEnd + magmaOffset;
-                    replay.Decorations.AddDecorationWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaWarningEnd), magmaColor + "0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
+                    replay.Decorations.AddWithGrowing(new CircleDecoration(magmaRadius, (magmaDropEnd, magmaWarningEnd), magmaColor + "0.2)", new PositionConnector(position)), magmaDropEnd + magmaOffset);
                     replay.Decorations.Add(new CircleDecoration(magmaRadius, (magmaWarningEnd, magmaWarningEnd + magmaDuration), magmaColor + "0.5)", new PositionConnector(position)));
                 }
             }
