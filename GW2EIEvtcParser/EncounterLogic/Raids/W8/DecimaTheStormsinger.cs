@@ -35,6 +35,7 @@ internal class DecimaTheStormsinger : MountBalrior
             new PlayerDstHitMechanic([SparkingAuraTier1, SparkingAuraTier2, SparkingAuraTier3], "Sparking Aura", new MechanicPlotlySetting(Symbols.CircleX, Colors.MilitaryGreen), "SparkAuraInc.H", "Hit by Sparking Aura with Galvanic Sensitivity", "Sparking Aura with Galvanic Sensitivity Hit", 0),
             new PlayerDstHitMechanic(FulgentFence, "Fulgent Fence", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "FulFence.H", "Hit by Fulgent Fence (Barriers between Conduits)", "Fulgence Fence Hit", 0),
             new PlayerDstHitMechanic(ReverberatingImpact, "Reverberating Impact", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "RevImpact.H", "Hit by Reverberating Impact (Hit a Conduit)", "Reverberating Impact Hit", 0),
+            new PlayerDstHitMechanic([FulgentAuraTier1, FulgentAuraTier2, FulgentAuraTier3], "Fulgent Aura", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Purple), "FulAura.H", "Hit by Fulgent Aura (Conduit AoE)", "Fulgent Aura Hit", 0),
             new PlayerDstBuffApplyMechanic([TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], "Target Order", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightOrange), "FluxOrder.T", "Targeted by Fluxlance (Target Order)", "Fluxlance Target (Sequential)", 0),
             new PlayerDstBuffApplyMechanic(FluxlanceTargetBuff1, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Orange), "Fluxlance.T", "Targeted by Fluxlance", "Fluxlance Target", 0),
             new PlayerDstBuffApplyMechanic(FluxlanceRedArrowTargetBuff, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Red), "FluxRed.T", "Targeted by Fluxlance (Red Arrow)", "Fluxlance (Red Arrow)", 0),
@@ -411,7 +412,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.AddTether(walls, Colors.Purple, 0.4, 60, true);
                 break;
             case (int)ArcDPSEnums.TrashID.EnlightenedConduitGadget:
-                // Tier 1 Charge
+                // Fulgent Aura - Tier 1 Charge
                 var tier1 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier1.Where(x => x.Value > 0))
                 {
@@ -419,7 +420,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     replay.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder1Overhead);
                 }
 
-                // Tier 2 Charge
+                // Fulgent Aura - Tier 2 Charge
                 var tier2 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier2Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier2.Where(x => x.Value > 0))
                 {
@@ -427,7 +428,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     replay.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder2Overhead);
                 }
 
-                // Tier 3 Charge
+                // Fulgent Aura - Tier 3 Charge
                 var tier3 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier3Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier3.Where(x => x.Value > 0))
                 {

@@ -4513,6 +4513,7 @@ public static class SkillIDs
     public const long SeismicCrashDamage = 74653;
     public const long GalvanicSensitivity = 74659;
     public const long FluxlanceFusillade = 74660;
+    public const long FulgentAuraTier1 = 74686;
     public const long POV_FocusedFluxlanceBuff = 74689;
     public const long FluxlanceSalvo1 = 74705;
     public const long ChorusOfThunderDamage = 74706;
@@ -4558,6 +4559,7 @@ public static class SkillIDs
     public const long Deterrence = 75075;
     public const long BlobOfBlight = 75089;
     public const long DecimaRedBeamLoading = 75090;
+    public const long FulgentAuraTier2 = 75114;
     public const long EnlightenedConduitGadgetChargeTier2Buff = 75128;
     public const long FluxlanceTargetBuff2 = 75140;
     public const long TargetOrder2JW = 75151;
@@ -4565,6 +4567,7 @@ public static class SkillIDs
     public const long ChargeDecima = 75175;
     public const long Earthrend = 75197;
     public const long DecimaBeamLoading = 75198;
+    public const long FulgentAuraTier3 = 75221;
     public const long UnstoppableDecima = 75246;
     public const long RotEruption = 75251;
     public const long PressureBlastDamage = 75258;
