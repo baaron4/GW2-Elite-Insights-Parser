@@ -4536,7 +4536,7 @@ public static class SkillIDs
     public const long FracturedArmor = 74840;
     public const long FluxlanceRedArrowTargetBuff = 74845;
     public const long EnlightenedConduitGadgetChargeTier1Buff = 74846;
-    public const long SeismicCrashSkill = 74870;
+    public const long SeismicCrashHitboxDamage = 74870;
     public const long ThrummingPresenceDamage = 74872;
     public const long Foreshock = 74887;
     public const long SparkingAuraTier1 = 74898;
