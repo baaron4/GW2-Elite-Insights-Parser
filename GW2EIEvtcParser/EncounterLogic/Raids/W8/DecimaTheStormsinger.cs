@@ -275,7 +275,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     // There are 10 AoEs of radius 200, then 10 of 240, 10 of 280 and 10 of 320. When they bounce back to Decima they restart at 200 radius.
                     uint radius = 200;
                     float distance = 0;
-                    EffectEvent first = aftershock.FirstOrDefault()!.FirstOrDefault()!;
+                    EffectEvent first = aftershock.First().First();
                     long groupStartTime = first.Time;
 
                     // Because the x9th and the x0th can happen at the same timestamp, we need to check the distance of the from Decima.
