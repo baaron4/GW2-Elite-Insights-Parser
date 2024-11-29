@@ -42,18 +42,20 @@ public class StabilityTestEvtc
         }
         catch (ProgramException canc)
         {
-            if (canc.InnerException == null || !(canc.InnerException is EIException))
+            var finalException = ParserHelper.GetFinalException(canc);
+            if (finalException is not EIException)
             {
-                evtcTestItem.SetFailure(canc.Message);
+                evtcTestItem.SetFailure(finalException.Message + "\n" + finalException.StackTrace);
                 return false;
             }
             return true;
         }
         catch (Exception ex)
         {
-            if (!(ex is EIException))
+            var finalException = ParserHelper.GetFinalException(ex);
+            if (finalException is not EIException)
             {
-                evtcTestItem.SetFailure(ex.Message);
+                evtcTestItem.SetFailure(finalException.Message + "\n" + finalException.StackTrace);
                 return false;
             }
             return true;

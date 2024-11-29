@@ -281,8 +281,6 @@ public class AgentItem
             nones.Add(new Segment(FirstAware, LastAware, 1));
             return;
         }
-
-        status.SortByTime();
         for (int i = 0; i < status.Count - 1; i++)
         {
             BreakbarStateEvent cur = status[i];
@@ -573,6 +571,7 @@ public static partial class ListExt
         return result.Agent;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SortByFirstAware<T>(this List<T> list) where T : AgentItem
     {
         list.AsSpan().SortStable((a, b) => a.FirstAware.CompareTo(b.FirstAware));

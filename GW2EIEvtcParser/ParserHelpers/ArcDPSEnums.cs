@@ -72,6 +72,7 @@ public static class ArcDPSEnums
         internal const ulong June2024Balance = 164824;
         internal const ulong August2024JWRelease = 167136;
         internal const ulong October2024Balance = 169300;
+        internal const ulong November2024MountBalriorRelease = 171452;
         //
         internal const ulong EndOfLife = ulong.MaxValue;
     }
@@ -614,6 +615,7 @@ public static class ArcDPSEnums
     private const int SulfuricGeyser = -63;
     private const int TitanspawnGeyser = -64;
     private const int UraGadget_BloodstoneShard = -65;
+    private const int EnlightenedConduitGadget = -66;
     public const int NonIdentifiedSpecies = 0;
 
     //
@@ -898,6 +900,7 @@ public static class ArcDPSEnums
         EmpoweringBeast = 26776,
         // Decima
         EnlightenedConduit = 26709,
+        EnlightenedConduitGadget = ArcDPSEnums.EnlightenedConduitGadget,
         GreenOrb1Player = 26798,
         GreenOrb2Players = 26783,
         GreenOrb3Players = 26727,

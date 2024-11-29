@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 using System.Security.Cryptography;
 using GW2EIEvtcParser.ParsedData;
 
@@ -319,6 +320,73 @@ public class CombatReplay
     internal void AddHideByBuff(SingleActor actor, ParsedEvtcLog log, long buffID)
     {
         Hidden.AddRange(actor.GetBuffStatus(log, buffID, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0));
+    }
+
+    /// <summary>
+    /// Adds concentric doughnuts.
+    /// </summary>
+    /// <param name="minRadius">Starting radius.</param>
+    /// <param name="radiusIncrease">Radius increase for each concentric ring.</param>
+    /// <param name="lifespan">Lifespan of the decoration.</param>
+    /// <param name="position">Starting position.</param>
+    /// <param name="color">Color of the rings.</param>
+    /// <param name="initialOpacity">Starting opacity of the rings' color.</param>
+    /// <param name="rings">Total number of rings.</param>
+    /// <param name="inverted">Inverts the opacity direction.</param>
+    internal void AddContrenticRings(uint minRadius, uint radiusIncrease, (long, long) lifespan, in Vector3 position, Color color, float initialOpacity = 0.5f, int rings = 8, bool inverted = false)
+    {
+        var positionConnector = new PositionConnector(position);
+
+        for (int i = 1; i <= rings; i++)
+        {
+            uint maxRadius = minRadius + radiusIncrease;
+            float opacity = inverted ? initialOpacity * i : initialOpacity / i;
+            var circle = new DoughnutDecoration(minRadius, maxRadius, lifespan, color, opacity, positionConnector);
+            AddDecorationWithBorder(circle, color, 0.2);
+            minRadius = maxRadius;
+        }
+        
+    }
+
+    /// <summary>
+    /// Adds two rectangles over each other representing a loading bar.
+    /// </summary>
+    /// <param name="actor">Actor to attach the bar to.</param>
+    /// <param name="segments">Time segments used to increase or decrease the bar over the background.</param>
+    /// <param name="segmentMaxValue">The maximum value the segments could have. Necessary to know to calculate the bar size ratio.</param>
+    /// <param name="offsetX">Horizontal offset to position more to the left or to the right.</param>
+    /// <param name="offsetY">Vertical offset to position higher or lower.</param>
+    /// <param name="width">The maximum width of the bar.</param>
+    /// <param name="height">The maximum height of the bar.</param>
+    /// <param name="angle">Rotation angle.</param>
+    /// <param name="colors">Span containing the colors and opacity. They will be used in the following order:<br></br>
+    /// <list type="bullet">
+    /// <item>Bar Color</item>
+    /// <item>Background Color</item>
+    /// <item>Bar Border Color</item>
+    /// </list>
+    /// </param>
+    /// <param name="sizeMultiplier">Multiplies the Value of the Segment to scale the size of the bar. The value cannot be 0 or less.</param>
+    internal void AddDynamicBar(SingleActor actor, IReadOnlyList<GenericSegment<double>> segments, double segmentMaxValue, int offsetX, int offsetY, uint width, uint height, float angle, ReadOnlySpan<(Color color, double opacity)> colors, int sizeMultiplier = 1)
+    {
+        Debug.Assert(sizeMultiplier > 0, $"{nameof(sizeMultiplier)} must be greater than zero but was {sizeMultiplier}");
+
+        uint barWidth;
+        var offset = new Vector3(0, offsetY, 0);
+        var offsetBackground = new Vector3(offsetX, offsetY, 0);
+        var angleConnector = new AngleConnector(angle);
+
+        var ratio = width / segmentMaxValue;
+
+        foreach (var segment in segments)
+        {
+            offset.X = (float)(offsetX + (- (width / 2) + segment.Value * ratio * sizeMultiplier / 2));
+            barWidth = (uint)(segment.Value * sizeMultiplier * ratio);
+            var bar = (RectangleDecoration)new RectangleDecoration(barWidth, height, segment.TimeSpan, colors[0].color, colors[0].opacity, new AgentConnector(actor).WithOffset(offset, true)).UsingRotationConnector(angleConnector);
+            var background = (RectangleDecoration)new RectangleDecoration(width, height, segment.TimeSpan, colors[1].color, colors[1].opacity, new AgentConnector(actor).WithOffset(offsetBackground, true)).UsingRotationConnector(angleConnector);
+            AddDecorationWithBorder(bar, colors[2].color, colors[2].opacity);
+            Decorations.Add(background);
+        }
     }
 }
 

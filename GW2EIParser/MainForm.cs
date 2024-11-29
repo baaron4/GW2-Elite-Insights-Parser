@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Versioning;
 using Discord;
 using GW2EIDiscord;
+using GW2EIEvtcParser;
 using GW2EIParser.Setting;
 using GW2EIParserCommons;
 using GW2EIParserCommons.Exceptions;
@@ -124,7 +125,7 @@ internal sealed partial class MainForm : Form
                     else
                     {
                         Exception ex = t.Exception.InnerExceptions[0];
-                        if (!(ex is ProgramException))
+                        if (ex is not ProgramException)
                         {
                             operation.UpdateProgress("Program: something terrible has happened");
                         }
@@ -134,7 +135,11 @@ internal sealed partial class MainForm : Form
                         }
                         else if(ex.InnerException != null)
                         {
-                            operation.UpdateProgress("Program: " + ex.InnerException.Message);
+                            var finalException = ParserHelper.GetFinalException(ex);
+                            operation.UpdateProgress("Program: " + finalException.Source);
+                            operation.UpdateProgress("Program: " + finalException.StackTrace);
+                            operation.UpdateProgress("Program: " + finalException.TargetSite);
+                            operation.UpdateProgress("Program: " + finalException.Message);
                         }
                     }
                 }

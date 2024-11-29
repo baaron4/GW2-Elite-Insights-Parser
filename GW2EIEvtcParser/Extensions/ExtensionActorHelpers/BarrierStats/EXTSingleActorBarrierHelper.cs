@@ -66,7 +66,6 @@ public class EXTSingleActorBarrierHelper : EXTActorBarrierHelper
         if (BarrierReceivedEvents == null)
         {
             BarrierReceivedEvents = new List<EXTBarrierEvent>(log.CombatData.EXTBarrierCombatData.GetBarrierReceivedData(_agentItem).Where(x => x.ToFriendly));
-            BarrierReceivedEvents.SortByTime();
             BarrierReceivedEventsBySrc = BarrierReceivedEvents.GroupBy(x => x.From).ToDictionary(x => x.Key, x => x.ToList());
         }
     }
