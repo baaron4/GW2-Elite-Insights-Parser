@@ -416,11 +416,12 @@ public static class BuffImages
     public const string EnfeebledForce = "https://wiki.guildwars2.com/images/b/b6/Enfeebled_Force.png";
     public const string MagicBlastIntensity = "https://wiki.guildwars2.com/images/a/a9/Magic_Blast_Intensity.png";
     public const string PartiallyProtected = "https://wiki.guildwars2.com/images/d/d0/Partially_Protected.png";
+    // Greer
+    public const string InfectiousRot = "https://wiki.guildwars2.com/images/8/89/Infectious_Rot.png";
     // Decima
     public const string ElectricalBuildup = "https://wiki.guildwars2.com/images/0/01/Electrical_Buildup.png";
     public const string ConjuredBarrier = "https://wiki.guildwars2.com/images/4/42/Conjured_Barrier.png";
     public const string ElectrifiedMinion = "https://wiki.guildwars2.com/images/6/6d/Electrified_Minion.png";
-    //
     public const string RisingPressure = "https://wiki.guildwars2.com/images/5/53/Fiery_Tornado_%28effect%29.png";
     public const string BloodstoneSaturation = "https://wiki.guildwars2.com/images/4/4d/Heat_Level.png";
     public const string Deterrence = "https://wiki.guildwars2.com/images/c/cc/Luck_of_Kings.png";
@@ -970,7 +971,7 @@ public static class BuffImages
     public const string HolographicSuperDrumstick = "https://wiki.guildwars2.com/images/1/1d/Holographic_Super_Drumstick.png";
     public const string CompactQualityTuningCrystal = "https://wiki.guildwars2.com/images/b/ba/Compact_Quality_Tuning_Crystal.png";
     public const string TuningIcicle = "https://wiki.guildwars2.com/images/7/75/Tuning_Icicle.png";
-    public const string ToxicFocusingCrystal = "https://wiki.guildwars2.com/images/d/de/Toxic_Focusing_Crystal.png";
+    public const string ToxicTuningCrystal = "https://wiki.guildwars2.com/images/8/8d/Toxic_Tuning_Crystal.png";
     public const string MagnanimousTuningCrystal = "https://wiki.guildwars2.com/images/2/23/Magnanimous_Tuning_Crystal.png";
     public const string CorsairTuningCrystal = "https://wiki.guildwars2.com/images/f/f7/Corsair_Tuning_Crystal.png";
     public const string HolographicSuperApple = "https://wiki.guildwars2.com/images/e/ee/Holographic_Super_Apple.png";
