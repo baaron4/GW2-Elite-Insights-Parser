@@ -207,6 +207,7 @@ public static class BuffImages
     public const string RelicOfTheSorrow = "https://wiki.guildwars2.com/images/4/4b/Relic_of_Sorrow.png";
     public const string RelicOfTheBlightbringer = "https://wiki.guildwars2.com/images/3/3f/Relic_of_Nourys.png";
     public const string RelicOfTheClaw = "https://wiki.guildwars2.com/images/7/7f/Relic_of_the_Claw.png";
+    public const string RelicOfMountBalrior = "https://wiki.guildwars2.com/images/a/a9/Relic_of_Mount_Balrior.png";
     #endregion Gear
 
     #region Fractal

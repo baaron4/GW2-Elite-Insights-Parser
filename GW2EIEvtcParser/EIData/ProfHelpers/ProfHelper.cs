@@ -154,6 +154,12 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfTheStormsingerChain, EffectGUIDs.RelicOfTheStormsinger)
             .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheStormsinger) // Effect triggers at least twice
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(RelicOfTheBeehive, EffectGUIDs.RelicWhiteCircle)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheBeehive1, 1000, ServerDelayConstant)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
+        new EffectCastFinder(RelicOfMountBalrior, EffectGUIDs.RelicOfMountBalrior1)
+            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfMountBalrior2)
+            .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfKarakosaHealing, RelicOfKarakosaHealing)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EXTHealingCastFinder(RelicOfNayosHealing, RelicOfNayosHealing)
@@ -451,6 +457,15 @@ internal static class ProfHelper
             }
         }
 
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RelicOfMountBalrior1, out var mountBalriorEffects))
+        {
+            var skill = new SkillModeDescriptor(player, RelicOfMountBalrior);
+            foreach (var effect in mountBalriorEffects)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 6000);
+                AddCircleSkillDecoration(replay, effect, Colors.White, skill, lifespan, 240, ParserIcons.RelicOfMountBalrior);
+            }
+        }
 
         switch (player.Spec)
         {

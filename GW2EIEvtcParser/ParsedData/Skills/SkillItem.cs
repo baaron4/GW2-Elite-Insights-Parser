@@ -524,6 +524,8 @@ public class SkillItem
         { RelicOfSorrowBuff, BuffImages.RelicOfTheSorrow },
         { RelicOfSorrowHeal, BuffImages.RelicOfTheSorrow },
         { RelicOfTheStormsingerChain, BuffImages.RelicOfTheStormsinger },
+        { RelicOfTheBeehive, "https://wiki.guildwars2.com/images/4/49/Relic_of_the_Beehive.png" },
+        { RelicOfMountBalrior, BuffImages.RelicOfMountBalrior },
 #endregion RelicIcons
         #region ElementalistIcons
         { DualFireAttunement, "https://wiki.guildwars2.com/images/b/b4/Fire_Attunement.png" },
