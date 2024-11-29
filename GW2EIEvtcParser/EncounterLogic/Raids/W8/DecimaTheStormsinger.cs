@@ -155,7 +155,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     (Colors.Black, 0.4),
                     (Colors.LightRed, 0.8),
                 ];
-                replay.AddDynamicBar(target, chargeSegments, 10, 1800, -2000, 1000, 100, 0, colors);
+                replay.Decorations.AddDynamicBar(target, chargeSegments, 10, 1800, -2000, 1000, 100, 0, colors);
 
                 // Mainshock - Pizza Indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaMainshockIndicator, out var mainshockSlices))
@@ -188,7 +188,7 @@ internal class DecimaTheStormsinger : MountBalrior
                             nextStartTime = lifespanLeft.end;
                             var rotation = new AngleConnector(effect.Rotation.Z + 90);
                             var leftHalf = (PieDecoration)new PieDecoration(1185, 180, lifespanLeft, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                            replay.AddDecorationWithBorder(leftHalf, Colors.LightOrange, 0.6);
+                            replay.Decorations.AddWithBorder(leftHalf, Colors.LightOrange, 0.6);
                         }
                     }
 
@@ -202,7 +202,7 @@ internal class DecimaTheStormsinger : MountBalrior
                             nextStartTime = lifespanRight.end;
                             var rotation = new AngleConnector(effect.Rotation.Z + 90);
                             var rightHalf = (PieDecoration)new PieDecoration(1185, 180, lifespanRight, Colors.LightOrange, 0.4, new PositionConnector(effect.Position)).UsingRotationConnector(rotation);
-                            replay.AddDecorationWithBorder(rightHalf, Colors.LightOrange, 0.6);
+                            replay.Decorations.AddWithBorder(rightHalf, Colors.LightOrange, 0.6);
                         }
                     }
 
@@ -214,7 +214,7 @@ internal class DecimaTheStormsinger : MountBalrior
                             (long start, long end) lifespanFrontal = effect.ComputeLifespan(log, 5100);
                             lifespanFrontal.start = nextStartTime;
                             var frontalCircle = new CircleDecoration(600, lifespanFrontal, Colors.LightOrange, 0.4, new PositionConnector(effect.Position));
-                            replay.AddDecorationWithBorder(frontalCircle, Colors.LightOrange, 0.6);
+                            replay.Decorations.AddWithBorder(frontalCircle, Colors.LightOrange, 0.6);
                         }
                     }
                 }
@@ -242,7 +242,7 @@ internal class DecimaTheStormsinger : MountBalrior
                         }
 
                         var doughnut = new DoughnutDecoration(inner, outer, lifespanRing, Colors.LightOrange, 0.2, new AgentConnector(target));
-                        replay.AddDecorationWithBorder(doughnut, Colors.LightOrange, 0.6);
+                        replay.Decorations.AddWithBorder(doughnut, Colors.LightOrange, 0.6);
                     }
                 }
 
@@ -252,7 +252,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     foreach (var effect in seismicCrash)
                     {
                         (long start, long end) lifespanCrash = effect.ComputeLifespan(log, 3000);
-                        replay.AddContrenticRings(300, 140, lifespanCrash, effect.Position, Colors.LightOrange, 0.30f, 6, false);
+                        replay.Decorations.AddContrenticRings(300, 140, lifespanCrash, effect.Position, Colors.LightOrange, 0.30f, 6, false);
                     }
                 }
 
@@ -264,7 +264,7 @@ internal class DecimaTheStormsinger : MountBalrior
                         // Logged effect has 2 durations depending on attack - 3000 and 2500
                         (long start, long end) lifespanDeathzone = effect.ComputeLifespan(log, effect.Duration);
                         var zone = new CircleDecoration(300, lifespanDeathzone, Colors.Red, 0.2, new PositionConnector(effect.Position));
-                        replay.AddDecorationWithGrowing(zone, effect.Time + effect.Duration);
+                        replay.Decorations.AddWithGrowing(zone, effect.Time + effect.Duration);
                     }
                 }
 
@@ -316,7 +316,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
                 // Overhead Number
-                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
 
                 // Hp Bar
                 ReadOnlySpan<(Color, double)> colorsOrb1 =
@@ -326,14 +326,14 @@ internal class DecimaTheStormsinger : MountBalrior
                     (Colors.Green, 0.5),
                 ];
                 var hpUpdates1 = target.GetHealthUpdates(log);
-                replay.AddDynamicBar(target, hpUpdates1, 100, 0, 20, 100, 20, 0, colorsOrb1);
+                replay.Decorations.AddDynamicBar(target, hpUpdates1, 100, 0, 20, 100, 20, 0, colorsOrb1);
                 break;
             case (int)ArcDPSEnums.TrashID.GreenOrb2Players:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(185, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
                 // Overhead Number
-                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
 
                 // Hp Bar
                 ReadOnlySpan<(Color, double)> colorsOrb2 =
@@ -343,14 +343,14 @@ internal class DecimaTheStormsinger : MountBalrior
                     (Colors.Green, 0.5),
                 ];
                 var hpUpdates2 = target.GetHealthUpdates(log);
-                replay.AddDynamicBar(target, hpUpdates2, 200, 0, 20, 200, 20, 0, colorsOrb2, 2);
+                replay.Decorations.AddDynamicBar(target, hpUpdates2, 200, 0, 20, 200, 20, 0, colorsOrb2, 2);
                 break;
             case (int)ArcDPSEnums.TrashID.GreenOrb3Players:
                 // Green Circle
                 replay.Decorations.Add(new CircleDecoration(285, lifespan, Colors.DarkGreen, 0.2, new AgentConnector(target)));
 
                 // Overhead Number
-                replay.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
+                replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
 
                 // Hp Bar
                 ReadOnlySpan<(Color, double)> colorsOrb3 =
@@ -360,7 +360,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     (Colors.Green, 0.5),
                 ];
                 var hpUpdates3 = target.GetHealthUpdates(log);
-                replay.AddDynamicBar(target, hpUpdates3, 300, 0, 20, 300, 20, 0, colorsOrb3, 3);
+                replay.Decorations.AddDynamicBar(target, hpUpdates3, 300, 0, 20, 300, 20, 0, colorsOrb3, 3);
                 break;
             case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
                 // Chorus of Thunder / Discordant Thunder - Orange AoE
@@ -376,7 +376,7 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // Warning indicator of walls spawning between Conduits.
                 var wallsWarnings = GetFilteredList(log.CombatData, DecimaConduitWallWarningBuff, target, true, true);
-                replay.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
+                replay.Decorations.AddTether(wallsWarnings, Colors.Red, 0.2, 30, true);
 
                 // Walls connecting Conduits to each other.
                 var walls = GetFilteredList(log.CombatData, DecimaConduitWallBuff, target, true, true);
@@ -387,24 +387,24 @@ internal class DecimaTheStormsinger : MountBalrior
                 var tier1 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier1Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier1.Where(x => x.Value > 0))
                 {
-                    replay.AddDecorationWithBorder(new CircleDecoration(100, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
-                    replay.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder1Overhead);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(100, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
+                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder1Overhead);
                 }
 
                 // Fulgent Aura - Tier 2 Charge
                 var tier2 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier2Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier2.Where(x => x.Value > 0))
                 {
-                    replay.AddDecorationWithBorder(new CircleDecoration(200, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
-                    replay.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder2Overhead);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(200, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
+                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder2Overhead);
                 }
 
                 // Fulgent Aura - Tier 3 Charge
                 var tier3 = target.GetBuffStatus(log, EnlightenedConduitGadgetChargeTier3Buff, log.FightData.FightStart, log.FightData.FightEnd);
                 foreach (var segment in tier3.Where(x => x.Value > 0))
                 {
-                    replay.AddDecorationWithBorder(new CircleDecoration(400, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
-                    replay.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder3Overhead);
+                    replay.Decorations.AddWithBorder(new CircleDecoration(400, segment.TimeSpan, Colors.DarkPurple, 0.4, new AgentConnector(target)), Colors.Red, 0.4);
+                    replay.Decorations.AddOverheadIcon(segment.TimeSpan, target, ParserIcons.TargetOrder3Overhead);
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.DecimaBeamStart:
@@ -483,11 +483,11 @@ internal class DecimaTheStormsinger : MountBalrior
         }
 
         // Target Order Overhead
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
-        replay.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder1JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder1Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder2JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder2Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder3JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder3Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder4JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder4Overhead);
+        replay.Decorations.AddOverheadIcons(player.GetBuffStatus(log, TargetOrder5JW, log.FightData.LogStart, log.FightData.LogEnd).Where(x => x.Value > 0), player, ParserIcons.TargetOrder5Overhead);
 
         // Chorus of Thunder / Discordant Thunder - Orange AoE
         AddThunderAoE(player, log, replay);
@@ -505,7 +505,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 long duration = 5000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
-                replay.AddDecorationWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, new AgentConnector(actor)), growing);
+                replay.Decorations.AddWithGrowing(new CircleDecoration(285, lifespan, Colors.LightOrange, 0.2, new AgentConnector(actor)), growing);
             }
         }
     }
