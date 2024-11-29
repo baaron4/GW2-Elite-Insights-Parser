@@ -220,28 +220,18 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Earthrend - Outer Sliced Doughnut - 8 Slices
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaEarthrendDoughnutSlice, out var earthrend))
+                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaEarthrendDoughnutSlice, out var earthrend))
                 {
                     // Since we don't have a decoration shaped like this, we regroup the 8 effects and use Decima position as the center for a doughnut sliced by lines.
-                    var filtered = new List<EffectEvent>();
-                    foreach (var effect in earthrend)
-                    {
-                        if (filtered.FirstOrDefault(x => Math.Abs(x.Time - effect.Time) < ServerDelayConstant) != null)
-                        {
-                            continue;
-                        }
-                        filtered.Add(effect);
-                    }
-
-                    foreach (EffectEvent effect in filtered)
+                    foreach (List<EffectEvent> group in earthrend)
                     {
                         uint inner = 1200;
                         uint outer = 3000;
                         int lineAngle = 45;
                         var offset = new Vector3(0, inner + (outer - inner) / 2, 0);
-                        (long start, long end) lifespanRing = effect.ComputeLifespan(log, 2800);
+                        (long start, long end) lifespanRing = group[0].ComputeLifespan(log, 2800);
 
-                        if (target.TryGetCurrentFacingDirection(log, effect.Time, out Vector3 facing, 100))
+                        if (target.TryGetCurrentFacingDirection(log, group[0].Time, out Vector3 facing, 100))
                         {
                             for (int i = 0; i < 360; i += lineAngle)
                             {
@@ -279,41 +269,20 @@ internal class DecimaTheStormsinger : MountBalrior
                 }
 
                 // Aftershock - Moving AoEs - 4 Cascades 
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaAftershockAoE, out var aftershock))
+                if (log.CombatData.TryGetGroupedEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaAftershockAoE, out var aftershock, 12000))
                 {
                     // All the AoEs take roughly 11-12 seconds to appear
-                    // There are 10 AoEs of radius 200, then 10 of 240, 10 of 280, etc.
-
+                    // There are 10 AoEs of radius 200, then 10 of 240, 10 of 280 and 10 of 320. When they bounce back to Decima they restart at 200 radius.
                     uint radius = 200;
                     float distance = 0;
-                    EffectEvent first = aftershock.FirstOrDefault()!;
-                    List<EffectEvent>? currentGroup = [];
-                    List<List<EffectEvent>>? groups = [];
+                    EffectEvent first = aftershock.FirstOrDefault()!.FirstOrDefault()!;
                     long groupStartTime = first.Time;
-
-                    foreach (var effect in aftershock)
-                    {
-                        if (effect.Time <= groupStartTime + 12000)
-                        {
-                            currentGroup.Add(effect);
-                        }
-                        else
-                        {
-                            groups.Add(new List<EffectEvent>(currentGroup));
-                            currentGroup.Clear();
-                            currentGroup.Add(effect);
-                            groupStartTime = effect.Time;
-                        }
-                    }
-
-                    // Last group
-                    groups.Add(new List<EffectEvent>(currentGroup));
 
                     // Because the x9th and the x0th can happen at the same timestamp, we need to check the distance of the from Decima.
                     // A simple increase every 10 can happen to increase the x9th instead of the following x0th.
                     if (target.TryGetCurrentPosition(log, first.Time, out Vector3 decimaPosition))
                     {
-                        foreach (var group in groups)
+                        foreach (var group in aftershock)
                         {
                             foreach (var effect in group)
                             {
