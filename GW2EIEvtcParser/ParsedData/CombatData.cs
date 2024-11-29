@@ -1198,10 +1198,6 @@ public class CombatData
     /// <returns>true on success</returns>
     public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
     {
-        if (effect.ToString() == "88A721E87033E34C88143D116DBA9120")
-        {
-
-        }
         if(!TryGetEffectEventsBySrcWithGUID(agent, effect, out var effects))
         {
             groupedEffectEvents = null;
