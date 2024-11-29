@@ -754,6 +754,11 @@ internal static class ParserIcons
     internal const string TargetOrder4Overhead = "https://wiki.guildwars2.com/images/c/c6/Target_Order-4_%28overhead_icon%29.png";
     internal const string TargetOrder5Overhead = "https://wiki.guildwars2.com/images/4/47/Target_Order-5_%28overhead_icon%29.png";
     #endregion
+
+    #region Gear
+    internal const string RelicOfMountBalrior = "https://i.imgur.com/IH29TE0.png";
+    #endregion
+
     // NPC / Gadgets Icons not private
     internal const string DhuumPlayerSoul = "https://i.imgur.com/rAyuxqS.png";
 

@@ -457,6 +457,15 @@ internal static class ProfHelper
             }
         }
 
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RelicOfMountBalrior1, out var mountBalriorEffects))
+        {
+            var skill = new SkillModeDescriptor(player, RelicOfMountBalrior);
+            foreach (var effect in mountBalriorEffects)
+            {
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 6000);
+                AddCircleSkillDecoration(replay, effect, Colors.White, skill, lifespan, 240, ParserIcons.RelicOfMountBalrior);
+            }
+        }
 
         switch (player.Spec)
         {
