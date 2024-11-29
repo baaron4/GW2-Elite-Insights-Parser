@@ -1198,6 +1198,10 @@ public class CombatData
     /// <returns>true on success</returns>
     public bool TryGetGroupedEffectEventsBySrcWithGUID(AgentItem agent, GUID effect, [NotNullWhen(true)] out List<List<EffectEvent>>? groupedEffectEvents, long epsilon = ServerDelayConstant)
     {
+        if (effect.ToString() == "88A721E87033E34C88143D116DBA9120")
+        {
+
+        }
         if(!TryGetEffectEventsBySrcWithGUID(agent, effect, out var effects))
         {
             groupedEffectEvents = null;
@@ -1226,28 +1230,30 @@ public class CombatData
         return true;
     }
 
-    static List<List<EffectEvent>> EpsilonWindowOverTime(IReadOnlyList<EffectEvent> effects, long epsilon)
+    static List<List<EffectEvent>> EpsilonWindowOverTime(IReadOnlyList<EffectEvent> effectEvents, long epsilon)
     {
         //NOTE(Rennorb): Has entries due to invariant on TryGetEffectEventsBySrcWithGUID
-        var startTime = effects[0].Time;
-        var endTime = effects[^1].Time;
+        var startTime = effectEvents[0].Time;
+        var endTime = effectEvents[^1].Time;
         var slices = Math.Max(1, (int)((endTime - startTime + (epsilon - 1)) / epsilon)); // ceiling of total duration / epsilon, and at least one slice
         var groupedEffectEvents = new List<List<EffectEvent>>(slices);
 
 
         var blockStart = startTime;
         var blockEnd = blockStart + epsilon;
-        var currentBlock = new List<EffectEvent>(effects.Count / slices); // assume average distribution
+        var currentBlock = new List<EffectEvent>(effectEvents.Count / slices); // assume average distribution
         int index = 0;
-        foreach(var @event in effects)
+        foreach(var effectEvent in effectEvents)
         {
-            if(@event.Time >= blockEnd)
+            if(effectEvent.Time >= blockEnd)
             {
                 groupedEffectEvents.Add(currentBlock);
-                currentBlock = new((effects.Count - index) / slices); // assume average distribution in remaining blocks
+                currentBlock = new((effectEvents.Count - index) / slices); // assume average distribution in remaining blocks
+                blockStart = effectEvent.Time;
+                blockEnd = blockStart + epsilon;
             }
 
-            currentBlock.Add(@event);
+            currentBlock.Add(effectEvent);
             index++;
         }
         groupedEffectEvents.Add(currentBlock);
