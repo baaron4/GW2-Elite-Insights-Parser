@@ -207,6 +207,7 @@ internal static class CommonBuffs
         new Buff("Relic of Sorrow", RelicOfSorrowBuff, Source.Gear, BuffClassification.Defensive, BuffImages.RelicOfTheSorrow),
         new Buff("Greer's Virulence", GreersVirulence, Source.Gear,  BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, BuffImages.RelicOfTheBlightbringer),
         new Buff("Relic of the Claw", RelicOfTheClaw, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheClaw),
+        new Buff("Relic of Mount Balrior", RelicOfMountBalrior, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfMountBalrior),
     ];
 
 }

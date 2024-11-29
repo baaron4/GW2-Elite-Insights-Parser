@@ -27,10 +27,10 @@ public static class EffectGUIDs
     public static readonly GUID SkyscaleBlast1 = new("4D30A7F374E56E4F806420A81EAEA03F");
     public static readonly GUID SkyscaleBlast2 = new("E15FF7FD742AA24BB6C2BE38087CFC22");
     #endregion
-      
+
     #region Gear
     // Relics
-    public static readonly GUID RelicWhiteCircle = new("866307A6A0E34242BDC3067AB24A549D"); // Appears for Nightmare, Citadel, Krait
+    public static readonly GUID RelicWhiteCircle = new("866307A6A0E34242BDC3067AB24A549D"); // Appears for Nightmare, Citadel, Krait (no Src), Beehive (has Src)
     public static readonly GUID RelicOfCerusEye = new("1066BEACB107C743908D860DA2D59796");
     public static readonly GUID RelicOfCerusEye2 = new("521B6C72BF291E4E8A895A0827AF1727");
     public static readonly GUID RelicOfCerusBeam = new("513AEEF08C217942A798831BD9F4903E"); // 1 second delayed
@@ -49,8 +49,12 @@ public static class EffectGUIDs
     public static readonly GUID RelicOfSorrow2 = new("FEEA4632BAF0B1438D83F6C8B71AEA15"); // Duration 0, No Src
     public static readonly GUID RelicOfSorrow3 = new("3D981397D9C6A44B888212CE4E3F6F9A"); // Duration 4000
     public static readonly GUID RelicOfTheStormsinger = new("E8EB2CDF97F34C42A8AAC0D3BA6551D0"); // Effect appears up to 4 times. Collides with Overload Air but OA does not multi trigger
+    public static readonly GUID RelicOfTheBeehive1 = new("54233E44A93BD84589F7D0BECCC8A538"); // Duration 0, Player Src, ground effect, 1 second delay off the white circle
+    public static readonly GUID RelicOfTheBeehive2 = new("85B0BB9E723EB444AC4C2CCD06B3C606"); // Duration 3500, Player Src, has Dst and Effect End
+    public static readonly GUID RelicOfMountBalrior1 = new("7CD892DAA47D194CA3FE962ADE6F626F"); // Duration 6000, Player Src, ground effect
+    public static readonly GUID RelicOfMountBalrior2 = new("1558621A51FE5F4B848A8B252AFE616C"); // Duration infinite, Player Src, ground effect with effect end
     #endregion
-      
+
     #region Mesmer
     public static readonly GUID MesmerThePrestigeDisappear1 = new("48B69FBC3090E144BFC067D6C0208878");
     public static readonly GUID MesmerThePrestigeDisappear2 = new("5FA6527231BB8041AC783396142C6200"); // also used with elementalist cleansing fire

@@ -70,6 +70,7 @@ internal static class GearDamageModifiers
         new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "25%", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.PvE),
         new BuffOnActorDamageModifier(Mod_RelicOfNourys, NouryssHungerDamageBuff, "Relic of Nourys", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfNourys, DamageModifierMode.sPvPWvW),
         new BuffOnActorDamageModifier(Mod_RelicOfTheClaw, RelicOfTheClaw, "Relic of the Claw", "7% after disabling a foe", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfTheClaw, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RelicOfMountBalrior, RelicOfMountBalrior, "Relic of Mount Balrior", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Gear, ByPresence, BuffImages.RelicOfMountBalrior, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
