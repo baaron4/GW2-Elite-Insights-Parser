@@ -638,6 +638,13 @@ public static class EffectGUIDs
     public static readonly GUID UraSulfuricGeyserSpawn = new("413AF4D44B924B4399481047CBB2820C");
     public static readonly GUID UraSlamCone = new("BBA33A70B7D2A94589DE81B1F35D3D69");
     public static readonly GUID UraSteamPrisonIndicator = new("093D22A7DBFB0D4ABA9424225954DB68"); // 3000 duration - Src Ura - Dst Player
+    public static readonly GUID UraSteamPrisonGround = new("1B48612F7622A1459219292165055192"); // 10000 duration - Src Ura - Has Effect End
+    public static readonly GUID UraFumarollerBreakingGround = new("DBFE3D3DBD1ACF44B1A590E67A7137F7"); // 20000 duration Src Fumaroller -  Has Effect End
+    public static readonly GUID UraReturn1 = new("4D2103B344C20A468626C0C817C001C7"); // 3000 duration - Src Ura
+    public static readonly GUID UraReturn2 = new("0836E7E36B6E7D4496EC712DD4976440"); // Src Ura - Happens twice, one with 0 duration no effect end, other 6000 duration with effect end
+    public static readonly GUID UraSulfuricGeyserShockwave = new("CC50996DB340B649B717DE52EF667040"); // 8000 duration - Src Ura - Has Effect End
+    public static readonly GUID UraSulfuricGeyserTarget = new("EE7B17875C502A499B2DCA60C3A44602"); // 5000 duration - Src Ura - Dst Player
+    public static readonly GUID UraBloodstoneRadiationPulse = new("3DBBDE2C5042744DB6AF333EDA672281"); // 0 duration - No Src - No Dst - happens at the same time of a Bloodstone Radiation damage event
     #endregion
 
     #region Strikes

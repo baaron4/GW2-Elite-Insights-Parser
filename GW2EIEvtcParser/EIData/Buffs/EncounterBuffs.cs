@@ -412,6 +412,7 @@ internal static class EncounterBuffs
             new Buff("Bloodstone Saturation", BloodstoneSaturation, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.BloodstoneSaturation),
             new Buff("Rising Pressure", RisingPressure, Source.FightSpecific, BuffStackType.Stacking, 20, BuffClassification.Other, BuffImages.RisingPressure),
             new Buff("Hardened Crust", HardenedCrust, Source.FightSpecific, BuffClassification.Other, BuffImages.HardenedCrust),
+            new Buff("Fire", Fire, Source.FightSpecific, BuffClassification.Other, BuffImages.FireEffect),
             //////////////////////////////////////////////
             // Fractals 
             new Buff("Rigorous Certainty", RigorousCertainty, Source.Common, BuffClassification.Defensive, BuffImages.DesertCarapace),
