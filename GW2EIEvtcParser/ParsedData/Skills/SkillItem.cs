@@ -1044,7 +1044,7 @@ public class SkillItem
             { PlayerLiftUpQadimThePeerless, ParserIcons.GenericBlueArrowUp },
             { UnleashSAK, "https://wiki.guildwars2.com/images/9/99/Touch_of_the_Sun.png" },
             // - Ura
-            { UraDispelSAK, "https://wiki.guildwars2.com/images/0/07/Consume_Bloodsktone_Fragment.png" },
+            { UraDispelSAK, "https://wiki.guildwars2.com/images/0/07/Consume_Bloodstone_Fragment.png" },
             // - Mai Trin (Aetherble Hideout)
             { ReverseThePolaritySAK, "https://wiki.guildwars2.com/images/f/f8/Prod.png" },
             // - Dadga (Cosmic Observatory)
