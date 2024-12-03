@@ -92,8 +92,7 @@ internal class UraTheSteamshrieker : MountBalrior
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var sulfuricEffectGUID = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraSulfuricGeyserSpawn
-            .Equals(x.SrcAgent, x.DstAgent))
+            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraSulfuricGeyserSpawn.Equals(x.SrcAgent, x.DstAgent))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
         bool refresh = false;
@@ -111,11 +110,7 @@ internal class UraTheSteamshrieker : MountBalrior
                 sulfuricAgent.OverrideType(AgentItem.AgentType.NPC);
             }
         }
-        var toxicEffectGUID = combatData
-            .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraToxicGeyserSpawn
-            .Equals(x.SrcAgent, x.DstAgent))
-            .Select(x => new EffectGUIDEvent(x, evtcVersion))
-            .FirstOrDefault();
+        var toxicEffectGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent)).Select(x => new EffectGUIDEvent(x, evtcVersion)).FirstOrDefault();
         if (toxicEffectGUID != null)
         {
             var toxicAgents = combatData
@@ -153,7 +148,6 @@ internal class UraTheSteamshrieker : MountBalrior
         {
             shard.OverrideID(ArcDPSEnums.TrashID.UraGadget_BloodstoneShard);
             shard.OverrideType(AgentItem.AgentType.NPC);
-            shard.OverrideName("Bloodstone Shard");
         }
         if (refresh)
         {
@@ -205,7 +199,7 @@ internal class UraTheSteamshrieker : MountBalrior
                     {
                         var offset = new Vector3(250, 0, 0);
                         var rotation = new AngleConnector(facing);
-                        replay.Decorations.Add((RectangleDecoration)new RectangleDecoration(500, 70, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(offset, true)).UsingRotationConnector(rotation));
+                        replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, Colors.LightOrange, 0.2, new AgentConnector(target).WithOffset(offset, true)).UsingRotationConnector(rotation));
                     }
                 }
 
@@ -325,13 +319,13 @@ internal class UraTheSteamshrieker : MountBalrior
             foreach (var effect in sulfuricGeyserTarget)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
-                var cicle = (lifespan.end - lifespan.start) / 5;
-                (long start, long end) pulse = (lifespan.start, lifespan.start + cicle);
+                int pulseCycle = 1000;
+                (long start, long end) pulse = (lifespan.start, lifespan.start + pulseCycle);
                 for (int i = 0; i < 5; i++)
                 {
                     replay.Decorations.AddShockwave(new AgentConnector(player), pulse, Colors.LightOrange, 0.2, 300);
                     pulse.start = pulse.end;
-                    pulse.end = pulse.start + cicle;
+                    pulse.end = pulse.start + pulseCycle;
                 }
                 replay.Decorations.AddOverheadIcon(lifespan, player, ParserIcons.BombTimerFullOverhead);
             }
