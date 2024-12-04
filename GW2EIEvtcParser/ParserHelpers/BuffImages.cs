@@ -423,11 +423,13 @@ public static class BuffImages
     public const string ElectricalBuildup = "https://wiki.guildwars2.com/images/0/01/Electrical_Buildup.png";
     public const string ConjuredBarrier = "https://wiki.guildwars2.com/images/4/42/Conjured_Barrier.png";
     public const string ElectrifiedMinion = "https://wiki.guildwars2.com/images/6/6d/Electrified_Minion.png";
+    // Ura
     public const string RisingPressure = "https://wiki.guildwars2.com/images/5/53/Fiery_Tornado_%28effect%29.png";
     public const string BloodstoneSaturation = "https://wiki.guildwars2.com/images/4/4d/Heat_Level.png";
     public const string Deterrence = "https://wiki.guildwars2.com/images/c/cc/Luck_of_Kings.png";
     public const string SulfuricAcid = "https://wiki.guildwars2.com/images/a/ab/Grasp_of_Joko_%28effect%29.png";
     public const string HardenedCrust = "https://wiki.guildwars2.com/images/4/4e/Branded_Crystal_Shield.png";
+    public const string FireEffect = "https://wiki.guildwars2.com/images/e/eb/Fire_%28effect%29.png";
     // Fractal
     public const string GambitExhausted = "https://wiki.guildwars2.com/images/4/41/Gambit_Exhausted.png";
     public const string RedirectAnomaly = "https://wiki.guildwars2.com/images/9/94/Redirect_Anomaly.png";
