@@ -14,7 +14,7 @@ internal abstract class FormDecoration : AttachedDecoration
     internal abstract class FormDecorationRenderingData : AttachedDecorationRenderingData
     {
         public bool Filled { get; private set; } = true;
-        public int GrowingEnd { get; private set; }
+        public long GrowingEnd { get; private set; }
         public bool GrowingReverse { get; private set; }
         protected FormDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
@@ -27,7 +27,7 @@ internal abstract class FormDecoration : AttachedDecoration
 
         public virtual void UsingGrowingEnd(long growingEnd, bool reverse = false)
         {
-            GrowingEnd = growingEnd <= Lifespan.start ? Lifespan.start : (int)growingEnd;
+            GrowingEnd = growingEnd <= Lifespan.start ? Lifespan.start : growingEnd;
             GrowingReverse = reverse;
         }
     }
@@ -36,7 +36,7 @@ internal abstract class FormDecoration : AttachedDecoration
 
     public bool Filled => DecorationRenderingData.Filled;
     public string Color => DecorationMetadata.Color;
-    public int GrowingEnd => DecorationRenderingData.GrowingEnd;
+    public long GrowingEnd => DecorationRenderingData.GrowingEnd;
     public bool GrowingReverse => DecorationRenderingData.GrowingReverse;
 
     internal FormDecoration(FormDecorationMetadata metadata, FormDecorationRenderingData renderingData) : base(metadata, renderingData)

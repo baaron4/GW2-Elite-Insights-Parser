@@ -44,8 +44,8 @@ internal abstract class AttachedDecoration : Decoration
     /// <summary>Creates a new line towards the other decoration</summary>
     public LineDecoration LineTo(AttachedDecoration other, string color)
     {
-        int start = Math.Max(Lifespan.start, other.Lifespan.start);
-        int end = Math.Min(Lifespan.end, other.Lifespan.end);
+        long start = Math.Max(Lifespan.start, other.Lifespan.start);
+        long end = Math.Min(Lifespan.end, other.Lifespan.end);
         return new LineDecoration((start, end), color, ConnectedTo, other.ConnectedTo);
     }
 
