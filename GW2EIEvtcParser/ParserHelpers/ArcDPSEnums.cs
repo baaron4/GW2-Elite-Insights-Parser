@@ -616,6 +616,7 @@ public static class ArcDPSEnums
     private const int TitanspawnGeyser = -64;
     private const int UraGadget_BloodstoneShard = -65;
     private const int EnlightenedConduitGadget = -66;
+    private const int FakeEnsolyss = -67;
     public const int NonIdentifiedSpecies = 0;
 
     //
@@ -1267,6 +1268,7 @@ public static class ArcDPSEnums
         MAMA = 17021,
         Siax = 17028,
         Ensolyss = 16948,
+        FakeEnsolyss = ArcDPSEnums.FakeEnsolyss,
         Skorvald = 17632,
         Artsariiv = 17949,
         Arkk = 17759,

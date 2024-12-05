@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
+using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
@@ -65,6 +66,18 @@ internal class Ensolyss : Nightmare
         trashIDs.Add(TrashID.NightmareHallucination2);
         //trashIDs.Add(TrashID.NightmareAltar);
         return trashIDs;
+    }
+
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    {
+        var ensolyssMaxHPUpdates = combatData.Where(y => y.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(y) == 13439478);
+        var fakeEnsos = agentData.GetNPCsByID(TargetID.Ensolyss).Where(x => !ensolyssMaxHPUpdates.Any(y => y.SrcMatchesAgent(x)));
+        foreach(var fakeEnsoy in fakeEnsos)
+        {
+            fakeEnsoy.OverrideID(TargetID.FakeEnsolyss);
+        }
+        agentData.Refresh();
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
