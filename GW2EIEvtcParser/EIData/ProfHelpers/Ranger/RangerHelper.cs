@@ -350,7 +350,7 @@ internal static class RangerHelper
             var skill = new SkillModeDescriptor(player, Spec.Ranger, HealingSpring, SkillModeCategory.ShowOnSelect);
             foreach (EffectEvent effect in healingSpringsInactive)
             {
-                (long, long) lifespan = effect.ComputeDynamicLifespan(log, effect.Duration);
+                (long, long) lifespan = effect.ComputeDynamicLifespan(log, 300000);
                 var connector = new PositionConnector(effect.Position);
                 // Halved the saturation of the circle and icon to distinguish between inactive and active.
                 replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.25, connector).UsingFilled(false).UsingSkillMode(skill));
