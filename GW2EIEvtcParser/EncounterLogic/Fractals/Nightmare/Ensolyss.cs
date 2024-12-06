@@ -70,11 +70,14 @@ internal class Ensolyss : Nightmare
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var ensolyssMaxHPUpdates = combatData.Where(y => y.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(y) == 13439478);
-        var fakeEnsos = agentData.GetNPCsByID(TargetID.Ensolyss).Where(x => !ensolyssMaxHPUpdates.Any(y => y.SrcMatchesAgent(x)));
-        foreach(var fakeEnsoy in fakeEnsos)
+        var mainEnsolyssMaxHPUpdates = combatData.Where(x => x.IsStateChange == StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) >= 7e6 && agentData.GetAgent(x.SrcAgent, x.Time).IsSpecies(TargetID.Ensolyss));
+        var ensolysses = agentData.GetNPCsByID(TargetID.Ensolyss);
+        foreach(var ensolyss in ensolysses)
         {
-            fakeEnsoy.OverrideID(TargetID.FakeEnsolyss);
+            if (!mainEnsolyssMaxHPUpdates.Any(y => y.SrcMatchesAgent(ensolyss)))
+            {
+                ensolyss.OverrideID(TargetID.FakeEnsolyss);
+            }
         }
         agentData.Refresh();
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
