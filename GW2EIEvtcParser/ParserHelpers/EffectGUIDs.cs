@@ -618,7 +618,35 @@ public static class EffectGUIDs
     public static readonly GUID QadimPeerlessMagmaLandingExplosion = new("6617FA23565EE646ADAA7A646C895927"); // 1000 duration - No Src
     public static readonly GUID QadimPeerlessMagmaDamagingAoE = new("BABE69EC5AC7AF48A2F14A9FB8920C7F"); // 600000 duration - Src Qadim
     // Greer
-    public static readonly GUID GreerNoxiousBlightGreen = new("C4E12D8CDDAA904CB4E7B52E6CEF1287"); // 10000 duration - Src NPC
+    public static readonly GUID GreerNoxiousBlightGreen = new("C4E12D8CDDAA904CB4E7B52E6CEF1287"); // 10000 duration - Src Gree
+    public static readonly GUID GreerNoxiousBlightGreen2 = new("3E7B9E8C7FFF3A42B02F8FE8E5AC4709"); // 8000 duration - Src Greer
+    public static readonly GUID GreerScatteringSporeblastIndicator = new("C0D32EEEDFAA0E40B3342DD9B82AC94E"); // Dynamic duration - Src NPC
+    public static readonly GUID GreerSweepTheMoldRakeTheRotIndicator = new("051F8F1650EE0A44960AD1B865DB4BC5"); // 3000/4000 duration
+    public static readonly GUID GreerEnfeeblingMiasma = new("BBA33A70B7D2A94589DE81B1F35D3D69"); // 6000 duration
+    public static readonly GUID GreerEnfeeblingMiasmaGasClouds = new("E8240F7797D797468D23EEB36939EA3B"); // 12000 duration
+    public static readonly GUID GreerEnfeeblingMiasmaGasMoving = new("44DDA7CFF5C5C549822FFF54648915B6"); // 4000 duration
+    public static readonly GUID GreerCageOfDecayArrowIndicator = new("27563132F8532847B4DD2CA7AB5B9CE8"); // 5000 duration
+    public static readonly GUID GreerCageOfDecayCircleIndicator = new("3A77C01985706240BCB7D04B82124F63"); // 5000 duration
+    public static readonly GUID GreerCageOfDecayCircleDamage = new("E05331E90885E649A730BE79BE3DD14F"); // 23000 duration / 8000 duration (Cage of Decay + Eruption of Rot)
+    public static readonly GUID GreerCageOfDecayCircleWalls = new("6F34E94792DB1541A836C80153E957DE"); // 23000 duration
+    public static readonly GUID GreerCageOfDecayMovingWalls = new("8E1B3D2867A1614281C06E46C73F5873"); // 2000 duration
+    public static readonly GUID GreerCageOfDecayRoots = new("A106AF30128BE543ACFDD7B667364274"); // 2000 duration (Cage of Decay + Eruption of Rot)
+    public static readonly GUID GreerRotTheWorld = new("A478BD35F568974091FC99670B5A9700"); // 12000 duration
+    public static readonly GUID GreerBlightingStabIndicator = new("BD95008C94F51345B954D36AA21B3736"); // 3000 duration
+    public static readonly GUID GreerBlightingStabDamage = new("6F6E4929434F0247A239234FC3E24545"); // 1000 duration
+    public static readonly GUID GreerRainOfSporesIndicator = new("B21F84B9ABF75949B3782089A29DB7A4"); // Dynamic duration
+    public static readonly GUID GreerRainOfSporesDamage1 = new("A0D53D5A8AB10C4C84B66611F4760BBB"); // 0 duration - Src unknown - Collisions with other attacks
+    public static readonly GUID GreerRainOfSporesDamage2 = new("9CFCE6154A8D16478B2EB9F164001906"); // 0 duration - Src unknown - Collisions with other attacks
+    public static readonly GUID GreerStompTheGrowth = new("BA8654BD3D252C4B9A170EE404FBEA15"); // Dynamic duration
+    public static readonly GUID GreerStompTheGrowthShockwave1 = new("C8D276FDFE582E4485FC5FCE2B617A78"); // Duration 0 - Src Unknown
+    public static readonly GUID GreerStompTheGrowthShockwave2 = new("29E4FF27335CD045962342511841CBCA"); // Duration 0 - Src Unknown
+    public static readonly GUID GreerInvulnerableBarrier = new("BB1DBC24ABF7A24880A98E7696DD2010"); // 240000 duration - Src Greer - Dst Greer
+    public static readonly GUID GreerRipplesOfRotIndicator1 = new("D11320204E28E643A48469AA8E4845BA"); // 3000 duration
+    public static readonly GUID GreerRipplesOfRotIndicator2 = new("C86E82EAAE88FF4B970FE278DBF9115D"); // 3000 duration
+    public static readonly GUID GreerRipplesOfRotMovingWalls = new("92746BC770773842B4034E049A40C1DD"); // 2000 duration
+    public static readonly GUID GreerRipplesOfRotWalls = new("8A3F35110E95E8458CAE1D22499A7076"); // 23000 duration
+    public static readonly GUID GreerBlobOfBlightIndicator = new("34724E94CD4E974C95A8D9D1D1162658"); // 0 duration
+    public static readonly GUID GreerBlobofBlight = new("1DCAF79F42B75D41AC13A9C8968AFAEA"); // 5000 duration
     // Decima
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE = new("1A81CC24D58C3046AEF30AAA35D6D854"); // 1200000 duration - Src Conduit
     public static readonly GUID DecimaEnlightenedConduitPurpleAoE2 = new("8771719DDCA8654BA06B928509595BB1"); // 0 duration - Src Conduit
