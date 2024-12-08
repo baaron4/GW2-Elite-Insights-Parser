@@ -157,30 +157,33 @@ public class BuffsContainer
         BuffsBySource = currentBuffs.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => (IReadOnlyList<Buff>)x.ToList());
         //
         _buffSourceFinder = GetBuffSourceFinder(combatData, new HashSet<long>(BuffsByClassification[BuffClassification.Boon].Select(x => x.ID)));
-        // Band aid for the stack type 0 situation
+        // Band aid for the stack type situation with fake inactive/infinite durations
         if (combatData.HasStackIDs)
         {
-            var stackType0Buffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss);
-            foreach (Buff buff in stackType0Buffs)
+            var stackTypeBuffs = currentBuffs.Where(x => x.StackType == BuffStackType.StackingConditionalLoss || x.StackType == BuffStackType.Stacking);
+            foreach (Buff buff in stackTypeBuffs)
             {
                 IReadOnlyList<BuffEvent> buffData = combatData.GetBuffData(buff.ID);
-                foreach (var group in buffData.GroupBy(x => x.To))
+                if (buffData.OfType<BuffRemoveSingleEvent>().Any(x => !x.OverstackOrNaturalEnd))
                 {
-                    var buffs = group.ToList();
-                    var appliesPerInstanceID = buffs.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
-                    var removeSinglesPerInstanceID = buffs.OfType<BuffRemoveSingleEvent>().Where(x => !x.OverstackOrNaturalEnd).GroupBy(x => x.BuffInstance);
-                    foreach (var removePair in removeSinglesPerInstanceID)
+                    foreach (var group in buffData.GroupBy(x => x.To))
                     {
-                        if (appliesPerInstanceID.TryGetValue(removePair.Key, out var applyList))
+                        var buffs = group.ToList();
+                        var appliesPerInstanceID = buffs.OfType<BuffApplyEvent>().GroupBy(x => x.BuffInstance).ToDictionary(x => x.Key, x => x.ToList());
+                        var removeSinglesPerInstanceID = buffs.OfType<BuffRemoveSingleEvent>().Where(x => !x.OverstackOrNaturalEnd).GroupBy(x => x.BuffInstance);
+                        foreach (var removePair in removeSinglesPerInstanceID)
                         {
-                            foreach (BuffRemoveSingleEvent remove in removePair)
+                            if (appliesPerInstanceID.TryGetValue(removePair.Key, out var applyList))
                             {
-                                BuffApplyEvent? apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
-                                if (apply != null && apply.OriginalAppliedDuration == remove.RemovedDuration)
+                                foreach (BuffRemoveSingleEvent remove in removePair)
                                 {
-                                    int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;
-                                    int elapsedTime = (int)(remove.Time - apply.Time);
-                                    remove.OverrideRemovedDuration(remove.RemovedDuration - activeTime - elapsedTime);
+                                    BuffApplyEvent? apply = applyList.LastOrDefault(x => x.Time <= remove.Time); //TODO(Rennorb) @perf
+                                    if (apply != null && apply.OriginalAppliedDuration == remove.RemovedDuration)
+                                    {
+                                        int activeTime = apply.OriginalAppliedDuration - apply.AppliedDuration;
+                                        int elapsedTime = (int)(remove.Time - apply.Time);
+                                        remove.OverrideRemovedDuration(remove.RemovedDuration - activeTime - elapsedTime);
+                                    }
                                 }
                             }
                         }
