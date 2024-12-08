@@ -205,5 +205,9 @@ public abstract class EffectEvent : AbstractEffectEvent
     internal void SetGUIDEvent(CombatData combatData)
     {
         GUIDEvent = combatData.GetEffectGUIDEvent(EffectID);
+        if (Duration == 0 && GUIDEvent.DefaultDuration > 0)
+        {
+            Duration = (long)Math.Min(GUIDEvent.DefaultDuration, int.MaxValue); // To avoid overflow, end time could be start + duration, 13 days is more than enough to cover a log's duration
+        }
     }
 }

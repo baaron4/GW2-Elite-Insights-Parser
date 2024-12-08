@@ -3,14 +3,14 @@
 public class EffectGUIDEvent : IDToGUIDEvent
 {
     public int EffectType { get; } = -1;
-    public float LastDuration { get; } = -1;
+    public float DefaultDuration { get; } = -1;
     internal static EffectGUIDEvent DummyEffectGUID = new();
     internal EffectGUIDEvent(CombatItem evtcItem, EvtcVersionEvent evtcVersion) : base(evtcItem)
     {
         if (evtcVersion.Build > ArcDPSEnums.ArcDPSBuilds.ExtraDataInGUIDEvents)
         {
             EffectType = evtcItem.SrcInstid;
-            LastDuration = Convert.ToSingle(evtcItem.BuffDmg);
+            DefaultDuration = Convert.ToSingle(evtcItem.BuffDmg);
         }
     }
 
