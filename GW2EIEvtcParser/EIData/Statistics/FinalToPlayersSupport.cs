@@ -14,6 +14,8 @@ public class FinalToPlayersSupport
     public readonly double CondiCleanseTimeSelf;
     public readonly int BoonStrips;
     public readonly double BoonStripsTime;
+    public readonly int BoonStripsDownContribution;
+    public readonly double BoonStripsDownContributionTime;
     public readonly int StunBreak;
     public readonly double RemovedStunDuration;
 
@@ -32,6 +34,11 @@ public class FinalToPlayersSupport
             {
                 BoonStrips += itemFoe.count;
                 BoonStripsTime += itemFoe.time;
+            }
+            if (totals.FoeRemovalsDownContribution.TryGetValue(boon.ID, out (int count, long time) itemFoeDownContribution))
+            {
+                BoonStripsDownContribution += itemFoeDownContribution.count;
+                BoonStripsDownContributionTime += itemFoeDownContribution.time;
             }
             if (totals.UnknownRemovals.TryGetValue(boon.ID, out (int count, long time) itemUnknown))
             {
@@ -65,6 +72,7 @@ public class FinalToPlayersSupport
         CondiCleanseTime = Math.Round(CondiCleanseTime / 1000.0, ParserHelper.TimeDigit);
         CondiCleanseTimeSelf = Math.Round(CondiCleanseTimeSelf / 1000.0, ParserHelper.TimeDigit);
         BoonStripsTime = Math.Round(BoonStripsTime / 1000.0, ParserHelper.TimeDigit);
+        BoonStripsDownContributionTime = Math.Round(BoonStripsDownContributionTime / 1000.0, ParserHelper.TimeDigit);
     }
 
 }

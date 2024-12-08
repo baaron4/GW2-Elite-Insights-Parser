@@ -8,6 +8,8 @@ public class FinalSupport
     public IReadOnlyDictionary<long, (int count, long time)> FriendlyRemovals => _friendlyRemovals;
     private readonly Dictionary<long, (int count, long time)> _foeRemovals = [];
     public IReadOnlyDictionary<long, (int count, long time)> FoeRemovals => _foeRemovals;
+    private readonly Dictionary<long, (int count, long time)> _foeRemovalsDownContribution = [];
+    public IReadOnlyDictionary<long, (int count, long time)> FoeRemovalsDownContribution => _foeRemovalsDownContribution;
     private readonly Dictionary<long, (int count, long time)> _unknownRemovals = [];
     public IReadOnlyDictionary<long, (int count, long time)> UnknownRemovals => _unknownRemovals;
 
@@ -17,6 +19,8 @@ public class FinalSupport
         {
             int foeCount = 0;
             long foeTime = 0;
+            int foeDownContributionCount = 0;
+            long foeDownContributionTime = 0;
             int friendlyCount = 0;
             long friendlyTime = 0;
             int unknownCount = 0;
@@ -38,6 +42,11 @@ public class FinalSupport
                     {
                         foeCount++;
                         foeTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);
+                        if (brae.To.IsDownedBeforeNext90(log, brae.Time))
+                        {
+                            foeDownContributionCount++;
+                            foeDownContributionTime = Math.Max(foeTime + brae.RemovedDuration, log.FightData.FightDuration);
+                        }
                     }
                     else
                     {
@@ -49,6 +58,10 @@ public class FinalSupport
             if (foeCount > 0)
             {
                 _foeRemovals[buffID] = (foeCount, foeTime);
+            }
+            if (foeDownContributionCount > 0)
+            {
+                _foeRemovalsDownContribution[buffID] = (foeDownContributionCount, foeDownContributionTime);
             }
             if (friendlyCount > 0)
             {

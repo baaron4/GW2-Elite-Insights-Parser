@@ -38,6 +38,8 @@ public class FinalOffensiveStats
 
     public readonly int AppliedCrowdControl;
     public readonly double AppliedCrowdControlDuration;
+    public readonly int AppliedCrowdControlDownContribution;
+    public readonly double AppliedCrowdControlDurationDownContribution;
 
 
     internal FinalOffensiveStats(ParsedEvtcLog log, long start, long end, SingleActor actor, SingleActor? target)
@@ -170,6 +172,11 @@ public class FinalOffensiveStats
         {
             AppliedCrowdControl++;
             AppliedCrowdControlDuration += cc.Duration;
+            if (cc.To.IsDownedBeforeNext90(log, cc.Time))
+            {
+                AppliedCrowdControlDownContribution++;
+                AppliedCrowdControlDurationDownContribution += cc.Duration;
+            }
         }
     }
 }
