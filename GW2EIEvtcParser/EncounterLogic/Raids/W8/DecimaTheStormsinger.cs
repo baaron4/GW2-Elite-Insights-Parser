@@ -36,8 +36,10 @@ internal class DecimaTheStormsinger : MountBalrior
             new PlayerDstHitMechanic(FulgentFence, "Fulgent Fence", new MechanicPlotlySetting(Symbols.Octagon, Colors.Purple), "FulFence.H", "Hit by Fulgent Fence (Barriers between Conduits)", "Fulgence Fence Hit", 0),
             new PlayerDstHitMechanic(ReverberatingImpact, "Reverberating Impact", new MechanicPlotlySetting(Symbols.StarOpen, Colors.LightBlue), "RevImpact.H", "Hit by Reverberating Impact (Hit a Conduit)", "Reverberating Impact Hit", 0),
             new PlayerDstHitMechanic([FulgentAuraTier1, FulgentAuraTier2, FulgentAuraTier3], "Fulgent Aura", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.Purple), "FulAura.H", "Hit by Fulgent Aura (Conduit AoE)", "Fulgent Aura Hit", 0),
-            new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Earthrend.D", "Earthrend Death (Hitbox)", "Earthrend Death", 0).UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)),
-            new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "SeisCrash.D", "Seismic Crash Death (Hitbox)", "Seismic Crash Death", 0).UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)),
+            new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.LightRed), "Earthrend.Dwn", "Downed by Earthrend (Hitbox)", "Earthrend Downed", 0).UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)),
+            new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.LightRed), "SeisCrash.Dwn", "Downed by Seismic Crash (Hitbox)", "Seismic Crash Downed", 0).UsingChecker((hde, log) => hde.To.IsDowned(log, hde.Time)),
+            new PlayerDstSkillMechanic(Earthrend, "Earthrend", new MechanicPlotlySetting(Symbols.CircleCrossOpen, Colors.Red), "Earthrend.D", "Earthrend Death (Hitbox)", "Earthrend Death", 0).UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // Legacy
+            new PlayerDstSkillMechanic(SeismicCrashHitboxDamage, "Seismic Crash", new MechanicPlotlySetting(Symbols.CircleCross, Colors.Red), "SeisCrash.D", "Seismic Crash Death (Hitbox)", "Seismic Crash Death", 0).UsingChecker((hde, log) => hde.To.IsDead(log, hde.Time)), // Legacy
             new PlayerDstBuffApplyMechanic([TargetOrder1JW, TargetOrder2JW, TargetOrder3JW, TargetOrder4JW, TargetOrder5JW], "Target Order", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightOrange), "FluxOrder.T", "Targeted by Fluxlance (Target Order)", "Fluxlance Target (Sequential)", 0),
             new PlayerDstBuffApplyMechanic(FluxlanceTargetBuff1, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Orange), "Fluxlance.T", "Targeted by Fluxlance", "Fluxlance Target", 0),
             new PlayerDstBuffApplyMechanic(FluxlanceRedArrowTargetBuff, "Fluxlance", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.Red), "FluxRed.T", "Targeted by Fluxlance (Red Arrow)", "Fluxlance (Red Arrow)", 0),
@@ -155,7 +157,7 @@ internal class DecimaTheStormsinger : MountBalrior
                     (Colors.Black, 0.4),
                     (Colors.LightRed, 0.8),
                 ];
-                replay.Decorations.AddDynamicBar(target, chargeSegments, 10, 1800, -2000, 1000, 100, 0, colors);
+                replay.Decorations.AddDynamicBar(target, chargeSegments, 10, 2500, -2850, 1000, 150, 0, colors);
 
                 // Mainshock - Pizza Indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaMainshockIndicator, out var mainshockSlices))
