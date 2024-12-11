@@ -71,7 +71,7 @@ internal static class WvWBuffs
         new Buff("Dune Roller", DuneRoller, Source.Common, BuffClassification.Support, BuffImages.BattleRoar),
         new Buff("Invulnerable Dolyak", InvulnerableDolyak, Source.Common, BuffClassification.Other, BuffImages.Brilliance),
         new Buff("Superspeed (Speedy Dolyak)", SuperspeedSpeedyDolyak, Source.Common, BuffClassification.Other, BuffImages.Superspeed),
-        new Buff("Spoiled Supply", SpoiledSupply, Source.Common, BuffClassification.Other, BuffImages.SpoiledSupply),
+        new Buff("Spoiled Supply", SpoiledSupply, Source.Common, BuffStackType.Stacking, 1, BuffClassification.Other, BuffImages.SpoiledSupply),
         new Buff("Commander's Presence", CommandersPresence, Source.Common, BuffClassification.Support, BuffImages.MightyBlow),
         new Buff("Inferno Hound", InfernoHound, Source.Common, BuffClassification.Other, BuffImages.HoundsOfBalthazar),
         new Buff("Smoke Form", SmokeForm, Source.Common, BuffClassification.Other, BuffImages.InkShot),
