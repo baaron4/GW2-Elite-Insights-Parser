@@ -35,7 +35,7 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         return new CombatReplayMap(CombatReplayGreerTheBlightbringer,
                         (1912, 1845),
-                        (11200, -10291, 16890, -4800));
+                        (11300, -10621, 18374, -3794));
     }
     protected override ReadOnlySpan<int> GetTargetsIDs()
     {
