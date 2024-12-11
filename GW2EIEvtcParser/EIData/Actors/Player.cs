@@ -2,6 +2,7 @@
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
+using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.ParserHelper;
 
 namespace GW2EIEvtcParser.EIData;
@@ -95,6 +96,7 @@ public class Player : PlayerActor
     {
         if (CommanderStates == null)
         {
+            var useGUIDs = log.LogData.EvtcBuild >= ArcDPSBuilds.FunctionalIDToGUIDEvents;
             var statesByPlayer = new Dictionary<Player, IReadOnlyList<GenericSegment<GUID>>>(log.PlayerList.Count);
             foreach (Player player in log.PlayerList)
             {
@@ -104,7 +106,7 @@ public class Player : PlayerActor
                 foreach (MarkerEvent markerEvent in markerEvents)
                 {
                     MarkerGUIDEvent marker = markerEvent.GUIDEvent!;
-                    if (marker.IsValid)
+                    if (useGUIDs)
                     {
                         if (marker.IsCommanderTag)
                         {
