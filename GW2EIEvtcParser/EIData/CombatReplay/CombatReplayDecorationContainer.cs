@@ -507,9 +507,9 @@ internal class CombatReplayDecorationContainer
         {
             offset.X = (float)(offsetX + (-(width / 2) + segment.Value * ratio * sizeMultiplier / 2));
             barWidth = (uint)(segment.Value * sizeMultiplier * ratio);
-            var bar = (RectangleDecoration)new RectangleDecoration(barWidth, height, segment.TimeSpan, colors[0].color, colors[0].opacity, new AgentConnector(actor).WithOffset(offset, true)).UsingRotationConnector(angleConnector);
-            var background = (RectangleDecoration)new RectangleDecoration(width, height, segment.TimeSpan, colors[1].color, colors[1].opacity, new AgentConnector(actor).WithOffset(offsetBackground, true)).UsingRotationConnector(angleConnector);
-            AddWithBorder(bar, colors[2].color, colors[2].opacity);
+            var bar = new RectangleDecoration(barWidth, height, segment.TimeSpan, colors[0].color, colors[0].opacity, new AgentConnector(actor).WithOffset(offset, true)).UsingRotationConnector(angleConnector);
+            var background = new RectangleDecoration(width, height, segment.TimeSpan, colors[1].color, colors[1].opacity, new AgentConnector(actor).WithOffset(offsetBackground, true)).UsingRotationConnector(angleConnector);
+            AddWithBorder((FormDecoration)bar, colors[2].color, colors[2].opacity);
             Add(background);
         }
     }
