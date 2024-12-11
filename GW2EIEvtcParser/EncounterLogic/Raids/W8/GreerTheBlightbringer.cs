@@ -235,6 +235,21 @@ internal class GreerTheBlightbringer : MountBalrior
 
     }
 
+    internal override void ComputeEnvironmentCombatReplayDecorations(ParsedEvtcLog log)
+    {
+        base.ComputeEnvironmentCombatReplayDecorations(log);
+
+        // Wave of Corruption
+        if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GreerWaveOfCorruption1, out var shockwaves))
+        {
+            foreach (EffectEvent effect in shockwaves)
+            {
+                (long start, long end) lifespan = (effect.Time, effect.Time + 3000);
+                EnvironmentDecorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Purple, 0.2, 1500);
+            }
+        }
+    }
+
     private static void AddScatteringSporeblast(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         // Scattering Sporeblast - Indicator
@@ -277,19 +292,17 @@ internal class GreerTheBlightbringer : MountBalrior
         }
 
         // Enfeebling Miasma - Gas Circles
-        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerEnfeeblingMiasmaGasMoving, out var miasmaAnimation))
+        if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerEnfeeblingMiasmaGasMoving, out var miasmaAnimation) &&
+            log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerEnfeeblingMiasmaGasClouds, out var miasmaClouds))
         {
             foreach (EffectEvent animation in miasmaAnimation)
             {
-                if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerEnfeeblingMiasmaGasClouds, out var miasmaClouds))
+                foreach (EffectEvent cloud in miasmaClouds.Where(x => x.Time > animation.Time && x.Time < animation.Time + 6000))
                 {
-                    foreach (EffectEvent cloud in miasmaClouds.Where(x => x.Time > animation.Time && x.Time < animation.Time + 6000))
-                    {
-                        (long start, long end) lifespan = cloud.ComputeLifespan(log, 12000);
-                        var circle = new CircleDecoration(150, lifespan, Colors.Purple, 0.2, new PositionConnector(cloud.Position));
-                        replay.Decorations.Add(circle);
-                        replay.Decorations.AddProjectile(animation.Position, cloud.Position, (animation.Time, cloud.Time), Colors.Purple, 0.2, 150);
-                    }
+                    (long start, long end) lifespan = cloud.ComputeLifespan(log, 12000);
+                    var circle = new CircleDecoration(150, lifespan, Colors.Purple, 0.2, new PositionConnector(cloud.Position));
+                    replay.Decorations.Add(circle);
+                    replay.Decorations.AddProjectile(animation.Position, cloud.Position, (animation.Time, cloud.Time), Colors.Purple, 0.2, 150);
                 }
             }
         }
@@ -391,19 +404,6 @@ internal class GreerTheBlightbringer : MountBalrior
                 (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
                 var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
                 replay.Decorations.AddWithGrowing(circle, effect.Time + effect.Duration);
-            }
-        }
-
-        // Gree doesn't create shockwaves
-        if (target.IsSpecies(ArcDPSEnums.TargetID.Greer))
-        {
-            if (log.CombatData.TryGetEffectEventsByGUID(EffectGUIDs.GreerStompTheGrowthShockwave1, out var shockwaves))
-            {
-                foreach (EffectEvent effect in shockwaves)
-                {
-                    (long start, long end) lifespan = (effect.Time, effect.Time + 3000);
-                    replay.Decorations.AddShockwave(new PositionConnector(effect.Position), lifespan, Colors.Purple, 0.2, 1500);
-                }
             }
         }
     }

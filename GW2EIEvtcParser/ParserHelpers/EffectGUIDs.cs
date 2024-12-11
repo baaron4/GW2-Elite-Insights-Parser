@@ -638,8 +638,8 @@ public static class EffectGUIDs
     public static readonly GUID GreerRainOfSporesDamage1 = new("A0D53D5A8AB10C4C84B66611F4760BBB"); // 0 duration - Src unknown - Collisions with other attacks
     public static readonly GUID GreerRainOfSporesDamage2 = new("9CFCE6154A8D16478B2EB9F164001906"); // 0 duration - Src unknown - Collisions with other attacks
     public static readonly GUID GreerStompTheGrowth = new("BA8654BD3D252C4B9A170EE404FBEA15"); // Dynamic duration
-    public static readonly GUID GreerStompTheGrowthShockwave1 = new("C8D276FDFE582E4485FC5FCE2B617A78"); // Duration 0 - Src Unknown
-    public static readonly GUID GreerStompTheGrowthShockwave2 = new("29E4FF27335CD045962342511841CBCA"); // Duration 0 - Src Unknown
+    public static readonly GUID GreerWaveOfCorruption1 = new("C8D276FDFE582E4485FC5FCE2B617A78"); // Duration 0 - Src Unknown
+    public static readonly GUID GreerWaveOfCorruption2 = new("29E4FF27335CD045962342511841CBCA"); // Duration 0 - Src Unknown
     public static readonly GUID GreerInvulnerableBarrier = new("BB1DBC24ABF7A24880A98E7696DD2010"); // 240000 duration - Src Greer - Dst Greer
     public static readonly GUID GreerRipplesOfRotIndicator1 = new("D11320204E28E643A48469AA8E4845BA"); // 3000 duration
     public static readonly GUID GreerRipplesOfRotIndicator2 = new("C86E82EAAE88FF4B970FE278DBF9115D"); // 3000 duration
