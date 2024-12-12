@@ -4633,7 +4633,7 @@ public static class SkillIDs
     public const long RipplesOfRot2 = 75332;
     public const long ReverberatingImpact = 75334;
     public const long FluxlanceSalvo5 = 75348;
-    public const long EruptionOfRotBuff = 75355;
+    public const long EruptionOfRotBuff = 75355; // Stacking buff when standing in a green
     #endregion
 }
 

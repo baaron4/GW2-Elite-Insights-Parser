@@ -145,7 +145,7 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddRainOfSpores(target, log, replay);
                 AddRipplesOfRot(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
-                AddCageOfDecayOrEruptionOfRot(target, log, replay);
+                AddCageOfDecayOrNoxiousBlight(target, log, replay);
 
                 // Getting breakbar times to filter some effects of different sizes appearing at the end of it.
                 var breakbars = target.GetBuffStatus(log, DamageImmunity, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
@@ -176,14 +176,14 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddScatteringSporeblast(target, log, replay);
                 AddRainOfSpores(target, log, replay);
                 AddBlobOfBlight(target, log, replay);
-                AddCageOfDecayOrEruptionOfRot(target, log, replay);
+                AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
             case (int)ArcDPSEnums.TrashID.Gree:
                 AddSweepTheMoldRakeTheRot(target, log, replay);
                 AddStompTheGrowth(target, log, replay);
                 AddRipplesOfRot(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
-                AddCageOfDecayOrEruptionOfRot(target, log, replay);
+                AddCageOfDecayOrNoxiousBlight(target, log, replay);
                 break;
             case (int)ArcDPSEnums.TrashID.EmpoweringBeast:
                 // Blighting Stab - Indicator
@@ -346,7 +346,7 @@ internal class GreerTheBlightbringer : MountBalrior
         }
     }
 
-    private static void AddCageOfDecayOrEruptionOfRot(NPC target, ParsedEvtcLog log, CombatReplay replay)
+    private static void AddCageOfDecayOrNoxiousBlight(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         // Cage of Decay - Arrow Indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerCageOfDecayArrowIndicator, out var cageOfDecayArrows))
