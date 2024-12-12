@@ -16,7 +16,7 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal class GreerTheBlightbringer : MountBalrior
 {
-    private readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores];
+    private readonly long[] ReflectableProjectiles = [BlobOfBlight, BlobOfBlight2, ScatteringSporeblast, RainOfSpores]; // Legacy, no longer reflectable.
     public GreerTheBlightbringer(int triggerID) : base(triggerID)
     {
         MechanicList.AddRange(new List<Mechanic>()
@@ -28,9 +28,10 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerDstHitMechanic(WaveOfCorruption, "Wave of Corruption", new MechanicPlotlySetting(Symbols.HourglassOpen, Colors.LightRed), "WaveCor.H", "Hit by Wave of Corruption", "Wave of Corruption Hit", 0),
             new PlayerDstHitMechanic([RipplesOfRot, RipplesOfRot2], "Ripples of Rot", new MechanicPlotlySetting(Symbols.StarSquareOpenDot, Colors.Chocolate), "RippRot.H", "Hit by Ripples of Rot", "Ripples of Rot Hit", 0),
             new PlayerDstHitMechanic([RainOfSpores, RainOfSpores2], "Rain of Spores", new MechanicPlotlySetting(Symbols.Hexagon, Colors.Green), "RainSpore.H", "Hit by Rain of Spores", "Rain of Spores Hit", 0),
+            new PlayerDstHitMechanic([NoxiousBlight, NoxiousBlight2], "Noxious Blight", new MechanicPlotlySetting(Symbols.TriangleNEOpen, Colors.DarkPink), "NoxBlight.H", "Hit by Noxious Blight", "Noxious Blight Hit", 0),
             new PlayerDstHitMechanic([EnfeeblingMiasma, EnfeeblingMiasma2], "Enfeebling Miasma", new MechanicPlotlySetting(Symbols.TriangleDown, Colors.LightPurple), "EnfMiasma.H", "Hit by Enfeebling Miasma", "Enfeebling Miasma Hit", 0),
             new PlayerDstHitMechanic([ScatteringSporeblast, ScatteringSporeblast2], "Scattering Sporeblast", new MechanicPlotlySetting(Symbols.SquareOpen, Colors.GreenishYellow), "ScatSpore.H", "Hit by Scattering Sporeblast", "Scattering Sporeblast Hit", 0),
-            new PlayerDstHitMechanic([AuraOfCorruptionDamage, AuraOfCorruptionDamage2], "Aura of Corruption", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "AuraCorr.H", "Hit by Aura of Corruption (Hitbox)", "Aura of Corruption Hit", 0),
+            new PlayerDstHitMechanic([AuraOfCorruptionReegGreeDamage, AuraOfCorruptionGreerDamage], "Aura of Corruption", new MechanicPlotlySetting(Symbols.CircleOpenDot, Colors.Purple), "AuraCorr.H", "Hit by Aura of Corruption (Hitbox)", "Aura of Corruption Hit", 0),
             new PlayerDstHitMechanic([RakeTheRot, RakeTheRot2, RakeTheRot3], "Rake the Rot", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.LightBlue), "Rake.H", "Hit by Rake the Rot", "Rake the Rot Hit", 0),
             new PlayerDstHitMechanic([CageOfDecay, CageOfDecay2, CageOfDecay3], "Cage of Decay", new MechanicPlotlySetting(Symbols.Hourglass, Colors.LightPurple), "Cage.H", "Hit by Cage of Decay", "Cage of Decay Hit", 0),
             new PlayerDstHitMechanic([SweepTheMold, SweepTheMold2, SweepTheMold3], "Sweep the Mold", new MechanicPlotlySetting(Symbols.PentagonOpen, Colors.Blue), "Sweep.H", "Hit by Sweep the Mold", "Sweep the Mold Hit", 0),
@@ -38,8 +39,10 @@ internal class GreerTheBlightbringer : MountBalrior
             new PlayerDstHitMechanic([EruptionOfRot, EruptionOfRot2, EruptionOfRot3], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Hexagram, Colors.GreenishYellow), "ErupRot.H", "Hit by Eruption of Rot", "Eruption of Rot Hit", 0),
             new PlayerDstHitMechanic([StompTheGrowth, StompTheGrowth2, StompTheGrowth3], "Stomp the Growth", new MechanicPlotlySetting(Symbols.CircleOpen, Colors.LightOrange), "Stomp.H", "Hit by Stomp the Growth", "Stomp the Growth Hit", 0),
             new PlayerDstBuffApplyMechanic(TargetBuff, "Target", new MechanicPlotlySetting(Symbols.CircleXOpen, Colors.LightBlue), "BlobBlight.T", "Targeted by Blob of Blight", "Blob of Blight Target", 0),
-            new PlayerDstBuffApplyMechanic(InfectiousRotBuff, "Infectious Rot", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "InfRot.T", "Targeted by Infectious Rot (Hit by Eruption of Rot)", "Infectious Rot Target", 0),
-            new PlayerDstEffectMechanic([EffectGUIDs.GreerNoxiousBlightGreen, EffectGUIDs.GreerNoxiousBlightGreen2], "Noxious Blight", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "NoxBlight.T", "Targeted by Noxious Blight (Green)", "Noxious Blight (Green)", 0),
+            new PlayerDstBuffApplyMechanic(InfectiousRotBuff, "Infectious Rot", new MechanicPlotlySetting(Symbols.CircleX, Colors.Red), "InfRot.T", "Targeted by Infectious Rot (Hit by Noxious Blight)", "Infectious Rot Target", 0),
+            new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, "Eruption of Rot", new MechanicPlotlySetting(Symbols.StarTriangleDown, Colors.LightBrown), "ErupRot.S", "Stood in Eruption of Rot (Green)", "Stood in Eruption of Rot", 0),
+            new PlayerDstBuffApplyMechanic(EruptionOfRotBuff, "Eruption of Rot", new MechanicPlotlySetting(Symbols.StarTriangleDownOpen, Colors.LightBrown), "ErupRot.Dwn", "Downed by stacking Eruption of Rot (Green)", "Downed by Eruption of Rot", 0).UsingChecker((bae, log) => bae.To.IsDowned(log, bae.Time)),
+            new PlayerDstEffectMechanic([EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2], "Eruption of Rot", new MechanicPlotlySetting(Symbols.Circle, Colors.Green), "ErupRot.T", "Targeted by Eruption of Rot (Green)", "Eruption of Rot (Green)", 0),
             new EnemyDstBuffApplyMechanic(EmpoweredGreer, "Empowered", new MechanicPlotlySetting(Symbols.YUp, Colors.Red), "Empowered", "Gained Empowered", "Empowered", 0),
         });
         Extension = "greer";
@@ -135,8 +138,8 @@ internal class GreerTheBlightbringer : MountBalrior
         switch (target.ID)
         {
             case (int)ArcDPSEnums.TargetID.Greer:
-                AddSweepTheMoldRakeTheRot(target, log, replay, 750);
-                AddStompTheGrowth(target, log, replay, 800);
+                AddSweepTheMoldRakeTheRot(target, log, replay);
+                AddStompTheGrowth(target, log, replay);
                 AddScatteringSporeblast(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
                 AddRainOfSpores(target, log, replay);
@@ -176,8 +179,8 @@ internal class GreerTheBlightbringer : MountBalrior
                 AddCageOfDecayOrEruptionOfRot(target, log, replay);
                 break;
             case (int)ArcDPSEnums.TrashID.Gree:
-                AddSweepTheMoldRakeTheRot(target, log, replay, 550);
-                AddStompTheGrowth(target, log, replay, 600);
+                AddSweepTheMoldRakeTheRot(target, log, replay);
+                AddStompTheGrowth(target, log, replay);
                 AddRipplesOfRot(target, log, replay);
                 AddEnfeeblingMiasma(target, log, replay);
                 AddCageOfDecayOrEruptionOfRot(target, log, replay);
@@ -213,12 +216,12 @@ internal class GreerTheBlightbringer : MountBalrior
     {
         base.ComputePlayerCombatReplayActors(player, log, replay);
 
-        // Noxious Blight - Green AoE
-        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, [EffectGUIDs.GreerNoxiousBlightGreen, EffectGUIDs.GreerNoxiousBlightGreen2], out var noxiousBlight))
+        // Eruption of Rot - Green AoE
+        if (log.CombatData.TryGetEffectEventsByDstWithGUIDs(player.AgentItem, [EffectGUIDs.GreerEruptionOfRotGreen, EffectGUIDs.GreerEruptionOfRotGreen2], out var noxiousBlight))
         {
             foreach (EffectEvent effect in noxiousBlight)
             {
-                long duration = effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerNoxiousBlightGreen ? 10000 : 8000;
+                long duration = effect.GUIDEvent.ContentGUID == EffectGUIDs.GreerEruptionOfRotGreen ? 10000 : 8000;
                 long growing = effect.Time + duration;
                 (long start, long end) lifespan = effect.ComputeLifespan(log, duration);
                 var circle = new CircleDecoration(240, lifespan, Colors.DarkGreen, 0.1, new AgentConnector(player));
@@ -264,16 +267,50 @@ internal class GreerTheBlightbringer : MountBalrior
         }
     }
 
-    private static void AddSweepTheMoldRakeTheRot(NPC target, ParsedEvtcLog log, CombatReplay replay, uint radius)
+    private static void AddSweepTheMoldRakeTheRot(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         // Swepp the Mold / Rake the Rot - Indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerSweepTheMoldRakeTheRotIndicator, out var indicators))
         {
-            foreach (EffectEvent effect in indicators)
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x =>
+            x.SkillId == SweepTheMold || x.SkillId == SweepTheMold2 || x.SkillId == SweepTheMold3 ||
+            x.SkillId == RakeTheRot || x.SkillId == RakeTheRot2 || x.SkillId == RakeTheRot3);
+
+            foreach (var cast in casts)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
-                var cone = new PieDecoration(radius, 120, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
-                replay.Decorations.Add(cone);
+                foreach (EffectEvent effect in indicators.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 1000)) // 1 second padding
+                {
+                    // Sweep the Mold has a X 20 and Y 40 offset, the X is already covered by the effect rotation.
+                    // Adding 40 to the radius matches the in game visual
+                    uint radius = 0;
+                    switch (cast.SkillId)
+                    {
+                        case SweepTheMold:
+                            radius = 750 + 40;
+                            break;
+                        case RakeTheRot:
+                            radius = 750;
+                            break;
+                        case SweepTheMold2:
+                            radius = 950 + 40;
+                            break;
+                        case RakeTheRot2:
+                            radius = 950;
+                            break;
+                        case SweepTheMold3:
+                            radius = 550 + 40;
+                            break;
+                        case RakeTheRot3:
+                            radius = 550;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                    var cone = new PieDecoration(radius, 120, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)).UsingRotationConnector(new AngleConnector(effect.Rotation.Z + 90));
+                    replay.Decorations.Add(cone);
+                }
             }
         }
     }
@@ -293,15 +330,16 @@ internal class GreerTheBlightbringer : MountBalrior
 
         // Enfeebling Miasma - Gas Circles
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerEnfeeblingMiasmaGasMoving, out var miasmaAnimation) &&
-            log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerEnfeeblingMiasmaGasClouds, out var miasmaClouds))
+            log.CombatData.TryGetEffectEventsBySrcWithGUIDs(target.AgentItem, [EffectGUIDs.GreerEnfeeblingMiasmaGasClouds, EffectGUIDs.GreerEnfeeblingMiasmaGasCloudsNew], out var miasmaClouds))
         {
             foreach (EffectEvent animation in miasmaAnimation)
             {
                 foreach (EffectEvent cloud in miasmaClouds.Where(x => x.Time > animation.Time && x.Time < animation.Time + 6000))
                 {
-                    (long start, long end) lifespan = cloud.ComputeLifespan(log, 12000);
+                    long duration = cloud.GUIDEvent.ContentGUID == EffectGUIDs.GreerEnfeeblingMiasmaGasClouds ? 12000 : 13000;
+                    (long start, long end) lifespan = cloud.ComputeLifespan(log, duration);
                     var circle = new CircleDecoration(150, lifespan, Colors.Purple, 0.2, new PositionConnector(cloud.Position));
-                    replay.Decorations.Add(circle);
+                    replay.Decorations.AddWithBorder(circle, Colors.Red, 0.2);
                     replay.Decorations.AddProjectile(animation.Position, cloud.Position, (animation.Time, cloud.Time), Colors.Purple, 0.2, 150);
                 }
             }
@@ -335,7 +373,7 @@ internal class GreerTheBlightbringer : MountBalrior
             }
         }
 
-        // Cage of Decay + Eruption of Rot - Roots
+        // Cage of Decay + Noxious Blight - Roots
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerCageOfDecayRoots, out var cageOfDecayRoots))
         {
             foreach (EffectEvent effect in cageOfDecayRoots)
@@ -346,7 +384,7 @@ internal class GreerTheBlightbringer : MountBalrior
             }
         }
 
-        // Cage of Decay + Eruption of Rot - Circle Damage
+        // Cage of Decay + Noxious Blight - Circle Damage
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerCageOfDecayCircleDamage, out var cageOfDecayCirclesDamage))
         {
             foreach (EffectEvent effect in cageOfDecayCirclesDamage)
@@ -394,16 +432,36 @@ internal class GreerTheBlightbringer : MountBalrior
         }
     }
 
-    private static void AddStompTheGrowth(NPC target, ParsedEvtcLog log, CombatReplay replay, uint radius)
+    private static void AddStompTheGrowth(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         // Stomp the Growth - Circle indicator
         if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.GreerStompTheGrowth, out var stompTheGrowth))
         {
-            foreach (EffectEvent effect in stompTheGrowth)
+            var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.SkillId == StompTheGrowth || x.SkillId == StompTheGrowth2 || x.SkillId == StompTheGrowth3);
+            
+            foreach (var cast in casts)
             {
-                (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
-                var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
-                replay.Decorations.AddWithGrowing(circle, effect.Time + effect.Duration);
+                foreach (EffectEvent effect in stompTheGrowth.Where(x => x.Time >= cast.Time && x.Time < cast.Time + 3000)) // 3 seconds padding
+                {
+                    uint radius = 0;
+                    switch (cast.SkillId)
+                    {
+                        case StompTheGrowth:
+                            radius = 800;
+                            break;
+                        case StompTheGrowth2:
+                            radius = 600;
+                            break;
+                        case StompTheGrowth3:
+                            radius = 1000;
+                            break;
+                        default:
+                            break;
+                    }
+                    (long start, long end) lifespan = effect.ComputeLifespan(log, effect.Duration);
+                    var circle = new CircleDecoration(radius, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position));
+                    replay.Decorations.AddWithGrowing(circle, effect.Time + effect.Duration);
+                }
             }
         }
     }
@@ -462,8 +520,8 @@ internal class GreerTheBlightbringer : MountBalrior
         {
             foreach (EffectEvent effect in blobOfBlightIndicator)
             {
-                // The effect has 0 duration for some reason
-                (long start, long end) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.GreerBlobofBlight, 1000);
+                // The effect has 0 duration logged
+                (long start, long end) lifespan = effect.ComputeLifespan(log, 2315);
                 replay.Decorations.AddWithGrowing(new CircleDecoration(300, lifespan, Colors.LightOrange, 0.2, new PositionConnector(effect.Position)), lifespan.end);
             }
         }
