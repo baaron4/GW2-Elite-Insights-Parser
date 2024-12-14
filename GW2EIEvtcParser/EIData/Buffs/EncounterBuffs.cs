@@ -405,6 +405,7 @@ internal static class EncounterBuffs
             new Buff("Damage Immunity", DamageImmunity, Source.FightSpecific, BuffClassification.Other, BuffImages.DefensiveInspiration),
             new Buff("Infectious Rot", InfectiousRotBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.InfectiousRot),
             new Buff("Target", TargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Target),
+            new Buff("Eruption of Rot (Stood in it)", EruptionOfRotBuff, Source.FightSpecific, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MonsterSkill),
             // Ura
             new Buff("Pressure Blast", PressureBlastBubbleBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),
             new Buff("Pressure Blast Target", PressureBlastTargetBuff, Source.FightSpecific, BuffClassification.Other, BuffImages.Unknown),

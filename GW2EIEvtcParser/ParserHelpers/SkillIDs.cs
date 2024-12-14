@@ -4505,7 +4505,9 @@ public static class SkillIDs
     public const long GreersVirulence = 73181;
     public const long SolarStormIlluminatedHealing = 73199;
     public const long RelicOfTheStormsingerBuff = 73455;
+    public const long NoxiousBlight = 73496;
     public const long HuntersProwess = 73541;
+    public const long NoxiousBlight2 = 73663;
     public const long RelicOfSorrowHeal = 73714;
     public const long RelicOfTheBlightbringer = 73794;
     public const long RelicOfTheStormsingerChain = 73851;
@@ -4557,7 +4559,7 @@ public static class SkillIDs
     public const long SparkingAuraTier1 = 74898;
     public const long InfectiousRotBuff = 74900;
     public const long HarmonicSensitivity = 74904;
-    public const long AuraOfCorruptionDamage = 74915;
+    public const long AuraOfCorruptionReegGreeDamage = 74915;
     public const long CageOfDecay2 = 74917;
     public const long DecimaBeamTargeting = 74922;
     public const long SulfuricFroth = 74931;
@@ -4607,7 +4609,7 @@ public static class SkillIDs
     public const long RakeTheRot2 = 75195;
     public const long Earthrend = 75197;
     public const long DecimaBeamLoading = 75198;
-    public const long AuraOfCorruptionDamage2 = 75199;
+    public const long AuraOfCorruptionGreerDamage = 75199;
     public const long EruptionVent = 75200;
     public const long SweepTheMold3 = 75210;
     public const long FulgentAuraTier3 = 75221;
@@ -4631,6 +4633,7 @@ public static class SkillIDs
     public const long RipplesOfRot2 = 75332;
     public const long ReverberatingImpact = 75334;
     public const long FluxlanceSalvo5 = 75348;
+    public const long EruptionOfRotBuff = 75355; // Stacking buff when standing in a green
     #endregion
 }
 
