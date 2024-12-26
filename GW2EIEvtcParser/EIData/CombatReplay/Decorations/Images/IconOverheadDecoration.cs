@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class IconOverheadDecoration : IconDecoration
 {
-    internal class IconOverheadDecorationMetadata : IconDecorationMetadata
+    public class IconOverheadDecorationMetadata : IconDecorationMetadata
     {
 
 
@@ -21,7 +21,7 @@ internal class IconOverheadDecoration : IconDecoration
             return new IconOverheadDecorationMetadataDescription(this);
         }
     }
-    internal class IconOverheadDecorationRenderingData : IconDecorationRenderingData
+    public class IconOverheadDecorationRenderingData : IconDecorationRenderingData
     {
         public IconOverheadDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
@@ -34,9 +34,6 @@ internal class IconOverheadDecoration : IconDecoration
         {
             return new IconOverheadDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }
-    }
-    internal IconOverheadDecoration(IconOverheadDecorationMetadata metadata, IconOverheadDecorationRenderingData renderingData) : base(metadata, renderingData)
-    {
     }
     public IconOverheadDecoration(string icon, uint pixelSize, float opacity, (long start, long end) lifespan, AgentConnector connector) : base(new IconOverheadDecorationMetadata(icon, pixelSize, Math.Min(connector.Agent.HitboxWidth / 2, 250), opacity), new IconOverheadDecorationRenderingData(lifespan, connector))
     {

@@ -2,10 +2,10 @@
 
 internal abstract class AttachedDecoration : Decoration
 {
-    internal abstract class AttachedDecorationMetadata : _DecorationMetadata
+    public abstract class AttachedDecorationMetadata : _DecorationMetadata
     {
     }
-    internal abstract class AttachedDecorationRenderingData : _DecorationRenderingData
+    public abstract class AttachedDecorationRenderingData : _DecorationRenderingData
     {
         public readonly GeographicalConnector ConnectedTo;
         public RotationConnector? RotationConnectedTo { get; protected set; }
@@ -37,7 +37,7 @@ internal abstract class AttachedDecoration : Decoration
     public RotationConnector? RotationConnectedTo => DecorationRenderingData.RotationConnectedTo;
     public SkillModeDescriptor? SkillMode => DecorationRenderingData.SkillMode;
 
-    internal AttachedDecoration(AttachedDecorationMetadata metadata, AttachedDecorationRenderingData renderingData) : base(metadata, renderingData)
+    protected AttachedDecoration(AttachedDecorationMetadata metadata, AttachedDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
     }
 

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class DoughnutDecoration : FormDecoration
 {
-    internal class DoughnutDecorationMetadata : FormDecorationMetadata
+    public class DoughnutDecorationMetadata : FormDecorationMetadata
     {
         public readonly uint OuterRadius;
         public readonly uint InnerRadius;
@@ -28,7 +28,7 @@ internal class DoughnutDecoration : FormDecoration
             return new DoughnutDecorationMetadataDescription(this);
         }
     }
-    internal class DoughnutDecorationRenderingData : FormDecorationRenderingData
+    public class DoughnutDecorationRenderingData : FormDecorationRenderingData
     {
         public DoughnutDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
@@ -42,10 +42,6 @@ internal class DoughnutDecoration : FormDecoration
     private new DoughnutDecorationMetadata DecorationMetadata => (DoughnutDecorationMetadata)base.DecorationMetadata;
     public uint OuterRadius => DecorationMetadata.OuterRadius;
     public uint InnerRadius => DecorationMetadata.InnerRadius;
-
-    internal DoughnutDecoration(DoughnutDecorationMetadata metadata, DoughnutDecorationRenderingData renderingData) : base(metadata, renderingData)
-    {
-    }
 
     public DoughnutDecoration(uint innerRadius, uint outerRadius, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new DoughnutDecorationMetadata(color, innerRadius, outerRadius), new DoughnutDecorationRenderingData(lifespan, connector))
     {

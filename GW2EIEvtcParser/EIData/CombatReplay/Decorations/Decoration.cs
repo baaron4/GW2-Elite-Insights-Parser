@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 public abstract class Decoration
 {
-    internal abstract class _DecorationMetadata
+    public abstract class _DecorationMetadata
     {
 
         public abstract string GetSignature();
@@ -13,7 +13,7 @@ public abstract class Decoration
 
     }
 
-    internal abstract class _DecorationRenderingData
+    public abstract class _DecorationRenderingData
     {
         public readonly (long start, long end) Lifespan;
 
@@ -28,7 +28,7 @@ public abstract class Decoration
     internal readonly _DecorationRenderingData DecorationRenderingData;
 
     public (long start, long end) Lifespan => DecorationRenderingData.Lifespan;
-    internal Decoration(_DecorationMetadata metaData, _DecorationRenderingData renderingData)
+    protected Decoration(_DecorationMetadata metaData, _DecorationRenderingData renderingData)
     {
         DecorationMetadata = metaData;
         DecorationRenderingData = renderingData;

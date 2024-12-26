@@ -43,9 +43,7 @@ internal class MovingPlatformDecoration : BackgroundDecoration
     public int Height => DecorationMetadata.Height;
 
     public IReadOnlyList<(float x, float y, float z, float angle, float opacity, long time)> Positions => DecorationRenderingData.Positions;
-    internal MovingPlatformDecoration(MovingPlatformDecorationMetadata metadata, MovingPlatformDecorationRenderingData renderingData) : base(metadata, renderingData)
-    {
-    }
+
     public MovingPlatformDecoration(string image, int width, int height, (long start, long end) lifespan) : base(new MovingPlatformDecorationMetadata(image, width, height), new MovingPlatformDecorationRenderingData(lifespan))
     {
     }
