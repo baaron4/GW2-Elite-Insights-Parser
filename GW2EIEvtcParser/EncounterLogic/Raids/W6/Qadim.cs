@@ -796,9 +796,24 @@ internal class Qadim : MythwrightGambit
                         break;
                     case "05":
                     case "5":
-                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, 0, out velocityIndex, 0, 0, hiddenOpacity))
+                        bool doNormalPlat5 = true;
+                        if (log.FightData.IsCM)
                         {
-                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            doNormalPlat5 = false;
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new( -8.0078125f, 0, 0), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(6.7871094f, 18.188477f, -9.094238f), noOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                {
+                                    doNormalPlat5 = AddOpacityUsingVelocity(replay.Velocities, opacities, new(0, 0, 0), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
+                                }
+                            }
+                        }
+                        if (doNormalPlat5)
+                        {
+                            if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(255.712891f, -69.43359f, 2.722168f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                            {
+                                AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                            }
                         }
                         break;
                     case "06":
@@ -871,9 +886,17 @@ internal class Qadim : MythwrightGambit
                             {
                                 if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
                                 {
-                                    if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                    bool doNormalPlat10 = true;
+                                    if (log.FightData.IsCM)
                                     {
-                                        AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                        doNormalPlat10 = AddOpacityUsingVelocity(replay.Velocities, opacities, new(49.8291f, -43.5791f, 4.5410156f), hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity);
+                                    }
+                                    if (doNormalPlat10)
+                                    {
+                                        if (AddOpacityUsingVelocity(replay.Velocities, opacities, new(-51.3793945f, 110.473633f, -3.63769531f), log.FightData.IsCM ? noOpacity : hiddenOpacity, velocityIndex, out velocityIndex, 0, 0, hiddenOpacity))
+                                        {
+                                            AddOpacityUsingVelocity(replay.Velocities, opacities, new(0f, 0f, 0f), visibleOpacity, velocityIndex, out velocityIndex, 0, finalPhasePlatformSwapTime, hiddenOpacity);
+                                        }
                                     }
                                 }
                             }
