@@ -232,6 +232,9 @@ class Animator {
                 case "Rectangle":
                     MetadataClass = RectangleDecorationMetadata;
                     break;
+                case "ProgressBar":
+                    MetadataClass = ProgressBarDecorationMetadata;
+                    break;
                 case "BackgroundIconDecoration":
                     MetadataClass = IconDecorationMetadata;
                     break;
@@ -240,6 +243,9 @@ class Animator {
                     break;
                 case "IconOverheadDecoration":
                     MetadataClass = IconOverheadDecorationMetadata;
+                    break;
+                case "OverheadProgressBar":
+                    MetadataClass = OverheadProgressBarDecorationMetadata;
                     break;
                 case "MovingPlatform":
                     MetadataClass = MovingPlatformDecorationMetadata;
@@ -314,6 +320,9 @@ class Animator {
                     case "Rectangle":
                         DecorationClass = RectangleMechanicDrawable;
                         break;
+                    case "ProgressBar":
+                        DecorationClass = ProgressBarMechanicDrawable;
+                        break;
                     case "Doughnut":
                         DecorationClass = DoughnutMechanicDrawable;
                         break;
@@ -328,6 +337,9 @@ class Animator {
                         break;
                     case "IconOverheadDecoration":
                         this.overheadActorData.push(new IconOverheadMechanicDrawable(decorationRendering));
+                        continue;
+                    case "OverheadProgressBar":
+                        this.overheadActorData.push(new OverheadProgressBarMechanicDrawable(decorationRendering));
                         continue;
                     case "SquadMarkerDecoration":
                         this.squadMarkerData.push(new IconMechanicDrawable(decorationRendering));
