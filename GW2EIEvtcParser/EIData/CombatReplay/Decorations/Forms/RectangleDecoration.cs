@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EIData.CircleDecoration;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -38,6 +39,10 @@ internal class RectangleDecoration : FormDecoration
     private new RectangleDecorationMetadata DecorationMetadata => (RectangleDecorationMetadata)base.DecorationMetadata;
     public uint Height => DecorationMetadata.Height;
     public uint Width => DecorationMetadata.Width;
+
+    protected RectangleDecoration(RectangleDecorationMetadata metadata, RectangleDecorationRenderingData renderingData) : base(metadata, renderingData)
+    {
+    }
 
     public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new RectangleDecorationMetadata(color, width, height), new RectangleDecorationRenderingData(lifespan, connector))
     {
