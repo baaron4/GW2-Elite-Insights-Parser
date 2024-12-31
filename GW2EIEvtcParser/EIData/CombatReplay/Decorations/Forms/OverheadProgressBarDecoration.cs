@@ -8,16 +8,15 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
     public class OverheadProgressBarDecorationMetadata : ProgressBarDecorationMetadata
     {
         public readonly uint PixelWidth;
-        public readonly uint PixelHeight;
-        public OverheadProgressBarDecorationMetadata(string color, string secondaryColor, uint width, uint height, uint pixelWidth, uint pixelHeight) : base(color, secondaryColor, width, height)
+        public uint PixelHeight => PixelWidth / 5;
+        public OverheadProgressBarDecorationMetadata(string color, string secondaryColor, uint width, uint pixelWidth) : base(color, secondaryColor, width, width / 5)
         {
             PixelWidth = pixelWidth;
-            PixelHeight = pixelHeight;
         }
 
         public override string GetSignature()
         {
-            return "OProg" + Height + Color + Width + SecondaryColor + PixelWidth + PixelHeight.ToString();
+            return "OProg"  + Color + Width + SecondaryColor + PixelWidth;
         }
         public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
@@ -46,38 +45,39 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
     }
 
     public OverheadProgressBarDecoration(
-        uint width, uint height, 
-        uint pixelWidth, uint pixelHeight,
+        uint pixelWidth,
         (long start, long end) lifespan,
         string color, string secondaryColor,
-        IReadOnlyList<(long, double)> progress, GeographicalConnector connector
+        IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
         ) : base(
-            new OverheadProgressBarDecorationMetadata(color, secondaryColor, width, height, pixelWidth, pixelHeight),
-            new OverheadProgressBarDecorationRenderingData(lifespan, progress, connector)
+            new OverheadProgressBarDecorationMetadata(
+                color, 
+                secondaryColor, 
+                Math.Max(Math.Min((uint)(1.5 * connectedTo.Agent.HitboxWidth), 80), 500),
+                pixelWidth),
+            new OverheadProgressBarDecorationRenderingData(lifespan, progress, connectedTo)
             )
     {
     }
     public OverheadProgressBarDecoration(
-        uint width, uint height,
-        uint pixelWidth, uint pixelHeight,
+        uint pixelWidth,
         (long start, long end) lifespan,
         Color color, double opacity,
         Color secondaryColor, double secondaryOpacity,
-        IReadOnlyList<(long, double)> progress, GeographicalConnector connector
+        IReadOnlyList<(long, double)> progress, AgentConnector connectedTo
         ) : this(
-            width, height, 
-            pixelWidth, pixelHeight,
+            pixelWidth,
             lifespan,
             color.WithAlpha(opacity).ToString(true),
             secondaryColor.WithAlpha(secondaryOpacity).ToString(true),
-            progress, connector
+            progress, connectedTo
             )
     {
     }
 
     public override FormDecoration Copy(string? color = null)
     {
-        return (FormDecoration)new OverheadProgressBarDecoration(Width, Height, PixelWidth, PixelHeight, Lifespan, color ?? Color, SecondaryColor, Progress, ConnectedTo)
+        return (FormDecoration)new OverheadProgressBarDecoration(PixelWidth, Lifespan, color ?? Color, SecondaryColor, Progress, (AgentConnector)ConnectedTo)
             .UsingFilled(Filled)
             .UsingGrowingEnd(GrowingEnd, GrowingReverse)
             .UsingRotationConnector(RotationConnectedTo)
@@ -86,7 +86,7 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
 
     public override FormDecoration Copy(string? color = null, string? secondaryColor = null)
     {
-        return (FormDecoration)new OverheadProgressBarDecoration(Width, Height, PixelWidth, PixelHeight, Lifespan, color ?? Color, secondaryColor ?? SecondaryColor, Progress, ConnectedTo)
+        return (FormDecoration)new OverheadProgressBarDecoration(PixelWidth, Lifespan, color ?? Color, secondaryColor ?? SecondaryColor, Progress, (AgentConnector)ConnectedTo)
             .UsingFilled(Filled)
             .UsingGrowingEnd(GrowingEnd, GrowingReverse)
             .UsingRotationConnector(RotationConnectedTo)
