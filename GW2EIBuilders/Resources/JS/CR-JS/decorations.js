@@ -125,6 +125,11 @@ class MovingPlatformDecorationMetadata extends BackgroundDecorationMetadata{
 
 //// BASE MECHANIC
 
+const InterpolationMethod = {
+    LINEAR: 0,
+    STEP: 1,
+};
+
 function interpolatedPositionFetcher(connection, master) {
     var index = -1;
     var totalPoints = connection.positions.length / 3;
@@ -151,19 +156,26 @@ function interpolatedPositionFetcher(connection, master) {
             x: connection.positions[3 * index],
             y: connection.positions[3 * index + 1]
         };
-        var curTime = connection.positions[3 * index + 2];
-        var next = {
-            x: connection.positions[3 * (index + 1)],
-            y: connection.positions[3 * (index + 1) + 1]
-        };
-        var nextTime = connection.positions[3 * (index + 1) + 2];
-        var pt = {
-            x: 0,
-            y: 0
-        };
-        pt.x = cur.x + (time - curTime) / (nextTime - curTime) * (next.x - cur.x);
-        pt.y = cur.y + (time - curTime) / (nextTime - curTime) * (next.y - cur.y);
-        return pt;
+        switch (connection.interpolationMethod) {
+            case InterpolationMethod.LINEAR:
+                var curTime = connection.positions[3 * index + 2];
+                var next = {
+                    x: connection.positions[3 * (index + 1)],
+                    y: connection.positions[3 * (index + 1) + 1]
+                };
+                var nextTime = connection.positions[3 * (index + 1) + 2];
+                var pt = {
+                    x: 0,
+                    y: 0
+                };
+                pt.x = cur.x + (time - curTime) / (nextTime - curTime) * (next.x - cur.x);
+                pt.y = cur.y + (time - curTime) / (nextTime - curTime) * (next.y - cur.y);
+                return pt;
+            case InterpolationMethod.STEP:
+                return cur;
+            default:
+                return null;
+        }
     }
 }
 
@@ -216,17 +228,24 @@ function interpolatedAngleFetcher(connection, master, dstMaster, start, end) {
         return connection.angles[2 * index];
     } else {
         var cur = connection.angles[2 * index];
-        var curTime = connection.angles[2 * index + 1];
-        var next = connection.angles[2 * (index + 1)];
-        var nextTime = connection.angles[2 * (index + 1) + 1];
-        // Make sure the interpolation is only done on the shortest path to avoid big flips around PI or -PI radians
-        if (next - cur < -180) {
-            next += 360.0;
-        } else if (next - cur > 180) {
-            next -= 360.0;
+        switch (connection.interpolationMethod) {
+            case InterpolationMethod.LINEAR:
+                var curTime = connection.angles[2 * index + 1];
+                var next = connection.angles[2 * (index + 1)];
+                var nextTime = connection.angles[2 * (index + 1) + 1];
+                // Make sure the interpolation is only done on the shortest path to avoid big flips around PI or -PI radians
+                if (next - cur < -180) {
+                    next += 360.0;
+                } else if (next - cur > 180) {
+                    next -= 360.0;
+                }
+                var interpolatedAngle = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
+                return interpolatedAngle;
+            case InterpolationMethod.STEP:
+                return cur;
+            default:
+                return 0;
         }
-        var interpolatedAngle = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
-        return interpolatedAngle;
     }
 }
 

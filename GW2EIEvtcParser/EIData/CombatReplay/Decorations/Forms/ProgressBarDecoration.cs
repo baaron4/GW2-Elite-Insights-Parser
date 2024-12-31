@@ -1,4 +1,5 @@
 ﻿using GW2EIEvtcParser.ParsedData;
+using static GW2EIEvtcParser.EIData.Connector;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -24,6 +25,7 @@ internal class ProgressBarDecoration : RectangleDecoration
     public class ProgressBarDecorationRenderingData : RectangleDecorationRenderingData
     {
         public readonly IReadOnlyList<(long, double)> Progress;
+        public InterpolationMethod Method { get; private set; } = InterpolationMethod.Linear;
         public ProgressBarDecorationRenderingData((long, long) lifespan, IReadOnlyList<(long, double)> progress, GeographicalConnector connector) : base(lifespan, connector)
         {
             Progress = progress;
@@ -32,6 +34,11 @@ internal class ProgressBarDecoration : RectangleDecoration
         public override DecorationRenderingDescription GetCombatReplayRenderingDescription(CombatReplayMap map, ParsedEvtcLog log, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature)
         {
             return new ProgressBarDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
+        }
+
+        public void UsingInterpolationMethod(InterpolationMethod method)
+        {
+            Method = method;
         }
     }
     private new ProgressBarDecorationMetadata DecorationMetadata => (ProgressBarDecorationMetadata)base.DecorationMetadata;
@@ -77,7 +84,7 @@ internal class ProgressBarDecoration : RectangleDecoration
             .UsingSkillMode(SkillMode);
     }
 
-    public FormDecoration Copy(string? color = null, string? secondaryColor = null)
+    public virtual FormDecoration Copy(string? color = null, string? secondaryColor = null)
     {
         return (FormDecoration)new ProgressBarDecoration(Width, Height, Lifespan, color ?? Color, secondaryColor ?? SecondaryColor, Progress, ConnectedTo)
             .UsingFilled(Filled)
@@ -86,6 +93,11 @@ internal class ProgressBarDecoration : RectangleDecoration
             .UsingSkillMode(SkillMode);
     }
 
+    public ProgressBarDecoration UsingInterpolationMethod(InterpolationMethod method)
+    {
+        RenderingMetadata.UsingInterpolationMethod(method);
+        return this;
+    }
 
     public override FormDecoration UsingFilled(bool filled)
     {
