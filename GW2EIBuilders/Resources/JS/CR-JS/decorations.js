@@ -759,21 +759,21 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
             ctx.lineWidth = (2 / animator.scale).toString();
             ctx.strokeStyle = this.color;
             ctx.stroke();
-        }
-        if (progressPercent < 1) {
-            const reverseProgressPercent = 1.0 - progressPercent;
-            ctx.beginPath();
-            ctx.rect((- 0.5 + progressPercent) * size.w, - 0.5 * size.h, reverseProgressPercent * size.w, size.h);
-            ctx.closePath();
-            ctx.fillStyle = this.secondaryColor;
-            ctx.fill();
-            //
-            ctx.beginPath();
-            ctx.rect((- 0.5 + progressPercent) * size.w, - 0.5 * size.h, reverseProgressPercent * size.w, size.h);
-            ctx.closePath();
-            ctx.lineWidth = (2 / animator.scale).toString();
-            ctx.strokeStyle = this.secondaryColor;
-            ctx.stroke();
+            if (progressPercent < 1) {
+                const reverseProgressPercent = 1.0 - progressPercent;
+                ctx.beginPath();
+                ctx.rect((- 0.5 + progressPercent) * size.w, - 0.5 * size.h, reverseProgressPercent * size.w, size.h);
+                ctx.closePath();
+                ctx.fillStyle = this.secondaryColor;
+                ctx.fill();
+                //
+                ctx.beginPath();
+                ctx.rect((- 0.5 + progressPercent) * size.w, - 0.5 * size.h, reverseProgressPercent * size.w, size.h);
+                ctx.closePath();
+                ctx.lineWidth = (2 / animator.scale).toString();
+                ctx.strokeStyle = this.secondaryColor;
+                ctx.stroke();
+            }
         }
         ctx.restore();
     }
