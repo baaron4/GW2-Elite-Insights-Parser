@@ -8,7 +8,7 @@ public class OverheadProgressBarDecorationMetadataDescription : ProgressBarDecor
     public readonly uint PixelHeight;
     internal OverheadProgressBarDecorationMetadataDescription(OverheadProgressBarDecorationMetadata decoration) : base(decoration)
     {
-        Type = "ProgressBar";
+        Type = "OverheadProgressBar";
         PixelWidth = decoration.PixelWidth;
         PixelHeight = decoration.PixelHeight;
     }

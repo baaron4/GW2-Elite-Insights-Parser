@@ -53,7 +53,7 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
             new OverheadProgressBarDecorationMetadata(
                 color, 
                 secondaryColor, 
-                Math.Max(Math.Min((uint)(1.5 * connectedTo.Agent.HitboxWidth), 80), 500),
+                Math.Min(Math.Max((uint)(1.5 * connectedTo.Agent.HitboxWidth), 80), 500),
                 pixelWidth),
             new OverheadProgressBarDecorationRenderingData(lifespan, progress, connectedTo)
             )
