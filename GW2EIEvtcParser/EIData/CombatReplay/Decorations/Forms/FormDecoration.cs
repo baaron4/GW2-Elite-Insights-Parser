@@ -2,7 +2,7 @@
 
 internal abstract class FormDecoration : AttachedDecoration
 {
-    internal abstract class FormDecorationMetadata : AttachedDecorationMetadata
+    public abstract class FormDecorationMetadata : AttachedDecorationMetadata
     {
         public readonly string Color;
 
@@ -11,7 +11,7 @@ internal abstract class FormDecoration : AttachedDecoration
             Color = color;
         }
     }
-    internal abstract class FormDecorationRenderingData : AttachedDecorationRenderingData
+    public abstract class FormDecorationRenderingData : AttachedDecorationRenderingData
     {
         public bool Filled { get; private set; } = true;
         public long GrowingEnd { get; private set; }
@@ -39,7 +39,7 @@ internal abstract class FormDecoration : AttachedDecoration
     public long GrowingEnd => DecorationRenderingData.GrowingEnd;
     public bool GrowingReverse => DecorationRenderingData.GrowingReverse;
 
-    internal FormDecoration(FormDecorationMetadata metadata, FormDecorationRenderingData renderingData) : base(metadata, renderingData)
+    protected FormDecoration(FormDecorationMetadata metadata, FormDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
     }
 

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class PieDecoration : CircleDecoration
 {
-    internal class PieDecorationMetadata : CircleDecorationMetadata
+    public class PieDecorationMetadata : CircleDecorationMetadata
     {
         public readonly float OpeningAngle; //in degrees
 
@@ -30,7 +30,7 @@ internal class PieDecoration : CircleDecoration
             return new PieDecorationMetadataDescription(this);
         }
     }
-    internal class PieDecorationRenderingData : CircleDecorationRenderingData
+    public class PieDecorationRenderingData : CircleDecorationRenderingData
     {
         public PieDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
@@ -43,10 +43,6 @@ internal class PieDecoration : CircleDecoration
     }
     private new PieDecorationMetadata DecorationMetadata => (PieDecorationMetadata)base.DecorationMetadata;
     public float OpeningAngle => DecorationMetadata.OpeningAngle;
-
-    internal PieDecoration(PieDecorationMetadata metadata, PieDecorationRenderingData renderingData) : base(metadata, renderingData)
-    {
-    }
 
     //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
 

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class CircleDecoration : FormDecoration
 {
-    internal class CircleDecorationMetadata : FormDecorationMetadata
+    public class CircleDecorationMetadata : FormDecorationMetadata
     {
         public readonly uint Radius;
         public readonly uint MinRadius;
@@ -28,7 +28,7 @@ internal class CircleDecoration : FormDecoration
             return new CircleDecorationMetadataDescription(this);
         }
     }
-    internal class CircleDecorationRenderingData : FormDecorationRenderingData
+    public class CircleDecorationRenderingData : FormDecorationRenderingData
     {
         public CircleDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
@@ -44,7 +44,7 @@ internal class CircleDecoration : FormDecoration
     public uint MinRadius => DecorationMetadata.MinRadius;
 
 
-    internal CircleDecoration(CircleDecorationMetadata metadata, CircleDecorationRenderingData renderingData) : base(metadata, renderingData)
+    protected CircleDecoration(CircleDecorationMetadata metadata, CircleDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
     }
 

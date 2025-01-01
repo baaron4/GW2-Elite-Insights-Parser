@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class ActorOrientationDecoration : AttachedDecoration
 {
-    internal class ActorOrientationDecorationMetadata : AttachedDecorationMetadata
+    public class ActorOrientationDecorationMetadata : AttachedDecorationMetadata
     {
 
         public override string GetSignature()
@@ -16,7 +16,7 @@ internal class ActorOrientationDecoration : AttachedDecoration
             return new ActorOrientationDecorationMetadataDescription(this);
         }
     }
-    internal class ActorOrientationDecorationRenderingData : AttachedDecorationRenderingData
+    public class ActorOrientationDecorationRenderingData : AttachedDecorationRenderingData
     {
         public ActorOrientationDecorationRenderingData((long, long) lifespan, AgentItem agent) : base(lifespan, new AgentConnector(agent))
         {
@@ -34,10 +34,6 @@ internal class ActorOrientationDecoration : AttachedDecoration
         {
             return new ActorOrientationDecorationRenderingDescription(log, this, map, usedSkills, usedBuffs, metadataSignature);
         }
-    }
-
-    internal ActorOrientationDecoration(ActorOrientationDecorationMetadata metadata, ActorOrientationDecorationRenderingData renderingData) : base (metadata, renderingData)
-    {
     }
 
     public ActorOrientationDecoration((long start, long end) lifespan, AgentItem agent) : base(new ActorOrientationDecorationMetadata(), new ActorOrientationDecorationRenderingData(lifespan, agent))

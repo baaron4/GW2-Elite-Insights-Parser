@@ -797,12 +797,12 @@ class BackgroundDrawable {
 
 class MovingPlatformDrawable extends BackgroundDrawable {
     constructor(params) {
-        super(start, end);
+        super(params);
         this.positions = params.positions;
         if (this.positions.length > 1) {
             this.currentIndex = 0;
             this.currentStart = Number.NEGATIVE_INFINITY;
-            this.currentEnd = positions[0][5];
+            this.currentEnd = this.positions[0][5];
         }
     }
 

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class LineDecoration : FormDecoration
 {
-    internal class LineDecorationMetadata : FormDecorationMetadata
+    public class LineDecorationMetadata : FormDecorationMetadata
     {
         public bool WorldSizeThickness;
         public uint Thickness;
@@ -29,7 +29,7 @@ internal class LineDecoration : FormDecoration
             return new LineDecorationMetadataDescription(this);
         }
     }
-    internal class LineDecorationRenderingData : FormDecorationRenderingData
+    public class LineDecorationRenderingData : FormDecorationRenderingData
     {
         public readonly GeographicalConnector ConnectedFrom;
         public LineDecorationRenderingData((long, long) lifespan, GeographicalConnector connector, GeographicalConnector targetConnector) : base(lifespan, connector)
@@ -53,10 +53,6 @@ internal class LineDecoration : FormDecoration
     private new LineDecorationMetadata DecorationMetadata => (LineDecorationMetadata)base.DecorationMetadata;
     public bool WorldSizeThickness => DecorationMetadata.WorldSizeThickness;
     public uint Thickness => DecorationMetadata.Thickness;
-
-    internal LineDecoration(LineDecorationMetadata metadata, LineDecorationRenderingData renderingData) : base(metadata, renderingData)
-    {
-    }
 
     public LineDecoration((long start, long end) lifespan, string color, GeographicalConnector connector, GeographicalConnector targetConnector) : base(new LineDecorationMetadata(color), new LineDecorationRenderingData(lifespan, connector, targetConnector))
     {

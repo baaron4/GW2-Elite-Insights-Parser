@@ -2,7 +2,7 @@
 
 internal abstract class ImageDecoration : AttachedDecoration
 {
-    internal abstract class ImageDecorationMetadata : AttachedDecorationMetadata
+    public abstract class ImageDecorationMetadata : AttachedDecorationMetadata
     {
         public readonly string Image;
         public readonly uint PixelSize;
@@ -18,7 +18,7 @@ internal abstract class ImageDecoration : AttachedDecoration
             }
         }
     }
-    internal abstract class ImageDecorationRenderingData : AttachedDecorationRenderingData
+    public abstract class ImageDecorationRenderingData : AttachedDecorationRenderingData
     {
         protected ImageDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
@@ -29,7 +29,7 @@ internal abstract class ImageDecoration : AttachedDecoration
     public uint PixelSize => DecorationMetadata.PixelSize;
     public uint WorldSize => DecorationMetadata.WorldSize;
 
-    internal ImageDecoration(ImageDecorationMetadata metadata, ImageDecorationRenderingData renderingData) : base(metadata, renderingData)
+    protected ImageDecoration(ImageDecorationMetadata metadata, ImageDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
     }
 }

@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class IconDecoration : ImageDecoration
 {
-    internal class IconDecorationMetadata : ImageDecorationMetadata
+    public class IconDecorationMetadata : ImageDecorationMetadata
     {
         public readonly float Opacity;
 
@@ -23,7 +23,7 @@ internal class IconDecoration : ImageDecoration
             return new IconDecorationMetadataDescription(this);
         }
     }
-    internal class IconDecorationRenderingData : ImageDecorationRenderingData
+    public class IconDecorationRenderingData : ImageDecorationRenderingData
     {
         public bool IsSquadMarker { get; private set; }
         public IconDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
@@ -44,7 +44,7 @@ internal class IconDecoration : ImageDecoration
     public float Opacity => DecorationMetadata.Opacity;
     public bool IsSquadMarker => DecorationRenderingData.IsSquadMarker;
 
-    internal IconDecoration(IconDecorationMetadata metadata, IconDecorationRenderingData renderingData) : base(metadata, renderingData)
+    protected IconDecoration(IconDecorationMetadata metadata, IconDecorationRenderingData renderingData) : base(metadata, renderingData)
     {
     }
 

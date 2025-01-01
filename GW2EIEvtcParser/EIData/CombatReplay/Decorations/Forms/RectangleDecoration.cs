@@ -4,7 +4,7 @@ namespace GW2EIEvtcParser.EIData;
 
 internal class RectangleDecoration : FormDecoration
 {
-    internal class RectangleDecorationMetadata : FormDecorationMetadata
+    public class RectangleDecorationMetadata : FormDecorationMetadata
     {
         public readonly uint Height;
         public readonly uint Width;
@@ -24,7 +24,7 @@ internal class RectangleDecoration : FormDecoration
             return new RectangleDecorationMetadataDescription(this);
         }
     }
-    internal class RectangleDecorationRenderingData : FormDecorationRenderingData
+    public class RectangleDecorationRenderingData : FormDecorationRenderingData
     {
         public RectangleDecorationRenderingData((long, long) lifespan, GeographicalConnector connector) : base(lifespan, connector)
         {
@@ -38,10 +38,6 @@ internal class RectangleDecoration : FormDecoration
     private new RectangleDecorationMetadata DecorationMetadata => (RectangleDecorationMetadata)base.DecorationMetadata;
     public uint Height => DecorationMetadata.Height;
     public uint Width => DecorationMetadata.Width;
-
-    internal RectangleDecoration(RectangleDecorationMetadata metadata, RectangleDecorationRenderingData renderingData) : base(metadata, renderingData)
-    {
-    }
 
     public RectangleDecoration(uint width, uint height, (long start, long end) lifespan, string color, GeographicalConnector connector) : base(new RectangleDecorationMetadata(color, width, height), new RectangleDecorationRenderingData(lifespan, connector))
     {
