@@ -686,26 +686,26 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
     computeProgress() {
         const progress = this.progress;
         var index = -1;
-        var totalPoints = progress.length / 2;
+        var totalPoints = progress.length;
         var time = animator.reactiveDataStatus.time;
         for (var i = 0; i < totalPoints; i++) {
-            var posTime = progress[2 * i];
+            var posTime = progress[i][0];
             if (time < posTime) {
                 break;
             }
             index = i;
         }
         if (index === -1) {
-            return progress[1];
+            return progress[0][1];
         } else if (index === totalPoints - 1) {
-            return progress[2 * index + 1];
+            return progress[index][1];
         } else {
-            var cur = progress[2 * index + 1];
-            switch (connection.interpolationMethod) {
+            var cur = progress[index][1];
+            switch (this.interpolationMethod) {
                 case InterpolationMethod.LINEAR:
-                    var curTime = progress[2 * index];
-                    var next = progress[2 * (index + 1) + 1];
-                    var nextTime = progress[2 * (index + 1)];
+                    var curTime = progress[index][0];
+                    var next = progress[index + 1][1];
+                    var nextTime = progress[index + 1][0];
                     var interpolated = cur + (time - curTime) / (nextTime - curTime) * (next - cur);
                     return interpolated;
                 case InterpolationMethod.STEP:
@@ -742,7 +742,7 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
         const normalizedRot = Math.abs(((rot + this.rotationOffset) / Math.PI) % 2);
-        if (0.5 < normalizedRot < 1.5) {
+        if (0.5 < normalizedRot && normalizedRot < 1.5) {
             // make sure the progress bar remains upright
             ctx.rotate(-ToRadians(180));
         }
@@ -751,7 +751,14 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
             ctx.rect(- 0.5 * size.w, - 0.5 * size.h, progressPercent * size.w, size.h);
             ctx.closePath();
             ctx.fillStyle = this.color;
-            ctx.fill();
+            ctx.fill();     
+            //
+            ctx.beginPath();
+            ctx.rect(- 0.5 * size.w, - 0.5 * size.h, progressPercent * size.w, size.h);
+            ctx.closePath();
+            ctx.lineWidth = (2 / animator.scale).toString();
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
         }
         if (progressPercent < 1) {
             const reverseProgressPercent = 1.0 - progressPercent;
@@ -760,6 +767,13 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
             ctx.closePath();
             ctx.fillStyle = this.secondaryColor;
             ctx.fill();
+            //
+            ctx.beginPath();
+            ctx.rect((- 0.5 + progressPercent) * size.w, - 0.5 * size.h, reverseProgressPercent * size.w, size.h);
+            ctx.closePath();
+            ctx.lineWidth = (2 / animator.scale).toString();
+            ctx.strokeStyle = this.secondaryColor;
+            ctx.stroke();
         }
         ctx.restore();
     }
