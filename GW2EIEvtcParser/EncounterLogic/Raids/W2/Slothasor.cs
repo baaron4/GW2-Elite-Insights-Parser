@@ -157,7 +157,7 @@ internal class Slothasor : SalvationPass
                 var narcolepsies = target.GetBuffStatus(log, NarcolepsyBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (var narcolepsy in narcolepsies)
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(50, (narcolepsy.Start, narcolepsy.End), Colors.LightBlue, 0.8, Colors.Black, 0.2, [(narcolepsy.Start, 0), (narcolepsy.Start + 120000, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(50, (narcolepsy.Start, narcolepsy.End), Colors.LightBlue, 0.6, Colors.Black, 0.2, [(narcolepsy.Start, 0), (narcolepsy.Start + 120000, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 var breath = cls.Where(x => x.SkillId == Halitosis);
