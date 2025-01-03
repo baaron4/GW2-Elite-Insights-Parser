@@ -190,7 +190,8 @@ internal class ValeGuardian : SpiritVale
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
-                    replay.Decorations.AddWithGrowing(new CircleDecoration(180, (start, end), Colors.LightBlue, 0.3, new AgentConnector(target)), start + c.ExpectedDuration);
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(50, (start, end), Colors.LightBlue, 0.8, Colors.Black, 0.4, [(start, 0), (start + 30000, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 if (!log.CombatData.HasEffectData)
                 {
