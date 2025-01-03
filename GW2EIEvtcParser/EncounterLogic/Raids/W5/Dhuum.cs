@@ -410,7 +410,7 @@ internal class Dhuum : HallOfChains
                 {
                     var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
                         replay.Decorations.Add(circle);
-                        replay.Decorations.Add(new OverheadProgressBarDecoration(50, (c.Time, c.EndTime), Colors.LightOrange, 0.8, Colors.Black, 0.2, [(c.Time, 0), (c.EndTime, 100)], new AgentConnector(target))
+                        replay.Decorations.Add(new OverheadProgressBarDecoration(50, (c.Time, c.EndTime), Colors.Orange, 0.9, Colors.Black, 0.2, [(c.Time, 0), (c.EndTime, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
 
