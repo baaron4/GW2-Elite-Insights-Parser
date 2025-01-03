@@ -147,8 +147,8 @@ internal class Gorseval : SpiritVale
         {
             case (int)ArcDPSEnums.TargetID.Gorseval:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var blooms = cls.Where(x => x.SkillId == GorsevalBloom);
-                foreach (CastEvent c in blooms)
+                var worldEaters = cls.Where(x => x.SkillId == GorsevalWorldEater);
+                foreach (CastEvent c in worldEaters)
                 {
                     int start = (int)c.Time;
                     int end = (int)c.EndTime;
