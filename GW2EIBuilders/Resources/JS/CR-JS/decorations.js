@@ -741,7 +741,7 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
         if (secondaryOffset) {
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        const normalizedRot = Math.abs(((rot + this.rotationOffset) / Math.PI) % 2);
+        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
         if (0.5 < normalizedRot && normalizedRot < 1.5) {
             // make sure the progress bar remains upright
             ctx.rotate(-ToRadians(180));
@@ -800,7 +800,7 @@ class OverheadProgressBarMechanicDrawable extends ProgressBarMechanicDrawable {
             x: 0,
             y: 0,
         };
-        offset.y -= masterSize / 4 + this.getSize().h / 2;
+        offset.y -= masterSize / 4 + this.getSize().h;
         return offset;
     }
 
