@@ -341,7 +341,7 @@ internal class Matthias : SalvationPass
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sacrificeMatthias)
         {
-            replay.Decorations.Add(new OverheadProgressBarDecoration(50, (seg.Start, seg.End), Colors.Red, 0.8, Colors.Black, 0.4, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(50, (seg.Start, seg.End), Colors.Red, 0.8, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(90)));
         }
                 // Bombs
