@@ -328,12 +328,7 @@ internal class BanditTrio : SalvationPass
         base.ComputePlayerCombatReplayActors(player, log, replay);
         // Sapper bombs
         var sapperBombs = player.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        foreach (var seg in sapperBombs)
-        {
-            var circle = new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(player));
-            replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, seg.Start + 5000);
-            replay.Decorations.AddOverheadIcon(seg, player, ParserIcons.BombOverhead);
-        }
+        replay.Decorations.AddOverheadIcons(sapperBombs, player, ParserIcons.BombOverhead);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

@@ -238,11 +238,7 @@ internal class Sabetha : SpiritVale
         }
                 // Sapper bombs
         var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        foreach (var seg in sapperBombs)
-        {
-            replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(180, seg, "rgba(200, 255, 100, 0.5)", new AgentConnector(p)).UsingFilled(false), true, seg.Start + 5000);
-            replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.BombOverhead);
-        }
+        replay.Decorations.AddOverheadIcons(sapperBombs, p, ParserIcons.BombOverhead);
     }
 
     protected override ReadOnlySpan<int> GetUniqueNPCIDs()
