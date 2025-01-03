@@ -664,16 +664,17 @@ internal class Dhuum : HallOfChains
         replay.Decorations.AddTether(shacklesDmg, Colors.Yellow, 0.5);
 
         // Soul split
+        var hastenedDemise = p.GetBuffStatus(log, HastenedDemise, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 1);
         var souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
         foreach (AgentItem soul in souls)
         {
-            if (soul.TryGetCurrentPosition(log, soul.FirstAware, out var soulPosition, 1000))
+            Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - ServerDelayConstant);
+            if (curHastenedDemise != null && soul.TryGetCurrentPosition(log, soul.FirstAware, out var soulPosition, 1000))
             {
-                AddSoulSplitDecorations(p, replay, soul, soulPosition);
+                AddSoulSplitDecorations(p, replay, soul, curHastenedDemise.Value, soulPosition);
             }
         }
         // show the death trigger even if we don't have the souls
-        var hastenedDemise = p.GetBuffStatus(log, HastenedDemise, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 1);
         foreach (var seg in hastenedDemise)
         {
             long soulSplitDeathTime = seg.Start + 10000;
@@ -792,10 +793,11 @@ internal class Dhuum : HallOfChains
     /// <param name="p">The player.</param>
     /// <param name="replay">The Combat Replay.</param>
     /// <param name="soul">The Soul to tether to the player.</param>
+    /// <param name="hastenedDemise">Time frame during which the hastened demise buff is present.</param>
     /// <param name="soulPosition">The position of the Soul.</param>
-    private static void AddSoulSplitDecorations(PlayerActor p, CombatReplay replay, AgentItem soul, in Vector3 soulPosition)
+    private static void AddSoulSplitDecorations(PlayerActor p, CombatReplay replay, AgentItem soul, in Segment hastenedDemise, in Vector3 soulPosition)
     {
-        (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
+        (long, long) soulLifespan = (soul.FirstAware, hastenedDemise.End);
 
         uint radius = (soul.HitboxWidth / 2);
         var soulConnector = new PositionConnector(soulPosition);
