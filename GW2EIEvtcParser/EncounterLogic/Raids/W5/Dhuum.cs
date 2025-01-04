@@ -410,7 +410,7 @@ internal class Dhuum : HallOfChains
                 {
                     var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
                         replay.Decorations.Add(circle);
-                        replay.Decorations.Add(new OverheadProgressBarDecoration(50, (c.Time, c.EndTime), Colors.Orange, 0.9, Colors.Black, 0.2, [(c.Time, 0), (c.EndTime, 100)], new AgentConnector(target))
+                        replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Orange, 0.9, Colors.Black, 0.2, [(c.Time, 0), (c.EndTime, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
 
@@ -541,7 +541,7 @@ internal class Dhuum : HallOfChains
                 var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 replay.Decorations.AddOverheadIcons(stealths, target, BuffImages.Stealth);
                 var underworldReaperHPs = target.GetHealthUpdates(log);
-                replay.Decorations.Add(new OverheadProgressBarDecoration(30, (start, end), Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMinorSizeInPixel, (start, end), Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                     .UsingRotationConnector(new AngleConnector(180)));
                 if (_hasPrevent)
@@ -638,7 +638,7 @@ internal class Dhuum : HallOfChains
                 end = (int)removedBuff.Time;
             }
             var lifespan = new Segment(start, end, 1);
-            replay.Decorations.Add(new OverheadProgressBarDecoration(40, (start, end), Colors.CobaltBlue, 0.6, Colors.Black, 0.2, [(start, 0), (start + duration, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMinorSizeInPixel, (start, end), Colors.CobaltBlue, 0.6, Colors.Black, 0.2, [(start, 0), (start + duration, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(130)));
             replay.Decorations.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
@@ -646,7 +646,7 @@ internal class Dhuum : HallOfChains
         var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in bombDhuum)
         {
-            replay.Decorations.Add(new OverheadProgressBarDecoration(40, (seg.Start, seg.End), Colors.Orange, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 13000, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMinorSizeInPixel, (seg.Start, seg.End), Colors.Orange, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 13000, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(-130)));
             replay.Decorations.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
         }
@@ -675,7 +675,7 @@ internal class Dhuum : HallOfChains
         foreach (var seg in hastenedDemise)
         {
             long soulSplitDeathTime = seg.Start + 10000;
-            replay.Decorations.Add(new OverheadProgressBarDecoration(30, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (soulSplitDeathTime, 100)], new AgentConnector(p))
+            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMinorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (soulSplitDeathTime, 100)], new AgentConnector(p))
                 .UsingRotationConnector(new AngleConnector(90)));
         }
     }

@@ -152,7 +152,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 // Add the Charge Bar on top right of the replay
                 var chargeSegments = target.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd);
                 replay.Decorations.Add(
-                    new OverheadProgressBarDecoration(50, lifespan, Colors.Red, 0.6, Colors.Black, 0.4, chargeSegments.Select(x => (x.Start, x.Value * 10)).ToList(), new AgentConnector(target))
+                    new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.4, chargeSegments.Select(x => (x.Start, x.Value * 10)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                     .UsingRotationConnector(new AngleConnector(180))
                 );
@@ -321,7 +321,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 // Hp Bar
                 var hpUpdatesOrb1 = target.GetHealthUpdates(log);
                 replay.Decorations.Add(
-                    new OverheadProgressBarDecoration(20, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb1.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                    new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb1.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                     .UsingRotationConnector(new AngleConnector(180))
                 );
@@ -336,7 +336,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 // Hp Bar
                 var hpUpdatesOrb2 = target.GetHealthUpdates(log);
                 replay.Decorations.Add(
-                    new OverheadProgressBarDecoration(20, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb2.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                    new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb2.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                     .UsingRotationConnector(new AngleConnector(180))
                 );
@@ -351,7 +351,7 @@ internal class DecimaTheStormsinger : MountBalrior
                 // Hp Bar
                 var hpUpdatesOrb3 = target.GetHealthUpdates(log);
                 replay.Decorations.Add(
-                    new OverheadProgressBarDecoration(20, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb3.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                    new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb3.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                     .UsingRotationConnector(new AngleConnector(180))
                 );

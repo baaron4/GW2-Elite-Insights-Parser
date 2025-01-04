@@ -222,7 +222,7 @@ internal class SoullessHorror : HallOfChains
                 var howling = cls.Where(x => x.SkillId == HowlingDeath);
                 foreach (CastEvent c in howling)
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(50, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 

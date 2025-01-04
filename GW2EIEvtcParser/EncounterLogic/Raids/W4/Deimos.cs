@@ -534,7 +534,7 @@ internal class Deimos : BastionOfThePenitent
                 {
                     start = (int)c.Time;
                     end = start + 5000;
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(50, (start, end), Colors.Red, 0.6, Colors.Black, 0.2, [(start, 0), (end, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (start, end), Colors.Red, 0.6, Colors.Black, 0.2, [(start, 0), (end, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                     if (!log.FightData.IsCM)
                     {

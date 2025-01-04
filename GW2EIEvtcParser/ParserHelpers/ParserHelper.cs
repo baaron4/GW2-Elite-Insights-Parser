@@ -15,6 +15,8 @@ public static class ParserHelper
     internal const uint CombatReplaySkillDefaultSizeInPixel = 22;
     internal const uint CombatReplaySkillDefaultSizeInWorld = 90;
     internal const uint CombatReplayOverheadDefaultSizeInPixel = 20;
+    internal const uint CombatReplayOverheadProgressBarMinorSizeInPixel = 20;
+    internal const uint CombatReplayOverheadProgressBarMajorSizeInPixel = 35;
     internal const float CombatReplayOverheadDefaultOpacity = 0.8f;
 
     public const int MinionLimit = 1500;
