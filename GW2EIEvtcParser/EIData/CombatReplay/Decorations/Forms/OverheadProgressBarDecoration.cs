@@ -8,15 +8,16 @@ internal class OverheadProgressBarDecoration : ProgressBarDecoration
     public class OverheadProgressBarDecorationMetadata : ProgressBarDecorationMetadata
     {
         public readonly uint PixelWidth;
-        public uint PixelHeight => PixelWidth / 5;
+        public readonly uint PixelHeight;
         public OverheadProgressBarDecorationMetadata(string color, string secondaryColor, uint width, uint pixelWidth) : base(color, secondaryColor, width, width / 5)
         {
             PixelWidth = pixelWidth;
+            PixelHeight = PixelWidth / 5;
         }
 
         public override string GetSignature()
         {
-            return "OProg"  + Color + Width + SecondaryColor + PixelWidth;
+            return "OProg" + Color + Width + Height.ToString()  + SecondaryColor + PixelWidth + PixelHeight.ToString();
         }
         public override DecorationMetadataDescription GetCombatReplayMetadataDescription()
         {
