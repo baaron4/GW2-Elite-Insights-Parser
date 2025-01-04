@@ -754,7 +754,7 @@ class ProgressBarMechanicDrawable extends RectangleMechanicDrawable {
             ctx.fill();     
             //
             ctx.beginPath();
-            ctx.rect(- 0.5 * size.w, - 0.5 * size.h, progressPercent * size.w, size.h);
+            ctx.rect(- 0.5 * size.w, - 0.5 * size.h, size.w, size.h);
             ctx.closePath();
             ctx.lineWidth = (2 / animator.scale).toString();
             ctx.strokeStyle = this.color;

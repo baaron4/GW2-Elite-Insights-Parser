@@ -539,10 +539,7 @@ internal class Dhuum : HallOfChains
                 break;
             case (int)TrashID.UnderworldReaper:
                 var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                foreach (Segment seg in stealths)
-                {
-                    replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
-                }
+                replay.Decorations.AddOverheadIcons(stealths, target, BuffImages.Stealth);
                 var underworldReaperHPs = target.GetHealthUpdates(log);
                 replay.Decorations.Add(new OverheadProgressBarDecoration(30, (start, end), Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
                     .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
