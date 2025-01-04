@@ -3,6 +3,7 @@ using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
@@ -162,10 +163,7 @@ internal class Adina : TheKeyOfAhdashim
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
         var radiantBlindnesses = p.GetBuffStatus(log, RadiantBlindness, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-        foreach (Segment seg in radiantBlindnesses)
-        {
-            replay.Decorations.Add(new CircleDecoration(90, seg, "rgba(200, 0, 200, 0.3)", new AgentConnector(p)));
-        }
+        replay.Decorations.AddOverheadIcons(radiantBlindnesses, p, BuffImages.PersistentlyBlinded);
     }
 
 
@@ -224,6 +222,7 @@ internal class Adina : TheKeyOfAhdashim
                 foreach (Segment seg in diamondPalisades)
                 {
                     replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
+                    replay.Decorations.AddOverheadIcon(seg, target, BuffImages.MonsterSkill);
                 }
                 //
                 var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage);

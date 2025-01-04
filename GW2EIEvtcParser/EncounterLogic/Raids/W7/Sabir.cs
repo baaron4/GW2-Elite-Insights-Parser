@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicTimeUtils;
@@ -152,15 +153,9 @@ internal class Sabir : TheKeyOfAhdashim
             case (int)ArcDPSEnums.TargetID.Sabir:
                 var casts = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
                 var repulsionFields = target.GetBuffStatus(log, RepulsionField, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                foreach (Segment seg in repulsionFields)
-                {
-                    replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(80, 0, 255, 0.3)", new AgentConnector(target)));
-                }
+                replay.Decorations.AddOverheadIcons(repulsionFields, target, BuffImages.TargetedLocust);
                 var ionShields = target.GetBuffStatus(log, IonShield, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                foreach (Segment seg in ionShields)
-                {
-                    replay.Decorations.Add(new CircleDecoration(120, seg, "rgba(0, 80, 255, 0.3)", new AgentConnector(target)));
-                }
+                replay.Decorations.AddOverheadIcons(repulsionFields, target, BuffImages.IonShield);
                 //
                 var furyOfTheStorm = casts.Where(x => x.SkillId == FuryOfTheStorm);
                 foreach (CastEvent c in furyOfTheStorm)
