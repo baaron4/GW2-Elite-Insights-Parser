@@ -60,6 +60,7 @@ internal static class Colors
     public static Color MilitaryGreen = new(69, 75, 27);
     public static Color LightMilitaryGreen = new(49, 71, 0);
     public static Color GreyishGreen = new(40, 57, 54);
+    public static Color SligthlyDarkGreen = new(0, 180, 0);
     public static Color DarkGreen = new(0, 128, 0);
     public static Color DarkBlue = new(0, 0, 128);
     public static Color Teal = new(0, 255, 255);
