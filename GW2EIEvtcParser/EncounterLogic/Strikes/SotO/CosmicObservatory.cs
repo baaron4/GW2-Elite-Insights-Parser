@@ -86,7 +86,7 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                 var planetCrashes = casts.Where(x => x.SkillId == PlanetCrashSkill);
                 foreach (CastEvent c in planetCrashes)
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.Time + 10000, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.Time + 10000, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
 

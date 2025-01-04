@@ -508,7 +508,7 @@ internal class Qadim : MythwrightGambit
                 var breakbar = cls.Where(x => x.SkillId == QadimCC);
                 foreach (CastEvent c in breakbar)
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Riposte
@@ -545,7 +545,7 @@ internal class Qadim : MythwrightGambit
                 var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor);
                 foreach (CastEvent c in fieryMeteor)
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 var eleBreath = cls.Where(x => x.SkillId == ElementalBreath);
@@ -626,7 +626,7 @@ internal class Qadim : MythwrightGambit
                 var patCC = cls.Where(x => x.SkillId == PatriarchCC);
                 foreach (CastEvent c in patCC)
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Breath
@@ -702,7 +702,7 @@ internal class Qadim : MythwrightGambit
                 var summon = cls.Where(x => x.SkillId == SummonDestroyer);
                 foreach (CastEvent c in summon)
                 {
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
                         .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Pizza

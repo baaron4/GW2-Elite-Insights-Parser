@@ -848,7 +848,7 @@ internal class HarvestTemple : EndOfDragonsStrike
                 if (breakbar != null)
                 {
                     var breakbarStates = log.CombatData.GetBreakbarPercentEvents(target.AgentItem).Where(x => x.Time >= breakbar.Time);
-                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (breakbar.Time, target.LastAware), Colors.LightBlue, 0.6, Colors.Black, 0.2, breakbarStates.Select(x => (x.Time, x.BreakbarPercent)).ToList(), new AgentConnector(target))
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (breakbar.Time, target.LastAware), Colors.LightBlue, 0.6, Colors.Black, 0.2, breakbarStates.Select(x => (x.Time, x.BreakbarPercent)).ToList(), new AgentConnector(target))
                         .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
                         .UsingRotationConnector(new AngleConnector(180)));
                 }

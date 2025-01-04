@@ -38,7 +38,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
         int toRemoveIdx = -1;
         switch (removeType)
         {
-            case ArcDPSEnums.BuffRemove.All:
+            case BuffRemove.All:
                 // remove all due to despawn event
                 if (removedStacks == BuffRemoveAllEvent.FullRemoval)
                 {
@@ -71,7 +71,7 @@ internal abstract class BuffSimulatorID : AbstractBuffSimulator
                 }
                 toRemoveIdx = 0;
                 break;
-            case ArcDPSEnums.BuffRemove.Single:
+            case BuffRemove.Single:
                 toRemoveIdx = BuffStack.FindIndex(x => x.StackID == stackID);
                 break;
             default:
