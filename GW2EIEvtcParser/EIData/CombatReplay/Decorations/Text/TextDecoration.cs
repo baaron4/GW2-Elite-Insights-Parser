@@ -29,8 +29,8 @@ internal class TextDecoration : Decoration
     public class TextDecorationRenderingData : _DecorationRenderingData
     {
         public readonly string Text;
-        public bool Bold { get; private set; }
-        public string FontType { get; private set; }
+        public bool Bold { get; private set; } = false;
+        public string? FontType { get; private set; }
         public readonly uint FontSize;
 
         public readonly Connector ConnectedTo;

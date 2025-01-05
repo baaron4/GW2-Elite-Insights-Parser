@@ -7,7 +7,7 @@ public class TextDecorationRenderingDescription : DecorationRenderingDescription
 {
     public readonly string Text;
     public readonly bool Bold;
-    public readonly string FontType;
+    public readonly string? FontType;
     public readonly uint FontSize;
     public readonly ConnectorDescription ConnectedTo;
 
