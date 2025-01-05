@@ -23,7 +23,7 @@ internal class TextDecoration : Decoration
 
         public override string GetSignature()
         {
-            throw new NotImplementedException();
+            return "Txt" + Color + BackgroundColor ?? "";
         }
     }
     public class TextDecorationRenderingData : _DecorationRenderingData
