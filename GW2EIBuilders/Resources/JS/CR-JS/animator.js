@@ -343,7 +343,7 @@ class Animator {
                     case "Line":
                         DecorationClass = LineMechanicDrawable;
                         break;
-                    case "IconDecoration":
+                    case "Icon":
                         DecorationClass = IconMechanicDrawable;
                         break;
                     case "IconOverhead":
@@ -813,10 +813,6 @@ class Animator {
                     ctx.fillStyle = "#CC2200";
                     ctx.textAlign = "center";
                     ctx.fillText((50 / (InchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
-                    // Screen space actors
-                    for (let i = 0; i < animator.screenSpaceActorData.length; i++) {
-                        animator.screenSpaceActorData[i].draw();
-                    }
                 }
                 ctx.restore();
             }
@@ -984,6 +980,15 @@ class Animator {
                     this.overheadSquadMarkerData[i].draw();
                 }
             }
+            ctx.save();
+            {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                // Screen space actors
+                for (let i = 0; i < animator.screenSpaceActorData.length; i++) {
+                    animator.screenSpaceActorData[i].draw();
+                }
+            }
+            ctx.restore()
         }
         //ctx.restore();  
     }

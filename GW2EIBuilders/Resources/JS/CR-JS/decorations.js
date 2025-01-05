@@ -203,7 +203,7 @@ function interpolatedPositionFetcher(connection, master) {
 }
 
 function staticPositionFetcher(connection, master) {
-    const factor = connection.screenSpace ? resolutionMultiplier : 1;
+    const factor = connection.isScreenSpace ? resolutionMultiplier : 1;
     return {
         x: factor * connection.position[0],
         y: factor * connection.position[1]
@@ -1173,10 +1173,12 @@ class IconMechanicDrawable extends MechanicDrawable {
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        ctx.font = this.font;
-        ctx.fillStyle = this.color;
-        ctx.textAlign = "center";
-        ctx.fillText(this.text, 0, 0);
+        if(!this.canRotate) {
+            // Don't rotate the icon
+            ctx.rotate(-ToRadians(rot + this.rotationOffset));
+        }
+        const size = this.getSize();
+        ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
         ctx.restore();
     }
 }
@@ -1269,9 +1271,10 @@ class IconOverheadMechanicDrawable extends IconMechanicDrawable {
 
 class TextDrawable extends MechanicDrawable {
     constructor(params) {
+        super(params);
         this.text = params.text;
         const bold = !!params.bold;
-        const fontSize = params.fontSize * resolutionMultiplier + " px";
+        const fontSize = params.fontSize * resolutionMultiplier + "px";
         const fontType = params.fontType || "Comic Sans MS";
         this.font  = (bold ? "bold " : "") + fontSize + " " + fontType;
     }
@@ -1292,7 +1295,7 @@ class TextDrawable extends MechanicDrawable {
             return;
         }
         
-        const ctx = this.connectedTo.screenSpace ? animator.bgContext : animator.mainContext;
+        const ctx = animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
         const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
@@ -1300,8 +1303,10 @@ class TextDrawable extends MechanicDrawable {
             // make sure the text remains upright
             ctx.rotate(-ToRadians(180));
         }
-        const size = this.getSize();
-        ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
+        ctx.font = this.font;
+        ctx.fillStyle = this.color;
+        ctx.textAlign = "center";
+        ctx.fillText(this.text, 0, 0);
         ctx.restore();
     }
 }
