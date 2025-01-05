@@ -112,6 +112,7 @@ class Animator {
         this.skillMechanicActorData = [];
         this.actorOrientationData = new Map();
         this.backgroundActorData = [];
+        this.screenSpaceActorData = [];
         this.backgroundImages = [];
         this.selectedActor = null;
         // animation
@@ -250,6 +251,9 @@ class Animator {
                 case "MovingPlatform":
                     MetadataClass = MovingPlatformDecorationMetadata;
                     break;
+                case "Text":
+                    MetadataClass = TextDecorationMetadata;
+                    break;
                 default:
                     throw "Unknown decoration type " + metadata.type;
             }
@@ -314,6 +318,13 @@ class Animator {
             } else {
                 let DecorationClass;
                 switch (decorationRendering.type) {
+                    case "Text":
+                        if (decorationRendering.connectedTo.isScreenSpace) {
+                            this.screenSpaceActorData.push(new TextDrawable(decorationRendering));
+                            continue;
+                        }
+                        DecorationClass = TextDrawable;
+                        break;
                     case "Circle":
                         DecorationClass = CircleMechanicDrawable;
                         break;
@@ -802,6 +813,10 @@ class Animator {
                     ctx.fillStyle = "#CC2200";
                     ctx.textAlign = "center";
                     ctx.fillText((50 / (InchToPixel * this.scale)).toFixed(1) + " units", resolutionMultiplier * 95, resolutionMultiplier * 60);
+                    // Screen space actors
+                    for (let i = 0; i < animator.screenSpaceActorData.length; i++) {
+                        animator.screenSpaceActorData[i].draw();
+                    }
                 }
                 ctx.restore();
             }
