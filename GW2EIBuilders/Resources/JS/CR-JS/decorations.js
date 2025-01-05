@@ -1173,11 +1173,6 @@ class IconMechanicDrawable extends MechanicDrawable {
         if (secondaryOffset) {        
             ctx.translate(secondaryOffset.x, secondaryOffset.y);
         }
-        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
-        if (0.5 < normalizedRot && normalizedRot < 1.5) {
-            // make sure the text remains upright
-            ctx.rotate(-ToRadians(180));
-        }
         ctx.font = this.font;
         ctx.fillStyle = this.color;
         ctx.textAlign = "center";
@@ -1300,9 +1295,10 @@ class TextDrawable extends MechanicDrawable {
         const ctx = this.connectedTo.screenSpace ? animator.bgContext : animator.mainContext;
         ctx.save();
         this.moveContext(ctx, pos, rot);
-        if(!this.canRotate) {
-            // Don't rotate the icon
-            ctx.rotate(-ToRadians(rot + this.rotationOffset));
+        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
+        if (0.5 < normalizedRot && normalizedRot < 1.5) {
+            // make sure the text remains upright
+            ctx.rotate(-ToRadians(180));
         }
         const size = this.getSize();
         ctx.drawImage(this.image, - size / 2, - size / 2, size, size);
