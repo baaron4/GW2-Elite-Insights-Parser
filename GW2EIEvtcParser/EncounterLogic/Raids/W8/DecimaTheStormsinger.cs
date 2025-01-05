@@ -149,13 +149,12 @@ internal class DecimaTheStormsinger : MountBalrior
                     replay.Decorations.Add(new CircleDecoration(700, segment.TimeSpan, Colors.Red, 0.2, new AgentConnector(target)).UsingFilled(false));
                 }
 
-                // Add the Charge Bar on top right of the replay
-                var chargeSegments = target.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd);
-                replay.Decorations.Add(
-                    new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.4, chargeSegments.Select(x => (x.Start, x.Value * 10)).ToList(), new AgentConnector(target))
-                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
-                    .UsingRotationConnector(new AngleConnector(180))
-                );
+                // Add the Charge indicator on top right of the replay
+                var chargeSegments = target.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                foreach (Segment seg in chargeSegments)
+                {
+                    replay.Decorations.Add(new TextDecoration((seg.Start, seg.End), "Decima Charge(s) " + seg.Value + " out of 10", 15, Colors.Red, 1.0, new ScreenSpaceConnector(new Vector2(600, 60))));
+                }
 
                 // Mainshock - Pizza Indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaMainshockIndicator, out var mainshockSlices))
