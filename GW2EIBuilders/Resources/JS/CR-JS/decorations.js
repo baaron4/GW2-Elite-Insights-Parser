@@ -4,13 +4,13 @@
 /*global animator, ToRadians, overheadAnimationFrame, maxOverheadAnimationFrame, facingIcon, animateCanvas, noUpdateTime, SkillDecorationCategory*/
 "use strict";
 
-class GenericDecorationMetadata {
+class GenericMetadata {
     constructor(params) {
 
     }
 }
 
-class TextDecorationMetadata extends GenericDecorationMetadata{
+class TextMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
         this.color = params.color;
@@ -18,26 +18,26 @@ class TextDecorationMetadata extends GenericDecorationMetadata{
     }
 }
 
-class GenericAttachedDecorationMetadata extends GenericDecorationMetadata{
+class GenericAttachedMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
     }
 }
 
-class ActorOrientationDecorationMetadata extends GenericAttachedDecorationMetadata {
+class ActorOrientationMetadata extends GenericAttachedMetadata {
     constructor(params) {
         super(params);
     }
 }
 
-class FormDecorationMetadata extends GenericAttachedDecorationMetadata {
+class FormMetadata extends GenericAttachedMetadata {
     constructor(params) {
         super(params);
         this.color = params.color;
     }
 }
 
-class CircleDecorationMetadata extends FormDecorationMetadata {
+class CircleMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.radius = InchToPixel * params.radius;
@@ -45,7 +45,7 @@ class CircleDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class DoughnutDecorationMetadata extends FormDecorationMetadata {
+class DoughnutMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.outerRadius = InchToPixel * params.outerRadius;
@@ -53,7 +53,7 @@ class DoughnutDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class LineDecorationMetadata extends FormDecorationMetadata {
+class LineMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.thickness = params.thickness;
@@ -64,7 +64,7 @@ class LineDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class PieDecorationMetadata extends CircleDecorationMetadata {
+class PieMetadata extends CircleMetadata {
     constructor(params) {
         super(params);
         this.openingAngle = params.openingAngle;
@@ -73,7 +73,7 @@ class PieDecorationMetadata extends CircleDecorationMetadata {
     }
 }
 
-class RectangleDecorationMetadata extends FormDecorationMetadata {
+class RectangleMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.width = InchToPixel * params.width;
@@ -81,14 +81,14 @@ class RectangleDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class ProgressBarDecorationMetadata extends RectangleDecorationMetadata {
+class ProgressBarMetadata extends RectangleMetadata {
     constructor(params) {
         super(params);
         this.secondaryColor = params.secondaryColor;
     }
 }
 
-class OverheadProgressBarDecorationMetadata extends ProgressBarDecorationMetadata {
+class OverheadProgressBarMetadata extends ProgressBarMetadata {
     constructor(params) {
         super(params);
         this.pixelWidth = params.pixelWidth;
@@ -96,7 +96,7 @@ class OverheadProgressBarDecorationMetadata extends ProgressBarDecorationMetadat
     }
 }
 
-class GenericIconDecorationMetadata extends GenericAttachedDecorationMetadata{
+class GenericIconMetadata extends GenericAttachedMetadata{
     constructor(params) {
         super(params);
         this.imageUrl = params.image;
@@ -108,32 +108,32 @@ class GenericIconDecorationMetadata extends GenericAttachedDecorationMetadata{
     }
 }
 
-class BackgroundIconDecorationMetadata extends GenericIconDecorationMetadata {
+class BackgroundIconMetadata extends GenericIconMetadata {
     constructor(params) {
         super(params);
     }
 }
 
-class IconDecorationMetadata extends GenericIconDecorationMetadata {
+class IconMetadata extends GenericIconMetadata {
     constructor(params) {
         super(params);
         this.opacity = params.opacity;
     }
 }
 
-class IconOverheadDecorationMetadata extends IconDecorationMetadata {
+class IconOverheadMetadata extends IconMetadata {
     constructor(params) {
         super(params);
     }
 }
 
-class BackgroundDecorationMetadata extends GenericDecorationMetadata{
+class BackgroundMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
     }
 }
 
-class MovingPlatformDecorationMetadata extends BackgroundDecorationMetadata{
+class MovingPlatformMetadata extends BackgroundMetadata{
     constructor(params, ) {
         super(params);
         this.imageUrl = params.image;

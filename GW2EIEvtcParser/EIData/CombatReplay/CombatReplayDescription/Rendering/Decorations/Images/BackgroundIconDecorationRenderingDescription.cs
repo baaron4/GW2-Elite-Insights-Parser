@@ -10,7 +10,7 @@ public class BackgroundIconDecorationRenderingDescription : ImageDecorationRende
     public readonly IReadOnlyList<float> Heights;
     internal BackgroundIconDecorationRenderingDescription(ParsedEvtcLog log, BackgroundIconDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
-        Type = "BackgroundIconDecoration"; //TODO(Rennorb) @cleanup: enum
+        Type = "BackgroundIcon"; //TODO(Rennorb) @cleanup: enum
         IsMechanicOrSkill = false;
         var opacities = new List<float>(decoration.Opacities.Count * 2);
         foreach (ParametricPoint1D opacity in decoration.Opacities)

@@ -216,43 +216,43 @@ class Animator {
             let MetadataClass = null;
             switch (metadata.type) {
                 case "ActorOrientation":
-                    MetadataClass = ActorOrientationDecorationMetadata;
+                    MetadataClass = ActorOrientationMetadata;
                     break;
                 case "Circle":
-                    MetadataClass = CircleDecorationMetadata;
+                    MetadataClass = CircleMetadata;
                     break;
                 case "Doughnut":
-                    MetadataClass = DoughnutDecorationMetadata;
+                    MetadataClass = DoughnutMetadata;
                     break;
                 case "Line":
-                    MetadataClass = LineDecorationMetadata;
+                    MetadataClass = LineMetadata;
                     break;
                 case "Pie":
-                    MetadataClass = PieDecorationMetadata;
+                    MetadataClass = PieMetadata;
                     break;
                 case "Rectangle":
-                    MetadataClass = RectangleDecorationMetadata;
+                    MetadataClass = RectangleMetadata;
                     break;
                 case "ProgressBar":
-                    MetadataClass = ProgressBarDecorationMetadata;
+                    MetadataClass = ProgressBarMetadata;
                     break;
-                case "BackgroundIconDecoration":
-                    MetadataClass = IconDecorationMetadata;
+                case "BackgroundIcon":
+                    MetadataClass = IconMetadata;
                     break;
-                case "IconDecoration":
-                    MetadataClass = IconDecorationMetadata;
+                case "Icon":
+                    MetadataClass = IconMetadata;
                     break;
-                case "IconOverheadDecoration":
-                    MetadataClass = IconOverheadDecorationMetadata;
+                case "IconOverhead":
+                    MetadataClass = IconOverheadMetadata;
                     break;
                 case "OverheadProgressBar":
-                    MetadataClass = OverheadProgressBarDecorationMetadata;
+                    MetadataClass = OverheadProgressBarMetadata;
                     break;
                 case "MovingPlatform":
-                    MetadataClass = MovingPlatformDecorationMetadata;
+                    MetadataClass = MovingPlatformMetadata;
                     break;
                 case "Text":
-                    MetadataClass = TextDecorationMetadata;
+                    MetadataClass = TextMetadata;
                     break;
                 default:
                     throw "Unknown decoration type " + metadata.type;
@@ -309,7 +309,7 @@ class Animator {
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(decorationRendering));
                         break;
-                    case "BackgroundIconDecoration":
+                    case "BackgroundIcon":
                         this.backgroundActorData.push(new BackgroundIconMechanicDrawable(decorationRendering));
                         break;
                     default:
@@ -346,16 +346,16 @@ class Animator {
                     case "IconDecoration":
                         DecorationClass = IconMechanicDrawable;
                         break;
-                    case "IconOverheadDecoration":
+                    case "IconOverhead":
                         this.overheadActorData.push(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
                     case "OverheadProgressBar":
                         this.overheadActorData.push(new OverheadProgressBarMechanicDrawable(decorationRendering));
                         continue;
-                    case "SquadMarkerDecoration":
+                    case "SquadMarker":
                         this.squadMarkerData.push(new IconMechanicDrawable(decorationRendering));
                         continue;
-                    case "OverheadSquadMarkerDecoration":
+                    case "OverheadSquadMarker":
                         this.overheadSquadMarkerData.push(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
                     default:

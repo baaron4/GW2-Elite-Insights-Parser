@@ -7,6 +7,6 @@ public class BackgroundIconDecorationMetadataDescription : ImageDecorationMetada
 
     internal BackgroundIconDecorationMetadataDescription(BackgroundIconDecorationMetadata decoration) : base(decoration)
     {
-        Type = "BackgroundIconDecoration";
+        Type = "BackgroundIcon";
     }
 }
