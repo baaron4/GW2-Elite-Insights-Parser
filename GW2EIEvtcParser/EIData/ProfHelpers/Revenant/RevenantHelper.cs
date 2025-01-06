@@ -277,18 +277,21 @@ internal static class RevenantHelper
                 foreach (EffectEvent effect in eternitysRequiem)
                 {
                     var positions = new List<Vector3>();
-                    foreach (EffectEvent hitEffect in eternitysRequiemHits.Where(x => x.Time >= effect.Time && x.Time <= effect.Time + 2800 && x.Dst == null))
+                    foreach (EffectEvent hitEffect in eternitysRequiemHits.Where(x => x.Time >= effect.Time && x.Time <= effect.Time + 2800 && !x.IsAroundDst))
                     {
                         positions.Add(hitEffect.Position);
                         (long, long) lifespanHit = hitEffect.ComputeLifespan(log, 1000);
                         var connector = new PositionConnector(hitEffect.Position);
                         replay.Decorations.Add(new CircleDecoration(120, lifespanHit, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
                     }
-                    (long, long) lifespan = (effect.Time, effect.Time + 2800);
-                    var centralConnector = new PositionConnector(positions.Average());
-                    replay.Decorations.Add(new IconDecoration(ParserIcons.EffectEternitysRequiem, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector).UsingSkillMode(skill));
-                    // TODO: Find a way to tell the user that the circle is approximative.
-                    //replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));
+                    if (positions.Count > 0)
+                    {
+                        (long, long) lifespan = (effect.Time, effect.Time + 2800);
+                        var centralConnector = new PositionConnector(positions.Average());
+                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectEternitysRequiem, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector).UsingSkillMode(skill));
+                        // TODO: Find a way to tell the user that the circle is approximative.
+                        //replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));
+                    }
                 }
             }
         }
