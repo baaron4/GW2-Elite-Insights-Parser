@@ -508,7 +508,8 @@ internal class Qadim : MythwrightGambit
                 var breakbar = cls.Where(x => x.SkillId == QadimCC);
                 foreach (CastEvent c in breakbar)
                 {
-                    replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Riposte
                 var riposte = cls.Where(x => x.SkillId == QadimRiposte);
@@ -544,7 +545,8 @@ internal class Qadim : MythwrightGambit
                 var fieryMeteor = cls.Where(x => x.SkillId == FieryMeteor);
                 foreach (CastEvent c in fieryMeteor)
                 {
-                    replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 var eleBreath = cls.Where(x => x.SkillId == ElementalBreath);
                 foreach (CastEvent c in eleBreath)
@@ -624,7 +626,8 @@ internal class Qadim : MythwrightGambit
                 var patCC = cls.Where(x => x.SkillId == PatriarchCC);
                 foreach (CastEvent c in patCC)
                 {
-                    replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), "rgba(0, 180, 255, 0.4)", new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Breath
                 var patBreath = cls.Where(x => x.SkillId == FireBreath);
@@ -699,7 +702,8 @@ internal class Qadim : MythwrightGambit
                 var summon = cls.Where(x => x.SkillId == SummonDestroyer);
                 foreach (CastEvent c in summon)
                 {
-                    replay.Decorations.Add(new CircleDecoration(ccRadius, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Pizza
                 var forceWave = cls.Where(x => x.SkillId == WaveOfForce);

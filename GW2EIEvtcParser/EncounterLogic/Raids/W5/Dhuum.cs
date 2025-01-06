@@ -409,7 +409,9 @@ internal class Dhuum : HallOfChains
                 foreach (CastEvent c in cataCycle)
                 {
                     var circle = new CircleDecoration(300, (c.Time, c.EndTime), Colors.LightOrange, 0.5, new AgentConnector(target));
-                    replay.Decorations.AddWithGrowing(circle, end);
+                        replay.Decorations.Add(circle);
+                        replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Orange, 0.9, Colors.Black, 0.2, [(c.Time, 0), (c.EndTime, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
 
                 // Cone Slash
@@ -537,10 +539,11 @@ internal class Dhuum : HallOfChains
                 break;
             case (int)TrashID.UnderworldReaper:
                 var stealths = target.GetBuffStatus(log, Stealth, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                foreach (Segment seg in stealths)
-                {
-                    replay.Decorations.Add(new CircleDecoration(180, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(target)));
-                }
+                replay.Decorations.AddOverheadIcons(stealths, target, BuffImages.Stealth);
+                var underworldReaperHPs = target.GetHealthUpdates(log);
+                replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (start, end), Colors.Green, 0.6, Colors.Black, 0.2, underworldReaperHPs.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                    .UsingRotationConnector(new AngleConnector(180)));
                 if (_hasPrevent)
                 {
                     if (_greenStart == 0)
@@ -560,9 +563,17 @@ internal class Dhuum : HallOfChains
                     if (replay.Positions.Count > 0) {
                         pos = replay.Positions[0];
 
-                        if (replay.Positions.Count > 1)
+                        if (pos.XYZ.X < 14000)
                         {
-                            replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                            // Outside reaper
+                            replay.Trim(target.FirstAware, target.FirstAware + CombatReplayPollingRate);
+                        } 
+                        else
+                        {
+                            if (replay.Positions.Count > 1)
+                            {
+                                replay.Trim(replay.Positions.LastOrDefault().Time, replay.TimeOffsets.end);
+                            }
                         }
                     }
                     else
@@ -627,16 +638,16 @@ internal class Dhuum : HallOfChains
                 end = (int)removedBuff.Time;
             }
             var lifespan = new Segment(start, end, 1);
-            var circle = new CircleDecoration(100, lifespan, "rgba(0, 50, 200, 0.3)", new AgentConnector(p));
-            replay.Decorations.AddWithGrowing(circle, duration);
+            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (start, end), Colors.CobaltBlue, 0.6, Colors.Black, 0.2, [(start, 0), (start + duration, 100)], new AgentConnector(p))
+                .UsingRotationConnector(new AngleConnector(130)));
             replay.Decorations.AddRotatedOverheadIcon(lifespan, p, ParserIcons.GenericGreenArrowUp, 40f);
         }
         // bomb
         var bombDhuum = p.GetBuffStatus(log, ArcingAffliction, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in bombDhuum)
         {
-            var circle = new CircleDecoration(100, seg, "rgba(80, 180, 0, 0.3)", new AgentConnector(p));
-            replay.Decorations.AddWithGrowing(circle, seg.Start + 13000);
+            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (seg.Start, seg.End), Colors.Orange, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 13000, 100)], new AgentConnector(p))
+                .UsingRotationConnector(new AngleConnector(-130)));
             replay.Decorations.AddRotatedOverheadIcon(seg, p, ParserIcons.BombTimerFullOverhead, -40f);
         }
         // shackles connection
@@ -650,16 +661,22 @@ internal class Dhuum : HallOfChains
         replay.Decorations.AddTether(shacklesDmg, Colors.Yellow, 0.5);
 
         // Soul split
+        var hastenedDemise = p.GetBuffStatus(log, HastenedDemise, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value == 1);
         var souls = log.AgentData.GetNPCsByID(TrashID.YourSoul).Where(x => x.GetFinalMaster() == p.AgentItem);
-
-        // check Hastened Demise
         foreach (AgentItem soul in souls)
         {
-            Segment? hastenedDemise = p.GetBuffStatus(log, HastenedDemise, soul.FirstAware, soul.LastAware).FirstOrNull(static (in Segment x) => x.Value == 1);
-            if (hastenedDemise != null && soul.TryGetCurrentPosition(log, soul.FirstAware, out var soulPosition, 1000))
+            Segment? curHastenedDemise = hastenedDemise.FirstOrNull((in Segment x) => x.Start >= soul.FirstAware - ServerDelayConstant);
+            if (curHastenedDemise != null && soul.TryGetCurrentPosition(log, soul.FirstAware, out var soulPosition, 1000))
             {
-                AddSoulSplitDecorations(p, replay, soul, hastenedDemise.Value, soulPosition);
+                AddSoulSplitDecorations(p, replay, soul, curHastenedDemise.Value, soulPosition);
             }
+        }
+        // show the death trigger even if we don't have the souls
+        foreach (var seg in hastenedDemise)
+        {
+            long soulSplitDeathTime = seg.Start + 10000;
+            replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (soulSplitDeathTime, 100)], new AgentConnector(p))
+                .UsingRotationConnector(new AngleConnector(90)));
         }
     }
 
@@ -773,29 +790,25 @@ internal class Dhuum : HallOfChains
     /// <param name="p">The player.</param>
     /// <param name="replay">The Combat Replay.</param>
     /// <param name="soul">The Soul to tether to the player.</param>
-    /// <param name="hastenedDemise">The segment of the buff on the player.</param>
+    /// <param name="hastenedDemise">Time frame during which the hastened demise buff is present.</param>
     /// <param name="soulPosition">The position of the Soul.</param>
     private static void AddSoulSplitDecorations(PlayerActor p, CombatReplay replay, AgentItem soul, in Segment hastenedDemise, in Vector3 soulPosition)
     {
-        (long, long) soulLifespan = (soul.FirstAware, soul.LastAware);
-        long soulSplitDeathTime = hastenedDemise.Start + 10000;
+        (long, long) soulLifespan = (soul.FirstAware, hastenedDemise.End);
 
         uint radius = (soul.HitboxWidth / 2);
-        var positionConnector = new PositionConnector(soulPosition);
+        var soulConnector = new PositionConnector(soulPosition);
         var playerConnector = new AgentConnector(p);
 
         // Soul outer circle
-        var hitbox = (CircleDecoration)new CircleDecoration(radius, radius - 25, soulLifespan, Colors.White, 0.8, positionConnector).UsingFilled(false);
+        var hitbox = (CircleDecoration)new CircleDecoration(radius, radius - 25, soulLifespan, Colors.White, 0.8, soulConnector).UsingFilled(false);
         // Soul tether to player
-        var line = new LineDecoration(soulLifespan, Colors.White, 0.8, positionConnector, playerConnector);
+        var line = new LineDecoration(soulLifespan, Colors.White, 0.8, soulConnector, playerConnector);
         // Soul icon
-        var icon = new IconDecoration(ParserIcons.DhuumPlayerSoul, 16, 1, soulLifespan, positionConnector);
-        // Red circle indicating timer
-        var death = new CircleDecoration(radius, hastenedDemise, Colors.Red, 0.2, positionConnector);
+        var icon = new IconDecoration(ParserIcons.DhuumPlayerSoul, 16, 1, soulLifespan, soulConnector);
 
         replay.Decorations.Add(hitbox);
         replay.Decorations.Add(line);
         replay.Decorations.Add(icon);
-        replay.Decorations.AddWithFilledWithGrowing(death, true, soulSplitDeathTime);
     }
 }

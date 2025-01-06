@@ -375,6 +375,12 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
                     var circle = new CircleDecoration(2500, lifespan, Colors.RedSkin, 0.1, new AgentConnector(target));
                     replay.Decorations.Add(circle);
                 }
+                var petrifies = casts.Where(x => x.SkillId == PetrifySkill);
+                foreach (CastEvent c in petrifies)
+                {
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.Time + 10000, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
+                }
                 break;
             case (int)TrashID.EmbodimentOfDespair:
                 AddDeterminedOverhead(target, log, replay);

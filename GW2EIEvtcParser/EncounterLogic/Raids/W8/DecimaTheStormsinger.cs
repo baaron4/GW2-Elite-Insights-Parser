@@ -151,13 +151,11 @@ internal class DecimaTheStormsinger : MountBalrior
 
                 // Add the Charge Bar on top right of the replay
                 var chargeSegments = target.GetBuffStatus(log, ChargeDecima, log.FightData.FightStart, log.FightData.FightEnd);
-                ReadOnlySpan<(Color, double)> colors =
-                [
-                    (Colors.Red, 0.6),
-                    (Colors.Black, 0.4),
-                    (Colors.LightRed, 0.8),
-                ];
-                replay.Decorations.AddDynamicBar(target, chargeSegments, 10, 2500, -2850, 1000, 150, 0, colors);
+                replay.Decorations.Add(
+                    new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, lifespan, Colors.Red, 0.6, Colors.Black, 0.4, chargeSegments.Select(x => (x.Start, x.Value * 10)).ToList(), new AgentConnector(target))
+                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                    .UsingRotationConnector(new AngleConnector(180))
+                );
 
                 // Mainshock - Pizza Indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(target.AgentItem, EffectGUIDs.DecimaMainshockIndicator, out var mainshockSlices))
@@ -321,14 +319,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder1Overhead);
 
                 // Hp Bar
-                ReadOnlySpan<(Color, double)> colorsOrb1 =
-                [
-                    (Colors.Green, 0.4),
-                    (Colors.Black, 0.4),
-                    (Colors.Green, 0.5),
-                ];
-                var hpUpdates1 = target.GetHealthUpdates(log);
-                replay.Decorations.AddDynamicBar(target, hpUpdates1, 100, 0, 20, 100, 20, 0, colorsOrb1);
+                var hpUpdatesOrb1 = target.GetHealthUpdates(log);
+                replay.Decorations.Add(
+                    new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb1.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                    .UsingRotationConnector(new AngleConnector(180))
+                );
                 break;
             case (int)ArcDPSEnums.TrashID.GreenOrb2Players:
                 // Green Circle
@@ -338,14 +334,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder2Overhead);
 
                 // Hp Bar
-                ReadOnlySpan<(Color, double)> colorsOrb2 =
-                [
-                    (Colors.Green, 0.4),
-                    (Colors.Black, 0.4),
-                    (Colors.Green, 0.5),
-                ];
-                var hpUpdates2 = target.GetHealthUpdates(log);
-                replay.Decorations.AddDynamicBar(target, hpUpdates2, 200, 0, 20, 200, 20, 0, colorsOrb2, 2);
+                var hpUpdatesOrb2 = target.GetHealthUpdates(log);
+                replay.Decorations.Add(
+                    new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb2.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                    .UsingRotationConnector(new AngleConnector(180))
+                );
                 break;
             case (int)ArcDPSEnums.TrashID.GreenOrb3Players:
                 // Green Circle
@@ -355,14 +349,12 @@ internal class DecimaTheStormsinger : MountBalrior
                 replay.Decorations.AddOverheadIcon(lifespan, target, ParserIcons.TargetOrder3Overhead);
 
                 // Hp Bar
-                ReadOnlySpan<(Color, double)> colorsOrb3 =
-                [
-                    (Colors.Green, 0.4),
-                    (Colors.Black, 0.4),
-                    (Colors.Green, 0.5),
-                ];
-                var hpUpdates3 = target.GetHealthUpdates(log);
-                replay.Decorations.AddDynamicBar(target, hpUpdates3, 300, 0, 20, 300, 20, 0, colorsOrb3, 3);
+                var hpUpdatesOrb3 = target.GetHealthUpdates(log);
+                replay.Decorations.Add(
+                    new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMinorSizeInPixel, lifespan, Colors.SligthlyDarkGreen, 0.8, Colors.Black, 0.6, hpUpdatesOrb3.Select(x => (x.Start, x.Value)).ToList(), new AgentConnector(target))
+                    .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                    .UsingRotationConnector(new AngleConnector(180))
+                );
                 break;
             case (int)ArcDPSEnums.TrashID.EnlightenedConduit:
                 // Chorus of Thunder / Discordant Thunder - Orange AoE

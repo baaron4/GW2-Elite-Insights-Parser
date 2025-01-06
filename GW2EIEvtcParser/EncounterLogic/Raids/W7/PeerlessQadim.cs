@@ -368,13 +368,13 @@ internal class PeerlessQadim : TheKeyOfAhdashim
         var chaosCorrosion = p.GetBuffStatus(log, ChaosCorrosion, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in chaosCorrosion)
         {
-            replay.Decorations.Add(new CircleDecoration(100, seg, "rgba(80, 80, 80, 0.3)", new AgentConnector(p)));
+            replay.Decorations.AddRotatedOverheadIcon(seg, p, BuffImages.Fractured, -40f);
         }
         // Critical Mass, debuff while carrying an orb
         var criticalMass = p.GetBuffStatus(log, CriticalMass, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in criticalMass)
         {
-            replay.Decorations.Add(new CircleDecoration(200, seg, Colors.Red, 0.3, new AgentConnector(p)).UsingFilled(false));
+            replay.Decorations.AddRotatedOverheadIcon(seg, p, BuffImages.OrbOfAscension, 40f);
         }
         // Magma drop
         var magmaDrop = p.GetBuffStatus(log, MagmaDrop, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);

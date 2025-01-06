@@ -289,7 +289,8 @@ internal class TwinLargos : MythwrightGambit
                 var barrageN = cls.Where(x => x.SkillId == AquaticBarrage);
                 foreach (CastEvent c in barrageN)
                 {
-                    replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Platform wipe (CM only)
                 var aquaticDomainN = cls.Where(x => x.SkillId == AquaticDomain);
@@ -306,7 +307,8 @@ internal class TwinLargos : MythwrightGambit
                 var barrageK = cls.Where(x => x.SkillId == AquaticBarrage);
                 foreach (CastEvent c in barrageK)
                 {
-                    replay.Decorations.Add(new CircleDecoration(250, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.ExpectedEndTime, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 //Platform wipe (CM only)
                 var aquaticDomainK = cls.Where(x => x.SkillId == AquaticDomain);

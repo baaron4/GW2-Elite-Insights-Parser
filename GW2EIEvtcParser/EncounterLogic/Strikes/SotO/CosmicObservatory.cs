@@ -82,6 +82,14 @@ internal class CosmicObservatory : SecretOfTheObscureStrike
                     replay.Decorations.Add(circle);
                 }
 
+                //
+                var planetCrashes = casts.Where(x => x.SkillId == PlanetCrashSkill);
+                foreach (CastEvent c in planetCrashes)
+                {
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (c.Time, c.EndTime), Colors.Red, 0.6, Colors.Black, 0.2, [(c.Time, 0), (c.Time + 10000, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
+                }
+
                 // Spinning nebula
                 var spinningNebulas = casts.Where(x => x.SkillId == SpinningNebulaCentral || x.SkillId == SpinningNebulaWithTeleport);
                 foreach (CastEvent cast in spinningNebulas)

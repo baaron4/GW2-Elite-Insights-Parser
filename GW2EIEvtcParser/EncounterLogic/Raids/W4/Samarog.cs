@@ -187,7 +187,8 @@ internal class Samarog : BastionOfThePenitent
                 var brutalize = target.GetBuffStatus(log, FanaticalResilience, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in brutalize)
                 {
-                    replay.Decorations.Add(new CircleDecoration(120, seg, Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 15000, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 break;
             case (int)ArcDPSEnums.TrashID.Rigom:
@@ -234,7 +235,6 @@ internal class Samarog : BastionOfThePenitent
         var fixatedSam = p.GetBuffStatus(log, FixatedSamarog, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (Segment seg in fixatedSam)
         {
-            replay.Decorations.Add(new CircleDecoration(80, seg, "rgba(255, 80, 255, 0.3)", new AgentConnector(p)));
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.FixationPurpleOverhead);
         }
         var fixatedSamarog = GetFilteredList(log.CombatData, FixatedSamarog, p, true, true);

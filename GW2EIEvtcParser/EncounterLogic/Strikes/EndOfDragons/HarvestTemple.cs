@@ -847,8 +847,10 @@ internal class HarvestTemple : EndOfDragonsStrike
                 BreakbarStateEvent? breakbar = log.CombatData.GetBreakbarStateEvents(target.AgentItem).FirstOrDefault(x => x.State == ArcDPSEnums.BreakbarState.Active);
                 if (breakbar != null)
                 {
-                    (long start, long end) lifespan = (breakbar.Time, target.LastAware);
-                    replay.Decorations.Add(new CircleDecoration(120, lifespan, Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    var breakbarStates = log.CombatData.GetBreakbarPercentEvents(target.AgentItem).Where(x => x.Time >= breakbar.Time);
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (breakbar.Time, target.LastAware), Colors.LightBlue, 0.6, Colors.Black, 0.2, breakbarStates.Select(x => (x.Time, x.BreakbarPercent)).ToList(), new AgentConnector(target))
+                        .UsingInterpolationMethod(Connector.InterpolationMethod.Step)
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 break;
             case (int)ArcDPSEnums.TargetID.TheDragonVoidJormag:

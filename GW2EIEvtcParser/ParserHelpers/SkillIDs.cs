@@ -1640,7 +1640,7 @@ public static class SkillIDs
     public const long Exposed31589 = 31589;
     public const long BoundHit = 31600;
     public const long TailLashWyvern = 31613;
-    public const long GorsevalBloom = 31616;
+    public const long GorsevalWorldEater = 31616;
     public const long GhastlyPrison = 31623;
     public const long YouWillJoinUs = 31624;
     public const long CultivatedSynergyPet = 31629;

@@ -1,4 +1,5 @@
-﻿using GW2EIEvtcParser.EIData;
+﻿using System.Numerics;
+using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
@@ -152,10 +153,12 @@ internal class Slothasor : SalvationPass
         {
             case (int)ArcDPSEnums.TargetID.Slothasor:
                 var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-                var sleepy = cls.Where(x => x.SkillId == NarcolepsySkill);
-                foreach (CastEvent c in sleepy)
+
+                var narcolepsies = target.GetBuffStatus(log, NarcolepsyBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
+                foreach (var narcolepsy in narcolepsies)
                 {
-                    replay.Decorations.Add(new CircleDecoration(180, ((int)c.Time, (int)c.EndTime), Colors.LightBlue, 0.3, new AgentConnector(target)));
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (narcolepsy.Start, narcolepsy.End), Colors.LightBlue, 0.6, Colors.Black, 0.2, [(narcolepsy.Start, 0), (narcolepsy.Start + 120000, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 var breath = cls.Where(x => x.SkillId == Halitosis);
                 foreach (CastEvent c in breath)

@@ -317,7 +317,8 @@ internal class Matthias : SalvationPass
             replay.Decorations.Add(new CircleDecoration(180, seg, Colors.LightOrange, 0.5, new AgentConnector(p)));
             if (p.TryGetCurrentInterpolatedPosition(log, corruptedMatthiasEnd, out var position))
             {
-                replay.Decorations.AddWithGrowing(new CircleDecoration(180, (corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), Colors.Black, 0.3, new PositionConnector(position)), corruptedMatthiasEnd + 100000);
+                var fountainActiveTime = corruptedMatthiasEnd + 100000;
+                replay.Decorations.Add(new ProgressBarDecoration(240, 48, (corruptedMatthiasEnd, fountainActiveTime), Colors.Black, 0.6, Colors.Black, 0.2, [(corruptedMatthiasEnd, 0), (fountainActiveTime, 100)], new PositionConnector(position)));
             }
             replay.Decorations.AddOverheadIcon(seg, p, ParserIcons.CorruptionOverhead);
         }
@@ -340,7 +341,8 @@ internal class Matthias : SalvationPass
         var sacrificeMatthias = p.GetBuffStatus(log, MatthiasSacrifice, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sacrificeMatthias)
         {
-            replay.Decorations.AddWithGrowing(new CircleDecoration(120, seg, "rgba(0, 150, 250, 0.2)", new AgentConnector(p)), seg.Start + 10000);
+            replay.Decorations.Add(new OverheadProgressBarDecoration(ParserHelper.CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.Start + 10000, 100)], new AgentConnector(p))
+                .UsingRotationConnector(new AngleConnector(90)));
         }
                 // Bombs
         var zealousBenediction = log.CombatData.GetBuffDataByIDByDst(ZealousBenediction, p.AgentItem).Where(x => x is BuffApplyEvent);

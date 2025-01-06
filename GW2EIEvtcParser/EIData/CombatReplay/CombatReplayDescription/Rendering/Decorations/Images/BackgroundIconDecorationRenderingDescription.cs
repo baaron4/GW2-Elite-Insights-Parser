@@ -6,8 +6,8 @@ namespace GW2EIEvtcParser.EIData;
 public class BackgroundIconDecorationRenderingDescription : ImageDecorationRenderingDescription
 {
 
-    public IReadOnlyList<float> Opacities { get; private set; }
-    public IReadOnlyList<float> Heights { get; private set; }
+    public readonly IReadOnlyList<float> Opacities;
+    public readonly IReadOnlyList<float> Heights;
     internal BackgroundIconDecorationRenderingDescription(ParsedEvtcLog log, BackgroundIconDecorationRenderingData decoration, CombatReplayMap map, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Buff> usedBuffs, string metadataSignature) : base(log, decoration, map, usedSkills, usedBuffs, metadataSignature)
     {
         Type = "BackgroundIconDecoration"; //TODO(Rennorb) @cleanup: enum

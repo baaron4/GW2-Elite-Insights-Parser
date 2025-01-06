@@ -287,7 +287,8 @@ internal class KeepConstruct : StrongholdOfTheFaithful
                 var kcOrbCollect = target.GetBuffStatus(log, XerasBoon, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
                 foreach (Segment seg in kcOrbCollect)
                 {
-                    replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(300, seg, Colors.Red, 0.3, new AgentConnector(target)).UsingFilled(false), true, seg.End);
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (seg.Start, seg.End), Colors.Red, 0.6, Colors.Black, 0.2, [(seg.Start, 0), (seg.End, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                 }
                 
                 var towerDrop = cls.Where(x => x.SkillId == TowerDrop);

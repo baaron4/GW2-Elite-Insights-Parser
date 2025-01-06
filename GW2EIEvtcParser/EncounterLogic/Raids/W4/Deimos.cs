@@ -534,8 +534,8 @@ internal class Deimos : BastionOfThePenitent
                 {
                     start = (int)c.Time;
                     end = start + 5000;
-                    var circle = new CircleDecoration(180, (start, end), Colors.Red, 0.5, new AgentConnector(target));
-                    replay.Decorations.AddWithFilledWithGrowing(circle.UsingFilled(false), true, end);
+                    replay.Decorations.Add(new OverheadProgressBarDecoration(CombatReplayOverheadProgressBarMajorSizeInPixel, (start, end), Colors.Red, 0.6, Colors.Black, 0.2, [(start, 0), (end, 100)], new AgentConnector(target))
+                        .UsingRotationConnector(new AngleConnector(180)));
                     if (!log.FightData.IsCM)
                     {
                         replay.Decorations.Add(new CircleDecoration(180, (start, end), Colors.Blue, 0.3, new PositionConnector(new Vector3(-8421.818f, 3091.72949f, -9.818082e8f))));
@@ -571,10 +571,7 @@ internal class Deimos : BastionOfThePenitent
                 }
 
                 var signets = target.GetBuffStatus(log, UnnaturalSignet, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
-                foreach (Segment seg in signets)
-                {
-                    replay.Decorations.Add(new CircleDecoration(120, seg, Colors.Teal, 0.4, new AgentConnector(target)));
-                }
+                replay.Decorations.AddOverheadIcons(signets, target, BuffImages.UnnaturalSignet);
                 break;
             case (int)ArcDPSEnums.TrashID.Gambler:
             case (int)ArcDPSEnums.TrashID.Thief:
