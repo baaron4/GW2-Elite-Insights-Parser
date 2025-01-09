@@ -500,7 +500,6 @@ internal class Qadim : MythwrightGambit
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)
     {
         var cls = target.GetCastEvents(log, log.FightData.FightStart, log.FightData.FightEnd);
-        uint ccRadius = 200;
         switch (target.ID)
         {
             case (int)TargetID.Qadim:

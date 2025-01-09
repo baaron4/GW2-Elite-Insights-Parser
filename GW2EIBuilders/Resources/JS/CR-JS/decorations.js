@@ -4,32 +4,40 @@
 /*global animator, ToRadians, overheadAnimationFrame, maxOverheadAnimationFrame, facingIcon, animateCanvas, noUpdateTime, SkillDecorationCategory*/
 "use strict";
 
-class GenericDecorationMetadata {
+class GenericMetadata {
     constructor(params) {
 
     }
 }
 
-class GenericAttachedDecorationMetadata extends GenericDecorationMetadata{
+class TextMetadata extends GenericMetadata{
+    constructor(params) {
+        super(params);
+        this.color = params.color;
+        this.backgroundColor = params.backgroundColor;
+    }
+}
+
+class GenericAttachedMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
     }
 }
 
-class ActorOrientationDecorationMetadata extends GenericAttachedDecorationMetadata {
+class ActorOrientationMetadata extends GenericAttachedMetadata {
     constructor(params) {
         super(params);
     }
 }
 
-class FormDecorationMetadata extends GenericAttachedDecorationMetadata {
+class FormMetadata extends GenericAttachedMetadata {
     constructor(params) {
         super(params);
         this.color = params.color;
     }
 }
 
-class CircleDecorationMetadata extends FormDecorationMetadata {
+class CircleMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.radius = InchToPixel * params.radius;
@@ -37,7 +45,7 @@ class CircleDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class DoughnutDecorationMetadata extends FormDecorationMetadata {
+class DoughnutMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.outerRadius = InchToPixel * params.outerRadius;
@@ -45,7 +53,7 @@ class DoughnutDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class LineDecorationMetadata extends FormDecorationMetadata {
+class LineMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.thickness = params.thickness;
@@ -56,7 +64,7 @@ class LineDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class PieDecorationMetadata extends CircleDecorationMetadata {
+class PieMetadata extends CircleMetadata {
     constructor(params) {
         super(params);
         this.openingAngle = params.openingAngle;
@@ -65,7 +73,7 @@ class PieDecorationMetadata extends CircleDecorationMetadata {
     }
 }
 
-class RectangleDecorationMetadata extends FormDecorationMetadata {
+class RectangleMetadata extends FormMetadata {
     constructor(params) {
         super(params);
         this.width = InchToPixel * params.width;
@@ -73,14 +81,14 @@ class RectangleDecorationMetadata extends FormDecorationMetadata {
     }
 }
 
-class ProgressBarDecorationMetadata extends RectangleDecorationMetadata {
+class ProgressBarMetadata extends RectangleMetadata {
     constructor(params) {
         super(params);
         this.secondaryColor = params.secondaryColor;
     }
 }
 
-class OverheadProgressBarDecorationMetadata extends ProgressBarDecorationMetadata {
+class OverheadProgressBarMetadata extends ProgressBarMetadata {
     constructor(params) {
         super(params);
         this.pixelWidth = params.pixelWidth;
@@ -88,7 +96,7 @@ class OverheadProgressBarDecorationMetadata extends ProgressBarDecorationMetadat
     }
 }
 
-class GenericIconDecorationMetadata extends GenericAttachedDecorationMetadata{
+class GenericIconMetadata extends GenericAttachedMetadata{
     constructor(params) {
         super(params);
         this.imageUrl = params.image;
@@ -100,32 +108,32 @@ class GenericIconDecorationMetadata extends GenericAttachedDecorationMetadata{
     }
 }
 
-class BackgroundIconDecorationMetadata extends GenericIconDecorationMetadata {
+class BackgroundIconMetadata extends GenericIconMetadata {
     constructor(params) {
         super(params);
     }
 }
 
-class IconDecorationMetadata extends GenericIconDecorationMetadata {
+class IconMetadata extends GenericIconMetadata {
     constructor(params) {
         super(params);
         this.opacity = params.opacity;
     }
 }
 
-class IconOverheadDecorationMetadata extends IconDecorationMetadata {
+class IconOverheadMetadata extends IconMetadata {
     constructor(params) {
         super(params);
     }
 }
 
-class BackgroundDecorationMetadata extends GenericDecorationMetadata{
+class BackgroundMetadata extends GenericMetadata{
     constructor(params) {
         super(params);
     }
 }
 
-class MovingPlatformDecorationMetadata extends BackgroundDecorationMetadata{
+class MovingPlatformMetadata extends BackgroundMetadata{
     constructor(params, ) {
         super(params);
         this.imageUrl = params.image;
@@ -195,9 +203,10 @@ function interpolatedPositionFetcher(connection, master) {
 }
 
 function staticPositionFetcher(connection, master) {
+    const factor = connection.isScreenSpace ? resolutionMultiplier : 1;
     return {
-        x: connection.position[0],
-        y: connection.position[1]
+        x: factor * connection.position[0],
+        y: factor * connection.position[1]
     };
 }
 
@@ -1255,5 +1264,49 @@ class IconOverheadMechanicDrawable extends IconMechanicDrawable {
         };
         offset.y -= masterSize/4 + this.getSize()/2 + 3 * overheadAnimationFrame/ maxOverheadAnimationFrame / scale;
         return offset;
+    }
+}
+
+//
+
+class TextDrawable extends MechanicDrawable {
+    constructor(params) {
+        super(params);
+        this.text = params.text;
+        const bold = !!params.bold;
+        const fontSize = params.fontSize * resolutionMultiplier + "px";
+        const fontType = params.fontType || "Comic Sans MS";
+        this.font  = (bold ? "bold " : "") + fontSize + " " + fontType;
+    }
+    get color() {
+        return this.metadata.color;
+    }
+    get backgroundColor() {
+        return this.metadata.backgroundColor;
+    }
+    
+    draw() {
+        if (!this.canDraw()) {
+            return;
+        }
+        const pos = this.getPosition();
+        const rot = this.getRotation();
+        if (pos === null || rot === null) {
+            return;
+        }
+        
+        const ctx = animator.mainContext;
+        ctx.save();
+        this.moveContext(ctx, pos, rot);
+        const normalizedRot = Math.abs((ToRadians(rot + this.rotationOffset) / Math.PI) % 2);
+        if (0.5 < normalizedRot && normalizedRot < 1.5) {
+            // make sure the text remains upright
+            ctx.rotate(-ToRadians(180));
+        }
+        ctx.font = this.font;
+        ctx.fillStyle = this.color;
+        ctx.textAlign = "center";
+        ctx.fillText(this.text, 0, 0);
+        ctx.restore();
     }
 }

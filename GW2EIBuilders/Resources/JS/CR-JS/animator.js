@@ -112,6 +112,7 @@ class Animator {
         this.skillMechanicActorData = [];
         this.actorOrientationData = new Map();
         this.backgroundActorData = [];
+        this.screenSpaceActorData = [];
         this.backgroundImages = [];
         this.selectedActor = null;
         // animation
@@ -215,40 +216,43 @@ class Animator {
             let MetadataClass = null;
             switch (metadata.type) {
                 case "ActorOrientation":
-                    MetadataClass = ActorOrientationDecorationMetadata;
+                    MetadataClass = ActorOrientationMetadata;
                     break;
                 case "Circle":
-                    MetadataClass = CircleDecorationMetadata;
+                    MetadataClass = CircleMetadata;
                     break;
                 case "Doughnut":
-                    MetadataClass = DoughnutDecorationMetadata;
+                    MetadataClass = DoughnutMetadata;
                     break;
                 case "Line":
-                    MetadataClass = LineDecorationMetadata;
+                    MetadataClass = LineMetadata;
                     break;
                 case "Pie":
-                    MetadataClass = PieDecorationMetadata;
+                    MetadataClass = PieMetadata;
                     break;
                 case "Rectangle":
-                    MetadataClass = RectangleDecorationMetadata;
+                    MetadataClass = RectangleMetadata;
                     break;
                 case "ProgressBar":
-                    MetadataClass = ProgressBarDecorationMetadata;
+                    MetadataClass = ProgressBarMetadata;
                     break;
-                case "BackgroundIconDecoration":
-                    MetadataClass = IconDecorationMetadata;
+                case "BackgroundIcon":
+                    MetadataClass = IconMetadata;
                     break;
-                case "IconDecoration":
-                    MetadataClass = IconDecorationMetadata;
+                case "Icon":
+                    MetadataClass = IconMetadata;
                     break;
-                case "IconOverheadDecoration":
-                    MetadataClass = IconOverheadDecorationMetadata;
+                case "IconOverhead":
+                    MetadataClass = IconOverheadMetadata;
                     break;
                 case "OverheadProgressBar":
-                    MetadataClass = OverheadProgressBarDecorationMetadata;
+                    MetadataClass = OverheadProgressBarMetadata;
                     break;
                 case "MovingPlatform":
-                    MetadataClass = MovingPlatformDecorationMetadata;
+                    MetadataClass = MovingPlatformMetadata;
+                    break;
+                case "Text":
+                    MetadataClass = TextMetadata;
                     break;
                 default:
                     throw "Unknown decoration type " + metadata.type;
@@ -305,7 +309,7 @@ class Animator {
                     case "MovingPlatform":
                         this.backgroundActorData.push(new MovingPlatformDrawable(decorationRendering));
                         break;
-                    case "BackgroundIconDecoration":
+                    case "BackgroundIcon":
                         this.backgroundActorData.push(new BackgroundIconMechanicDrawable(decorationRendering));
                         break;
                     default:
@@ -314,6 +318,13 @@ class Animator {
             } else {
                 let DecorationClass;
                 switch (decorationRendering.type) {
+                    case "Text":
+                        if (decorationRendering.connectedTo.isScreenSpace) {
+                            this.screenSpaceActorData.push(new TextDrawable(decorationRendering));
+                            continue;
+                        }
+                        DecorationClass = TextDrawable;
+                        break;
                     case "Circle":
                         DecorationClass = CircleMechanicDrawable;
                         break;
@@ -332,19 +343,19 @@ class Animator {
                     case "Line":
                         DecorationClass = LineMechanicDrawable;
                         break;
-                    case "IconDecoration":
+                    case "Icon":
                         DecorationClass = IconMechanicDrawable;
                         break;
-                    case "IconOverheadDecoration":
+                    case "IconOverhead":
                         this.overheadActorData.push(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
                     case "OverheadProgressBar":
                         this.overheadActorData.push(new OverheadProgressBarMechanicDrawable(decorationRendering));
                         continue;
-                    case "SquadMarkerDecoration":
+                    case "SquadMarker":
                         this.squadMarkerData.push(new IconMechanicDrawable(decorationRendering));
                         continue;
-                    case "OverheadSquadMarkerDecoration":
+                    case "OverheadSquadMarker":
                         this.overheadSquadMarkerData.push(new IconOverheadMechanicDrawable(decorationRendering));
                         continue;
                     default:
@@ -969,6 +980,15 @@ class Animator {
                     this.overheadSquadMarkerData[i].draw();
                 }
             }
+            ctx.save();
+            {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                // Screen space actors
+                for (let i = 0; i < animator.screenSpaceActorData.length; i++) {
+                    animator.screenSpaceActorData[i].draw();
+                }
+            }
+            ctx.restore()
         }
         //ctx.restore();  
     }
