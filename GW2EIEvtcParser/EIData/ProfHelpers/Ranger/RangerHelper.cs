@@ -321,7 +321,7 @@ internal static class RangerHelper
             foreach (EffectEvent effect in hunkerDowns)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectHunkerDown);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectHunkerDown);
             }
         }
         // Barrage
@@ -331,7 +331,7 @@ internal static class RangerHelper
             foreach (EffectEvent effect in barrages)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 600); // ~600ms interval
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectBarrage);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectBarrage);
             }
         }
         // Bonfire
@@ -341,7 +341,7 @@ internal static class RangerHelper
             foreach (EffectEvent effect in bonfires)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 8000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectBonfire);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectBonfire);
             }
         }
         // Healing Spring - Inactive
@@ -354,7 +354,7 @@ internal static class RangerHelper
                 var connector = new PositionConnector(effect.Position);
                 // Halved the saturation of the circle and icon to distinguish between inactive and active.
                 replay.Decorations.Add(new CircleDecoration(180, lifespan, color, 0.25, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectHealingSpring, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.25f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectHealingSpring, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.25f, lifespan, connector).UsingSkillMode(skill));
             }
         }
         // Healing Spring - Active
@@ -365,7 +365,7 @@ internal static class RangerHelper
             {
                 long duration = log.LogData.GW2Build < GW2Builds.March2024BalanceAndCerusLegendary ? 10000 : 5000;
                 (long, long) lifespan = effect.ComputeLifespan(log, duration);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectHealingSpring);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectHealingSpring);
             }
         }
         // Frost Trap
@@ -375,7 +375,7 @@ internal static class RangerHelper
             foreach (EffectEvent effect in frostTraps)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFrostTrap);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectFrostTrap);
             }
         }
         // Flame Trap
@@ -385,7 +385,7 @@ internal static class RangerHelper
             foreach (EffectEvent effect in flameTraps)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFlameTrap);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectFlameTrap);
             }
         }
         // Viper's Nest
@@ -395,7 +395,7 @@ internal static class RangerHelper
             foreach (EffectEvent effect in vipersNests)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectVipersNest);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectVipersNest);
             }
         }
         // Spike Trap
@@ -405,7 +405,7 @@ internal static class RangerHelper
             foreach (EffectEvent effect in spikeTraps)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 2000); // roughly time displayed ingame
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectSpikeTrap);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSpikeTrap);
             }
         }
         // Sublime Conversion
@@ -422,7 +422,7 @@ internal static class RangerHelper
                         var connector = new PositionConnector(effect.Position);
                         var rotationConnector = new AngleConnector(effect.Rotation.Z);
                         replay.Decorations.Add(new RectangleDecoration(400, 60, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
-                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectSublimeConversion, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(EffectImages.EffectSublimeConversion, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
                     }
                 }
             }

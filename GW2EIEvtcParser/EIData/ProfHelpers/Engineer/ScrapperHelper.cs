@@ -73,7 +73,7 @@ internal static class ScrapperHelper
             foreach (EffectEvent effect in functionGyros)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFunctionGyro);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectFunctionGyro);
             }
         }
         // Defense Field
@@ -83,7 +83,7 @@ internal static class ScrapperHelper
             foreach (EffectEvent effect in defenseFields)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectDefenseField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectDefenseField);
             }
         }
     }

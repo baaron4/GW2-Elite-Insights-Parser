@@ -80,7 +80,7 @@ internal static class TempestHelper
                         continue;
                     }
                     (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectOverloadFire);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectOverloadFire);
                 }
             }
         }
@@ -98,7 +98,7 @@ internal static class TempestHelper
                         continue;
                     }
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectOverloadAir);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectOverloadAir);
                 }
             }
         }

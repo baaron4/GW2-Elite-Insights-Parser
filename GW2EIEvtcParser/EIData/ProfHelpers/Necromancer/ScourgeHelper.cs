@@ -61,7 +61,7 @@ internal static class ScourgeHelper
                     (long, long) lifespan = effect.ComputeLifespan(log, 8000, player.AgentItem, PathUses);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                    AttachedDecoration icon = new IconDecoration(ParserIcons.PortalSandswell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                    AttachedDecoration icon = new IconDecoration(EffectImages.PortalSandswell, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     if (first == null)
                     {
                         first = icon;
@@ -91,7 +91,7 @@ internal static class ScourgeHelper
                     duration = log.LogData.GW2Build >= GW2Builds.July2023BalanceAndSilentSurfCM ? 8000 : 20000;
                 }
                 (long, long) lifespan = effect.ComputeLifespan(log, duration);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectShade);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectShade);
             }
         }
     }

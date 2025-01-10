@@ -115,7 +115,7 @@ internal static class VirtuosoHelper
             foreach (EffectEvent effect in rainOfSwords)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 6000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 280, ParserIcons.EffectRainOfSwords);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 280, EffectImages.EffectRainOfSwords);
             }
         }
         // Thousand Cuts
@@ -131,7 +131,7 @@ internal static class VirtuosoHelper
                 replay.Decorations.Add(new RectangleDecoration(30, 1200, lifespan, color, 0.5, connector)
                     .UsingRotationConnector(rotationConnector)
                     .UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectThousandCuts, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
                     .UsingRotationConnector(rotationConnector)
                     .UsingSkillMode(skill));
             }

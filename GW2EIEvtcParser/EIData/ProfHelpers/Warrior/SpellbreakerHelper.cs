@@ -64,7 +64,7 @@ internal static class SpellbreakerHelper
             foreach (EffectEvent effect in windsOfDisenchantments)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectWindsOfDisenchantment);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectWindsOfDisenchantment);
             }
         }
     }

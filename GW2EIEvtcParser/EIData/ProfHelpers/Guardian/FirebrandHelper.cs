@@ -136,7 +136,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in valiantBulwarks)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectValiantBulwark);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectValiantBulwark);
             }
         }
 
@@ -147,7 +147,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in stalwartStands)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectStalwartStand);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectStalwartStand);
             }
         }
 
@@ -158,7 +158,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in shiningRiver)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectShiningRiver);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectShiningRiver);
             }
         }
 
@@ -169,7 +169,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in scorchedAftermath)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectScorchedAftermath);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectScorchedAftermath);
             }
         }
     }

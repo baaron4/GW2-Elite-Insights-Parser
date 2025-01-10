@@ -68,7 +68,7 @@ internal static class DruidHelper
             foreach (EffectEvent effect in glyphOfTheStars)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectGlyphOfTheStars);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectGlyphOfTheStars);
             }
         }
 
@@ -79,7 +79,7 @@ internal static class DruidHelper
             foreach (EffectEvent effect in glyphOfTheStarsCA)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectGlyphOfTheStarsCA);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectGlyphOfTheStarsCA);
             }
         }
     }

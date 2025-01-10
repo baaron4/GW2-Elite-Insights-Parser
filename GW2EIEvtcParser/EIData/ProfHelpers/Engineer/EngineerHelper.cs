@@ -291,7 +291,7 @@ internal static class EngineerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThunderclap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectThunderclap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -317,7 +317,7 @@ internal static class EngineerHelper
                         if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
                         {
                             isThrowMine = true;
-                            AddMineDecoration(log, replay, mine, color, throwMine, ParserIcons.EffectThrowMine);
+                            AddMineDecoration(log, replay, mine, color, throwMine, EffectImages.EffectThrowMine);
                             AddMineDetonationDecoration(log, replay, detonation, color, detonateThrowMine, 240);
                         }
                     }
@@ -332,7 +332,7 @@ internal static class EngineerHelper
                         if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
                         {
                             isMineField = true;
-                            AddMineDecoration(log, replay, mine, color, mineField, ParserIcons.EffectMineField);
+                            AddMineDecoration(log, replay, mine, color, mineField, EffectImages.EffectMineField);
                             AddMineDetonationDecoration(log, replay, detonation, color, detonateMineField, 180);
                         }
                     }
@@ -379,7 +379,7 @@ internal static class EngineerHelper
         (long, long) lifespan = effect.ComputeLifespan(log, 500);
         var connector = new PositionConnector(effect.Position);
         replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectDetonateThrowMineOrMineField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+        replay.Decorations.Add(new IconDecoration(EffectImages.EffectDetonateThrowMineOrMineField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
         // If we do not know the source of the detonation, show both radiuses
         if (unknownSource)
         {

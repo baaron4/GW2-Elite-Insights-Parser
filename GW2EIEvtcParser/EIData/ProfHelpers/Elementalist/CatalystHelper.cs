@@ -93,10 +93,10 @@ internal static class CatalystHelper
     {
         Color color = Colors.Elementalist;
 
-        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployFireJadeSphere, DeployJadeSphereFire, ParserIcons.EffectDeployJadeSphereFire);
-        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployWaterJadeSphere, DeployJadeSphereWater, ParserIcons.EffectDeployJadeSphereWater);
-        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployAirJadeSphere, DeployJadeSphereAir, ParserIcons.EffectDeployJadeSphereAir);
-        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployEarthJadeSphere, DeployJadeSphereEarth, ParserIcons.EffectDeployJadeSphereEarth);
+        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployFireJadeSphere, DeployJadeSphereFire, EffectImages.EffectDeployJadeSphereFire);
+        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployWaterJadeSphere, DeployJadeSphereWater, EffectImages.EffectDeployJadeSphereWater);
+        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployAirJadeSphere, DeployJadeSphereAir, EffectImages.EffectDeployJadeSphereAir);
+        AddJadeSphereDecoration(player, log, replay, color, EffectGUIDs.CatalystDeployEarthJadeSphere, DeployJadeSphereEarth, EffectImages.EffectDeployJadeSphereEarth);
     }
 
     internal static void AddJadeSphereDecoration(PlayerActor player, ParsedEvtcLog log, CombatReplay replay, Color color, GUID effect, long skillId, string icon)

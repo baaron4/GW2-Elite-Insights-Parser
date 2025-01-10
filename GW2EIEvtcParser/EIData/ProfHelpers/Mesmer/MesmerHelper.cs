@@ -331,7 +331,7 @@ internal static class MesmerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 60000, player.AgentItem, PortalWeaving);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.3, connector).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -346,7 +346,7 @@ internal static class MesmerHelper
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUses);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                    AttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                    AttachedDecoration icon = new IconDecoration(EffectImages.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     if (first == null)
                     {
                         first = icon;
@@ -367,7 +367,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in feedbacks)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 6000 : 7000); // 7s with trait pre March 2024
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFeedback);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectFeedback);
             }
         }
         // Veil
@@ -380,7 +380,7 @@ internal static class MesmerHelper
                 var connector = new PositionConnector(effect.Position);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
         // Null Field
@@ -390,7 +390,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in nullFields)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 5000 : 6000); // 6s with trait pre March 2024
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectNullField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectNullField);
             }
         }
 
@@ -401,7 +401,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in illusionOfLife)
             {
                 (long, long) lifespan = (effect.Time, effect.Time + 500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectIllusionOfLife);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectIllusionOfLife);
             }
         }
 
@@ -434,7 +434,7 @@ internal static class MesmerHelper
 
                         // Portal location
                         replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingSkillMode(skill));
-                        replay.Decorations.Add(new IconDecoration(ParserIcons.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(EffectImages.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
 
                         // Tether between the portal and the player
                         replay.Decorations.Add(new LineDecoration(lifespan, color, 0.3, new AgentConnector(player.AgentItem), connector));
@@ -450,7 +450,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in unstableBladestorm)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectUnstableBladestorm);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectUnstableBladestorm);
             }
         }
 
@@ -482,7 +482,7 @@ internal static class MesmerHelper
                 }
 
                 (long, long) lifespan = (effect.Time, effect.Time + duration);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, ParserIcons.EffectMentalCollapse);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectMentalCollapse);
             }
         }
     }

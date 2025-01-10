@@ -301,7 +301,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in meteorShowerCircles)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 9000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectMeteorShower);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectMeteorShower);
             }
             // The meteors
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerMeteor, out var meteorShowersMeteors))
@@ -324,7 +324,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in staticFieldsStaff)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectStaticField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectStaticField);
             }
         }
 
@@ -335,7 +335,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in staticFieldsHammer)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectStaticField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectStaticField);
             }
         }
 
@@ -349,7 +349,7 @@ internal static class ElementalistHelper
                 var connector = new PositionConnector(effect.Position);
                 var circle = (CircleDecoration)new CircleDecoration(240, lifespan, color, 0.3, connector).UsingFilled(false).UsingSkillMode(skill);
                 replay.Decorations.AddWithGrowing(circle, lifespan.Item2, true);
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -365,12 +365,12 @@ internal static class ElementalistHelper
                 if (firestormCastsOnEffect.Count() == 1)
                 {
                     skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.First().SkillId);
-                    icon = skill.SkillID == FirestormGlyphOfStorms ? ParserIcons.EffectFirestormGlyph : ParserIcons.EffectFirestormFieryGreatsword;
+                    icon = skill.SkillID == FirestormGlyphOfStorms ? EffectImages.EffectFirestormGlyph : EffectImages.EffectFirestormFieryGreatsword;
                 }
                 else
                 {
                     skill = new SkillModeDescriptor(player, Spec.Elementalist, FirestormGlyphOfStormsOrFieryGreatsword);
-                    icon = ParserIcons.EffectFirestormGlyphOrFieryGreatsword;
+                    icon = EffectImages.EffectFirestormGlyphOrFieryGreatsword;
                 }
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 10000);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, icon);
@@ -390,7 +390,7 @@ internal static class ElementalistHelper
                         continue;
                     }
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGeyser);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectGeyser);
                 }
             }
         }
@@ -402,7 +402,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in meteors)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 1000);
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectMeteor);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectMeteor);
             }
         }
 
@@ -417,7 +417,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingVolcanoEffects, out var etchingVolcano))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingVolcano, EtchingVolcano, ParserIcons.EffectEtchingVolcano);
+            AddEtchingDecorations(log, player, replay, color, etchingVolcano, EtchingVolcano, EffectImages.EffectEtchingVolcano);
         }
 
         // Lesser Volcano
@@ -427,7 +427,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in lesserVolcano)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4400);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectLesserVolcano);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectLesserVolcano);
                 // Hits landing from the volcano
                 AddVolcanoProjectileHitDecorations(log, player, replay, skill, color, effect.Time, effect.Duration);
             }
@@ -440,7 +440,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in volcano)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectVolcano);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectVolcano);
                 // Hits landing from the volcano
                 AddVolcanoProjectileHitDecorations(log, player, replay, skill, color, effect.Time, effect.Duration);
             }
@@ -453,7 +453,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in undertows)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 1000); // logged duration of 0 - overriding it to 1000 like the others
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectUndertow);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectUndertow);
             }
         }
 
@@ -468,7 +468,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingJokulhlaupEffects, out var etchingJokulhlaup))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingJokulhlaup, EtchingJokulhlaup, ParserIcons.EffectEtchingJokulhlaup);
+            AddEtchingDecorations(log, player, replay, color, etchingJokulhlaup, EtchingJokulhlaup, EffectImages.EffectEtchingJokulhlaup);
         }
 
         // Fulgor
@@ -478,7 +478,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in fulgors)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectFulgor);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectFulgor);
             }
         }
 
@@ -489,7 +489,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in twisters)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 1000);
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectTwister);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectTwister);
             }
         }
 
@@ -504,7 +504,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingDerechoEffects, out var etchingDerecho))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingDerecho, EtchingDerecho, ParserIcons.EffectEtchingDerecho);
+            AddEtchingDecorations(log, player, replay, color, etchingDerecho, EtchingDerecho, EffectImages.EffectEtchingDerecho);
         }
 
         // Fissure
@@ -514,7 +514,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in fissures)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 1000); // logged duration of 0 - overriding it to 1000 like the others
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectFissure);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectFissure);
             }
         }
 
@@ -529,7 +529,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingHaboobEffects, out var etchingHaboob))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingHaboob, EtchingHaboob, ParserIcons.EffectEtchingHaboob);
+            AddEtchingDecorations(log, player, replay, color, etchingHaboob, EtchingHaboob, EffectImages.EffectEtchingHaboob);
         }
     }
 

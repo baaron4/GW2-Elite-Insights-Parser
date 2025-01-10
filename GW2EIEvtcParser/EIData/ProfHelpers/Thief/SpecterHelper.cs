@@ -78,7 +78,7 @@ internal static class SpecterHelper
             foreach (EffectEvent effect in wellsOfGloom)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfGloom);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfGloom);
             }
         }
         // Well of Bounty
@@ -88,7 +88,7 @@ internal static class SpecterHelper
             foreach (EffectEvent effect in wellsOfBounty)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfBounty);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfBounty);
             }
         }
         // Well of Tears
@@ -98,7 +98,7 @@ internal static class SpecterHelper
             foreach (EffectEvent effect in wellsOfTears)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfTears);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfTears);
             }
         }
         // Well of Silence
@@ -108,7 +108,7 @@ internal static class SpecterHelper
             foreach (EffectEvent effect in wellsOfSilence)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfSilence);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfSilence);
             }
         }
         // Well of Sorrow
@@ -118,7 +118,7 @@ internal static class SpecterHelper
             foreach (EffectEvent effect in wellsOfSorrow)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfSorrow);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfSorrow);
             }
         }
         // Shadowfall
@@ -128,7 +128,7 @@ internal static class SpecterHelper
             foreach (EffectEvent effect in shadowfalls)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 2250);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectShadowfall);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectShadowfall);
             }
         }
     }

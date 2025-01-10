@@ -247,7 +247,7 @@ internal static class RevenantHelper
                     .UsingFilled(false)
                     .UsingRotationConnector(rotationConnector)
                     .UsingSkillMode(inspiringReinforcementSkill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectInspiringReinforcement, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
                     .UsingRotationConnector(rotationConnector)
                     .UsingSkillMode(inspiringReinforcementSkill));
             }
@@ -263,7 +263,7 @@ internal static class RevenantHelper
                 var connector = new AgentConnector(effect.Dst);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.2, connector)
                     .UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectProtectiveSolace, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectProtectiveSolace, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector)
                     .UsingSkillMode(skill));
             }
         }
@@ -288,7 +288,7 @@ internal static class RevenantHelper
                     {
                         (long, long) lifespan = (effect.Time, effect.Time + 2800);
                         var centralConnector = new PositionConnector(positions.Average());
-                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectEternitysRequiem, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(EffectImages.EffectEternitysRequiem, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector).UsingSkillMode(skill));
                         // TODO: Find a way to tell the user that the circle is approximative.
                         //replay.Decorations.Add(new CircleDecoration(360, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));
                     }
@@ -307,7 +307,7 @@ internal static class RevenantHelper
                 var connector = new PositionConnector(effect.Position);
                 var rotation = new AngleConnector(effect.Rotation.Z);
                 replay.Decorations.Add(new RectangleDecoration(180, 400, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotation).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCoalescenceOfRuin, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectCoalescenceOfRuin, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -318,7 +318,7 @@ internal static class RevenantHelper
             foreach (EffectEvent effect in dropTheHammer)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 1220);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectDropTheHammer);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectDropTheHammer);
             }
         }
 
@@ -329,7 +329,7 @@ internal static class RevenantHelper
             foreach (EffectEvent effect in abyssalBlitzMines)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 120, ParserIcons.EffectAbyssalBlitzMines);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 120, EffectImages.EffectAbyssalBlitzMines);
             }
         }
 
@@ -340,7 +340,7 @@ internal static class RevenantHelper
             foreach (EffectEvent effect in abyssalBlots)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectAbyssalBlot);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectAbyssalBlot);
             }
         }
 
@@ -356,7 +356,7 @@ internal static class RevenantHelper
                 (long start, long end) lifespanWarning = (effect.Time, effect.Time + warningDuration);
                 var circle = (CircleDecoration)new CircleDecoration(radius, lifespanWarning, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill);
                 replay.Decorations.AddWithGrowing(circle, lifespanWarning.end);
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanWarning, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanWarning, connector).UsingSkillMode(skill));
                 // Hit indicator
                 if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.RevenantSpearAbyssalRazeHit, out var abyssalRazeHits))
                 {
@@ -365,7 +365,7 @@ internal static class RevenantHelper
                     {
                         (long start, long end) lifespanHit = (lifespanWarning.end, lifespanWarning.end + 500);
                         replay.Decorations.Add(new CircleDecoration(radius, lifespanHit, color, 0.5, connector).UsingSkillMode(skill));
-                        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanHit, connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(EffectImages.EffectAbyssalRaze, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespanHit, connector).UsingSkillMode(skill));
                     }
                 }
             }

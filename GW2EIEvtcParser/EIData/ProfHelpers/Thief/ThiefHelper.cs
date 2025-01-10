@@ -153,7 +153,7 @@ internal static class ThiefHelper
                 (long, long) lifespan = enter.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                 var connector = new PositionConnector(enter.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                AttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                AttachedDecoration icon = new IconDecoration(EffectImages.PortalShadowPortalPrepare, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                 replay.Decorations.Add(icon);
                 entranceDecorations.Add(icon);
             }
@@ -166,7 +166,7 @@ internal static class ThiefHelper
                 (long, long) lifespan = exit.ComputeLifespan(log, 8000, player.AgentItem, ShadowPortalOpenedBuff);
                 var connector = new PositionConnector(exit.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                AttachedDecoration icon = new IconDecoration(ParserIcons.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                AttachedDecoration icon = new IconDecoration(EffectImages.PortalShadowPortalOpen, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                 AttachedDecoration? entranceDecoration = entranceDecorations.FirstOrDefault(x => Math.Abs(x.Lifespan.start - exit.Time) < ServerDelayConstant);
                 if (entranceDecoration != null)
                 {
@@ -183,7 +183,7 @@ internal static class ThiefHelper
             foreach (EffectEvent effect in sealAreaAoEs)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 8000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectSealArea);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSealArea);
             }
         }
         // Shadow Refuge
@@ -193,7 +193,7 @@ internal static class ThiefHelper
             foreach (EffectEvent effect in shadowRefuges)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectShadowRefuge);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectShadowRefuge);
             }
         }
     }

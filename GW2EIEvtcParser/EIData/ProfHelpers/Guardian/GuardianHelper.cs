@@ -212,7 +212,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in ringOfWardings)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectRingOfWarding);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectRingOfWarding);
             }
         }
         // Line of Warding (Staff 5)
@@ -225,7 +225,7 @@ internal static class GuardianHelper
                 var connector = new PositionConnector(effect.Position);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectLineOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectLineOfWarding, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
         // Wall of Reflection
@@ -238,7 +238,7 @@ internal static class GuardianHelper
                 var connector = new PositionConnector(effect.Position);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWallOfReflection, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectWallOfReflection, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
         // Sanctuary
@@ -248,7 +248,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in sanctuaries)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 7000); // 7s with trait
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectSanctuary);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectSanctuary);
             }
         }
         // Shield of the Avenger
@@ -258,7 +258,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in shieldOfTheAvengers)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectShieldOfTheAvenger);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectShieldOfTheAvenger);
             }
         }
 
@@ -270,7 +270,7 @@ internal static class GuardianHelper
             {
                 // Only displays if fully channeled.
                 (long start, long end) lifespan = effect.ComputeLifespanWithSecondaryEffectAndPosition(log, EffectGUIDs.GuardianGenericLightEffect, effect.Duration);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSignetOfMercy);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSignetOfMercy);
             }
         }
 
@@ -282,7 +282,7 @@ internal static class GuardianHelper
             {
                 long duration = log.FightData.Logic.SkillMode == FightLogic.SkillModeEnum.WvW ? 3000 : 5000;
                 (long start, long end) lifespan = effect.ComputeDynamicLifespan(log, duration);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 140, ParserIcons.EffectHuntersWard); // radius approximation
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 140, EffectImages.EffectHuntersWard); // radius approximation
             }
         }
 
@@ -293,7 +293,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsOfEnergy)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfEnergy);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfEnergy);
             }
         }
 
@@ -304,7 +304,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsOfVengeance)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfVengeance);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfVengeance);
             }
         }
 
@@ -315,7 +315,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsOfPunishment)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfPunishment);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfPunishment);
             }
         }
 
@@ -326,7 +326,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsOfBlades)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfBlades);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfBlades);
             }
         }
 
@@ -337,7 +337,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsOfResolution)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfResolution);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfResolution);
             }
         }
 
@@ -349,7 +349,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in solarStorms)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 2000); // 2000 apromixated duration
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectSolarStorm);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectSolarStorm);
             }
             // Spear Impact
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.GuardianSolarStormSpearImpact, out var spearImpacts))
@@ -370,7 +370,7 @@ internal static class GuardianHelper
             foreach (EffectEvent effect in symbolsOfLuminance)
             {
                 (long start, long end) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSymbolOfLuminance);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSymbolOfLuminance);
             }
         }
     }

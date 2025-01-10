@@ -154,7 +154,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in wellOfBloods)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfBlood);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfBlood);
             }
         }
         // Well of Suffering
@@ -164,7 +164,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in wellOfSufferings)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 6000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfSuffering);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfSuffering);
             }
         }
         // Well of Darkness
@@ -174,7 +174,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in wellOfDarknesses)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfDarkness);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfDarkness);
             }
         }
         // Well of Corruption
@@ -184,7 +184,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in wellOfCorruptions)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfCorruption);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfCorruption);
             }
         }
         // Corrosive Poison Cloud
@@ -194,7 +194,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in poisonClouds)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 8000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectCorrosivePoisonCloud);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectCorrosivePoisonCloud);
             }
         }
         // Plaguelands
@@ -220,7 +220,7 @@ internal static class NecromancerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 10000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectPlaguelands, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectPlaguelands, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -242,12 +242,12 @@ internal static class NecromancerHelper
                         fromDodge = true;
                         skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBlood);
                     }
-                    icon = skill.SkillID == Chillblains ? ParserIcons.EffectChillblains : ParserIcons.EffectMarkOfBlood;
+                    icon = skill.SkillID == Chillblains ? EffectImages.EffectChillblains : EffectImages.EffectMarkOfBlood;
                 }
                 else
                 {
                     skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblains);
-                    icon = ParserIcons.EffectMarkOfBloodOrChillblains;
+                    icon = EffectImages.EffectMarkOfBloodOrChillblains;
                 }
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, fromDodge ? 6000 : 30000);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, icon);
@@ -260,7 +260,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in marksOfBloodActivated)
             {
                 (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectMarkOfBlood);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, EffectImages.EffectMarkOfBlood);
             }
         }
         // Chillblains Activated (Staff 3)
@@ -270,7 +270,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in chillblainsActivated)
             {
                 (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectChillblains);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, EffectImages.EffectChillblains);
             }
         }
 
@@ -281,7 +281,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in putridMarks)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectPutridMark);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectPutridMark);
             }
         }
         // Putrid Mark (Staff 4) Activated
@@ -291,7 +291,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in putridMarksActivated)
             {
                 (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectPutridMark);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, EffectImages.EffectPutridMark);
             }
         }
 
@@ -302,7 +302,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in reapersMarks)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 30000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectReapersMark);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectReapersMark);
             }
         }
         // Reaper's Mark (Staff 5) Activated
@@ -312,7 +312,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in reapersMarksActivated)
             {
                 (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, ParserIcons.EffectReapersMark);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 300, EffectImages.EffectReapersMark);
             }
         }
 
@@ -323,7 +323,7 @@ internal static class NecromancerHelper
             foreach (EffectEvent effect in signetOfUndeath)
             {
                 (long, long) lifespan = ((int)effect.Time, (int)effect.Time + 500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectSignetOfUndeath);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectSignetOfUndeath);
             }
         }
 
@@ -335,7 +335,7 @@ internal static class NecromancerHelper
             {
                 long duration = log.FightData.Logic.SkillMode == EncounterLogic.FightLogic.SkillModeEnum.WvW ? 5000 : 8000;
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, duration);
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 180, 200, ParserIcons.EffectSpectralRing);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 180, 200, EffectImages.EffectSpectralRing);
             }
         }
     }

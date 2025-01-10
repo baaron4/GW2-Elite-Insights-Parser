@@ -119,9 +119,9 @@ internal static class RenegadeHelper
                             // AoE Radius and icons
                             (long, long) lifespan = (effect.Time, effect.Time + 3000);
                             var centralConnector = new PositionConnector(positions.Average());
-                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardmentPortal, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, playerPositionConnector)
+                            replay.Decorations.Add(new IconDecoration(EffectImages.EffectCitadelBombardmentPortal, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, playerPositionConnector)
                                 .UsingSkillMode(skill));
-                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector)
+                            replay.Decorations.Add(new IconDecoration(EffectImages.EffectCitadelBombardment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector)
                                 .UsingSkillMode(skill));
                             // TODO: Find a way to tell the user that the circle is approximative.
                             //replay.Decorations.Add(new CircleDecoration(230, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));

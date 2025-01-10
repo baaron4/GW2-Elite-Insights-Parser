@@ -59,7 +59,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in wellsOfEternity)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfEternity);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfEternity);
             }
         }
         // Well of Eternity - Pulses
@@ -84,7 +84,7 @@ internal static class ChronomancerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfAction, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectWellOfAction, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
 
                 // Well pulses - Hard coded because the effects don't have a Src
                 int pulseTimeDelay = 0;
@@ -116,7 +116,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in wellsOfCalamity)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfCalamity);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfCalamity);
             }
         }
         // Well of Calamity - Pulses
@@ -139,7 +139,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in wellsOfPrecognition)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfPrecognition);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfPrecognition);
             }
         }
         // Well of Precognition - Pulses
@@ -164,7 +164,7 @@ internal static class ChronomancerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSenility, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectWellOfSenility, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
 
                 // Well pulses - Hard coded because the effects don't have a Src
                 int pulseTimeDelay = 0;
@@ -196,7 +196,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in gravityWells)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGravityWell);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectGravityWell);
             }
         }
         // Gravity Well - Pulses
