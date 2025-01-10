@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using GW2EIEvtcParser.Exceptions;
+﻿using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.ParsedData;
 
 namespace GW2EIEvtcParser.EIData.BuffSimulators;

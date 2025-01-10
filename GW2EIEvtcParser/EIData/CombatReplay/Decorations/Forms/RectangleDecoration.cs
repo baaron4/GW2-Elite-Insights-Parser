@@ -1,5 +1,4 @@
 ﻿using GW2EIEvtcParser.ParsedData;
-using static GW2EIEvtcParser.EIData.CircleDecoration;
 
 namespace GW2EIEvtcParser.EIData;
 

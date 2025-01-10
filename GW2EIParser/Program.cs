@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GW2EIParserCommons;
-using System.Windows.Forms;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIParser;

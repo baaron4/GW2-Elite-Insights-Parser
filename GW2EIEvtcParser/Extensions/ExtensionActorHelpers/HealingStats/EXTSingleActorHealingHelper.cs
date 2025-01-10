@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using GW2EIEvtcParser.EIData;
+﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;
 using static GW2EIEvtcParser.Extensions.HealingStatsExtensionHandler;
 
