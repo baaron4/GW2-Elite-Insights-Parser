@@ -7,22 +7,28 @@ namespace GW2EIEvtcParser.ParserHelpers;
 internal static class TraitImages
 {
     // TODO: organize this
-    public const string ExposedWeakness = "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png";
-    public const string HardyConduit = "https://wiki.guildwars2.com/images/2/25/Hardy_Conduit.png";
+    #region Elementalist
+    public const string EarthenBlast = "https://wiki.guildwars2.com/images/e/e2/Earthen_Blast.png";
+    public const string ElectricDischarge = "https://wiki.guildwars2.com/images/a/a4/Electric_Discharge.png";
     public const string PersistingFlames = "https://wiki.guildwars2.com/images/5/5f/Persisting_Flames.png";
     public const string StoneFlesh = "https://wiki.guildwars2.com/images/b/b9/Stone_Flesh.png";
     public const string PyromancersTraining = "https://wiki.guildwars2.com/images/e/e6/Pyromancer%27s_Training.png";
-    public const string BurningRage = "https://wiki.guildwars2.com/images/b/bd/Burning_Rage.png";
     public const string BoltToTheHeart = "https://wiki.guildwars2.com/images/f/f8/Bolt_to_the_Heart.png";
     public const string SerratedStones = "https://wiki.guildwars2.com/images/6/60/Serrated_Stones.png";
     public const string EmpoweringAuras = "https://wiki.guildwars2.com/images/4/44/Empowering_Auras.png";
     public const string AquamancersTraining = "https://wiki.guildwars2.com/images/8/81/Aquamancer%27s_Training.png";
+    public const string HardyConduit = "https://wiki.guildwars2.com/images/2/25/Hardy_Conduit.png";
+    public const string BurningRage = "https://wiki.guildwars2.com/images/b/bd/Burning_Rage.png";
     public const string ElementalEmpowerment = "https://wiki.guildwars2.com/images/e/e6/Elemental_Empowerment.png";
     public const string TranscendentTempest = "https://wiki.guildwars2.com/images/a/ac/Transcendent_Tempest_%28effect%29.png";
     public const string WeaversProwess = "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png";
     public const string ElementsOfRage = "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png";
     public const string SwiftRevenge = "https://wiki.guildwars2.com/images/9/94/Swift_Revenge.png";
     public const string HarmoniousConduit = "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png";
+    public const string HealingRipple = "https://wiki.guildwars2.com/images/1/1c/Healing_Ripple.png";
+    public const string ElementalRefreshment = "https://wiki.guildwars2.com/images/c/ce/Elemental_Refreshment.png";
+    #endregion
+    public const string ExposedWeakness = "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png";
     public const string VampiricPresence = "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";
     public const string SadisticSearing = "https://wiki.guildwars2.com/images/d/dd/Sadistic_Searing.png";
     public const string HardenedAuras = "https://wiki.guildwars2.com/images/2/23/Hardened_Auras.png";
