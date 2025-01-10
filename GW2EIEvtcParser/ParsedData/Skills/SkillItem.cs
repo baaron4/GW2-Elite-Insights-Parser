@@ -564,8 +564,8 @@ public class SkillItem
         { FlashFreezeDelayed, SkillImages.FlashFreeze },
 #endregion  ElementalistIcons
         #region EngineerIcons
-        { ShredderGyroHit, "https://wiki.guildwars2.com/images/9/96/Shredder_Gyro.png" },
-        { ShredderGyroDamage, "https://assets.gw2dat.com/1128595.png" },
+        { ShredderGyroHit, SkillImages.ShredderGyro },
+        { ShredderGyroDamage, SkillImages.ShredderGyro },
         { HealingMistOrSoothingDetonation, "https://i.imgur.com/cS05J70.png" },
         { ThermalReleaseValve, "https://wiki.guildwars2.com/images/0/0c/Thermal_Release_Valve.png" },
         { RefractionCutterBlade, "https://wiki.guildwars2.com/images/1/10/Refraction_Cutter.png" },
