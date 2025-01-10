@@ -1,8 +1,4 @@
-﻿using static System.Net.WebRequestMethods;
-using static GW2EIEvtcParser.ArcDPSEnums;
-using static GW2EIEvtcParser.ParserHelper;
-
-namespace GW2EIEvtcParser.ParserHelpers;
+﻿namespace GW2EIEvtcParser.ParserHelpers;
 
 #pragma warning disable CA1823 // Unused field
 internal static class SkillImages
