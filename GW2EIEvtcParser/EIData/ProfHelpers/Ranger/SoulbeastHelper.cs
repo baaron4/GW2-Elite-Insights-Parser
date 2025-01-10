@@ -36,17 +36,17 @@ internal static class SoulbeastHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (4s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "10% (10s) after disabling foe", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.TwiceAsVicious, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, BuffImages.FuriousStrength, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, BuffImages.FuriousStrength, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, BuffImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "15% under fury", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, BuffImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021BalanceHotFix, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, BuffImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_LoudWhistle, [Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.LoudWhistle, DamageModifierMode.All).UsingChecker((x,log) => x.IsOverNinety).WithBuilds(GW2Builds.May2018Balance),
-        new DamageLogDamageModifier(Mod_OppressiveSuperiority, "Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, BuffImages.OppressiveSuperiority, (x,log) =>
+        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (4s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "10% (10s) after disabling foe", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.TwiceAsVicious, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_TwiceAsVicious, TwiceAsVicious, "Twice as Vicious", "5% (10s) after disabling foe", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.TwiceAsVicious, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "7% under fury", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance, GW2Builds.May2021BalanceHotFix),
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "15% under fury", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021BalanceHotFix, GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_FuriousStrength, Fury, "Furious Strength", "10% under fury", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByStack, TraitImages.FuriousStrength, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_LoudWhistle, [Stout, Deadly, Ferocious, Supportive, Versatile], "Loud Whistle", "10% while merged and hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.LoudWhistle, DamageModifierMode.All).UsingChecker((x,log) => x.IsOverNinety).WithBuilds(GW2Builds.May2018Balance),
+        new DamageLogDamageModifier(Mod_OppressiveSuperiority, "Oppressive Superiority", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Soulbeast, TraitImages.OppressiveSuperiority, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -56,35 +56,35 @@ internal static class SoulbeastHelper
             }
             return selfHP > dstHP;
         }, DamageModifierMode.All ).UsingApproximate(true),
-        new SkillDamageModifier(Mod_OneWolfPack,"One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.OneWolfPack, DamageModifierMode.All),
+        new SkillDamageModifier(Mod_OneWolfPack,"One Wolf Pack", "per hit (max. once every 0.25s)", OneWolfPackDamage, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.OneWolfPack, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-20% under protection", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2024Balance),
-        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-25% under protection", DamageSource.NoPets, -25.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, BuffImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.October2024Balance),
-        new BuffOnActorDamageModifier(Mod_DolyakStance, DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, BuffImages.DolyakStance, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-33% under protection", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-20% under protection", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.July2019Balance, GW2Builds.October2024Balance),
+        new BuffOnActorDamageModifier(Mod_SecondSkin, Protection, "Second Skin", "-25% under protection", DamageSource.NoPets, -25.0, DamageType.Condition, DamageType.All, Source.Soulbeast, ByPresence, TraitImages.SecondSkin, DamageModifierMode.sPvP).WithBuilds(GW2Builds.October2024Balance),
+        new BuffOnActorDamageModifier(Mod_DolyakStance, DolyakStanceBuff, "Dolyak Stance", "-33%", DamageSource.All, -33.0, DamageType.StrikeAndCondition, DamageType.All, Source.Common, ByPresence, SkillImages.DolyakStance, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Dolyak Stance", DolyakStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.DolyakStance),
-        new Buff("Griffon Stance", GriffonStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.GriffonStance),
-        new Buff("Moa Stance", MoaStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, BuffImages.MoaStance),
-        new Buff("Vulture Stance", VultureStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, BuffImages.VultureStance),
-        new Buff("Bear Stance", BearStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, BuffImages.BearStance),
-        new Buff("One Wolf Pack", OneWolfPackBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, BuffImages.OneWolfPack),
-        new Buff("Deadly", Deadly, Source.Soulbeast, BuffClassification.Other, BuffImages.DeadlyArchetype),
-        new Buff("Ferocious", Ferocious, Source.Soulbeast, BuffClassification.Other, BuffImages.FerociousArchetype),
-        new Buff("Supportive", Supportive, Source.Soulbeast, BuffClassification.Other, BuffImages.SupportiveArchetype),
-        new Buff("Versatile", Versatile, Source.Soulbeast, BuffClassification.Other, BuffImages.VersatileArchetype),
-        new Buff("Stout", Stout, Source.Soulbeast, BuffClassification.Other, BuffImages.StoutArchetype),
-        new Buff("Unstoppable Union", UnstoppableUnion, Source.Soulbeast, BuffClassification.Other, BuffImages.UnstoppableUnion),
-        new Buff("Twice as Vicious", TwiceAsVicious, Source.Soulbeast, BuffClassification.Other, BuffImages.TwiceAsVicious),
-        new Buff("Unflinching Fortitude", UnflinchingFortitudeBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.UnflinchingFortitude),
-        new Buff("Defy Pain", DefyPainSoulbeastBuff, Source.Soulbeast, BuffClassification.Defensive, BuffImages.DefyPain),
+        new Buff("Dolyak Stance", DolyakStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, SkillImages.DolyakStance),
+        new Buff("Griffon Stance", GriffonStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, SkillImages.GriffonStance),
+        new Buff("Moa Stance", MoaStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Support, SkillImages.MoaStance),
+        new Buff("Vulture Stance", VultureStanceBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, SkillImages.VultureStance),
+        new Buff("Bear Stance", BearStance, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Defensive, SkillImages.BearStance),
+        new Buff("One Wolf Pack", OneWolfPackBuff, Source.Soulbeast, BuffStackType.Queue, 25, BuffClassification.Offensive, SkillImages.OneWolfPack),
+        new Buff("Deadly", Deadly, Source.Soulbeast, BuffClassification.Other, TraitImages.DeadlyArchetype),
+        new Buff("Ferocious", Ferocious, Source.Soulbeast, BuffClassification.Other, TraitImages.FerociousArchetype),
+        new Buff("Supportive", Supportive, Source.Soulbeast, BuffClassification.Other, TraitImages.SupportiveArchetype),
+        new Buff("Versatile", Versatile, Source.Soulbeast, BuffClassification.Other, TraitImages.VersatileArchetype),
+        new Buff("Stout", Stout, Source.Soulbeast, BuffClassification.Other, TraitImages.StoutArchetype),
+        new Buff("Unstoppable Union", UnstoppableUnion, Source.Soulbeast, BuffClassification.Other, TraitImages.UnstoppableUnion),
+        new Buff("Twice as Vicious", TwiceAsVicious, Source.Soulbeast, BuffClassification.Other, TraitImages.TwiceAsVicious),
+        new Buff("Unflinching Fortitude", UnflinchingFortitudeBuff, Source.Soulbeast, BuffClassification.Defensive, SkillImages.UnflinchingFortitude),
+        new Buff("Defy Pain", DefyPainSoulbeastBuff, Source.Soulbeast, BuffClassification.Defensive, SkillImages.DefyPain),
     ];
 
 }

@@ -34,18 +34,18 @@ internal static class SpecterHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_ShadowShroud, ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, BuffImages.EnterShadowShroud, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
+        new BuffOnActorDamageModifier(Mod_ShadowShroud, ShadowShroud, "Shadow Shroud", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Specter, ByPresence, SkillImages.EnterShadowShroud, DamageModifierMode.PvE).WithBuilds(GW2Builds.November2022Balance),
     ];
 
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Shadow Shroud", ShadowShroud, Source.Specter, BuffClassification.Other, BuffImages.EnterShadowShroud),
-        new Buff("Endless Night", EndlessNight, Source.Specter, BuffClassification.Other, BuffImages.EndlessNight),
-        new Buff("Shrouded", Shrouded, Source.Specter, BuffClassification.Support, BuffImages.EnterShadowShroud),
-        new Buff("Shrouded Ally", ShroudedAlly, Source.Specter, BuffClassification.Other, BuffImages.Siphon),
-        new Buff("Rot Wallow Venom", RotWallowVenom, Source.Specter, BuffStackType.StackingConditionalLoss, 100, BuffClassification.Offensive, BuffImages.DarkSentry),
-        new Buff("Consume Shadows", ConsumeShadows, Source.Specter, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.ConsumeShadows),
+        new Buff("Shadow Shroud", ShadowShroud, Source.Specter, BuffClassification.Other, SkillImages.EnterShadowShroud),
+        new Buff("Endless Night", EndlessNight, Source.Specter, BuffClassification.Other, SkillImages.EndlessNight),
+        new Buff("Shrouded", Shrouded, Source.Specter, BuffClassification.Support, SkillImages.EnterShadowShroud),
+        new Buff("Shrouded Ally", ShroudedAlly, Source.Specter, BuffClassification.Other, SkillImages.Siphon),
+        new Buff("Rot Wallow Venom", RotWallowVenom, Source.Specter, BuffStackType.StackingConditionalLoss, 100, BuffClassification.Offensive, TraitImages.DarkSentry),
+        new Buff("Consume Shadows", ConsumeShadows, Source.Specter, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, TraitImages.ConsumeShadows),
     ];
 
     private static HashSet<int> Minions =

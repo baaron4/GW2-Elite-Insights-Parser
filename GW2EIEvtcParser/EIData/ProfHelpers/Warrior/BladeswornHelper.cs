@@ -37,21 +37,21 @@ internal static class BladeswornHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, BuffImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, TraitImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Gunsaber Mode", GunsaberMode, Source.Bladesworn, BuffClassification.Other, BuffImages.UnsheatheGunsaber),
-        new Buff("Dragon Trigger", DragonTrigger, Source.Bladesworn, BuffClassification.Other, BuffImages.DragonTrigger),
+        new Buff("Gunsaber Mode", GunsaberMode, Source.Bladesworn, BuffClassification.Other, SkillImages.UnsheatheGunsaber),
+        new Buff("Dragon Trigger", DragonTrigger, Source.Bladesworn, BuffClassification.Other, SkillImages.DragonTrigger),
         new Buff("Positive Flow", PositiveFlow, Source.Bladesworn, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.AttributeBonus),
-        new Buff("Fierce as Fire", FierceAsFire, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FierceAsFire),
-        new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other, BuffImages.CombatStimulant),
-        new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.GunsAndGlory),
-        new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, BuffImages.TacticalReload),
-        new Buff("Overcharged Cartridges", OverchargedCartridgesBuff, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.OverchargedCartridges).WithBuilds(GW2Builds.June2022Balance),
+        new Buff("Fierce as Fire", FierceAsFire, Source.Bladesworn, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.FierceAsFire),
+        new Buff("Stim State", StimState, Source.Bladesworn, BuffClassification.Other, SkillImages.CombatStimulant),
+        new Buff("Guns and Glory", GunsAndGlory, Source.Bladesworn, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.GunsAndGlory),
+        new Buff("Tactical Reload", TacticalReload, Source.Bladesworn, BuffClassification.Other, SkillImages.TacticalReload),
+        new Buff("Overcharged Cartridges", OverchargedCartridgesBuff, Source.Bladesworn, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.OverchargedCartridges).WithBuilds(GW2Builds.June2022Balance),
     ];
 
 

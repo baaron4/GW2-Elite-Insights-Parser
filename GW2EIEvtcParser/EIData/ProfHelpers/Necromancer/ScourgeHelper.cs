@@ -41,8 +41,8 @@ internal static class ScourgeHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Sadistic Searing", SadisticSearing, Source.Scourge, BuffClassification.Other, BuffImages.SadisticSearing),
-        new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.SandSwell),
+        new Buff("Sadistic Searing", SadisticSearing, Source.Scourge, BuffClassification.Other, TraitImages.SadisticSearing),
+        new Buff("Path Uses", PathUses, Source.Scourge, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.SandSwell),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

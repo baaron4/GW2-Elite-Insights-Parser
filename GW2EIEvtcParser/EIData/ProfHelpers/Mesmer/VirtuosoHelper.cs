@@ -35,22 +35,22 @@ internal static class VirtuosoHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new DamageLogDamageModifier(Mod_MentalFocus, "Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, BuffImages.MentalFocus, (x,log) =>
+        new DamageLogDamageModifier(Mod_MentalFocus, "Mental Focus", "10% to foes within 600 range", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Virtuoso, TraitImages.MentalFocus, (x,log) =>
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 600
             , DamageModifierMode.PvE).UsingApproximate(true).WithBuilds(GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(Mod_DeadlyBlades, DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, BuffImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_DeadlyBlades, DeadlyBlades, "Deadly Blades", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Virtuoso, ByPresence, TraitImages.DeadlyBlades, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, BuffImages.DeadlyBlades),
-        new Buff("Bladeturn", Bladeturn, Source.Virtuoso, BuffClassification.Other, BuffImages.BladeturnRequiem),
+        new Buff("Deadly Blades", DeadlyBlades, Source.Virtuoso, BuffClassification.Other, TraitImages.DeadlyBlades),
+        new Buff("Bladeturn", Bladeturn, Source.Virtuoso, BuffClassification.Other, SkillImages.BladeturnRequiem),
         new Buff("Virtuoso Blade", VirtuosoBlades, Source.Virtuoso, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.PowerAttribute),
-        new Buff("Psychic Riposte", PsychicRiposteBuff, Source.Virtuoso, BuffClassification.Other, BuffImages.PsychicRiposte),
+        new Buff("Psychic Riposte", PsychicRiposteBuff, Source.Virtuoso, BuffClassification.Other, TraitImages.PsychicRiposte),
     ];
 
     public static List<BuffEvent> TransformVirtuosoBladeStorage(IReadOnlyList<BuffEvent> buffs, AgentItem a, SkillData skillData, EvtcVersionEvent evtcVersion)

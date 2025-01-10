@@ -23,42 +23,42 @@ internal static class TempestHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_HarmoniousConduit, HarmoniousConduit, "Harmonious Conduit", "10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HarmoniousConduit, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_HarmoniousConduit, HarmoniousConduit, "Harmonious Conduit", "10% (4s) after overload", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.HarmoniousConduit, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife ,GW2Builds.October2019Balance),
-        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance, GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "7% after overload", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "15% after overload", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "15% after overload", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.August2022Balance, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TranscendentTempest, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_TranscendentTempest, TranscendentTempest, "Transcendent Tempest", "25% after overload", DamageSource.NoPets, 25.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TranscendentTempest, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "7% after giving aura", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "7% after giving aura", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.June2023Balance),
-        new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_TempestuousAria, TempestuousAria, "Tempestuous Aria", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.June2023Balance, GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(Mod_TempestuousAriaStrike, TempestuousAria, "Tempestuous Aria (Strike)", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_TempestuousAriaStrike, TempestuousAria, "Tempestuous Aria (Strike)", "10% after giving aura", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(Mod_TempestuousAriaCondition, TempestuousAria, "Tempestuous Aria (Condition)", "5% after giving aura", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, BuffImages.TempestuousAria, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_TempestuousAriaCondition, TempestuousAria, "Tempestuous Aria (Condition)", "5% after giving aura", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Tempest, ByPresence, TraitImages.TempestuousAria, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_HardyConduit, Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, BuffImages.HardyConduit, DamageModifierMode.All), // We only compute the added effectiveness
+        new BuffOnActorDamageModifier(Mod_HardyConduit, Protection, "Hardy Conduit", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Tempest, ByPresence, TraitImages.HardyConduit, DamageModifierMode.All), // We only compute the added effectiveness
     ];
 
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Rebound", Rebound, Source.Tempest, BuffClassification.Defensive, BuffImages.Rebound),
-        new Buff("Harmonious Conduit", HarmoniousConduit, Source.Tempest, BuffClassification.Other, BuffImages.HarmoniousConduit)
+        new Buff("Rebound", Rebound, Source.Tempest, BuffClassification.Defensive, SkillImages.Rebound),
+        new Buff("Harmonious Conduit", HarmoniousConduit, Source.Tempest, BuffClassification.Other, TraitImages.HarmoniousConduit)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
-        new Buff("Transcendent Tempest", TranscendentTempest, Source.Tempest, BuffClassification.Other, BuffImages.TranscendentTempest)
+        new Buff("Transcendent Tempest", TranscendentTempest, Source.Tempest, BuffClassification.Other, TraitImages.TranscendentTempest)
             .WithBuilds(GW2Builds.October2019Balance),
-        new Buff("Static Charge", StaticCharge, Source.Tempest, BuffClassification.Offensive, BuffImages.OverloadAir),
-        new Buff("Heat Sync", HeatSync, Source.Tempest, BuffClassification.Support, BuffImages.HeatSync),
-        new Buff("Tempestuous Aria", TempestuousAria, Source.Tempest, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.TempestuousAria)
+        new Buff("Static Charge", StaticCharge, Source.Tempest, BuffClassification.Offensive, SkillImages.OverloadAir),
+        new Buff("Heat Sync", HeatSync, Source.Tempest, BuffClassification.Support, SkillImages.HeatSync),
+        new Buff("Tempestuous Aria", TempestuousAria, Source.Tempest, BuffStackType.Queue, 9, BuffClassification.Other, TraitImages.TempestuousAria)
             .WithBuilds(GW2Builds.June2023Balance),
     ];
 

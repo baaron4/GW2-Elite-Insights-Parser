@@ -54,13 +54,13 @@ internal static class MechanistHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Need to check mech specy id for those
-        new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, BuffImages.ForceSignet, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ForceSignet, ForceSignet, "Force Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Mechanist, ByPresence, SkillImages.ForceSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
             .UsingChecker((x,log) =>
             {
                 return x.From == x.CreditedFrom || x.From.IsSpecies(MinionID.JadeMech);
             }),
-        new BuffOnActorDamageModifier(Mod_SuperconductingSignet, SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.SuperconductingSignet, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_SuperconductingSignet, SuperconductingSignet, "Superconducting Signet", "10%, including Mech", DamageSource.All, 10.0, DamageType.Condition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.SuperconductingSignet, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta4)
             .UsingChecker((x,log) =>
             {
@@ -70,27 +70,27 @@ internal static class MechanistHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_BarrierSignet, BarrierSignet, "Barrier Signet", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, BuffImages.BarrierSignet, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_BarrierSignet, BarrierSignet, "Barrier Signet", "-10%", DamageSource.NoPets, -10, DamageType.StrikeAndCondition, DamageType.All, Source.Mechanist, ByPresence, SkillImages.BarrierSignet, DamageModifierMode.All),
     ];
 
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Rectifier Signet", RectifierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.RectifierSignet),
-        new Buff("Barrier Signet", BarrierSignet, Source.Mechanist, BuffClassification.Other, BuffImages.BarrierSignet),
-        new Buff("Force Signet", ForceSignet, Source.Mechanist, BuffClassification.Other, BuffImages.ForceSignet),
-        new Buff("Shift Signet", ShiftSignetBuff, Source.Mechanist, BuffClassification.Other, BuffImages.ShiftSignet),
-        new Buff("Superconducting Signet", SuperconductingSignet, Source.Mechanist, BuffClassification.Other, BuffImages.SuperconductingSignet),
-        new Buff("Overclock Signet", OverclockSignetBuff, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
-        new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, BuffImages.MechanicalGenius),
-        new Buff("Exigency Protocols", ExigencyProtocol, Source.PetSpecific, BuffClassification.Other, BuffImages.ExigencyProtocol),
+        new Buff("Rectifier Signet", RectifierSignet, Source.Mechanist, BuffClassification.Other, SkillImages.RectifierSignet),
+        new Buff("Barrier Signet", BarrierSignet, Source.Mechanist, BuffClassification.Other, SkillImages.BarrierSignet),
+        new Buff("Force Signet", ForceSignet, Source.Mechanist, BuffClassification.Other, SkillImages.ForceSignet),
+        new Buff("Shift Signet", ShiftSignetBuff, Source.Mechanist, BuffClassification.Other, SkillImages.ShiftSignet),
+        new Buff("Superconducting Signet", SuperconductingSignet, Source.Mechanist, BuffClassification.Other, SkillImages.SuperconductingSignet),
+        new Buff("Overclock Signet", OverclockSignetBuff, Source.Mechanist, BuffClassification.Other, SkillImages.OverclockSignet),
+        new Buff("Mechanical Genius", MechanicalGenius, Source.Mechanist, BuffClassification.Other, TraitImages.MechanicalGenius),
+        new Buff("Exigency Protocols", ExigencyProtocol, Source.PetSpecific, BuffClassification.Other, TraitImages.ExigencyProtocol),
         //
         //new Buff("Rectifier Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.RectifierSignet),
-        new Buff("Barrier Signet (J-Drive)", BarrierSignetJDrive, Source.Mechanist, BuffClassification.Other, BuffImages.BarrierSignet),
+        new Buff("Barrier Signet (J-Drive)", BarrierSignetJDrive, Source.Mechanist, BuffClassification.Other, SkillImages.BarrierSignet),
         //new Buff("Force Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.ForceSignet),
         //new Buff("Shift Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.ShiftSignet),
         //new Buff("Superconducting Signet (J-Drive)",-1, Source.Mechanist, BuffNature.GraphOnlyBuff, BuffImages.SuperconductingSignet),
-        new Buff("Overclock Signet (J-Drive)", OverclockSignetJDrive, Source.Mechanist, BuffClassification.Other, BuffImages.OverclockSignet),
+        new Buff("Overclock Signet (J-Drive)", OverclockSignetJDrive, Source.Mechanist, BuffClassification.Other, SkillImages.OverclockSignet),
     ];
 
     private static HashSet<int> Minions =

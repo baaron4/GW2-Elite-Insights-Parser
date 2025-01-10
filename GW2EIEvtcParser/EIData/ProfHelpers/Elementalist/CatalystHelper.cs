@@ -41,52 +41,52 @@ internal static class CatalystHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "5%", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance2),
-        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.March2022Balance2, GW2Builds.SOTOBetaAndSilentSurfNM),
-        new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.March2022Balance),
-        new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.March2022Balance),
-        new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, BuffImages.RelentlessFire, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_RelentlessFire, RelentlessFire, "Relentless Fire", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByPresence, SkillImages.RelentlessFire, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.March2022Balance),
-        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, TraitImages.EmpoweringAuras, DamageModifierMode.All)
             .WithBuilds(GW2Builds.EODBeta2, GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, TraitImages.EmpoweringAuras, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, TraitImages.EmpoweringAuras, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, BuffImages.EmpoweringAuras, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_EmpoweringAuras, EmpoweringAuras, "Empowering Auras", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Catalyst, ByStack, TraitImages.EmpoweringAuras, DamageModifierMode.All)
             .WithBuilds(GW2Builds.September2023Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_HardenedAuras, HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.NoPets, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, BuffImages.HardenedAuras, DamageModifierMode.All),// TODO Check if strike only
+        new BuffOnActorDamageModifier(Mod_HardenedAuras, HardenedAuras, "Hardened Auras", "-2% damage per stack", DamageSource.NoPets, -2, DamageType.Strike, DamageType.All, Source.Catalyst, ByStack, TraitImages.HardenedAuras, DamageModifierMode.All),// TODO Check if strike only
     ];
 
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Flame Wheel", FlameWheelBuff, Source.Catalyst, BuffClassification.Other, BuffImages.FlameWheel)
+        new Buff("Flame Wheel", FlameWheelBuff, Source.Catalyst, BuffClassification.Other, SkillImages.FlameWheel)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Icy Coil", IcyCoilBuff, Source.Catalyst, BuffClassification.Other, BuffImages.IcyCoil)
+        new Buff("Icy Coil", IcyCoilBuff, Source.Catalyst, BuffClassification.Other, SkillImages.IcyCoil)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Crescent Wind", CrescentWindBuff, Source.Catalyst, BuffClassification.Other, BuffImages.CrescentWind)
+        new Buff("Crescent Wind", CrescentWindBuff, Source.Catalyst, BuffClassification.Other, SkillImages.CrescentWind)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Rocky Loop", RockyLoopBuff, Source.Catalyst, BuffClassification.Other, BuffImages.RockyLoop)
+        new Buff("Rocky Loop", RockyLoopBuff, Source.Catalyst, BuffClassification.Other, SkillImages.RockyLoop)
             .WithBuilds(GW2Builds.EODBeta1, GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Relentless Fire", RelentlessFire, Source.Catalyst, BuffClassification.Other, BuffImages.RelentlessFire),
-        new Buff("Shattering Ice", ShatteringIce, Source.Catalyst, BuffClassification.Other, BuffImages.ShatteringIce),
-        new Buff("Invigorating Air", InvigoratingAirBuff, Source.Catalyst, BuffClassification.Other, BuffImages.InvigoratingAir),
-        new Buff("Immutable Stone", ImmutableStoneBuff, Source.Catalyst, BuffClassification.Other, BuffImages.ImmutableStone),
-        new Buff("Fortified Earth", FortifiedEarth, Source.Catalyst, BuffClassification.Other, BuffImages.FortifiedEarth),
-        new Buff("Elemental Celerity", ElementalCelerity, Source.Catalyst, BuffClassification.Other, BuffImages.ElementalCelerity),
-        new Buff("Soothing Water", SoothingWaterBuff, Source.Catalyst, BuffClassification.Other, BuffImages.SoothingWater),
-        new Buff("Elemental Empowerment", ElementalEmpowerment, Source.Catalyst, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ElementalEmpowerment),
-        new Buff("Empowering Auras", EmpoweringAuras, Source.Catalyst, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.EmpoweringAuras),
-        new Buff("Hardened Auras", HardenedAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.HardenedAuras),
+        new Buff("Relentless Fire", RelentlessFire, Source.Catalyst, BuffClassification.Other, SkillImages.RelentlessFire),
+        new Buff("Shattering Ice", ShatteringIce, Source.Catalyst, BuffClassification.Other, SkillImages.ShatteringIce),
+        new Buff("Invigorating Air", InvigoratingAirBuff, Source.Catalyst, BuffClassification.Other, SkillImages.InvigoratingAir),
+        new Buff("Immutable Stone", ImmutableStoneBuff, Source.Catalyst, BuffClassification.Other, SkillImages.ImmutableStone),
+        new Buff("Fortified Earth", FortifiedEarth, Source.Catalyst, BuffClassification.Other, SkillImages.FortifiedEarth),
+        new Buff("Elemental Celerity", ElementalCelerity, Source.Catalyst, BuffClassification.Other, SkillImages.ElementalCelerity),
+        new Buff("Soothing Water", SoothingWaterBuff, Source.Catalyst, BuffClassification.Other, SkillImages.SoothingWater),
+        new Buff("Elemental Empowerment", ElementalEmpowerment, Source.Catalyst, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.ElementalEmpowerment),
+        new Buff("Empowering Auras", EmpoweringAuras, Source.Catalyst, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.EmpoweringAuras),
+        new Buff("Hardened Auras", HardenedAuras, Source.Catalyst, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, TraitImages.HardenedAuras),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)

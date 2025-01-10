@@ -222,7 +222,7 @@ internal class Adina : TheKeyOfAhdashim
                 foreach (Segment seg in diamondPalisades)
                 {
                     replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
-                    replay.Decorations.AddOverheadIcon(seg, target, BuffImages.MonsterSkill);
+                    replay.Decorations.AddOverheadIcon(seg, target, SkillImages.MonsterSkill);
                 }
                 //
                 var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage);

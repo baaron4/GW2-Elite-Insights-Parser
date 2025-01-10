@@ -50,8 +50,8 @@ internal static class CommonBuffs
 
     internal static readonly IReadOnlyList<Buff> Commons =
     [
-        new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfRanger),
-        new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RuneOfMesmer),
+        new Buff("Number of Active Combat Minions", NumberOfActiveCombatMinions, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, ItemImages.SuperiorRuneOfTheRanger),
+        new Buff("Number of Clones", NumberOfClones, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, ItemImages.SuperiorRuneOfTheMesmer),
         new Buff("Number of Ranger Pets", NumberOfRangerPets, Source.Common, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.RangerPets),
         new Buff("Downed", Downed, Source.Common, BuffClassification.Other, BuffImages.Downed),
         new Buff("Downed (Pet)", DownedPet, Source.Common, BuffClassification.Other, BuffImages.HealingPowerAttribute),
@@ -97,15 +97,15 @@ internal static class CommonBuffs
         new Buff("Dark Aura", DarkAura, Source.Common, BuffClassification.Support, BuffImages.DarkAura)
             .WithBuilds(GW2Builds.April2019Balance),
         // Race
-        new Buff("Take Root", TakeRootBufft, Source.Common, BuffClassification.Other, BuffImages.TakeRoot),
-        new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, BuffImages.BecomeBear),
-        new Buff("Become the Raven", BecomeTheRaven, Source.Common, BuffClassification.Other, BuffImages.BecomeRaven),
-        new Buff("Become the Snow Leopard", BecomeTheSnowLeopard, Source.Common, BuffClassification.Other, BuffImages.BecomeLeopard),
-        new Buff("Become the Wolf", BecomeTheWolf, Source.Common, BuffClassification.Other, BuffImages.BecomeWolf),
-        new Buff("Avatar of Melandru", AvatarOfMelandru, Source.Common, BuffClassification.Other, BuffImages.AvatarOfMelandru),
-        new Buff("Power Suit", PowerSuit, Source.Common, BuffClassification.Other, BuffImages.PowerSuit),
-        new Buff("Reaper of Grenth", ReaperOfGrenth, Source.Common, BuffClassification.Other, BuffImages.ReaperOfGrenth),
-        new Buff("Charrzooka", Charrzooka, Source.Common, BuffClassification.Other, BuffImages.Charrzooka),
+        new Buff("Take Root", TakeRootBufft, Source.Common, BuffClassification.Other, SkillImages.TakeRoot),
+        new Buff("Become the Bear", BecomeTheBear, Source.Common, BuffClassification.Other, SkillImages.BecomeBear),
+        new Buff("Become the Raven", BecomeTheRaven, Source.Common, BuffClassification.Other, SkillImages.BecomeRaven),
+        new Buff("Become the Snow Leopard", BecomeTheSnowLeopard, Source.Common, BuffClassification.Other, SkillImages.BecomeLeopard),
+        new Buff("Become the Wolf", BecomeTheWolf, Source.Common, BuffClassification.Other, SkillImages.BecomeWolf),
+        new Buff("Avatar of Melandru", AvatarOfMelandru, Source.Common, BuffClassification.Other, SkillImages.AvatarOfMelandru),
+        new Buff("Power Suit", PowerSuit, Source.Common, BuffClassification.Other, SkillImages.PowerSuit),
+        new Buff("Reaper of Grenth", ReaperOfGrenth, Source.Common, BuffClassification.Other, SkillImages.ReaperOfGrenth),
+        new Buff("Charrzooka", Charrzooka, Source.Common, BuffClassification.Other, SkillImages.Charrzooka),
         // W4
         new Buff("Crystalline Heart", CrystallineHeart, Source.Common, BuffClassification.Other, BuffImages.CrystallineHeart),
         // Mounts
@@ -119,56 +119,56 @@ internal static class CommonBuffs
         // Gliding
         new Buff("Gliding Disabled", GlidingDisabled, Source.Common, BuffClassification.Debuff, BuffImages.GlidingDisabled),
         // Consumable Portal
-        new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingWhiteMantleWatchwork, Source.Common, BuffClassification.Other, BuffImages.PortalEnter),
-        new Buff("Portal Uses (Xera/Watchwork)", PortalUsesWhiteMantleWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
+        new Buff("Portal Weaving (Xera/Watchwork)", PortalWeavingWhiteMantleWatchwork, Source.Common, BuffClassification.Other, SkillImages.PortalEnter),
+        new Buff("Portal Uses (Xera/Watchwork)", PortalUsesWhiteMantleWatchwork, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.PortalEnter),
         // Consumable Summons
-        new Buff("Ogre Pet Whistle", OgrePetWhistleBuff, Source.Common, BuffClassification.Other, BuffImages.OgrePetWhistle),
-        new Buff("Fire Elemental Powder", FireElementalPowderBuff, Source.Common, BuffClassification.Other, BuffImages.FireElementalPowder),
-        new Buff("Sunspear Paragon Support", SunspearParagonSupportBuff, Source.Common, BuffClassification.Other, BuffImages.SunspearParagonSupport),
-        new Buff("Raven Spirit Shadow", RavenSpiritShadowBuff, Source.Common, BuffClassification.Other, BuffImages.RavenSpiritShadow),
+        new Buff("Ogre Pet Whistle", OgrePetWhistleBuff, Source.Common, BuffClassification.Other, ItemImages.OgrePetWhistle),
+        new Buff("Fire Elemental Powder", FireElementalPowderBuff, Source.Common, BuffClassification.Other, ItemImages.FireElementalPowder),
+        new Buff("Sunspear Paragon Support", SunspearParagonSupportBuff, Source.Common, BuffClassification.Other, ItemImages.SunspearParagonSupport),
+        new Buff("Raven Spirit Shadow", RavenSpiritShadowBuff, Source.Common, BuffClassification.Other, ItemImages.RavenSpiritShadow),
         // Primers
-        new Buff("Metabolic Primer", MetabolicPrimer, Source.Common, BuffClassification.Other, BuffImages.MetabolicPrimer),
-        new Buff("Utility Primer", UtilityPrimer, Source.Common, BuffClassification.Other, BuffImages.UtilityPrimer),
+        new Buff("Metabolic Primer", MetabolicPrimer, Source.Common, BuffClassification.Other, ItemImages.MetabolicPrimer),
+        new Buff("Utility Primer", UtilityPrimer, Source.Common, BuffClassification.Other, ItemImages.UtilityPrimer),
     ];
 
     internal static readonly IReadOnlyList<Buff> Gear =
     [
         // Sigils
-        new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfConcentration)
+        new Buff("Superior Sigil of Concentration", SuperiorSigilOfConcentration, Source.Gear, BuffClassification.Gear, ItemImages.SuperiorSigilOfConcentration)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune),
-        new Buff("Minor Sigil of Corruption", MinorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfCorruption),
-        new Buff("Major Sigil of Corruption", MajorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfCorruption),
-        new Buff("Superior Sigil of Corruption", SuperiorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCorruption),
-        new Buff("Superior Sigil of Cruelty", SuperiorSigilOfCruelty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfCruelty),
-        new Buff("Major Sigil of Life", MajorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfLife),
-        new Buff("Superior Sigil of Life", SuperiorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfLife),
-        new Buff("Major Sigil of Perception", MajorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfPerception),
-        new Buff("Superior Sigil of Perception", SuperiorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfPerception),
-        new Buff("Minor Sigil of Bloodlust", MinorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfBloodlust),
-        new Buff("Major Sigil of Bloodlust", MajorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfBloodlust),
-        new Buff("Superior Sigil of Bloodlust", SuperiorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBloodlust),
-        new Buff("Superior Sigil of Bounty", SuperiorSigilOfBounty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBounty),
-        new Buff("Minor Sigil of Benevolence", MinorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MinorSigilOfBenevolence),
-        new Buff("Major Sigil of Benevolence", MajorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.MajorSigilOfBenevolence),
-        new Buff("Superior Sigil of Benevolence", SuperiorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfBenevolence),
-        new Buff("Superior Sigil of Momentum", SuperiorSigilOfMomentum, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfMomentum),
-        new Buff("Superior Sigil of the Stars", SuperiorSigilOfTheStars, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.SuperiorSigilOfStars),
-        new Buff("Superior Sigil of Severance", SuperiorSigilOfSeverance, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfSeverance),
-        new Buff("Minor Sigil of Doom", MinorSigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
-        new Buff("Major Sigil of Doom", MajorSigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
-        new Buff("Superior Sigil of Doom", SuperiorSigilOfDoom, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfDoom),
-        new Buff("Superior Sigil of Vision", SuperiorSigilOfVision, Source.Gear, BuffClassification.Gear, BuffImages.SuperiorSigilOfVision),
-        new Buff("Leech (Major Sigil of Leeching)",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect),
-        new Buff("Leech (Sigil / Runes)", LeechBuff, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect)
+        new Buff("Minor Sigil of Corruption", MinorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MinorSigilOfCorruption),
+        new Buff("Major Sigil of Corruption", MajorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MajorSigilOfCorruption),
+        new Buff("Superior Sigil of Corruption", SuperiorSigilOfCorruption, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfCorruption),
+        new Buff("Superior Sigil of Cruelty", SuperiorSigilOfCruelty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfCruelty),
+        new Buff("Major Sigil of Life", MajorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MajorSigilOfLife),
+        new Buff("Superior Sigil of Life", SuperiorSigilOfLife, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfLife),
+        new Buff("Major Sigil of Perception", MajorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MajorSigilOfPerception),
+        new Buff("Superior Sigil of Perception", SuperiorSigilOfPerception, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfPerception),
+        new Buff("Minor Sigil of Bloodlust", MinorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MinorSigilOfBloodlust),
+        new Buff("Major Sigil of Bloodlust", MajorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MajorSigilOfBloodlust),
+        new Buff("Superior Sigil of Bloodlust", SuperiorSigilOfBloodlust, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfBloodlust),
+        new Buff("Superior Sigil of Bounty", SuperiorSigilOfBounty, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfBounty),
+        new Buff("Minor Sigil of Benevolence", MinorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MinorSigilOfBenevolence),
+        new Buff("Major Sigil of Benevolence", MajorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.MajorSigilOfBenevolence),
+        new Buff("Superior Sigil of Benevolence", SuperiorSigilOfBenevolence, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfBenevolence),
+        new Buff("Superior Sigil of Momentum", SuperiorSigilOfMomentum, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfMomentum),
+        new Buff("Superior Sigil of the Stars", SuperiorSigilOfTheStars, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, ItemImages.SuperiorSigilOfStars),
+        new Buff("Superior Sigil of Severance", SuperiorSigilOfSeverance, Source.Gear, BuffClassification.Gear, ItemImages.SuperiorSigilOfSeverance),
+        new Buff("Minor Sigil of Doom", MinorSigilOfDoom, Source.Gear, BuffClassification.Gear, ItemImages.SuperiorSigilOfDoom),
+        new Buff("Major Sigil of Doom", MajorSigilOfDoom, Source.Gear, BuffClassification.Gear, ItemImages.SuperiorSigilOfDoom),
+        new Buff("Superior Sigil of Doom", SuperiorSigilOfDoom, Source.Gear, BuffClassification.Gear, ItemImages.SuperiorSigilOfDoom),
+        new Buff("Superior Sigil of Vision", SuperiorSigilOfVision, Source.Gear, BuffClassification.Gear, ItemImages.SuperiorSigilOfVision),
+        new Buff("Leech (Major Sigil of Leeching)",  MajorSigilOfLeeching, Source.Gear, BuffClassification.Gear, ItemImages.LeechEffect),
+        new Buff("Leech (Sigil / Runes)", LeechBuff, Source.Gear, BuffClassification.Gear, ItemImages.LeechEffect)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2018Rune), // Used to be on Runes of Scavenging (Builds 23057 - November2018Rune) and Vampirism (Builds StartOfLife - November2018Rune)
-        new Buff("Leech (Superior Sigil of Leeching)", LeechBuff, Source.Gear, BuffClassification.Gear, BuffImages.LeechEffect)
+        new Buff("Leech (Superior Sigil of Leeching)", LeechBuff, Source.Gear, BuffClassification.Gear, ItemImages.LeechEffect)
             .WithBuilds(GW2Builds.November2018Rune),
         // Runes
-        new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.SuperiorRuneOfTheMonk)
+        new Buff("Superior Rune of the Monk", SuperiorRuneOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.SuperiorRuneOfTheMonk)
             .WithBuilds(GW2Builds.November2018Rune, GW2Builds.SOTOReleaseAndBalance),
-        new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, BuffImages.SuperiorRuneOfTheCavalier)
+        new Buff("Superior Rune of the Cavalier", SuperiorRuneOfTheCavalier, Source.Gear,BuffClassification.Gear, ItemImages.SuperiorRuneOfTheCavalier)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
-        new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, BuffImages.ConsumeRation)
+        new Buff("Healing Glyph (Druid Runes)", HealingGlyph, Source.Gear, BuffClassification.Gear, SkillImages.ConsumeRation)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
         new Buff("Critical (Daredevil Runes)", Critical, Source.Gear, BuffStackType.Stacking, 25, BuffClassification.Gear, BuffImages.Critical)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOReleaseAndBalance),
@@ -179,35 +179,35 @@ internal static class CommonBuffs
         new Buff("Cat's Shadow", CatsShadow, Source.Gear, BuffClassification.Gear, BuffImages.OrbOfAscension),
         // Relics
         new Buff("Relic Player Buff (Dragonhunter / Isgarren / Peitha)", RelicTargetToPlayerBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Hidden, BuffImages.Unknown),
-        new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunterTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, BuffImages.RelicOfTheDragonhunter), // Applied on target
-        new Buff("Relic of the Aristocracy", RelicOfTheAristocracy, Source.Gear, BuffStackType.Stacking, 5, BuffClassification.Gear, BuffImages.RelicOfTheAristocracy),
-        new Buff("Relic of the Monk", RelicOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheMonk),
-        new Buff("Relic of the Brawler", RelicOfTheBrawler, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheBrawler),
-        new Buff("Relic of the Thief", RelicOfTheThief, Source.Gear, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, BuffImages.RelicOfTheThief),
-        new Buff("Relic of Fireworks", RelicOfFireworks, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfFireworks),
-        new Buff("Relic of the Daredevil", RelicOfTheDaredevil, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, BuffImages.RelicOfTheDaredevil),
-        new Buff("Relic of the Deadeye", RelicOfTheDeadeye, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheDeadeye),
-        new Buff("Relic of the Firebrand", RelicOfTheFirebrand, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheFirebrand),
-        new Buff("Relic of the Herald", RelicOfTheHerald, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheHerald),
-        new Buff("Relic of the Scourge", RelicOfTheScourge, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, BuffImages.RelicOfTheScourge),
-        new Buff("Relic of the Weaver", RelicOfTheWeaver, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheWeaver),
-        new Buff("Relic of the Zephyrite", RelicOfTheZephyrite, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheZephyrite),
-        new Buff("Relic of Cerus", RelicOfCerusBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfCerus),
-        new Buff("Relic of Dagda", RelicOfDagdaBuff, Source.Gear, BuffStackType.Stacking, 1, BuffClassification.Gear, BuffImages.RelicOfDagda),
-        new Buff("Relic of Isgarren", RelicOfIsgarrenTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, BuffImages.RelicOfIsgarren),
-        new Buff("Relic of Lyhr", RelicOfLyhr, Source.Gear, BuffClassification.Defensive, BuffImages.RelicOfLyhr),
-        new Buff("Mabon's Strength", MabonsStrength, Source.Gear, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, BuffImages.RelicOfMabon),
-        new Buff("Relic of Mabon", RelicOfMabon, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfMabon),
-        new Buff("Relic of Peitha", RelicOfPeithaTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, BuffImages.RelicOfPeitha),
-        new Buff("Relic of Vass", RelicOfVass, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, BuffImages.RelicOfVass),
-        new Buff("Nourys's Hunger (Active)", NouryssHungerStartGainingStacksBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.RelicOfNourys),
-        new Buff("Nourys's Hunger (Stacks)", NouryssHungerStacksBuff, Source.Gear,  BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, BuffImages.RelicOfNourys),
-        new Buff("Nourys's Hunger (Damage Buff)", NouryssHungerDamageBuff, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfNourys),
-        new Buff("Relic of the Stormsinger", RelicOfTheStormsingerBuff, Source.Gear, BuffClassification.Other, BuffImages.RelicOfTheStormsinger),
-        new Buff("Relic of Sorrow", RelicOfSorrowBuff, Source.Gear, BuffClassification.Defensive, BuffImages.RelicOfTheSorrow),
-        new Buff("Greer's Virulence", GreersVirulence, Source.Gear,  BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, BuffImages.RelicOfTheBlightbringer),
-        new Buff("Relic of the Claw", RelicOfTheClaw, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfTheClaw),
-        new Buff("Relic of Mount Balrior", RelicOfMountBalrior, Source.Gear, BuffClassification.Gear, BuffImages.RelicOfMountBalrior),
+        new Buff("Relic of the Dragonhunter", RelicOfTheDragonhunterTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfTheDragonhunter), // Applied on target
+        new Buff("Relic of the Aristocracy", RelicOfTheAristocracy, Source.Gear, BuffStackType.Stacking, 5, BuffClassification.Gear, ItemImages.RelicOfTheAristocracy),
+        new Buff("Relic of the Monk", RelicOfTheMonk, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.RelicOfTheMonk),
+        new Buff("Relic of the Brawler", RelicOfTheBrawler, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheBrawler),
+        new Buff("Relic of the Thief", RelicOfTheThief, Source.Gear, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, ItemImages.RelicOfTheThief),
+        new Buff("Relic of Fireworks", RelicOfFireworks, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfFireworks),
+        new Buff("Relic of the Daredevil", RelicOfTheDaredevil, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, ItemImages.RelicOfTheDaredevil),
+        new Buff("Relic of the Deadeye", RelicOfTheDeadeye, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheDeadeye),
+        new Buff("Relic of the Firebrand", RelicOfTheFirebrand, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheFirebrand),
+        new Buff("Relic of the Herald", RelicOfTheHerald, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.RelicOfTheHerald),
+        new Buff("Relic of the Scourge", RelicOfTheScourge, Source.Gear, BuffStackType.Stacking, 10, BuffClassification.Gear, ItemImages.RelicOfTheScourge),
+        new Buff("Relic of the Weaver", RelicOfTheWeaver, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheWeaver),
+        new Buff("Relic of the Zephyrite", RelicOfTheZephyrite, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheZephyrite),
+        new Buff("Relic of Cerus", RelicOfCerusBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfCerus),
+        new Buff("Relic of Dagda", RelicOfDagdaBuff, Source.Gear, BuffStackType.Stacking, 1, BuffClassification.Gear, ItemImages.RelicOfDagda),
+        new Buff("Relic of Isgarren", RelicOfIsgarrenTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfIsgarren),
+        new Buff("Relic of Lyhr", RelicOfLyhr, Source.Gear, BuffClassification.Defensive, ItemImages.RelicOfLyhr),
+        new Buff("Mabon's Strength", MabonsStrength, Source.Gear, BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, ItemImages.RelicOfMabon),
+        new Buff("Relic of Mabon", RelicOfMabon, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfMabon),
+        new Buff("Relic of Peitha", RelicOfPeithaTargetBuff, Source.Gear, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Debuff, ItemImages.RelicOfPeitha),
+        new Buff("Relic of Vass", RelicOfVass, Source.Gear, BuffStackType.StackingConditionalLoss, 3, BuffClassification.Gear, ItemImages.RelicOfVass),
+        new Buff("Nourys's Hunger (Active)", NouryssHungerStartGainingStacksBuff, Source.Gear, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, ItemImages.RelicOfNourys),
+        new Buff("Nourys's Hunger (Stacks)", NouryssHungerStacksBuff, Source.Gear,  BuffStackType.StackingConditionalLoss, 10, BuffClassification.Gear, ItemImages.RelicOfNourys),
+        new Buff("Nourys's Hunger (Damage Buff)", NouryssHungerDamageBuff, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfNourys),
+        new Buff("Relic of the Stormsinger", RelicOfTheStormsingerBuff, Source.Gear, BuffClassification.Other, ItemImages.RelicOfTheStormsinger),
+        new Buff("Relic of Sorrow", RelicOfSorrowBuff, Source.Gear, BuffClassification.Defensive, ItemImages.RelicOfTheSorrow),
+        new Buff("Greer's Virulence", GreersVirulence, Source.Gear,  BuffStackType.StackingConditionalLoss, 5, BuffClassification.Gear, ItemImages.RelicOfTheBlightbringer),
+        new Buff("Relic of the Claw", RelicOfTheClaw, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfTheClaw),
+        new Buff("Relic of Mount Balrior", RelicOfMountBalrior, Source.Gear, BuffClassification.Gear, ItemImages.RelicOfMountBalrior),
     ];
 
 }

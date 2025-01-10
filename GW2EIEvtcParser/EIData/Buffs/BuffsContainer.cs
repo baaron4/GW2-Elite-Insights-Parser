@@ -109,7 +109,7 @@ public class BuffsContainer
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {
                     operation.UpdateProgressWithCancellationCheck("Parsing: Creating nourishement " + buffInfoEvent.BuffID);
-                    currentBuffs.Add(CreateCustomBuff("Parsing: Unknown Nourishment", buffInfoEvent.BuffID, BuffImages.NourishmentEffect, buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
+                    currentBuffs.Add(CreateCustomBuff("Parsing: Unknown Nourishment", buffInfoEvent.BuffID, ItemImages.NourishmentEffect, buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
                 }
             }
         }
@@ -125,7 +125,7 @@ public class BuffsContainer
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {
                     operation.UpdateProgressWithCancellationCheck("Creating enhancement " + buffInfoEvent.BuffID);
-                    currentBuffs.Add(CreateCustomBuff("Unknown Enhancement", buffInfoEvent.BuffID, BuffImages.EnhancementEffect, buffInfoEvent.MaxStacks, BuffClassification.Enhancement));
+                    currentBuffs.Add(CreateCustomBuff("Unknown Enhancement", buffInfoEvent.BuffID, ItemImages.EnhancementEffect, buffInfoEvent.MaxStacks, BuffClassification.Enhancement));
                 }
             }
         }
