@@ -1,4 +1,4 @@
-﻿namespace GW2EIEvtcParser.EncounterLogic;
+﻿namespace GW2EIEvtcParser.ParserHelpers;
 
 internal static class EncounterImages
 {
@@ -13,8 +13,8 @@ internal static class EncounterImages
 
     // Encounters Icons
     internal const string EncounterIconMAMA = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/MAMA.png?raw=true";
-    internal const string EncounterIconSiax = "https://wiki.guildwars2.com/images/3/31/Mini_Toxic_Nimross.png";
-    internal const string EncounterIconEnsolyss = "https://wiki.guildwars2.com/images/5/5e/Mini_Toxic_Hybrid.png";
+    internal const string EncounterIconSiax = "https://render.guildwars2.com/file/9DA3485C5FDAB0041E192A0A693A26C203350C53/665772.png";
+    internal const string EncounterIconEnsolyss = "https://render.guildwars2.com/file/0B18DC4908C424B43F36DCB3F019AE5CC090470C/665770.png";
     internal const string EncounterIconSkorvald = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Skorvald.png?raw=true";
     internal const string EncounterIconArtsariiv = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Artsariiv.png?raw=true";
     internal const string EncounterIconArkk = "https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/master/GW2EICustomAssets/FromGW2LogProofs/Arkk.png?raw=true";
@@ -46,17 +46,17 @@ internal static class EncounterImages
     #region RAIDS
 
     // Encounters Icons
-    internal const string EncounterIconValeGuardian = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
-    internal const string EncounterIconSpiritRace = "https://wiki.guildwars2.com/images/e/e5/Spirit_Thread.png";
-    internal const string EncounterIconGorseval = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
-    internal const string EncounterIconSabetha = "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
-    internal const string EncounterIconSlothasor = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+    internal const string EncounterIconValeGuardian = "https://render.guildwars2.com/file/1CCB9B3880B062465F9F5834F04739289AF27BBA/1301792.png";
+    internal const string EncounterIconSpiritRace = "https://render.guildwars2.com/file/B2D729C5944B38FF9C22C4CDC02616471644BA0C/1302753.png";
+    internal const string EncounterIconGorseval = "https://render.guildwars2.com/file/E5074A6E5CE552A9231195202B45D5DA2C1A585E/1301787.png";
+    internal const string EncounterIconSabetha = "https://render.guildwars2.com/file/1C96C03C385529A818E9E14ED7BB7E47F10154F5/1301795.png";
+    internal const string EncounterIconSlothasor = "https://render.guildwars2.com/file/74C5E9AA0B163A297673040D02FB477552ED5A96/1377393.png";
     internal const string EncounterIconBanditTrio = "https://i.imgur.com/UZZQUdf.png";
-    internal const string EncounterIconMatthias = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
-    internal const string EncounterIconEscort = "https://wiki.guildwars2.com/images/b/b5/Mini_McLeod_the_Silent.png";
-    internal const string EncounterIconKeepConstruct = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+    internal const string EncounterIconMatthias = "https://render.guildwars2.com/file/EBAFC4EA9C80F6D66AD9A427E15918E0172A476F/1377391.png";
+    internal const string EncounterIconEscort = "https://render.guildwars2.com/file/433A4E66794240AD463941F868754BB46D245020/1451172.png";
+    internal const string EncounterIconKeepConstruct = "https://render.guildwars2.com/file/E87C6B0BB4C1D93231A4DB7CBE91157516580A3E/1451173.png";
     internal const string EncounterIconTwistedCastle = "https://i.imgur.com/xpQnu35.png";
-    internal const string EncounterIconXera = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+    internal const string EncounterIconXera = "https://render.guildwars2.com/file/551509B3B91270BFF016C020D2F9D99B550F93AA/1451174.png";
     internal const string EncounterIconCairn = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
     internal const string EncounterIconMursaatOverseer = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
     internal const string EncounterIconSamarog = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";

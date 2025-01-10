@@ -605,7 +605,7 @@ public static class ParserHelper
 
     internal static string GetGadgetIcon()
     {
-        return "https://wiki.guildwars2.com/images/1/17/Gadgeteer.png";
+        return "https://render.guildwars2.com/file/09AF0498D757B191E229C862F4AA360DA65C4FE1/1012386.png";
     }
 
     internal static string GetNPCIcon(int id)
