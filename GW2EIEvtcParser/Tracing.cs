@@ -1,11 +1,7 @@
-﻿
-#if TRACING
+﻿#if TRACING
 #define EI_TRACING
 #define EI_TRACING_STATS
 #endif
-
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace Tracing;
 

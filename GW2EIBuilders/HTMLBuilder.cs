@@ -5,7 +5,6 @@ using GW2EIEvtcParser;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tracing;
-using GW2EIEvtcParser.EIData;
 
 [assembly: CLSCompliant(false)]
 namespace GW2EIBuilders;

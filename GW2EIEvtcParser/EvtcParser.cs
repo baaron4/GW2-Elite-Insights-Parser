@@ -1,5 +1,4 @@
 ﻿using System.IO.Compression;
-using System.Linq;
 using System.Text;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;

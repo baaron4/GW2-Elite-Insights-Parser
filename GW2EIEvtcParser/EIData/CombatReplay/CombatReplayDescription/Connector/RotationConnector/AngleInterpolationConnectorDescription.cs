@@ -1,6 +1,4 @@
-﻿using static GW2EIEvtcParser.EIData.AngleInterpolationConnector;
-
-namespace GW2EIEvtcParser.EIData;
+﻿namespace GW2EIEvtcParser.EIData;
 
 public class AngleInterpolationConnectorDescription : RotationConnectorDescription
 {

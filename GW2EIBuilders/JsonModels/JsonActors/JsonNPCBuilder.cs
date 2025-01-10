@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using GW2EIBuilders.JsonModels.JsonActorUtilities;
+﻿using GW2EIBuilders.JsonModels.JsonActorUtilities;
 using GW2EIEvtcParser;
 using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.ParsedData;

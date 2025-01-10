@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Numerics;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
