@@ -10,8 +10,7 @@ internal static class ItemImages
     public const string NourishmentFood = "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
     public const string NourishmentUtility = "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png";
 
-    #region Gear
-    // Sigils
+    #region Sigil
     public const string SuperiorSigilOfImpact = "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Impact.png";
     public const string SuperiorSigilOfConcentration = "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png";
     public const string MinorSigilOfCorruption = "https://wiki.guildwars2.com/images/5/50/Minor_Sigil_of_Corruption.png";
@@ -34,7 +33,8 @@ internal static class ItemImages
     public const string SuperiorSigilOfSeverance = "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png";
     public const string SuperiorSigilOfDoom = "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png";
     public const string SuperiorSigilOfVision = "https://wiki.guildwars2.com/images/4/4f/Superior_Sigil_of_Vision.png";
-    // Runes
+    #endregion Sigil
+    #region Rune
     public const string SuperiorRuneOfTheRanger = "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png";
     public const string SuperiorRuneOfTheMonk = "https://wiki.guildwars2.com/images/1/18/Superior_Rune_of_the_Monk.png";
     public const string SuperiorRuneOfTheCavalier = "https://wiki.guildwars2.com/images/9/94/Superior_Rune_of_the_Cavalier.png";
@@ -54,7 +54,8 @@ internal static class ItemImages
     public const string SuperiorRuneOfMercy = "https://wiki.guildwars2.com/images/2/23/Superior_Rune_of_Mercy.png";
     public const string SuperiorRuneOfPerplexity = "https://wiki.guildwars2.com/images/1/1e/Superior_Rune_of_Perplexity.png";
     public const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
-    // Relics
+    #endregion Rune
+    #region Relic
     public const string RelicOfTheDragonhunter = "https://wiki.guildwars2.com/images/0/0b/Relic_of_the_Dragonhunter.png";
     public const string RelicOfTheAristocracy = "https://wiki.guildwars2.com/images/6/60/Relic_of_the_Aristocracy.png";
     public const string RelicOfTheMonk = "https://wiki.guildwars2.com/images/c/c9/Relic_of_the_Monk.png";
@@ -83,7 +84,7 @@ internal static class ItemImages
     public const string RelicOfTheBlightbringer = "https://wiki.guildwars2.com/images/3/3f/Relic_of_Nourys.png";
     public const string RelicOfTheClaw = "https://wiki.guildwars2.com/images/7/7f/Relic_of_the_Claw.png";
     public const string RelicOfMountBalrior = "https://wiki.guildwars2.com/images/a/a9/Relic_of_Mount_Balrior.png";
-    #endregion Gear
+    #endregion Relic
     #region Food
     public const string NourishmentEffect = "https://assets.gw2dat.com/436367.png";
     public const string Malnourished = "https://wiki.guildwars2.com/images/6/67/Malnourished.png";
@@ -450,7 +451,8 @@ internal static class ItemImages
     public const string BowlOfMangoSalsa = "https://wiki.guildwars2.com/images/0/09/Bowl_of_Mango_Salsa.png";
     public const string CanOfMangoSalsa = "https://wiki.guildwars2.com/images/b/b0/Can_of_Mango_Salsa.png";
     public const string BloodstonePotPie = "https://wiki.guildwars2.com/images/6/68/Meat_Pie.png";
-    // Ascended
+    #endregion Food
+    #region AscendedFood
     public const string BowlOfFruitSaladWithCilantroGarnish = "https://wiki.guildwars2.com/images/0/08/Bowl_of_Fruit_Salad_with_Cilantro_Garnish.png";
     public const string BowlOfFruitSaladWithMintGarnish = "https://wiki.guildwars2.com/images/4/47/Bowl_of_Fruit_Salad_with_Mint_Garnish.png";
     public const string BowlOfFruitSaladWithOrangeCloveSyrup = "https://wiki.guildwars2.com/images/d/dc/Bowl_of_Fruit_Salad_with_Orange-Clove_Syrup.png";
@@ -516,12 +518,10 @@ internal static class ItemImages
     public const string BowlOfJadeSeaBounty = "https://wiki.guildwars2.com/images/4/40/Bowl_of_Jade_Sea_Bounty.png";
     public const string BowlOfEchovaldHotpot = "https://wiki.guildwars2.com/images/e/e1/Bowl_of_Echovald_Hotpot.png";
     public const string FlightOfSushi = "https://wiki.guildwars2.com/images/8/87/Flight_of_Sushi.png";
+    #endregion AscendedFood
     // Food Procs
     public const string ChampionOfTheCrown = "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png";
-    #endregion Food
-
-    #region Enhancement
-    // Utilities
+    #region Utility
     public const string EnhancementEffect = "https://assets.gw2dat.com/436368.png";
     public const string Diminished = "https://wiki.guildwars2.com/images/7/71/Diminished.png";
     public const string RoughSharpeningStone = "https://wiki.guildwars2.com/images/1/14/Rough_Sharpening_Stone.png";
@@ -565,7 +565,8 @@ internal static class ItemImages
     public const string FlaskOfPumpkinOil = "https://wiki.guildwars2.com/images/7/71/Flask_of_Pumpkin_Oil.png";
     public const string LumpOfCrystallizedNougat = "https://wiki.guildwars2.com/images/8/8f/Lump_of_Crystallized_Nougat.png";
     public const string DecadeEnhancement = "https://wiki.guildwars2.com/images/7/76/Decade_Enhancement_Station.png";
-    // Writs
+    #endregion Utility
+    #region Writ
     public const string WritOfBasicStrength = "https://wiki.guildwars2.com/images/7/7e/Writ_of_Basic_Strength.png";
     public const string WritOfStrength = "https://wiki.guildwars2.com/images/5/5e/Writ_of_Strength.png";
     public const string WritOfStudiedStrength = "https://wiki.guildwars2.com/images/2/23/Writ_of_Studied_Strength.png";
@@ -587,7 +588,8 @@ internal static class ItemImages
     public const string WritOfBasicSpeed = "https://wiki.guildwars2.com/images/e/e6/Writ_of_Basic_Speed.png";
     public const string WritOfStudiedSpeed = "https://wiki.guildwars2.com/images/d/d1/Recipe_sheet_fine_boots.png";
     public const string WritOfMasterfulSpeed = "https://wiki.guildwars2.com/images/8/8e/Recipe_sheet_masterwork_boots.png";
-    // Potions
+    #endregion Writ
+    #region Potion
     public const string MinorPotionOfBrandedSlaying = "https://wiki.guildwars2.com/images/8/81/Minor_Potion_of_Branded_Slaying.png";
     public const string PowerfulPotionOfBrandedSlaying = "https://wiki.guildwars2.com/images/b/b5/Powerful_Potion_of_Branded_Slaying.png";
     public const string DragonCrystalPotion = "https://wiki.guildwars2.com/images/6/60/Dragon_Crystal_Potion.png";
@@ -694,14 +696,14 @@ internal static class ItemImages
     public const string FelineFury = "https://wiki.guildwars2.com/images/3/32/Feline_Fury.png";
     public const string PumpkinProwess = "https://wiki.guildwars2.com/images/d/d3/Pumpkin_Prowess.png";
     public const string GhoulsGrasp = "https://wiki.guildwars2.com/images/1/12/Ghoul%27s_Grasp.png";
-    #endregion Enhancement
+    #endregion Potion
 
     // Guild
     public const string GuildSwiftnessBanner = "https://wiki.guildwars2.com/images/4/45/Guild_Swiftness_Banner_Boost.png";
     // Primers
     public const string UtilityPrimer = "https://wiki.guildwars2.com/images/a/a8/Utility_Primer_%28effect%29.png";
     public const string MetabolicPrimer = "https://wiki.guildwars2.com/images/a/af/Metabolic_Primer_%28effect%29.png";
-    // Consumables
+    // Other Consumables
     public const string NourishmentBirthdayBlaster = "https://wiki.guildwars2.com/images/e/ec/Nourishment_%28Birthday_Blaster%29.png";
     public const string ReinforcedArmor = "https://wiki.guildwars2.com/images/8/83/Reinforced_Armor.png";
     public const string SpeedBonus15 = "https://wiki.guildwars2.com/images/d/d7/Speed_Bonus_%28fifteen_percent%29.png";

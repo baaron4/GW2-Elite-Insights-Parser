@@ -2,6 +2,7 @@
 
 namespace GW2EIEvtcParser.ParserHelpers;
 
+#pragma warning disable CA1823 // Unused field
 internal static class EncounterImages
 {
     #region GENERICS
@@ -223,3 +224,5 @@ internal static class EncounterImages
 
     #endregion WVW
 }
+
+#pragma warning restore CA1823 // Unused field
