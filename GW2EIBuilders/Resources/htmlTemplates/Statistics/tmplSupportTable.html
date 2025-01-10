@@ -32,12 +32,12 @@
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8)"
                         data-original-title="Stun Break">
-                        <img src="https://wiki.guildwars2.com/images/7/7a/Breaks_stun.png" alt="Stun Break"
+                        <img :src="UIIcons.StunBreak" alt="Stun Break"
                             class="icon icon-hover">
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6)"
                         data-original-title="Resurrects">
-                        <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Resurrects"
+                        <img :src="UIIcons.DownedAlly" alt="Resurrects"
                             class="icon icon-hover">
                     </th>
                 </tr>
@@ -195,6 +195,9 @@
                 };
                 this.cache.set(this.phaseindex, res);
                 return res;
+            },
+            UIIcons: function() {
+                return UIIcons;
             }
         }
     });

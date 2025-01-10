@@ -37,12 +37,12 @@
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 21)" @click="sortBy('Data', 21, 20)"
                         data-original-title="Percent time power hits while self above 90% hp">
-                        <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
+                        <img :src="UIIcons.Power" alt="Power"
                              class="icon"> > 90%
                     </th>    
                     <th class="stat-cell" :class="getHeaderClass('Data', 23)" @click="sortBy('Data', 23, 22)"
                         data-original-title="Percent time condition ticks while self above 90% hp">
-                        <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
+                        <img :src="UIIcons.ConditionDamage" alt="Condition"
                              class="icon"> > 90%
                     </th>    
                     <th class="stat-cell" :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5, 11)"
@@ -86,24 +86,24 @@
                     </th>    
                     <th class="stat-cell" v-if="wvw" :class="getHeaderClass('Data', 17)" @click="sortBy('Data', 17)"
                         data-original-title="Down Contribution">
-                         <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                         <img :src="UIIcons.Damage" alt="Damage"
                             class="icon">
                         /
-                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Down"
+                        <img :src="UIIcons.DownedEnemy" alt="Down"
                             class="icon">
                     </th>          
                     <th class="stat-cell" v-if="wvw" :class="getHeaderClass('Data', 13)" @click="sortBy('Data', 13)"
                         data-original-title="Number of times downed target">
-                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
+                        <img :src="UIIcons.DownedEnemy"
                             alt="Downed" 
                             class="icon icon-hover">
                     </th>   
                     <th class="stat-cell" v-if="wvw" :class="getHeaderClass('Data', 25)" @click="sortBy('Data', 25)"
                         data-original-title="Damage against downed target">
-                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                        <img :src="UIIcons.Damage" alt="Damage"
                             class="icon">
                             &#8658
-                        <img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png"
+                        <img :src="UIIcons.DownedEnemy"
                             alt="Downed" 
                             class="icon">
                     </th>           
@@ -443,6 +443,9 @@
                 };
                 this.cacheTarget.set(cacheID, res);
                 return res;
+            },
+            UIIcons: function() {
+                return UIIcons;
             }
         }
     });

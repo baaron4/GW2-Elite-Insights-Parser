@@ -16,11 +16,11 @@
                         Account
                     </th>
                     <th class="damage-cell" :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0)" data-original-title="Healed">
-                        <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png"
+                        <img :src="UIIcons.Heal"
                             alt="Healed" class="icon icon-hover">
                     </th>
                     <th class="damage-cell" :class="getHeaderClass('Data', 1)" @click="sortBy('Data', 1)" data-original-title="Healing Power Healed">
-                        <img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power Healed"
+                        <img :src="UIIcons.HealingPower" alt="Healing Power Healed"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-cell" :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2)" data-original-title="Conversion Healed">
@@ -28,11 +28,11 @@
                             class="icon icon-hover">
                     </th>
                     <th class="damage-cell" :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3)" data-original-title="Downed Healed">
-                        <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
+                        <img :src="UIIcons.DownedAlly" alt="Downed Healing"
                             class="icon icon-hover">
                     </th>
                     <th v-if="hasBarrier" :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)" data-original-title="Barrier Received" class="damage-cell">
-                        <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png"
+                        <img :src="UIIcons.Barrier"
                             alt="Barrier Received" class="icon icon-hover">
                     </th>
                 </tr>
@@ -198,6 +198,9 @@
                 };
                 this.cache.set(this.phaseindex, res);
                 return res;
+            },
+            UIIcons: function() {
+                return UIIcons;
             }
         }
     });

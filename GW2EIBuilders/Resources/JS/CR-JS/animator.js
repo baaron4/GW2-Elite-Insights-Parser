@@ -15,8 +15,12 @@ const deadIcon = new Image();
 deadIcon.onload = function () {
     animateCanvas(noUpdateTime);
 };
-const downIcon = new Image();
-downIcon.onload = function () {
+const downEnemyIcon = new Image();
+downEnemyIcon.onload = function () {
+    animateCanvas(noUpdateTime);
+};
+const downAllyIcon = new Image();
+downAllyIcon.onload = function () {
     animateCanvas(noUpdateTime);
 };
 const dcIcon = new Image();
@@ -150,7 +154,8 @@ class Animator {
             if (options.actors) {
                 this._initActors(options.actors, options.decorationRenderings, options.decorationMetadata);
             }
-            downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+            downEnemyIcon.src = UIIcons.DownedEnemy;
+            downAllyIcon.src = UIIcons.DownedAlly;
             dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
             deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
             facingIcon.src = "https://i.imgur.com/tZTmTRn.png";

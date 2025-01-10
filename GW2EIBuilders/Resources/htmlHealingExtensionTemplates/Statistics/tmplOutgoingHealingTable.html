@@ -17,12 +17,12 @@
                     </th>
                     <th data-original-title="All" class="damage-cell"
                         :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0)">
-                        Target <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="All"
+                        Target <img :src="UIIcons.Heal" alt="All"
                                     class="icon">
                     </th>
                     <th data-original-title="Healing Power" class="damage-cell"
                         :class="getHeaderClass('Data', 1)" @click="sortBy('Data', 1)">
-                        Target <img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power"
+                        Target <img :src="UIIcons.HealingPower" alt="Healing Power"
                                     class="icon">
                     </th>
                     <th data-original-title="Conversion" class="damage-cell"
@@ -32,22 +32,22 @@
                     </th>
                     <th data-original-title="Downed Healing" class="damage-cell"
                         :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3)">
-                        Target <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
+                        Target <img :src="UIIcons.DownedAlly" alt="Downed Healing"
                             class="icon">
                     </th>
                     <th v-if="hasBarrier" data-original-title="Barrier" class="damage-cell"
                         :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)">
-                        Target <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
+                        Target <img :src="UIIcons.Barrier"  alt="Barrier"
                                  class="icon">
                     </th>
                     <th data-original-title="All" class="damage-cell"
                         :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5)">
-                        All <img src="https://wiki.guildwars2.com/images/thumb/f/f3/Healing.png/20px-Healing.png" alt="All"
+                        All <img :src="UIIcons.Heal" alt="All"
                                  class="icon">
                     </th>
                     <th data-original-title="Healing Power" class="damage-cell"
                         :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6)">
-                        All <img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power"
+                        All <img :src="UIIcons.HealingPower" alt="Healing Power"
                                  class="icon">
                     </th>
                     <th data-original-title="Conversion" class="damage-cell"
@@ -57,12 +57,12 @@
                     </th>
                     <th data-original-title="Downed Healing" class="damage-cell"
                         :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8)">
-                        All <img src="https://wiki.guildwars2.com/images/3/3d/Downed_ally.png" alt="Downed Healing"
+                        All <img :src="UIIcons.DownedAlly"alt="Downed Healing"
                             class="icon ">
                     </th>
                     <th v-if="hasBarrier" data-original-title="Barrier" class="damage-cell"
                         :class="getHeaderClass('Data', 9)" @click="sortBy('Data', 9)">
-                        All <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
+                        All <img :src="UIIcons.Barrier" alt="Barrier"
                                  class="icon">
                     </th>
                 </tr>
@@ -264,6 +264,9 @@
                 };
                 this.cacheTarget.set(cacheID, res);
                 return res;
+            },
+            UIIcons: function() {
+                return UIIcons;
             }
         }
     });

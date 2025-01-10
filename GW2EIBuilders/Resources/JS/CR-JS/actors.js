@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 /* jshint node: true */
 /*jslint browser: true */
-/*global animator, animateCanvas, noUpdateTime, deadIcon, dcIcon, downIcon*/
+/*global animator, animateCanvas, noUpdateTime, deadIcon, dcIcon, downAllyIcon, downEnemyIcon*/
 "use strict";
 //// ACTORS
 
@@ -80,7 +80,7 @@ class IconDrawable {
             return deadIcon;
         }
         if (this.downed()) {
-            return downIcon;
+            return animator.playerData.has(this) || animator.friendlyMobData.has(this) ? downAllyIcon : downEnemyIcon;
         }
         if (this.disconnected()) {
             return dcIcon;

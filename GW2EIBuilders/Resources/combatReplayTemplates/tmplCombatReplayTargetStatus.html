@@ -69,7 +69,7 @@
             status: function () {
                 var crTData = animator.getActorData(this.target.uniqueID);
                 var icon = crTData.getIcon(this.time);
-                return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
+                return icon === deadIcon ? 0 : icon === downAllyIcon ||  icon === downEnemyIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
             healths: function () {
                 return graphData.phases[0].targetsHealthStatesForCR[this.targetindex];

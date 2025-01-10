@@ -62,25 +62,25 @@ const themes = {
 
 const urls = {
     Unknown: "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png",
-    Sword: "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png",
-    Axe: "https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png",
-    Dagger: "https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png",
-    Mace: "https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png",
-    Pistol: "https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png",
-    Scepter: "https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png",
-    Focus: "https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png",
-    Shield: "https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png",
-    Torch: "https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png",
-    Warhorn: "https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png",
-    Greatsword: "https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png",
-    Hammer: "https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png",
-    Longbow: "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png",
-    Shortbow: "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png",
-    Rifle: "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png",
-    Staff: "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png",
-    Trident: "https://wiki.guildwars2.com/images/9/98/Crimson_Antique_Trident.png",
-    Speargun: "https://wiki.guildwars2.com/images/3/3b/Crimson_Antique_Harpoon_Gun.png",
-    Spear: "https://wiki.guildwars2.com/images/c/cb/Crimson_Antique_Impaler.png"
+    Axe: "https://assets.gw2dat.com/631536.png",
+    Dagger: "https://assets.gw2dat.com//631546.png",
+    Mace: "https://assets.gw2dat.com//631600.png",
+    Pistol: "https://assets.gw2dat.com/631608.png",
+    Scepter: "https://assets.gw2dat.com/631624.png",
+    Sword: "https://assets.gw2dat.com/631658.png",
+    Focus: "https://assets.gw2dat.com/631554.png",
+    Shield: "https://assets.gw2dat.com/631632.png",
+    Torch: "https://assets.gw2dat.com/631666.png",
+    Warhorn: "https://assets.gw2dat.com/631683.png",
+    Greatsword: "https://assets.gw2dat.com/631562.png",
+    Hammer: "https://assets.gw2dat.com/631576.png",
+    Longbow: "https://assets.gw2dat.com/631592.png",
+    Rifle: "https://assets.gw2dat.com/631616.png",
+    Shortbow: "https://assets.gw2dat.com/631634.png",
+    Staff: "https://assets.gw2dat.com/631650.png",
+    Speargun: "https://assets.gw2dat.com/631642.png",
+    Spear: "https://assets.gw2dat.com/631584.png",
+    Trident: "https://assets.gw2dat.com/631675.png",
 };
 
 const specs = [
@@ -201,6 +201,20 @@ const RotationStatus = {
     CANCEL: 2,
     FULL: 3,
     INSTANT: 4
+};
+
+const UIIcons = {
+    Barrier: "https://assets.gw2dat.com/1770209.png",
+    Heal: "https://assets.gw2dat.com/156662.png",
+    Damage: "https://assets.gw2dat.com/156657.png",
+    ConditionDamage: "https://assets.gw2dat.com/2229318.png",
+    Power: "https://assets.gw2dat.com/2229322.png",
+    HealingPower: "https://assets.gw2dat.com/2229321.png",
+    Activation: "https://wiki.guildwars2.com/images/6/6e/Activation.png",
+    NumberOfTargets: "https://assets.gw2dat.com/1770208.png",
+    DownedAlly: "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png",
+    DownedEnemy: "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png",
+    StunBreak: "https://assets.gw2dat.com/156654.png",
 };
 
 const EIUrlParams = new URLSearchParams(window.location.search);

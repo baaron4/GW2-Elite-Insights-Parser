@@ -31,37 +31,37 @@
                     <th class="damage-dist-cell"  
                         :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0, x => getDamage(x))"
                         data-original-title="% Damage">
-                        % <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                        % <img :src="UIIcons.Damage" alt="Damage"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 1)" @click="sortBy('Data', 1, x => getDamage(x))"
                         data-original-title="Damage">
-                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                        <img :src="UIIcons.Damage" alt="Damage"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2, x => getBarrierDamage(x))"
                         data-original-title="Damage against barrier. Not necessarily included in total damage">
-                        <img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png"
+                        <img :src="UIIcons.Barrier"
                             alt="Barrier Damage" class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3, x => getMinDamage(x))"    
                         data-original-title="Minimum Damage">
-                        Min <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                        Min <img :src="UIIcons.Damage" alt="Damage"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4, x => round(getDamage(x)/getConnectedHits(x)))" 
                         data-original-title="Average Damage">
-                        Avg <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                        Avg <img :src="UIIcons.Damage" alt="Damage"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5, x => getMaxDamage(x))"    
                         data-original-title="Maximum Damage">
-                        Max <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                        Max <img :src="UIIcons.Damage" alt="Damage"
                         class="icon">
                     </th>
                     <th v-if="hasBreakbarDamage" class="damage-dist-cell"  
@@ -88,34 +88,34 @@
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 10)" @click="sortBy('Data', 10, x => round2(getConnectedHits(x)/getCast(x)))"
                         data-original-title="Hits per Cast">
-                        <img src="https://wiki.guildwars2.com/images/thumb/5/53/Number_of_targets.png/20px-Number_of_targets.png"
+                        <img :src="UIIcons.NumberOfTargets"
                             alt="Hits per Cast" class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 11)" @click="sortBy('Data', 11, x => round2(getDamage(x)/(0.001 * getCastDuration(x))))"
                         data-original-title="Damage divided by time spent in animation">
-                        <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="Damage"
+                        <img :src="UIIcons.Damage" alt="Damage"
                             class="icon">
                         /
-                        <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                        <img :src="UIIcons.Activation" alt="Activation Time"
                             class="icon">
                     </th>                 
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 18)" @click="sortBy('Data', 18, x => getMinCastingTimeNoInterrupt(x))"    
                         data-original-title="Minimum Casting Time (No interrupted skills)">
-                        Min <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                        Min <img :src="UIIcons.Activation" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 19)" @click="sortBy('Data', 19, x => round3(0.001 * getCastDurationNoInterrupt(x) / getCastNoInterrupt(x) ))" 
                         data-original-title="Average Casting Time (No interrupted skills)">
-                        Avg <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                        Avg <img :src="UIIcons.Activation" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 20)" @click="sortBy('Data', 20, x => getMaxCastingTimeNoInterrupt(x))"    
                         data-original-title="Maximum Casting Time (No interrupted skills)">
-                        Max <img src="https://wiki.guildwars2.com/images/6/6e/Activation.png" alt="Activation Time"
+                        Max <img :src="UIIcons.Activation" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" 
@@ -388,6 +388,9 @@
             hasBreakbarDamage: function() {
                 return logData.hasBreakbarDamage;
             },
+            UIIcons: function() {
+                return UIIcons;
+            }
         }
     });
 </script>
