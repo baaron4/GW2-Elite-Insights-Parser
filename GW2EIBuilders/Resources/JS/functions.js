@@ -39,9 +39,8 @@ function buildFallBackURL(skill) {
         return;
     }
     var splitIcon = apiIcon.split('/');
-    var signature = splitIcon[splitIcon.length - 2];
-    var id = splitIcon[splitIcon.length - 1].split('.')[0] + "-64px.png";
-    skill.icon = "https://darthmaim-cdn.de/gw2treasures/icons/" + signature + "/" + id;
+    var id = splitIcon[splitIcon.length - 1];
+    skill.icon = "https://assets.gw2dat.com/"+ id;
     skill.fallBack = true;
 }
 
@@ -268,7 +267,7 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
                 name = skill.name;
             }
 
-            if (!icon.includes("render") && !icon.includes("darthmaim")) {
+            if (!icon.includes("render") && !icon.includes("gw2dat")) {
                 icon = null;
             }
 

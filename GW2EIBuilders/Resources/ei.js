@@ -290,8 +290,7 @@ window.onload = function () {
     };
     img.onerror = function () {
         apiRenderServiceOkay = false;
-        console.warn("Warning: GW2 Render service unavailable, switching to darthmaim-cdn");
-        console.warn("More info at https://dev.gw2treasures.com/services/icons");
+        console.warn("Warning: GW2 Render service unavailable, switching to https://assets.gw2dat.com");
         mainLoad();
         document.body.removeChild(img);
     };
