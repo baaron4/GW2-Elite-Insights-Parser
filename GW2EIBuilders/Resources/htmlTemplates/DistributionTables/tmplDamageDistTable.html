@@ -108,23 +108,11 @@
                         /
                         <img :src="UIIcons.Activation" alt="Activation Time"
                             class="icon">
-                    </th>                 
-                    <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 18)" @click="sortBy('Data', 18, x => getMinCastingTimeNoInterrupt(x))"    
-                        data-original-title="Minimum Casting Time (No interrupted skills)">
-                        Min <img :src="UIIcons.Activation" alt="Activation Time"
-                        class="icon">
-                    </th>
+                    </th>        
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 19)" @click="sortBy('Data', 19, x => round3(0.001 * getCastDurationNoInterrupt(x) / getCastNoInterrupt(x) ))" 
-                        data-original-title="Average Casting Time (No interrupted skills)">
+                        data-original-title="Average Casting Time (No interrupted skills) <br>Min and Max on hover"">
                         Avg <img :src="UIIcons.Activation" alt="Activation Time"
-                        class="icon">
-                    </th>
-                    <th class="damage-dist-cell" v-if="actor !== null" 
-                        :class="getHeaderClass('Data', 20)" @click="sortBy('Data', 20, x => getMaxCastingTimeNoInterrupt(x))"    
-                        data-original-title="Maximum Casting Time (No interrupted skills)">
-                        Max <img :src="UIIcons.Activation" alt="Activation Time"
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" 
@@ -212,15 +200,16 @@
                     </td>
                     <td :class="getBodyClass('Data', 11)" v-if="actor !== null">
                         {{(!getSkill(row).condi && getConnectedHits(row) && getCastDuration(row)) ? round2(getDamage(row)/(0.001 * getCastDuration(row))) : ''}}
-                    </td>              
-                    <td :class="getBodyClass('Data', 18)" v-if="actor !== null" >
-                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's': ' '}}
-                    </td>
-                    <td :class="getBodyClass('Data', 19)" v-if="actor !== null" >
+                    </td>    
+                    <td :class="getBodyClass('Data', 19)" v-if="actor !== null"
+                        :data-original-title=" getCastDurationNoInterrupt(row) ? 
+                            (
+                                'Min: ' + round3(0.001 * getMinCastingTimeNoInterrupt(row)) + 's' + 
+                                '<br> Max: '+ round3(0.001 * getMaxCastingTimeNoInterrupt(row)) + 's'
+                            ) 
+                            : 
+                            null" >
                         {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getCastDurationNoInterrupt(row) / getCastNoInterrupt(row) ) + 's'  : ' '}}
-                    </td>
-                    <td :class="getBodyClass('Data', 20)" v-if="actor !== null" >
-                        {{ getCastDurationNoInterrupt(row) ? round3(0.001 * getMaxCastingTimeNoInterrupt(row)) + 's'  : ' '}}
                     </td>
                     <td :class="getBodyClass('Data', 12)" 
                         :data-original-title="(!getSkill(row).condi && getConnectedHits(row)) ? getCriticalHits(row) +' out of ' + getConnectedHits(row) + ' connected hit(s) <br> Damage: ' + getCriticalDamage(row) + '<br>' + round2(getCriticalDamage(row)*100/getDamage(row)) + '% of skill damage' : false">
@@ -273,8 +262,6 @@
                     <td v-if="actor !== null">
                         {{round2(dmgdist.contributedDamage/(0.001 * dmgdist.totalCasting))}}
                     </td>
-                    <td v-if="actor !== null"></td>
-                    <td v-if="actor !== null"></td>
                     <td v-if="actor !== null"></td>
                     <td></td>
                     <td></td>
