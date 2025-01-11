@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParserHelpers;
+﻿using static System.Net.WebRequestMethods;
+
+namespace GW2EIEvtcParser.ParserHelpers;
 
 /// <summary>
 /// Class containing URL <see cref="string"/> for buff icons.
@@ -6,38 +8,36 @@
 public static class BuffImages
 {
     #region Boons
-    public const string Might = "https://assets.gw2dat.com/102852.png";
-    public const string Fury = "https://assets.gw2dat.com/102842.png";
-    public const string Quickness = "https://assets.gw2dat.com/1012835.png";
-    public const string Alacrity = "https://assets.gw2dat.com/1938787.png";
-    public const string Protection = "https://assets.gw2dat.com/102834.png";
-    public const string Regeneration = "https://assets.gw2dat.com/102835.png";
-    public const string Vigor = "https://assets.gw2dat.com/102843.png";
-    public const string Aegis = "https://assets.gw2dat.com/102854.png";
-    public const string Stability = "https://assets.gw2dat.com/415959.png";
-    public const string Swiftness = "https://assets.gw2dat.com/102836.png";
+    public const string Might = "https://render.guildwars2.com/file/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png";
+    public const string Fury = "https://render.guildwars2.com/file/96D90DF84CAFE008233DD1C2606A12C1A0E68048/102842.png";
+    public const string Quickness = "https://render.guildwars2.com/file/D4AB6401A6D6917C3D4F230764452BCCE1035B0D/1012835.png";
+    public const string Alacrity = "https://render.guildwars2.com/file/4FDAC2113B500104121753EF7E026E45C141E94D/1938787.png";
+    public const string Protection = "https://render.guildwars2.com/file/CD77D1FAB7B270223538A8F8ECDA1CFB044D65F4/102834.png";
+    public const string Regeneration = "https://render.guildwars2.com/file/F69996772B9E18FD18AD0AABAB25D7E3FC42F261/102835.png";
+    public const string Vigor = "https://render.guildwars2.com/file/58E92EBAF0DB4DA7C4AC04D9B22BCA5ECF0100DE/102843.png";
+    public const string Aegis = "https://render.guildwars2.com/file/DFB4D1B50AE4D6A275B349E15B179261EE3EB0AF/102854.png";
+    public const string Stability = "https://render.guildwars2.com/file/3D3A1C2D6D791C05179AB871902D28782C65C244/415959.png";
+    public const string Swiftness = "https://render.guildwars2.com/file/20CFC14967E67F7A3FD4A4B8722B4CF5B8565E11/102836.png";
     public const string Retaliation = "https://wiki.guildwars2.com/images/5/53/Retaliation.png";
-    public const string Resistance = "https://assets.gw2dat.com/961398.png";
-    public const string Resolution = "https://assets.gw2dat.com//2440718.png";
-    public const string BoonDuration = "https://assets.gw2dat.com/2207782.png";
+    public const string Resistance = "https://render.guildwars2.com/file/50BAC1B8E10CFAB9E749A5D910D4A9DCF29EBB7C/961398.png";
+    public const string Resolution = "https://render.guildwars2.com/file/D104A6B9344A2E2096424A3C300E46BC2926E4D7/2440718.png";
     #endregion Boons
 
     #region Conditions
-    public const string Bleeding = "https://assets.gw2dat.com/102848.png";
-    public const string Burning = "https://assets.gw2dat.com/102849.png";
-    public const string Confusion = "https://assets.gw2dat.com/102880.png";
-    public const string Poison = "https://assets.gw2dat.com/102840.png";
-    public const string Torment = "https://assets.gw2dat.com/598887.png";
-    public const string Blind = "https://assets.gw2dat.com/102837.png";
-    public const string Chilled = "https://assets.gw2dat.com/102839.png";
-    public const string Crippled = "https://assets.gw2dat.com/102838.png";
-    public const string Fear = "https://assets.gw2dat.com/102869.png";
-    public const string Immobile = "https://assets.gw2dat.com/102844.png";
-    public const string Slow = "https://assets.gw2dat.com/961397.png";
-    public const string Weakness = "https://assets.gw2dat.com/102853.png";
-    public const string Taunt = "https://assets.gw2dat.com/1228472.png";
-    public const string Vulnerability = "https://assets.gw2dat.com/102850.png";
-    public const string ConditionDuration = "https://assets.gw2dat.com/2229319.png";
+    public const string Bleeding = "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png";
+    public const string Burning = "https://render.guildwars2.com/file/B47BF5803FED2718D7474EAF9617629AD068EE10/102849.png";
+    public const string Confusion = "https://render.guildwars2.com/file/289AA0A4644F0E044DED3D3F39CED958E1DDFF53/102880.png";
+    public const string Poison = "https://render.guildwars2.com/file/559B0AF9FB5E1243D2649FAAE660CCB338AACC19/102840.png";
+    public const string Torment = "https://render.guildwars2.com/file/10BABF2708CA3575730AC662A2E72EC292565B08/598887.png";
+    public const string Blind = "https://render.guildwars2.com/file/09770136BB76FD0DBE1CC4267DEED54774CB20F6/102837.png";
+    public const string Chilled = "https://render.guildwars2.com/file/28C4EC547A3516AF0242E826772DA43A5EAC3DF3/102839.png";
+    public const string Crippled = "https://render.guildwars2.com/file/070325E519C178D502A8160523766070D30C0C19/102838.png";
+    public const string Fear = "https://render.guildwars2.com/file/30307A6E766D74B6EB09EDA12A4A2DE50E4D76F4/102869.png";
+    public const string Immobile = "https://render.guildwars2.com/file/397A613651BFCA2832B6469CE34735580A2C120E/102844.png";
+    public const string Slow = "https://render.guildwars2.com/file/F60D1EF5271D7B9319610855676D320CD25F01C6/961397.png";
+    public const string Weakness = "https://render.guildwars2.com/file/6CB0E64AF9AA292E332A38C1770CE577E2CDE0E8/102853.png";
+    public const string Taunt = "https://render.guildwars2.com/file/02EED459AD65FAF7DF32A260E479C625070841B9/1228472.png";
+    public const string Vulnerability = "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png";
     #endregion Conditions
 
     #region Commons
@@ -50,8 +50,8 @@ public static class BuffImages
     public const string Revealed = "https://wiki.guildwars2.com/images/d/db/Revealed.png";
     public const string Superspeed = "https://wiki.guildwars2.com/images/c/c8/Superspeed.png";
     public const string Determined = "https://wiki.guildwars2.com/images/e/eb/Determined.png";
-    public const string Stun = "https://assets.gw2dat.com/522727.png";
-    public const string Daze = "https://assets.gw2dat.com/433474.png";
+    public const string Stun = "https://render.guildwars2.com/file/1999B9DB355005D2DD19F66DFFBAA6D466057508/522727.png";
+    public const string Daze = "https://render.guildwars2.com/file/9AE125E930C92FEA0DD99E7EBAEDE4CF5EC556B6/433474.png";
     public const string Exposed = "https://wiki.guildwars2.com/images/6/6b/Exposed.png";
     public const string Unblockable = "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png";
     public const string Encumbered = "https://wiki.guildwars2.com/images/d/d7/Encumbered.png";

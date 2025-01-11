@@ -133,7 +133,7 @@ internal static class TraitImages
     public const string OpeningStrike = "https://wiki.guildwars2.com/images/4/44/Opening_Strike_%28effect%29.png";
     public const string QuickDraw = "https://wiki.guildwars2.com/images/3/39/Quick_Draw.png";
     public const string SteadyFocus = "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png";
-    public const string HuntersTactics = "https://assets.gw2dat.com/1012653.png";
+    public const string HuntersTactics = "https://render.guildwars2.com/file/44D4631FB427F09BE5B300BE0F537E6F2126BA0B/1012653.png";
     public const string PredatorsOnslaught = "https://wiki.guildwars2.com/images/a/ac/Predator%27s_Onslaught.png";
     public const string LightOnYourFeet = "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png";
     public const string BountifulHunter = "https://wiki.guildwars2.com/images/2/25/Bountiful_Hunter.png";
@@ -205,7 +205,7 @@ internal static class TraitImages
     public const string InstantReflexes = "https://wiki.guildwars2.com/images/7/7d/Instant_Reflexes.png";
     #endregion
     #region Warrior
-    public const string RousingResilience = "https://assets.gw2dat.com/1012794.png";
+    public const string RousingResilience = "https://render.guildwars2.com/file/630279C914D8BF414C2358281F1A37EDF86B203B/1012794.png";
     public const string PeakPerformace = "https://wiki.guildwars2.com/images/9/98/Peak_Performance.png";
     public const string AdrenalHealth = "https://wiki.guildwars2.com/images/2/24/Adrenal_Health.png";
     public const string BerserkersPower = "https://wiki.guildwars2.com/images/6/6f/Berserker%27s_Power.png";

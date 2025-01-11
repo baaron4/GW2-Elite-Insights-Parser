@@ -36,6 +36,8 @@ function buildFallBackURL(skill) {
     }
     var apiIcon = skill.icon;
     if (!apiIcon.includes("render")) {
+        // not using API render service
+        skill.fallBack = true;
         return;
     }
     var splitIcon = apiIcon.split('/');
