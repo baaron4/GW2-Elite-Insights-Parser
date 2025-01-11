@@ -67,29 +67,37 @@
                     <th v-if="hasBreakbarDamage" class="damage-dist-cell"  
                         :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6, x => getBreakbarDamage(x))"    
                         data-original-title="% Breakbar Damage">
-                        % <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                        % <img :src="UIIcons.Breakbar" alt="Breakbar"
                         class="icon">
                     </th>
                     <th v-if="hasBreakbarDamage" class="damage-dist-cell"  
                         :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7, x => getBreakbarDamage(x))" 
                         data-original-title="Breakbar Damage">
-                        <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                        <img :src="UIIcons.Breakbar" alt="Breakbar"
                         class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8, x => getCast(x))"
-                        v-if="actor !== null">
-                        Cast
+                        v-if="actor !== null">          
+                        #
+                        <img :src="UIIcons.Activation" alt="Cast"
+                            class="icon">
                     </th>
                     <th class="damage-dist-cell"
-                        :class="getHeaderClass('Data', 9)" @click="sortBy('Data', 9, x => getConnectedHits(x))">
-                        Hits
+                        :class="getHeaderClass('Data', 9)" @click="sortBy('Data', 9, x => getConnectedHits(x))"
+                        data-original-title="Hits">         
+                        <img :src="UIIcons.NumberOfTargets"
+                            alt="Hits" class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 10)" @click="sortBy('Data', 10, x => round2(getConnectedHits(x)/getCast(x)))"
                         data-original-title="Hits per Cast">
-                        <img :src="UIIcons.NumberOfTargets"
-                            alt="Hits per Cast" class="icon icon-hover">
+                            <img :src="UIIcons.NumberOfTargets"
+                            alt="Hits" class="icon">
+                            /
+                            #
+                            <img :src="UIIcons.Activation" alt="Cast"
+                            class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 11)" @click="sortBy('Data', 11, x => round2(getDamage(x)/(0.001 * getCastDuration(x))))"
@@ -121,19 +129,19 @@
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 12)" @click="sortBy('Data', 12, x => round2(getCriticalHits(x)*100/getConnectedHits(x)))"
                         data-original-title="Percent time hits critical">
-                        <img src="https://wiki.guildwars2.com/images/9/95/Critical_Chance.png" alt="Crits"
+                        <img :src="UIIcons.Crit" alt="Crits"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 13)" @click="sortBy('Data', 13, x => round2(getFlankingHits(x)*100/getConnectedHits(x)))"
                         data-original-title="Percent time hits while flanking">
-                        <img src="https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png" alt="Flank"
+                        <img :src="UIIcons.Flank" alt="Flank"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" 
                         :class="getHeaderClass('Data', 14)" @click="sortBy('Data', 14, x => round2(getGlancingHits(x)*100/getConnectedHits(x)))"
                         data-original-title="Percent time hits while glancing">
-                        <img src="https://wiki.guildwars2.com/images/f/f9/Weakness.png" alt="Glance"
+                        <img :src="UIIcons.Glance" alt="Glance"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" 
@@ -145,13 +153,13 @@
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 16)" @click="sortBy('Data', 16, x => getCastTimeWasted(x))"
                         data-original-title="Time wasted interupting skill casts">
-                        <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
+                        <img :src="UIIcons.TimeWasted" alt="Wasted"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 17)" @click="sortBy('Data', 17, x => getCastTimeSaved(x))"
                         data-original-title="Time saved(in seconds) interupting skill casts">
-                        <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
+                        <img :src="UIIcons.TimeSaved" alt="Saved"
                             class="icon icon-hover">
                     </th>
                 </tr>

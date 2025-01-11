@@ -42,7 +42,7 @@
             </li>
             <li class="nav-item d-flex flex-row justify-content-center align-items-center" v-if="hasBreakbarDamage" data-original-title="Breakbar">
                 <a class="nav-link" @click="data.damagemode = damageModeEnum.Breakbar" :class="{active: data.damagemode === damageModeEnum.Breakbar}"> 
-                    <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                    <img :src="UIIcons.Breakbar" alt="Breakbar"
                     class="icon"></a>
             </li>
         </ul>

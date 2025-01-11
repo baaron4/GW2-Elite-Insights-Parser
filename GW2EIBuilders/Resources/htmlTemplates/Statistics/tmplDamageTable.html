@@ -20,7 +20,7 @@
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3)" v-if="!targetless && hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
-                        Target <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                        Target <img :src="UIIcons.Breakbar" alt="Breakbar"
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)" data-original-title="Power + Condition" class="damage-cell">
@@ -36,7 +36,7 @@
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7)" v-if="hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
-                        All <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                        All <img :src="UIIcons.Breakbar" alt="Breakbar"
                         class="icon">
                     </th>
                 </tr>

@@ -57,18 +57,26 @@
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null"
-                        :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6, x => getCast(x))" >
-                        Cast
+                        :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6, x => getCast(x))" >          
+                        #
+                        <img :src="UIIcons.Activation" alt="Cast"
+                            class="icon">
                     </th>
                     <th class="damage-dist-cell"
-                        :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7, x => getConnectedHits(x))">
-                        Hits
+                        :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7, x => getConnectedHits(x))"
+                        data-original-title="Hits">         
+                        <img :src="UIIcons.NumberOfTargets"
+                            alt="Hits" class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8, x => round2(getConnectedHits(x)/getCast(x)))"
                         data-original-title="Hits per Cast">
                         <img :src="UIIcons.NumberOfTargets"
-                            alt="Hits per Cast" class="icon icon-hover">
+                            alt="Hits" class="icon">
+                            /
+                            #
+                            <img :src="UIIcons.Activation" alt="Cast"
+                            class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 9)" @click="sortBy('Data', 9, x => round2(getHealingOutput(row)/(0.001 * getCastDuration(row))))"
@@ -100,13 +108,13 @@
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 10)" @click="sortBy('Data', 10, x => getCastTimeWasted(x))"
                         data-original-title="Time wasted interupting skill casts">
-                        <img src="https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png" alt="Wasted"
+                        <img :src="UIIcons.TimeWasted" alt="Wasted"
                             class="icon icon-hover">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null" 
                         :class="getHeaderClass('Data', 11)" @click="sortBy('Data', 11, x => getCastTimeSaved(x))"
                         data-original-title="Time saved(in seconds) interupting skill casts">
-                        <img src="https://wiki.guildwars2.com/images/e/eb/Ready.png" alt="Saved"
+                        <img :src="UIIcons.TimeSaved" alt="Saved"
                             class="icon icon-hover">
                     </th>
                 </tr>

@@ -17,7 +17,7 @@
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0)"
                         data-original-title="Condition Cleanse on Squad Mates">
-                        <img src="https://wiki.guildwars2.com/images/1/12/Healing_Spring.png"
+                        <img :src="UIIcons.Cleanse"
                             alt="Condition Cleanse on Others" class="icon icon-hover">
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2)"
@@ -27,7 +27,7 @@
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)"
                         data-original-title="Boon Strips">
-                        <img src="https://wiki.guildwars2.com/images/e/ec/Banish_Enchantment.png" alt="Boon Strips"
+                        <img :src="UIIcons.Strip" alt="Boon Strips"
                             class="icon icon-hover">
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 8)" @click="sortBy('Data', 8)"

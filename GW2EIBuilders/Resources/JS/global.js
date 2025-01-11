@@ -206,15 +206,33 @@ const RotationStatus = {
 const UIIcons = {
     Barrier: "https://assets.gw2dat.com/1770209.png",
     Heal: "https://assets.gw2dat.com/156662.png",
+    Crit: "https://assets.gw2dat.com/2229323.png",
+    Flank: "https://assets.gw2dat.com/1012653.png",
     Damage: "https://assets.gw2dat.com/156657.png",
+    Breakbar: "https://wiki.guildwars2.com/images/a/ae/Unshakable.png",
+    CC: "https://assets.gw2dat.com/522727.png",
     ConditionDamage: "https://assets.gw2dat.com/2229318.png",
     Power: "https://assets.gw2dat.com/2229322.png",
     HealingPower: "https://assets.gw2dat.com/2229321.png",
     Activation: "https://wiki.guildwars2.com/images/6/6e/Activation.png",
+    Duration: "https://assets.gw2dat.com/156659.png",
     NumberOfTargets: "https://assets.gw2dat.com/1770208.png",
     DownedAlly: "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png",
     DownedEnemy: "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png",
+    Dead: "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png",
+    ConvertHealing: "https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png",
+    TimeWasted: "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png",
+    TimeSaved: "https://wiki.guildwars2.com/images/e/eb/Ready.png",
     StunBreak: "https://assets.gw2dat.com/156654.png",
+    Glance: "https://assets.gw2dat.com/102853.png",
+    Miss: "https://assets.gw2dat.com/102837.png",
+    Interrupt: "https://assets.gw2dat.com/433474.png",
+    Evade: "https://wiki.guildwars2.com/images/e/e2/Evade.png",
+    Dodge: "https://wiki.guildwars2.com/images/b/b2/Dodge.png",
+    Invul: "https://wiki.guildwars2.com/images/e/eb/Determined.png",
+    Block: "https://assets.gw2dat.com/102854.png",
+    Strip: "https://assets.gw2dat.com/961449.png",
+    Cleanse: "https://assets.gw2dat.com/103544.png"
 };
 
 const EIUrlParams = new URLSearchParams(window.location.search);

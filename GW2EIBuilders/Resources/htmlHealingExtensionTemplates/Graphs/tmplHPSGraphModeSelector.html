@@ -37,14 +37,14 @@
             </li>                     
             <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Conversion">
                 <a class="nav-link" @click="data.healingmode = healingModeEnum.Conversion" :class="{active: data.healingmode === healingModeEnum.Conversion}">
-                    <img src="https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png" alt="Conversion"
+                    <img :src="UIIcons.ConvertHealing" alt="Conversion"
                     class="icon"></a>
             </li>   
             <!--                 
             <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Hybrid">
                 <a class="nav-link" @click="data.healingmode = healingModeEnum.Hybrid" :class="{active: data.healingmode === healingModeEnum.Hybrid}">
                     <img :src="UIIcons.HealingPower" alt="Hybrid"
-                    class="icon"> / <img src="https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png" alt="Hybrid"
+                    class="icon"> / <img :src="UIIcons.ConvertHealing" alt="Hybrid"
                     class="icon"></a>
             </li>
             //-->
