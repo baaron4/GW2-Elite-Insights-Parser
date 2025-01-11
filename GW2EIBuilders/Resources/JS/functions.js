@@ -40,7 +40,12 @@ function buildFallBackURL(skill) {
     }
     var splitIcon = apiIcon.split('/');
     var id = splitIcon[splitIcon.length - 1];
-    skill.icon = "https://assets.gw2dat.com/"+ id;
+    if (useDarthmaim) {
+        var signature = splitIcon[splitIcon.length - 2];
+        skill.icon = "https://icons-gw2.darthmaim-cdn.com/" + signature + "/" + id;
+    } else {
+        skill.icon = "https://assets.gw2dat.com/"+ id;
+    }
     skill.fallBack = true;
 }
 
@@ -267,7 +272,7 @@ function computeRotationData(rotationData, images, data, phase, actor, yAxis) {
                 name = skill.name;
             }
 
-            if (!icon.includes("render") && !icon.includes("gw2dat")) {
+            if (!icon.includes("render") && !icon.includes("darthmaim") && !icon.includes("gw2dat")) {
                 icon = null;
             }
 

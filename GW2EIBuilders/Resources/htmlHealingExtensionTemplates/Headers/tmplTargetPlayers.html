@@ -53,7 +53,7 @@
         template: `${template}`,
         methods: {
             getIcon: function (path) {
-                return urls[path];
+                return WeaponIcons[path];
             },
             select: function (id) {
                 this.players[id].targetActive = !this.players[id].targetActive;
