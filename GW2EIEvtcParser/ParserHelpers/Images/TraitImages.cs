@@ -133,7 +133,7 @@ internal static class TraitImages
     public const string OpeningStrike = "https://wiki.guildwars2.com/images/4/44/Opening_Strike_%28effect%29.png";
     public const string QuickDraw = "https://wiki.guildwars2.com/images/3/39/Quick_Draw.png";
     public const string SteadyFocus = "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png";
-    public const string HuntersTactics = "https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png";
+    public const string HuntersTactics = "https://assets.gw2dat.com/1012653.png";
     public const string PredatorsOnslaught = "https://wiki.guildwars2.com/images/a/ac/Predator%27s_Onslaught.png";
     public const string LightOnYourFeet = "https://wiki.guildwars2.com/images/2/22/Light_on_your_Feet.png";
     public const string BountifulHunter = "https://wiki.guildwars2.com/images/2/25/Bountiful_Hunter.png";

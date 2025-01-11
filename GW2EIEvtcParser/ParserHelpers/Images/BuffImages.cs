@@ -23,21 +23,21 @@ public static class BuffImages
     #endregion Boons
 
     #region Conditions
-    public const string Bleeding = "https://render.guildwars2.com/file/79FF0046A5F9ADA3B4C4EC19ADB4CB124D5F0021/102848.png";
-    public const string Burning = "https://render.guildwars2.com/file/B47BF5803FED2718D7474EAF9617629AD068EE10/102849.png";
-    public const string Confusion = "https://render.guildwars2.com/file/289AA0A4644F0E044DED3D3F39CED958E1DDFF53/102880.png";
-    public const string Poison = "https://render.guildwars2.com/file/559B0AF9FB5E1243D2649FAAE660CCB338AACC19/102840.png";
-    public const string Torment = "https://render.guildwars2.com/file/10BABF2708CA3575730AC662A2E72EC292565B08/598887.png";
-    public const string Blind = "https://render.guildwars2.com/file/09770136BB76FD0DBE1CC4267DEED54774CB20F6/102837.png";
-    public const string Chilled = "https://render.guildwars2.com/file/28C4EC547A3516AF0242E826772DA43A5EAC3DF3/102839.png";
-    public const string Crippled = "https://render.guildwars2.com/file/070325E519C178D502A8160523766070D30C0C19/102838.png";
-    public const string Fear = "https://render.guildwars2.com/file/30307A6E766D74B6EB09EDA12A4A2DE50E4D76F4/102869.png";
-    public const string Immobile = "https://render.guildwars2.com/file/397A613651BFCA2832B6469CE34735580A2C120E/102844.png";
-    public const string Slow = "https://render.guildwars2.com/file/F60D1EF5271D7B9319610855676D320CD25F01C6/961397.png";
-    public const string Weakness = "https://render.guildwars2.com/file/6CB0E64AF9AA292E332A38C1770CE577E2CDE0E8/102853.png";
-    public const string Taunt = "https://render.guildwars2.com/file/02EED459AD65FAF7DF32A260E479C625070841B9/1228472.png";
-    public const string Vulnerability = "https://render.guildwars2.com/file/3A394C1A0A3257EB27A44842DDEEF0DF000E1241/102850.png";
-    public const string ConditionDuration = "https://render.guildwars2.com/file/4977CD5BAF0A7B6412DCC775C3909F7D4EFE4C65/2229319.png";
+    public const string Bleeding = "https://assets.gw2dat.com/102848.png";
+    public const string Burning = "https://assets.gw2dat.com/102849.png";
+    public const string Confusion = "https://assets.gw2dat.com/102880.png";
+    public const string Poison = "https://assets.gw2dat.com/102840.png";
+    public const string Torment = "https://assets.gw2dat.com/598887.png";
+    public const string Blind = "https://assets.gw2dat.com/102837.png";
+    public const string Chilled = "https://assets.gw2dat.com/102839.png";
+    public const string Crippled = "https://assets.gw2dat.com/102838.png";
+    public const string Fear = "https://assets.gw2dat.com/102869.png";
+    public const string Immobile = "https://assets.gw2dat.com/102844.png";
+    public const string Slow = "https://assets.gw2dat.com/961397.png";
+    public const string Weakness = "https://assets.gw2dat.com/102853.png";
+    public const string Taunt = "https://assets.gw2dat.com/1228472.png";
+    public const string Vulnerability = "https://assets.gw2dat.com/102850.png";
+    public const string ConditionDuration = "https://assets.gw2dat.com/2229319.png";
     #endregion Conditions
 
     #region Commons
@@ -50,8 +50,8 @@ public static class BuffImages
     public const string Revealed = "https://wiki.guildwars2.com/images/d/db/Revealed.png";
     public const string Superspeed = "https://wiki.guildwars2.com/images/c/c8/Superspeed.png";
     public const string Determined = "https://wiki.guildwars2.com/images/e/eb/Determined.png";
-    public const string Stun = "https://wiki.guildwars2.com/images/9/97/Stun.png";
-    public const string Daze = "https://wiki.guildwars2.com/images/7/79/Daze.png";
+    public const string Stun = "https://assets.gw2dat.com/522727.png";
+    public const string Daze = "https://assets.gw2dat.com/433474.png";
     public const string Exposed = "https://wiki.guildwars2.com/images/6/6b/Exposed.png";
     public const string Unblockable = "https://wiki.guildwars2.com/images/f/f0/Unblockable_%28effect%29.png";
     public const string Encumbered = "https://wiki.guildwars2.com/images/d/d7/Encumbered.png";
