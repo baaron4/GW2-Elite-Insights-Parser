@@ -67,7 +67,7 @@ const WeaponIcons = {
     Dagger: "https://render.guildwars2.com/file/2F94A543C87EAEE701BE28B26564C7B3D19C0977/631546.png",
     Mace: "https://render.guildwars2.com/file/6EA5EEBFDC1278F3F997A248362A6F9698CA09FD/631600.png",
     Pistol: "https://render.guildwars2.com/file/51217142E12EB2FE19B1DB1CAE4F1D275CC9EA03/631608.png",
-    Scepter: "https://render.guildwars2.com/file/3832066C1A5B45F1C40930C703573C65CB53D73B/631624.pn",
+    Scepter: "https://render.guildwars2.com/file/3832066C1A5B45F1C40930C703573C65CB53D73B/631624.png",
     Sword: "https://render.guildwars2.com/file/3C4AA1BD79DAB49201C81D934AC7567B286E711B/631658.png",
     Focus: "https://render.guildwars2.com/file/3F2F9F46E00592FE966F0E976445A87536743513/631554.png",
     Shield: "https://render.guildwars2.com/file/59060CD4B67508090C0F5F436499F07B71080E1B/631632.png",
@@ -77,7 +77,7 @@ const WeaponIcons = {
     Hammer: "https://render.guildwars2.com/file/A3455EC1C59AC001E12C65740DE32DA12645EFA5/631576.png",
     Longbow: "https://render.guildwars2.com/file/773EB91B749EB947CBB277D3219090CC1BDCCAC4/631592.png",
     Rifle: "https://render.guildwars2.com/file/9D0F6CE0C16A43FD0E66C55E3E27CCDF260779ED/631616.png",
-    Shortbow: "https://render.guildwars2.com/file/3D7A68807006A225D124A4315DDAFB10AA07CE0F/631634.pn",
+    Shortbow: "https://render.guildwars2.com/file/3D7A68807006A225D124A4315DDAFB10AA07CE0F/631634.png",
     Staff: "https://render.guildwars2.com/file/F86C3CD9FA20D20EE920590517993211C6F9B99C/631650.png",
     Speargun: "https://render.guildwars2.com/file/5C473933354CB8F1542F9F0FF39A5B445877CC06/631642.png",
     Spear: "https://render.guildwars2.com/file/C427A73B00AB091FE8049AC2FD7EDEB4AF9A093F/631584.png",
@@ -85,6 +85,7 @@ const WeaponIcons = {
 };
 
 const UIIcons = {
+    Facing: "https://i.imgur.com/tZTmTRn.png",
     Barrier: "https://render.guildwars2.com/file/357922487919E8E84B914EAC13D5796DDDC42D14/1770209.png",
     Heal: "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png",
     Crit: "https://render.guildwars2.com/file/C2CEA567E0C43C199C782809544721AA12A6DF0A/2229323.png",
@@ -95,13 +96,17 @@ const UIIcons = {
     ConditionDamage: "https://render.guildwars2.com/file/0120CB042BFC2EA6A45BC3DB45155FECDDDE1910/2229318.png",
     Power: "https://render.guildwars2.com/file/D6CAECEA0FD5FADE04DD6970384ADC5DE309C506/2229322.png",
     HealingPower: "https://render.guildwars2.com/file/9B986DEADC035E58C364A1423975F5F538FC2202/2229321.png",
+    Vitality: "https://render.guildwars2.com/file/CAE8B4C43FF9D203FA55016700420A0454DFFE02/2229325.png",
+    BoonDuration: "https://render.guildwars2.com/file/6574560606F6BA1B32E9CF0F6C9709D1C1F2D9A6/2207782.png",
+    Toughness: "https://render.guildwars2.com/file/432C0F04F740C1377E6D5D56640B57083C031216/2229324.png",
     Activation: "https://wiki.guildwars2.com/images/6/6e/Activation.png",
     Duration: "https://render.guildwars2.com/file/7B2193ACCF77E56C13E608191B082D68AA0FAA71/156659.png",
     NumberOfTargets: "https://render.guildwars2.com/file/BBE8191A494B0352259C10EADFDACCE177E6DA5B/1770208.png",
     DownedAlly: "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png",
     DownedEnemy: "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png",
     Dead: "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png",
-    ConvertHealing: "https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png",
+    Disconnected: "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png",
+    ConvertHealing: "https://render.guildwars2.com/file/77077EDEB2AF1F3D4062E6428000F44F77616ADE/699527.png",
     TimeWasted: "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png",
     TimeSaved: "https://wiki.guildwars2.com/images/e/eb/Ready.png",
     StunBreak: "https://render.guildwars2.com/file/DCF0719729165FD8910E034CA4E0780F90582D15/156654.png",
@@ -113,7 +118,15 @@ const UIIcons = {
     Invul: "https://wiki.guildwars2.com/images/e/eb/Determined.png",
     Block: "https://render.guildwars2.com/file/DFB4D1B50AE4D6A275B349E15B179261EE3EB0AF/102854.png",
     Strip: "https://render.guildwars2.com/file/D327055AA824ABDDAD70E2606E1C9AF018FF9902/961449.png",
-    Cleanse: "https://render.guildwars2.com/file/F6C2FD7E78EE0D9178AEAEF8B1666477D1E92C99/103544.png"
+    Cleanse: "https://render.guildwars2.com/file/F6C2FD7E78EE0D9178AEAEF8B1666477D1E92C99/103544.png",
+    CleanseSelf: "https://render.guildwars2.com/file/04EB1106C95B7579EA29FA2F08BAFDA649C60715/103295.png",
+    WeaponSwap: "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png",
+    Commander: "https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png",
+    HitboxWidth: "https://i.imgur.com/QSI79aT.png",
+    HitboxHeight: "https://i.imgur.com/41lsf0q.png",
+    ExclamationMark: "https://i.imgur.com/k3tdKEQ.png",
+    QuestionMark: "https://i.imgur.com/nSYuby8.png",
+    AgainstMoving: "https://i.imgur.com/11uAbd4.png",
 };
 
 const specs = [

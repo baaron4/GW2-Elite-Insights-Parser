@@ -1,6 +1,6 @@
 <template>
     <div v-if="buffs.length > 0">
-        <img v-if="generation" class="mb-1 icon" src="https://i.imgur.com/nSYuby8.png"
+        <img v-if="generation" class="mb-1 icon" :src="UIIcons.QuestionMark"
             :data-original-title="tooltipExpl" />
         <div v-if="colPageCount > 0">
             <table-scroll-component :min="0" :max="colPageCount" :width="'600px'" :height="'10px'" :transform="'translate(500px)'" :pagestructure="colStructure"></table-scroll-component>
@@ -172,6 +172,9 @@
             },
             tableid: function() {
                 return this.id;
+            },
+            UIIcons: function() {
+                return UIIcons;
             },
             tooltipExpl: function () {
                 return `<ul style='text-align:left;margin-block-end: 0.3em;'>

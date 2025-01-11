@@ -170,7 +170,7 @@ internal static class SkillImages
     public const string TomeOfResolve = "https://wiki.guildwars2.com/images/a/a9/Tome_of_Resolve.png";
     public const string ZealotsFlame = "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png";
     public const string PurgingFlames = "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png";
-    public const string LitanyOfWrath = "https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png";
+    public const string LitanyOfWrath = "https://render.guildwars2.com/file/77077EDEB2AF1F3D4062E6428000F44F77616ADE/699527.png";
     public const string RenewedFocus = "https://wiki.guildwars2.com/images/1/10/Renewed_Focus.png";
     public const string ShieldOfWrath = "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png";
     public const string BindingBlade = "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png";
@@ -385,6 +385,7 @@ internal static class SkillImages
     public const string BloodReckoning = "https://wiki.guildwars2.com/images/d/d6/Blood_Reckoning.png";
     public const string ShatteringBlow = "https://wiki.guildwars2.com/images/c/c7/Shattering_Blow.png";
     public const string ImpaleWarriorSword = "https://wiki.guildwars2.com/images/4/42/Impale_%28warrior_sword_skill%29.png";
+    public const string Mending = "https://render.guildwars2.com/file/04EB1106C95B7579EA29FA2F08BAFDA649C60715/103295.png";
     #endregion Warrior
     #region WvW
     public const string FireTrebuchet = "https://wiki.guildwars2.com/images/3/38/Fire_%28Trebuchet%29.png";

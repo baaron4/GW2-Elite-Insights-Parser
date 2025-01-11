@@ -27,7 +27,7 @@
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)"
                         data-original-title="Times weapon swapped">
-                        <img src="https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png" alt="Swap"
+                        <img :src="UIIcons.WeaponSwap" alt="Swap"
                             class="icon icon-hover">
                     </th>
                     <th class="stat-cell" :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7)"
@@ -53,7 +53,7 @@
                     </th>
                     <th class="stat-cell" v-if="hasCommander" :class="getHeaderClass('Data', 6)"
                         @click="sortBy('Data', 6)" data-original-title="Average Distance to the commander">
-                        <img src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png"
+                        <img :src="UIIcons.Commander"
                             alt="Stack Commander" class="icon icon-hover">
                     </th>
                 </tr>

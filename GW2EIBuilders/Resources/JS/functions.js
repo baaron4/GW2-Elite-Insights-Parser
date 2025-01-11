@@ -30,24 +30,27 @@ function computeSliderGradient(color, fillColor, startPercent, endPercent) {
     return template;
 };
 
+function _buildFallBackURL(url) {
+    if (!url.includes("render")) {
+        // not using API render service
+        return url;
+    }
+    var splitIcon = url.split('/');
+    var id = splitIcon[splitIcon.length - 1];
+    if (useDarthmaim) {
+        var signature = splitIcon[splitIcon.length - 2];
+        return "https://icons-gw2.darthmaim-cdn.com/" + signature + "/" + id;
+    } else {
+        return "https://assets.gw2dat.com/"+ id;
+    }
+}
+
 function buildFallBackURL(skill) {
     if (!skill.icon || skill.fallBack) {
         return;
     }
     var apiIcon = skill.icon;
-    if (!apiIcon.includes("render")) {
-        // not using API render service
-        skill.fallBack = true;
-        return;
-    }
-    var splitIcon = apiIcon.split('/');
-    var id = splitIcon[splitIcon.length - 1];
-    if (useDarthmaim) {
-        var signature = splitIcon[splitIcon.length - 2];
-        skill.icon = "https://icons-gw2.darthmaim-cdn.com/" + signature + "/" + id;
-    } else {
-        skill.icon = "https://assets.gw2dat.com/"+ id;
-    }
+    skill.icon = _buildFallBackURL(apiIcon);
     skill.fallBack = true;
 }
 

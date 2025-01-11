@@ -35,6 +35,7 @@ class IconDrawable {
         this.breakbarActive = typeof params.breakbarActive !== "undefined" ? params.breakbarActive : null;
         this.hitboxWidth = InchToPixel * params.hitboxWidth;
         //
+        this.id = params.id;
         uint32[0] = params.id;
         this.pickingColor = params.img && params.img.length > 0 ? `rgba(${uint32ToUint8[0]}, ${uint32ToUint8[1]}, ${uint32ToUint8[2]}, 1)` : null;
     }
@@ -80,7 +81,7 @@ class IconDrawable {
             return deadIcon;
         }
         if (this.downed()) {
-            return animator.playerData.has(this) || animator.friendlyMobData.has(this) ? downAllyIcon : downEnemyIcon;
+            return animator.playerData.has(this.id) || animator.friendlyMobData.has(this.id) ? downAllyIcon : downEnemyIcon;
         }
         if (this.disconnected()) {
             return dcIcon;
