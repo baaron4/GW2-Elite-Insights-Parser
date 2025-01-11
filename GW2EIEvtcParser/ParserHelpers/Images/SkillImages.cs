@@ -3,10 +3,17 @@
 #pragma warning disable CA1823 // Unused field
 internal static class SkillImages
 {
-    public const string MonsterSkill = "https://wiki.guildwars2.com/images/5/5f/Monster_Skill.png";
+    public const string MonsterSkill = "https://assets.gw2dat.com/62248.png";
     public const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
-    public const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
-    public const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
+    public const string WeaponSwap = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
+    public const string WeaponStow = "https://i.imgur.com/K7taOUe.png";
+    public const string WeaponDraw = "https://i.imgur.com/7TAlNtd.png";
+    #region Down
+    public const string Anchor = "https://wiki.guildwars2.com/images/c/c0/Anchor.png";
+    public const string Resurrect = "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
+    public const string Bandage = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+    #endregion Down
+    public const string Dodge = "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png";
     // Races
     public const string TakeRoot = "https://wiki.guildwars2.com/images/b/b2/Take_Root.png";
     public const string BecomeBear = "https://wiki.guildwars2.com/images/7/7e/Become_the_Bear.png";
@@ -18,6 +25,8 @@ internal static class SkillImages
     public const string ReaperOfGrenth = "https://wiki.guildwars2.com/images/0/07/Reaper_of_Grenth.png";
     public const string Charrzooka = "https://wiki.guildwars2.com/images/1/17/Charrzooka.png";
     public const string HoundsOfBalthazar = "https://wiki.guildwars2.com/images/9/95/Hounds_of_Balthazar.png";
+    //
+    public const string WhirlingAssault = "https://wiki.guildwars2.com/images/8/8b/Whirling_Assault.png";
     // TODO: organize this
     //
     #region Elementalist
@@ -145,6 +154,7 @@ internal static class SkillImages
     public const string ConduitSurge = "https://wiki.guildwars2.com/images/6/6b/Conduit_Surge.png";
     public const string ElectricArtillery = "https://wiki.guildwars2.com/images/1/13/Electric_Artillery.png";
     public const string Focused = "https://wiki.guildwars2.com/images/5/51/Focused.png";
+    public const string NetShot = "https://wiki.guildwars2.com/images/3/3d/Net_Shot.png";
     #endregion Engineer
     #region Guardian
     public const string SpearOfLight = "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png";
@@ -182,6 +192,7 @@ internal static class SkillImages
     public const string MightyBlow = "https://wiki.guildwars2.com/images/7/70/Mighty_Blow.png";
     public const string Illuminated = "https://wiki.guildwars2.com/images/7/7d/Illuminated.png";
     public const string SymbolOfLuminance = "https://wiki.guildwars2.com/images/c/c5/Symbol_of_Luminance_%28effect%29.png";
+    public const string FireJurisdiction = "https://assets.gw2dat.com/3256356.png";
     #endregion Guardian
     #region Mesmer
     public const string ContinuumSplit = "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png";
@@ -339,6 +350,8 @@ internal static class SkillImages
     public const string ShadowPortal = "https://wiki.guildwars2.com/images/d/d3/Shadow_Portal.png";
     public const string DistractingThrow = "https://wiki.guildwars2.com/images/d/d8/Distracting_Throw.png";
     public const string ShadowVeil = "https://wiki.guildwars2.com/images/d/dd/Shadow_Veil.png";
+    public const string ThrowGunk = "https://wiki.guildwars2.com/images/d/d9/Throw_Gunk.png";
+    public const string ImpairingDaggers = "https://wiki.guildwars2.com/images/9/94/Impairing_Daggers.png";
     #endregion Thief
     #region Warrior
     public const string Riposte = "https://wiki.guildwars2.com/images/d/de/Riposte.png";
@@ -373,6 +386,33 @@ internal static class SkillImages
     public const string ShatteringBlow = "https://wiki.guildwars2.com/images/c/c7/Shattering_Blow.png";
     public const string ImpaleWarriorSword = "https://wiki.guildwars2.com/images/4/42/Impale_%28warrior_sword_skill%29.png";
     #endregion Warrior
+    #region WvW
+    public const string FireTrebuchet = "https://wiki.guildwars2.com/images/3/38/Fire_%28Trebuchet%29.png";
+    #endregion WvW
+    #region Mount
+    public const string BondOfLife = "https://wiki.guildwars2.com/images/2/23/Bond_of_Life.png";
+    public const string BondOfVigor = "https://wiki.guildwars2.com/images/6/60/Bond_of_Vigor.png";
+    public const string BondOfFaith = "https://wiki.guildwars2.com/images/c/c7/Bond_of_Faith.png";
+    public const string StealthMount = "https://wiki.guildwars2.com/images/5/51/Stealth_%28mount%29.png";
+    // Skyscale
+    public const string Skyscale = "https://wiki.guildwars2.com/images/0/01/Skyscale_%28skill%29.png";
+    public const string SkyscaleFireball = "https://i.imgur.com/zPlzUia.png";
+    public const string SkyscaleBlast = "https://wiki.guildwars2.com/images/e/e7/Blast.png";
+    // Raptor
+    public const string RaptorTailSpin = "https://wiki.guildwars2.com/images/f/f2/Tail_Spin.png";
+    // Warclaw
+    public const string WarclawBattleMaul = "https://wiki.guildwars2.com/images/f/f8/Battle_Maul.png";
+    public const string WarclawLance = "https://wiki.guildwars2.com/images/f/f8/Lance.png";
+    public const string WarclawChainPull = "https://wiki.guildwars2.com/images/0/0c/Chain_Pull.png";
+    #endregion Mount
+    #region Bundle
+    public const string SmashBottle = "https://wiki.guildwars2.com/images/b/ba/Smash_%28empty_bottle%29.png";
+    public const string ThrowBottle = "https://wiki.guildwars2.com/images/7/75/Throw_%28empty_bottle%29.png";
+    #endregion Bundle
+    #region Fight Specific
+    public const string CelestialDash = "https://wiki.guildwars2.com/images/5/56/Celestial_Dash.png";
+    public const string CounterMagicSkill = "https://wiki.guildwars2.com/images/6/69/Counter_Magic_%28skill%29.png";
+    #endregion Fight Specific
 
 }
 

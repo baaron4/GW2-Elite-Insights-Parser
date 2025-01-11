@@ -95,7 +95,6 @@ public static class BuffImages
     public const string SiegeDeploymentBlocked = "https://wiki.guildwars2.com/images/3/35/Siege_Deployment_Blocked.png";
     public const string Bombard = "https://wiki.guildwars2.com/images/5/5d/Bombard_%28skill%29.png";
     public const string HardenedSiegeGear = "https://wiki.guildwars2.com/images/b/b8/Hardened_Siege_Gear.png";
-    public const string FireTrebuchet = "https://wiki.guildwars2.com/images/3/38/Fire_%28Trebuchet%29.png";
     public const string DragonBanner = "https://wiki.guildwars2.com/images/c/c0/Dragon_Banner.png";
     public const string TurtleBanner = "https://wiki.guildwars2.com/images/9/96/Turtle_Banner.png";
     public const string CentaurBanner = "https://wiki.guildwars2.com/images/d/da/Centaur_Banner.png";
@@ -356,6 +355,9 @@ public static class BuffImages
     public const string RegretAttunement = "https://wiki.guildwars2.com/images/5/5f/Regret_Attunement.png";
     public const string Consumed = "https://wiki.guildwars2.com/images/7/71/Scion%27s_Absorption.png";
     // Strikes
+    public const string SpiritNova = "https://wiki.guildwars2.com/images/1/16/Spirit_Nova.png";
+    public const string ShatteredPsyche = "https://wiki.guildwars2.com/images/6/68/Shattered_Psyche.png";
+    public const string NightTerror = "https://wiki.guildwars2.com/images/0/03/Night_Terror.png";
     public const string Hypothermia = "https://wiki.guildwars2.com/images/d/d5/Hypothermia_%28story_effect%29.png";
     public const string Frostbite = "https://wiki.guildwars2.com/images/6/6a/Frostbite_%28Bitterfrost_Frontier%29.png";
     public const string Darkness = "https://wiki.guildwars2.com/images/c/c0/Darkness.png";

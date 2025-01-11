@@ -8,6 +8,22 @@ internal static class ItemImages
     public const string NourishmentUtility = "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png";
 
     #region Sigil
+    public const string SuperiorSigilOfAir = "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png";
+    public const string SuperiorSigilOfFire = "https://wiki.guildwars2.com/images/5/56/Superior_Sigil_of_Fire.png";
+    public const string MinorSigilOfGeomancy = "https://wiki.guildwars2.com/images/2/22/Minor_Sigil_of_Geomancy.png";
+    public const string MajorSigilOfGeomancy = "https://wiki.guildwars2.com/images/6/68/Major_Sigil_of_Geomancy.png";
+    public const string SuperiorSigilOfGeomancy = "https://wiki.guildwars2.com/images/4/43/Superior_Sigil_of_Geomancy.png";
+    public const string MinorSigilOfHydromancy = "https://wiki.guildwars2.com/images/b/bc/Minor_Sigil_of_Hydromancy.png";
+    public const string MajorSigilOfHydromancy = "https://wiki.guildwars2.com/images/c/c0/Major_Sigil_of_Hydromancy.png";
+    public const string SuperiorSigilOfHydromancy = "https://wiki.guildwars2.com/images/3/33/Superior_Sigil_of_Hydromancy.png";
+    public const string MinorSigilOfWater = "https://wiki.guildwars2.com/images/8/84/Minor_Sigil_of_Water.png";
+    public const string MajorSigilOfWater = "https://wiki.guildwars2.com/images/6/69/Major_Sigil_of_Water.png";
+    public const string SuperiorSigilOfWater = "https://wiki.guildwars2.com/images/f/f9/Superior_Sigil_of_Water.png";
+    public const string MinorSigilOfRenewal = "https://wiki.guildwars2.com/images/a/a5/Minor_Sigil_of_Renewal.png";
+    public const string MajorSigilOfRenewal = "https://wiki.guildwars2.com/images/f/f6/Major_Sigil_of_Renewal.png";
+    public const string SuperiorSigilOfRenewal = "https://wiki.guildwars2.com/images/d/db/Superior_Sigil_of_Renewal.png";
+    public const string MajorSigilOfRestoration = "https://wiki.guildwars2.com/images/c/cd/Major_Sigil_of_Restoration.png";
+    public const string SuperiorSigilOfRestoration = "https://wiki.guildwars2.com/images/2/24/Superior_Sigil_of_Restoration.png";
     public const string SuperiorSigilOfImpact = "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Impact.png";
     public const string SuperiorSigilOfConcentration = "https://wiki.guildwars2.com/images/b/b3/Superior_Sigil_of_Concentration.png";
     public const string MinorSigilOfCorruption = "https://wiki.guildwars2.com/images/5/50/Minor_Sigil_of_Corruption.png";
@@ -28,6 +44,8 @@ internal static class ItemImages
     public const string SuperiorSigilOfMomentum = "https://wiki.guildwars2.com/images/3/30/Superior_Sigil_of_Momentum.png";
     public const string SuperiorSigilOfStars = "https://wiki.guildwars2.com/images/d/dc/Superior_Sigil_of_the_Stars.png";
     public const string SuperiorSigilOfSeverance = "https://wiki.guildwars2.com/images/c/c2/Superior_Sigil_of_Severance.png";
+    public const string MinorSigilOfDoom = "https://wiki.guildwars2.com/images/5/51/Minor_Sigil_of_Doom.png";
+    public const string MajorSigilOfDoom = "https://wiki.guildwars2.com/images/7/78/Major_Sigil_of_Doom.png";
     public const string SuperiorSigilOfDoom = "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png";
     public const string SuperiorSigilOfVision = "https://wiki.guildwars2.com/images/4/4f/Superior_Sigil_of_Vision.png";
     #endregion Sigil
@@ -695,6 +713,71 @@ internal static class ItemImages
     public const string GhoulsGrasp = "https://wiki.guildwars2.com/images/1/12/Ghoul%27s_Grasp.png";
     #endregion Potion
 
+    #region Finishers
+    public const string BasicFinisher = "https://wiki.guildwars2.com/images/0/00/Basic_Finisher.png";
+    public const string RabbitRankFinisher = "https://wiki.guildwars2.com/images/d/d5/Rabbit_Rank_Finisher.png";
+    public const string DeerRankFinisher = "https://wiki.guildwars2.com/images/5/58/Deer_Rank_Finisher.png";
+    public const string DolyakRankFinisher = "https://wiki.guildwars2.com/images/b/bd/Dolyak_Rank_Finisher.png";
+    public const string WolfRankFinisher = "https://wiki.guildwars2.com/images/b/b4/Wolf_Rank_Finisher.png";
+    public const string TigerRankFinisher = "https://wiki.guildwars2.com/images/9/9b/Tiger_Rank_Finisher.png";
+    public const string BearRankFinisher = "https://wiki.guildwars2.com/images/0/08/Bear_Rank_Finisher.png";
+    public const string SharkRankFinisher = "https://wiki.guildwars2.com/images/1/18/Shark_Rank_Finisher.png";
+    public const string PhoenixRankFinisher = "https://wiki.guildwars2.com/images/c/cf/Phoenix_Rank_Finisher.png";
+    public const string DragonRankFinisher = "https://wiki.guildwars2.com/images/d/d0/Dragon_Rank_Finisher.png";
+    public const string MordremRabbitFinisher = "https://wiki.guildwars2.com/images/e/e7/Mordrem_Rabbit_Finisher.png";
+    public const string MordremDeerFinisher = "https://wiki.guildwars2.com/images/c/c1/Mordrem_Deer_Finisher.png";
+    public const string MordremDolyakFinisher = "https://wiki.guildwars2.com/images/7/7a/Mordrem_Dolyak_Finisher.png";
+    public const string MordremWolfFinisher = "https://wiki.guildwars2.com/images/1/13/Mordrem_Wolf_Finisher.png";
+    public const string MordremTigerFinisher = "https://wiki.guildwars2.com/images/d/d2/Mordrem_Tiger_Finisher.png";
+    public const string MordremBearFinisher = "https://wiki.guildwars2.com/images/2/21/Mordrem_Bear_Finisher.png";
+    public const string MordremSharkFinisher = "https://wiki.guildwars2.com/images/d/d0/Mordrem_Shark_Finisher.png";
+    public const string MordremPhoenixFinisher = "https://wiki.guildwars2.com/images/c/cf/Mordrem_Phoenix_Finisher.png";
+    public const string MordremDragonFinisher = "https://wiki.guildwars2.com/images/5/50/Mordrem_Dragon_Finisher.png";
+    public const string WvWGoldenDolyakFinisher = "https://wiki.guildwars2.com/images/2/2e/WvW_Golden_Dolyak_Finisher.png";
+    public const string WvWSilverDolyakFinisher = "https://wiki.guildwars2.com/images/d/d3/WvW_Silver_Dolyak_Finisher.png";
+    public const string ChineseWorldTournamentFinisher = "https://wiki.guildwars2.com/images/b/b5/Chinese_World_Tournament_Finisher.png";
+    public const string NorthAmericanWorldTournamentFinisher = "https://wiki.guildwars2.com/images/d/db/European_World_Tournament_Finisher.png";
+    public const string EuropeanWorldTournamentFinisher = "https://wiki.guildwars2.com/images/e/ed/North_American_World_Tournament_Finisher.png";
+    public const string AscalonianLeaderFinisher = "https://wiki.guildwars2.com/images/f/fc/Permanent_Ascalonian-Leader_Finisher.png";
+    public const string CuteQuagganFinisher = "https://wiki.guildwars2.com/images/8/83/Cute-Quaggan_Finisher.png";
+    public const string BirthdayFinisher = "https://wiki.guildwars2.com/images/9/95/Birthday_Finisher.png";
+    public const string ChoyaFinisher = "https://wiki.guildwars2.com/images/2/23/Choya_Finisher.png";
+    public const string CowFinisher = "https://wiki.guildwars2.com/images/c/cc/Cow_Finisher.png";
+    public const string GiftFinisher = "https://wiki.guildwars2.com/images/2/26/Gift_Finisher.png";
+    public const string GolemPummelerFinisher = "https://wiki.guildwars2.com/images/e/e3/Golem_Pummeler_Finisher.png";
+    public const string GraveFinisher = "https://wiki.guildwars2.com/images/7/7d/Grave_Finisher.png";
+    public const string GreatJungleWurmFinisher = "https://wiki.guildwars2.com/images/0/01/Great_Jungle_Wurm_Finisher.png";
+    public const string GuildFlagFinisher = "https://wiki.guildwars2.com/images/e/e6/Guild_Flag_Finisher.png";
+    public const string GuildShieldFinisher = "https://wiki.guildwars2.com/images/a/a1/Guild_Shield_Finisher.png";
+    public const string HiddenMinstrelFinisher = "https://wiki.guildwars2.com/images/a/a3/Hidden_Minstrel_Finisher.png";
+    public const string LeyLineFinisher = "https://wiki.guildwars2.com/images/7/73/Ley_Line_Finisher.png";
+    public const string LlamaFinisher = "https://wiki.guildwars2.com/images/3/3a/Llama_Finisher.png";
+    public const string MadKingFinisher = "https://wiki.guildwars2.com/images/e/e6/Mad_King_Finisher.png";
+    public const string MysticalDragonFinisher = "https://wiki.guildwars2.com/images/6/6d/Mystical_Dragon_Finisher.png";
+    public const string RainbowUnicornFinisher = "https://wiki.guildwars2.com/images/6/69/Rainbow_Unicorn_Finisher.png";
+    public const string RevenantFinisher = "https://wiki.guildwars2.com/images/1/1c/Revenant_Finisher.png";
+    public const string SandsharkFinisher = "https://wiki.guildwars2.com/images/2/29/Sandshark_Finisher.png";
+    public const string ScarecrowFinisher = "https://wiki.guildwars2.com/images/3/39/Scarecrow_Finisher.png";
+    public const string SnowGlobeFinisher = "https://wiki.guildwars2.com/images/4/47/Snow_Globe_Finisher.png";
+    public const string SnowmanFinisher = "https://wiki.guildwars2.com/images/8/8c/Snowman_Finisher.png";
+    public const string SuperExplosiveFinisher = "https://wiki.guildwars2.com/images/8/8c/Super_Explosive_Finisher.png";
+    public const string TwistedWatchworkFinisher = "https://wiki.guildwars2.com/images/0/02/Twisted_Watchwork_Finisher.png";
+    public const string WhumpTheGiantFinisher = "https://wiki.guildwars2.com/images/a/ab/Whump_the_Giant_Finisher.png";
+    public const string WizardLightningFinisher = "https://wiki.guildwars2.com/images/d/d1/Wizard_Lightning_Finisher.png";
+    public const string SpectreFinisher = "https://wiki.guildwars2.com/images/e/e9/Spectre_Finisher.png";
+    public const string VigilMegalaserFinisher = "https://wiki.guildwars2.com/images/c/c4/Vigil_Megalaser_Finisher.png";
+    public const string ThornrootFinisher = "https://wiki.guildwars2.com/images/8/85/Thornroot_Finisher.png";
+    public const string SanctifiedFinisher = "https://wiki.guildwars2.com/images/4/4f/Sanctified_Finisher.png";
+    public const string MartialFinisher = "https://wiki.guildwars2.com/images/2/28/Martial_Finisher.png";
+    public const string ToxicOffshootFinisher = "https://wiki.guildwars2.com/images/0/0b/Toxic_Offshoot_Finisher.png";
+    public const string SkrittScavengerFinisher = "https://wiki.guildwars2.com/images/a/a8/Skritt-Scavenger_Finisher.png";
+    public const string ChickenadoFinisher = "https://wiki.guildwars2.com/images/3/3f/Chickenado_Finisher.png";
+    public const string PactFleetFinisher = "https://wiki.guildwars2.com/images/6/60/Pact_Fleet_Finisher.png";
+    public const string RealmPortalSpikeFinisher = "https://wiki.guildwars2.com/images/5/59/Realm_Portal_Spike_Finisher.png";
+    public const string AvatarOfDeathFinisher = "https://wiki.guildwars2.com/images/3/31/Avatar_of_Death_Finisher.png";
+    public const string HonorGuardFinisher = "https://wiki.guildwars2.com/images/f/fb/Honor_Guard_Finisher.png";
+    #endregion
+
     // Guild
     public const string GuildSwiftnessBanner = "https://wiki.guildwars2.com/images/4/45/Guild_Swiftness_Banner_Boost.png";
     // Primers
@@ -712,6 +795,8 @@ internal static class ItemImages
     public const string FireElementalPowder = "https://wiki.guildwars2.com/images/9/9c/Pile_of_Cinnamon_and_Sugar.png";
     public const string SunspearParagonSupport = "https://wiki.guildwars2.com/images/1/17/Sunspear_Paragon_Support.png";
     public const string RavenSpiritShadow = "https://wiki.guildwars2.com/images/d/de/Raven_Spirit_Shadow.png";
+    // Other Items
+    public const string WatchworkPortalDevice = "https://wiki.guildwars2.com/images/4/43/Watchwork_Portal_Device.png";
 
 }
 #pragma warning restore CA1823 // Unused field

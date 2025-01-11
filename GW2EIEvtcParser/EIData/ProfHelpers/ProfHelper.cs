@@ -177,7 +177,7 @@ internal static class ProfHelper
         new BuffGainCastFinder(BondOfVigorSkill, BondOfVigorBuff),
         new BuffGainCastFinder(BondOfFaithSkill, EvasionBondOfFaith)
             .UsingBeforeWeaponSwap(true),
-        new BuffGainCastFinder(Stealth2Skill, StealthMountBuff),
+        new BuffGainCastFinder(StealthMountSkill, StealthMountBuff),
         // Skyscale
         new EffectCastFinderByDst(SkyscaleSkill, EffectGUIDs.SkyscaleLaunch),
         new EffectCastFinder(SkyscaleFireballSkill, EffectGUIDs.SkyscaleFireball),

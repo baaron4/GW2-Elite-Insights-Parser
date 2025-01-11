@@ -17,6 +17,12 @@ internal static class ParserIcons
     /// </summary>
     public const string GenericEnemyIcon = "https://i.imgur.com/ZnFcOIA.png";
 
+    #region Misc
+    public const string Breakbar = "https://wiki.guildwars2.com/images/a/ae/Unshakable.png";
+    public const string LevelUp = "https://i.imgur.com/uf1VZEJ.png";
+    public const string Healing = "https://assets.gw2dat.com/156662.png";
+    public const string Combo = "https://i.imgur.com/fmwZ1cP.png";
+    #endregion Misc
 
     #region Specialization
     /// <summary>
