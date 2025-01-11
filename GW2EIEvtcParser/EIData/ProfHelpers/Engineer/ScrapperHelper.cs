@@ -31,19 +31,19 @@ internal static class ScrapperHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_ObjectInMotion, [Swiftness, Superspeed, Stability], "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, BuffImages.ObjectInMotion, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ObjectInMotion, [Swiftness, Superspeed, Stability], "Object in Motion", "5% under swiftness/superspeed/stability, cumulative", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Scrapper, ByMultiPresence, TraitImages.ObjectInMotion, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance)
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new DamageLogDamageModifier(Mod_AdaptiveArmor, "Adaptive Armor", "-20%", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, BuffImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
+        new DamageLogDamageModifier(Mod_AdaptiveArmor, "Adaptive Armor", "-20%", DamageSource.NoPets, -20.0, DamageType.Condition, DamageType.All, Source.Scrapper, TraitImages.AdaptiveArmor, (x, log) => x.ShieldDamage > 0 , DamageModifierMode.All).WithBuilds(GW2Builds.July2019Balance, GW2Builds.January2024Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Watchful Eye", WatchfulEye, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),
-        new Buff("Watchful Eye PvP", WatchfulEyePvP, Source.Scrapper, BuffClassification.Defensive, BuffImages.BulwarkGyro),
+        new Buff("Watchful Eye", WatchfulEye, Source.Scrapper, BuffClassification.Defensive, SkillImages.BulwarkGyro),
+        new Buff("Watchful Eye PvP", WatchfulEyePvP, Source.Scrapper, BuffClassification.Defensive, SkillImages.BulwarkGyro),
     ];
 
     private static HashSet<int> Minions =
@@ -73,7 +73,7 @@ internal static class ScrapperHelper
             foreach (EffectEvent effect in functionGyros)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFunctionGyro);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectFunctionGyro);
             }
         }
         // Defense Field
@@ -83,7 +83,7 @@ internal static class ScrapperHelper
             foreach (EffectEvent effect in defenseFields)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectDefenseField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectDefenseField);
             }
         }
     }

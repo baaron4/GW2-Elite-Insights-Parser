@@ -35,26 +35,26 @@ internal static class DruidHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_NaturalBalance, NaturalBalance, "Natural Balance", "10% after leaving or entering Celestial Avatar", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Druid, ByPresence, BuffImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance),
+        new BuffOnActorDamageModifier(Mod_NaturalBalance, NaturalBalance, "Natural Balance", "10% after leaving or entering Celestial Avatar", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Druid, ByPresence, TraitImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_NaturalBalance, NaturalBalance, "Natural Balance", "-10% after leaving or entering Celestial Avatar", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Druid, ByPresence, BuffImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance, GW2Builds.March2024BalanceAndCerusLegendary),
+        new BuffOnActorDamageModifier(Mod_NaturalBalance, NaturalBalance, "Natural Balance", "-10% after leaving or entering Celestial Avatar", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Druid, ByPresence, TraitImages.NaturalBalance, DamageModifierMode.All).WithBuilds(GW2Builds.June2023Balance, GW2Builds.March2024BalanceAndCerusLegendary),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, BuffImages.CelestialAvatar),
-        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, BuffImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
-        new Buff("Glyph of Unity", GlyphOfUnityBuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnity),
-        new Buff("Glyph of Unity (CA)", GlyphOfUnityCABuff, Source.Druid, BuffClassification.Other, BuffImages.GlyphOfUnityCelestialAvatar),
-        new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfTheStars).WithBuilds(GW2Builds.April2019Balance, GW2Builds.October2022Balance),
-        new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, BuffImages.GlyphOfEmpowermentCelestialAvatar).WithBuilds(GW2Builds.April2019Balance),
-        new Buff("Natural Mender", NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.NaturalMender).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
-        new Buff("Lingering Light", LingeringLight, Source.Druid, BuffClassification.Other, BuffImages.LingeringLight).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023Balance),
-        new Buff("Natural Balance", NaturalBalance, Source.Druid, BuffClassification.Other, BuffImages.NaturalBalance).WithBuilds(GW2Builds.June2023Balance),
+        new Buff("Celestial Avatar", CelestialAvatar, Source.Druid, BuffClassification.Other, SkillImages.CelestialAvatar),
+        new Buff("Ancestral Grace", AncestralGraceBuff, Source.Druid, BuffClassification.Other, SkillImages.AncestralGrace).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Glyph of Empowerment", GlyphOfEmpowerment, Source.Druid, BuffClassification.Offensive, SkillImages.GlyphOfTheStars).WithBuilds(GW2Builds.StartOfLife, GW2Builds.April2019Balance),
+        new Buff("Glyph of Unity", GlyphOfUnityBuff, Source.Druid, BuffClassification.Other, SkillImages.GlyphOfUnity),
+        new Buff("Glyph of Unity (CA)", GlyphOfUnityCABuff, Source.Druid, BuffClassification.Other, SkillImages.GlyphOfUnityCelestialAvatar),
+        new Buff("Glyph of the Stars", GlyphOfTheStars, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfTheStars).WithBuilds(GW2Builds.April2019Balance, GW2Builds.October2022Balance),
+        new Buff("Glyph of the Stars (CA)", GlyphOfTheStarsCA, Source.Druid, BuffClassification.Defensive, SkillImages.GlyphOfEmpowermentCelestialAvatar).WithBuilds(GW2Builds.April2019Balance),
+        new Buff("Natural Mender", NaturalMender, Source.Druid, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.NaturalMender).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2022Balance),
+        new Buff("Lingering Light", LingeringLight, Source.Druid, BuffClassification.Other, TraitImages.LingeringLight).WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2023Balance),
+        new Buff("Natural Balance", NaturalBalance, Source.Druid, BuffClassification.Other, TraitImages.NaturalBalance).WithBuilds(GW2Builds.June2023Balance),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
@@ -68,7 +68,7 @@ internal static class DruidHelper
             foreach (EffectEvent effect in glyphOfTheStars)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectGlyphOfTheStars);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectGlyphOfTheStars);
             }
         }
 
@@ -79,7 +79,7 @@ internal static class DruidHelper
             foreach (EffectEvent effect in glyphOfTheStarsCA)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectGlyphOfTheStarsCA);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectGlyphOfTheStarsCA);
             }
         }
     }

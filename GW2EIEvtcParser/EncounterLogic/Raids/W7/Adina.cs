@@ -4,7 +4,7 @@ using GW2EIEvtcParser.Exceptions;
 using GW2EIEvtcParser.Extensions;
 using GW2EIEvtcParser.ParsedData;
 using GW2EIEvtcParser.ParserHelpers;
-using static GW2EIEvtcParser.EncounterLogic.EncounterImages;
+using static GW2EIEvtcParser.ParserHelpers.EncounterImages;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicPhaseUtils;
 using static GW2EIEvtcParser.EncounterLogic.EncounterLogicUtils;
 using static GW2EIEvtcParser.ParserHelper;
@@ -222,7 +222,7 @@ internal class Adina : TheKeyOfAhdashim
                 foreach (Segment seg in diamondPalisades)
                 {
                     replay.Decorations.Add(new CircleDecoration(90, seg, Colors.Red, 0.2, new AgentConnector(target)));
-                    replay.Decorations.AddOverheadIcon(seg, target, BuffImages.MonsterSkill);
+                    replay.Decorations.AddOverheadIcon(seg, target, SkillImages.MonsterSkill);
                 }
                 //
                 var boulderBarrages = casts.Where(x => x.SkillId == BoulderBarrage);

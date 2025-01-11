@@ -27,30 +27,30 @@ internal static class HarbingerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, BuffImages.WickedCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
-        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, BuffImages.WickedCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, BuffImages.WickedCorruption, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, BuffImages.WickedCorruption, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "10% critical to foes with torment", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, BuffImages.WickedCorruption, DamageModifierMode.All).UsingChecker((evt, log) => evt.HasCrit).WithBuilds(GW2Builds.EODRelease, GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "10% critical to foes with torment", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, BuffImages.WickedCorruption, DamageModifierMode.sPvPWvW).UsingChecker((evt, log) => evt.HasCrit).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "12.5% critical to foes with torment", DamageSource.NoPets, 12.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, BuffImages.WickedCorruption, DamageModifierMode.PvE).UsingChecker((evt, log) => evt.HasCrit).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
-        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023Balance),
-        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.25% per blight stack", DamageSource.NoPets, 0.25, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
-        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, BuffImages.SepticCorruption, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2023Balance),
+        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, TraitImages.WickedCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "1% per blight stack", DamageSource.NoPets, 1.0, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta1, GW2Builds.EODBeta4),
+        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, TraitImages.WickedCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4, GW2Builds.March2024BalanceAndCerusLegendary),
+        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, TraitImages.WickedCorruption, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+        new BuffOnActorDamageModifier(Mod_WickedCorruption, Blight, "Wicked Corruption", "1% per blight stack", DamageSource.NoPets, 1, DamageType.Strike, DamageType.All, Source.Harbinger, ByStack, TraitImages.WickedCorruption, DamageModifierMode.PvE).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+        new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "10% critical to foes with torment", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.WickedCorruption, DamageModifierMode.All).UsingChecker((evt, log) => evt.HasCrit).WithBuilds(GW2Builds.EODRelease, GW2Builds.March2024BalanceAndCerusLegendary),
+        new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "10% critical to foes with torment", DamageSource.NoPets, 10, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.WickedCorruption, DamageModifierMode.sPvPWvW).UsingChecker((evt, log) => evt.HasCrit).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+        new BuffOnFoeDamageModifier(Mod_WickedCorruptionCrit, Torment, "Wicked Corruption (Crit)", "12.5% critical to foes with torment", DamageSource.NoPets, 12.5, DamageType.Strike, DamageType.All, Source.Harbinger, ByPresence, TraitImages.WickedCorruption, DamageModifierMode.PvE).UsingChecker((evt, log) => evt.HasCrit).WithBuilds(GW2Builds.March2024BalanceAndCerusLegendary),
+        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4, GW2Builds.June2023Balance),
+        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.25% per blight stack", DamageSource.NoPets, 0.25, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.PvE).WithBuilds(GW2Builds.June2023Balance),
+        new BuffOnActorDamageModifier(Mod_SepticCorruption, Blight, "Septic Corruption", "0.5% per blight stack", DamageSource.NoPets, 0.5, DamageType.Condition, DamageType.All, Source.Harbinger, ByStack, TraitImages.SepticCorruption, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.June2023Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
         // Confirm if applied strike and condition
-        new BuffOnActorDamageModifier(Mod_ImplacableFoe, ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, BuffImages.ImplacableFoe, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_ImplacableFoe, ImplacableFoe, "Implacable Foe", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Harbinger, ByPresence, TraitImages.ImplacableFoe, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Harbinger Shroud", HarbingerShroud, Source.Harbinger, BuffClassification.Other, BuffImages.HarbingerShroud),
-        new Buff("Blight", Blight, Source.Harbinger, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Blight),
-        new Buff("Implacable Foe", ImplacableFoe, Source.Harbinger, BuffClassification.Other, BuffImages.ImplacableFoe),
+        new Buff("Harbinger Shroud", HarbingerShroud, Source.Harbinger, BuffClassification.Other, SkillImages.HarbingerShroud),
+        new Buff("Blight", Blight, Source.Harbinger, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.Blight),
+        new Buff("Implacable Foe", ImplacableFoe, Source.Harbinger, BuffClassification.Other, TraitImages.ImplacableFoe),
     ];
 
     private static readonly HashSet<long> _harbingerShroudTransform =
@@ -74,7 +74,7 @@ internal static class HarbingerHelper
             foreach (EffectEvent effect in vitalDraws)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectVitalDraw);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectVitalDraw);
             }
         }
     }

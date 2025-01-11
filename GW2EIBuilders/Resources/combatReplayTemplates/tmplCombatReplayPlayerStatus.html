@@ -64,7 +64,7 @@
             status: function () {
                 var crPData = animator.getActorData(this.player.uniqueID);
                 var icon = crPData.getIcon(this.time);
-                return icon === deadIcon ? 0 : icon === downIcon ? 1 : icon === dcIcon ? 2 : 3;
+                return icon === deadIcon ? 0 : icon === downAllyIcon ||  icon === downEnemyIcon ? 1 : icon === dcIcon ? 2 : 3;
             },
             hasHealth: function () {
                 return !!this.healths;

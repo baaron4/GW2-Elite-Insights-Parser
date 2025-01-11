@@ -24,18 +24,18 @@ internal static class SpellbreakerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Mod_PureStrikeBoons, NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Mod_PureStrikeBoons, NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Mod_PureStrikeBoons, NumberOfBoons, "Pure Strike (boons)", "7.5% crit damage", DamageSource.NoPets, 7.5, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.PureStrike, DamageModifierMode.PvE).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Mod_PureStrikeNoBoons, NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.All).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Mod_PureStrikeNoBoons, NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Mod_PureStrikeNoBoons, NumberOfBoons, "Pure Strike (no boons)", "15% crit damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, BuffImages.PureStrike, DamageModifierMode.PvE).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
+        new BuffOnFoeDamageModifier(Mod_PureStrikeBoons, NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.PureStrike, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_PureStrikeBoons, NumberOfBoons, "Pure Strike (boons)", "7% crit damage", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_PureStrikeBoons, NumberOfBoons, "Pure Strike (boons)", "7.5% crit damage", DamageSource.NoPets, 7.5, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.PureStrike, DamageModifierMode.PvE).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_PureStrikeNoBoons, NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, TraitImages.PureStrike, DamageModifierMode.All).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_PureStrikeNoBoons, NumberOfBoons, "Pure Strike (no boons)", "14% crit damage", DamageSource.NoPets, 14.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, TraitImages.PureStrike, DamageModifierMode.sPvPWvW).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_PureStrikeNoBoons, NumberOfBoons, "Pure Strike (no boons)", "15% crit damage", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByAbsence, TraitImages.PureStrike, DamageModifierMode.PvE).UsingChecker( (x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022Balance),
+        new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "10% to tethered target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
             AgentItem src = x.From;
             AgentItem dst = x.To;
             return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTetherBuff, x.Time);
         }).WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, BuffImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
+        new BuffOnFoeDamageModifier(Mod_MagebaneTether, MagebaneTetherBuff, "Magebane Tether", "15% to tethered target", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Spellbreaker, ByPresence, TraitImages.MagebaneTether, DamageModifierMode.PvEInstanceOnly).UsingChecker((x, log) => {
             AgentItem src = x.From;
             AgentItem dst = x.To;
             return log.FindActor(dst).HasBuff(log, log.FindActor(src), MagebaneTetherBuff, x.Time);
@@ -46,11 +46,11 @@ internal static class SpellbreakerHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Sight beyond Sight", SightBeyondSightBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.SightBeyondSight),
-        new Buff("Full Counter", FullCounterBuff, Source.Spellbreaker, BuffClassification.Other, BuffImages.FullCounter),
-        new Buff("Disenchantment", Disenchantment, Source.Spellbreaker, BuffClassification.Other, BuffImages.WindsOfDisenchantment),
-        new Buff("Attacker's Insight", AttackersInsight, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.AttackersInsight),
-        new Buff("Magebane Tether", MagebaneTetherBuff, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.MagebaneTether),
+        new Buff("Sight beyond Sight", SightBeyondSightBuff, Source.Spellbreaker, BuffClassification.Other, TraitImages.SightBeyondSight),
+        new Buff("Full Counter", FullCounterBuff, Source.Spellbreaker, BuffClassification.Other, SkillImages.FullCounter),
+        new Buff("Disenchantment", Disenchantment, Source.Spellbreaker, BuffClassification.Other, SkillImages.WindsOfDisenchantment),
+        new Buff("Attacker's Insight", AttackersInsight, Source.Spellbreaker, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.AttackersInsight),
+        new Buff("Magebane Tether", MagebaneTetherBuff, Source.Spellbreaker, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.MagebaneTether),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
@@ -64,7 +64,7 @@ internal static class SpellbreakerHelper
             foreach (EffectEvent effect in windsOfDisenchantments)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectWindsOfDisenchantment);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectWindsOfDisenchantment);
             }
         }
     }

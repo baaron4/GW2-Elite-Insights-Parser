@@ -113,16 +113,16 @@ internal static class FirebrandHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Ashes of the Just", AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, BuffImages.EpilogueAshesOfTheJust),
-        new Buff("Eternal Oasis", EternalOasis, Source.Firebrand, BuffClassification.Defensive, BuffImages.EpilogueEternalOasis),
-        new Buff("Unbroken Lines", UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, BuffImages.EpilogueUnbrokenLines),
-        new Buff("Tome of Justice", TomeOfJusticeBuff, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfJustice),
-        new Buff("Tome of Courage", TomeOfCourageBuff, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfCourage),
-        new Buff("Tome of Resolve", TomeOfResolveBuff, Source.Firebrand, BuffClassification.Other, BuffImages.TomeOfResolve),
-        new Buff("Quickfire", Quickfire, Source.Firebrand, BuffClassification.Other, BuffImages.Quickfire),
-        new Buff("Dormant Justice", DormantJustice, Source.Firebrand, BuffClassification.Other, BuffImages.DormantJustice),
-        new Buff("Dormant Courage", DormantCourage, Source.Firebrand, BuffClassification.Other, BuffImages.DormantCourage),
-        new Buff("Dormant Resolve", DormantResolve, Source.Firebrand, BuffClassification.Other, BuffImages.DormantResolve),
+        new Buff("Ashes of the Just", AshesOfTheJust, Source.Firebrand, BuffStackType.Stacking, 25, BuffClassification.Offensive, SkillImages.EpilogueAshesOfTheJust),
+        new Buff("Eternal Oasis", EternalOasis, Source.Firebrand, BuffClassification.Defensive, SkillImages.EpilogueEternalOasis),
+        new Buff("Unbroken Lines", UnbrokenLines, Source.Firebrand, BuffStackType.Stacking, 3, BuffClassification.Defensive, SkillImages.EpilogueUnbrokenLines),
+        new Buff("Tome of Justice", TomeOfJusticeBuff, Source.Firebrand, BuffClassification.Other, SkillImages.TomeOfJustice),
+        new Buff("Tome of Courage", TomeOfCourageBuff, Source.Firebrand, BuffClassification.Other, SkillImages.TomeOfCourage),
+        new Buff("Tome of Resolve", TomeOfResolveBuff, Source.Firebrand, BuffClassification.Other, SkillImages.TomeOfResolve),
+        new Buff("Quickfire", Quickfire, Source.Firebrand, BuffClassification.Other, TraitImages.Quickfire),
+        new Buff("Dormant Justice", DormantJustice, Source.Firebrand, BuffClassification.Other, TraitImages.DormantJustice),
+        new Buff("Dormant Courage", DormantCourage, Source.Firebrand, BuffClassification.Other, TraitImages.DormantCourage),
+        new Buff("Dormant Resolve", DormantResolve, Source.Firebrand, BuffClassification.Other, TraitImages.DormantResolve),
     ];
 
     internal static void ComputeProfessionCombatReplayActors(PlayerActor player, ParsedEvtcLog log, CombatReplay replay)
@@ -136,7 +136,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in valiantBulwarks)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectValiantBulwark);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectValiantBulwark);
             }
         }
 
@@ -147,7 +147,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in stalwartStands)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectStalwartStand);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectStalwartStand);
             }
         }
 
@@ -158,7 +158,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in shiningRiver)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectShiningRiver);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectShiningRiver);
             }
         }
 
@@ -169,7 +169,7 @@ internal static class FirebrandHelper
             foreach (EffectEvent effect in scorchedAftermath)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectScorchedAftermath);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectScorchedAftermath);
             }
         }
     }

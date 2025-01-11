@@ -40,32 +40,32 @@ internal static class HolosmithHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_LasersEdge, LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LasersEdge, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
+        new BuffOnActorDamageModifier(Mod_LasersEdge, LasersEdge, "Laser's Edge", "15%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, TraitImages.LasersEdge, DamageModifierMode.PvE).WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, BuffImages.SpectrumShield, DamageModifierMode.sPvP).WithBuilds(GW2Builds.February2020Balance),
-        new BuffOnActorDamageModifier(Mod_LightDensityAmplifier, PhotonForge, "Light Density Amplifier", "-15%", DamageSource.NoPets, -15, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, BuffImages.LightDensityAmplifier, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, SkillImages.SpectrumShield, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-50%", DamageSource.NoPets, -50, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, SkillImages.SpectrumShield, DamageModifierMode.PvEWvW).WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_SpectrumShield, SpectrumShieldBuff, "Spectrum Shield", "-33%", DamageSource.NoPets, -33, DamageType.StrikeAndCondition, DamageType.All, Source.Holosmith, ByPresence, SkillImages.SpectrumShield, DamageModifierMode.sPvP).WithBuilds(GW2Builds.February2020Balance),
+        new BuffOnActorDamageModifier(Mod_LightDensityAmplifier, PhotonForge, "Light Density Amplifier", "-15%", DamageSource.NoPets, -15, DamageType.Strike, DamageType.All, Source.Holosmith, ByPresence, TraitImages.LightDensityAmplifier, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Cooling Vapor", CoolingVapor, Source.Holosmith, BuffClassification.Other, BuffImages.CoolantBlast),
-        new Buff("Photon Wall Deployed", PhotonWallDeployed, Source.Holosmith, BuffClassification.Other, BuffImages.PhotonWall),
-        new Buff("Spectrum Shield", SpectrumShieldBuff, Source.Holosmith, BuffClassification.Other, BuffImages.SpectrumShield),
-        new Buff("Photon Forge", PhotonForge, Source.Holosmith, BuffClassification.Other, BuffImages.EngagePhotonForge),
-        new Buff("Laser's Edge", LasersEdge, Source.Holosmith, BuffClassification.Other, BuffImages.LasersEdge)
+        new Buff("Cooling Vapor", CoolingVapor, Source.Holosmith, BuffClassification.Other, SkillImages.CoolantBlast),
+        new Buff("Photon Wall Deployed", PhotonWallDeployed, Source.Holosmith, BuffClassification.Other, SkillImages.PhotonWall),
+        new Buff("Spectrum Shield", SpectrumShieldBuff, Source.Holosmith, BuffClassification.Other, SkillImages.SpectrumShield),
+        new Buff("Photon Forge", PhotonForge, Source.Holosmith, BuffClassification.Other, SkillImages.EngagePhotonForge),
+        new Buff("Laser's Edge", LasersEdge, Source.Holosmith, BuffClassification.Other, TraitImages.LasersEdge)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new Buff("Afterburner", Afterburner, Source.Holosmith, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.SolarFocusingLens),
-        new Buff("Heat Therapy", HeatTherapy, Source.Holosmith, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.HeatTherapy),
-        new Buff("Overheat", OverheatBuff, Source.Holosmith, BuffClassification.Other, BuffImages.Overheat),
-        new Buff("Photon Barrier", PhotonBarrierBuff, Source.Holosmith, BuffClassification.Defensive, BuffImages.PhotonWall),
+        new Buff("Afterburner", Afterburner, Source.Holosmith, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, TraitImages.SolarFocusingLens),
+        new Buff("Heat Therapy", HeatTherapy, Source.Holosmith, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.HeatTherapy),
+        new Buff("Overheat", OverheatBuff, Source.Holosmith, BuffClassification.Other, TraitImages.Overheat),
+        new Buff("Photon Barrier", PhotonBarrierBuff, Source.Holosmith, BuffClassification.Defensive, SkillImages.PhotonWall),
         // heat buffs only present in forge
-        new Buff("0-50 Heat (Photon Forge)", PhotonForgeAbove0Heat, Source.Holosmith, BuffClassification.Other, BuffImages.Heat1),
-        new Buff("50-100 Heat (Photon Forge)", PhotonForgeAbove50Heat, Source.Holosmith, BuffClassification.Other, BuffImages.Heat2),
-        new Buff("100-150 Heat (Photon Forge)", PhotonForgeAbove100Heat, Source.Holosmith, BuffClassification.Other, BuffImages.Heat3),
+        new Buff("0-50 Heat (Photon Forge)", PhotonForgeAbove0Heat, Source.Holosmith, BuffClassification.Other, TraitImages.HeatLvl1),
+        new Buff("50-100 Heat (Photon Forge)", PhotonForgeAbove50Heat, Source.Holosmith, BuffClassification.Other, TraitImages.HeatLvl2),
+        new Buff("100-150 Heat (Photon Forge)", PhotonForgeAbove100Heat, Source.Holosmith, BuffClassification.Other, TraitImages.HeatLvl3),
     ];
 }

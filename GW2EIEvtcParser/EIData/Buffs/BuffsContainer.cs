@@ -1,6 +1,7 @@
 ﻿using GW2EIEvtcParser.EIData.Buffs;
 using GW2EIEvtcParser.EIData.BuffSourceFinders;
 using GW2EIEvtcParser.ParsedData;
+using GW2EIEvtcParser.ParserHelpers;
 using static GW2EIEvtcParser.ArcDPSEnums;
 using static GW2EIEvtcParser.EIData.Buff;
 
@@ -108,7 +109,7 @@ public class BuffsContainer
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {
                     operation.UpdateProgressWithCancellationCheck("Parsing: Creating nourishement " + buffInfoEvent.BuffID);
-                    currentBuffs.Add(CreateCustomBuff("Parsing: Unknown Nourishment", buffInfoEvent.BuffID, "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png", buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
+                    currentBuffs.Add(CreateCustomBuff("Parsing: Unknown Nourishment", buffInfoEvent.BuffID, ItemImages.NourishmentEffect, buffInfoEvent.MaxStacks, BuffClassification.Nourishment));
                 }
             }
         }
@@ -124,7 +125,7 @@ public class BuffsContainer
                 if (!buffIDs.Contains(buffInfoEvent.BuffID))
                 {
                     operation.UpdateProgressWithCancellationCheck("Creating enhancement " + buffInfoEvent.BuffID);
-                    currentBuffs.Add(CreateCustomBuff("Unknown Enhancement", buffInfoEvent.BuffID, "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png", buffInfoEvent.MaxStacks, BuffClassification.Enhancement));
+                    currentBuffs.Add(CreateCustomBuff("Unknown Enhancement", buffInfoEvent.BuffID, ItemImages.EnhancementEffect, buffInfoEvent.MaxStacks, BuffClassification.Enhancement));
                 }
             }
         }

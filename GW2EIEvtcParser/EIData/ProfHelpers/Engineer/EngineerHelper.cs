@@ -116,20 +116,20 @@ internal static class EngineerHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Explosives
-        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.February2017Balance, GW2Builds.July2019Balance2),
-        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "7% if hp >=75%", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.July2019Balance2, GW2Builds.May2021Balance),
-        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_GlassCannon, "Glass Cannon", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.GlassCannon, (x, log) => (x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0), DamageModifierMode.All)
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExplosivePowder, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "10% on vulnerable enemies", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExplosivePowder, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2019Balance),
-        new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ExplosivePowder, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_ShapedCharge, Vulnerability, "Shaped Charge", "0.5% per stack vuln", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ExplosivePowder, DamageModifierMode.All)
             .WithBuilds(GW2Builds.October2019Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -140,7 +140,7 @@ internal static class EngineerHelper
             return selfHP > dstHP;
         }, DamageModifierMode.All ).UsingApproximate(true)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -152,7 +152,7 @@ internal static class EngineerHelper
         }, DamageModifierMode.sPvPWvW )
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.August2022Balance),
-        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, BuffImages.BigBoomer, (x,log) =>
+        new DamageLogDamageModifier(Mod_BigBoomer, "Big Boomer", "15% if target hp% lower than self hp%", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Engineer, TraitImages.BigBoomer, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -165,49 +165,49 @@ internal static class EngineerHelper
             .UsingApproximate(true)
             .WithBuilds(GW2Builds.August2022Balance),
         // Firearms
-        new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "5% (4s) after burning foe", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, TraitImages.ThermalVision, DamageModifierMode.All)
             .WithBuilds(GW2Builds.August2018Balance),
-        new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, BuffImages.SkilledMarksman, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_ThermalVision, ThermalVision, "Thermal Vision", "10% (4s) after burning foe", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Engineer, ByPresence, TraitImages.ThermalVision, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2018Balance),
-        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.August2024JWRelease),
-        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.WvW)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "1.5% per condition on target", DamageSource.NoPets, 1.5, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.WvW)
             .WithBuilds(GW2Builds.August2024JWRelease),
-        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, BuffImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
+        new BuffOnFoeDamageModifier(Mod_ModifiedAmmunition, NumberOfConditions, "Modified Ammunition", "2% per condition on target", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Engineer, ByStack, TraitImages.ModifiedAmmunition, DamageModifierMode.PvEsPvP)
             .WithBuilds(GW2Builds.August2024JWRelease),
         // Tools
-        new BuffOnActorDamageModifier(Mod_ExcessiveEnergy, Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.ExcessiveEnergy, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_ExcessiveEnergy, Vigor, "Excessive Energy", "10% under vigor", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.ExcessiveEnergy, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_OverShield, Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, BuffImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
-        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.NoPets, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, BuffImages.IronBlooded, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_OverShield, Protection, "Over Shield", "20% extra protection effectiveness", DamageSource.NoPets, (0.604/0.67 - 1) * 100, DamageType.Strike, DamageType.All, Source.Engineer, ByPresence, TraitImages.OverShield, DamageModifierMode.All), // We only compute the added effectiveness
+        new BuffOnActorDamageModifier(Mod_IronBlooded, IronBlooded, "Iron Blooded", "-2% per stack", DamageSource.NoPets, -2, DamageType.StrikeAndCondition, DamageType.All, Source.Engineer, ByStack, TraitImages.IronBlooded, DamageModifierMode.All),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, BuffImages.StaticShield),
-        new Buff("Absorb", Absorb, Source.Engineer, BuffClassification.Other, BuffImages.Absorb),
-        new Buff("A.E.D.", AED, Source.Engineer, BuffClassification.Other, BuffImages.AED),
-        new Buff("Elixir S", ElixirSBuff, Source.Engineer, BuffClassification.Other, BuffImages.ElixirS),
-        new Buff("Utility Goggles", UtilityGoggles, Source.Engineer, BuffClassification.Other, BuffImages.UtilityGoggles),
-        new Buff("Slick Shoes", SlickShoesBuff, Source.Engineer, BuffClassification.Other, BuffImages.SlickShoes),
-        new Buff("Gear Shield", GearShield, Source.Engineer, BuffClassification.Other, BuffImages.GearShield),
-        new Buff("Iron Blooded", IronBlooded, Source.Engineer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.IronBlooded),
-        new Buff("Streamlined Kits", StreamlinedKits, Source.Engineer, BuffClassification.Other, BuffImages.StreamlinedKits),
-        new Buff("Kinetic Charge", KineticCharge, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KineticBattery),
-        new Buff("Pinpoint Distribution", PinpointDistribution, Source.Engineer, BuffClassification.Offensive, BuffImages.PinpointDistribution)
+        new Buff("Static Shield", StaticShield, Source.Engineer, BuffClassification.Other, SkillImages.StaticShield),
+        new Buff("Absorb", Absorb, Source.Engineer, BuffClassification.Other, SkillImages.Absorb),
+        new Buff("A.E.D.", AED, Source.Engineer, BuffClassification.Other, SkillImages.AED),
+        new Buff("Elixir S", ElixirSBuff, Source.Engineer, BuffClassification.Other, SkillImages.ElixirS),
+        new Buff("Utility Goggles", UtilityGoggles, Source.Engineer, BuffClassification.Other, SkillImages.UtilityGoggles),
+        new Buff("Slick Shoes", SlickShoesBuff, Source.Engineer, BuffClassification.Other, SkillImages.SlickShoes),
+        new Buff("Gear Shield", GearShield, Source.Engineer, BuffClassification.Other, SkillImages.GearShield),
+        new Buff("Iron Blooded", IronBlooded, Source.Engineer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.IronBlooded),
+        new Buff("Streamlined Kits", StreamlinedKits, Source.Engineer, BuffClassification.Other, TraitImages.StreamlinedKits),
+        new Buff("Kinetic Charge", KineticCharge, Source.Engineer, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KineticBattery),
+        new Buff("Pinpoint Distribution", PinpointDistribution, Source.Engineer, BuffClassification.Offensive, TraitImages.PinpointDistribution)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.June2022Balance),
-        new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, BuffImages.SkilledMarksman),
-        new Buff("Explosive Entrance", ExplosiveEntranceBuff, Source.Engineer, BuffClassification.Other, BuffImages.ExplosiveEntrance)
+        new Buff("Thermal Vision", ThermalVision, Source.Engineer, BuffClassification.Other, TraitImages.ThermalVision),
+        new Buff("Explosive Entrance", ExplosiveEntranceBuff, Source.Engineer, BuffClassification.Other, TraitImages.ExplosiveEntrance)
             .WithBuilds(GW2Builds.February2020Balance),
-        new Buff("Explosive Temper", ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.ExplosiveTemper)
+        new Buff("Explosive Temper", ExplosiveTemper, Source.Engineer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.ExplosiveTemper)
             .WithBuilds(GW2Builds.February2020Balance),
-        new Buff("Big Boomer", BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, BuffImages.BigBoomer),
-        new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.MedKit),
-        new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  BuffImages.MedKit),
-        new Buff("Compounding Chemicals", CompoundingChemicals, Source.Engineer, BuffClassification.Other, BuffImages.CompoundingChemicals),
+        new Buff("Big Boomer", BigBoomer, Source.Engineer, BuffStackType.Queue, 3, BuffClassification.Other, TraitImages.BigBoomer),
+        new Buff("Med Kit", MedKitOpen, Source.Engineer, BuffClassification.Other, SkillImages.MedKit),
+        new Buff("Med Kit Bonus", MedKitBonus, Source.Engineer, BuffClassification.Other,  SkillImages.MedKit),
+        new Buff("Compounding Chemicals", CompoundingChemicals, Source.Engineer, BuffClassification.Other, TraitImages.CompoundingChemicals),
         /*
         new Buff("Grenade Kit", POV_GrenadeKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.GrenadeKit),
         new Buff("Bomb Kit", POV_BombKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.BombKit),
@@ -217,10 +217,10 @@ internal static class EngineerHelper
         new Buff("Elite Mortar", POV_EliteMortarKitOpen, Source.Engineer, BuffClassification.Other, BuffImages.EliteMortarKit),
         */
         // Spear
-        new Buff("Conduit Surge", ConduitSurgeBuff, Source.Engineer, BuffClassification.Other, BuffImages.ConduitSurge),
-        new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, BuffImages.ElectricArtillery),
-        new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, BuffImages.Focused),
-        new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, BuffImages.LightningRod),
+        new Buff("Conduit Surge", ConduitSurgeBuff, Source.Engineer, BuffClassification.Other, SkillImages.ConduitSurge),
+        new Buff("Electric Artillery", ElectricArtillery, Source.Engineer, BuffClassification.Other, SkillImages.ElectricArtillery),
+        new Buff("Focused", Focused, Source.Engineer, BuffStackType.Stacking, 99, BuffClassification.Other, SkillImages.Focused),
+        new Buff("Lightning Rod Charges", LightningRodCharges, Source.Engineer, BuffStackType.Stacking, 12, BuffClassification.Other, SkillImages.LightningRod),
     ];
 
     public static void ProcessGadgets(IReadOnlyList<Player> players, CombatData combatData)
@@ -291,7 +291,7 @@ internal static class EngineerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 5000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectThunderclap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectThunderclap, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -317,7 +317,7 @@ internal static class EngineerHelper
                         if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
                         {
                             isThrowMine = true;
-                            AddMineDecoration(log, replay, mine, color, throwMine, ParserIcons.EffectThrowMine);
+                            AddMineDecoration(log, replay, mine, color, throwMine, EffectImages.EffectThrowMine);
                             AddMineDetonationDecoration(log, replay, detonation, color, detonateThrowMine, 240);
                         }
                     }
@@ -332,7 +332,7 @@ internal static class EngineerHelper
                         if (mine.HasDynamicEndTime && Math.Abs(mine.DynamicEndTime - detonation.Time) < ServerDelayConstant)
                         {
                             isMineField = true;
-                            AddMineDecoration(log, replay, mine, color, mineField, ParserIcons.EffectMineField);
+                            AddMineDecoration(log, replay, mine, color, mineField, EffectImages.EffectMineField);
                             AddMineDetonationDecoration(log, replay, detonation, color, detonateMineField, 180);
                         }
                     }
@@ -379,7 +379,7 @@ internal static class EngineerHelper
         (long, long) lifespan = effect.ComputeLifespan(log, 500);
         var connector = new PositionConnector(effect.Position);
         replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-        replay.Decorations.Add(new IconDecoration(ParserIcons.EffectDetonateThrowMineOrMineField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+        replay.Decorations.Add(new IconDecoration(EffectImages.EffectDetonateThrowMineOrMineField, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
         // If we do not know the source of the detonation, show both radiuses
         if (unknownSource)
         {

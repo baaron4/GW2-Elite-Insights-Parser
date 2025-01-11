@@ -8,35 +8,35 @@
                     <th class="text-left" :class="getHeaderClass('Name')" @click="sortBy('Name')">Name</th>
                     <th :class="getHeaderClass('Account')" @click="sortBy('Account')">Account</th>
                     <th v-if="!targetless" :class="getHeaderClass('Data', 0)" @click="sortBy('Data', 0)" data-original-title="Power + Condition" class="damage-cell">
-                        Target <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
+                        Target <img :src="UIIcons.Damage" alt="All"
                             class="icon">
                     </th>
                     <th v-if="!targetless" :class="getHeaderClass('Data', 1)" @click="sortBy('Data', 1)" data-original-title="Power" class="damage-cell">
-                        Target <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
+                        Target <img :src="UIIcons.Power" alt="Power"
                              class="icon">
                     </th>
                     <th v-if="!targetless" :class="getHeaderClass('Data', 2)" @click="sortBy('Data', 2)" data-original-title="Condition" class="damage-cell">
-                        Target <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
+                        Target <img :src="UIIcons.ConditionDamage" alt="Condition"
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 3)" @click="sortBy('Data', 3)" v-if="!targetless && hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
-                        Target <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                        Target <img :src="UIIcons.Breakbar" alt="Breakbar"
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 4)" @click="sortBy('Data', 4)" data-original-title="Power + Condition" class="damage-cell">
-                        All <img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
+                        All <img :src="UIIcons.Damage" alt="All"
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 5)" @click="sortBy('Data', 5)" data-original-title="Power" class="damage-cell">
-                        All <img src="https://wiki.guildwars2.com/images/2/23/Power.png" alt="Power"
+                        All <img :src="UIIcons.Power" alt="Power"
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6)" data-original-title="Condition" class="damage-cell">
-                        All <img src="https://wiki.guildwars2.com/images/5/54/Condition_Damage.png" alt="Condition"
+                        All <img :src="UIIcons.ConditionDamage" alt="Condition"
                         class="icon">
                     </th>
                     <th :class="getHeaderClass('Data', 7)" @click="sortBy('Data', 7)" v-if="hasBreakbarDamage" data-original-title="Breakbar" class="damage-cell">
-                        All <img src="https://wiki.guildwars2.com/images/a/ae/Unshakable.png" alt="Breakbar"
+                        All <img :src="UIIcons.Breakbar" alt="Breakbar"
                         class="icon">
                     </th>
                 </tr>
@@ -252,6 +252,9 @@
                 };
                 this.cacheTarget.set(cacheID, res);
                 return res;
+            },
+            UIIcons: function() {
+                return UIIcons;
             }
         }
     });

@@ -213,80 +213,80 @@ internal static class WeaverHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaversProwess, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "5% cDam (8s) after switching element",  DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.PvE).WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_WeaversProwess, WeaversProwess, "Weaver's Prowess", "10% cDam (8s) after switching element",  DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, TraitImages.WeaversProwess, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.September2023Balance),
+        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "10% (8s) after double attuning", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "7% (8s) after double attuning", DamageSource.NoPets, 7.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.September2023Balance),
-        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, BuffImages.ElementsOfRage, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_ElementsOfRage, ElementsOfRage, "Elements of Rage", "5% (8s) after double attuning", DamageSource.NoPets, 5.0, DamageType.StrikeAndCondition, DamageType.All, Source.Weaver, ByPresence, TraitImages.ElementsOfRage, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(Mod_WovenFire, WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenFire, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_WovenAir, WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenAir, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance),
-        new BuffOnActorDamageModifier(Mod_PerfectWeaveCondition, PerfectWeave, "Perfect Weave (Condition)", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave (Strike)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_WovenFire, WovenFire, "Woven Fire", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenFire, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_WovenAir, WovenAir, "Wover Air", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenAir, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance),
+        new BuffOnActorDamageModifier(Mod_PerfectWeaveCondition, PerfectWeave, "Perfect Weave (Condition)", "20%", DamageSource.NoPets, 20.0, DamageType.Condition, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave (Strike)", "10%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All)
             .WithBuilds(GW2Builds.February2023Balance),
-        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "7% under swiftness/superspeed", DamageSource.NoPets, 7.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.November2022Balance),
-        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "15% under swiftness/superspeed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "15% under swiftness/superspeed", DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2022Balance, GW2Builds.SOTOReleaseAndBalance),
-        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.SwiftRevenge, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_SwiftRevenge, [Swiftness, Superspeed], "Swift Revenge", "10% under swiftness/superspeed", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, TraitImages.SwiftRevenge, DamageModifierMode.All)
             .WithBuilds(GW2Builds.SOTOReleaseAndBalance)
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_WovenEarth, WovenEarth, "Woven Earth", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WovenEarth, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, BuffImages.WeaveSelf, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_WovenEarth, WovenEarth, "Woven Earth", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WovenEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_PerfectWeaveStrike, PerfectWeave, "Perfect Weave", "-20% damage", DamageSource.NoPets, -20, DamageType.Strike, DamageType.All, Source.Weaver, ByPresence, SkillImages.WeaveSelf, DamageModifierMode.All),
     ];
 
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Dual Fire Attunement", DualFireAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireAttunement),
-        new Buff("Fire Water Attunement", FireWaterAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireWaterAttunement),
-        new Buff("Fire Air Attunement", FireAirAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireAirAttunement),
-        new Buff("Fire Earth Attunement", FireEarthAttunement, Source.Weaver, BuffClassification.Other, BuffImages.FireEarthAttunement),
-        new Buff("Dual Water Attunement", DualWaterAttunement, Source.Weaver, BuffClassification.Other, BuffImages.WaterAttunement),
-        new Buff("Water Fire Attunement", WaterFireAttunement, Source.Weaver, BuffClassification.Other, BuffImages.WaterFireAttunement),
-        new Buff("Water Air Attunement", WaterAirAttunement, Source.Weaver, BuffClassification.Other, BuffImages.WaterAirAttunement),
-        new Buff("Water Earth Attunement", WaterEarthAttunement, Source.Weaver, BuffClassification.Other, BuffImages.WaterEarthAttunement),
-        new Buff("Dual Air Attunement", DualAirAttunement, Source.Weaver, BuffClassification.Other, BuffImages.AirAttunement),
-        new Buff("Air Fire Attunement", AirFireAttunement, Source.Weaver, BuffClassification.Other, BuffImages.AirFireAttunement),
-        new Buff("Air Water Attunement", AirWaterAttunement, Source.Weaver, BuffClassification.Other, BuffImages.AirWaterAttunement),
-        new Buff("Air Earth Attunement", AirEarthAttunement, Source.Weaver, BuffClassification.Other, BuffImages.AirEarthAttunement),
-        new Buff("Dual Earth Attunement", DualEarthAttunement, Source.Weaver, BuffClassification.Other, BuffImages.EarthAttunement),
-        new Buff("Earth Fire Attunement", EarthFireAttunement, Source.Weaver, BuffClassification.Other, BuffImages.EarthFireAttunement),
-        new Buff("Earth Water Attunement", EarthWaterAttunement, Source.Weaver, BuffClassification.Other, BuffImages.EarthWaterAttunement),
-        new Buff("Earth Air Attunement", EarthAirAttunement, Source.Weaver, BuffClassification.Other, BuffImages.EarthAirAttunement),
-        new Buff("Primordial Stance", PrimordialStanceBuff, Source.Weaver, BuffClassification.Other, BuffImages.PrimordialStance),
-        new Buff("Unravel", UnravelBuff, Source.Weaver, BuffClassification.Other, BuffImages.Unravel),
-        new Buff("Weave Self", WeaveSelf, Source.Weaver, BuffClassification.Other, BuffImages.WeaveSelf),
-        new Buff("Woven Air", WovenAir, Source.Weaver, BuffClassification.Other, BuffImages.WovenAir),
-        new Buff("Woven Fire", WovenFire, Source.Weaver, BuffClassification.Other, BuffImages.WovenFire),
-        new Buff("Woven Earth", WovenEarth, Source.Weaver, BuffClassification.Other, BuffImages.WovenEarth),
-        new Buff("Woven Water", WovenWater, Source.Weaver, BuffClassification.Other, BuffImages.WovenWater),
-        new Buff("Perfect Weave", PerfectWeave, Source.Weaver, BuffClassification.Other, BuffImages.WeaveSelf),
-        new Buff("Molten Armor", MoltenArmor, Source.Weaver, BuffClassification.Other, BuffImages.LavaSkin),
-        new Buff("Weaver's Prowess", WeaversProwess, Source.Weaver, BuffClassification.Other, BuffImages.WeaversProwess),
-        new Buff("Elements of Rage", ElementsOfRage, Source.Weaver, BuffClassification.Other, BuffImages.ElementsOfRage),
-        new Buff("Stone Resonance", StoneResonanceBuff, Source.Weaver, BuffClassification.Other, BuffImages.StoneResonance),
-        new Buff("Grinding Stones", GrindingStones, Source.Weaver, BuffClassification.Other, BuffImages.GrindingStones),
+        new Buff("Dual Fire Attunement", DualFireAttunement, Source.Weaver, BuffClassification.Other, SkillImages.FireAttunement),
+        new Buff("Fire Water Attunement", FireWaterAttunement, Source.Weaver, BuffClassification.Other, SkillImages.FireWaterAttunement),
+        new Buff("Fire Air Attunement", FireAirAttunement, Source.Weaver, BuffClassification.Other, SkillImages.FireAirAttunement),
+        new Buff("Fire Earth Attunement", FireEarthAttunement, Source.Weaver, BuffClassification.Other, SkillImages.FireEarthAttunement),
+        new Buff("Dual Water Attunement", DualWaterAttunement, Source.Weaver, BuffClassification.Other, SkillImages.WaterAttunement),
+        new Buff("Water Fire Attunement", WaterFireAttunement, Source.Weaver, BuffClassification.Other, SkillImages.WaterFireAttunement),
+        new Buff("Water Air Attunement", WaterAirAttunement, Source.Weaver, BuffClassification.Other, SkillImages.WaterAirAttunement),
+        new Buff("Water Earth Attunement", WaterEarthAttunement, Source.Weaver, BuffClassification.Other, SkillImages.WaterEarthAttunement),
+        new Buff("Dual Air Attunement", DualAirAttunement, Source.Weaver, BuffClassification.Other, SkillImages.AirAttunement),
+        new Buff("Air Fire Attunement", AirFireAttunement, Source.Weaver, BuffClassification.Other, SkillImages.AirFireAttunement),
+        new Buff("Air Water Attunement", AirWaterAttunement, Source.Weaver, BuffClassification.Other, SkillImages.AirWaterAttunement),
+        new Buff("Air Earth Attunement", AirEarthAttunement, Source.Weaver, BuffClassification.Other, SkillImages.AirEarthAttunement),
+        new Buff("Dual Earth Attunement", DualEarthAttunement, Source.Weaver, BuffClassification.Other, SkillImages.EarthAttunement),
+        new Buff("Earth Fire Attunement", EarthFireAttunement, Source.Weaver, BuffClassification.Other, SkillImages.EarthFireAttunement),
+        new Buff("Earth Water Attunement", EarthWaterAttunement, Source.Weaver, BuffClassification.Other, SkillImages.EarthWaterAttunement),
+        new Buff("Earth Air Attunement", EarthAirAttunement, Source.Weaver, BuffClassification.Other, SkillImages.EarthAirAttunement),
+        new Buff("Primordial Stance", PrimordialStanceBuff, Source.Weaver, BuffClassification.Other, SkillImages.PrimordialStance),
+        new Buff("Unravel", UnravelBuff, Source.Weaver, BuffClassification.Other, SkillImages.Unravel),
+        new Buff("Weave Self", WeaveSelf, Source.Weaver, BuffClassification.Other, SkillImages.WeaveSelf),
+        new Buff("Woven Air", WovenAir, Source.Weaver, BuffClassification.Other, SkillImages.WovenAir),
+        new Buff("Woven Fire", WovenFire, Source.Weaver, BuffClassification.Other, SkillImages.WovenFire),
+        new Buff("Woven Earth", WovenEarth, Source.Weaver, BuffClassification.Other, SkillImages.WovenEarth),
+        new Buff("Woven Water", WovenWater, Source.Weaver, BuffClassification.Other, SkillImages.WovenWater),
+        new Buff("Perfect Weave", PerfectWeave, Source.Weaver, BuffClassification.Other, SkillImages.WeaveSelf),
+        new Buff("Molten Armor", MoltenArmor, Source.Weaver, BuffClassification.Other, SkillImages.LavaSkin),
+        new Buff("Weaver's Prowess", WeaversProwess, Source.Weaver, BuffClassification.Other, TraitImages.WeaversProwess),
+        new Buff("Elements of Rage", ElementsOfRage, Source.Weaver, BuffClassification.Other, TraitImages.ElementsOfRage),
+        new Buff("Stone Resonance", StoneResonanceBuff, Source.Weaver, BuffClassification.Other, SkillImages.StoneResonance),
+        new Buff("Grinding Stones", GrindingStones, Source.Weaver, BuffClassification.Other, SkillImages.GrindingStones),
         // Spear
-        new Buff("Frostfire Ward", FrostfireWardBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
-        new Buff("Galvanize", GalvanizeBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
-        new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
-        new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
-        new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Other, BuffImages.MonsterSkill),
+        new Buff("Frostfire Ward", FrostfireWardBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
+        new Buff("Galvanize", GalvanizeBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
+        new Buff("Fiery Impact", FieryImpactBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
+        new Buff("Elutriate", ElutriateBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
+        new Buff("Shale Storm", ShaleStormBuff, Source.Weaver, BuffClassification.Other, SkillImages.MonsterSkill),
     ];
 
 

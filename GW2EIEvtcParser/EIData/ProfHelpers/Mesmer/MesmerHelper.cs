@@ -86,10 +86,10 @@ internal static class MesmerHelper
         // Domination
         // Empowered illusions require knowing all illusion species ID
         // We need illusion species ID to enable Vicious Expression on All
-        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
-        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, BuffImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "25% on boonless target",  DamageSource.NoPets, 25.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.PvE).WithBuilds(GW2Builds.February2020Balance, GW2Builds.February2020Balance2),
+        new BuffOnFoeDamageModifier(Mod_ViciousExpression, NumberOfBoons, "Vicious Expression", "15% on boonless target",  DamageSource.NoPets, 15.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByAbsence, TraitImages.ConfoundingSuggestions, DamageModifierMode.All).WithBuilds(GW2Builds.February2020Balance2),
         //
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -99,7 +99,7 @@ internal static class MesmerHelper
             }
             return selfHP > dstHP;
         }, DamageModifierMode.PvE).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "5% if target hp% lower than self hp%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -109,7 +109,7 @@ internal static class MesmerHelper
             }
             return selfHP > dstHP;
         }, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.October2018Balance, GW2Builds.February2023Balance).UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, BuffImages.TemporalEnchanter, (x,log) =>
+        new DamageLogDamageModifier(Mod_Egotism, "Egotism", "10% if target hp% lower than self hp%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Mesmer, TraitImages.TemporalEnchanter, (x,log) =>
         {
             double selfHP = x.From.GetCurrentHealthPercent(log, x.Time);
             double dstHP = x.To.GetCurrentHealthPercent(log, x.Time);
@@ -120,60 +120,60 @@ internal static class MesmerHelper
             return selfHP > dstHP;
         }, DamageModifierMode.All).WithBuilds(GW2Builds.February2023Balance).UsingApproximate(true),
         //
-        new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.Fragility, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_Fragility, Vulnerability, "Fragility", "0.5% per stack vuln on target", DamageSource.NoPets, 0.5, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.Fragility, DamageModifierMode.All),
         // Dueling
         // Superiority Complex can all the conditions be tracked?
         // Illusions
-        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, BuffImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_CompoundingPower, CompoundingPower, "Compounding Power", "2% per stack after creating an illusion", DamageSource.NoPets, 2.0, DamageType.StrikeAndCondition, DamageType.All, Source.Mesmer, ByStack, TraitImages.CompoundingPower, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance),
         // Phantasmal Force: the current infrastructure is not capable of checking buffs on minions, once we have that, this does not require knowing illusion species id
         // Chaos       
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.January2024Balance),
-        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, BuffImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, Regeneration, "Illusionary Membrane", "10% under regeneration", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance, GW2Builds.November2023Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.All).WithBuilds(GW2Builds.November2023Balance, GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "10% under chaos aura", DamageSource.NoPets, 10.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.sPvPWvW).WithBuilds(GW2Builds.January2024Balance),
+        new BuffOnActorDamageModifier(Mod_IllusionaryMembrane, ChaosAura, "Illusionary Membrane", "7% under chaos aura", DamageSource.NoPets, 7.0, DamageType.Condition, DamageType.All, Source.Mesmer, ByPresence, TraitImages.IllusionaryMembrane, DamageModifierMode.PvE).WithBuilds(GW2Builds.January2024Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, BuffImages.Distortion, DamageModifierMode.All)
+        new CounterOnActorDamageModifier(Mod_Distortion, DistortionBuff, "Distortion", "Invulnerable", DamageSource.NoPets, DamageType.All, DamageType.All, Source.Mesmer, SkillImages.Distortion, DamageModifierMode.All)
     ];
 
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
         // Signets
-        new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfTheEther),
-        new Buff("Signet of Domination", SignetOfDomination, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfDomination),
-        new Buff("Signet of Illusions", SignetOfIllusions, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfIllusions),
-        new Buff("Signet of Inspiration", SignetOfInspirationBuff, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfInspiration),
-        new Buff("Signet of Midnight", SignetOfMidnightBuff, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfMidnight),
-        new Buff("Signet of Humility", SignetOfHumility, Source.Mesmer, BuffClassification.Other, BuffImages.SignetOfHumility),
+        new Buff("Signet of the Ether", SignetOfTheEther, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfTheEther),
+        new Buff("Signet of Domination", SignetOfDomination, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfDomination),
+        new Buff("Signet of Illusions", SignetOfIllusions, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfIllusions),
+        new Buff("Signet of Inspiration", SignetOfInspirationBuff, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfInspiration),
+        new Buff("Signet of Midnight", SignetOfMidnightBuff, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfMidnight),
+        new Buff("Signet of Humility", SignetOfHumility, Source.Mesmer, BuffClassification.Other, SkillImages.SignetOfHumility),
         // Skills
-        new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.Distortion),
-        new Buff("Blur", Blur, Source.Mesmer, BuffClassification.Other, BuffImages.Distortion),
-        new Buff("Mirror", Mirror, Source.Mesmer, BuffClassification.Other, BuffImages.Mirror),
-        new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, BuffImages.Echo),
-        new Buff("Illusionary Counter", IllusionaryCounterBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryCounter),
-        new Buff("Illusionary Riposte", IllusionaryRiposteBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryRiposte),
-        new Buff("Illusionary Leap", IllusionaryLeapBuff, Source.Mesmer, BuffClassification.Other, BuffImages.IllusionaryLeap),
-        new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, BuffImages.PortalEnter),
-        new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.PortalEnter),
-        new Buff("Illusion of Life", IllusionOfLifeBuff, Source.Mesmer, BuffClassification.Support, BuffImages.IllusionOfLife),
-        new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Dimensional Aperture", DimensionalAperturePortalBuff, Source.Mesmer, BuffClassification.Other, BuffImages.DimensionalAperture),
+        new Buff("Distortion", DistortionBuff, Source.Mesmer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.Distortion),
+        new Buff("Blur", Blur, Source.Mesmer, BuffClassification.Other, SkillImages.Distortion),
+        new Buff("Mirror", Mirror, Source.Mesmer, BuffClassification.Other, SkillImages.Mirror),
+        new Buff("Echo", Echo, Source.Mesmer, BuffClassification.Other, SkillImages.Echo),
+        new Buff("Illusionary Counter", IllusionaryCounterBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryCounter),
+        new Buff("Illusionary Riposte", IllusionaryRiposteBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryRiposte),
+        new Buff("Illusionary Leap", IllusionaryLeapBuff, Source.Mesmer, BuffClassification.Other, SkillImages.IllusionaryLeap),
+        new Buff("Portal Weaving", PortalWeaving, Source.Mesmer, BuffClassification.Other, SkillImages.PortalEnter),
+        new Buff("Portal Uses", PortalUses, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.PortalEnter),
+        new Buff("Illusion of Life", IllusionOfLifeBuff, Source.Mesmer, BuffClassification.Support, SkillImages.IllusionOfLife),
+        new Buff("Time Echo", TimeEcho, Source.Mesmer, BuffClassification.Other, SkillImages.DejaVu).WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Dimensional Aperture", DimensionalAperturePortalBuff, Source.Mesmer, BuffClassification.Other, SkillImages.DimensionalAperture),
         // Traits
-        new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.FencersFinesse),
-        new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.IllusionaryDefense),
-        new Buff("Compounding Power", CompoundingPower, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.CompoundingPower),
-        new Buff("Phantasmal Force", PhantasmalForce, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.Mistrust),
-        new Buff("Reflection", Reflection, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.ArcaneShield),
-        new Buff("Reflection 2", Reflection2, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.ArcaneShield),
+        new Buff("Fencer's Finesse", FencersFinesse , Source.Mesmer, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.FencersFinesse),
+        new Buff("Illusionary Defense", IllusionaryDefense, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.IllusionaryDefense),
+        new Buff("Compounding Power", CompoundingPower, Source.Mesmer, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.CompoundingPower),
+        new Buff("Phantasmal Force", PhantasmalForce, Source.Mesmer, BuffStackType.Stacking, 25, BuffClassification.Other, TraitImages.Mistrust),
+        new Buff("Reflection", Reflection, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.ArcaneShield),
+        new Buff("Reflection 2", Reflection2, Source.Mesmer, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.ArcaneShield),
         // Transformations
-        new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphMoa),
-        new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, BuffImages.MorphedPolymorphTuna),
+        new Buff("Morphed (Polymorph Moa)", MorphedPolymorphMoa, Source.Mesmer, BuffClassification.Debuff, SkillImages.MorphedPolymorphMoa),
+        new Buff("Morphed (Polymorph Tuna)", MorphedPolymorphTuna, Source.Mesmer, BuffClassification.Debuff, SkillImages.MorphedPolymorphTuna),
         // Spear
-        new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, BuffImages.Clarity),
+        new Buff("Clarity", Clarity, Source.Mesmer, BuffClassification.Other, SkillImages.Clarity),
     ];
 
     private static readonly HashSet<int> _cloneIDs =
@@ -331,7 +331,7 @@ internal static class MesmerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 60000, player.AgentItem, PortalWeaving);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.3, connector).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.PortalMesmerEntre, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -346,7 +346,7 @@ internal static class MesmerHelper
                     (long, long) lifespan = effect.ComputeLifespan(log, 10000, player.AgentItem, PortalUses);
                     var connector = new PositionConnector(effect.Position);
                     replay.Decorations.Add(new CircleDecoration(90, lifespan, color, 0.5, connector).UsingSkillMode(skill));
-                    AttachedDecoration icon = new IconDecoration(ParserIcons.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
+                    AttachedDecoration icon = new IconDecoration(EffectImages.PortalMesmerExeunt, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.7f, lifespan, connector).UsingSkillMode(skill);
                     if (first == null)
                     {
                         first = icon;
@@ -367,7 +367,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in feedbacks)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 6000 : 7000); // 7s with trait pre March 2024
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectFeedback);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectFeedback);
             }
         }
         // Veil
@@ -380,7 +380,7 @@ internal static class MesmerHelper
                 var connector = new PositionConnector(effect.Position);
                 var rotationConnector = new AngleConnector(effect.Rotation.Z);
                 replay.Decorations.Add(new RectangleDecoration(500, 70, lifespan, color, 0.5, connector).UsingFilled(false).UsingRotationConnector(rotationConnector).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectVeil, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
         // Null Field
@@ -390,7 +390,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in nullFields)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, gw2Build >= GW2Builds.March2024BalanceAndCerusLegendary ? 5000 : 6000); // 6s with trait pre March 2024
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectNullField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectNullField);
             }
         }
 
@@ -401,7 +401,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in illusionOfLife)
             {
                 (long, long) lifespan = (effect.Time, effect.Time + 500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectIllusionOfLife);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectIllusionOfLife);
             }
         }
 
@@ -434,7 +434,7 @@ internal static class MesmerHelper
 
                         // Portal location
                         replay.Decorations.Add(new CircleDecoration(radius, lifespan, color, 0.3, connector).UsingSkillMode(skill));
-                        replay.Decorations.Add(new IconDecoration(ParserIcons.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                        replay.Decorations.Add(new IconDecoration(EffectImages.PortalDimensionalAperture, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
 
                         // Tether between the portal and the player
                         replay.Decorations.Add(new LineDecoration(lifespan, color, 0.3, new AgentConnector(player.AgentItem), connector));
@@ -450,7 +450,7 @@ internal static class MesmerHelper
             foreach (EffectEvent effect in unstableBladestorm)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 6000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectUnstableBladestorm);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectUnstableBladestorm);
             }
         }
 
@@ -482,7 +482,7 @@ internal static class MesmerHelper
                 }
 
                 (long, long) lifespan = (effect.Time, effect.Time + duration);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, ParserIcons.EffectMentalCollapse);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, radius, EffectImages.EffectMentalCollapse);
             }
         }
     }

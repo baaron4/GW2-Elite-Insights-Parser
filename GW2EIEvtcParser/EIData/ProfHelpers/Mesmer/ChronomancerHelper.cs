@@ -27,9 +27,9 @@ internal static class ChronomancerHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
-        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, BuffImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
+        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.February2018Balance, GW2Builds.December2018Balance),
+        new BuffOnFoeDamageModifier(Mod_DangerTime, Slow, "Danger Time", "10% crit damage on slowed target", DamageSource.All, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.DangerTime, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.December2018Balance, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_ImprovedAlacrity, Alacrity, "Improved Alacrity", "10% crit under alacrity", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Chronomancer, ByPresence, TraitImages.ImprovedAlacrity, DamageModifierMode.All).UsingChecker((x, log) => x.HasCrit).WithBuilds(GW2Builds.August2022BalanceHotFix),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers = [];
@@ -37,8 +37,8 @@ internal static class ChronomancerHelper
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, BuffImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, BuffImages.ContinuumSplit),
+        new Buff("Time Echo", TimeEcho, Source.Chronomancer, BuffClassification.Other, SkillImages.DejaVu).WithBuilds(GW2Builds.StartOfLife, GW2Builds.SOTOBetaAndSilentSurfNM),
+        new Buff("Time Anchored", TimeAnchored, Source.Chronomancer, BuffStackType.Queue, 25, BuffClassification.Other, SkillImages.ContinuumSplit),
         new Buff("Temporal Stasis", TemporalStasis, Source.Chronomancer, BuffClassification.Other, BuffImages.Stun),
     ];
 
@@ -59,7 +59,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in wellsOfEternity)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfEternity);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfEternity);
             }
         }
         // Well of Eternity - Pulses
@@ -84,7 +84,7 @@ internal static class ChronomancerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfAction, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectWellOfAction, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
 
                 // Well pulses - Hard coded because the effects don't have a Src
                 int pulseTimeDelay = 0;
@@ -116,7 +116,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in wellsOfCalamity)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfCalamity);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfCalamity);
             }
         }
         // Well of Calamity - Pulses
@@ -139,7 +139,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in wellsOfPrecognition)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectWellOfPrecognition);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectWellOfPrecognition);
             }
         }
         // Well of Precognition - Pulses
@@ -164,7 +164,7 @@ internal static class ChronomancerHelper
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
                 var connector = new PositionConnector(effect.Position);
                 replay.Decorations.Add(new CircleDecoration(240, lifespan, color, 0.5, connector).UsingFilled(false).UsingSkillMode(skill));
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectWellOfSenility, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectWellOfSenility, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
 
                 // Well pulses - Hard coded because the effects don't have a Src
                 int pulseTimeDelay = 0;
@@ -196,7 +196,7 @@ internal static class ChronomancerHelper
             foreach (EffectEvent effect in gravityWells)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 3000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGravityWell);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectGravityWell);
             }
         }
         // Gravity Well - Pulses

@@ -37,32 +37,32 @@ internal static class RenegadeHelper
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_KallasFervor, KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_KallasFervor, KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, BuffImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
-        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.SoulcleavesSummit, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_KallasFervor, KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_KallasFervor, KallasFervor, "Kalla's Fervor", "2% per stack", DamageSource.NoPets, 2.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_ImprovedKallasFervor, ImprovedKallasFervor, "Improved Kalla's Fervor", "3% per stack", DamageSource.NoPets, 3.0, DamageType.StrikeAndConditionAndLifeLeech, DamageType.All, Source.Renegade, ByStack, TraitImages.KallasFervor, DamageModifierMode.PvE).WithBuilds(GW2Builds.May2021Balance),
+        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (no ICD)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2021Balance),
-        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (1s ICD per target)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, BuffImages.SoulcleavesSummit, DamageModifierMode.All)
+        new SkillDamageModifier(Mod_SoulcleavesSummit, "Soulcleave's Summit", "per hit (1s ICD per target)", SoulcleavesSummitBuff, DamageSource.NoPets, DamageType.Power, DamageType.All, Source.Common, SkillImages.SoulcleavesSummit, DamageModifierMode.All)
             .WithBuilds(GW2Builds.May2021Balance),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_BreakrazorsBastion, BreakrazorsBastionBuff, "Breakrazor's Bastion", "-50%", DamageSource.NoPets, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, BuffImages.BreakrazorsBastion, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-33%", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Renegade, ByPresence, BuffImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
-        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-7% per stack", DamageSource.NoPets, -7.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.October2018Balance, GW2Builds.May2021Balance),
-        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-4% per stack", DamageSource.NoPets, -4.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, BuffImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_BreakrazorsBastion, BreakrazorsBastionBuff, "Breakrazor's Bastion", "-50%", DamageSource.NoPets, -50.0, DamageType.Condition, DamageType.All, Source.Common, ByPresence, SkillImages.BreakrazorsBastion, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-33%", DamageSource.NoPets, -33.0, DamageType.Condition, DamageType.All, Source.Renegade, ByPresence, TraitImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.StartOfLife, GW2Builds.October2018Balance),
+        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-7% per stack", DamageSource.NoPets, -7.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.October2018Balance, GW2Builds.May2021Balance),
+        new BuffOnActorDamageModifier(Mod_RighteousRebel, KallasFervor, "Righteous Rebel", "-4% per stack", DamageSource.NoPets, -4.0, DamageType.Condition, DamageType.All, Source.Renegade, ByStack, TraitImages.RighteousRebel, DamageModifierMode.All).WithBuilds(GW2Builds.May2021Balance),
     ];
 
     internal static readonly IReadOnlyList<Buff> Buffs =
     [
-        new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceBuff, Source.Renegade, BuffClassification.Other, BuffImages.LegendaryRenegadeStance),
-        new Buff("Breakrazor's Bastion", BreakrazorsBastionBuff, Source.Renegade, BuffClassification.Defensive, BuffImages.BreakrazorsBastion),
-        new Buff("Razorclaw's Rage", RazorclawsRageBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.RazorclawsRage),
-        new Buff("Soulcleave's Summit", SoulcleavesSummitBuff, Source.Renegade, BuffClassification.Offensive, BuffImages.SoulcleavesSummit),
-        new Buff("Kalla's Fervor", KallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
-        new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, BuffImages.KallasFervor),
+        new Buff("Legendary Renegade Stance", LegendaryRenegadeStanceBuff, Source.Renegade, BuffClassification.Other, SkillImages.LegendaryRenegadeStance),
+        new Buff("Breakrazor's Bastion", BreakrazorsBastionBuff, Source.Renegade, BuffClassification.Defensive, SkillImages.BreakrazorsBastion),
+        new Buff("Razorclaw's Rage", RazorclawsRageBuff, Source.Renegade, BuffClassification.Offensive, SkillImages.RazorclawsRage),
+        new Buff("Soulcleave's Summit", SoulcleavesSummitBuff, Source.Renegade, BuffClassification.Offensive, SkillImages.SoulcleavesSummit),
+        new Buff("Kalla's Fervor", KallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KallasFervor),
+        new Buff("Improved Kalla's Fervor", ImprovedKallasFervor, Source.Renegade, BuffStackType.Stacking, 5, BuffClassification.Other, TraitImages.KallasFervor),
     ];
 
     private static HashSet<int> Minions =
@@ -119,9 +119,9 @@ internal static class RenegadeHelper
                             // AoE Radius and icons
                             (long, long) lifespan = (effect.Time, effect.Time + 3000);
                             var centralConnector = new PositionConnector(positions.Average());
-                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardmentPortal, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, playerPositionConnector)
+                            replay.Decorations.Add(new IconDecoration(EffectImages.EffectCitadelBombardmentPortal, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, playerPositionConnector)
                                 .UsingSkillMode(skill));
-                            replay.Decorations.Add(new IconDecoration(ParserIcons.EffectCitadelBombardment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector)
+                            replay.Decorations.Add(new IconDecoration(EffectImages.EffectCitadelBombardment, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, centralConnector)
                                 .UsingSkillMode(skill));
                             // TODO: Find a way to tell the user that the circle is approximative.
                             //replay.Decorations.Add(new CircleDecoration(230, lifespan, color, 0.5, centralConnector).UsingFilled(false).UsingSkillMode(skill));

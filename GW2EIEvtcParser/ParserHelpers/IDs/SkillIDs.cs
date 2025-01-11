@@ -361,7 +361,7 @@ public static class SkillIDs
     public const long MajorSigilOfBlood = 9457;
     public const long SuperiorSigilOfBlood = 9458;
     public const long SuperiorRuneOfTheDolyak = 9586;
-    public const long FrozenBurstRuneOfIce = 9604;
+    public const long FrozenBurst_RuneOfIce = 9604;
     public const long MinorSigilOfDoom = 9703;
     public const long BowlOfSimpleStirfry = 9733;
     public const long BowlOfGarlicSpinachSautee = 9734;
@@ -1055,7 +1055,7 @@ public static class SkillIDs
     public const long GlazedPeachTart = 15258;
     public const long OmnomberryGhost = 15259;
     public const long SpicyPumpkinCookie = 15260;
-    public const long HuntersCallRuneOfMadKing = 15266;
+    public const long HuntersCall_RuneOfMadKing = 15266;
     public const long WeakPotionOfHalloweenSlaying = 15272;
     public const long MinorPotionOfHalloweenSlaying = 15274;
     public const long PotionOfHalloweenSlaying = 15276;
@@ -2407,7 +2407,7 @@ public static class SkillIDs
     public const long Chapter4ShiningRiver = 42008;
     public const long WeaversProwess = 42061;
     public const long PrimordialStanceBuff = 42086;
-    public const long TailSpin = 42133;
+    public const long RaptorTailSpin = 42133;
     public const long OneWolfPackDamage = 42145;
     public const long POV_StealPrecisionBuff = 42194;
     public const long Afterburner = 42210;
@@ -2887,10 +2887,10 @@ public static class SkillIDs
     public const long SoulPastry = 53222;
     public const long SuperiorRuneOfTheMonk = 53285;
     public const long EnhancedLucentOil = 53304;
-    public const long ArtilleryBarrageRuneofCitadel = 53337;
+    public const long ArtilleryBarrage_RuneofCitadel = 53337;
     public const long PotentLucentOil = 53374;
     public const long CanOfStewedOysters = 53384;
-    public const long HandOfGrenthRuneOfGrenth = 53406;
+    public const long HandOfGrenth_RuneOfGrenth = 53406;
     public const long MarkedMistsArena = 53412;
     public const long AuroraBeam1 = 53445;
     public const long FrostPatchDamage = 53446;
@@ -2932,13 +2932,13 @@ public static class SkillIDs
     public const long MistlockInstabilityWeBleedFire = 54719;
     public const long MistlockInstabilitySlipperySlope2 = 54817;
     public const long SandstormShroudSkill = 54870;
-    public const long ChainPull1 = 54877;
+    public const long WarclawChainPull1 = 54877;
     public const long ChainAttached = 54898;
-    public const long BattleMaulSkill = 54912;
-    public const long BattleMaulDamage = 54922;
+    public const long WarclawBattleMaulSkill = 54912;
+    public const long WarclawBattleMaulDamage = 54922;
     public const long ShredderGyroDamage = 54935;
     public const long NoMountUseWarclaw = 54938;
-    public const long ChainPull2 = 54953;
+    public const long WarclawChainPull2 = 54953;
     public const long SandstormShroudHit = 54958;
     public const long GlyphOfTheStarsCA = 55026;
     public const long FeelNoPainSavageInstinct = 55030;
@@ -3157,7 +3157,7 @@ public static class SkillIDs
     public const long Hypothermia = 57969;
     public const long BowlOfCarneKhanChili = 57982;
     public const long BowlOfGreenChileIceCream = 58014;
-    public const long Lance = 58083;
+    public const long WarclawLance = 58083;
     public const long SoldiersFocus = 58102;
     public const long HammerSpin = 58132;
     public const long Fixated2 = 58136;
@@ -3318,7 +3318,7 @@ public static class SkillIDs
     public const long Enraged_200_strike_50_reduc = 60674;
     public const long Claw3 = 60842;
     public const long Enraged_300_strike_75_reduc = 61006;
-    public const long Stealth2Skill = 61081;
+    public const long StealthMountSkill = 61081;
     public const long Enraged_100_strike_25_reduc = 61138;
     public const long OverwhelmingSorrowDetonate = 61168;
     public const long ElementalManipulationWater1 = 61172;

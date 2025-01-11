@@ -76,70 +76,70 @@ internal static class ElementalistHelper
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         // Fire
-        new BuffOnActorDamageModifier(Mod_PersistingFlames, PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.PersistingFlames, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_PersistingFlames, PersistingFlames, "Persisting Flames", "1% per stack", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.PersistingFlames, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2020Balance),
-        new BuffOnActorDamageModifier(Mod_PyromancersTraining, [FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement], "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_PyromancersTraining, [FireAttunementBuff, FireWaterAttunement, FireAirAttunement, FireEarthAttunement, DualFireAttunement], "Pyromancer's Training", "10% while fire attuned", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PyromancersTraining, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnFoeDamageModifier(Mod_BurningRage, Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.BurningRage, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_BurningRage, Burning, "Burning Rage", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.BurningRage, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnFoeDamageModifier(Mod_PyromancersTraining, Burning, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PyromancersTraining, DamageModifierMode.All)
+        new BuffOnFoeDamageModifier(Mod_PyromancersTraining, Burning, "Pyromancer's Training", "10% on burning target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PyromancersTraining, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance),
         // Air
-        new DamageLogDamageModifier(Mod_BoltToTheHeart, "Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.BoltToTheHeart, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_BoltToTheHeart, "Bolt to the Heart", "20% if target <50% HP", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.BoltToTheHeart, (x, log) => x.AgainstUnderFifty, DamageModifierMode.All),
         // Earth
-        new BuffOnFoeDamageModifier(Mod_SerratedStoned, Bleeding, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SerratedStones, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_SerratedStoned, Bleeding, "Serrated Stones", "5% to bleeding target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.SerratedStones, DamageModifierMode.All),
         // Water
-        new DamageLogDamageModifier(Mod_AquamancersTraining, "Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.AquamancersTraining, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_AquamancersTraining, "Aquamancer's Training", "10% if hp >=90%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.AquamancersTraining, (x, log) => x.IsOverNinety, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards w/ Water", "20% on vuln target while on water", DamageSource.NoPets, 20.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.PvE)
             .UsingSrcCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
-        new BuffOnFoeDamageModifier(Mod_PiercingShardsNoWater, Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_PiercingShardsNoWater, Vulnerability, "Piercing Shards", "10% on vuln target", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.PvE)
             .UsingSrcCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
-        new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
+        new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards w/ Water", "10% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.sPvPWvW)
             .UsingSrcCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
-        new BuffOnFoeDamageModifier(Mod_PiercingShardsNoWater, Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.sPvPWvW)
+        new BuffOnFoeDamageModifier(Mod_PiercingShardsNoWater, Vulnerability, "Piercing Shards", "5% on vuln target", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.sPvPWvW)
             .UsingSrcCheckerByAbsence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.July2019Balance),
-        new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.PiercingShards, DamageModifierMode.PvE)
+        new BuffOnFoeDamageModifier(Mod_PiercingShardsWater, Vulnerability, "Piercing Shards", "20% on vuln target while on water", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.PiercingShards, DamageModifierMode.PvE)
             .UsingSrcCheckerByPresence([ WaterAttunementBuff, WaterAirAttunement, WaterEarthAttunement, WaterFireAttunement, DualWaterAttunement ])
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.July2019Balance),
-        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.July2019Balance, GW2Builds.February2020Balance)
             .UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "10% if hp >=75%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance)
             .UsingApproximate(true),
-        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.sPvPWvW)
+        new DamageLogDamageModifier(Mod_FlowLikeWater, "Flow like Water", "5% if hp >=75%", DamageSource.NoPets, 5.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 75.0, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.February2020Balance, GW2Builds.June2024Balance),
-        new DamageLogDamageModifier(Mod_FlowLikeWater10, "Flow like Water (>= 50%)", "10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FlowLikeWater10, "Flow like Water (>= 50%)", "10% if hp >=50%", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) >= 50.0, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2024Balance),
-        new DamageLogDamageModifier(Mod_FlowLikeWater5, "Flow like Water (< 50%)", "5% if hp <50%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50, DamageModifierMode.All)
+        new DamageLogDamageModifier(Mod_FlowLikeWater5, "Flow like Water (< 50%)", "5% if hp <50%", DamageSource.NoPets, 5, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.FlowLikeWater, (x, log) => x.From.GetCurrentHealthPercent(log, x.Time) < 50, DamageModifierMode.All)
             .WithBuilds(GW2Builds.June2024Balance)
             .UsingApproximate(true),
         //new DamageLogDamageModifier("Flow like Water", "10% over 75% HP", DamageSource.NoPets, 10.0, DamageType.Power, DamageType.All, ParseHelper.Source.Elementalist, BuffImages.FlowLikeWater, x => x.IsOverNinety, GW2Builds.July2019Balance),
         // Arcane
-        new BuffOnActorDamageModifier(Mod_BountifulPower, NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, BuffImages.BountifulPower, DamageModifierMode.All),
-        new BuffOnFoeDamageModifier(Mod_StormSoul, [Stun, Daze, Knockdown, Fear, Taunt], "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, BuffImages.Stormsoul, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_BountifulPower, NumberOfBoons, "Bountiful Power", "2% per boon", DamageSource.NoPets, 2.0, DamageType.Strike, DamageType.All, Source.Elementalist, ByStack, TraitImages.BountifulPower, DamageModifierMode.All),
+        new BuffOnFoeDamageModifier(Mod_StormSoul, [Stun, Daze, Knockdown, Fear, Taunt], "Stormsoul", "10% to disabled foes", DamageSource.NoPets, 10.0, DamageType.Strike, DamageType.Strike, Source.Elementalist, ByPresence, TraitImages.Stormsoul, DamageModifierMode.All)
             .WithBuilds(GW2Builds.December2018Balance)
             .UsingApproximate(true),
-        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.All)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.All)
             .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM, GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.sPvPWvW)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "10%", DamageSource.NoPets, 10.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.sPvPWvW)
             .WithBuilds(GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.FlameWheel, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_FlameWheel, FlameWheelBuff, "Flame Wheel", "15%", DamageSource.NoPets, 15.0, DamageType.StrikeAndCondition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.FlameWheel, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.November2023Balance),
-        new BuffOnActorDamageModifier(Mod_RagingRicochet, RagingRichochetBuff, "Raging Ricochet", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Elementalist, ByPresence, BuffImages.RagingRicochet, DamageModifierMode.PvE)
+        new BuffOnActorDamageModifier(Mod_RagingRicochet, RagingRichochetBuff, "Raging Ricochet", "5%", DamageSource.NoPets, 5.0, DamageType.Condition, DamageType.All, Source.Elementalist, ByPresence, SkillImages.RagingRicochet, DamageModifierMode.PvE)
             .WithBuilds(GW2Builds.February2024NewWeapons),
     ];
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> IncomingDamageModifiers =
     [
-        new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.SignetOfEarth, DamageModifierMode.All),
-        new BuffOnActorDamageModifier(Mod_StoneFlesh, [EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, BuffImages.StoneFlesh, DamageModifierMode.All),
-        new DamageLogDamageModifier(Mod_GeomancersTraining, "Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Elementalist, BuffImages.GeomancersTraining, (x,log) => 
+        new BuffOnActorDamageModifier(Mod_SignetOfEarth, SignetOfEarth, "Signet of Earth", "-10% damage", DamageSource.NoPets, -10, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, SkillImages.SignetOfEarth, DamageModifierMode.All),
+        new BuffOnActorDamageModifier(Mod_StoneFlesh, [EarthAttunementBuff, FireEarthAttunement, WaterEarthAttunement, EarthAirAttunement, DualEarthAttunement], "Stone Flesh", "-7% damage while attuned to earth", DamageSource.NoPets, -7, DamageType.Strike, DamageType.All, Source.Elementalist, ByPresence, TraitImages.StoneFlesh, DamageModifierMode.All),
+        new DamageLogDamageModifier(Mod_GeomancersTraining, "Geomancer's Training", "-10% damage from foes within 360 range", DamageSource.NoPets, -10.0, DamageType.Strike, DamageType.All, Source.Elementalist, TraitImages.GeomancersTraining, (x,log) => 
                 x.From.TryGetCurrentPosition(log, x.Time, out var currentPosition)
                 && x.To.TryGetCurrentPosition(log, x.Time, out var currentTargetPosition)
                 && (currentPosition - currentTargetPosition).Length() <= 360.0
@@ -150,74 +150,74 @@ internal static class ElementalistHelper
     internal static readonly IReadOnlyList<Buff> Buffs =
     [       
         // Signets
-        new Buff("Signet of Restoration", SignetOfRestoration, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfRestoration),
-        new Buff("Signet of Air", SignetOfAirBuff, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfAir),
-        new Buff("Signet of Earth", SignetOfEarth, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfEarth),
-        new Buff("Signet of Fire", SignetOfFire, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfFire),
-        new Buff("Signet of Water", SignetOfWater, Source.Elementalist, BuffClassification.Other, BuffImages.SignetOfWater),
+        new Buff("Signet of Restoration", SignetOfRestoration, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfRestoration),
+        new Buff("Signet of Air", SignetOfAirBuff, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfAir),
+        new Buff("Signet of Earth", SignetOfEarth, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfEarth),
+        new Buff("Signet of Fire", SignetOfFire, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfFire),
+        new Buff("Signet of Water", SignetOfWater, Source.Elementalist, BuffClassification.Other, SkillImages.SignetOfWater),
         // Attunements
         // Fire
-        new Buff("Fire Attunement", FireAttunementBuff, Source.Elementalist, BuffClassification.Other, BuffImages.FireAttunement),
+        new Buff("Fire Attunement", FireAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FireAttunement),
         // Water
-        new Buff("Water Attunement", WaterAttunementBuff, Source.Elementalist, BuffClassification.Other, BuffImages.WaterAttunement),
+        new Buff("Water Attunement", WaterAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.WaterAttunement),
         // Air
-        new Buff("Air Attunement", AirAttunementBuff, Source.Elementalist, BuffClassification.Other, BuffImages.AirAttunement),
+        new Buff("Air Attunement", AirAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.AirAttunement),
         // Earth
-        new Buff("Earth Attunement", EarthAttunementBuff, Source.Elementalist, BuffClassification.Other, BuffImages.EarthAttunement),
+        new Buff("Earth Attunement", EarthAttunementBuff, Source.Elementalist, BuffClassification.Other, SkillImages.EarthAttunement),
         // Forms
-        new Buff("Mist Form", MistForm, Source.Elementalist, BuffClassification.Other, BuffImages.MistForm),
-        new Buff("Mist Form 2", MistForm2, Source.Elementalist, BuffClassification.Other, BuffImages.MistForm),
-        new Buff("Ride the Lightning",RideTheLightningBuff, Source.Elementalist, BuffClassification.Other, BuffImages.RideTheLightning),
-        new Buff("Vapor Form", VaporForm, Source.Elementalist, BuffClassification.Other, BuffImages.VaporForm),
-        new Buff("Tornado", Tornado, Source.Elementalist, BuffClassification.Other, BuffImages.Tornado),
-        new Buff("Whirlpool", Whirlpool, Source.Elementalist, BuffClassification.Other, BuffImages.Whirlpool),
-        new Buff("Electrified Tornado", ElectrifiedTornado, Source.Elementalist, BuffClassification.Other, BuffImages.ChainLightning),
-        new Buff("Arcane Lightning", ArcaneLightning, Source.Elementalist, BuffClassification.Other, BuffImages.ElementalSurge),
+        new Buff("Mist Form", MistForm, Source.Elementalist, BuffClassification.Other, SkillImages.MistForm),
+        new Buff("Mist Form 2", MistForm2, Source.Elementalist, BuffClassification.Other, SkillImages.MistForm),
+        new Buff("Ride the Lightning",RideTheLightningBuff, Source.Elementalist, BuffClassification.Other, SkillImages.RideTheLightning),
+        new Buff("Vapor Form", VaporForm, Source.Elementalist, BuffClassification.Other, SkillImages.VaporForm),
+        new Buff("Tornado", Tornado, Source.Elementalist, BuffClassification.Other, SkillImages.Tornado),
+        new Buff("Whirlpool", Whirlpool, Source.Elementalist, BuffClassification.Other, SkillImages.Whirlpool),
+        new Buff("Electrified Tornado", ElectrifiedTornado, Source.Elementalist, BuffClassification.Other, SkillImages.ChainLightning),
+        new Buff("Arcane Lightning", ArcaneLightning, Source.Elementalist, BuffClassification.Other, SkillImages.ElementalSurge),
         // Conjures
-        new Buff("Conjure Earth Shield", ConjureEarthShield, Source.Elementalist, BuffClassification.Support, BuffImages.ConjureEarthShield),
-        new Buff("Conjure Flame Axe", ConjureFlameAxe, Source.Elementalist, BuffClassification.Support, BuffImages.ConjureFlameAxe),
-        new Buff("Conjure Frost Bow", ConjureFrostBow, Source.Elementalist, BuffClassification.Support, BuffImages.ConjureFrostBow),
-        new Buff("Conjure Lightning Hammer", ConjureLightningHammer, Source.Elementalist, BuffClassification.Support, BuffImages.ConjureLightningHammer),
-        new Buff("Conjure Fiery Greatsword", ConjureFieryGreatsword, Source.Elementalist, BuffClassification.Support, BuffImages.ConjureFieryGreatsword),
+        new Buff("Conjure Earth Shield", ConjureEarthShield, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureEarthShield),
+        new Buff("Conjure Flame Axe", ConjureFlameAxe, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFlameAxe),
+        new Buff("Conjure Frost Bow", ConjureFrostBow, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFrostBow),
+        new Buff("Conjure Lightning Hammer", ConjureLightningHammer, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureLightningHammer),
+        new Buff("Conjure Fiery Greatsword", ConjureFieryGreatsword, Source.Elementalist, BuffClassification.Support, SkillImages.ConjureFieryGreatsword),
         new Buff("Freeze 1", Freeze1, Source.Elementalist, BuffClassification.Other, BuffImages.Stun),
         new Buff("Freeze 2", Freeze2, Source.Elementalist, BuffClassification.Other, BuffImages.Stun),
         // Summons
-        new Buff("Lesser Air Elemental Summoned", LesserAirElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfLesserElementalsAir),
-        new Buff("Air Elemental Summoned", AirElementalSummoned, Source.Elementalist, BuffClassification.Other, BuffImages.GlyphOfElementalsAir),
-        new Buff("Lesser Water Elemental Summoned", LesserWaterElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfLesserElementalsWater),
-        new Buff("Water Elemental Summoned", WaterElementalSummoned, Source.Elementalist, BuffClassification.Other, BuffImages.GlyphOfElementalsWater),
-        new Buff("Lesser Fire Elemental Summoned", LesserFireElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfLesserElementalsFire),
-        new Buff("Fire Elemental Summoned", FireElementalSummoned, Source.Elementalist, BuffClassification.Other, BuffImages.GlyphOfElementalsFire),
-        new Buff("Lesser Earth Elemental Summoned", LesserEarthElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfLesserElementalsEarth),
-        new Buff("Earth Elemental Summoned", EarthElementalSummoned, Source.Elementalist, BuffClassification.Other, BuffImages.GlyphOfElementalsEarth),
+        new Buff("Lesser Air Elemental Summoned", LesserAirElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfLesserElementalsAir),
+        new Buff("Air Elemental Summoned", AirElementalSummoned, Source.Elementalist, BuffClassification.Other, SkillImages.GlyphOfElementalsAir),
+        new Buff("Lesser Water Elemental Summoned", LesserWaterElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfLesserElementalsWater),
+        new Buff("Water Elemental Summoned", WaterElementalSummoned, Source.Elementalist, BuffClassification.Other, SkillImages.GlyphOfElementalsWater),
+        new Buff("Lesser Fire Elemental Summoned", LesserFireElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfLesserElementalsFire),
+        new Buff("Fire Elemental Summoned", FireElementalSummoned, Source.Elementalist, BuffClassification.Other, SkillImages.GlyphOfElementalsFire),
+        new Buff("Lesser Earth Elemental Summoned", LesserEarthElementalSummoned, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfLesserElementalsEarth),
+        new Buff("Earth Elemental Summoned", EarthElementalSummoned, Source.Elementalist, BuffClassification.Other, SkillImages.GlyphOfElementalsEarth),
         // Skills
-        new Buff("Arcane Power", ArcanePowerBuff, Source.Elementalist, BuffStackType.Stacking, 6, BuffClassification.Other, BuffImages.ArcanePower),
-        new Buff("Arcane Power (Ferocity)", ArcanePowerFerocityBuff, Source.Elementalist, BuffClassification.Other, BuffImages.ArcanePower),
-        new Buff("Arcane Shield", ArcaneShieldBuff, Source.Elementalist, BuffStackType.Stacking, 25, BuffClassification.Other, BuffImages.ArcaneShield),
-        new Buff("Renewal of Fire", RenewalOfFire, Source.Elementalist, BuffClassification.Other, BuffImages.RenewalOfFire),
-        new Buff("Rock Barrier", RockBarrier, Source.Elementalist, BuffClassification.Other, BuffImages.RockBarrier),//750?
-        new Buff("Magnetic Wave", MagneticWave, Source.Elementalist, BuffClassification.Other, BuffImages.MagneticWave),
-        new Buff("Obsidian Flesh", ObsidianFlesh, Source.Elementalist, BuffClassification.Other, BuffImages.ObsidianFlesh),
-        new Buff("Persisting Flames", PersistingFlames, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, BuffImages.PersistingFlames)
+        new Buff("Arcane Power", ArcanePowerBuff, Source.Elementalist, BuffStackType.Stacking, 6, BuffClassification.Other, SkillImages.ArcanePower),
+        new Buff("Arcane Power (Ferocity)", ArcanePowerFerocityBuff, Source.Elementalist, BuffClassification.Other, SkillImages.ArcanePower),
+        new Buff("Arcane Shield", ArcaneShieldBuff, Source.Elementalist, BuffStackType.Stacking, 25, BuffClassification.Other, SkillImages.ArcaneShield),
+        new Buff("Renewal of Fire", RenewalOfFire, Source.Elementalist, BuffClassification.Other, SkillImages.RenewalOfFire),
+        new Buff("Rock Barrier", RockBarrier, Source.Elementalist, BuffClassification.Other, SkillImages.RockBarrier),//750?
+        new Buff("Magnetic Wave", MagneticWave, Source.Elementalist, BuffClassification.Other, SkillImages.MagneticWave),
+        new Buff("Obsidian Flesh", ObsidianFlesh, Source.Elementalist, BuffClassification.Other, SkillImages.ObsidianFlesh),
+        new Buff("Persisting Flames", PersistingFlames, Source.Elementalist, BuffStackType.Stacking, 10, BuffClassification.Other, TraitImages.PersistingFlames)
             .WithBuilds(GW2Builds.July2020Balance),
-        new Buff("Fresh Air", FreshAir, Source.Elementalist, BuffClassification.Other, BuffImages.FreshAir),
-        new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffClassification.Defensive, BuffImages.SoothingMist)
+        new Buff("Fresh Air", FreshAir, Source.Elementalist, BuffClassification.Other, TraitImages.FreshAir),
+        new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffClassification.Defensive, TraitImages.SoothingMist)
             .WithBuilds(GW2Builds.StartOfLife, GW2Builds.May2023Balance),
-        new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Defensive, BuffImages.SoothingMist)
+        new Buff("Soothing Mist", SoothingMist, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Defensive, TraitImages.SoothingMist)
             .WithBuilds(GW2Builds.May2023Balance),
-        new Buff("Stone Heart", StoneHeart, Source.Elementalist, BuffClassification.Defensive, BuffImages.StoneHeart),
-        new Buff("Glyph of Elemental Power (Fire)", GlyphOfElementalPowerFireBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerFire),
-        new Buff("Glyph of Elemental Power (Air)", GlyphOfElementalPowerAirBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerAir),
-        new Buff("Glyph of Elemental Power (Water)", GlyphOfElementalPowerWaterBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerWater),
-        new Buff("Glyph of Elemental Power (Earth)", GlyphOfElementalPowerEarthBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, BuffImages.GlyphOfElementalPowerEarth),
+        new Buff("Stone Heart", StoneHeart, Source.Elementalist, BuffClassification.Defensive, TraitImages.StoneHeart),
+        new Buff("Glyph of Elemental Power (Fire)", GlyphOfElementalPowerFireBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfElementalPowerFire),
+        new Buff("Glyph of Elemental Power (Air)", GlyphOfElementalPowerAirBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfElementalPowerAir),
+        new Buff("Glyph of Elemental Power (Water)", GlyphOfElementalPowerWaterBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfElementalPowerWater),
+        new Buff("Glyph of Elemental Power (Earth)", GlyphOfElementalPowerEarthBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 5, BuffClassification.Other, SkillImages.GlyphOfElementalPowerEarth),
         // Hammer
-        new Buff("Flame Wheel", FlameWheelBuff, Source.Elementalist, BuffClassification.Other, BuffImages.FlameWheel)
+        new Buff("Flame Wheel", FlameWheelBuff, Source.Elementalist, BuffClassification.Other, SkillImages.FlameWheel)
             .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Icy Coil", IcyCoilBuff, Source.Elementalist, BuffClassification.Other, BuffImages.IcyCoil)
+        new Buff("Icy Coil", IcyCoilBuff, Source.Elementalist, BuffClassification.Other, SkillImages.IcyCoil)
             .WithBuilds( GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Crescent Wind", CrescentWindBuff, Source.Elementalist, BuffClassification.Other, BuffImages.CrescentWind)
+        new Buff("Crescent Wind", CrescentWindBuff, Source.Elementalist, BuffClassification.Other, SkillImages.CrescentWind)
             .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
-        new Buff("Rocky Loop", RockyLoopBuff, Source.Elementalist, BuffClassification.Other, BuffImages.RockyLoop)
+        new Buff("Rocky Loop", RockyLoopBuff, Source.Elementalist, BuffClassification.Other, SkillImages.RockyLoop)
             .WithBuilds(GW2Builds.SOTOBetaAndSilentSurfNM),
         // Pistol
         new Buff("Fire Bullet", FireBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
@@ -228,18 +228,18 @@ internal static class ElementalistHelper
             .WithBuilds(GW2Builds.February2024NewWeapons),
         new Buff("Earth Bullet", EarthBullet, Source.Elementalist, BuffClassification.Other, BuffImages.Unknown)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-        new Buff("Raging Ricochet", RagingRichochetBuff, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Other, BuffImages.RagingRicochet)
+        new Buff("Raging Ricochet", RagingRichochetBuff, Source.Elementalist, BuffStackType.Queue, 9, BuffClassification.Other, SkillImages.RagingRicochet)
             .WithBuilds( GW2Builds.February2024NewWeapons),
-        new Buff("Dazing Discharge", DazingDischargeBuff, Source.Elementalist, BuffClassification.Other, BuffImages.DazingDischarge)
+        new Buff("Dazing Discharge", DazingDischargeBuff, Source.Elementalist, BuffClassification.Other, SkillImages.DazingDischarge)
             .WithBuilds(GW2Builds.February2024NewWeapons),
-        new Buff("Shattering Stone", ShatteringStoneBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, BuffImages.ShatteringStone)
+        new Buff("Shattering Stone", ShatteringStoneBuff, Source.Elementalist, BuffStackType.StackingConditionalLoss, 25, BuffClassification.Other, SkillImages.ShatteringStone)
             .WithBuilds(GW2Builds.February2024NewWeapons),
         // Spear
-        new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Other, BuffImages.Seethe),
-        new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Other, BuffImages.Ripple),
-        new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Other, BuffImages.Energize),
-        new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, BuffImages.Fulgor),
-        new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Other, BuffImages.Harden),
+        new Buff("Seethe", SeetheBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Seethe),
+        new Buff("Ripple", RippleBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Ripple),
+        new Buff("Energize", EnergizeBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Energize),
+        new Buff("Fulgor", FulgorBuff, Source.Elementalist, BuffStackType.StackingTargetUniqueSrc, 999, BuffClassification.Other, SkillImages.Fulgor),
+        new Buff("Harden", HardenBuff, Source.Elementalist, BuffClassification.Other, SkillImages.Harden),
     ];
 
 
@@ -301,7 +301,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in meteorShowerCircles)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 9000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectMeteorShower);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectMeteorShower);
             }
             // The meteors
             if (log.CombatData.TryGetEffectEventsBySrcWithGUID(player.AgentItem, EffectGUIDs.ElementalistMeteorShowerMeteor, out var meteorShowersMeteors))
@@ -324,7 +324,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in staticFieldsStaff)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectStaticField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectStaticField);
             }
         }
 
@@ -335,7 +335,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in staticFieldsHammer)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectStaticField);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectStaticField);
             }
         }
 
@@ -349,7 +349,7 @@ internal static class ElementalistHelper
                 var connector = new PositionConnector(effect.Position);
                 var circle = (CircleDecoration)new CircleDecoration(240, lifespan, color, 0.3, connector).UsingFilled(false).UsingSkillMode(skill);
                 replay.Decorations.AddWithGrowing(circle, lifespan.Item2, true);
-                replay.Decorations.Add(new IconDecoration(ParserIcons.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
+                replay.Decorations.Add(new IconDecoration(EffectImages.EffectUpdraft, CombatReplaySkillDefaultSizeInPixel, CombatReplaySkillDefaultSizeInWorld, 0.5f, lifespan, connector).UsingSkillMode(skill));
             }
         }
 
@@ -365,12 +365,12 @@ internal static class ElementalistHelper
                 if (firestormCastsOnEffect.Count() == 1)
                 {
                     skill = new SkillModeDescriptor(player, Spec.Necromancer, firestormCastsOnEffect.First().SkillId);
-                    icon = skill.SkillID == FirestormGlyphOfStorms ? ParserIcons.EffectFirestormGlyph : ParserIcons.EffectFirestormFieryGreatsword;
+                    icon = skill.SkillID == FirestormGlyphOfStorms ? EffectImages.EffectFirestormGlyph : EffectImages.EffectFirestormFieryGreatsword;
                 }
                 else
                 {
                     skill = new SkillModeDescriptor(player, Spec.Elementalist, FirestormGlyphOfStormsOrFieryGreatsword);
-                    icon = ParserIcons.EffectFirestormGlyphOrFieryGreatsword;
+                    icon = EffectImages.EffectFirestormGlyphOrFieryGreatsword;
                 }
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 10000);
                 AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, icon);
@@ -390,7 +390,7 @@ internal static class ElementalistHelper
                         continue;
                     }
                     (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, ParserIcons.EffectGeyser);
+                    AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 240, EffectImages.EffectGeyser);
                 }
             }
         }
@@ -402,7 +402,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in meteors)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 1000);
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectMeteor);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectMeteor);
             }
         }
 
@@ -417,7 +417,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingVolcanoEffects, out var etchingVolcano))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingVolcano, EtchingVolcano, ParserIcons.EffectEtchingVolcano);
+            AddEtchingDecorations(log, player, replay, color, etchingVolcano, EtchingVolcano, EffectImages.EffectEtchingVolcano);
         }
 
         // Lesser Volcano
@@ -427,7 +427,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in lesserVolcano)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4400);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectLesserVolcano);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectLesserVolcano);
                 // Hits landing from the volcano
                 AddVolcanoProjectileHitDecorations(log, player, replay, skill, color, effect.Time, effect.Duration);
             }
@@ -440,7 +440,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in volcano)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4500);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, ParserIcons.EffectVolcano);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 360, EffectImages.EffectVolcano);
                 // Hits landing from the volcano
                 AddVolcanoProjectileHitDecorations(log, player, replay, skill, color, effect.Time, effect.Duration);
             }
@@ -453,7 +453,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in undertows)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 1000); // logged duration of 0 - overriding it to 1000 like the others
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectUndertow);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectUndertow);
             }
         }
 
@@ -468,7 +468,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingJokulhlaupEffects, out var etchingJokulhlaup))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingJokulhlaup, EtchingJokulhlaup, ParserIcons.EffectEtchingJokulhlaup);
+            AddEtchingDecorations(log, player, replay, color, etchingJokulhlaup, EtchingJokulhlaup, EffectImages.EffectEtchingJokulhlaup);
         }
 
         // Fulgor
@@ -478,7 +478,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in fulgors)
             {
                 (long, long) lifespan = effect.ComputeLifespan(log, 4000);
-                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, ParserIcons.EffectFulgor);
+                AddCircleSkillDecoration(replay, effect, color, skill, lifespan, 180, EffectImages.EffectFulgor);
             }
         }
 
@@ -489,7 +489,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in twisters)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 1000);
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectTwister);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectTwister);
             }
         }
 
@@ -504,7 +504,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingDerechoEffects, out var etchingDerecho))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingDerecho, EtchingDerecho, ParserIcons.EffectEtchingDerecho);
+            AddEtchingDecorations(log, player, replay, color, etchingDerecho, EtchingDerecho, EffectImages.EffectEtchingDerecho);
         }
 
         // Fissure
@@ -514,7 +514,7 @@ internal static class ElementalistHelper
             foreach (EffectEvent effect in fissures)
             {
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, 1000); // logged duration of 0 - overriding it to 1000 like the others
-                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, ParserIcons.EffectFissure);
+                AddDoughnutSkillDecoration(replay, effect, color, skill, lifespan, 120, 240, EffectImages.EffectFissure);
             }
         }
 
@@ -529,7 +529,7 @@ internal static class ElementalistHelper
         };
         if (log.CombatData.TryGetEffectEventsBySrcWithGUIDs(player.AgentItem, etchingHaboobEffects, out var etchingHaboob))
         {
-            AddEtchingDecorations(log, player, replay, color, etchingHaboob, EtchingHaboob, ParserIcons.EffectEtchingHaboob);
+            AddEtchingDecorations(log, player, replay, color, etchingHaboob, EtchingHaboob, EffectImages.EffectEtchingHaboob);
         }
     }
 

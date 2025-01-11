@@ -26,27 +26,32 @@
         </ul>    
         <ul class="nav nav-pills d-flex flex-wrap justify-content-center ml-3 scale85" :class="{'flex-row': !column, 'flex-column': column}">
             <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="All">
-                <a class="nav-link" @click="data.healingmode = healingModeEnum.All" :class="{active: data.healingmode === healingModeEnum.All}"><img src="https://wiki.guildwars2.com/images/thumb/6/6a/Damage.png/30px-Damage.png" alt="All"
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.All" :class="{active: data.healingmode === healingModeEnum.All}">
+                    <img :src="UIIcons.Heal" alt="All"
                     class="icon"></a>
             </li>    
             <li class="nav-item d-flex flex-row justify-content-center align-items-centerm" data-original-title="Healing Power">
-                <a class="nav-link" @click="data.healingmode = healingModeEnum.HealingPower" :class="{active: data.healingmode === healingModeEnum.HealingPower}"><img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Healing Power"
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.HealingPower" :class="{active: data.healingmode === healingModeEnum.HealingPower}">
+                    <img :src="UIIcons.HealingPower" alt="Healing Power"
                     class="icon"></a>
             </li>                     
             <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Conversion">
-                <a class="nav-link" @click="data.healingmode = healingModeEnum.Conversion" :class="{active: data.healingmode === healingModeEnum.Conversion}"><img src="https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png" alt="Conversion"
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.Conversion" :class="{active: data.healingmode === healingModeEnum.Conversion}">
+                    <img :src="UIIcons.ConvertHealing" alt="Conversion"
                     class="icon"></a>
             </li>   
             <!--                 
             <li class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Hybrid">
-                <a class="nav-link" @click="data.healingmode = healingModeEnum.Hybrid" :class="{active: data.healingmode === healingModeEnum.Hybrid}"><img src="https://wiki.guildwars2.com/images/8/81/Healing_Power.png" alt="Hybrid"
-                    class="icon"> / <img src="https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png" alt="Hybrid"
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.Hybrid" :class="{active: data.healingmode === healingModeEnum.Hybrid}">
+                    <img :src="UIIcons.HealingPower" alt="Hybrid"
+                    class="icon"> / <img :src="UIIcons.ConvertHealing" alt="Hybrid"
                     class="icon"></a>
             </li>
             //-->
                                  
             <li v-if="hasBarrier" class="nav-item d-flex flex-row justify-content-center align-items-center" data-original-title="Barrier">
-                <a class="nav-link" @click="data.healingmode = healingModeEnum.Barrier" :class="{active: data.healingmode === healingModeEnum.Barrier}"><img src="https://wiki.guildwars2.com/images/thumb/c/cc/Barrier.png/30px-Barrier.png" alt="Barrier"
+                <a class="nav-link" @click="data.healingmode = healingModeEnum.Barrier" :class="{active: data.healingmode === healingModeEnum.Barrier}">
+                    <img :src="UIIcons.Barrier" alt="Barrier"
                     class="icon"></a>
             </li>  
         </ul>
@@ -87,6 +92,9 @@
             hasBarrier: function() {
                 return !!barrierStatsExtension;
             },
+            UIIcons: function() {
+                return UIIcons;
+            }
         }
     });
 </script>
