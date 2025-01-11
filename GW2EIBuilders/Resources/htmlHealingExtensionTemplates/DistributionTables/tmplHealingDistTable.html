@@ -57,7 +57,8 @@
                         class="icon">
                     </th>
                     <th class="damage-dist-cell" v-if="actor !== null"
-                        :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6, x => getCast(x))" >          
+                        :class="getHeaderClass('Data', 6)" @click="sortBy('Data', 6, x => getCast(x))" 
+                        data-original-title="Cast">          
                         #
                         <img :src="UIIcons.Activation" alt="Cast"
                             class="icon">
