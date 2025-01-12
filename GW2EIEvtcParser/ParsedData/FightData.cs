@@ -232,9 +232,6 @@ public class FightData
                         return new CerusAndDeimos(id);
                     case TargetID.EparchLonelyTower:
                         return new Eparch(id);
-                    // Open World
-                    case TargetID.SooWonOW:
-                        return new SooWon(id);
                     // Golems
                     case TargetID.MassiveGolem10M:
                     case TargetID.MassiveGolem4M:
@@ -270,6 +267,9 @@ public class FightData
                             return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
                         }
                         break;
+                    // Open World
+                    case TargetID.SooWonOW:
+                        return new SooWon(id);
                 }
                 break;
         }

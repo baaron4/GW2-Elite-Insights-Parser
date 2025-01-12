@@ -1188,11 +1188,11 @@ public static class ArcDPSEnums
         Instance = 2,
         DummyTarget = ArcDPSEnums.DummyTarget,
         Mordremoth = 15884,
-        // Raid
+        // Raids
         ValeGuardian = 15438,
         Gorseval = 15429,
         EtherealBarrier = ArcDPSEnums.EtherealBarrier,
-        EtherealBarrierGadget = 47188,
+        EtherealBarrierGadget = 47188, // Gadget
         Sabetha = 15375,
         Slothasor = 16123,
         Berg = 16088,
@@ -1247,8 +1247,8 @@ public static class ArcDPSEnums
         Ankka = 23957,
         MinisterLi = 24485,
         MinisterLiCM = 24266,
-        GadgetTheDragonVoid1 = 43488,
-        GadgetTheDragonVoid2 = 1378,
+        GadgetTheDragonVoid1 = 43488, // Gadget
+        GadgetTheDragonVoid2 = 1378, // Gadget
         VoidAmalgamate1 = 24375,
         TheDragonVoidZhaitan = ArcDPSEnums.TheDragonVoidZhaitan,
         TheDragonVoidJormag = ArcDPSEnums.TheDragonVoidJormag,
@@ -1264,8 +1264,7 @@ public static class ArcDPSEnums
         PrototypeIndigoCM = 25423,
         Dagda = 25705,
         Cerus = 25989,
-        //VoidAmalgamate = 
-        // Fract
+        // Fractals
         MAMA = 17021,
         Siax = 17028,
         Ensolyss = 16948,
@@ -1295,8 +1294,8 @@ public static class ArcDPSEnums
         MedGolem = 19645,
         ConditionGolem = 16174,
         PowerGolem = 16176,
-        // Open world
-        SooWonOW = 35552,
+        // Open World
+        SooWonOW = 35552, // Gadget
         //
         Unknown = int.MaxValue,
     };
