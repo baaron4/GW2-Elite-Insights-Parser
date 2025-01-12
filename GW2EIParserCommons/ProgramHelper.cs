@@ -4,6 +4,7 @@ using System.Text;
 using Discord;
 using GW2EIBuilders;
 using GW2EIDiscord;
+using GW2EIWingman;
 using GW2EIDPSReport;
 using GW2EIDPSReport.DPSReportJsons;
 using GW2EIEvtcParser;
@@ -204,7 +205,6 @@ public sealed class ProgramHelper : IDisposable
         }
         if (Settings.UploadToWingman)
         {
-#if !DEBUG
             if (originalLog.ParserSettings.AnonymousPlayers)
             {
                 originalController.UpdateProgressWithCancellationCheck("Wingman: players and accounts have been anonymized, log not supported");
@@ -215,6 +215,7 @@ public sealed class ProgramHelper : IDisposable
 
                 if (WingmanController.CheckUploadPossible(fInfo, accName, originalLog.FightData.TriggerID, str => originalController.UpdateProgress("Wingman: " + str)))
                 {
+#if !DEBUG
                     try
                     {
                         var expectedSettings = new EvtcParserSettings(Settings.Anonymous,
@@ -272,14 +273,14 @@ public sealed class ProgramHelper : IDisposable
                     {
                         originalController.UpdateProgressWithCancellationCheck("Wingman: Operation failed " + e.Message);
                     }
-                } 
+#endif
+                }
                 else
                 {
                     originalController.UpdateProgressWithCancellationCheck("Wingman: Upload is not possible, unsupported log, log already uploaded or wingman is down");
                 }
             }
             originalController.UpdateProgressWithCancellationCheck("Wingman: Operation completed");
-#endif
 
         }
         return uploadresult;
