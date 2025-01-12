@@ -156,9 +156,9 @@ class Animator {
             }
             downEnemyIcon.src = UIIcons.DownedEnemy;
             downAllyIcon.src = UIIcons.DownedAlly;
-            dcIcon.src = "https://wiki.guildwars2.com/images/f/f5/Talk_end_option_tango.png";
+            dcIcon.src = UIIcons.Disconnected;
             deadIcon.src = UIIcons.Dead;
-            facingIcon.src = "https://i.imgur.com/tZTmTRn.png";
+            facingIcon.src = UIIcons.Facing;
         }
     }
 

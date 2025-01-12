@@ -17,7 +17,7 @@
                         <div>
                             <img :src="player.icon" :alt="player.profession" class="icon"
                                 :data-original-title="player.profession">
-                            <img v-if="player.health > 0" src="https://wiki.guildwars2.com/images/b/be/Vitality.png" alt="Health"
+                            <img v-if="player.health > 0" :src="UIIcons.VitalityChar" alt="Health"
                                 class="icon" :data-original-title="'Health: ' + player.health">
                         </div>
                         <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
@@ -32,7 +32,7 @@
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
                             <img v-if="player.isCommander"
-                                src="https://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png" alt="Commander"
+                                :src="UIIcons.Commander" alt="Commander"
                                 class="icon" :data-original-title="getCommanderTooltip(player)">
                             <span class="player-cell-shorten" :data-original-title="player.name + ' - ' + player.acc">
                                 {{ player.name }}
@@ -53,7 +53,7 @@
         template: `${template}`,
         methods: {
             getIcon: function (path) {
-                return urls[path];
+                return WeaponIcons[path];
             },
             select: function (id) {
                 this.players[id].targetActive = !this.players[id].targetActive;
@@ -106,6 +106,9 @@
                     }
                 }
                 return noUndefinedGroups;
+            },
+            UIIcons: function() {
+                return UIIcons;
             }
         }
     });

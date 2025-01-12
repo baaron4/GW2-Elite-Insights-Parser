@@ -25,7 +25,7 @@ internal static class CommonBuffs
         new Buff("Resistance", Resistance, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resistance),
         new Buff("Resolution", Resolution, Source.Common, BuffStackType.Queue, 5, BuffClassification.Boon, BuffImages.Resolution).WithBuilds(GW2Builds.May2021Balance),
         //
-        new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.BoonDuration),
+        new Buff("Number of Boons", NumberOfBoons, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, ParserIcons.BoonDuration),
     ];
 
     internal static readonly IReadOnlyList<Buff> Conditions =
@@ -45,7 +45,7 @@ internal static class CommonBuffs
         new Buff("Taunt", Taunt, Source.Common, BuffStackType.Queue, 5, BuffClassification.Condition, BuffImages.Taunt),
         new Buff("Vulnerability", Vulnerability, Source.Common, BuffStackType.Stacking, 25, BuffClassification.Condition, BuffImages.Vulnerability),
         //
-        new Buff("Number of Conditions", NumberOfConditions, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, BuffImages.ConditionDuration),
+        new Buff("Number of Conditions", NumberOfConditions, Source.Common, BuffStackType.Stacking, 0, BuffClassification.Other, ParserIcons.ConditionDuration),
     ];
 
     internal static readonly IReadOnlyList<Buff> Commons =

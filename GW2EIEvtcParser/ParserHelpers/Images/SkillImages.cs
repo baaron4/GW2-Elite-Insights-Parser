@@ -3,7 +3,7 @@
 #pragma warning disable CA1823 // Unused field
 internal static class SkillImages
 {
-    public const string MonsterSkill = "https://assets.gw2dat.com/62248.png";
+    public const string MonsterSkill = "https://render.guildwars2.com/file/1D55D34FB4EE20B1962E315245E40CA5E1042D0E/62248.png";
     public const string ConsumeRation = "https://wiki.guildwars2.com/images/1/19/Consume_Ration.png";
     public const string WeaponSwap = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
     public const string WeaponStow = "https://i.imgur.com/K7taOUe.png";
@@ -124,7 +124,7 @@ internal static class SkillImages
     public const string Fulgor = "https://wiki.guildwars2.com/images/5/53/Fulgor.png";
     #endregion Elementalist
     #region Engineer
-    public const string ShredderGyro = "https://assets.gw2dat.com/1128595.png";
+    public const string ShredderGyro = "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png";
     public const string StaticShield = "https://wiki.guildwars2.com/images/9/90/Static_Shield.png";
     public const string Absorb = "https://wiki.guildwars2.com/images/8/8a/Absorb.png";
     public const string AED = "https://wiki.guildwars2.com/images/e/e6/A.E.D..png";
@@ -170,7 +170,7 @@ internal static class SkillImages
     public const string TomeOfResolve = "https://wiki.guildwars2.com/images/a/a9/Tome_of_Resolve.png";
     public const string ZealotsFlame = "https://wiki.guildwars2.com/images/7/7a/Zealot%27s_Flame.png";
     public const string PurgingFlames = "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png";
-    public const string LitanyOfWrath = "https://wiki.guildwars2.com/images/4/4a/Litany_of_Wrath.png";
+    public const string LitanyOfWrath = "https://render.guildwars2.com/file/77077EDEB2AF1F3D4062E6428000F44F77616ADE/699527.png";
     public const string RenewedFocus = "https://wiki.guildwars2.com/images/1/10/Renewed_Focus.png";
     public const string ShieldOfWrath = "https://wiki.guildwars2.com/images/b/bc/Shield_of_Wrath.png";
     public const string BindingBlade = "https://wiki.guildwars2.com/images/d/de/Binding_Blade.png";
@@ -190,9 +190,9 @@ internal static class SkillImages
     public const string Repose = "https://wiki.guildwars2.com/images/8/80/Repose.png";
     public const string MercifulIntervention = "https://wiki.guildwars2.com/images/1/15/Merciful_Intervention.png";
     public const string MightyBlow = "https://wiki.guildwars2.com/images/7/70/Mighty_Blow.png";
-    public const string Illuminated = "https://wiki.guildwars2.com/images/7/7d/Illuminated.png";
+    public const string Illuminated = "https://render.guildwars2.com/file/0A200D7371125E9E9ADE1FA9F71C5528AFC5A5DE/3379001.png";
     public const string SymbolOfLuminance = "https://wiki.guildwars2.com/images/c/c5/Symbol_of_Luminance_%28effect%29.png";
-    public const string FireJurisdiction = "https://assets.gw2dat.com/3256356.png";
+    public const string FireJurisdiction = "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png";
     #endregion Guardian
     #region Mesmer
     public const string ContinuumSplit = "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png";
@@ -385,6 +385,7 @@ internal static class SkillImages
     public const string BloodReckoning = "https://wiki.guildwars2.com/images/d/d6/Blood_Reckoning.png";
     public const string ShatteringBlow = "https://wiki.guildwars2.com/images/c/c7/Shattering_Blow.png";
     public const string ImpaleWarriorSword = "https://wiki.guildwars2.com/images/4/42/Impale_%28warrior_sword_skill%29.png";
+    public const string Mending = "https://render.guildwars2.com/file/04EB1106C95B7579EA29FA2F08BAFDA649C60715/103295.png";
     #endregion Warrior
     #region WvW
     public const string FireTrebuchet = "https://wiki.guildwars2.com/images/3/38/Fire_%28Trebuchet%29.png";

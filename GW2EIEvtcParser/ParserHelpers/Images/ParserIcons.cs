@@ -20,8 +20,15 @@ internal static class ParserIcons
     #region Misc
     public const string Breakbar = "https://wiki.guildwars2.com/images/a/ae/Unshakable.png";
     public const string LevelUp = "https://i.imgur.com/uf1VZEJ.png";
-    public const string Healing = "https://assets.gw2dat.com/156662.png";
-    public const string Combo = "https://i.imgur.com/fmwZ1cP.png";
+    public const string Healing = "https://render.guildwars2.com/file/D4347C52157B040943051D7E09DEAD7AF63D4378/156662.png";
+    public const string HealingPower = "https://render.guildwars2.com/file/9B986DEADC035E58C364A1423975F5F538FC2202/2229321.png";
+    public const string BoonDuration = "https://render.guildwars2.com/file/6574560606F6BA1B32E9CF0F6C9709D1C1F2D9A6/2207782.png";
+    public const string ConditionDuration = "https://render.guildwars2.com/file/4977CD5BAF0A7B6412DCC775C3909F7D4EFE4C65/2229319.png";
+    public const string Power = "https://render.guildwars2.com/file/D6CAECEA0FD5FADE04DD6970384ADC5DE309C506/2229322.png";
+    public const string Vitality = "https://render.guildwars2.com/file/CAE8B4C43FF9D203FA55016700420A0454DFFE02/2229325.png";
+    public const string Toughness = "https://render.guildwars2.com/file/432C0F04F740C1377E6D5D56640B57083C031216/2229324.png";
+    public const string CriticalChance = "https://render.guildwars2.com/file/C2CEA567E0C43C199C782809544721AA12A6DF0A/2229323.png";
+    public const string Combo = "https://render.guildwars2.com/file/A513F3653D33FBA4220D2D307799F8A327A36A3B/156656.png";
     #endregion Misc
 
     #region Specialization
@@ -29,7 +36,7 @@ internal static class ParserIcons
     /// Default icon in case of unknown profession.
     /// </summary>
     public const string UnknownProfessionIcon = "https://i.imgur.com/UbvyFSt.png";
-    public const string GenericGadgetIcon = "https://assets.gw2dat.com/1012386.png";
+    public const string GenericGadgetIcon = "https://render.guildwars2.com/file/09AF0498D757B191E229C862F4AA360DA65C4FE1/1012386.png";
     // High Resolution Icons 200px
     private const string HighResUntamed = "https://wiki.guildwars2.com/images/3/33/Untamed_tango_icon_200px.png";
     private const string HighResSoulbeast = "https://wiki.guildwars2.com/images/f/f6/Soulbeast_tango_icon_200px.png";

@@ -857,7 +857,7 @@ public class SkillItem
             { DeathDropDodge, SkillImages.Dodge },
             { SaintsShieldDodge, SkillImages.Dodge },
             { ImperialImpactDodge, SkillImages.Dodge },
-            { LesserBanishEnchantment, "https://assets.gw2dat.com/961449.png" },
+            { LesserBanishEnchantment, "https://render.guildwars2.com/file/D327055AA824ABDDAD70E2606E1C9AF018FF9902/961449.png" },
             { BalanceInDiscord, "https://wiki.guildwars2.com/images/a/a2/Balance_in_Discord.png" },
             { HealersGift, "https://wiki.guildwars2.com/images/8/85/Healer%27s_Gift.png" },
             { EnergyExpulsionHeal, "https://wiki.guildwars2.com/images/0/0d/Energy_Expulsion.png" },

@@ -154,6 +154,14 @@ function getDefaultPhase() {
 }
 
 function mainLoad() {
+    if (!apiRenderServiceOkay) {
+        for (let key in WeaponIcons) {
+            WeaponIcons[key] = _buildFallBackURL(WeaponIcons[key]);
+        }
+        for (let key in UIIcons) {
+            UIIcons[key] = _buildFallBackURL(UIIcons[key]);
+        }
+    }
     // make some additional variables reactive
     var activePhaseIndex = getDefaultPhase();
     var firstActive = logData.phases[activePhaseIndex] ? logData.phases[activePhaseIndex] : logData.phases[0];
@@ -264,6 +272,9 @@ function mainLoad() {
                     return null;
                 }
                 return logData.usedExtensions;
+            },
+            UIIcons: function () {
+                return UIIcons;
             }
         },
         mounted() {
@@ -281,18 +292,32 @@ function mainLoad() {
 window.onload = function () {
     Vue.config.devtools = true;
     // trick from
-    var img = document.createElement("img");
-    img.style.display = "none";
-    document.body.appendChild(img);
-    img.onload = function () {
+    var imgOfficialAPI = document.createElement("img");
+    imgOfficialAPI.style.display = "none";
+    document.body.appendChild(imgOfficialAPI);
+    imgOfficialAPI.onload = function () {
+        console.info("Info: GW2 Render service available");
         mainLoad();
-        document.body.removeChild(img);
+        document.body.removeChild(imgOfficialAPI);
     };
-    img.onerror = function () {
-        apiRenderServiceOkay = false;
-        console.warn("Warning: GW2 Render service unavailable, switching to https://assets.gw2dat.com");
-        mainLoad();
-        document.body.removeChild(img);
+    imgOfficialAPI.onerror = function () {
+        apiRenderServiceOkay = false;      
+        document.body.removeChild(imgOfficialAPI);
+        var imgDarthmaim = document.createElement("img");
+        imgDarthmaim.style.display = "none";
+        imgDarthmaim.onload = function () {
+            console.warn("Warning: GW2 Render service unavailable, switching to https://icons-gw2.darthmaim-cdn.com");
+            useDarthmaim = true;
+            mainLoad();
+            document.body.removeChild(imgDarthmaim);
+        };
+        imgDarthmaim.onerror = function() {
+            console.warn("Warning: GW2 Render service unavailable, switching to https://assets.gw2dat.com");
+            useDarthmaim = false;
+            mainLoad();
+            document.body.removeChild(imgDarthmaim);
+        }
+        imgDarthmaim.src = "https://icons-gw2.darthmaim-cdn.com/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png";
     };
-    img.src = "https://render.guildwars2.com/file/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png";
+    imgOfficialAPI.src = "https://render.guildwars2.com/file/2FA9DF9D6BC17839BBEA14723F1C53D645DDB5E1/102852.png";
 }

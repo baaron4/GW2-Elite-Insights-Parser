@@ -101,7 +101,7 @@ internal static class ItemImages
     public const string RelicOfMountBalrior = "https://wiki.guildwars2.com/images/a/a9/Relic_of_Mount_Balrior.png";
     #endregion Relic
     #region Food
-    public const string NourishmentEffect = "https://assets.gw2dat.com/436367.png";
+    public const string NourishmentEffect = "https://render.guildwars2.com/file/779D3F0ABE5B46C09CFC57374DA8CC3A495F291C/436367.png";
     public const string Malnourished = "https://wiki.guildwars2.com/images/6/67/Malnourished.png";
     public const string PlateOfTruffleSteak = "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png";
     public const string BowlOfSweetAndSpicyButternutSquashSoup = "https://wiki.guildwars2.com/images/d/df/Bowl_of_Sweet_and_Spicy_Butternut_Squash_Soup.png";
@@ -537,7 +537,7 @@ internal static class ItemImages
     // Food Procs
     public const string ChampionOfTheCrown = "https://wiki.guildwars2.com/images/d/d6/Champion_of_the_Crown.png";
     #region Utility
-    public const string EnhancementEffect = "https://assets.gw2dat.com/436368.png";
+    public const string EnhancementEffect = "https://render.guildwars2.com/file/64976F59BF060718C9109D36C27AD0F40F06BB32/436368.png";
     public const string Diminished = "https://wiki.guildwars2.com/images/7/71/Diminished.png";
     public const string RoughSharpeningStone = "https://wiki.guildwars2.com/images/1/14/Rough_Sharpening_Stone.png";
     public const string SimpleSharpeningStone = "https://wiki.guildwars2.com/images/e/ef/Simple_Sharpening_Stone.png";
