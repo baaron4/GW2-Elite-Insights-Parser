@@ -1,8 +1,8 @@
 <template>
     <div class="d-flex flex-row justify-content-center align-items-center mb-2">
-        <img v-if="target.health > 0" :src="UIIcons.Vitality" alt="Health"
+        <img v-if="target.health > 0" :src="UIIcons.VitalityChar" alt="Health"
             class="icon" :data-original-title="'Health: ' + target.health">
-        <img v-if="target.tough > 0" :src="UIIcons.Toughness" alt="Toughness"
+        <img v-if="target.tough > 0" :src="UIIcons.ToughnessChar" alt="Toughness"
             class="icon" hbHeight :data-original-title="'Toughness: ' + target.tough">
         <img v-if="target.hbWidth > 0" :src="UIIcons.HitboxWidth" alt="Hitbox Width"
             class="icon" :data-original-title="'Hitbox Width: ' + target.hbWidth">

@@ -17,7 +17,7 @@
                         <div>
                             <img :src="player.icon" :alt="player.profession" class="icon"
                                 :data-original-title="player.profession">
-                            <img v-if="player.health > 0" :src="UIIcons.Vitality" alt="Health"
+                            <img v-if="player.health > 0" :src="UIIcons.VitalityChar" alt="Health"
                                 class="icon" :data-original-title="'Health: ' + player.health">
                         </div>
                         <div v-if="player.l1Set.length > 0 || player.l2Set.length > 0">
