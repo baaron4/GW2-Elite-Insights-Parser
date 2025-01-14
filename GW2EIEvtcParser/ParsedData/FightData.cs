@@ -1,6 +1,8 @@
 ﻿using GW2EIEvtcParser.EIData;
 using GW2EIEvtcParser.EncounterLogic;
 using GW2EIEvtcParser.EncounterLogic.OpenWorld;
+using static GW2EIEvtcParser.ArcDPSEnums;
+using static GW2EIEvtcParser.ParsedData.AgentItem;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -59,282 +61,219 @@ public class FightData
         LogStart = start;
         LogEnd = end;
         FightEnd = end - start;
-        switch (ArcDPSEnums.GetTargetID(id))
+
+        Logic = DetectFight(id, agentData, parserSettings, evtcVersion);
+        Logic = Logic.AdjustLogic(agentData, combatData);
+        TriggerID = Logic.GetTriggerID();
+    }
+
+    static internal FightLogic DetectFight(int id, AgentData agentData, EvtcParserSettings parserSettings, EvtcVersionEvent evtcVersion)
+    {
+        var targetID = GetTargetID(id);
+        var target = agentData.GetNPCsByID(id).FirstOrDefault() ?? agentData.GetGadgetsByID(id).FirstOrDefault();
+        switch (target?.Type)
         {
-            case ArcDPSEnums.TargetID.Mordremoth:
-                Logic = new Mordremoth(id);
-                break;
-            //
-            case ArcDPSEnums.TargetID.ValeGuardian:
-                Logic = new ValeGuardian(id);
-                break;
-            case ArcDPSEnums.TargetID.EtherealBarrierGadget:
-                Logic = new SpiritRace(id);
-                break;
-            case ArcDPSEnums.TargetID.Gorseval:
-                Logic = new Gorseval(id);
-                break;
-            case ArcDPSEnums.TargetID.Sabetha:
-                Logic = new Sabetha(id);
-                break;
-            case ArcDPSEnums.TargetID.Slothasor:
-                Logic = new Slothasor(id);
-                break;
-            case ArcDPSEnums.TargetID.Zane:
-            case ArcDPSEnums.TargetID.Berg:
-            case ArcDPSEnums.TargetID.Narella:
-                Logic = new BanditTrio(id);
-                break;
-            case ArcDPSEnums.TargetID.Matthias:
-                Logic = new Matthias(id);
-                break;
-            case ArcDPSEnums.TargetID.McLeodTheSilent:
-                // No proper escort support by arc dps before that build, redirect to unknown
-                if (evtcVersion.Build >= ArcDPSEnums.ArcDPSBuilds.NewLogStart)
+            case null:
+                switch (targetID)
                 {
-                    Logic = new Escort(id);
-                }
-                else
-                {
-                    Logic = new UnknownFightLogic(id);
-                }
-                break;
-            case ArcDPSEnums.TargetID.KeepConstruct:
-                Logic = new KeepConstruct(id);
-                break;
-            case ArcDPSEnums.TargetID.Xera:
-                // some TC logs are registered as Xera
-                if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.HauntingStatue).Count > 0)
-                {
-                    Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
-                    break;
-                }
-                Logic = new Xera(id);
-                break;
-            case ArcDPSEnums.TargetID.Cairn:
-                Logic = new Cairn(id);
-                break;
-            case ArcDPSEnums.TargetID.MursaatOverseer:
-                Logic = new MursaatOverseer(id);
-                break;
-            case ArcDPSEnums.TargetID.Samarog:
-                Logic = new Samarog(id);
-                break;
-            case ArcDPSEnums.TargetID.Deimos:
-                Logic = new Deimos(id);
-                break;
-            case ArcDPSEnums.TargetID.SoullessHorror:
-                Logic = new SoullessHorror(id);
-                break;
-            case ArcDPSEnums.TargetID.Desmina:
-                Logic = new River((int)ArcDPSEnums.TargetID.DummyTarget);
-                break;
-            case ArcDPSEnums.TargetID.BrokenKing:
-                Logic = new StatueOfIce(id);
-                break;
-            case ArcDPSEnums.TargetID.EaterOfSouls:
-                Logic = new StatueOfDeath(id);
-                break;
-            case ArcDPSEnums.TargetID.EyeOfFate:
-            case ArcDPSEnums.TargetID.EyeOfJudgement:
-                Logic = new StatueOfDarkness(id);
-                break;
-            case ArcDPSEnums.TargetID.Dhuum:
-                // some eyes logs are registered as Dhuum
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfFate).Count > 0 ||
-                    agentData.GetNPCsByID(ArcDPSEnums.TargetID.EyeOfJudgement).Count > 0)
-                {
-                    Logic = new StatueOfDarkness((int)ArcDPSEnums.TargetID.EyeOfFate);
-                    break;
-                }
-                Logic = new Dhuum(id);
-                break;
-            case ArcDPSEnums.TargetID.ConjuredAmalgamate:
-            case ArcDPSEnums.TargetID.ConjuredAmalgamate_CHINA:
-            case ArcDPSEnums.TargetID.CALeftArm_CHINA:
-            case ArcDPSEnums.TargetID.CARightArm_CHINA:
-                Logic = new ConjuredAmalgamate(id);
-                break;
-            case ArcDPSEnums.TargetID.Kenut:
-            case ArcDPSEnums.TargetID.Nikare:
-                Logic = new TwinLargos(id);
-                break;
-            case ArcDPSEnums.TargetID.Qadim:
-                Logic = new Qadim(id);
-                break;
-            case ArcDPSEnums.TargetID.Freezie:
-                Logic = new Freezie(id);
-                break;
-            case ArcDPSEnums.TargetID.Adina:
-                Logic = new Adina(id);
-                break;
-            case ArcDPSEnums.TargetID.Sabir:
-                Logic = new Sabir(id);
-                break;
-            case ArcDPSEnums.TargetID.PeerlessQadim:
-                Logic = new PeerlessQadim(id);
-                break;
-            case ArcDPSEnums.TargetID.Greer:
-                Logic = new GreerTheBlightbringer(id);
-                break;
-            case ArcDPSEnums.TargetID.Decima:
-                Logic = new DecimaTheStormsinger(id);
-                break;
-            case ArcDPSEnums.TargetID.Ura:
-                Logic = new UraTheSteamshrieker(id);
-                break;
-            //
-            case ArcDPSEnums.TargetID.IcebroodConstruct:
-                Logic = new IcebroodConstruct(id);
-                break;
-            case ArcDPSEnums.TargetID.FraenirOfJormag:
-                Logic = new FraenirOfJormag(id);
-                break;
-            case ArcDPSEnums.TargetID.VoiceOfTheFallen:
-            case ArcDPSEnums.TargetID.ClawOfTheFallen:
-                Logic = new SuperKodanBrothers(id);
-                break;
-            case ArcDPSEnums.TargetID.Boneskinner:
-                Logic = new Boneskinner(id);
-                break;
-            case ArcDPSEnums.TargetID.WhisperOfJormag:
-                Logic = new WhisperOfJormag(id);
-                break;
-            case ArcDPSEnums.TargetID.VariniaStormsounder:
-                Logic = new ColdWar(id);
-                break;
-            case ArcDPSEnums.TargetID.MaiTrinStrike:
-                Logic = new AetherbladeHideout(id);
-                break;
-            case ArcDPSEnums.TargetID.MinisterLi:
-            case ArcDPSEnums.TargetID.MinisterLiCM:
-                Logic = new KainengOverlook(id);
-                break;
-            case ArcDPSEnums.TargetID.Ankka:
-                Logic = new XunlaiJadeJunkyard(id);
-                break;
-            // This will most likely require a chinese client version
-            case ArcDPSEnums.TargetID.GadgetTheDragonVoid1:
-            case ArcDPSEnums.TargetID.GadgetTheDragonVoid2:
-                if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
-                {
-                    Logic = new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
-                }
-                else
-                {
-                    Logic = new UnknownFightLogic(id);
-                }
-                break;
-            case ArcDPSEnums.TargetID.PrototypeVermilion:
-            case ArcDPSEnums.TargetID.PrototypeArsenite:
-            case ArcDPSEnums.TargetID.PrototypeIndigo:
-            case ArcDPSEnums.TargetID.PrototypeVermilionCM:
-            case ArcDPSEnums.TargetID.PrototypeArseniteCM:
-            case ArcDPSEnums.TargetID.PrototypeIndigoCM:
-                Logic = new OldLionsCourt(id);
-                break;
-            case ArcDPSEnums.TargetID.Dagda:
-                Logic = new CosmicObservatory(id);
-                break;
-            case ArcDPSEnums.TargetID.Cerus:
-                Logic = new TempleOfFebe(id);
-                break;
-            //
-            case ArcDPSEnums.TargetID.MAMA:
-                Logic = new MAMA(id);
-                break;
-            case ArcDPSEnums.TargetID.Siax:
-                Logic = new Siax(id);
-                break;
-            case ArcDPSEnums.TargetID.Ensolyss:
-                Logic = new Ensolyss(id);
-                break;
-            case ArcDPSEnums.TargetID.Skorvald:
-                Logic = new Skorvald(id);
-                break;
-            case ArcDPSEnums.TargetID.Artsariiv:
-                Logic = new Artsariiv(id);
-                break;
-            case ArcDPSEnums.TargetID.Arkk:
-                Logic = new Arkk(id);
-                break;
-            case ArcDPSEnums.TargetID.AiKeeperOfThePeak:
-                Logic = new AiKeeperOfThePeak(id);
-                break;
-            case ArcDPSEnums.TargetID.KanaxaiScytheOfHouseAurkusCM:
-                Logic = new Kanaxai(id);
-                break;
-            case ArcDPSEnums.TargetID.CerusLonelyTower:
-            case ArcDPSEnums.TargetID.DeimosLonelyTower:
-                Logic = new CerusAndDeimos(id);
-                break;
-            case ArcDPSEnums.TargetID.EparchLonelyTower:
-                Logic = new Eparch(id);
-                break;
-            //
-            case ArcDPSEnums.TargetID.WorldVersusWorld:
-                if (agentData.GetNPCsByID(ArcDPSEnums.TargetID.Desmina).Any())
-                {
-                    Logic = new River((int)ArcDPSEnums.TargetID.DummyTarget);
-                    break;
-                }
-                Logic = new WvWFight(id, parserSettings.DetailedWvWParse);
-                break;
-            //
-            case ArcDPSEnums.TargetID.SooWonOW:
-                Logic = new SooWon(id);
-                break;
-            //
-            case ArcDPSEnums.TargetID.MassiveGolem10M:
-            case ArcDPSEnums.TargetID.MassiveGolem4M:
-            case ArcDPSEnums.TargetID.MassiveGolem1M:
-            case ArcDPSEnums.TargetID.VitalGolem:
-            case ArcDPSEnums.TargetID.AvgGolem:
-            case ArcDPSEnums.TargetID.StdGolem:
-            case ArcDPSEnums.TargetID.ConditionGolem:
-            case ArcDPSEnums.TargetID.PowerGolem:
-            case ArcDPSEnums.TargetID.LGolem:
-            case ArcDPSEnums.TargetID.MedGolem:
-                Logic = new Golem(id);
-                break;
-            case ArcDPSEnums.TargetID.Instance:
-                Logic = new Instance(id);
-                break;
-            //
-            default:
-                switch (ArcDPSEnums.GetTrashID(id))
-                {
-                    case ArcDPSEnums.TrashID.WallOfGhosts:
-                        Logic = new SpiritRace(id);
-                        break;
-                    case ArcDPSEnums.TrashID.HauntingStatue:
-                        Logic = new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
-                        break;
-                    case ArcDPSEnums.TrashID.VoidAmalgamate:
-                        Logic = new HarvestTemple(id);
-                        break;
-                    case ArcDPSEnums.TrashID.AncientInvokedHydra:
-                        Logic = new Qadim((int)ArcDPSEnums.TargetID.Qadim);
-                        break;
-                    case ArcDPSEnums.TrashID.VoidMelter:
-                        if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
+                    case TargetID.WorldVersusWorld:
+                        if (agentData.GetNPCsByID(TargetID.Desmina).Any())
                         {
-                            Logic = new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
+                            return new River((int)TargetID.DummyTarget);
                         }
                         else
                         {
-                            Logic = new UnknownFightLogic(id);
+                            return new WvWFight(id, parserSettings.DetailedWvWParse);
+                        }
+                    case TargetID.Instance:
+                        return new Instance(id);
+                }
+                break;
+
+            case AgentType.NPC:
+                switch (targetID)
+                {
+                    case TargetID.Mordremoth:
+                        return new Mordremoth(id);
+                    // Raids
+                    case TargetID.ValeGuardian:
+                        return new ValeGuardian(id);
+                    case TargetID.Gorseval:
+                        return new Gorseval(id);
+                    case TargetID.Sabetha:
+                        return new Sabetha(id);
+                    case TargetID.Slothasor:
+                        return new Slothasor(id);
+                    case TargetID.Zane:
+                    case TargetID.Berg:
+                    case TargetID.Narella:
+                        return new BanditTrio(id);
+                    case TargetID.Matthias:
+                        return new Matthias(id);
+                    case TargetID.McLeodTheSilent:
+                        // No proper escort support by arc dps before that build, redirect to unknown
+                        if (evtcVersion.Build >= ArcDPSBuilds.NewLogStart)
+                        {
+                            return new Escort(id);
                         }
                         break;
-                    default:
-                        // Unknown
-                        Logic = new UnknownFightLogic(id);
+                    case TargetID.KeepConstruct:
+                        return new KeepConstruct(id);
+                    case TargetID.Xera:
+                        // some TC logs are registered as Xera
+                        if (agentData.GetNPCsByID(TrashID.HauntingStatue).Count > 0)
+                        {
+                            return new TwistedCastle((int)TargetID.DummyTarget);
+                        }
+                        else
+                        {
+                            return new Xera(id);
+                        }
+                    case TargetID.Cairn:
+                        return new Cairn(id);
+                    case TargetID.MursaatOverseer:
+                        return new MursaatOverseer(id);
+                    case TargetID.Samarog:
+                        return new Samarog(id);
+                    case TargetID.Deimos:
+                        return new Deimos(id);
+                    case TargetID.SoullessHorror:
+                        return new SoullessHorror(id);
+                    case TargetID.Desmina:
+                        return new River((int)TargetID.DummyTarget);
+                    case TargetID.BrokenKing:
+                        return new StatueOfIce(id);
+                    case TargetID.EaterOfSouls:
+                        return new StatueOfDeath(id);
+                    case TargetID.EyeOfFate:
+                    case TargetID.EyeOfJudgement:
+                        return new StatueOfDarkness(id);
+                    case TargetID.Dhuum:
+                        // some eyes logs are registered as Dhuum
+                        if (agentData.GetNPCsByID(TargetID.EyeOfFate).Count > 0 ||
+                            agentData.GetNPCsByID(TargetID.EyeOfJudgement).Count > 0)
+                        {
+                            return new StatueOfDarkness((int)TargetID.EyeOfFate);
+                        }
+                        else
+                        {
+                            return new Dhuum(id);
+                        }
+                    case TargetID.Kenut:
+                    case TargetID.Nikare:
+                        return new TwinLargos(id);
+                    case TargetID.Qadim:
+                        return new Qadim(id);
+                    case TargetID.Freezie:
+                        return new Freezie(id);
+                    case TargetID.Adina:
+                        return new Adina(id);
+                    case TargetID.Sabir:
+                        return new Sabir(id);
+                    case TargetID.PeerlessQadim:
+                        return new PeerlessQadim(id);
+                    case TargetID.Greer:
+                        return new GreerTheBlightbringer(id);
+                    case TargetID.Decima:
+                        return new DecimaTheStormsinger(id);
+                    case TargetID.Ura:
+                        return new UraTheSteamshrieker(id);
+                    // Strike Missions
+                    case TargetID.IcebroodConstruct:
+                        return new IcebroodConstruct(id);
+                    case TargetID.FraenirOfJormag:
+                        return new FraenirOfJormag(id);
+                    case TargetID.VoiceOfTheFallen:
+                    case TargetID.ClawOfTheFallen:
+                        return new SuperKodanBrothers(id);
+                    case TargetID.Boneskinner:
+                        return new Boneskinner(id);
+                    case TargetID.WhisperOfJormag:
+                        return new WhisperOfJormag(id);
+                    case TargetID.VariniaStormsounder:
+                        return new ColdWar(id);
+                    case TargetID.MaiTrinStrike:
+                        return new AetherbladeHideout(id);
+                    case TargetID.MinisterLi:
+                    case TargetID.MinisterLiCM:
+                        return new KainengOverlook(id);
+                    case TargetID.Ankka:
+                        return new XunlaiJadeJunkyard(id);
+                    case TargetID.PrototypeVermilion:
+                    case TargetID.PrototypeArsenite:
+                    case TargetID.PrototypeIndigo:
+                    case TargetID.PrototypeVermilionCM:
+                    case TargetID.PrototypeArseniteCM:
+                    case TargetID.PrototypeIndigoCM:
+                        return new OldLionsCourt(id);
+                    case TargetID.Dagda:
+                        return new CosmicObservatory(id);
+                    case TargetID.Cerus:
+                        return new TempleOfFebe(id);
+                    // Fractals
+                    case TargetID.MAMA:
+                        return new MAMA(id);
+                    case TargetID.Siax:
+                        return new Siax(id);
+                    case TargetID.Ensolyss:
+                        return new Ensolyss(id);
+                    case TargetID.Skorvald:
+                        return new Skorvald(id);
+                    case TargetID.Artsariiv:
+                        return new Artsariiv(id);
+                    case TargetID.Arkk:
+                        return new Arkk(id);
+                    case TargetID.AiKeeperOfThePeak:
+                        return new AiKeeperOfThePeak(id);
+                    case TargetID.KanaxaiScytheOfHouseAurkusCM:
+                        return new Kanaxai(id);
+                    case TargetID.CerusLonelyTower:
+                    case TargetID.DeimosLonelyTower:
+                        return new CerusAndDeimos(id);
+                    case TargetID.EparchLonelyTower:
+                        return new Eparch(id);
+                    // Golems
+                    case TargetID.MassiveGolem10M:
+                    case TargetID.MassiveGolem4M:
+                    case TargetID.MassiveGolem1M:
+                    case TargetID.VitalGolem:
+                    case TargetID.AvgGolem:
+                    case TargetID.StdGolem:
+                    case TargetID.ConditionGolem:
+                    case TargetID.PowerGolem:
+                    case TargetID.LGolem:
+                    case TargetID.MedGolem:
+                        return new Golem(id);
+                }
+                break;
+
+            case AgentType.Gadget:
+                switch (targetID)
+                {
+                    // Raids
+                    case TargetID.EtherealBarrierGadget:
+                        return new SpiritRace(id);
+                    case TargetID.ConjuredAmalgamate:
+                    case TargetID.ConjuredAmalgamate_CHINA:
+                    case TargetID.CALeftArm_CHINA:
+                    case TargetID.CARightArm_CHINA:
+                        return new ConjuredAmalgamate(id);
+                    // Strike Missions
+                    case TargetID.GadgetTheDragonVoid1:
+                    case TargetID.GadgetTheDragonVoid2:
+                        // This will most likely require a chinese client version
+                        if (agentData.GetNPCsByID(TrashID.VoidAmalgamate).Any())
+                        {
+                            return new HarvestTemple((int)TargetID.GadgetTheDragonVoid1);
+                        }
                         break;
+                    // Open World
+                    case TargetID.SooWonOW:
+                        return new SooWon(id);
                 }
                 break;
         }
-        Logic = Logic.AdjustLogic(agentData, combatData);
-        TriggerID = Logic.GetTriggerID();
+        return new UnknownFightLogic(id);
     }
 
     internal void CompleteFightName(CombatData combatData, AgentData agentData)
