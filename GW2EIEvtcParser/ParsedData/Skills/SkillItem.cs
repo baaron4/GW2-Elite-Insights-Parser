@@ -551,7 +551,7 @@ public class SkillItem
         { HealingRipple, TraitImages.HealingRipple },
         { HealingRain, SkillImages.HealingRain },
         { ElementalRefreshmentBarrier, TraitImages.ElementalRefreshment },
-        { FirestormGlyphOfStormsOrFieryGreatsword, "https://i.imgur.com/6BTB3XT.png" },
+        { FirestormGlyphOfStormsOrFieryGreatsword, SkillImages.FirestormGlyphOfStormsOrFieryGreatsword },
         { LightningStrikeWvW, SkillImages.LightningStrike },
         { ChainLightningWvW, SkillImages.ChainLightning },
         { FlameBurstWvW, SkillImages.FlameBurst },

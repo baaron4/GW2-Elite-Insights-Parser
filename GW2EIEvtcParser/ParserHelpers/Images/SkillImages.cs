@@ -122,6 +122,7 @@ internal static class SkillImages
     public const string Ripple = "https://wiki.guildwars2.com/images/2/23/Ripple.png";
     public const string Harden = "https://wiki.guildwars2.com/images/0/02/Harden.png";
     public const string Fulgor = "https://wiki.guildwars2.com/images/5/53/Fulgor.png";
+    public const string FirestormGlyphOfStormsOrFieryGreatsword = "https://i.imgur.com/6BTB3XT.png";
     #endregion Elementalist
     #region Engineer
     public const string ShredderGyro = "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png";
