@@ -227,6 +227,18 @@ internal static class SkillImages
     public const string SwordOfJustice = "https://render.guildwars2.com/file/98B40D09401B44949604E073F5F793C660B7ED22/103669.png";
     public const string ShieldOfTheAvenger = "https://render.guildwars2.com/file/CFBE4110635CD25B68EE194E7DBE25166DAAA197/103673.png";
     public const string HuntersVerdict = "https://render.guildwars2.com/file/02C8A032F60414D0FAB7D0AFD965B5BA0947D6F8/103703.png";
+    public const string FlameRush_Old = "https://wiki.guildwars2.com/images/a/a8/Flame_Rush.png";
+    public const string FlameSurge_Old = "https://wiki.guildwars2.com/images/7/7e/Flame_Surge.png";
+    public const string EchoOfTruth = "https://render.guildwars2.com/file/44E806054B684DE2914C3EC9010598406F039509/1770494.png";
+    public const string RestoringReprieveOrRejunevatingRespite = "https://i.imgur.com/RUJNIoM.png";
+    public const string OpeningPassageOrClarifiedConclusion = "https://i.imgur.com/2M93tOd.png";
+    public const string PotentHasteOrOverwhelmingCelerity = "https://i.imgur.com/vBBKfGz.png";
+    public const string PortentOfFreedomOrUnhinderedDelivery = "https://i.imgur.com/b6RUVTr.png";
+    public const string ExecutionersCalling = "https://render.guildwars2.com/file/ECB53EFD2308DAB756D8CC6EA852B9C4E4BFE16A/2479371.png";
+    public const string AdvancingStrike = "https://render.guildwars2.com/file/C6C4F63B3BE6D7CB0163F25E5A51029023F7B492/2479372.png";
+    public const string DaybreakingSlash = "https://render.guildwars2.com/file/9CE5430CF8490EAC2512AAC1C8362DD24A65D428/3379124.png";
+    public const string ReceiveTheLight = "https://render.guildwars2.com/file/98FF447227E81AB44D9298F0E3BD62D553972B54/103089.png";
+    public const string SolarStorm = "https://render.guildwars2.com/file/D026ABCF610D6E9615A2F7BDB8716EAFB99AAAFB/3379128.png";
     #endregion Guardian
     #region Mesmer
     public const string ContinuumSplit = "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png";
