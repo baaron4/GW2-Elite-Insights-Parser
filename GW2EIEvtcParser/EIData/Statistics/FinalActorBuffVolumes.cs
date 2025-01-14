@@ -77,7 +77,7 @@ public class FinalActorBuffVolumes
                 }
             }
             totalOutgoing += totalOutgoingByExtension;
-            totalActiveOutgoing = totalActiveOutgoingByExtension;
+            totalActiveOutgoing += totalActiveOutgoingByExtension;
 
             totalOutgoing /= phaseDuration;
             totalOutgoingByExtension /= phaseDuration;
@@ -115,14 +115,14 @@ public class FinalActorBuffVolumes
     }
 
 
-    internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForSelf(ParsedEvtcLog log, SingleActor actor, long start, long end)
+    internal static (Dictionary<long, FinalActorBuffVolumes> Volumes, Dictionary<long, FinalActorBuffVolumes> ActiveVolumes) GetBuffVolumesForSelf(ParsedEvtcLog log, SingleActor dstActor, long start, long end)
     {
         var buffs = new Dictionary<long, FinalActorBuffVolumes>();
         var activeBuffs = new Dictionary<long, FinalActorBuffVolumes>();
 
         long phaseDuration = end - start;
-        long playerActiveDuration = actor.GetActiveDuration(log, start, end);
-        foreach (Buff buff in actor.GetTrackedBuffs(log))
+        long playerActiveDuration = dstActor.GetActiveDuration(log, start, end);
+        foreach (Buff buff in dstActor.GetTrackedBuffs(log))
         {
 
             double totalIncoming = 0;
@@ -141,7 +141,7 @@ public class FinalActorBuffVolumes
                 if (abe.Time >= start && abe.Time <= end && abe is AbstractBuffApplyEvent abae)
                 {
                     abae.TryFindSrc(log);
-                    if (abe.CreditedBy == actor.AgentItem)
+                    if (abe.To == dstActor.AgentItem)
                     {
                         if (abae is BuffApplyEvent bae)
                         {
@@ -150,26 +150,18 @@ public class FinalActorBuffVolumes
                             {
                                 continue;
                             }*/
-                            totalOutgoing += bae.AppliedDuration;
-                        }
-                        if (abae is BuffExtensionEvent bee)
-                        {
-                            totalOutgoingByExtension += bee.ExtendedDuration;
-                        }
-                    }
-                    if (abe.To == actor.AgentItem)
-                    {
-                        if (abae is BuffApplyEvent bae)
-                        {
-                            // We ignore infinite duration buffs
-                            /*if (bae.AppliedDuration >= int.MaxValue)
+                            if (abe.CreditedBy == dstActor.AgentItem)
                             {
-                                continue;
-                            }*/
+                                totalOutgoing += bae.AppliedDuration;
+                            }
                             totalIncoming += bae.AppliedDuration;
                         }
                         if (abae is BuffExtensionEvent bee)
                         {
+                            if (abe.CreditedBy == dstActor.AgentItem)
+                            {
+                                totalOutgoingByExtension += bee.ExtendedDuration;
+                            }
                             totalIncomingByExtension += bee.ExtendedDuration;
                             if (abe.CreditedBy == ParserHelper._unknownAgent)
                             {
