@@ -126,7 +126,7 @@ internal static class SkillImages
     #endregion Elementalist
     #region Engineer
     public const string ShredderGyro = "https://render.guildwars2.com/file/E60C094A2349552EA6F6250D9B14E69BE91E4468/1128595.png";
-    public const string StaticShield = "https://wiki.guildwars2.com/images/9/90/Static_Shield.png";
+    public const string StaticShield = "https://render.guildwars2.com/file/133D50B114C9FDAE9D9DF0FBA5E82ABD0A610EE7/103474.png";
     public const string Absorb = "https://wiki.guildwars2.com/images/8/8a/Absorb.png";
     public const string AED = "https://wiki.guildwars2.com/images/e/e6/A.E.D..png";
     public const string ElixirS = "https://wiki.guildwars2.com/images/d/d8/Elixir_S.png";
@@ -152,10 +152,27 @@ internal static class SkillImages
     public const string OverclockSignet = "https://wiki.guildwars2.com/images/c/c7/Overclock_Signet.png";
     public const string BulwarkGyro = "https://wiki.guildwars2.com/images/2/29/Bulwark_Gyro.png";
     public const string LightningRod = "https://wiki.guildwars2.com/images/f/f9/Lightning_Rod_%28engineer_spear_skill%29.png";
-    public const string ConduitSurge = "https://wiki.guildwars2.com/images/6/6b/Conduit_Surge.png";
+    public const string ConduitSurge = "https://render.guildwars2.com/file/09D83A621D282D7E78C6E3502D9E91AC4AC6A2E9/3379114.png";
     public const string ElectricArtillery = "https://wiki.guildwars2.com/images/1/13/Electric_Artillery.png";
     public const string Focused = "https://wiki.guildwars2.com/images/5/51/Focused.png";
     public const string NetShot = "https://wiki.guildwars2.com/images/3/3d/Net_Shot.png";
+    public const string HealingMistOrSoothingDetonation = "https://i.imgur.com/cS05J70.png";
+    public const string RefractionCutter = "https://render.guildwars2.com/file/C571A742D055DCA81F6FD70D38C0409DDC9ABEE5/1770408.png";
+    public const string JumpShot = "https://render.guildwars2.com/file/6B29C1E841653F64FCB769236177CFC836C8B933/102798.png";
+    public const string MedBlaster = "https://render.guildwars2.com/file/94A7A5711A4922DFF3BCB701D770D3BB06EE0A59/1012852.png";
+    public const string HealingTurret = "https://render.guildwars2.com/file/7D5297C096055DE43153D90F965763F8F2D5FF25/103413.png";
+    public const string HardStrikeJadeMech = "https://wiki.guildwars2.com/images/6/62/Hard_Strike.png";
+    public const string HeavySmashJadeMech = "https://wiki.guildwars2.com/images/9/98/Heavy_Smash_%28Mech%29.png";
+    public const string TwinStrikeJadeMech = "https://wiki.guildwars2.com/images/3/31/Twin_Strike_%28Mech%29.png";
+    public const string RecallMech = "https://render.guildwars2.com/file/4D6BDB0DF61DF2E5045801F7995D68ECC8C5B602/2503676.png";
+    public const string BladeBurstOrParticleAccelerator = "https://i.imgur.com/09MY813.png";
+    public const string NetAttack = "https://render.guildwars2.com/file/A47830A4152F5F5DEC5D22975DE0449A57F2D570/102982.png";
+    public const string FlameTurret = "https://render.guildwars2.com/file/C2E712121CA0F846441EB380A89351EB55D47C79/103410.png";
+    public const string NetTurret = "https://render.guildwars2.com/file/45E806991F041B297A5D270A46C832E4E3B2A567/103110.png";
+    public const string GrenadeBarrage = "https://render.guildwars2.com/file/5B2AB667667749BC1BC7AEFD27362E3E0E0F2FE6/103294.png";
+    public const string FunctionGyro = "https://render.guildwars2.com/file/42BCB9C83B05D048C0E0BA1804F13D6FAC180DCD/2175057.png";
+    public const string DetonateMineField = "https://render.guildwars2.com/file/D97BF56EBB6D074BFEFC11E103D6D1F2360C6A17/102902.png";
+    public const string CrashDown = "https://render.guildwars2.com/file/9156D3FECB94F8B27909B3EA904DAAE3C21043F9/2503677.png";
     #endregion Engineer
     #region Guardian
     public const string SpearOfLight = "https://wiki.guildwars2.com/images/b/b0/Spear_of_Light.png";

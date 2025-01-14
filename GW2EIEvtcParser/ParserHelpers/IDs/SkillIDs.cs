@@ -235,7 +235,7 @@ public static class SkillIDs
     public const long ThumperTurretUW = 5890;
     public const long NetTurretDamage = 5896;
     public const long POV_GrenadeKitOpen = 5897;
-    public const long FireTurretDamage = 5903;
+    public const long FlameTurretDamage = 5903;
     public const long ToolKit = 5904;
     public const long RocketTurretCast = 5912;
     public const long RocketTurretDamageUW = 5914;

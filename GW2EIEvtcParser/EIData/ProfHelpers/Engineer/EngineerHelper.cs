@@ -227,7 +227,7 @@ internal static class EngineerHelper
     {
         var playerAgents = new HashSet<AgentItem>(players.Select(x => x.AgentItem));
 
-        HashSet<AgentItem> flameTurrets = GetOffensiveGadgetAgents(combatData, FireTurretDamage, playerAgents);
+        HashSet<AgentItem> flameTurrets = GetOffensiveGadgetAgents(combatData, FlameTurretDamage, playerAgents);
 
         HashSet<AgentItem> rifleTurrets = GetOffensiveGadgetAgents(combatData, RifleTurretDamage, playerAgents);
         rifleTurrets.UnionWith(GetOffensiveGadgetAgents(combatData, RifleTurretDamageUW, playerAgents));

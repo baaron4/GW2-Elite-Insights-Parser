@@ -63,6 +63,13 @@ internal static class TraitImages
     public const string MechanicalGenius = "https://wiki.guildwars2.com/images/b/b0/Mechanical_Genius.png";
     public const string ExigencyProtocol = "https://wiki.guildwars2.com/images/6/66/Exigency_Protocols.png";
     public const string ObjectInMotion = "https://wiki.guildwars2.com/images/d/da/Object_in_Motion.png";
+    public const string ThermalReleaveValve = "https://render.guildwars2.com/file/051954D32BCDA37DEAA1730C9CF09CAEF22F9FB3/1769933.png";
+    public const string MechCoreBarrierEngine = "https://render.guildwars2.com/file/EEE0C0D90EB9E244B3F11BA0AF7C77E3D83AF576/2503627.png";
+    public const string SoothingDetonation = "https://render.guildwars2.com/file/5E0C5F9FBA57D5C80109241602BE4A76A917A708/1012370.png";
+    public const string RapidRegeneration = "https://render.guildwars2.com/file/45FD994928E2247E2C80E42B3FF3B7F5EB280FC7/2983334.png";
+    public const string MedicalDispersionField = "https://render.guildwars2.com/file/4B4FA8FEC9F830DC75F8D1532AE6490B09326D98/1012374.png";
+    public const string ImpactSavant = "https://render.guildwars2.com/file/FD7AF757E6B02C7BC55101B0CFDCDAC87E5DBADD/1128528.png";
+    public const string SystemShocker = "https://render.guildwars2.com/file/D218686E042F19144D99A11F7205FB4763D053EF/2175050.png";
     #endregion
     #region Guardian
     public const string HuntersFortification = "https://wiki.guildwars2.com/images/0/00/Hunter%27s_Fortification.png";
