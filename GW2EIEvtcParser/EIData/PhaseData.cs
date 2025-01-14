@@ -58,6 +58,7 @@ public class PhaseData
         {
             return;
         }
+        _secondaryTargets.Remove(target); // promote to target, all targets stays unchanged
         _targets.Add(target);
     }
 
@@ -74,7 +75,7 @@ public class PhaseData
 
     internal void AddSecondaryTarget(SingleActor? target)
     {
-        if (target == null || _secondaryTargets.Contains(target))
+        if (target == null || AllTargets.Contains(target))
         {
             return;
         }
