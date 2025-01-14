@@ -1,4 +1,6 @@
-﻿namespace GW2EIEvtcParser.ParserHelpers;
+﻿using static System.Net.WebRequestMethods;
+
+namespace GW2EIEvtcParser.ParserHelpers;
 
 #pragma warning disable CA1823 // Unused field
 internal static class ItemImages
@@ -6,6 +8,8 @@ internal static class ItemImages
 
     public const string NourishmentFood = "https://wiki.guildwars2.com/images/c/ca/Nourishment_food.png";
     public const string NourishmentUtility = "https://wiki.guildwars2.com/images/2/23/Nourishment_utility.png";
+    // From runes and sigils
+    public const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
 
     #region Sigil
     public const string SuperiorSigilOfAir = "https://wiki.guildwars2.com/images/c/c3/Superior_Sigil_of_Air.png";
@@ -48,6 +52,12 @@ internal static class ItemImages
     public const string MajorSigilOfDoom = "https://wiki.guildwars2.com/images/7/78/Major_Sigil_of_Doom.png";
     public const string SuperiorSigilOfDoom = "https://wiki.guildwars2.com/images/6/67/Superior_Sigil_of_Doom.png";
     public const string SuperiorSigilOfVision = "https://wiki.guildwars2.com/images/4/4f/Superior_Sigil_of_Vision.png";
+    public const string MinorSigilOfBlood = "https://wiki.guildwars2.com/images/d/d4/Minor_Sigil_of_Blood.png";
+    public const string MajorSigilOfBlood = "https://wiki.guildwars2.com/images/9/9b/Major_Sigil_of_Blood.png";
+    public const string SuperiorSigilOfBlood = "https://wiki.guildwars2.com/images/a/ab/Superior_Sigil_of_Blood.png";
+    public const string MajorSigilOfLeeching = "https://wiki.guildwars2.com/images/3/3f/Major_Sigil_of_Leeching.png";
+    public const string SuperiorSigilOfLeeching = "https://wiki.guildwars2.com/images/0/05/Superior_Sigil_of_Leeching.png";
+    public const string SuperiorSigilOfMischief = "https://wiki.guildwars2.com/images/b/b7/Superior_Sigil_of_Mischief.png";
     #endregion Sigil
     #region Rune
     public const string SuperiorRuneOfTheRanger = "https://wiki.guildwars2.com/images/a/ad/Superior_Rune_of_the_Ranger.png";
@@ -68,7 +78,12 @@ internal static class ItemImages
     public const string SuperiorRuneOfTheStars = "https://wiki.guildwars2.com/images/8/86/Superior_Rune_of_the_Stars.png";
     public const string SuperiorRuneOfMercy = "https://wiki.guildwars2.com/images/2/23/Superior_Rune_of_Mercy.png";
     public const string SuperiorRuneOfPerplexity = "https://wiki.guildwars2.com/images/1/1e/Superior_Rune_of_Perplexity.png";
-    public const string LeechEffect = "https://wiki.guildwars2.com/images/0/00/Leech_%28effect%29.png";
+    public const string SuperiorRuneOfTormenting = "https://wiki.guildwars2.com/images/e/ec/Superior_Rune_of_Tormenting.png";
+    public const string SuperiorRuneOfTheNightmare = "https://wiki.guildwars2.com/images/2/2e/Superior_Rune_of_the_Nightmare.png";
+    public const string SuperiorRuneOfTheDolyak = "https://wiki.guildwars2.com/images/2/28/Superior_Rune_of_the_Dolyak.png";
+    public const string SuperiorRuneOfTheMadKing = "https://wiki.guildwars2.com/images/e/ed/Superior_Rune_of_the_Mad_King.png";
+    public const string SuperiorRuneOfTheCitadel = "https://wiki.guildwars2.com/images/f/f4/Superior_Rune_of_the_Citadel.png";
+    public const string SuperiorRuneOfGrenth = "https://wiki.guildwars2.com/images/6/6e/Superior_Rune_of_Grenth.png";
     #endregion Rune
     #region Relic
     public const string RelicOfTheDragonhunter = "https://wiki.guildwars2.com/images/0/0b/Relic_of_the_Dragonhunter.png";
