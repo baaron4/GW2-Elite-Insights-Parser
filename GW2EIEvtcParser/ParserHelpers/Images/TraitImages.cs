@@ -95,6 +95,9 @@ internal static class TraitImages
     public const string LethalTempo = "https://wiki.guildwars2.com/images/1/10/Lethal_Tempo.png";
     public const string TyrantsMomentum = "https://wiki.guildwars2.com/images/c/c4/Tyrant%27s_Momentum.png";
     public const string DeathlessCourage = "https://wiki.guildwars2.com/images/9/92/Deathless_Courage.png";
+    public const string GlacialHeart = "https://render.guildwars2.com/file/B6B838104E585313E2FA34481FEDBD9F1B6F07B4/1012443.png";
+    public const string ShatteredAegis = "https://render.guildwars2.com/file/5D0BC6DF96B62BF5FBA1B41BEC064BD9D4E421F2/1012457.png";
+    public const string SelflessDaring = "https://render.guildwars2.com/file/32BAB20860259FF3E8214E784E6BE7521213089C/1012412.png";
     #endregion
     #region Mesmer
     public const string PsychicRiposte = "https://wiki.guildwars2.com/images/1/16/Psychic_Riposte.png";

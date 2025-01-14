@@ -180,8 +180,20 @@ internal static class SkillImages
     public const string SpearOfJustice = "https://wiki.guildwars2.com/images/f/f1/Spear_of_Justice.png";
     public const string WingsOfResolve = "https://wiki.guildwars2.com/images/c/cb/Wings_of_Resolve.png";
     public const string HuntersWard = "https://wiki.guildwars2.com/images/e/e6/Hunter%27s_Ward.png";
+    public const string Chapter1SearingSpell = "https://wiki.guildwars2.com/images/d/d3/Chapter_1-_Searing_Spell.png";
+    public const string Chapter2IgnitingBurst = "https://wiki.guildwars2.com/images/5/53/Chapter_2-_Igniting_Burst.png";
+    public const string Chapter3HeatedRebuke = "https://wiki.guildwars2.com/images/e/e7/Chapter_3-_Heated_Rebuke.png";
+    public const string Chapter4ScorchedAftermath = "https://wiki.guildwars2.com/images/c/c9/Chapter_4-_Scorched_Aftermath.png";
     public const string EpilogueAshesOfTheJust = "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png";
+    public const string Chapter1DesertBloom = "https://wiki.guildwars2.com/images/f/fd/Chapter_1-_Desert_Bloom.png";
+    public const string Chapter2RadiantRecovery = "https://wiki.guildwars2.com/images/9/95/Chapter_2-_Radiant_Recovery.png";
+    public const string Chapter3AzureSun = "https://wiki.guildwars2.com/images/b/bf/Chapter_3-_Azure_Sun.png";
+    public const string Chapter4ShiningRiver = "https://wiki.guildwars2.com/images/1/16/Chapter_4-_Shining_River.png";
     public const string EpilogueEternalOasis = "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png";
+    public const string Chapter1UnflinchingCharge = "https://wiki.guildwars2.com/images/3/30/Chapter_1-_Unflinching_Charge.png";
+    public const string Chapter2DaringChallenge = "https://wiki.guildwars2.com/images/7/79/Chapter_2-_Daring_Challenge.png";
+    public const string Chapter3ValiantBulwark = "https://wiki.guildwars2.com/images/7/73/Chapter_3-_Valiant_Bulwark.png";
+    public const string Chapter4StalwartStand = "https://wiki.guildwars2.com/images/8/89/Chapter_4-_Stalwart_Stand.png";
     public const string EpilogueUnbrokenLines = "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png";
     public const string TomeOfJustice = "https://wiki.guildwars2.com/images/a/ae/Tome_of_Justice.png";
     public const string TomeOfCourage = "https://wiki.guildwars2.com/images/5/54/Tome_of_Courage.png";
@@ -211,6 +223,10 @@ internal static class SkillImages
     public const string Illuminated = "https://render.guildwars2.com/file/0A200D7371125E9E9ADE1FA9F71C5528AFC5A5DE/3379001.png";
     public const string SymbolOfLuminance = "https://wiki.guildwars2.com/images/c/c5/Symbol_of_Luminance_%28effect%29.png";
     public const string FireJurisdiction = "https://render.guildwars2.com/file/61186008B920AADD9A0D47E1A10C63AFF28030A9/3256356.png";
+    public const string ProtectorsStrike = "https://render.guildwars2.com/file/7C42A81ACFBFFE32A528DFCA8014E7C4476358C8/103202.png";
+    public const string SwordOfJustice = "https://render.guildwars2.com/file/98B40D09401B44949604E073F5F793C660B7ED22/103669.png";
+    public const string ShieldOfTheAvenger = "https://render.guildwars2.com/file/CFBE4110635CD25B68EE194E7DBE25166DAAA197/103673.png";
+    public const string HuntersVerdict = "https://render.guildwars2.com/file/02C8A032F60414D0FAB7D0AFD965B5BA0947D6F8/103703.png";
     #endregion Guardian
     #region Mesmer
     public const string ContinuumSplit = "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png";
