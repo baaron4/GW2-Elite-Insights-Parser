@@ -67,13 +67,13 @@ internal class Sabetha : SpiritVale
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)
     {
         List<PhaseData> phases = GetInitialPhase(log);
-        SingleActor mainTarget = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
-        phases[0].AddTarget(mainTarget);
+        SingleActor sabetha = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Sabetha)) ?? throw new MissingKeyActorsException("Sabetha not found");
+        phases[0].AddTarget(sabetha);
         var miniBossIds = new List<int>
         {
-            (int) ArcDPSEnums.TrashID.Kernan,
+            (int) ArcDPSEnums.TrashID.Karde, // reverse order for mini boss phase detection
             (int) ArcDPSEnums.TrashID.Knuckles,
-            (int) ArcDPSEnums.TrashID.Karde,
+            (int) ArcDPSEnums.TrashID.Kernan,
         };
         phases[0].AddSecondaryTargets(Targets.Where(x => x.IsAnySpecies(miniBossIds)));
         if (!requirePhases)
@@ -81,52 +81,35 @@ internal class Sabetha : SpiritVale
             return phases;
         }
         // Invul check
-        phases.AddRange(GetPhasesByInvul(log, Invulnerability757, mainTarget, true, true));
+        phases.AddRange(GetPhasesByInvul(log, Invulnerability757, sabetha, true, true));
         for (int i = 1; i < phases.Count; i++)
         {
             PhaseData phase = phases[i];
             if (i % 2 == 0)
             {
                 int phaseID = i / 2;
-                AddTargetsToPhaseAndFit(phase, miniBossIds, log);
-                if (phase.Targets.Count > 0)
+                phase.Name = "Unknown";
+                foreach (var miniBossId in miniBossIds)
                 {
-                    SingleActor phaseTar = phase.Targets[0];
-                    phase.Name = PhaseNames.TryGetValue(phaseTar.ID, out var phaseName) ? phaseName : "Unknown";
+                    AddTargetsToPhaseAndFit(phase, [miniBossId], log);
+                    if (phase.Targets.Count > 0)
+                    {
+                        SingleActor phaseTarget = phase.Targets[0];
+                        if (PhaseNames.TryGetValue(phaseTarget.ID, out var phaseName))
+                        {
+                            phase.Name = phaseName;
+                        }
+                        break; // we found our main target
+                    }
                 }
-                switch (phaseID)
-                {
-                    case 1:
-                        break;
-                    case 2:
-                        phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan)) && phase.Start < x.LastAware));
-                        break;
-                    case 3:
-                        phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan) || x.IsSpecies(ArcDPSEnums.TrashID.Knuckles)) && phase.Start < x.LastAware));
-                        break;
-                    default:
-                        break;
-                }
+                AddSecondaryTargetsToPhase(phase, miniBossIds);
             }
             else
             {
                 int phaseID = (i + 1) / 2;
                 phase.Name = "Phase " + phaseID;
-                phase.AddTarget(mainTarget);
-                switch (phaseID)
-                {
-                    case 2:
-                        phase.AddSecondaryTargets(Targets.Where(x => x.IsSpecies(ArcDPSEnums.TrashID.Kernan) && phase.Start < x.LastAware));
-                        break;
-                    case 3:
-                        phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan) || x.IsSpecies(ArcDPSEnums.TrashID.Knuckles)) && phase.Start < x.LastAware));
-                        break;
-                    case 4:
-                        phase.AddSecondaryTargets(Targets.Where(x => (x.IsSpecies(ArcDPSEnums.TrashID.Kernan) || x.IsSpecies(ArcDPSEnums.TrashID.Knuckles) || x.IsSpecies(ArcDPSEnums.TrashID.Karde)) && phase.Start < x.LastAware));
-                        break;
-                    default:
-                        break;
-                }
+                phase.AddTarget(sabetha);
+                AddSecondaryTargetsToPhase(phase, miniBossIds);
             }
         }
         return phases;
@@ -228,7 +211,7 @@ internal class Sabetha : SpiritVale
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)
     {
         base.ComputePlayerCombatReplayActors(p, log, replay);
-                // timed bombs
+        // timed bombs
         var timedBombs = log.CombatData.GetBuffDataByIDByDst(TimeBomb, p.AgentItem).Where(x => x is BuffApplyEvent);
         foreach (BuffEvent c in timedBombs)
         {
@@ -236,7 +219,7 @@ internal class Sabetha : SpiritVale
             int end = start + 3000;
             replay.Decorations.AddWithFilledWithGrowing(new CircleDecoration(280, (start, end), Colors.LightOrange, 0.5, new AgentConnector(p)).UsingFilled(false), true, end);
         }
-                // Sapper bombs
+        // Sapper bombs
         var sapperBombs = p.GetBuffStatus(log, SapperBombBuff, log.FightData.FightStart, log.FightData.FightEnd).Where(x => x.Value > 0);
         foreach (var seg in sapperBombs)
         {
