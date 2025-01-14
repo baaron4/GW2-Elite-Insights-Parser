@@ -244,6 +244,28 @@ public class FightData
                     case TargetID.LGolem:
                     case TargetID.MedGolem:
                         return new Golem(id);
+                    default:
+                        switch(GetTrashID(id))
+                        {
+                            case TrashID.WallOfGhosts:
+                                return new SpiritRace(id);
+                            case TrashID.HauntingStatue:
+                                return new TwistedCastle((int)ArcDPSEnums.TargetID.DummyTarget);
+                            case TrashID.VoidAmalgamate:
+                                return new HarvestTemple(id);
+                            case TrashID.AncientInvokedHydra:
+                                return new Qadim((int)ArcDPSEnums.TargetID.Qadim);
+                            case TrashID.VoidMelter:
+                                if (agentData.GetNPCsByID(ArcDPSEnums.TrashID.VoidAmalgamate).Any())
+                                {
+                                    return new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
+                                }
+                                else
+                                {
+                                    return new UnknownFightLogic(id);
+                                }
+                        }
+                        break;
                 }
                 break;
 
