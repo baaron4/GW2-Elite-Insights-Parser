@@ -114,6 +114,11 @@ internal static class TraitImages
     public const string FencersFinesse = "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png";
     public const string Mistrust = "https://wiki.guildwars2.com/images/5/5f/Mistrust.png";
     public const string IllusionaryDefense = "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png";
+    public const string HealingPrism = "https://render.guildwars2.com/file/090D289158520416A4402EBE9C92257E1309020D/1012533.png";
+    public const string IllusionaryInspiration = HealingPrism;
+    public const string RestorativeMantras = "https://render.guildwars2.com/file/2636BEBF0E35923BC4407739D0DC7DC223932F0C/1012523.png";
+    public const string PowerBlock = "https://render.guildwars2.com/file/E029766272E10A957B954B12B20FD916474D5A01/1012494.png";
+    public const string PersistenceOfMemory = "https://render.guildwars2.com/file/F225A021EB41754E4E0C9FCB46F40F7212DA41CE/1012511.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";

@@ -735,7 +735,7 @@ public static class SkillIDs
     public const long IllusionaryRiposteHit = 10281;
     public const long IllusionaryUnload = 10284;
     public const long Diversion = 10287;
-    public const long SpatialSurge = 10294;
+    public const long SpatialSurgeAdditional = 10294;
     public const long EtherBolt = 10295;
     public const long WindsOfChaosStaffClone = 10296;
     public const long MindSlashSwordClone = 10297;
