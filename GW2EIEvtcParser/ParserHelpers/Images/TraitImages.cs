@@ -139,6 +139,15 @@ internal static class TraitImages
     public const string LastRites = "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png";
     public const string ColdShoulder = "https://wiki.guildwars2.com/images/7/78/Cold_Shoulder.png";
     public const string SoulEater = "https://wiki.guildwars2.com/images/6/6c/Soul_Eater.png";
+    public const string LifeFromDeath = "https://render.guildwars2.com/file/B8310A13D0A908D9BBFC2607010AF79E399394AE/1012537.png";
+    public const string ChillingNova = "https://render.guildwars2.com/file/BC1757B4EF53B20D64E83AC495B6B2E4505B04F3/1012571.png";
+    public const string DesertEmpowerment = "https://render.guildwars2.com/file/2459E053ADCC6A6064DD505CC03FEA767D12DBB6/1769970.png";
+    public const string CascadingCorruption = "https://render.guildwars2.com/file/CDF71E71761E7997794E193A97FFC315E36CF1E7/2479344.png";
+    public const string DeathlyHaste = "https://render.guildwars2.com/file/7CC30E093EDFC0A3A4F32198B53E729842779AF6/2479345.png";
+    public const string DoomApproaches = "https://render.guildwars2.com/file/DDF771C8E5AA242AAEE72BAF26180C6DB4000771/2479346.png";
+    public const string Vampiric = "https://render.guildwars2.com/file/0DF523B154B8FD9F2E2B95F72A534E7C80352D2A/1012544.png";
+    public const string BloodBank = "https://render.guildwars2.com/file/06E563AE1E34AC1D24CCECF301AC70B4B07A330C/2310020.png";
+    public const string AuguryOfDeath = "https://render.guildwars2.com/file/CBBA2FA5F20755523E5424D0704B5B6C5F2B7C67/1012570.png";
     #endregion
     #region Ranger
     public const string OakheartSalve = "https://wiki.guildwars2.com/images/4/4d/Oakheart_Salve.png";

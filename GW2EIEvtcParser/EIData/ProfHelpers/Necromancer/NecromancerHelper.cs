@@ -246,7 +246,7 @@ internal static class NecromancerHelper
                 }
                 else
                 {
-                    skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblains);
+                    skill = new SkillModeDescriptor(player, Spec.Necromancer, MarkOfBloodOrChillblainsTrigger);
                     icon = EffectImages.EffectMarkOfBloodOrChillblains;
                 }
                 (long, long) lifespan = effect.ComputeDynamicLifespan(log, fromDodge ? 6000 : 30000);

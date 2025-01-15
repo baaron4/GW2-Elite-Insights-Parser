@@ -49,7 +49,7 @@ public static class SkillIDs
     public const long SadisticSearingActivation = -30;
     public const long BladeBurstOrParticleAccelerator = -31;
     public const long RelicOfFireworksBuffLoss = -32;
-    public const long MarkOfBloodOrChillblains = -33;
+    public const long MarkOfBloodOrChillblainsTrigger = -33;
     public const long FirestormGlyphOfStormsOrFieryGreatsword = -34;
     public const long NumberOfRangerPets = -35;
     public const long AchievementEligibilityApathetic = -36;
@@ -3416,7 +3416,7 @@ public static class SkillIDs
     public const long ExitHarbingerShroud = 62540;
     public const long RainOfSwords = 62553;
     public const long CutterBurst = 62554;
-    public const long DoomApproaches = 62558;
+    public const long ApproachingDoom = 62558;
     public const long VitalDraw = 62563;
     public const long EnterHarbingerShroud = 62567;
     public const long VirtuosoBlade2 = 62583;
