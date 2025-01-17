@@ -209,6 +209,12 @@ internal static class TraitImages
     public const string SelflessAmplification = "https://wiki.guildwars2.com/images/2/23/Selfless_Amplification.png";
     public const string ThrillOfCombat = "https://wiki.guildwars2.com/images/3/30/Thrill_of_Combat.png";
     public const string SteadfastRejuvenation = "https://wiki.guildwars2.com/images/b/bf/Steadfast_Rejuvenation.png";
+    public const string BalanceInDiscord = "https://render.guildwars2.com/file/0E49C9069C055B4FC23E02DC1E1271CB426F430A/2491541.png";
+    public const string HealersGift = "https://render.guildwars2.com/file/1CF0A1D20DF765AC21B31A5AB6E7305073A851DB/2128017.png";
+    public const string WordsOfCensure = "https://render.guildwars2.com/file/3DE4920AF60A437EDD94BBF435FAC19821DA7809/2128016.png";
+    public const string GenerousAbundance = "https://render.guildwars2.com/file/0F2DC0620428E1235AE6DFA4F0947C5DBE2FB076/2128013.png";
+    public const string GlaringResolve = "https://render.guildwars2.com/file/9B49A55EEF5A2B31C2C0DBE0C10E6FFF3F4E2E5D/1012682.png";
+    public const string ElevatedCompassion = "https://render.guildwars2.com/file/07A728FDFD275D406F255B08A26BBDCB37F6EE1F/2029284.png";
     #endregion
     #region Thief
     public const string ExposedWeakness = "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png";

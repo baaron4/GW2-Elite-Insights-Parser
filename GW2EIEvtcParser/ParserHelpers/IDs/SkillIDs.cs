@@ -4461,7 +4461,7 @@ public static class SkillIDs
     public const long ImaginedImpairment = 73069;
     public const long EnergizeBuff = 73071;
     public const long GalvanizeBuff = 73073;
-    public const long AbyssalRaze2 = 73077;
+    public const long AbyssalRazeUnleash = 73077;
     public const long BlazingBarrage = 73080;
     public const long BarbedSpearRanged = 73082;
     public const long CheetahsStrike = 73087;
