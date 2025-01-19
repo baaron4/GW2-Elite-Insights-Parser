@@ -112,12 +112,13 @@
                     var rota = rotation[i];
                     var skillID = rota[1];
                     var skill = this.getSkill(skillID);
-                    if (skill.isSwap || castCounts[skillID]) {
-                        continue;
+                    if (!castCounts[skillID]) {
+                        castCounts[skillID] = rotation.filter((cast) => cast[1] === skillID).length;
+                        if (!skill.isSwap) {
+                            skillList.push({name: skill.name, id: skillID});
+                            selectedSkills['s'+skillID] = true;
+                        }
                     }
-                    skillList.push({name: skill.name, id: skillID});
-                    castCounts[skillID] = rotation.filter((cast) => cast[1] === skillID).length;
-                    selectedSkills['s'+skillID] = true;
                 }
                 skillList.sort((x,y) => {
                     if (x.name < y.name) {
