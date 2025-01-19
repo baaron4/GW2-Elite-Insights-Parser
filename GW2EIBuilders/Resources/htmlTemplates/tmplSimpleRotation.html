@@ -163,8 +163,7 @@
                         duration: cast[2],
                         type: cast[3],
                         globalCast: globalCast,
-                        individualCast: individualCasts[skillID],
-                        individualTotalCasts: this.castCounts[skillID]
+                        individualCast: individualCasts[skillID]
                     };
                 });
             },
@@ -243,7 +242,7 @@
                 if (cast.type !== RotationStatus.INSTANT) {
                     tooltip += ` for ${cast.duration}ms`;
                 }
-                tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${cast.individualTotalCasts}`;
+                tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${this.castCounts[cast.skill.id]}`;
                 tooltip += `<br>Skill cast ${cast.globalCast} of ${this.rotation.length}`;
                 return tooltip;
             },
