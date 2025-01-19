@@ -248,8 +248,8 @@
                 return tooltip;
             },
             setAllSelectedSkills(selected) {
-                for (var id of Object.keys(skillList)) {
-                    selectedSkills['s' + id] = selected;
+                for (var i = 0; i < this.skillList.length; i++) {
+                    this.selectedSkills['s' + this.skillList[i].id] = selected;
                 }
             },
             toggleHighlight(skill) {
