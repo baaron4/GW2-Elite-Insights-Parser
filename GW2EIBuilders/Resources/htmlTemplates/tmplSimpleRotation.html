@@ -14,7 +14,7 @@
                     <a class="nav-link" @click="hideSmallTime = !hideSmallTime"
                         :class="{active: hideSmallTime}">Hide < 10ms</a>
                 </li>
-            </ul>      
+            </ul>
             <ul class="nav nav-pills ml-1 mr-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="hideInstantCast = !hideInstantCast"
@@ -52,26 +52,25 @@
                     style="border-bottom: 2px solid #bbb;">
                     <li>
                         <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
-                            @click="for (var i = 0; i < skillList.length; i++) {selectedSkills['s' + skillList[i].id] = true;}" @click.stop="stopClickEvent">Select all</button>
+                            @click="setAllSelectedSkills(true)" @click.stop="stopClickEvent">Select all</button>
                     </li>
                     <li class="mb-1">
                         <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
-                            @click="for (var i = 0; i < skillList.length; i++) {selectedSkills['s' + skillList[i].id] = false;}" @click.stop="stopClickEvent">Deselect all</button>
+                            @click="setAllSelectedSkills(false)" @click.stop="stopClickEvent">Deselect all</button>
                     </li>
                 </div>
                 <li v-for="(skill, index) in skillList" :key="index">
                     <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
                         v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
                     <label :for="'simple-rotation-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">           
-                        <img class="icon" 
-                                :src="getSkill(skill.id).icon">
-                        {{skill.name}}  
+                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">
+                        <img class="icon" :src="getSkill(skill.id).icon">
+                        {{skill.name}}
                     </label>
                 </li>
             </ul>
         </div>
-        <span class="rot-skill" v-for="cast in rotation" :class="getCastClass(cast)" v-show="showSkill(cast)">
+        <span class="rot-skill" v-for="cast in rotation" :class="getCastClass(cast)" v-show="showSkill(cast)" @click="toggleHighlight(cast.skill)">
             <img class="rot-icon" :class="getIconClass(cast)" :src="cast.skill.icon" :data-original-title="getTooltip(cast)"/>
         </span>
         <div class="card mt-2">
@@ -85,7 +84,7 @@
                     style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#FF0000; color:#000000">
                     Interrupted
                 </span>
-                <span class="mr-1" 
+                <span class="mr-1"
                     style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#00FFFF; color:#000000">
                     Instant
                 </span>
@@ -104,20 +103,20 @@
         template: `${template}`,
         data: function () {
             var selectedSkills = {};
-            var skillListList = [];
+            var phaseData = [];
             for (var phaseIndex = 0; phaseIndex < logData.phases.length; phaseIndex++) {
                 var skillList = [];
-                var encounteredSkills = {};
+                var castCounts = {};
                 var rotation = this.target ? logData.targets[this.actorindex].details.rotation[phaseIndex] : logData.players[this.actorindex].details.rotation[phaseIndex];
                 for (var i = 0; i < rotation.length; i++) {
                     var rota = rotation[i];
                     var skillID = rota[1];
                     var skill = this.getSkill(skillID);
-                    if (skill.isSwap || encounteredSkills['s' + skillID]) {
+                    if (skill.isSwap || castCounts[skillID]) {
                         continue;
                     }
                     skillList.push({name: skill.name, id: skillID});
-                    encounteredSkills['s'+skillID] = true;
+                    castCounts[skillID] = rotation.filter((cast) => cast[1] === skillID).length;
                     selectedSkills['s'+skillID] = true;
                 }
                 skillList.sort((x,y) => {
@@ -129,7 +128,7 @@
                     }
                     return 0;
                 });
-                skillListList.push(skillList);
+                phaseData.push({skillList: skillList, castCounts: castCounts});
             }
             return {
                 autoattack: true,
@@ -141,25 +140,42 @@
                 hideTraitProc: false,
                 hideGearProc: false,
                 hideSmallTime: true,
+                highlightedSkill: null,
                 selectedSkills: selectedSkills,
-                skillListList: skillListList,
+                phaseData: phaseData,
             };
         },
         computed: {
             rotation: function () {
                 var data = this.target ? logData.targets : logData.players;
-                return data[this.actorindex].details.rotation[this.phaseindex].map((cast) => ({
-                    time: cast[0],
-                    skill: this.getSkill(cast[1]),
-                    duration: cast[2],
-                    type: cast[3]
-                }));
+                var globalCast = 0;
+                var individualCasts = {};
+                return data[this.actorindex].details.rotation[this.phaseindex].map((cast) => {
+                    var skillID = cast[1];
+                    if (typeof individualCasts[skillID] !== "number") {
+                        individualCasts[skillID] = 0;
+                    }
+                    globalCast++;
+                    individualCasts[skillID]++;
+                    return {
+                        time: cast[0],
+                        skill: this.getSkill(cast[1]),
+                        duration: cast[2],
+                        type: cast[3],
+                        globalCast: globalCast,
+                        individualCast: individualCasts[skillID],
+                        individualTotalCasts: this.castCounts[skillID]
+                    };
+                });
             },
             RotationStatus: function() {
                 return RotationStatus;
             },
             skillList: function() {
-                return this.skillListList[this.phaseindex];
+                return this.phaseData[this.phaseindex].skillList;
+            },
+            castCounts: function() {
+                return this.phaseData[this.phaseindex].castCounts;
             }
         },
         methods: {
@@ -197,7 +213,7 @@
                         return false;
                     } else if (this.hideTraitProc && skill.traitProc) {
                         return false;
-                    }else if (this.hideInstantCastSkill && !skill.traitProc && !skill.gearProc) {
+                    } else if (this.hideInstantCastSkill && !skill.traitProc && !skill.gearProc) {
                         return false;
                     }
                 } else if (this.hideSmallTime) {
@@ -209,7 +225,9 @@
                 return {
                     'rot-swap': cast.skill.isSwap,
                     'mb-1': cast.skill.isSwap,
-                    'rot-small': this.small || (this.smallAA && cast.skill.aa)
+                    'rot-small': this.small || (this.smallAA && cast.skill.aa),
+                    'rot-highlight': typeof this.highlightedSkill === "number",
+                    'rot-highlight-active': cast.skill.id === this.highlightedSkill
                 };
             },
             getIconClass(cast) {
@@ -222,11 +240,20 @@
             },
             getTooltip(cast) {
                 var tooltip = `${cast.skill.name} at ${cast.time}s`;
-                if (cast.type === RotationStatus.INSTANT) {
-                    return tooltip;
-                } else {
-                    return tooltip + ` for ${cast.duration}ms`;
+                if (cast.type !== RotationStatus.INSTANT) {
+                    tooltip += ` for ${cast.duration}ms`;
                 }
+                tooltip += `<br>${cast.skill.name} cast ${cast.individualCast} of ${cast.individualTotalCasts}`;
+                tooltip += `<br>Skill cast ${cast.globalCast} of ${this.rotation.length}`;
+                return tooltip;
+            },
+            setAllSelectedSkills(selected) {
+                for (var id of Object.keys(skillList)) {
+                    selectedSkills['s' + id] = selected;
+                }
+            },
+            toggleHighlight(skill) {
+                this.highlightedSkill = this.highlightedSkill !== skill.id ? skill.id : null;
             }
         }
     });

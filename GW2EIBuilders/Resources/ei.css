@@ -158,7 +158,7 @@
     pointer-events: none;
 }
 
-.cr-barrier { 
+.cr-barrier {
     position: relative;
     width: 100%;
     top: -99px;
@@ -273,20 +273,20 @@ body {
 }
 
 .theme-yeti .player-cell{
-    box-shadow: 
-    1px 0 0 0 #dee2e6, 
-    0 1px 0 0 #dee2e6, 
+    box-shadow:
+    1px 0 0 0 #dee2e6,
+    0 1px 0 0 #dee2e6,
     1px 1px 0 0 #dee2e6,
-    1px 0 0 0 #dee2e6 inset, 
+    1px 0 0 0 #dee2e6 inset,
     0 1px 0 0 #dee2e6 inset;
 }
 
 .theme-slate .player-cell {
-    box-shadow: 
-    1px 0 0 0 rgb(10, 10, 10), 
-    0 1px 0 0 rgb(10, 10, 10), 
+    box-shadow:
+    1px 0 0 0 rgb(10, 10, 10),
+    0 1px 0 0 rgb(10, 10, 10),
     1px 1px 0 0 rgb(10, 10, 10),
-    1px 0 0 0 rgb(10, 10, 10) inset, 
+    1px 0 0 0 rgb(10, 10, 10) inset,
     0 1px 0 0 rgb(10, 10, 10) inset;
 }
 
@@ -440,7 +440,7 @@ th:hover img.icon-hover,
     filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=3, OffY=3, Color='#000')";
 }
 
-.sub-cell { 
+.sub-cell {
     width: 20px ;
 }
 
@@ -565,6 +565,11 @@ th {
 .rot-swap:after {
     content: '\A';
     white-space: pre;
+}
+
+.rot-highlight:not(.rot-highlight-active) {
+    opacity: 0.5;
+    filter: grayscale(0.7);
 }
 
 .theme-slate .player-cell.active {
@@ -793,8 +798,7 @@ td.approximate::before {
 }
 
 .scrollabledropdown {
-    max-height: 500px; 
-    overflow: auto; 
+    max-height: 500px;
+    overflow: auto;
     overscroll-behavior: contain;
 }
-  
