@@ -132,6 +132,7 @@ const UIIcons = {
     ExclamationMark: "https://i.imgur.com/k3tdKEQ.png",
     QuestionMark: "https://i.imgur.com/nSYuby8.png",
     AgainstMoving: "https://i.imgur.com/11uAbd4.png",
+    GreenFlag: "https://wiki.guildwars2.com/images/2/26/Event_flag_green_%28map_icon%29.png",
 };
 
 const specs = [

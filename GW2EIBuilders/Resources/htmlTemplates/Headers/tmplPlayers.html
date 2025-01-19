@@ -33,7 +33,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
                         <img v-if="runningExtensions && runningExtensions[player.id]"
-                            src="https://wiki.guildwars2.com/images/f/f0/Event_flag_green.png" alt="Extensions"
+                            :src="UIIcons.GreenFlag" alt="Extensions"
                             class="icon" :data-original-title="computeExtensionTooltip(runningExtensions[player.id])">
                         <img v-if="player.isCommander"
                             :src="UIIcons.Commander" alt="Commander"
