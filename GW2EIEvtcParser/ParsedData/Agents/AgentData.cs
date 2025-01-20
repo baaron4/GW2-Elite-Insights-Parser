@@ -215,7 +215,7 @@ public class AgentData
         _dirty = true;
     }
 
-    internal void Refresh()
+    private void Refresh()
     {
         if (_dirty)
         {

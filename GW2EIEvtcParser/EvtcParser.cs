@@ -862,7 +862,6 @@ public class EvtcParser
         if (toRemove.Count != 0)
         {
             _agentData.RemoveAllFrom(toRemove);
-            _agentData.Refresh();
         }
     }
 

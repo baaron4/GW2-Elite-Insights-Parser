@@ -9,25 +9,28 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicUtils
 {
-    internal static void RegroupSameInstidNPCsByID(int id, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RegroupSameInstidNPCsByID(ReadOnlySpan<int> ids, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var agentsByInstid = agentData.GetNPCsByID(id).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-        var toRemove = new List<AgentItem>(4 * agentsByInstid.Count);
-        var toAdd = new List<AgentItem>(agentsByInstid.Count);
-        foreach (var pair in agentsByInstid)
+        var toRemove = new List<AgentItem>(10);
+        var toAdd = new List<AgentItem>(3);
+        foreach (var id in ids)
         {
-            var agents = pair.Value;
-            if (agents.Count > 1)
+            var agentsByInstid = agentData.GetNPCsByID(id).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var pair in agentsByInstid)
             {
-                AgentItem firstItem = agents.First();
-                var newTargetAgent = new AgentItem(firstItem);
-                newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                foreach (AgentItem agentItem in agents)
+                var agents = pair.Value;
+                if (agents.Count > 1)
                 {
-                    RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
+                    AgentItem firstItem = agents.First();
+                    var newTargetAgent = new AgentItem(firstItem);
+                    newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
+                    foreach (AgentItem agentItem in agents)
+                    {
+                        RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
+                    }
+                    toRemove.AddRange(agents);
+                    toAdd.Add(newTargetAgent);
                 }
-                toRemove.AddRange(agents);
-                toAdd.Add(newTargetAgent);
             }
         }
         agentData.ReplaceAgents(toRemove, toAdd);
