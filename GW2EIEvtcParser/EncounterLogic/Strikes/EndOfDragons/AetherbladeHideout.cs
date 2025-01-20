@@ -599,26 +599,24 @@ internal class AetherbladeHideout : EndOfDragonsStrike
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 89640 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem bomb in bombs)
         {
-            bomb.OverrideType(AgentItem.AgentType.NPC);
-            bomb.OverrideID(TrashID.FerrousBomb);
+            bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
+            bomb.OverrideID(TrashID.FerrousBomb, agentData);
         }
-        agentData.Refresh();
         // We remove extra Mai trins if present
         IReadOnlyList<AgentItem> maiTrins = agentData.GetNPCsByID(TargetID.MaiTrinStrike);
         if (maiTrins.Count > 1)
         {
             for (int i = 1; i < maiTrins.Count; i++)
             {
-                maiTrins[i].OverrideID(TargetID.DummyMaiTrinStrike);
+                maiTrins[i].OverrideID(IgnoredSpecies, agentData);
             }
-            agentData.Refresh();
         }
         if (agentData.GetNPCsByID(TargetID.EchoOfScarletBriarNM).Count + agentData.GetNPCsByID(TargetID.EchoOfScarletBriarCM).Count == 0)
         {
             agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarNM, false);
             agentData.AddCustomNPCAgent(int.MaxValue, int.MaxValue, "Echo of Scarlet Briar", Spec.NPC, TargetID.EchoOfScarletBriarCM, false);
         }
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         var echoesOfScarlet = Targets.Where(x => x.IsSpecies(TargetID.EchoOfScarletBriarNM) || x.IsSpecies(TargetID.EchoOfScarletBriarCM));
         foreach (SingleActor echoOfScarlet in echoesOfScarlet)
         {

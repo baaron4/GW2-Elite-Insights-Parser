@@ -566,7 +566,7 @@ public static class ArcDPSEnums
     private const int PyreGuardianResolution = -13;
     private const int CASword = -14;
     private const int SubArtsariiv = -15;
-    private const int DummyMaiTrinStrike = -16;
+
     private const int TheDragonVoidZhaitan = -17;
     private const int TheDragonVoidSooWon = -18;
     private const int TheDragonVoidKralkatorrik = -19;
@@ -610,14 +610,15 @@ public static class ArcDPSEnums
     private const int PermanentEmbodimentOfEnvy = -57;
     private const int PermanentEmbodimentOfMalice = -58;
     private const int KryptisRift = -59;
-    private const int EparchLonelyTowerDummy = -60;
+
     private const int EtherealBarrier = -61;
     private const int ToxicGeyser = -62;
     private const int SulfuricGeyser = -63;
     private const int TitanspawnGeyser = -64;
     private const int UraGadget_BloodstoneShard = -65;
     private const int EnlightenedConduitGadget = -66;
-    private const int FakeEnsolyss = -67;
+
+    public const int IgnoredSpecies = int.MinValue;
     public const int NonIdentifiedSpecies = 0;
 
     //
@@ -1130,7 +1131,6 @@ public static class ArcDPSEnums
         TheTormentedLonelyTower = 26193,
         TheCravenLonelyTower = 26193,
         KryptisRift = ArcDPSEnums.KryptisRift,
-        EparchLonelyTowerDummy = ArcDPSEnums.EparchLonelyTowerDummy,
         // Open world Soo-Won
         SooWonTail = 51756,
         VoidGiant2 = 24310,
@@ -1241,7 +1241,6 @@ public static class ArcDPSEnums
         WhisperOfJormag = 22711,
         VariniaStormsounder = 22836,
         MaiTrinStrike = 24033,
-        DummyMaiTrinStrike = ArcDPSEnums.DummyMaiTrinStrike,
         EchoOfScarletBriarNM = 24768,
         EchoOfScarletBriarCM = 25247,
         Ankka = 23957,
@@ -1268,7 +1267,6 @@ public static class ArcDPSEnums
         MAMA = 17021,
         Siax = 17028,
         Ensolyss = 16948,
-        FakeEnsolyss = ArcDPSEnums.FakeEnsolyss,
         Skorvald = 17632,
         Artsariiv = 17949,
         Arkk = 17759,

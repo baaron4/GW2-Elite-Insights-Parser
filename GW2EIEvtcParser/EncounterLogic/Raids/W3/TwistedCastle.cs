@@ -77,7 +77,7 @@ internal class TwistedCastle : StrongholdOfTheFaithful
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Twisted Castle", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     protected override List<ArcDPSEnums.TrashID> GetTrashMobsIDs()

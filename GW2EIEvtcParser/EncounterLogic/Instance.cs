@@ -98,7 +98,7 @@ internal class Instance : FightLogic
         }
         _targets.RemoveAll(x => x.IsSpecies(ArcDPSEnums.TargetID.DummyTarget));
         AgentItem dummyAgent = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Instance Target", ParserHelper.Spec.NPC, ArcDPSEnums.TargetID.Instance, true);
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         _targets.RemoveAll(x => x.LastAware - x.FirstAware < ParserHelper.MinimumInCombatDuration);
         TargetAgents = new HashSet<AgentItem>(_targets.Select(x => x.AgentItem));
     }

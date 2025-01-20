@@ -132,23 +132,27 @@ internal class Escort : StrongholdOfTheFaithful
         {
             throw new MissingKeyActorsException("McLeod not found");
         }
-        bool needsRefresh = FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
+        FindChestGadget(ChestID, agentData, combatData, SiegeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         //
         var mineAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 1494 && x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 100 && x.HitboxHeight == 300);
         foreach (AgentItem mine in mineAgents)
         {
-            mine.OverrideID(ArcDPSEnums.TrashID.Mine);
-            mine.OverrideType(AgentItem.AgentType.NPC);
+            mine.OverrideID(ArcDPSEnums.TrashID.Mine, agentData);
+            mine.OverrideType(AgentItem.AgentType.NPC, agentData);
+        }
+        var duplicateGlennaPosition = new Vector3(-4326.979f, 13687.298f, -5561.857f);
+        foreach (var glenna in agentData.GetNPCsByID(ArcDPSEnums.TrashID.Glenna))
+        {
+            var positions = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.Position && x.SrcMatchesAgent(glenna)).Take(5).Select(x => new PositionEvent(x, agentData).GetParametricPoint3D());
+            if (positions.Any(x => (duplicateGlennaPosition.XY() - x.XYZ.XY()).LengthSquared() < 10))
+            {
+                glenna.OverrideID(ArcDPSEnums.IgnoredSpecies, agentData);
+            }
         }
         // to keep the pre event as we need targets
         if (_hasPreEvent && !agentData.GetNPCsByID(ArcDPSEnums.TrashID.WargBloodhound).Any(x => x.FirstAware < mcLeod.FirstAware))
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Escort", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
-            needsRefresh = false;
-        }
-        if (needsRefresh)
-        {
-            agentData.Refresh();
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int curCrimson = 1;

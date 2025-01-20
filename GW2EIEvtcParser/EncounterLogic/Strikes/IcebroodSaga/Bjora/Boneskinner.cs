@@ -70,12 +70,11 @@ internal class Boneskinner : Bjora
         var torches = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 14940 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 500 && x.HitboxWidth >= 250);
         foreach (AgentItem torch in torches)
         {
-            torch.OverrideType(AgentItem.AgentType.NPC);
-            torch.OverrideID(TrashID.Torch);
+            torch.OverrideType(AgentItem.AgentType.NPC, agentData);
+            torch.OverrideID(TrashID.Torch, agentData);
             torch.OverrideAwareTimes(fightData.LogStart, fightData.LogEnd);
         }
-        agentData.Refresh();
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

@@ -138,10 +138,9 @@ internal class Samarog : BastionOfThePenitent
             {
                 foreach (AgentItem spear in spearAgents)
                 {
-                    spear.OverrideType(AgentItem.AgentType.NPC);
-                    spear.OverrideID((int)ArcDPSEnums.TrashID.SpearAggressionRevulsion);
+                    spear.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    spear.OverrideID((int)ArcDPSEnums.TrashID.SpearAggressionRevulsion, agentData);
                 }
-                agentData.Refresh();
             }
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);

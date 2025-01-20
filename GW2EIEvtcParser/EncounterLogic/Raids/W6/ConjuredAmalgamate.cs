@@ -130,23 +130,22 @@ internal class ConjuredAmalgamate : MythwrightGambit
         IReadOnlyList<AgentItem> rightArms = agentData.GetGadgetsByID(_cn ? ArcDPSEnums.TargetID.CARightArm_CHINA : ArcDPSEnums.TargetID.CARightArm);
         foreach (AgentItem ca in cas)
         {
-            ca.OverrideType(AgentItem.AgentType.NPC);
-            ca.OverrideID(ArcDPSEnums.TargetID.ConjuredAmalgamate);
+            ca.OverrideType(AgentItem.AgentType.NPC, agentData);
+            ca.OverrideID(ArcDPSEnums.TargetID.ConjuredAmalgamate, agentData);
         }
         foreach (AgentItem leftArm in leftArms)
         {
-            leftArm.OverrideType(AgentItem.AgentType.NPC);
-            leftArm.OverrideID(ArcDPSEnums.TargetID.CALeftArm);
+            leftArm.OverrideType(AgentItem.AgentType.NPC, agentData);
+            leftArm.OverrideID(ArcDPSEnums.TargetID.CALeftArm, agentData);
         }
         foreach (AgentItem rightArm in rightArms)
         {
-            rightArm.OverrideType(AgentItem.AgentType.NPC);
-            rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm);
+            rightArm.OverrideType(AgentItem.AgentType.NPC, agentData);
+            rightArm.OverrideID(ArcDPSEnums.TargetID.CARightArm, agentData);
         }
         FindChestGadget(ChestID, agentData, combatData, CAChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
-        agentData.Refresh();
         AgentItem sword = agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Conjured Sword\0:Conjured Sword\051", ParserHelper.Spec.NPC, ArcDPSEnums.TrashID.ConjuredPlayerSword, true);
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (CombatItem c in combatData)
         {
             if (c.IsDamage(extensions) && c.SkillID == ConjuredSlashPlayer)

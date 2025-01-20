@@ -231,7 +231,7 @@ internal static class EncounterLogicUtils
         var chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
         if (chest != null)
         {
-            chest.OverrideID(chestID);
+            chest.OverrideID(chestID, agentData);
             return true;
         }
         return false;

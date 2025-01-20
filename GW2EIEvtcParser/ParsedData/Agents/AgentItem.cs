@@ -120,8 +120,9 @@ public class AgentItem
         IsNotInSquadFriendlyPlayer = status;
     }
 
-    internal void OverrideType(AgentType type)
+    internal void OverrideType(AgentType type, AgentData agentData)
     {
+        agentData.FlagAsDirty();
         Type = type;
     }
 
@@ -135,28 +136,33 @@ public class AgentItem
         InstID = instid;
     }
 
-    internal void OverrideID(int id)
+    internal void OverrideID(int id, AgentData agentData)
     {
+        agentData.FlagAsDirty();
         ID = id;
     }
 
-    internal void OverrideID(ArcDPSEnums.TrashID id)
+    internal void OverrideID(ArcDPSEnums.TrashID id, AgentData agentData)
     {
+        agentData.FlagAsDirty();
         ID = (int)id;
     }
 
-    internal void OverrideID(ArcDPSEnums.TargetID id)
+    internal void OverrideID(ArcDPSEnums.TargetID id, AgentData agentData)
     {
+        agentData.FlagAsDirty();
         ID = (int)id;
     }
 
-    internal void OverrideID(ArcDPSEnums.MinionID id)
+    internal void OverrideID(ArcDPSEnums.MinionID id, AgentData agentData)
     {
+        agentData.FlagAsDirty();
         ID = (int)id;
     }
 
-    internal void OverrideID(ArcDPSEnums.ChestID id)
+    internal void OverrideID(ArcDPSEnums.ChestID id, AgentData agentData)
     {
+        agentData.FlagAsDirty();
         ID = (int)id;
     }
 

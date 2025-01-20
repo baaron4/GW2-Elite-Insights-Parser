@@ -228,43 +228,37 @@ internal class TempleOfFebe : SecretOfTheObscureStrike
             TrashID.EmbodimentOfRage,
             TrashID.EmbodimentOfRegret,
         };
-        bool refresh = false;
         foreach (TrashID embodimentID in embodimentIDs)
         {
             foreach (AgentItem embodiment in agentData.GetNPCsByID(embodimentID))
             {
                 if (embodiment.FirstAware < 0)
                 {
-                    refresh = true;
                     switch (embodiment.ID)
                     {
                         case (int)TrashID.EmbodimentOfDespair:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfDespair);
+                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfDespair, agentData);
                             break;
                         case (int)TrashID.EmbodimentOfEnvy:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfEnvy);
+                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfEnvy, agentData);
                             break;
                         case (int)TrashID.EmbodimentOfGluttony:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfGluttony);
+                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfGluttony, agentData);
                             break;
                         case (int)TrashID.EmbodimentOfMalice:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfMalice);
+                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfMalice, agentData);
                             break;
                         case (int)TrashID.EmbodimentOfRage:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfRage);
+                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfRage, agentData);
                             break;
                         case (int)TrashID.EmbodimentOfRegret:
-                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfRegret);
+                            embodiment.OverrideID(TrashID.PermanentEmbodimentOfRegret, agentData);
                             break;
                         default:
                             break;
                     }
                 }
             }
-        }
-        if (refresh)
-        {
-            agentData.Refresh();
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int[] curEmbodiments = [1, 1, 1, 1, 1, 1];

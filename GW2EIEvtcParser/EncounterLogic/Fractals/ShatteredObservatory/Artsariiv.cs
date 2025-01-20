@@ -126,10 +126,9 @@ internal class Artsariiv : ShatteredObservatory
             {
                 foreach (AgentItem subartsariiv in artsariivs)
                 {
-                    subartsariiv.OverrideID(TrashID.CloneArtsariiv);
+                    subartsariiv.OverrideID(TrashID.CloneArtsariiv, agentData);
                 }
             }
-            agentData.Refresh();
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (NPC trashMob in _trashMobs)
@@ -138,7 +137,7 @@ internal class Artsariiv : ShatteredObservatory
             {
                 trashMob.OverrideName("Small " + trashMob.Character);
             }
-                        if (trashMob.IsSpecies(TrashID.MediumArtsariiv))
+            if (trashMob.IsSpecies(TrashID.MediumArtsariiv))
             {
                 trashMob.OverrideName("Medium " + trashMob.Character);
             }

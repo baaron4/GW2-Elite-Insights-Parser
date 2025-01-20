@@ -134,25 +134,21 @@ internal class BanditTrio : SalvationPass
     {
         // Cage
         AgentItem? cage = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 224100 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 238 && x.HitboxHeight == 300).FirstOrDefault();
+        // Reward Chest
+        FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
         if (cage != null)
         {
-            cage.OverrideType(AgentItem.AgentType.NPC);
-            cage.OverrideID(TrashID.Cage);
+            cage.OverrideType(AgentItem.AgentType.NPC, agentData);
+            cage.OverrideID(TrashID.Cage, agentData);
         }
-
         // Bombs
         var bombs = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 240);
         foreach (AgentItem bomb in bombs)
         {
-            bomb.OverrideType(AgentItem.AgentType.NPC);
-            bomb.OverrideID(TrashID.Bombs);
+            bomb.OverrideType(AgentItem.AgentType.NPC, agentData);
+            bomb.OverrideID(TrashID.Bombs, agentData);
         }
-
-        // Reward Chest
-        FindChestGadget(ChestID, agentData, combatData, ChestOfPrisonCampPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 1200 && agentItem.HitboxWidth == 100));
-
-        agentData.Refresh();
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override FightData.EncounterStartStatus GetEncounterStartStatus(CombatData combatData, AgentData agentData, FightData fightData)

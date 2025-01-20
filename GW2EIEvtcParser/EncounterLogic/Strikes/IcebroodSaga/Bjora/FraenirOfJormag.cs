@@ -148,8 +148,8 @@ internal class FraenirOfJormag : Bjora
         foreach (AgentItem boundElemental in boundElementals)
         {
             IEnumerable<CombatItem> boundElementalKilled = combatData.Where(x => x.SrcMatchesAgent(boundElemental) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
-            boundElemental.OverrideType(AgentItem.AgentType.NPC);
-            boundElemental.OverrideID(ArcDPSEnums.TrashID.BoundIcebroodElemental);
+            boundElemental.OverrideType(AgentItem.AgentType.NPC, agentData);
+            boundElemental.OverrideID(ArcDPSEnums.TrashID.BoundIcebroodElemental, agentData);
 
             // If a Bound Icebrood Elemental gets killed, the log contains a Health update event of 0
             if (boundElementalKilled.Any())
@@ -179,8 +179,7 @@ internal class FraenirOfJormag : Bjora
                 }
             }
         }
-        agentData.Refresh();
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

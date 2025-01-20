@@ -38,8 +38,9 @@ internal class UnknownFightLogic : FightLogic
         return GetGenericFightOffset(fightData);
     }
 
-    internal override void ComputeFightTargets(AgentData agentData, List<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
+        agentData.Refresh();
         int id = GenericTriggerID;
         AgentItem? agentItem = agentData.GetNPCsByID(id).FirstOrDefault();
         // Trigger ID is not NPC
