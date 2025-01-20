@@ -69,6 +69,7 @@ public class AgentData
     {
         if (agentAddress != 0)
         {
+            Refresh();
             if (_allAgentsByAgent.TryGetValue(agentAddress, out var agents))
             {
                 foreach (AgentItem a in agents)
@@ -85,6 +86,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetNPCsByID(int id)
     {
+        Refresh();
         if (_allNPCsByID.TryGetValue(id, out var list))
         {
             return list;
@@ -130,6 +132,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetGadgetsByID(int id)
     {
+        Refresh();
         if (_allGadgetsByID.TryGetValue(id, out var list))
         {
             return list;
@@ -166,6 +169,7 @@ public class AgentData
     {
         if (instid != 0)
         {
+            Refresh();
             if (_allAgentsByInstID.TryGetValue(instid, out var agents))
             {
                 foreach (AgentItem a in agents)
@@ -229,6 +233,7 @@ public class AgentData
 
     public IReadOnlyList<AgentItem> GetAgentByType(AgentItem.AgentType type)
     {
+        Refresh();
         if (_allAgentsByType.TryGetValue(type, out var list))
         {
             return list;
