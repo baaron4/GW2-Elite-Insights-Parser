@@ -187,11 +187,11 @@ internal static class EncounterLogicUtils
 
     internal delegate bool ChestAgentChecker(AgentItem agent);
 
-    internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
+    internal static AgentItem? FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
     {
         if (chestID == ArcDPSEnums.ChestID.None)
         {
-            return false;
+            return null;
         }
 
         var positions = combatData.Where(evt => {
@@ -235,9 +235,9 @@ internal static class EncounterLogicUtils
         if (chest != null)
         {
             chest.OverrideID(chestID, agentData);
-            return true;
+            return chest;
         }
-        return false;
+        return null;
     }
 
     internal static string? AddNameSuffixBasedOnInitialPosition(SingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)
