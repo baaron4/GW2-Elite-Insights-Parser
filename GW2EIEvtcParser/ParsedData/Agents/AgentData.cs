@@ -15,7 +15,7 @@ public class AgentData
     private Dictionary<int, List<AgentItem>> _allNPCsByID;
     private Dictionary<int, List<AgentItem>> _allGadgetsByID;
     private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
-    private bool _dirty = false;
+    private bool _dirty = true;
 #if DEBUG
     private Dictionary<string, List<AgentItem>> _allAgentsByName;
 #endif
