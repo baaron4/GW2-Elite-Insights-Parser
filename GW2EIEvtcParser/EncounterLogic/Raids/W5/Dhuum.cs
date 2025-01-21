@@ -290,7 +290,6 @@ internal class Dhuum : HallOfChains
         {
             if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out var firstApplier) && firstApplier != null)
             {
-                agentData.FlagAsDirty();
                 soul.OverrideType(AgentItem.AgentType.NPC, agentData);
                 soul.OverrideID(TrashID.YourSoul, agentData);
                 if (soul.GetFinalMaster() != firstApplier)

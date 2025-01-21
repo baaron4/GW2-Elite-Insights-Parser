@@ -141,7 +141,6 @@ internal class Slothasor : SalvationPass
                     copyEventsFrom.Add(aliveMushroom);
                 }
             }
-            agentData.FlagAsDirty();
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
