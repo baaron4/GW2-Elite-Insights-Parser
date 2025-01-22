@@ -121,9 +121,16 @@ internal static class NecromancerHelper
         EnterDeathShroud, ExitDeathShroud,
     ];
 
-    public static bool IsShroudTransform(long id)
+    public static bool IsDeathShroudTransform(long id)
     {
         return _shroudTransform.Contains(id);
+    }
+
+    public static bool IsShroudTransform(long id)
+    {
+        return IsDeathShroudTransform(id)
+            || ReaperHelper.IsReaperShroudTransform(id)
+            || HarbingerHelper.IsHarbingerShroudTransform(id);
     }
 
     private static HashSet<int> Minions =
