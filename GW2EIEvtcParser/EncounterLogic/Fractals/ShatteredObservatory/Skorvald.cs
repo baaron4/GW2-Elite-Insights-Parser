@@ -112,18 +112,12 @@ internal class Skorvald : ShatteredObservatory
         {
             fluxAnomalies.AddRange(agentData.GetNPCsByID(fluxIds[i]));
         }
-        var refresh = false;
         foreach (AgentItem fluxAnomaly in fluxAnomalies)
         {
             if (combatData.Any(x => x.SkillID == Determined762 && x.IsBuffApply() && x.DstMatchesAgent(fluxAnomaly)))
             {
-                refresh = true;
-                fluxAnomaly.OverrideID(TrashID.UnknownAnomaly);
+                fluxAnomaly.OverrideID(TrashID.UnknownAnomaly, agentData);
             }
-        }
-        if (refresh)
-        {
-            agentData.Refresh();
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         SingleActor skorvald = Targets.FirstOrDefault(x => x.IsSpecies(TargetID.Skorvald)) ?? throw new MissingKeyActorsException("Skorvald not found");

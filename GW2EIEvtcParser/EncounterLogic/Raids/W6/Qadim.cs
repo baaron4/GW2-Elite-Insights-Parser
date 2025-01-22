@@ -110,7 +110,6 @@ internal class Qadim : MythwrightGambit
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        bool refresh = false;
         var maxHPUpdates = combatData
             .Where(x => x.IsStateChange == StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
@@ -119,31 +118,25 @@ internal class Qadim : MythwrightGambit
         {
             if (maxHPUpdates.TryGetValue(14940, out var potentialPlatformAgentMaxHPs))
             {
-                var any = false;
                 var platformAgents = potentialPlatformAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth >= 2576 && x.HitboxWidth <= 2578);
                 foreach (AgentItem platform in platformAgents)
                 {
-                    any = true;
-                    platform.OverrideType(AgentItem.AgentType.NPC);
-                    platform.OverrideID(TrashID.QadimPlatform);
+                    platform.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    platform.OverrideID(TrashID.QadimPlatform, agentData);
                     platform.OverrideAwareTimes(platform.FirstAware, fightData.LogEnd);
                 }
-                refresh = refresh || any;
             }
         }
         IReadOnlyList<AgentItem> pyres = agentData.GetNPCsByID(TrashID.PyreGuardian);
         // Lamps
         if (maxHPUpdates.TryGetValue(14940, out var potentialLampAgentMaxHPs))
         {
-            var any = false;
             var lampAgents = potentialLampAgentMaxHPs.Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 202);
             foreach (AgentItem lamp in lampAgents)
             {
-                any = true;
-                lamp.OverrideType(AgentItem.AgentType.NPC);
-                lamp.OverrideID(TrashID.QadimLamp);
+                lamp.OverrideType(AgentItem.AgentType.NPC, agentData);
+                lamp.OverrideID(TrashID.QadimLamp, agentData);
             }
-            refresh = refresh || any;
         }
         // Pyres
         var protectPyrePositions = new Vector2[] { new(-8947, 14728), new(-10834, 12477) };
@@ -157,24 +150,17 @@ internal class Qadim : MythwrightGambit
                 var position = MovementEvent.GetPoint3D(positionEvt).XY();
                 if (protectPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
-                    pyre.OverrideID(TrashID.PyreGuardianProtect);
-                    refresh = true;
+                    pyre.OverrideID(TrashID.PyreGuardianProtect, agentData);
                 }
                 else if (stabilityPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
-                    pyre.OverrideID(TrashID.PyreGuardianStab);
-                    refresh = true;
+                    pyre.OverrideID(TrashID.PyreGuardianStab, agentData);
                 }
                 else if (resolutionRetaliationPyrePositions.Any(x => (x - position).Length() < InchDistanceThreshold))
                 {
-                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TrashID.PyreGuardianResolution : TrashID.PyreGuardianRetal);
-                    refresh = true;
+                    pyre.OverrideID(gw2Build >= GW2Builds.May2021Balance ? TrashID.PyreGuardianResolution : TrashID.PyreGuardianRetal, agentData);
                 }
             }
-        }
-        if (refresh)
-        {
-            agentData.Refresh();
         }
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (NPC target in TrashMobs)

@@ -100,7 +100,7 @@ internal class Golem : FightLogic
                 c.OverrideDstAgent(target.Agent);
             }
         }
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override void ComputePlayerCombatReplayActors(PlayerActor p, ParsedEvtcLog log, CombatReplay replay)

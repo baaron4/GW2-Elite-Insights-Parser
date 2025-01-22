@@ -290,15 +290,14 @@ internal class Dhuum : HallOfChains
         {
             if (dhuumPlayerToSoulTrackBuffApplications.TryGetValue(soul, out var firstApplier) && firstApplier != null)
             {
-                soul.OverrideType(AgentItem.AgentType.NPC);
-                soul.OverrideID(TrashID.YourSoul);
+                soul.OverrideType(AgentItem.AgentType.NPC, agentData);
+                soul.OverrideID(TrashID.YourSoul, agentData);
                 if (soul.GetFinalMaster() != firstApplier)
                 {
                     soul.SetMaster(firstApplier);
                 }
             }
         }
-        agentData.Refresh();
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 

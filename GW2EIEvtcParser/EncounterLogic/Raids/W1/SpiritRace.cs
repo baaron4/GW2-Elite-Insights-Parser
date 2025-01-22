@@ -124,22 +124,18 @@ internal class SpiritRace : SpiritVale
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         var maxHPs = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 1494000);
-        bool needRefresh = false;
+        bool needsDummy = true;
         foreach (CombatItem maxHP in maxHPs)
         {
             AgentItem candidate = agentData.GetAgent(maxHP.SrcAgent, maxHP.Time);
             if (candidate.Type == AgentItem.AgentType.Gadget)
             {
-                needRefresh = true;
-                candidate.OverrideID(ArcDPSEnums.TargetID.EtherealBarrier);
-                candidate.OverrideType(AgentItem.AgentType.NPC);
+                needsDummy = false;
+                candidate.OverrideID(ArcDPSEnums.TargetID.EtherealBarrier, agentData);
+                candidate.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
-        if (needRefresh)
-        {
-            agentData.Refresh();
-        } 
-        else
+        if (needsDummy)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, fightData.FightEnd, "Dummy Spirit Race", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
             Targetless = true;

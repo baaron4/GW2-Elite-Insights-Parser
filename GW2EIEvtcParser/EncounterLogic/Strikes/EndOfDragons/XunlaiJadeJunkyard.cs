@@ -199,12 +199,11 @@ internal class XunlaiJadeJunkyard : EndOfDragonsStrike
         foreach (AgentItem sanctuary in sanctuaryPrism)
         {
             IEnumerable<CombatItem> items = combatData.Where(x => x.SrcMatchesAgent(sanctuary) && x.IsStateChange == ArcDPSEnums.StateChange.HealthUpdate && HealthUpdateEvent.GetHealthPercent(x) == 0);
-            sanctuary.OverrideType(AgentItem.AgentType.NPC);
-            sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism);
+            sanctuary.OverrideType(AgentItem.AgentType.NPC, agentData);
+            sanctuary.OverrideID(ArcDPSEnums.TrashID.SanctuaryPrism, agentData);
             sanctuary.OverrideAwareTimes(fightData.LogStart, items.Any() ? items.First().Time : fightData.LogEnd);
         }
-        agentData.Refresh();
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     protected override void SetInstanceBuffs(ParsedEvtcLog log)

@@ -209,19 +209,17 @@ internal class SooWon : OpenWorldLogic
 
         foreach (AgentItem sooWon in sooWons)
         {
-            sooWon.OverrideType(AgentItem.AgentType.NPC);
-            sooWon.OverrideID(ArcDPSEnums.TargetID.SooWonOW);
+            sooWon.OverrideType(AgentItem.AgentType.NPC, agentData);
+            sooWon.OverrideID(ArcDPSEnums.TargetID.SooWonOW, agentData);
         }
 
         IReadOnlyList<AgentItem> sooWonTails = agentData.GetGadgetsByID(ArcDPSEnums.TrashID.SooWonTail);
         foreach (AgentItem sooWonTail in sooWonTails)
         {
-            sooWonTail.OverrideType(AgentItem.AgentType.NPC);
-            sooWonTail.OverrideID(ArcDPSEnums.TrashID.SooWonTail);
+            sooWonTail.OverrideType(AgentItem.AgentType.NPC, agentData);
+            sooWonTail.OverrideID(ArcDPSEnums.TrashID.SooWonTail, agentData);
         }
-
-        agentData.Refresh();
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override void CheckSuccess(CombatData combatData, AgentData agentData, FightData fightData,

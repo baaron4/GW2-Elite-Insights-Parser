@@ -180,8 +180,7 @@ internal class Xera : StrongholdOfTheFaithful
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        bool needsRefresh = false;
-        bool needsDummy = true;
+        bool mayRequireDummy = true;
         // find target
         if (!agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera, out var firstXera))
         {
@@ -194,35 +193,31 @@ internal class Xera : StrongholdOfTheFaithful
         var bloodstoneFragments = maxHPUpdates.Where(x => x.MaxHealth == 104580).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneFragments)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment);
-            needsRefresh = true;
+            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneFragment, agentData);
         }
         //
         var bloodstoneShardsMainFight = maxHPUpdates.Where(x => x.MaxHealth == 343620).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsMainFight)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardMainFight);
-            needsRefresh = true;
+            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardMainFight, agentData);
         }
         //
         var bloodstoneShardsButton = maxHPUpdates.Where(x => x.MaxHealth == 597600).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsButton)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardButton);
-            needsRefresh = true;
-            needsDummy = false;
+            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardButton, agentData);
+            mayRequireDummy = false;
         }
         //
         var bloodstoneShardsRift = maxHPUpdates.Where(x => x.MaxHealth == 747000).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem gadget in bloodstoneShardsRift)
         {
-            gadget.OverrideType(AgentItem.AgentType.NPC);
-            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardRift);
-            needsRefresh = true;
-            needsDummy = false;
+            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+            gadget.OverrideID(ArcDPSEnums.TrashID.BloodstoneShardRift, agentData);
+            mayRequireDummy = false;
         }
         //
         var chargedBloodStones = maxHPUpdates.Where(x => x.MaxHealth == 74700).Select(x => x.Src).Where(x => x.Type == AgentItem.AgentType.Gadget && x.LastAware > firstXera.LastAware);
@@ -232,18 +227,12 @@ internal class Xera : StrongholdOfTheFaithful
             {
                 continue;
             }
-            gadget.OverrideType(AgentItem.AgentType.NPC);
-            gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone);
-            needsRefresh = true;
+            gadget.OverrideType(AgentItem.AgentType.NPC, agentData);
+            gadget.OverrideID(ArcDPSEnums.TrashID.ChargedBloodstone, agentData);
         }
-        if (_hasPreEvent && needsDummy)
+        if (_hasPreEvent && mayRequireDummy)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, _xeraFirstPhaseStart, "Xera Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
-            needsRefresh = false; // AddCustomNPCAgent already refreshes
-        }
-        if (needsRefresh)
-        {
-            agentData.Refresh();
         }
         // find split
         if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TargetID.Xera2, out var secondXera))
@@ -260,7 +249,7 @@ internal class Xera : StrongholdOfTheFaithful
             firstXera.OverrideAwareTimes(firstXera.FirstAware, secondXera.LastAware);
             RedirectAllEvents(combatData, extensions, agentData, secondXera, firstXera);
         }
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // Xera gains hp at 50%, total hp of the encounter is not the initial hp of Xera
         SingleActor mainTarget = GetMainTarget() ?? throw new MissingKeyActorsException("Xera not found");
         mainTarget.SetManualHealth(24085950, new List<(long hpValue, double percent)>()

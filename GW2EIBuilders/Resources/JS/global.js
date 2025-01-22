@@ -132,6 +132,7 @@ const UIIcons = {
     ExclamationMark: "https://i.imgur.com/k3tdKEQ.png",
     QuestionMark: "https://i.imgur.com/nSYuby8.png",
     AgainstMoving: "https://i.imgur.com/11uAbd4.png",
+    GreenFlag: "https://assets.gw2dat.com/156954.png",
 };
 
 const specs = [

@@ -106,6 +106,15 @@ internal static class FirebrandHelper
         return _firebrandTomes.Contains(id);
     }
 
+    public static bool IsAutoAttack(ParsedEvtcLog log, long id)
+    {
+        var build = log.CombatData.GetGW2BuildEvent().Build;
+        var skillIds = new List<long>
+        {
+            Chapter1SearingSpell, Chapter1DesertBloomHeal, Chapter1UnflinchingCharge
+        };
+        return build >= GW2Builds.September2017PathOfFireRelease && skillIds.Contains(id);
+    }
 
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers = [];
 

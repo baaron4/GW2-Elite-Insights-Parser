@@ -214,7 +214,7 @@ internal class Matthias : SalvationPass
                 combatData.AddRange(copies);
             }
         }
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         foreach (SingleActor target in Targets)
         {
             if (target.IsSpecies(ArcDPSEnums.TrashID.MatthiasSacrificeCrystal))

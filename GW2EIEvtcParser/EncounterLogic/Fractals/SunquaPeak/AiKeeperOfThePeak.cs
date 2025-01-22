@@ -168,8 +168,7 @@ internal class AiKeeperOfThePeak : SunquaPeak
             else
             {
                 Extension = "drkai";
-                aiAgent.OverrideID(TargetID.AiKeeperOfThePeak2);
-                agentData.Refresh();
+                aiAgent.OverrideID(TargetID.AiKeeperOfThePeak2, agentData);
             }
         }
         else

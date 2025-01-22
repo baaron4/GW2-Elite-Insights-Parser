@@ -92,7 +92,6 @@ internal class UraTheSteamshrieker : MountBalrior
             .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraSulfuricGeyserSpawn.Equals(x.SrcAgent, x.DstAgent))
             .Select(x => new EffectGUIDEvent(x, evtcVersion))
             .FirstOrDefault();
-        bool refresh = false;
         if (sulfuricEffectGUID != null)
         {
             var sulfuricAgents = combatData
@@ -100,11 +99,10 @@ internal class UraTheSteamshrieker : MountBalrior
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget)
                 .Distinct();
-            refresh |= sulfuricAgents.Any();
             foreach (var sulfuricAgent in sulfuricAgents)
             {
-                sulfuricAgent.OverrideID(ArcDPSEnums.TrashID.SulfuricGeyser);
-                sulfuricAgent.OverrideType(AgentItem.AgentType.NPC);
+                sulfuricAgent.OverrideID(ArcDPSEnums.TrashID.SulfuricGeyser, agentData);
+                sulfuricAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
         var toxicEffectGUID = combatData.Where(x => x.IsStateChange == ArcDPSEnums.StateChange.EffectIDToGUID && EffectGUIDs.UraToxicGeyserSpawn.Equals(x.SrcAgent, x.DstAgent)).Select(x => new EffectGUIDEvent(x, evtcVersion)).FirstOrDefault();
@@ -115,11 +113,10 @@ internal class UraTheSteamshrieker : MountBalrior
                 .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
                 .Where(x => x.Type == AgentItem.AgentType.Gadget)
                 .Distinct();
-            refresh |= toxicAgents.Any();
             foreach (var toxicAgent in toxicAgents)
             {
-                toxicAgent.OverrideID(ArcDPSEnums.TrashID.ToxicGeyser);
-                toxicAgent.OverrideType(AgentItem.AgentType.NPC);
+                toxicAgent.OverrideID(ArcDPSEnums.TrashID.ToxicGeyser, agentData);
+                toxicAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
             }
         }
         // At this point, toxic and sulfur ones are properly flaggued 
@@ -129,28 +126,22 @@ internal class UraTheSteamshrieker : MountBalrior
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth > 100)
             .Distinct();
-        refresh |= titanGeysers.Any();
         foreach (var titanAgent in titanGeysers)
         {
-            titanAgent.OverrideID(ArcDPSEnums.TrashID.TitanspawnGeyser);
-            titanAgent.OverrideType(AgentItem.AgentType.NPC);
+            titanAgent.OverrideID(ArcDPSEnums.TrashID.TitanspawnGeyser, agentData);
+            titanAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         var bloodstoneShards = combatData
             .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate && MaxHealthUpdateEvent.GetMaxHealth(x) == 14940)
             .Select(x => agentData.GetAgent(x.SrcAgent, x.Time))
             .Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxHeight == 300 && x.HitboxWidth == 2 && x.FirstAware > 0)
             .Distinct();
-        refresh |= bloodstoneShards.Any();
         foreach (var shard in bloodstoneShards)
         {
-            shard.OverrideID(ArcDPSEnums.TrashID.UraGadget_BloodstoneShard);
-            shard.OverrideType(AgentItem.AgentType.NPC);
+            shard.OverrideID(ArcDPSEnums.TrashID.UraGadget_BloodstoneShard, agentData);
+            shard.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
-        if (refresh)
-        {
-            agentData.Refresh();
-        }
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
 
         int[] curFumarollers = [1, 1];
         foreach (SingleActor target in Targets)

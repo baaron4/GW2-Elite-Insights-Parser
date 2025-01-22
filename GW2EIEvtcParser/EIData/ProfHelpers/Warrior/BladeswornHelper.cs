@@ -35,6 +35,16 @@ internal static class BladeswornHelper
         return _gunsaberForm.Contains(id);
     }
 
+    public static bool IsAutoAttack(ParsedEvtcLog log, long id)
+    {
+        var build = log.CombatData.GetGW2BuildEvent().Build;
+        var skillIds = new List<long>
+        {
+            SwiftCut, SteelDivide, ExplosiveThrust
+        };
+        return build >= GW2Builds.EODBeta1 && skillIds.Contains(id);
+    }
+
     internal static readonly IReadOnlyList<DamageModifierDescriptor> OutgoingDamageModifiers =
     [
         new BuffOnActorDamageModifier(Mod_FierceAsFire, FierceAsFire, "Fierce as Fire", "1%", DamageSource.NoPets, 1.0, DamageType.Strike, DamageType.All, Source.Bladesworn, ByStack, TraitImages.FierceAsFire, DamageModifierMode.All).WithBuilds(GW2Builds.EODBeta4),

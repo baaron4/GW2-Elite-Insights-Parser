@@ -76,10 +76,9 @@ internal class Ensolyss : Nightmare
         {
             if (!mainEnsolyssMaxHPUpdates.Any(y => y.SrcMatchesAgent(ensolyss)))
             {
-                ensolyss.OverrideID(TargetID.FakeEnsolyss);
+                ensolyss.OverrideID(IgnoredSpecies, agentData);
             }
         }
-        agentData.Refresh();
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 

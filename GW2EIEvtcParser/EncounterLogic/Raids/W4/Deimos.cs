@@ -282,34 +282,27 @@ internal class Deimos : BastionOfThePenitent
         var demonicBonds = maxHPUpdates.Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Distinct().Where(x => x.Type == AgentItem.AgentType.Gadget);
         foreach (AgentItem demonicBond in demonicBonds)
         {
-            demonicBond.OverrideID(ArcDPSEnums.TrashID.DemonicBond);
-            demonicBond.OverrideType(AgentItem.AgentType.NPC);
+            demonicBond.OverrideID(ArcDPSEnums.TrashID.DemonicBond, agentData);
+            demonicBond.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         return demonicBonds.Any();
     }
 
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        bool needsRefresh = _hasPreEvent && HandleDemonicBonds(agentData, combatData);
-        bool needsDummy = !needsRefresh;
+        bool needsDummy = _hasPreEvent && !HandleDemonicBonds(agentData, combatData);
         AgentItem? shackledPrisoner = GetShackledPrisoner(agentData, combatData);
         AgentItem? saul = agentData.GetNPCsByID(ArcDPSEnums.TrashID.Saul).FirstOrDefault();
         if (shackledPrisoner != null && (saul == null || saul.FirstAware > shackledPrisoner.FirstAware + PreEventConsiderationConstant))
         {
-            shackledPrisoner.OverrideID(ArcDPSEnums.TrashID.ShackledPrisoner);
-            shackledPrisoner.OverrideType(AgentItem.AgentType.NPC);
-            needsRefresh = true;
+            shackledPrisoner.OverrideID(ArcDPSEnums.TrashID.ShackledPrisoner, agentData);
+            shackledPrisoner.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         if (_hasPreEvent && needsDummy)
         {
             agentData.AddCustomNPCAgent(fightData.FightStart, _deimos100PercentTime, "Deimos Pre Event", Spec.NPC, ArcDPSEnums.TargetID.DummyTarget, true);
-            needsRefresh = false; // AddCustomNPCAgent already refreshes
         }
-        if (needsRefresh)
-        {
-            agentData.Refresh();
-        }
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         // Find target
         SingleActor deimos = Targets.FirstOrDefault(x => x.IsSpecies(ArcDPSEnums.TargetID.Deimos)) ?? throw new MissingKeyActorsException("Deimos not found");
         // Deimos gadgets via attack targets

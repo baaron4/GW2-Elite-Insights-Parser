@@ -53,20 +53,16 @@ internal class Eparch : LonelyTower
         });
         foreach (var dummyEparch in dummyEparchs)
         {
-            dummyEparch.OverrideID(TrashID.EparchLonelyTowerDummy);
+            dummyEparch.OverrideID(IgnoredSpecies, agentData);
         }
         //
         var riftAgents = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 149400 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.FirstAware > fightData.FightStart + 5000);
         foreach (var riftAgent in riftAgents)
         {
-            riftAgent.OverrideID(TrashID.KryptisRift);
-            riftAgent.OverrideType(AgentItem.AgentType.NPC);
+            riftAgent.OverrideID(TrashID.KryptisRift, agentData);
+            riftAgent.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
         //
-        if (riftAgents.Any() || dummyEparchs.Any())
-        {
-            agentData.Refresh();
-        }
 
         base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         int[] miniBossCount = [1, 1, 1, 1];

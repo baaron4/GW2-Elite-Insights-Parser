@@ -141,9 +141,8 @@ internal class Slothasor : SalvationPass
                     copyEventsFrom.Add(aliveMushroom);
                 }
             }
-            agentData.Refresh();
         }
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override void ComputeNPCCombatReplayActors(NPC target, ParsedEvtcLog log, CombatReplay replay)

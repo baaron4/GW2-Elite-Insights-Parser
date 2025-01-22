@@ -56,11 +56,10 @@ internal class Freezie : FestivalStrikeMissionLogic
         var snowPiles = combatData.Where(x => MaxHealthUpdateEvent.GetMaxHealth(x) == 0 && x.IsStateChange == StateChange.MaxHealthUpdate).Select(x => agentData.GetAgent(x.SrcAgent, x.Time)).Where(x => x.Type == AgentItem.AgentType.Gadget && x.HitboxWidth == 2 && x.HitboxHeight == 300);
         foreach (AgentItem pile in snowPiles)
         {
-            pile.OverrideType(AgentItem.AgentType.NPC);
-            pile.OverrideID(TrashID.SnowPile);
+            pile.OverrideType(AgentItem.AgentType.NPC, agentData);
+            pile.OverrideID(TrashID.SnowPile, agentData);
         }
-        agentData.Refresh();
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

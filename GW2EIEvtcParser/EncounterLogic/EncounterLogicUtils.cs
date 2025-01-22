@@ -9,25 +9,28 @@ namespace GW2EIEvtcParser.EncounterLogic;
 
 internal static class EncounterLogicUtils
 {
-    internal static void RegroupSameInstidNPCsByID(int id, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
+    internal static void RegroupSameInstidNPCsByID(ReadOnlySpan<int> ids, AgentData agentData, IReadOnlyList<CombatItem> combatItems, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
-        var agentsByInstid = agentData.GetNPCsByID(id).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
-        var toRemove = new List<AgentItem>(4 * agentsByInstid.Count);
-        var toAdd = new List<AgentItem>(agentsByInstid.Count);
-        foreach (var pair in agentsByInstid)
+        var toRemove = new List<AgentItem>(10);
+        var toAdd = new List<AgentItem>(3);
+        foreach (var id in ids)
         {
-            var agents = pair.Value;
-            if (agents.Count > 1)
+            var agentsByInstid = agentData.GetNPCsByID(id).GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var pair in agentsByInstid)
             {
-                AgentItem firstItem = agents.First();
-                var newTargetAgent = new AgentItem(firstItem);
-                newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
-                foreach (AgentItem agentItem in agents)
+                var agents = pair.Value;
+                if (agents.Count > 1)
                 {
-                    RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
+                    AgentItem firstItem = agents.First();
+                    var newTargetAgent = new AgentItem(firstItem);
+                    newTargetAgent.OverrideAwareTimes(agents.Min(x => x.FirstAware), agents.Max(x => x.LastAware));
+                    foreach (AgentItem agentItem in agents)
+                    {
+                        RedirectAllEvents(combatItems, extensions, agentData, agentItem, newTargetAgent);
+                    }
+                    toRemove.AddRange(agents);
+                    toAdd.Add(newTargetAgent);
                 }
-                toRemove.AddRange(agents);
-                toAdd.Add(newTargetAgent);
             }
         }
         agentData.ReplaceAgents(toRemove, toAdd);
@@ -184,11 +187,11 @@ internal static class EncounterLogicUtils
 
     internal delegate bool ChestAgentChecker(AgentItem agent);
 
-    internal static bool FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
+    internal static AgentItem? FindChestGadget(ArcDPSEnums.ChestID chestID, AgentData agentData, IReadOnlyList<CombatItem> combatData, Vector3 chestPosition, ChestAgentChecker? chestChecker = null)
     {
         if (chestID == ArcDPSEnums.ChestID.None)
         {
-            return false;
+            return null;
         }
 
         var positions = combatData.Where(evt => {
@@ -231,10 +234,10 @@ internal static class EncounterLogicUtils
         var chest = candidates.FirstOrDefault(x => chestChecker == null || chestChecker(x));
         if (chest != null)
         {
-            chest.OverrideID(chestID);
-            return true;
+            chest.OverrideID(chestID, agentData);
+            return chest;
         }
-        return false;
+        return null;
     }
 
     internal static string? AddNameSuffixBasedOnInitialPosition(SingleActor target, IReadOnlyList<CombatItem> combatData, IReadOnlyCollection<(string, Vector2)> positionData, float maxDiff = InchDistanceThreshold)

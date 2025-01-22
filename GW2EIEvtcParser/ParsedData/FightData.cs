@@ -260,10 +260,7 @@ public class FightData
                                 {
                                     return new HarvestTemple((int)ArcDPSEnums.TargetID.GadgetTheDragonVoid1);
                                 }
-                                else
-                                {
-                                    return new UnknownFightLogic(id);
-                                }
+                                break;
                         }
                         break;
                 }

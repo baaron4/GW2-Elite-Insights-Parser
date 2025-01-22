@@ -96,11 +96,10 @@ internal class DecimaTheStormsinger : MountBalrior
             .Distinct();
         foreach (var conduit in conduitsGadgets)
         {
-            conduit.OverrideID(ArcDPSEnums.TrashID.EnlightenedConduitGadget);
-            conduit.OverrideType(AgentItem.AgentType.NPC);
+            conduit.OverrideID(ArcDPSEnums.TrashID.EnlightenedConduitGadget, agentData);
+            conduit.OverrideType(AgentItem.AgentType.NPC, agentData);
         }
-        agentData.Refresh();
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
     }
 
     internal override List<PhaseData> GetPhases(ParsedEvtcLog log, bool requirePhases)

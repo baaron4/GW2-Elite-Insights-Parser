@@ -209,13 +209,9 @@ internal static class RevenantHelper
         }
         foreach (AgentItem tablet in allTablets)
         {
-            tablet.OverrideType(AgentItem.AgentType.NPC);
-            tablet.OverrideID(MinionID.VentariTablet);
+            tablet.OverrideType(AgentItem.AgentType.NPC, agentData);
+            tablet.OverrideID(MinionID.VentariTablet, agentData);
             tablet.OverrideName("Ventari's Tablet");
-        }
-        if (allTablets.Count != 0)
-        {
-            agentData.Refresh();
         }
     }
 

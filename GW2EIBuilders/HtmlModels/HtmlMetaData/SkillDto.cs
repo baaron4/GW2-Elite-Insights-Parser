@@ -48,7 +48,7 @@ internal class SkillDto : IDItemDto
 
     public SkillDto(SkillItem skill, ParsedEvtcLog log) : base(skill, log)
     {
-        Aa = skill.AA;
+        Aa = skill.IsAutoAttack(log);
         IsSwap = skill.IsSwap;
         NotAccurate = log.SkillData.IsNotAccurate(skill.ID);
         GearProc = log.SkillData.IsGearProc(skill.ID);

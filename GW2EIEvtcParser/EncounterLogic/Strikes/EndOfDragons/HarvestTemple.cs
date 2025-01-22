@@ -375,7 +375,6 @@ internal class HarvestTemple : EndOfDragonsStrike
     internal override void EIEvtcParse(ulong gw2Build, EvtcVersionEvent evtcVersion, FightData fightData, AgentData agentData, List<CombatItem> combatData, IReadOnlyDictionary<uint, ExtensionHandler> extensions)
     {
         FindChestGadget(ChestID, agentData, combatData, GrandStrikeChestPosition, (agentItem) => agentItem.HitboxHeight == 0 || (agentItem.HitboxHeight == 500 && agentItem.HitboxWidth == 2));
-        bool needRefreshAgentPool = false;
         var maxHPEvents = combatData
             .Where(x => x.IsStateChange == ArcDPSEnums.StateChange.MaxHealthUpdate)
             .Select(x => new MaxHealthUpdateEvent(x, agentData))
@@ -383,20 +382,14 @@ internal class HarvestTemple : EndOfDragonsStrike
         //
         if (maxHPEvents.TryGetValue(491550, out var dragonOrbMaxHPs))
         {
-            var any = false;
             foreach (MaxHealthUpdateEvent dragonOrbMaxHP in dragonOrbMaxHPs)
             {
-                any = true;
                 AgentItem dragonOrb = dragonOrbMaxHP.Src;
                 if (dragonOrb != _unknownAgent && combatData.Count(x => x.IsStateChange == ArcDPSEnums.StateChange.Velocity && x.SrcMatchesAgent(dragonOrb)) > 5)
                 {
                     dragonOrb.OverrideName("Dragon Orb");
-                    dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb);
+                    dragonOrb.OverrideID(ArcDPSEnums.TrashID.DragonEnergyOrb, agentData);
                 }
-            }
-            if (any)
-            {
-                needRefreshAgentPool = true;
             }
         }
         //
@@ -482,15 +475,13 @@ internal class HarvestTemple : EndOfDragonsStrike
         {
             if (combatData.Where(x => x.SkillID == VoidShell && x.IsBuffApply() && x.SrcMatchesAgent(voidAmal)).Any())
             {
-                voidAmal.OverrideID(ArcDPSEnums.TrashID.PushableVoidAmalgamate);
-                needRefreshAgentPool = true;
+                voidAmal.OverrideID(ArcDPSEnums.TrashID.PushableVoidAmalgamate, agentData);
             }
         }
         AgentItem dragonBodyVoidAmalgamate = voidAmalgamates.MaxBy(x => x.LastAware - x.FirstAware);
         if (dragonBodyVoidAmalgamate != null)
         {
-            dragonBodyVoidAmalgamate.OverrideID(ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate);
-            needRefreshAgentPool = true;
+            dragonBodyVoidAmalgamate.OverrideID(ArcDPSEnums.TrashID.DragonBodyVoidAmalgamate, agentData);
         }
         // Gravity Ball - Timecaster gadget
         if (agentData.TryGetFirstAgentItem(ArcDPSEnums.TrashID.VoidTimeCaster, out var timecaster))
@@ -503,10 +494,9 @@ internal class HarvestTemple : EndOfDragonsStrike
                 var gravityBalls_ = gravityBalls.Where(x => candidateVelocities.Any(y => Math.Abs(MovementEvent.GetPointXY(y).Length() - referenceLength) < 10));
                 foreach (AgentItem ball in gravityBalls_)
                 {
-                    ball.OverrideType(AgentItem.AgentType.NPC);
-                    ball.OverrideID(ArcDPSEnums.TrashID.GravityBall);
+                    ball.OverrideType(AgentItem.AgentType.NPC, agentData);
+                    ball.OverrideID(ArcDPSEnums.TrashID.GravityBall, agentData);
                     ball.SetMaster(timecaster);
-                    needRefreshAgentPool = true;
                 }
             }
         }
@@ -519,19 +509,14 @@ internal class HarvestTemple : EndOfDragonsStrike
                     .Where(agent => agent.IsNPC && agent.FirstAware >= jormagAgent.FirstAware && agent.LastAware <= jormagAgent.LastAware && combatData.Count(evt => evt.SrcMatchesAgent(agent) && evt.IsStateChange == ArcDPSEnums.StateChange.Velocity && MovementEvent.GetPointXY(evt) != default) > 2);
                 foreach (AgentItem frostBeam in frostBeams)
                 {
-                    frostBeam.OverrideID(ArcDPSEnums.TrashID.JormagMovingFrostBeam);
-                    frostBeam.OverrideType(AgentItem.AgentType.NPC);
+                    frostBeam.OverrideID(ArcDPSEnums.TrashID.JormagMovingFrostBeam, agentData);
+                    frostBeam.OverrideType(AgentItem.AgentType.NPC, agentData);
                     frostBeam.SetMaster(jormagAgent);
-                    needRefreshAgentPool = true;
                 }
                 var knownFrostBeams = agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamNorth).ToList();
                 knownFrostBeams.AddRange(agentData.GetNPCsByID(ArcDPSEnums.TrashID.JormagMovingFrostBeamCenter));
                 knownFrostBeams.ForEach(x => x.SetMaster(jormagAgent));
             }
-        }
-        if (needRefreshAgentPool)
-        {
-            agentData.Refresh();
         }
         // Add missing agents
         for (int i = index; i < idsToUse.Count; i++)
@@ -539,7 +524,7 @@ internal class HarvestTemple : EndOfDragonsStrike
             agentData.AddCustomNPCAgent(int.MaxValue - idsToUse.Count + i, int.MaxValue, "Dragonvoid", Spec.NPC, idsToUse[i], false);
         }
         //
-        ComputeFightTargets(agentData, combatData, extensions);
+        base.EIEvtcParse(gw2Build, evtcVersion, fightData, agentData, combatData, extensions);
         //
         int purificationID = 0;
         bool needRedirect = false;
