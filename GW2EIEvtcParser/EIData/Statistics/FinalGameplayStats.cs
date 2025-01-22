@@ -89,7 +89,7 @@ public class FinalGameplayStats
             }
             long value = Math.Min(cl.EndTime, end) - Math.Max(cl.Time, start);
             SkillCastUptime += value;
-            if (!cl.Skill.AA)
+            if (!cl.Skill.IsAutoAttack(log))
             {
                 SkillCastUptimeNoAA += value;
             }

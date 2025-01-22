@@ -123,9 +123,7 @@ internal static class NecromancerHelper
 
     public static bool IsShroudTransform(long id)
     {
-        return _shroudTransform.Contains(id)
-            || ReaperHelper.IsReaperShroudTransform(id)
-            || HarbingerHelper.IsHarbingerShroudTransform(id);
+        return _shroudTransform.Contains(id);
     }
 
     private static HashSet<int> Minions =
