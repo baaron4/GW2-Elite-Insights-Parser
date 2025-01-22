@@ -16,7 +16,7 @@ internal static class JsonLogBuilder
         var skillDesc = new SkillDesc
         {
             Name = skill.Name,
-            AutoAttack = skill.AA,
+            AutoAttack = skill.IsAutoAttack(log),
             Icon = skill.Icon,
             CanCrit = SkillItem.CanCrit(skill.ID, log.LogData.GW2Build),
             IsSwap = skill.IsSwap,

@@ -14,6 +14,7 @@ public static class ArcDPSEnums
         internal const ulong February2017Balance = 72781;
         internal const ulong May2017Balance = 76706;
         internal const ulong July2017ShatteredObservatoryRelease = 79873;
+        internal const ulong September2017PathOfFireRelease = 82356;
         internal const ulong December2017Balance = 84832;
         internal const ulong February2018Balance = 86181;
         internal const ulong May2018Balance = 88541;
