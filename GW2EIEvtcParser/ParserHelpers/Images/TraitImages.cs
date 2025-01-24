@@ -104,6 +104,7 @@ internal static class TraitImages
     public const string FencersFinesse = "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png";
     public const string Mistrust = "https://wiki.guildwars2.com/images/5/5f/Mistrust.png";
     public const string IllusionaryDefense = "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png";
+    public const string NomadsEndurance = "https://render.guildwars2.com/file/EC4E5BEAD50EC6A5A91C312EE521B7C6EC56393B/1769961.png";
     #endregion
     #region Necromancer
     public const string VampiricPresence = "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";

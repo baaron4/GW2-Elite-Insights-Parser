@@ -325,5 +325,6 @@ public static class DamageModifierIDs
     public const int Mod_RelicOfFireworks = 312;
     public const int Mod_InspiringVirtue = 313;
     public const int Mod_RelicOfMountBalrior = 314;
+    public const int Mod_NomadsEndurance = 315;
 }
 
