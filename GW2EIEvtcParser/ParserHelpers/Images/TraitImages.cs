@@ -186,6 +186,7 @@ internal static class TraitImages
     public const string SelflessAmplification = "https://wiki.guildwars2.com/images/2/23/Selfless_Amplification.png";
     public const string ThrillOfCombat = "https://wiki.guildwars2.com/images/3/30/Thrill_of_Combat.png";
     public const string SteadfastRejuvenation = "https://wiki.guildwars2.com/images/b/bf/Steadfast_Rejuvenation.png";
+    public const string AllForOne = "https://render.guildwars2.com/file/9398D8F8E764A23596E17EDAA35B99961D62F061/1769993.png";
     #endregion
     #region Thief
     public const string ExposedWeakness = "https://wiki.guildwars2.com/images/0/02/Exposed_Weakness.png";

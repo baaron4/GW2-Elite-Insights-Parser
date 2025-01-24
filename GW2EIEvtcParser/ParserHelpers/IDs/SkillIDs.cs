@@ -4317,6 +4317,7 @@ public static class SkillIDs
     public const long RazorclawsRageSkillEnhanced = 72363;
     public const long BreakrazorsBastionSkillMinionReworked = 72365;
     public const long DarkrazorsDaringSkillEnhanced = 72366;
+    public const long AllForOne = 73157;
     public const long RazorclawsRageSkillMinionReworked = 72370;
     public const long SoulcleavesSummitHitReworked = 72376;
     public const long RazorclawsRageHitReworked = 72388;
