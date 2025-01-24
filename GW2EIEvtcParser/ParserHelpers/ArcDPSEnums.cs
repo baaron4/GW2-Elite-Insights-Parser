@@ -75,6 +75,7 @@ public static class ArcDPSEnums
         internal const ulong October2024Balance = 169300;
         internal const ulong November2024MountBalriorRelease = 171452;
         internal const ulong December2024MountBalriorNerfs = 172309;
+        internal const ulong February2025BalancePatch = ulong.MaxValue;
         //
         internal const ulong EndOfLife = ulong.MaxValue;
     }
