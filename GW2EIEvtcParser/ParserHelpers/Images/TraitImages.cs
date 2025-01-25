@@ -154,7 +154,7 @@ internal static class TraitImages
     public const string SecondSkin = "https://wiki.guildwars2.com/images/5/51/Second_Skin.png";
     public const string ImplacableFoe = "https://wiki.guildwars2.com/images/7/79/Implacable_Foe.png";
     public const string Spotter = "https://wiki.guildwars2.com/images/b/b0/Spotter.png";
-    public const string OpeningStrike = "https://wiki.guildwars2.com/images/4/44/Opening_Strike_%28effect%29.png";
+    public const string OpeningStrike = "https://render.guildwars2.com/file/A537B362D8AC54BC7907E050B596BA93E4CBE5F2/1012627.png";
     public const string QuickDraw = "https://wiki.guildwars2.com/images/3/39/Quick_Draw.png";
     public const string SteadyFocus = "https://wiki.guildwars2.com/images/2/2f/Steady_Focus.png";
     public const string HuntersTactics = "https://render.guildwars2.com/file/44D4631FB427F09BE5B300BE0F537E6F2126BA0B/1012653.png";
@@ -181,6 +181,14 @@ internal static class TraitImages
     public const string FerociousSymbiosis = "https://wiki.guildwars2.com/images/7/73/Ferocious_Symbiosis.png";
     public const string VowOfTheUntamed = "https://wiki.guildwars2.com/images/b/bd/Vow_of_the_Untamed.png";
     public const string UnleashedPower = "https://wiki.guildwars2.com/images/1/1d/Unleashed_Power.png";
+    public const string WindborneNotes = "https://render.guildwars2.com/file/E4A570C5B180415A581007A004037FEBFC99CE4B/1012635.png";
+    public const string InvigoratingBond = "https://render.guildwars2.com/file/625D22F52902A007CA6A037D0149251A2943C56E/1012638.png";
+    public const string RuggedGrowth = "https://render.guildwars2.com/file/C13D29745FB34B9B2C803ABAB92E011EEC1E4204/1012665.png";
+    public const string CultivatedSynergy = "https://render.guildwars2.com/file/9DAD4D2E74CDD1C5196848BCBE63BC12CE534B68/1128531.png";
+    public const string BloodMoon = "https://render.guildwars2.com/file/65C6E74A0A26786A243867FB79C63DAF0650CEDB/1128532.png";
+    public const string LiveVicariously = "https://render.guildwars2.com/file/F2A3C305087AFA5141FABEF5FB09AD05CCE8A46A/1128540.png";
+    public const string NaturalHealing = "https://render.guildwars2.com/file/E10A27535DAC0BBFFCB205BFBBC9D30F68BE0C07/1012611.png";
+    public const string PredatorsCunning = "https://render.guildwars2.com/file/25054EAF081EAB14A6B5C53197312F2AE6C32A17/1769977.png";
     #endregion Ranger
     #region Revenant
     public const string CloseQuarters = "https://wiki.guildwars2.com/images/4/43/Close_Quarters.png";
