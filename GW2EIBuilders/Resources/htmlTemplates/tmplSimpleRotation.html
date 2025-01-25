@@ -3,43 +3,64 @@
         <div class="d-flex flex-row justify-content-center mt-1 mb-1">
             <ul class="nav nav-pills mr-1 scale85">
                 <li class="nav-item">
-                    <a class="nav-link" @click="autoattack = !autoattack" :class="{active: autoattack}">Show auto
-                        attacks</a>
+                    <a class="nav-link" @click="autoattack = !autoattack"
+                       :class="{active: autoattack}">Show auto attacks</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="hideInterruptedAA = !hideInterruptedAA"
-                        :class="{active: hideInterruptedAA}">Hide interrupted auto attacks</a>
+                       :class="{active: hideInterruptedAA}">Hide interrupted auto attacks</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="hideSmallTime = !hideSmallTime"
-                        :class="{active: hideSmallTime}">Hide < 10ms</a>
+                       :class="{active: hideSmallTime}">Hide < 10ms</a>
                 </li>
             </ul>
             <ul class="nav nav-pills ml-1 mr-1 scale85">
                 <li class="nav-item">
                     <a class="nav-link" @click="hideInstantCast = !hideInstantCast"
-                        :class="{active: hideInstantCast}">Hide all instant cast</a>
+                       :class="{active: hideInstantCast}">Hide all instant cast</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="hideInstantCastSkill = !hideInstantCastSkill"
-                        :class="{active: hideInstantCastSkill, disabled: hideInstantCast}">Hide instant cast skills</a>
+                       :class="{active: hideInstantCastSkill, disabled: hideInstantCast}">Hide instant cast skills</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="hideGearProc = !hideGearProc"
-                        :class="{active: hideGearProc, disabled: hideInstantCast}">Hide gear procs</a>
+                       :class="{active: hideGearProc, disabled: hideInstantCast}">Hide gear procs</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" @click="hideTraitProc = !hideTraitProc"
-                        :class="{active: hideTraitProc, disabled: hideInstantCast}">Hide trait procs</a>
+                       :class="{active: hideTraitProc, disabled: hideInstantCast}">Hide trait procs</a>
                 </li>
             </ul>
             <ul class="nav nav-pills ml-1 scale85">
                 <li class="nav-item">
-                    <a class="nav-link" @click="small = !small" :class="{active: small}">Small icons</a>
+                    <a class="nav-link" @click="small = !small"
+                       :class="{active: small}">Small icons</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" @click="smallAA = !smallAA" :class="{active: smallAA}">Small auto attack
-                        icons</a>
+                    <a class="nav-link" @click="smallAA = !smallAA"
+                       :class="{active: smallAA}">Small auto attack icons</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex flex-row justify-content-center mt-1 mb-1">
+            <ul class="nav nav-pills mr-1 ml-1 scale85">
+                <li class="nav-item rot-animfull">
+                    <a class="nav-link" @click="aftercastBorder = !aftercastBorder"
+                       :class="{active: aftercastBorder}" data-original-title="Toggle full after cast border">Full After Cast</a>
+                </li>
+                <li class="nav-item rot-cancelled">
+                    <a class="nav-link" @click="interruptedBorder = !interruptedBorder"
+                       :class="{active: interruptedBorder}" data-original-title="Toggle interrupted cast border">Interrupted</a>
+                </li>
+                <li class="nav-item rot-instant">
+                    <a class="nav-link" @click="instantBorder = !instantBorder"
+                       :class="{active: instantBorder}" data-original-title="Toggle instant cast border">Instant</a>
+                </li>
+                <li class="nav-item rot-unknown">
+                    <a class="nav-link" @click="unknownBorder = !unknownBorder"
+                       :class="{active: unknownBorder}" data-original-title="Toggle unknown cast border">Unknown</a>
                 </li>
             </ul>
         </div>
@@ -48,22 +69,23 @@
                 Skills <span class="caret"></span>
             </a>
             <ul class="dropdown-menu p-2 font-weight-normal scrollabledropdown" style="min-width: 165px; max-width: 165px;">
-                <div class="d-flex flex-column justify-content-center align-items-center mb-1"
-                    style="border-bottom: 2px solid #bbb;">
-                    <li>
-                        <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
-                            @click="setAllSelectedSkills(true)" @click.stop="stopClickEvent">Select all</button>
-                    </li>
-                    <li class="mb-1">
-                        <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
-                            @click="setAllSelectedSkills(false)" @click.stop="stopClickEvent">Deselect all</button>
-                    </li>
-                </div>
+                <li>
+                    <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                            @click="setAllSelectedSkills(true)" @click.stop="stopClickEvent">
+                        Select all
+                    </button>
+                </li>
+                <li class="mb-1">
+                    <button style="width:130px; padding: 0.4rem 0.4rem;" type="button" class="btn btn-primary btn-sm"
+                            @click="setAllSelectedSkills(false)" @click.stop="stopClickEvent">
+                        Deselect all
+                    </button>
+                </li>
                 <li v-for="(skill, index) in skillList" :key="index">
                     <input :id="'simple-rotation-player-' + index  + '-' + phaseindex" type="checkbox"
-                        v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
+                           v-model="selectedSkills['s' + skill.id]" @click.stop="stopClickEvent" />
                     <label :for="'simple-rotation-player-' + index + '-' + phaseindex" @click.stop="stopClickEvent"
-                        style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">
+                           style="font-size: 1.0em; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 130px; margin-top: 2px; margin-left: 5px; position: absolute;">
                         <img class="icon" :src="getSkill(skill.id).icon">
                         {{skill.name}}
                     </label>
@@ -71,29 +93,8 @@
             </ul>
         </div>
         <span class="rot-skill" v-for="cast in rotation" :class="getCastClass(cast)" v-show="showSkill(cast)" @click="toggleHighlight(cast.skill)">
-            <img class="rot-icon" :class="getIconClass(cast)" :src="cast.skill.icon" :data-original-title="getTooltip(cast)"/>
+            <img class="rot-icon" :class="getIconClass(cast)" :src="cast.skill.icon" :data-original-title="getTooltip(cast)" />
         </span>
-        <div class="card mt-2">
-            <div class="card-body container">
-                <p><u>Outline</u></p>
-                <span class="mr-1"
-                    style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#00FF00; color:#000000">
-                    Full After Cast
-                </span>
-                <span class="mr-1"
-                    style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#FF0000; color:#000000">
-                    Interrupted
-                </span>
-                <span class="mr-1"
-                    style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#00FFFF; color:#000000">
-                    Instant
-                </span>
-                <span class="mr-1"
-                    style="padding: 2px; background-color:#999999; border-style:solid; border-width: 3px; border-color:#FFFF00; color:#000000">
-                    Unknown
-                </span>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -115,12 +116,12 @@
                     if (!castCounts[skillID]) {
                         castCounts[skillID] = rotation.filter((cast) => cast[1] === skillID).length;
                         if (!skill.isSwap) {
-                            skillList.push({name: skill.name, id: skillID});
-                            selectedSkills['s'+skillID] = true;
+                            skillList.push({ name: skill.name, id: skillID });
+                            selectedSkills['s' + skillID] = true;
                         }
                     }
                 }
-                skillList.sort((x,y) => {
+                skillList.sort((x, y) => {
                     if (x.name < y.name) {
                         return -1;
                     }
@@ -129,7 +130,7 @@
                     }
                     return 0;
                 });
-                phaseData.push({skillList: skillList, castCounts: castCounts});
+                phaseData.push({ skillList: skillList, castCounts: castCounts });
             }
             return {
                 autoattack: true,
@@ -141,6 +142,10 @@
                 hideTraitProc: false,
                 hideGearProc: false,
                 hideSmallTime: true,
+                aftercastBorder: true,
+                interruptedBorder: true,
+                instantBorder: true,
+                unknownBorder: true,
                 highlightedSkill: null,
                 selectedSkills: selectedSkills,
                 phaseData: phaseData,
@@ -168,13 +173,13 @@
                     };
                 });
             },
-            RotationStatus: function() {
+            RotationStatus: function () {
                 return RotationStatus;
             },
-            skillList: function() {
+            skillList: function () {
                 return this.phaseData[this.phaseindex].skillList;
             },
-            castCounts: function() {
+            castCounts: function () {
                 return this.phaseData[this.phaseindex].castCounts;
             }
         },
@@ -185,7 +190,7 @@
             getSkill: function (id) {
                 return findSkill(false, id);
             },
-            isSwap: function(id) {
+            isSwap: function (id) {
                 return findSkill(false, id).isSwap;
             },
             showSkill: function (cast) {
@@ -193,7 +198,7 @@
                 if (skill.isSwap) {
                     return true;
                 }
-                if (!this.selectedSkills['s'+skill.id]) {
+                if (!this.selectedSkills['s' + skill.id]) {
                     return false;
                 }
                 var aa = skill.aa;
@@ -232,10 +237,10 @@
             },
             getIconClass(cast) {
                 return {
-                    'rot-cancelled': cast.type === RotationStatus.CANCEL,
-                    'rot-animfull': cast.type === RotationStatus.FULL,
-                    'rot-unknown': cast.type === RotationStatus.UNKNOWN,
-                    'rot-instant': cast.type === RotationStatus.INSTANT
+                    'rot-cancelled': this.interruptedBorder && cast.type === RotationStatus.CANCEL,
+                    'rot-animfull': this.aftercastBorder && cast.type === RotationStatus.FULL,
+                    'rot-unknown': this.unknownBorder && cast.type === RotationStatus.UNKNOWN,
+                    'rot-instant': this.instantBorder && cast.type === RotationStatus.INSTANT
                 };
             },
             getTooltip(cast) {
