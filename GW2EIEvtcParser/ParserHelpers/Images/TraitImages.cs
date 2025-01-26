@@ -241,6 +241,9 @@ internal static class TraitImages
     public const string FluidStrikes = "https://wiki.guildwars2.com/images/b/bf/Fluid_Strikes.png";
     public const string Hiddenkiller = "https://wiki.guildwars2.com/images/e/ec/Hidden_Killer.png";
     public const string InstantReflexes = "https://wiki.guildwars2.com/images/7/7d/Instant_Reflexes.png";
+    public const string TraversingDusk = "https://render.guildwars2.com/file/DCA50F003BB8C0C5AC302A990BEEFF4D380E5071/2503649.png";
+    public const string ShadowSavior = "https://render.guildwars2.com/file/D3070EE4956FF44628AD3ED06FD60C7D94F20296/2175055.png";
+    public const string ShieldingRestoration = "https://render.guildwars2.com/file/3B7C573FBF124EC43F4102D530DE5E333F31014F/1012750.png";
     #endregion
     #region Warrior
     public const string RousingResilience = "https://render.guildwars2.com/file/630279C914D8BF414C2358281F1A37EDF86B203B/1012794.png";
