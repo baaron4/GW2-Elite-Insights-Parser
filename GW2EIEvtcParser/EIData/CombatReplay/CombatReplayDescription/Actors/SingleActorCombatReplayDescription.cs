@@ -83,7 +83,7 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
         Down = down;
         var dc = new List<long>();
         Dc = dc;
-        (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs) = a.GetStatus(log);
+        (IReadOnlyList<Segment> deads, IReadOnlyList<Segment> downs, IReadOnlyList<Segment> dcs, _) = a.GetStatus(log);
 
         foreach (Segment seg in deads)
         {

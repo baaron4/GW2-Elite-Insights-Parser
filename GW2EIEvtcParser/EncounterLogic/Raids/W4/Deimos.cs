@@ -35,7 +35,7 @@ internal class Deimos : BastionOfThePenitent
             {
                 return false;
             }
-            (_, IReadOnlyList<Segment> downs , _) = actor.GetStatus(log);
+            (_, IReadOnlyList<Segment> downs , _, _) = actor.GetStatus(log);
             bool hitInDown = downs.Any(x => x.ContainsPoint(ce.Time));
             return !hitInDown;
         }),

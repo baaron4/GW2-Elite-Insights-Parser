@@ -192,7 +192,7 @@ public class AgentItem
         return atEvents.Any() ? atEvents.LastOrDefault(y => time >= y.Time)?.Src : this;
     }
 
-    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, StatusEvent cur, long nextTime, long minTime, int index)
+    private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, StatusEvent cur, long nextTime, long minTime, int index)
     {
         long cTime = cur.Time;
 
@@ -208,13 +208,17 @@ public class AgentItem
         {
             dc.Add(new Segment(cTime, nextTime, 1));
         }
-        else if (index == 0 && cTime - minTime > 50)
+        else
         {
-            dc.Add(new Segment(minTime, cTime, 1));
+            if (index == 0 && cTime - minTime > 50)
+            {
+                dc.Add(new Segment(minTime, cTime, 1));
+            }
+            actives.Add(new Segment(cTime, nextTime, 1));
         }
     }
 
-    internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, CombatData combatData)
+    internal void GetAgentStatus(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, CombatData combatData)
     {
         //TODO(Rennorb) @perf: find average complexity
         var downEvents = combatData.GetDownEvents(this);
@@ -244,6 +248,7 @@ public class AgentItem
 
         if (status.Count == 0)
         {
+            actives.Add(new Segment(FirstAware, LastAware, 1));
             dc.Add(new Segment(LastAware, long.MaxValue, 1));
             return;
         }
@@ -254,14 +259,18 @@ public class AgentItem
         {
             StatusEvent cur = status[i];
             StatusEvent next = status[i + 1];
-            AddValueToStatusList(dead, down, dc, cur, next.Time, FirstAware, i);
+            AddValueToStatusList(dead, down, dc, actives, cur, next.Time, FirstAware, i);
         }
 
         // check last value
         if (status.Count > 0)
         {
             StatusEvent cur = status.Last();
-            AddValueToStatusList(dead, down, dc, cur, LastAware, FirstAware, status.Count - 1);
+            if (status.Count == 1)
+            {
+                actives.Add(new Segment(FirstAware, cur.Time, 1));
+            }
+            AddValueToStatusList(dead, down, dc, actives, cur, LastAware, FirstAware, status.Count - 1); 
             if (cur is DeadEvent)
             {
                 dead.Add(new Segment(LastAware, long.MaxValue, 1));

@@ -13,7 +13,7 @@ public class FinalDefensesAll : FinalDefenses
 
     public FinalDefensesAll(ParsedEvtcLog log, long start, long end, SingleActor actor) : base(log, start, end, actor, null)
     {
-        (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc) = actor.GetStatus(log);
+        (IReadOnlyList<Segment> dead, IReadOnlyList<Segment> down, IReadOnlyList<Segment> dc, _) = actor.GetStatus(log);
 
         // We can't use mechanics due to down event vs down buff desync
         if (actor.AgentItem.Type == AgentItem.AgentType.Player)
