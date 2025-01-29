@@ -7,8 +7,6 @@ public class PlayerCombatReplayDescription : SingleActorCombatReplayDescription
     internal PlayerCombatReplayDescription(PlayerActor player, ParsedEvtcLog log, CombatReplayMap map, CombatReplay replay) : base(player, log, map, replay)
     {
         Group = player.Group;
-        SetStatus(log, player);
-        SetBreakbarStatus(log, player);
     }
 
 }

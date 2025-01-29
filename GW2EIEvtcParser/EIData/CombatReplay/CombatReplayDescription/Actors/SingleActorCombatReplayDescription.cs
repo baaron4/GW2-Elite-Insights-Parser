@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace GW2EIEvtcParser.EIData;
 
@@ -73,6 +74,8 @@ public abstract class SingleActorCombatReplayDescription : CombatReplayDescripti
             }
             Hide = hide;
         }
+        SetStatus(log, actor);
+        SetBreakbarStatus(log, actor);
     }
 
     protected void SetStatus(ParsedEvtcLog log, SingleActor a)
