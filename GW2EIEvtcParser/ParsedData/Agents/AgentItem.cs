@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 using GW2EIEvtcParser.EIData;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GW2EIEvtcParser.ParsedData;
 
@@ -192,29 +193,37 @@ public class AgentItem
         return atEvents.Any() ? atEvents.LastOrDefault(y => time >= y.Time)?.Src : this;
     }
 
+    private static void AddSegment(List<Segment> segments, long start, long end)
+    {
+        if (start < end)
+        {
+            segments.Add(new Segment(start, end, 1));
+        }
+    }
+
     private static void AddValueToStatusList(List<Segment> dead, List<Segment> down, List<Segment> dc, List<Segment> actives, StatusEvent cur, long nextTime, long minTime, int index)
     {
         long cTime = cur.Time;
 
         if (cur is DownEvent)
         {
-            down.Add(new Segment(cTime, nextTime, 1));
+            AddSegment(down, cTime, nextTime);
         }
         else if (cur is DeadEvent)
         {
-            dead.Add(new Segment(cTime, nextTime, 1));
+            AddSegment(dead, cTime, nextTime);
         }
         else if (cur is DespawnEvent)
         {
-            dc.Add(new Segment(cTime, nextTime, 1));
+            AddSegment(dc, cTime, nextTime);
         }
         else
         {
             if (index == 0 && cTime - minTime > 50)
             {
-                dc.Add(new Segment(minTime, cTime, 1));
+                AddSegment(dc, minTime, cTime);
             }
-            actives.Add(new Segment(cTime, nextTime, 1));
+            AddSegment(actives, cTime, nextTime);
         }
     }
 
@@ -239,7 +248,7 @@ public class AgentItem
         status.AddRange(deadEvents);
         status.AddRange(spawnEvents);
         status.AddRange(despawnEvents);
-        dc.Add(new Segment(long.MinValue, FirstAware, 1));
+        AddSegment(dc, long.MinValue, FirstAware);
         // State changes are not reliable on non squad actors, so we check if arc provided us with some, we skip events created by EI.
         if (Type == AgentType.NonSquadPlayer && !status.Any(x => !x.IsCustom))
         {
@@ -248,8 +257,8 @@ public class AgentItem
 
         if (status.Count == 0)
         {
-            actives.Add(new Segment(FirstAware, LastAware, 1));
-            dc.Add(new Segment(LastAware, long.MaxValue, 1));
+            AddSegment(actives, FirstAware, LastAware);
+            AddSegment(dc, LastAware, long.MaxValue);
             return;
         }
 
@@ -268,16 +277,16 @@ public class AgentItem
             StatusEvent cur = status.Last();
             if (status.Count == 1)
             {
-                actives.Add(new Segment(FirstAware, cur.Time, 1));
+                AddSegment(actives, FirstAware, cur.Time);
             }
             AddValueToStatusList(dead, down, dc, actives, cur, LastAware, FirstAware, status.Count - 1); 
             if (cur is DeadEvent)
             {
-                dead.Add(new Segment(LastAware, long.MaxValue, 1));
+                AddSegment(dead, LastAware, long.MaxValue);
             }
             else
             {
-                dc.Add(new Segment(LastAware, long.MaxValue, 1));
+                AddSegment(dc, LastAware, long.MaxValue);
             }
         }
     }
@@ -293,7 +302,7 @@ public class AgentItem
 
         if (status.Count == 0)
         {
-            nones.Add(new Segment(FirstAware, LastAware, 1));
+            AddSegment(nones, FirstAware, LastAware);
             return;
         }
         for (int i = 0; i < status.Count - 1; i++)
@@ -301,22 +310,22 @@ public class AgentItem
             BreakbarStateEvent cur = status[i];
             if (i == 0 && cur.Time > FirstAware)
             {
-                nones.Add(new Segment(FirstAware, cur.Time, 1));
+                AddSegment(nones, FirstAware, cur.Time);
             }
             BreakbarStateEvent next = status[i + 1];
             switch (cur.State)
             {
                 case ArcDPSEnums.BreakbarState.Active:
-                    actives.Add(new Segment(cur.Time, next.Time, 1));
+                    AddSegment(actives, cur.Time, next.Time);
                     break;
                 case ArcDPSEnums.BreakbarState.Immune:
-                    immunes.Add(new Segment(cur.Time, next.Time, 1));
+                    AddSegment(immunes, cur.Time, next.Time);
                     break;
                 case ArcDPSEnums.BreakbarState.None:
-                    nones.Add(new Segment(cur.Time, next.Time, 1));
+                    AddSegment(nones, cur.Time, next.Time);
                     break;
                 case ArcDPSEnums.BreakbarState.Recover:
-                    recovering.Add(new Segment(cur.Time, next.Time, 1));
+                    AddSegment(recovering, cur.Time, next.Time);
                     break;
             }
         }
@@ -329,16 +338,16 @@ public class AgentItem
                 switch (cur.State)
                 {
                     case ArcDPSEnums.BreakbarState.Active:
-                        actives.Add(new Segment(cur.Time, LastAware, 1));
+                        AddSegment(actives, cur.Time, LastAware);
                         break;
                     case ArcDPSEnums.BreakbarState.Immune:
-                        immunes.Add(new Segment(cur.Time, LastAware, 1));
+                        AddSegment(immunes, cur.Time, LastAware);
                         break;
                     case ArcDPSEnums.BreakbarState.None:
-                        nones.Add(new Segment(cur.Time, LastAware, 1));
+                        AddSegment(nones, cur.Time, LastAware);
                         break;
                     case ArcDPSEnums.BreakbarState.Recover:
-                        recovering.Add(new Segment(cur.Time, LastAware, 1));
+                        AddSegment(recovering, cur.Time, LastAware);
                         break;
                 }
             }
