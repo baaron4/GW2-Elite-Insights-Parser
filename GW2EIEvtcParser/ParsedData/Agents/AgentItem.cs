@@ -123,7 +123,7 @@ public class AgentItem
 
     internal void OverrideType(AgentType type, AgentData agentData)
     {
-        agentData.FlagAsDirty();
+        agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.TypesDirty);
         Type = type;
     }
 
@@ -139,32 +139,28 @@ public class AgentItem
 
     internal void OverrideID(int id, AgentData agentData)
     {
-        agentData.FlagAsDirty();
+        agentData.FlagAsDirty(AgentData.AgentDataDirtyStatus.SpeciesDirty);
         ID = id;
     }
 
     internal void OverrideID(ArcDPSEnums.TrashID id, AgentData agentData)
     {
-        agentData.FlagAsDirty();
-        ID = (int)id;
+        OverrideID((int)id, agentData);
     }
 
     internal void OverrideID(ArcDPSEnums.TargetID id, AgentData agentData)
     {
-        agentData.FlagAsDirty();
-        ID = (int)id;
+        OverrideID((int)id, agentData);
     }
 
     internal void OverrideID(ArcDPSEnums.MinionID id, AgentData agentData)
     {
-        agentData.FlagAsDirty();
-        ID = (int)id;
+        OverrideID((int)id, agentData);
     }
 
     internal void OverrideID(ArcDPSEnums.ChestID id, AgentData agentData)
     {
-        agentData.FlagAsDirty();
-        ID = (int)id;
+        OverrideID((int)id, agentData);
     }
 
     internal void OverrideToughness(ushort toughness)

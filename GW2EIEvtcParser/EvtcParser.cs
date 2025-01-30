@@ -947,6 +947,7 @@ public class EvtcParser
         _allAgentsList.RemoveAll(x => !(x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue) && (x.Type != AgentItem.AgentType.Player && x.Type != AgentItem.AgentType.NonSquadPlayer));
         operation.UpdateProgressWithCancellationCheck("Parsing: Keeping " + _allAgentsList.Count + " agents");
         _agentData = new AgentData(_apiController, _allAgentsList);
+        _agentData.AddCustomNPCAgent(_logStartTime, _logEndTime, "Environment", Spec.NPC, ArcDPSEnums.TrashID.Environment, true);
 
         if (_agentData.GetAgentByType(AgentItem.AgentType.Player).Count == 0)
         {
@@ -1037,7 +1038,6 @@ public class EvtcParser
         OffsetEvtcData();
         operation.UpdateProgressWithCancellationCheck("Parsing: Offset of " + (_fightData.FightStartOffset) + " ms added");
         operation.UpdateProgressWithCancellationCheck("Parsing: Adding environment agent");
-        _agentData.AddCustomNPCAgent(_fightData.LogStart, _fightData.LogEnd, "Environment", Spec.NPC, ArcDPSEnums.TrashID.Environment, true);
         // Removal of players present before the fight but not during
         var agentsToRemove = new HashSet<AgentItem>();
         foreach (Player p in _playerList)
