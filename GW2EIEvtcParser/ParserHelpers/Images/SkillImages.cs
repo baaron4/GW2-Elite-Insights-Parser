@@ -587,6 +587,14 @@ internal static class SkillImages
     public const string ShatteringBlow = "https://wiki.guildwars2.com/images/c/c7/Shattering_Blow.png";
     public const string ImpaleWarriorSword = "https://wiki.guildwars2.com/images/4/42/Impale_%28warrior_sword_skill%29.png";
     public const string Mending = "https://render.guildwars2.com/file/04EB1106C95B7579EA29FA2F08BAFDA649C60715/103295.png";
+    public const string DragonSlashBoost = "https://wiki.guildwars2.com/images/7/75/Dragon_Slash%E2%80%94Boost.png";
+    public const string DragonSlashForce = "https://wiki.guildwars2.com/images/b/b5/Dragon_Slash%E2%80%94Force.png";
+    public const string DragonSlashReach = "https://wiki.guildwars2.com/images/e/eb/Dragon_Slash%E2%80%94Reach.png";
+    public const string Triggerguard = "https://wiki.guildwars2.com/images/4/4e/Triggerguard.png";
+    public const string MaceSmash = "https://render.guildwars2.com/file/F6440A5D08EDFB78FD5A5BB31E30CD25040D3F23/103121.png";
+    public const string CrushingBlow = "https://render.guildwars2.com/file/53DD40AE0BFA70045A054E30516CC054ECA73E15/103149.png";
+    public const string Pulverize = "https://render.guildwars2.com/file/0399B3F49AB8C94602BECE809EBC0FE238ECB64E/103122.png";
+    public const string BerserkerEnd = "https://i.imgur.com/dnoZYre.png";
     #endregion Warrior
     #region WvW
     public const string FireTrebuchet = "https://wiki.guildwars2.com/images/3/38/Fire_%28Trebuchet%29.png";

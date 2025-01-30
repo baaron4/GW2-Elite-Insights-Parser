@@ -270,6 +270,9 @@ internal static class TraitImages
     public const string SavageInstinct = "https://wiki.guildwars2.com/images/4/4d/Savage_Instinct.png";
     public const string HeatTheSoul = "https://wiki.guildwars2.com/images/5/58/Heat_the_Soul.png";
     public const string FierceAsFire = "https://wiki.guildwars2.com/images/8/8e/Fierce_as_Fire.png";
+    public const string MendingMight = "https://render.guildwars2.com/file/765438B1A46A5F987B0C6399DBC7723601AE0027/2207780.png";
+    public const string LossAversion = "https://render.guildwars2.com/file/CBD0D10F08D5D57ECAF57C0CC122D6419BE0060A/1770015.png";
+    public const string KingOfFires = "https://render.guildwars2.com/file/4ED712F8B5383CE8EF69682C0C587801A9F7674A/1058558.png";
     #endregion
 }
 #pragma warning restore CA1823 // Unused field
