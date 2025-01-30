@@ -73,4 +73,7 @@ public static class MarkerGUIDs
         TriangleOverhead,
         XOverhead
     };
+
+    // Other
+    internal static readonly GUID UraTitanspawnGeyserMarker = new("2818A92C67388940B74D627979000D39");
 }
