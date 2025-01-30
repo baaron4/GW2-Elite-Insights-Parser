@@ -153,7 +153,7 @@ internal static class ProfHelper
         new EffectCastFinder(RelicOfTheStormsingerChain, EffectGUIDs.RelicOfTheStormsinger)
             .UsingChecker((effectEvent, combatData, agentData, skillData) => 
             {
-                return combatData.GetBuffData(RelicOfTheStormsingerBuff).Where(x => x is BuffRemoveAllEvent && Math.Abs(x.Time - effectEvent.Time) < ServerDelayConstant).FirstOrDefault() != null;
+                return combatData.HasLostBuff(RelicOfTheStormsingerBuff, effectEvent.Src, effectEvent.Time);
             })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheBeehive, EffectGUIDs.RelicWhiteCircle)
