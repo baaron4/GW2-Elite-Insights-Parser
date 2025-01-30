@@ -150,9 +150,11 @@ internal static class ProfHelper
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfSorrowBuff, EffectGUIDs.RelicOfSorrow3)
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
-        // If this collides with something else we could check via buff remove with the condition dst == src
         new EffectCastFinder(RelicOfTheStormsingerChain, EffectGUIDs.RelicOfTheStormsinger)
-            .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheStormsinger) // Effect triggers at least twice
+            .UsingChecker((effectEvent, combatData, agentData, skillData) => 
+            {
+                return combatData.HasLostBuff(RelicOfTheStormsingerBuff, effectEvent.Src, effectEvent.Time);
+            })
             .UsingOrigin(InstantCastFinder.InstantCastOrigin.Gear),
         new EffectCastFinder(RelicOfTheBeehive, EffectGUIDs.RelicWhiteCircle)
             .UsingSecondaryEffectChecker(EffectGUIDs.RelicOfTheBeehive1, 1000, ServerDelayConstant)
