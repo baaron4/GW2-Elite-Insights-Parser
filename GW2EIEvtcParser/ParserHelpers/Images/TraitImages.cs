@@ -273,6 +273,9 @@ internal static class TraitImages
     public const string MendingMight = "https://render.guildwars2.com/file/765438B1A46A5F987B0C6399DBC7723601AE0027/2207780.png";
     public const string LossAversion = "https://render.guildwars2.com/file/CBD0D10F08D5D57ECAF57C0CC122D6419BE0060A/1770015.png";
     public const string KingOfFires = "https://render.guildwars2.com/file/4ED712F8B5383CE8EF69682C0C587801A9F7674A/1058558.png";
+    public const string EnchantmentCollapse = "https://render.guildwars2.com/file/AE076D6974ED7BD015E2EBBDDBCDEC1E21220CE7/1770018.png";
+    public const string VigorousShouts = "https://render.guildwars2.com/file/087A225EC4070E5B271B360D583AE4CC4210BFC0/1012829.png";
+    public const string ShrugItOff = "https://render.guildwars2.com/file/3D09CE385264C492CC3638AD3A7D753FC80A0D34/2207779.png";
     #endregion
 }
 #pragma warning restore CA1823 // Unused field

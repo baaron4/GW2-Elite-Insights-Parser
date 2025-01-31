@@ -128,7 +128,7 @@ public static class SkillIDs
     public const long CrashingWaves = 2654;
     public const long Freeze2 = 3138;
     public const long FiendLeechWvW = 3632;
-    public const long ChargeWvW = 3647;
+    public const long ChargeWarhornWvW = 3647;
     public const long BoneSlash = 3652;
     public const long TwistingFangThiefMinion1 = 3661;
     public const long TwistingFangThiefMinion2 = 3662;
@@ -146,7 +146,7 @@ public static class SkillIDs
     public const long CrushingBlowWvW1 = 3822;
     public const long PulverizeWvW1 = 3823;
     public const long ShieldBashWvW = 3825;
-    public const long BodyShotWvW = 3828;
+    public const long BolaShotWvW = 3828;
     public const long CripplingTalonWvW = 3830;
     public const long MaceSmashWvW2 = 3831;
     public const long CrushingBlowWvW2 = 3832;
